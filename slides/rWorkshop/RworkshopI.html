@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, R!</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Yue Hu Department of Political Science University of Iowa" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="libs/remark-css-0.0.1/default-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="stylesheet" href="font-awesome-4.7.0\css\font-awesome.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Hello, R!
+## ISRC R Workshop Series I
+### Yue Hu<br>Department of Political Science<br>University of Iowa
+
+---
+
+
+## ISRC R Workshop Series
+
+.center[&lt;img src="images/isrc.png" height = 200 /&gt;]
+
+.pull-left[
+
+*Fall*
+
+* R Basic
+* Data Manipulation
+* Quantitative Analysis
+* Basic Data Visualization
+]
+
+.pull-right[
+
+*Spring*
+
+* R Basics (again)
+* Geographic Data Visualization
+* Multilevel Model
+* Professionalization
+
+]
+
+--
+
+Check out other [fantastic workshops](http://ppc.uiowa.edu/node/3608) offered by us.
+
+---
+
+## How to Get the Slides?
+
+All the slides are presented in my personal webpage:
+
+1. Search "Yue Hu" in Google or directly type the webpage([sammo3182.github.io](https:\\sammo3182.github.io)) at any browser you prefer.
+1. Click "Teaching" tab in the upper-right corner.
+1. Find "Course: Hello, R: A Introduction To R, Iowa Social Science Research Center, University of Iowa" and click the "slides."
+
+.center[&lt;img src="images/pageInstruction.png" height = 300 /&gt;]
+
+---
+
+## What's R?
+
+R is an .magenta[object-oriented] language and environment for .magenta[statistical] computing and graphics.
+
+--
+
+* .magenta[Object-oriented] system: Put things in to boxes and carry around.
+
+--
+
+* Created for .magenta[statistics]:
+    + Built by statisticians and data scientists.
+    + Edit codes from Excel, STATA, Python, C++, ...
+    + Scrape data from texts, websites, databases, pdf...
+    + Create webpages (see, e.g., [`blogdown`](https://bookdown.org/yihui/blogdown/).)
+    + Write academic articles and save them in html, pdf, or word.
+    + Create presentation slides in pdf (as LaTex beamer), html (as Markdown).
+    + Write a book or dissertation (see e.g., [`bookdown`](https://bookdown.org/home/).)
+
+---
+
+## Why R?
+
+* FREE!!!
+
+--
+
+* Developing
+    + 12048+ packages.
+    + Compatible with new statistical and visualization techniques.
+    
+--
+
+* Popular
+
+--
+
+.center[&lt;img src="images/rank.jpeg" height = 300 /&gt;]
+.pull-right[.small[[Source:  IEEE Spectrum ranking](https://spectrum.ieee.org/computing/software/the-2017-top-programming-languages)]]
+
+---
+
+## Hey, Python?
+
+.center[&lt;img src="images/rank2.jpeg" height = 200 /&gt;]
+
+--
+
+* R vs. Python: "The war that never ends..."
+
+---
+
+## R vs. Python
+
+.pull-left[
+### R
+
+#### Advantages
+
+* Statistics
+* Visualization
+
+#### Inconvenience
+
+* Reading large-size (&gt; 1G) data
+* Learning the codes
+]
+
+.pull-right[
+### Python
+
+#### Advantages
+
+* Machine learning
+* Big data manipulation
+
+#### Inconvenience
+
+* Setting up at certain platform
+* 2.7 vs. 3.5?
+* Checking the outcomes
+
+]
+
+---
+
+## R vs. STATA
+
+.pull-left[
+### R
+
+#### Advantages
+
+* Updating
+* Flexible
+* Multi-lingual
+
+#### Inconvenience
+
+* Linear-algebraic calculation
+* Programming
+
+]
+
+.pull-right[
+### STATA
+
+#### Advantages
+
+* Stable
+* Reliable
+
+#### Inconvenience
+
+* You use what you get
+* Poor visualization
+* Long updating schedule
+* EXPENSIVE: 
+    + Perpetual for students:	**$995** (new) / **$325** (updates) 
+
+]
+
+---
+
+## Let's start our journey!
+
+.center[&lt;img src="images/begin.gif" height = 300 /&gt;]
+
+---
+
+## Program Installation
+
+.pull-left[
+### Core program
+
+[&lt;img src="images/Rlogo.png" height = 300 /&gt;](https://www.r-project.org/)
+
+]
+
+--
+
+.pull-right[
+### Graphic User Interfaces (GUI)
+
+[&lt;img src="images/rstudio.jpg" height = 300 /&gt;](https://www.rstudio.com/)
+
+]
+
+---
+
+## Package Installation
+
+.pull-left[
+
+* What's package?
+&lt;img src="images/apps.jpeg" height = 300 /&gt;
+
+]
+
+--
+
+.pull-right[
+
+* Installing:
+
+`install.packages(&lt;package name&gt;)`
+
+`devtools::install_github("&lt;repositary/package name&gt;")`
+
+* "Clicking":
+
+`library(&lt;package name&gt;)`
+
+`require(&lt;package name&gt;)`
+
+]
+
+---
+
+## First-Time Using
+
+Set the working directory! Set the working directory! Set the working directory!
+
+.pull-left[
+
+* Always check or set the &lt;span style="color:red"&gt;working directory&lt;/span&gt; first
+
+
+```r
+# find the current working directory
+getwd() 
+
+# Reset the working directory
+setwd("E:/R workshop/rworkshop") 
+```
+    
+]
+
+.pull-right[
+
+* Or click, click, and click in Rstudio
+&lt;img src=images/wdSetting.png height = "300"/&gt;
+
+
+]
+
+---
+
+## Terminology
+
+From linear algebra:
+
+--
+
+### Matrix
+
+.pull-left[
+
+&lt;img src=images/matrix.gif height = "300"/&gt;
+
+]
+
+--
+
+.pull-right[
+
+
+```r
+A &lt;- matrix(-8:7, ncol = 4)
+A
+```
+
+```
+##      [,1] [,2] [,3] [,4]
+## [1,]   -8   -4    0    4
+## [2,]   -7   -3    1    5
+## [3,]   -6   -2    2    6
+## [4,]   -5   -1    3    7
+```
+
+```r
+A[2, 3]
+```
+
+```
+## [1] 1
+```
+
+]
+
+---
+
+### Vector: 
+
+One-row / one-column matrix
+
+
+```r
+# Numeric
+c(1, 2, 3) # Integer
+```
+
+```
+## [1] 1 2 3
+```
+
+```r
+c(1.5, -2.34, NA) #Double
+```
+
+```
+## [1]  1.50 -2.34    NA
+```
+
+```r
+# Factor
+factor(c(1, 2, 2, 3), labels = c("Apple", "Pear", "Orange"))
+```
+
+```
+## [1] Apple  Pear   Pear   Orange
+## Levels: Apple Pear Orange
+```
+
+```r
+# Character
+c("R is hard.", "But I can learn.")
+```
+
+```
+## [1] "R is hard."       "But I can learn."
+```
+
+---
+
+
+```r
+# Time
+as.POSIXlt("2005-10-21 18:47:22")
+```
+
+```
+## [1] "2005-10-21 18:47:22 CST"
+```
+
+```r
+# Logic
+c(TRUE, TRUE, FALSE)
+```
+
+```
+## [1]  TRUE  TRUE FALSE
+```
+
+
+---
+
+### Data frame (tidy)
+
+A special matrix with observations in rows and variables in columns.
+
+
+```r
+knitr::kable(head(mtcars), format='html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mpg &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; cyl &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; disp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; hp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; drat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; wt &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; qsec &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; vs &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; am &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gear &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; carb &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.620 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Mazda RX4 Wag &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 160 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.875 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Datsun 710 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 108 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 93 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.85 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.61 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet 4 Drive &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 258 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.08 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.215 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Hornet Sportabout &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 360 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 175 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.440 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Valiant &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 225 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 105 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.76 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.460 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+.pull-left[
+
+```r
+mtcars[1,1]
+```
+
+```
+## [1] 21
+```
+]
+
+--
+
+.pull-right[
+
+```r
+mtcars$mpg[1]
+```
+
+```
+## [1] 21
+```
+
+]
+
+---
+
+### Array
+
+A multi-dimension matrix
+
+
+```r
+array(-9:9, dim = c(3,3,2)) 
+```
+
+```
+## , , 1
+## 
+##      [,1] [,2] [,3]
+## [1,]   -9   -6   -3
+## [2,]   -8   -5   -2
+## [3,]   -7   -4   -1
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3]
+## [1,]    0    3    6
+## [2,]    1    4    7
+## [3,]    2    5    8
+```
+
+```r
+# three dimensions with 3, 3, and 2 elements in each dimension.
+```
+
+---
+
+### List
+
+A series of everything.
+
+
+```r
+aList &lt;- list(c(1:5), letters[1:5])
+aList
+```
+
+```
+## [[1]]
+## [1] 1 2 3 4 5
+## 
+## [[2]]
+## [1] "a" "b" "c" "d" "e"
+```
+
+```r
+aList[[2]]
+```
+
+```
+## [1] "a" "b" "c" "d" "e"
+```
+
+---
+
+## Functions
+
+.center[&lt;img src=images/handShadow.gif height = "250"/&gt;]
+
+--
+
+
+```r
+light &lt;- function(finger){
+*  shadow &lt;- finger + 5
+}
+
+handShadow &lt;- light(finger = 3)
+handShadow
+```
+
+```
+## [1] 8
+```
+
+---
+
+## Data Input and Output
+
+
+### Build-in functions
+
+
+```r
+load("&lt;FileName&gt;.RData")
+
+df_rds &lt;- readRDS("&lt;FileName&gt;.rds")
+df_txt &lt;- read.table("&lt;FileName&gt;.txt")
+df_csv &lt;- read.csv("&lt;FileName&gt;.csv")
+```
+
+
+---
+
+### Package functions
+
+
+```r
+# SPSS, Stata, SAS
+library(haven)
+df_spss &lt;- read_spss("&lt;FileName&gt;.sav")
+df_stata &lt;- read_dta("&lt;FileName&gt;.dta") 
+df_sas &lt;- read_sas("&lt;FileName&gt;.sas7bdat")  
+
+# Excel sheets
+library(readxl)
+df_excel &lt;- read_excel("&lt;FileName&gt;.xls")
+df_excel2 &lt;- read_excel("&lt;FileName&gt;.xlsx") 
+
+# JavaScript Object Notation 
+library(rjson)
+df_json &lt;- fromJSON(file = "&lt;FileName&gt;.json" )
+
+# XML/Html
+df_xml &lt;- xmlTreeParse("&lt;url&gt;")
+df_html &lt;- readHTMLTable(url, which=3)
+```
+
+
+
+---
+
+## Data output
+
+* Save single object in a `.rds` file
+
+
+```r
+saveRDS(object, file = "./Data/mydata.Rdata")
+```
+
+* Save multip objects into an R dataset (`.RData`/`.rda`) 
+
+
+```r
+save(object, file = "./Data/mydata.Rdata")
+```
+
+* Save multip objects into a CSV sheet `.csv`
+
+
+```r
+write.csv(object, file = "mydata.csv")
+```
+
+
+---
+
+## Programming Basics: Math
+
+
+```r
+# basic math
+x + (1 - 2) * 3 / 4
+
+# advanced math
+x^2;sqrt(x);log(x);exp(x)
+
+# matrix algebra
+z &lt;- matrix(1:4, ncol = 2)
+z + z - z
+z %*% z  # inner mul&lt;span style="color:purple"&gt;Tip&lt;/span&gt;lication 
+z %o% z  # outter mul&lt;span style="color:purple"&gt;Tip&lt;/span&gt;lication
+
+# logical evaluation
+x == z; x != Z
+x &amp; z; x | z
+x &gt; z; x &lt;= z
+```
+
+
+---
+
+## Naming Objects
+
+* Don't start with numbers (WRONG: `1stday`)
+
+--
+
+* No special signs except for `.` and `-` (WRONG: `M&amp;M`)
+
+--
+
+* Case sensitivity (`X != x`)
+
+--
+
+* Don't overwrite the build-in functions unless necessary (DON'T: `list &lt;- c(1:5)`)
+
+
+---
+
+## Last Words
+
+* Being aware of the learning curve
+
+.center[&lt;img src=images/LearningCurve.png height="400"/&gt;]
+.pull-right[.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]]
+
+---
+
+* Preparing for unexpected troubles
+
+
+```r
+testDF &lt;- data.frame(x = c(1, 1, 1, NA, 4, 4),
+                     y = c(2, 2, 2, 2, 2, 2))
+testDF
+```
+
+```
+##    x y
+## 1  1 2
+## 2  1 2
+## 3  1 2
+## 4 NA 2
+## 5  4 2
+## 6  4 2
+```
+
+--
+
+
+```r
+testDF$x[testDF$x &lt; 4] &lt;- testDF$y[testDF$x &lt; 4]
+```
+
+```
+Error in testDF$x[testDF$x &lt; 4] &lt;- testDF$y[testDF$x &lt; 4] * 0 : 
+  NAs are not allowed in subscripted assignments
+```
+
+--
+
+
+```r
+testDF$x &lt;- ifelse(testDF$x &lt; 4, testDF$y, testDF$x)
+testDF$x 
+```
+
+```
+## [1]  2  2  2 NA  4  4
+```
+
+---
+
+* Sufficiently using online sources
+
+.center[&lt;img src=images/search.png height="400"/&gt;]
+
+---
+
+## That's It.
+
+.center[&lt;img src="http://rescuethepresent.net/tomandjerry/files/2016/05/16-thanks.gif" height="500" /&gt;]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
