@@ -198,8 +198,8 @@ class: large
 
 假设：
 
-* 定义贴近西方民主价值；
-* 民主话语与民主价值话语联系紧密。
+* 定义贴近流行民主价值；
+* 民主话语与价值话语联系紧密。
 
 ---
 
@@ -212,7 +212,7 @@ class: large
 假设：
 
 * 定义贴近现行制度特色；
-* 民主话语与与制度特色话语联系最为紧密。
+* 民主话语与制度特色话语联系最为紧密。
 
 ---
 
@@ -267,9 +267,7 @@ class: large
 
 class:large
 
-
-
-### 难关
+## 难关
 
 1. 计算机读中文
 1. 计算机读文章
@@ -301,21 +299,44 @@ class: large
 
 ]
 
-```{r segment, include=FALSE}
+
+
+---
+
+## 分词
+
+```{r package-load, echo = FALSE}
 library(jiebaR)
 
 cutter <- worker()
-new_user_word(cutter, "民主生活会", "n")
+```
+
+
+```{r segment}
+
+segment("民主集中制是建立民主生活会制度的基础。", cutter)
+
+```
+
+--
+
+```{r seg-customized}
+new_user_word(cutter, "民主生活会", "n") #<<
+```
+
+--
+
+```{r seg-adjusted}
 segment("民主集中制是建立民主生活会制度的基础。", cutter)
 ```
 
 --
 
-* "民主集中制" "是" "建立" "民主" "生活" "会" "制度" "的" "基础" ?
-    
---
-    
-* "民主集中制" "是" "建立" "民主生活会" "制度" "的" "基础" !
+1. 计算机读中文 &#9989;
+1. 计算机读文章
+1. 寻找靶向概念
+1. 在话语中界定概念定义
+1. 在话语间测量话语关系
 
 ---
 
@@ -325,16 +346,310 @@ class: large
 
 "民主生活会制度作为一项党内监督制度，是在长期实践中逐步形成的。民主集中制是建立民主生活会制度的基础，建党初期我们党十分重视发扬党内民主。党的五大党章规定党部的指导原则为民主集中制。"
 
-.right[—— 《 人民日报 》（ 2018年11月27日   18 版）]
+.right[——《人民日报》（2018年11月27日18版）]
 
 ---
+class: large
 
 ## A Bag of Words
 
-.center[<img src="image/bagOfWords.png" height = 300 />]
+A text is represented as the bag (multiset) of its words. 
+
+--
+
+<img src="image/bagOfWords.png" height = 300 />
 
 ---
 
 ## A Bag of Words
 
 .center[<img src="image/bagOfWords2.jpg" height = 500 />]
+
+---
+
+class: large
+
+## 降维阅读
+
+* Function words (虚词)
+    + 副词、介词、连词、助词、叹词和拟声词
+
+--
+
+* Grammar
+
+--
+
+* Word Order
+
+--
+
+1. 计算机读中文 &#9989;
+1. 计算机读文章 &#9989;
+1. 寻找靶向概念
+1. 在话语中界定概念定义
+1. 在话语间测量话语关系
+
+---
+class: large
+
+## Within-Discourse Analysis
+
+1. 计算机读中文 &#9989;
+1. 计算机读文章 &#9989;
+1. .magenta[寻找靶向概念]
+1. .magenta[在话语中界定概念定义]
+1. 在话语间测量话语关系
+
+---
+class: large
+
+## 概念哪，概念
+
+* 文本分析的两种形式
+    + Supervised analysis: 知道在找什么
+    + Unsupervised analysis: 不知道在找什么
+
+--
+
+* 根据概念分类词汇
+    + Topic model (unsupervised)
+* 根据词汇识别概念
+    + Frequency exclusivity scores (supervised)
+
+
+---
+
+class:large
+
+## Topic modeling
+
+<img src="image/tm.png" height = 380 />
+
+
+???
+
+Latent Dirichlet allocation
+
+---
+
+class: large
+
+## 操作
+
+词中义 $\rightarrow$ 篇中词 
+
+--
+
+$\rightarrow$ “概况本文中心思想和段落大意”~~
+
+--
+
+1. 以.magenta[年]为单位
+1. 仅限民主话语
+
+--
+
+```{r topicEg, echo=FALSE}
+topEg <- data.frame(top = c("工作, 认真, 宣传, 切实, 重点, 部门, 任务……",
+                   "报纸, 显然, 媒体, 争论, 说法, 看法, 舆论……",
+                   "处罚, 情节, 下列, 职业病, 罚金, 主管, 行政部门……"))
+rownames(topEg) <- c("Topic 1", "Topic 2", "Topic 3")
+colnames(topEg) <- "高频词"
+knitr::kable(topEg, format = "html")
+```
+
+
+---
+
+class: large
+
+## “靶向”概念
+
+* Supervised Analysis
+
+```{r keywords, echo=FALSE}
+knitr::kable(data.frame(concept = c("民主", "价值", "制度", "", "国务", ""),
+           category = c("", "", "", "国民经济", "国家安全", "社会稳定"),
+           keywords = c(c("民主, 民主化, 民主改革"), c("自由, 平等, 公平"), c("中国共产党, 民主集中制, 党群关系"),c("经济, 国民经济, 生产"), c("战斗, 军队, 侵略"), c("稳定, 不均, 贫富悬殊"))), 
+           format = "markdown",
+           col.names = c("概念", "分支", "关键词示例"),
+           align = "l") 
+```
+
+* Concept identification: Frequency exclusivity scores
+
+???
+
+Summarizes words with the harmonic means of the probability of appearance under a topic and the exclusivity of that topic
+
+---
+
+class: large
+
+1. 计算机读中文 &#9989;
+1. 计算机读文章 &#9989;
+1. 寻找靶向概念 &#9989;
+1. .magenta[在话语中界定概念定义]
+1. 在话语间测量话语关系
+
+--
+
+## 如何定义一个概念？
+
+$Concept A \sim \rho_1 Word_1 + \rho_2 Word_2 + \rho_3 Word_3 + ... + \rho_n Word_n$
+
+--
+
+政治：“阶级、政党、民族、国家内部及其相互之间的关系，是经济的集中表现。”
+
+--
+
+$政治 \sim 0.7\cdot 阶级 + 0.7\cdot 政党 + 0.7\cdot 民族 + ... + 0.8\cdot 经济$
+
+---
+
+class: large
+
+## 关系决定概念
+
+.center[<img src="image/yr_netGraph1991.png" height = 500 />]
+
+
+???
+
+$\theta_{ij}$: $i$ 文中概念 $j$ 的比重
+
+$\boldsymbol\theta_j$: 概念 $j$ 在整个文章中的分布特点
+
+$\rho_{j, j+1}$: 概念 $j$ 与 $j + 1$ 的关系
+
+---
+
+class:large
+
+## 对民主定义的实证检验
+
+$民主 \sim \beta_1价值 + \beta_2制度 + \beta_3国务 + \textbf{其他因素}\boldsymbol\beta$
+
+排除干扰因素：
+
+* 语言关系
+* 时间
+* 国际因素
+
+---
+class: large
+
+## 发现I
+
+.left-column[
+
+### 统计显著
+
+价值
+
+制度
+
+.orange[国家政治经济任务]:
++ .orange[国民经济] 
++ 国家安全
++ .orange[社会稳定]
+]
+
+--
+
+.right-column[
+
+### 假设检验
+
+* 接纳
+    + 定义贴近流行民主价值
+* 辩护
+    + 定义贴近现行制度特色
+* Refocusing
+    + 定义贴近国家重要政治经济任务 &#10004;
+
+]
+
+---
+
+class: large
+
+1. 计算机读中文 &#9989;
+1. 计算机读文章 &#9989;
+1. 寻找靶向概念 &#9989;
+1. 在话语中界定概念定义 &#9989;
+1. .magenta[在话语间测量话语关系]
+
+## Cross-Dicourse Analysis
+
+* 超越概念
+
+--
+
+* 同时出现 $\rightarrow$ 关系紧密
+
+--
+
+* 在多元回归模型中测量词频相关性
+
+---
+class: large
+
+## 发现II
+
+.left-column[
+
+### 统计显著
+
+.orange[价值]
+
+制度
+
+国家政治经济任务:
++ 国民经济
++ 国家安全
++ 社会稳定
+]
+
+--
+
+.right-column[
+
+### 假设检验
+
+* 接纳
+    + 民主话语与价值话语联系紧密 &#10004;
+* 辩护
+    + 民主话语与制度特色话语联系最为紧密
+* Refocusing
+    + 民主话语与价值话语联系紧密 &#10004;
+
+]
+
+---
+
+1. 计算机读中文 &#9989;
+1. 计算机读文章 &#9989;
+1. 寻找靶向概念 &#9989;
+1. 在话语中界定概念定义 &#9989;
+1. 在话语间测量话语关系 &#9989;
+
+--
+
+## 总结
+
+* 我们发现了什么？
+
+|            | Within-discourse | Cross-discourse |
+|------------|------------------|-----------------|
+| 接纳       |                  | &#10004;        |
+| 辩护       |                  |                 |
+| Refocusing | &#10004;         | &#10004;        |
+
+--
+
+* 如何理解
+    + 定义：具有中国特色
+    + 话语：与其他民主话语对话
