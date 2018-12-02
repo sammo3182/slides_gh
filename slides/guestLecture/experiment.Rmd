@@ -7,10 +7,16 @@ output:
   xaringan::moon_reader:
     css: [rladies, zh-CN_custom.css, styles.css, "font-awesome-4.7.0/css/font-awesome.css"]
     lib_dir: libs
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      slideNumberFormat: |
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
+          </div>
+        </div>`
 ---
 
 ```{r setup, include=FALSE}
@@ -21,20 +27,28 @@ class:large
 
 ## 天下大势
 
-1. 因果推断逻辑
-    + 因果效果
-    + 因果机制
+
+.left-column[
+### 因果推断逻辑
+
+* 因果效果
+* 因果机制
+]
+
 --
 
-1. 因果推断方法
-    + 计量经济学
-    + 实验
+.right-column[
+### 因果推断方法
+
+* 计量经济学
+* 实验
+]
 
 ---
 
 .center[<img src="image/causality.png" height = 300 />]
 
-## 为什么实验
+## 为什么做因果推断
 
 ---
 
@@ -62,18 +76,16 @@ $T$ 在哪里？
 
 $$Y_i = T_iY_{i1} + (1 - T)Y_{i0}.$$
 
----
-
-background-image: url(image/thatsit.gif)
-background-position: 50% 50%
-background-size: 100%
-
 
 ---
 
-## No? 
+class: large, center, middle
 
-Why?
+## 对于 $i$ , 我们能同时看到 $Y_{0i}$ 和 $Y_{1i}$ 吗？
+
+--
+
+## 如果不能，我们怎么计算 $\delta$
 
 ---
 
@@ -81,13 +93,15 @@ background-image: url(image/spiderMultiverse.png)
 background-position: 50% 50%
 background-size: 100%
 
-# Counterfactual
+# Counterfactual Logic
 
 ---
 
 class: large
 
-## Counterfactual
+## 反事实逻辑
+
+--
 
 * $T_i \in [0, 1].$
 
@@ -97,46 +111,229 @@ class: large
 
 --
 
-* $\delta_i$ 不可见
-    + 群体估计: $\hat\delta =  \mathbb{E}(\delta_i).$
+* $\delta_i$ 不可见 $\leadsto$ 群体估计
 
 ---
+
+class: large
+
+## 说来容易做来难……
+
+先了解几个概念：
+
+* Average treatment effect (ATE)
+    + $ATE = \hat\delta =  \mathbb{E}(\delta_i).$
+    
+* Average treatment effect on the treated (ATT)
+    + $ATT = \mathbb{E}(\delta_i | T_i = 1).$
+
+--
+
+* Average conditional treatment effect
+    + $ATE(W) = \mathbb{E}(\delta_i|W_i).$
+        + $\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.$
+    + $ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)$
+
+???
+
+ATE estimates the causal effect of treatment on a randomly drawn individual in the population
+ATT estimates the causal effect of treatment on a randomly drawn untreated individual.
+
+
+---
+
+class: large, middle
 
 ## Stable Unit Treatment Value Assumption (SUTVA)
 
-1. Treatment of unit i only a¤ects the outcome of unit i.
-2. In estimating ATE or ATT, the treatment is homogeneous across individuals.
-3. Treatment of unit i is invariant with respect to the mechanism by which the treatment is
-provided.
-4. All possible states of the world are observed.
-5. The only causality question of interest is a historical one for the dataset analyzed.
-6. The only causality question of interest is one in which treatment is received before a choice
-is made; there are no simultaneous relations between treatment and choice.
+1. $T_i$ only affects $Y_i$.
+
+--
+
+1. In estimating ATE or ATT, the treatment is homogeneous across individuals.
+
+--
+
+1. $T_i$ is invariant with respect to the mechanism by which the treatment is provided.
+
+--
+
+1. All possible states of the world are observed.
+
+--
+
+1. The only causality question of interest is a historical one for the dataset analyzed.
+
+--
+
+1. The only causality question of interest is one in which treatment is received before a choice is made; there are no simultaneous relations between treatment and choice.
+
 ---
 
-## 为什么实验室实验
+class: large
+
+## “让我们一起来做因果推断吧！”
+
+--
+
+.center[<img src="image/no.gif" height = 200 />]
+
+--
+
+### RCM之优势
+
+1. 因果律 $\leadsto$ 单一因素的因果效果
+1. 定义了因果关系
+1. 使因果关系可见、可测
+
 
 ---
 
-## 政治学研究中的实验室实验
+class: large
+
+## 实验逻辑的操作化
+
+<img src="image/lab.png" width = 32% />
+<img src="image/field.jpg" width = 32% />
+<img src="image/survey.jpg" width = 32% />
+
+
+--
+
+* 田野实验
+* 调查实验
+* 实验室实验
+
+---
+
+class: large
+
+## 实验室 vs. 田野 vs. 调查
+
+* 时间、空间、被试？
+
+--
+
+* 信息的运用！
+
+---
+
+class: large
+
+## 实验室实验的基本原则
+
+1. 研究者必须首先明确实验的目标人群以及核心干预因素，然后据此决定被试的来源和对其进行的干预模式。 
+
+--
+
+1. 研究设计必须充分考虑对可观察的干扰变量的控制，并通过随机分配控制组和实验组等方法对不可见干扰变量和难以控制的可见干扰变量进行进一步的剔除。 
+
+--
+
+1. 研究者需要对控制组和实验组在接受干预因素影响前后的态度和行为表现进行比对，并根据统计原则进行跨组比较，据此判断干预因素与行为态度之间的因果关系是否存在。
+
+---
+
+class: large
+
+## 实验室实验与实验政治学
+
+* 三大分水岭
+    
+* 三大派别
+    
+* 三大领域
+
 
 ---
 
 ## 对实验室实验的评价
 
+<br><br><br>
+
+
+--
+
+.Large[“虽然内在效度高，]
+
+.Huge[但是外在效度低！”]
+
 ---
 
-## 科学研究方法的效度
+class: large
+
+## 效度
+
+.center[<img src="image/validity.gif" height = 300 />]
+
+--
+
+推断与真实的接近程度。
 
 ---
+
+class: large
+
+## 政治科学研究方法的效度
+
+* 内部效度: 目标人群
+    + 建构性
+    + 因果性
+    + 统计性
+    
+--
+
+
+* 外部效度: 超越目标人群
+
+--
+
+* 生态效度: 嗯……
+
+
+---
+
+class: large
 
 ## 实验室实验的效度
+
+.left-column[
+
+* 一个事故
+    + 可重复危机
+        + 心理学（40%）
+        + 经济学（50% -）
+        + 自然科学
+        + 政治学
+        
+        ]
+
+--
+
+.right-column[
+
+* 几种批评
+    + “学生被试”
+    + “与真实不服”
+
+{{content}}
+
+]
+
+--
+
+* 一些方法
+    + 内部：精确 + 控制
+    + 外部：跨维度
+    + 生态：真实材料、真实环境
+
+{{content}}
 
 ---
 
 ## 怎么用
 
-<img src="image/anExample.gif" height = 300 />
+.center[<img src="image/anExample.gif" height = 400 />]
 
 ---
 
