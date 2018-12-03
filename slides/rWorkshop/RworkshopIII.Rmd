@@ -40,19 +40,6 @@ head(gapminder)
 #glimpse(gapminder)
 ```
 
-### Variable Properties
-
-Discover the attributes and distribution of all or particular variables.
-
-```{r variable, exercise = TRUE}
-summary(gapminder)
-```
-
-```{r variable-solution}
-summary(gapminder$lifeExp)
-#hist(gapminder$lifeExp)
-```
-
 ## Binary Analysis
 
 ### Difference in Mean
@@ -104,19 +91,23 @@ aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>%
 
 ## Multivariate Analysis
 
-### How does a country's average life expectancy change across continents and over time?
+### OLS
+
+Q: How does a country's average life expectancy change across continents and over time?
 
 ```{r ols, exercise = TRUE}
-model <- formula(lifeExp ~ continent + year)
+gapminder %>% count(lifeExp, continent, year)
 ```
 
 
 ```{r ols-solution}
-lm(model, data = gapminder) %>%
+lm(lifeExp ~ continent + year, data = gapminder) %>%
   summary()
 ```
 
-### Controlling for time dependency?
+### Nonlinear independent variables
+
+Controlling for time dependency?
 
 $t + t^2$
 
