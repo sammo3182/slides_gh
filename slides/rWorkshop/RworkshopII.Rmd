@@ -66,7 +66,7 @@ write.csv(gapminder, file = "gapminder.csv")
 ```
 
 
-## Data Manipulation
+## Overview
 
 ### Welcome to the `tidyverse`
 
@@ -103,12 +103,79 @@ Shortcut for `%>%`:
 * Ctrl + Shift + M (Win)
 * Cmd + Shift + M (Mac)
 
+## Single Variable Manipulation
+
 ### A Glimpse of the Data
 
-```{r overview, exercise = TRUE, exercise.eval = TRUE}
+```{r overview, exercise = TRUE}
 glimpse(gapminder)
 ```
 
+### Data properties
+
+```{r dataProp, exercise = TRUE}
+names(gapminder)
+# nrow(gapminder)
+# ncol(gapminder)
+# str(gapminder)
+```
+
+### Variable properties
+
+```{r varProp, exercise = TRUE}
+summary(gapminder$year)
+# mean(gapminder$year, na.rm = TRUE)
+# median(gapminder$year)
+# min(gapminder$year)
+# max(gapminder$year)
+# length(gapminder$year)
+# unique(gapminder$year)
+# table(gapminder$year)
+# descr::freq(gapminder$year)
+# class(gapminder$gdpPercap)
+# typeof(gapminder$gdpPercap)
+# class(gapminder$continent)
+# levels(gapminder$continent)
+```
+
+### Variable manipulation
+
+```{r varChange}
+gapminder$year_bu <- gapminder$year
+```
+
+* Changing a single value (rarely used)
+
+Let's change the second element of variable `year` to "1956."
+
+```{r singleValue, exercise = TRUE}
+gapminder$year[2]
+```
+
+* Changing values based on conditions
+
+Let's add a hundred years to every year recorded under "China."
+
+```{r conditionChange, exercise = TRUE}
+summary(gapminder$year[gapminder$country == "China"])
+```
+
+Is there a way avoiding typing the brackets so many times? 
+
+* Delete a variable
+
+```{r delete, exercise = TRUE}
+gapminder$year <- NA
+```
+
+* Create a variable
+
+```{r create, exercise = TRUE}
+gapminder$year
+```
+
+
+## Within-Dataset Manipulation
 
 ### Ordering the Data
 
@@ -241,7 +308,6 @@ If you want to save the changes, send the result to an object.
 ```{r eval = FALSE}
 gapminderNew <- gapminder %>% ...
 ```
-
 
 ## Multi-dataset Manipulation
 

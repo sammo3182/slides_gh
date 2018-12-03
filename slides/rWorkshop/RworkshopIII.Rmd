@@ -7,7 +7,6 @@ output:
 runtime: shiny_prerendered
 ---
 
-
 ```{r setup, include=FALSE}
 library(learnr)
 library(tidyverse)
@@ -15,37 +14,35 @@ library(gapminder)
 library(car)
 ```
 
-**Yue Hu's "Hello, R!" workshop series III**   
-*Iowa Social Science Research Center (ISRC)*
+**Dr. Hu's "Hello, R!" workshop series III** 
 
 ## Preface
 
-*Fall 2018*
+### R Workshop Series
 
-* A overview of R
-* Data manipulation (input/output, row/column selections, etc.)
-* _Quantitative Analysis_
-* Basic Data Visualization
-
-<br>
-
-Register other workshops in the [ISRC website](http://ppc.uiowa.edu/node/3608).
+* R Basic
+* Data Manipulation
+* **Quantitative Analysis**
+* Multilevel Analysis
+* Data Visualization
+* Geographic Data Visualization
+* Professionalization
 
 ## Descriptive Analysis
 
-### Data Glimpse
+### Data Overview
 
 Toy data: `gapminder` data, demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
 Let's have a check of data structure and sample observations.
 
 ```{r structure, exercise = TRUE}
-glimpse(gapminder)
-# as_data_frame(gapminder)
+head(gapminder)
+#glimpse(gapminder)
 ```
 
-### Variable Glimpse
+### Variable Properties
 
-Discover the attributes and distribution of a variable.
+Discover the attributes and distribution of all or particular variables.
 
 ```{r variable, exercise = TRUE}
 summary(gapminder)
@@ -53,20 +50,20 @@ summary(gapminder)
 
 ```{r variable-solution}
 summary(gapminder$lifeExp)
-hist(gapminder$lifeExp)
+#hist(gapminder$lifeExp)
 ```
 
 ## Binary Analysis
 
-### T Test
+### Difference in Mean
 
-Does the average life expectancy changes before and after the Cold War? (Difference in Mean)
+Q: Does the average life expectancy changes before and after the Cold War? 
 
 $H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alpha = .05$
 
 ```{r ttest, exercise = TRUE}
-gapminder$lifeExp[gapminder$year <= 1991]
-gapminder$lifeExp[gapminder$year > 1991]
+gapminder %>% filter(year <= 1991) %>% summarise(mean(lifeExp))
+gapminder %>% filter(year > 1991) %>% summarise(mean(lifeExp))
 ```
 
 ```{r ttest-solution}
@@ -77,7 +74,7 @@ t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$ye
 
 ### Correlation
 
-Does a country's average life expectancy associate with its GDP per capital? (How about with populations?)
+Q: Does a country's average life expectancy associate with its GDP per capital? (How about with populations?)
 
 $H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
 
