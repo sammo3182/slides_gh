@@ -33,9 +33,9 @@ options(htmltools.dir.version = FALSE)
 ```
 
 
-## 背景：反p-Hacking运动
+## 背景：p-Hacking
 
-* p-value: statistical significance, "stars", 0.05
+* p-value: 统计统计性显著, "stars", 0.05
 
 --
 
@@ -44,6 +44,15 @@ options(htmltools.dir.version = FALSE)
 --
 
 .center[<img src="image/p-worship.gif" height = 300 />]
+
+---
+
+## p-Hacking：一个触目惊心的栗子
+
+.small[Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.]
+
+.center[<img src="image/three_measures.png" height = 300 width = 550 />]
+
 
 ---
 
@@ -106,11 +115,28 @@ Wasserstein, Ronald L., Allen L. Schirm, and Nicole A. Lazar. 2019. “Moving to
 
 ## "Don't is not enough"
 
-Wasserstein et.al., 2019
+Wasserstein et al., 2019, p.1
+
+--
+
+### Many Do's
+
+1. Accept uncertainty;
+1. Be thoughtful;
+1. Be open;
+1. Be modest.
+
+--
+
+* Ziliak’s "Guinnessometrics"
+* Greenland's s-values
+* Blume et al.'s SGPV;
+* Mathews's AnCred;
+* Colquhoun's FPR......
 
 ---
 
-## 一小步
+## 为文明一大步的向前一小步
 
 * 把结果（尤其是**不确定性**）表现清楚
 
@@ -132,19 +158,452 @@ class: inverse, large
 
 ---
 
+## 一个栗子
+
+* Data: Pew Survey 2005-2009 (`df_pew`)
+* DV: 相信美国梦呗？(`meritocracy`)
+* IV:
+    + 收入(`income_i`)
+    + 经济不平等指数(`ginicnty`)
+    + 教育(`educ_i`)
+    + 党派(`partyid_i`)
+
+---
+
+class: small
+
+## Conventional Presentation
+
+.left-column[
+
+```{r example}
+df_pew <- read.csv("data/pew1_w.csv")
+
+m1 <- glm(
+  meritocracy~ginicnty + income_i + educ_i + union_i,
+  data = df_pew,
+  family = binomial(link = "logit")
+)
+
+```
+
+]
+
+.right-column[
+
+```{r table, echo=FALSE}
+library(dplyr)
+library(gt)
+library(gtsummary, lib.loc = .libPaths()[2])
+
+gtsummary(m1, stars = TRUE)
+
+```
+
+]
+
+
+---
+
 ## `dotwhisker::dwplot`
 
+.left-column[
+
+```{r dw-simple, eval = FALSE}
+library(dotwhisker)
+
+dwplot(m1)
+```
+
+]
+
+.right-column[
+
+```{r dw-simpleFig, echo = FALSE, message = FALSE, fig.width = 6}
+library(dotwhisker)
+
+dwplot(m1, by_2sd = FALSE, dot_args = list(size = 4)) +
+  theme(axis.text = element_text(size = 20))
+```
+
+]
+
 ---
 
-## `dotwhisker::dwplot(style = "distribution")`
+## `dotwhisker::dwplot`
+
+.left-column[
+
+"Compatibility Intervals": Showing the effect sizes that are most compatible with the data
+under the given model.
+
+```{r dw-ci, eval = FALSE}
+dwplot(m1,
+       conf.level = .975) #<<
+```
+
+]
+
+.right-column[
+
+```{r dw-ciFig, echo = FALSE, message = FALSE, fig.width = 6}
+dwplot(m1, conf.level = .975, by_2sd = FALSE, dot_args = list(size = 4)) +
+  theme(axis.text = element_text(size = 20))
+```
+
+]
 
 ---
+
+## `dotwhisker::dwplot`
+
+.left-column[
+
+Multiple models
+
+```{r dw-multi, eval = FALSE}
+m2 <- update(m1, . ~ . 
+             + age_i) #<<
+m3 <- update(m2, . ~ . 
+             + ideo_i) #<<
+
+dwplot(list(m1, m2, m3))
+```
+
+]
+
+.right-column[
+
+```{r dw-multiFig, echo = FALSE, message = FALSE, fig.width = 6}
+m2 <- update(m1, . ~ . + age_i)
+m3 <- update(m2, . ~ . + ideo_i)
+
+dwplot(
+  list(m1, m2, m3),
+  dot_args = list(size = 4),
+  by_2sd = FALSE
+) +
+  theme(axis.text = element_text(size = 20))
+```
+
+]
+
+---
+
+class: small
+
+## `dotwhisker::dwplot`
+
+换一种比较方式：
+
+```{r parallel, eval = FALSE}
+dwplot(list(m1, m2, m3)) +
+    facet_grid(~model, scales="free_y") #<<
+```
+
+```{r parallelFig, echo = FALSE, fig.height = 5}
+dwplot(
+  list(m1, m2, m3),
+  dot_args = list(size = 4),
+  by_2sd = FALSE
+) +
+  theme(axis.text = element_text(size = 20),
+        legend.position = "none") +
+    facet_grid(~model, scales="free_y") 
+```
+
+---
+
+## `dotwhisker::dwplot`
+
+.left-column[
+
+呈现截距
+
+```{r dw-intercept, eval = FALSE}
+dwplot(list(m1, m2, m3)，
+       show_intercept = TRUE) #<<
+```
+
+]
+
+.right-column[
+
+```{r dw-interceptFig, echo = FALSE, message = FALSE, fig.width = 6}
+dwplot(
+  list(m1, m2, m3),
+  dot_args = list(size = 4),
+  by_2sd = FALSE,
+  show_intercept = TRUE
+) +
+  theme(axis.text = element_text(size = 20))
+```
+
+]
+
+---
+
+## `dotwhisker::dwplot`
+
+
+`ggplot2`扩展
+
+```{r dw-ggplot, eval = FALSE}
+dwplot(list(m1, m2, m3)) %>% 
+    relabel_predictors(c(ginicnty = "Ginix系数",                       
+                         income_i = "个人收入", 
+                         educ_i = "教育", 
+                         union_i = "是否加入工会", 
+                         age_i = "年龄", 
+                         ideo_i = "意识形态倾向")) +
+     theme_bw() + xlab("Log Odds") + ylab("") +
+     geom_vline(xintercept = 0, colour = "grey60", linetype = 2) +
+     ggtitle("谁更相信‘美国梦’") +
+     theme(plot.title = element_text(face="bold"),
+           legend.justification=c(0, 0), legend.position=c(0, 0),
+           legend.background = element_rect(colour="grey80"),
+           legend.title = element_blank()) 
+```
+
+
+
+---
+
+## `dotwhisker::dwplot`
+
+`ggplot2`扩展
+
+
+```{r dw-ggplotFig, echo = FALSE, message = FALSE, fig.height = 6}
+dwplot(
+  list(m1, m2, m3),
+  dot_args = list(size = 4),
+  by_2sd = FALSE
+)  %>% 
+    relabel_predictors(c(ginicnty = "Ginix系数",                       
+                         income_i = "个人收入", 
+                         educ_i = "教育", 
+                         union_i = "是否加入工会", 
+                         age_i = "年龄", 
+                         ideo_i = "意识形态倾向")) +
+     theme_bw() + xlab("Log Odds") + ylab("") +
+     geom_vline(xintercept = 0, colour = "grey60", linetype = 2) +
+     ggtitle("谁更相信‘美国梦’") +
+     theme(plot.title = element_text(face="bold"),
+           legend.justification=c(0, 0), legend.position=c(0, 0),
+           legend.background = element_rect(colour="grey80"),
+           legend.title = element_blank()) +
+  theme(axis.text = element_text(size = 20))
+```
+
+---
+
+## `dotwhisker::dwplot`
+
+.left-column[
+
+方便发表
+
+```{r dw-polish, eval = FALSE}
+plotShape <- rep(c(8, 10, 15) , 
+                 each = 6)
+
+
+dwplot(list(m1, m2, m3),
+       dot_args =
+         list(
+           aes(
+             shape = plotShape #<<
+             )
+           )) + 
+  scale_shape_identity() +
+  theme_bw() #<<
+```
+
+]
+
+.right-column[
+
+```{r dw-polishFig, echo = FALSE, message = FALSE, fig.width = 6}
+plotShape <- rep(c(8, 10, 15) , 
+                 each = 6)
+
+dwplot(
+  list(m1, m2, m3),
+  dot_args = list(
+    aes(shape = plotShape),
+    size = 4),
+  by_2sd = FALSE
+) +
+  theme_bw() +
+  theme(axis.text = element_text(size = 20),
+        legend.position = "none") +
+  scale_shape_identity()
+```
+
+]
+
+---
+
+## `dotwhisker::dwplot`
+
+.left-column[
+
+分类标注
+
+```{r dw-cat, eval = FALSE}
+two_brackets <- list(
+  c("Econ", "ginicnty", "income_i"),
+  c("Demo", "educ_i", "ideo_i")
+)
+
+
+dwplot(list(m1, m2, m3)) %>% 
+  add_brackets(two_brackets) #<<
+```
+
+]
+
+.right-column[
+
+```{r dw-catFig, echo = FALSE, message = FALSE, fig.width = 6}
+two_brackets <- list(
+  c("Econ", "ginicnty", "income_i"),
+  c("Demo", "educ_i", "ideo_i")
+)
+
+{dwplot(
+  list(m1, m2, m3),
+  dot_args = list(size = 4),
+  by_2sd = FALSE
+) + theme(axis.text = element_text(size = 20),
+        legend.position = "none")} %>% 
+  add_brackets(two_brackets)
+```
+
+]
+
+---
+
+class: small
+
+## 再进一步
+
+.left-column[
+
+Inspired by Edwards, Jacobs, and Forrest (2016, p.5)  
+
+```{r dw-dist, eval = FALSE}
+m4 <- update(m3, .~. - ginicnty - ideo_i)
+
+dwplot(m4,
+       by_2sd = TRUE, #<<
+       style = "distribution")  #<<
+```
+
+]
+
+.right-column[
+
+```{r dw-distFig, echo = FALSE, message = FALSE, fig.height = 6, fig.width = 6}
+m4 <- update(m3, .~. - ginicnty - ideo_i)
+  
+dwplot(m4,
+       style = "distribution") + 
+  theme(axis.text = element_text(size = 20),
+        legend.position = "none")
+
+```
+
+]
+
+???
+
+distribution was estimated by `dnorm`
+
+---
+
+class: small
 
 ## `dotwhisker::secret_weapon`
 
+.left-column[
+
+Inspired by Andrew Gelman (2005)  
+
+```{r secret, eval = FALSE}
+df_byYear <- df_pew %>%
+  group_by(survid) %>%
+  do(tidy(
+    glm(
+      meritocracy ~ ginicnty + income_i + educ_i + union_i,
+      family = binomial(link = "logit"),
+      data = df_pew
+    )
+  )) %>% 
+  ungroup %>% 
+  rename(model = survid)
+
+secret_weapon(df_byYear, var = "income_i") #<<
+  
+```
+
+]
+
+.right-column[
+
+```{r secretFig, echo = FALSE, message = FALSE, , fig.height = 6, fig.width = 6}
+
+df_pew$survid <- select(df_pew, starts_with("survid")) %>%
+  mutate(survid = factor(as.matrix(.) %*% (1:3), labels = c("2005", "2006", "2007", "2009"))) %>% # combine binaries to a factor
+  .$survid
+
+
+df_byYear <- df_pew %>%
+  group_by(survid) %>%
+  do(tidy(
+    glm(
+      meritocracy ~ ginicnty + income_i + educ_i + union_i,
+      family = binomial(link = "logit"),
+      data = df_pew
+    )
+  )) %>% 
+  ungroup %>% 
+  rename(model = survid)
+
+secret_weapon(df_byYear, var = "income_i") + 
+  theme(axis.text = element_text(size = 20),
+        legend.position = "none")
+  
+```
+
+]
+
+
 ---
 
+class: small
+
 ## `dotwhisker::small_multiple`
+
+.left-column[
+
+Inspired by Kastellec and Leoni (2007, p.766)
+
+```{r smallM, eval = FALSE}
+small_multiple(list(m1, m2, m3))
+```
+
+]
+
+.right-column[
+
+```{r smallMFig, echo = FALSE, message = FALSE, , fig.height = 6, fig.width = 6}
+small_multiple(list(m1, m2, m3))  + 
+  theme(axis.text = element_text(size = 20))
+```
+
+]
 
 ---
 
@@ -157,6 +616,38 @@ class: inverse, large
 1. 排除虚假显著。
 
 ---
-## `interplot::interplot`
 
-example
+class: small
+
+## 交互项：又一个栗子
+
+```{r inter-eg}
+m5 <-glm(meritocracy ~ ginicnty + income_i + ginicnty:income_i + income_cnty +
+      black_cnty + perc_bush04 + pop_cnty + educ_i + age_i + gender_i + unemp_i +
+      union_i + partyid_i + ideo_i + attend_i + survid2006 + survid2007 + survid2009, data = df_pew, family = binomial(link = "logit"))
+
+gtsummary(m5, stars = TRUE, coef_map = c("ginicnty" = "Gini", "income_i" = "income", "ginicnty:income_i" = "Gini X income"))
+```
+
+---
+
+class: small
+
+## 毛病在哪里？
+
+.left-column[<img src="image/wrong.gif" height = 300 />]
+
+--
+
+.right-column[
+
+$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + \varepsilon.$$
+
+交互效应：
+
+$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
+]
+
+交互效应variance:
+
+$$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} \neq var(\hat{\beta_3}).$$
