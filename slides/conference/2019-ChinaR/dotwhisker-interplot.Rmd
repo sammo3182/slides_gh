@@ -554,7 +554,7 @@ secret_weapon(df_byYear, var = "income_i") #<<
 
 ```{r secretFig, echo = FALSE, message = FALSE, , fig.height = 6, fig.width = 6}
 
-df_pew$survid <- select(df_pew, starts_with("survid")) %>%
+df_pew$survid <- dplyr::select(df_pew, starts_with("survid")) %>%
   mutate(survid = factor(as.matrix(.) %*% (1:3), labels = c("2005", "2006", "2007", "2009"))) %>% # combine binaries to a factor
   .$survid
 
@@ -648,6 +648,80 @@ $$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + \varepsilon.$$
 $$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
 ]
 
+--
+
 交互效应variance:
 
 $$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} \neq var(\hat{\beta_3}).$$
+
+---
+
+## 怎么办？
+
+* Marginal effects + visualization
+
+```{r inter, eval = FALSE}
+library(interplot)
+interplot(m5, var1 = "ginicnty",var2 = "income_i") + #<<
+  xlab("income_i") + ylab("Effect of `ginicnty`")
+```
+
+---
+
+```{r interFig, echo = FALSE}
+library(interplot)
+interplot(m5, var1 = "ginicnty",var2 = "income_i") +
+  xlab("income_i") + ylab("Effect of `ginicnty`") +
+  theme(axis.text = element_text(size = 20))
+```
+
+---
+
+## 分布问题？
+
+Hainmueller, et al. 2018.
+
+```{r inter-dist, fig.width = 8, fig.height = 5, message=FALSE}
+interplot(m5, var1 = "ginicnty",var2 = "income_i", 
+          hist = TRUE) #<<
+```
+
+---
+
+## 解释问题？
+
+```{r inter-prepro, , fig.width = 8, fig.height= 5}
+interplot(m5, var1 = "ginicnty",var2 = "income_i", 
+          predPro = TRUE, #<<
+          var2_vals = c(min(df_pew$income_i), max(df_pew$income_i))) #<<
+```
+
+---
+
+## Take Home Points
+
+* Being transparent
+* Being modest/scientific
+* Using `dotwhisker` and `interplot`
+
+---
+
+## 最重要的是！
+
+Say no to ANY p-hacking!
+
+.center[<img src="image/say_no.gif" height = 400 />]
+
+
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
+
