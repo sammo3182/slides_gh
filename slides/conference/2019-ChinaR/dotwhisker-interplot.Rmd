@@ -35,7 +35,7 @@ options(htmltools.dir.version = FALSE)
 
 ## 背景：p-Hacking
 
-* p-value: 统计统计性显著, "stars", 0.05
+* p-value: 统计性显著, "stars", 0.05
 
 --
 
@@ -49,9 +49,11 @@ options(htmltools.dir.version = FALSE)
 
 ## p-Hacking：一个触目惊心的栗子
 
-.small[Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.]
+Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” *American Journal of Political Science* 59(2): 326–40.
 
-.center[<img src="image/three_measures.png" height = 300 width = 550 />]
+---
+
+.center[<img src="image/three_measures.png" height = 600 width = 700 />]
 
 
 ---
@@ -134,9 +136,13 @@ Wasserstein et al., 2019, p.1
 * Mathews's AnCred;
 * Colquhoun's FPR......
 
+???
+
+易丹辉： 用数据诠释实际问题
+
 ---
 
-## 为文明一大步的向前一小步
+## 一小步
 
 * 把结果（尤其是**不确定性**）表现清楚
 
@@ -166,15 +172,8 @@ class: inverse, large
     + 收入(`income_i`)
     + 经济不平等指数(`ginicnty`)
     + 教育(`educ_i`)
-    + 党派(`partyid_i`)
+    + 加入工会(`union_i`)
 
----
-
-class: small
-
-## Conventional Presentation
-
-.left-column[
 
 ```{r example}
 df_pew <- read.csv("data/pew1_w.csv")
@@ -187,9 +186,12 @@ m1 <- glm(
 
 ```
 
-]
 
-.right-column[
+---
+
+class: small
+
+## Conventional Presentation
 
 ```{r table, echo=FALSE}
 library(dplyr)
@@ -199,8 +201,6 @@ library(gtsummary, lib.loc = .libPaths()[2])
 gtsummary(m1, stars = TRUE)
 
 ```
-
-]
 
 
 ---
@@ -345,7 +345,6 @@ dwplot(
 
 ## `dotwhisker::dwplot`
 
-
 `ggplot2`扩展
 
 ```{r dw-ggplot, eval = FALSE}
@@ -408,7 +407,6 @@ dwplot(
 plotShape <- rep(c(8, 10, 15) , 
                  each = 6)
 
-
 dwplot(list(m1, m2, m3),
        dot_args =
          list(
@@ -456,7 +454,6 @@ two_brackets <- list(
   c("Econ", "ginicnty", "income_i"),
   c("Demo", "educ_i", "ideo_i")
 )
-
 
 dwplot(list(m1, m2, m3)) %>% 
   add_brackets(two_brackets) #<<
@@ -579,7 +576,6 @@ secret_weapon(df_byYear, var = "income_i") +
 
 ]
 
-
 ---
 
 class: small
@@ -617,17 +613,35 @@ class: inverse, large
 
 ---
 
-class: small
-
 ## 交互项：又一个栗子
 
 ```{r inter-eg}
-m5 <-glm(meritocracy ~ ginicnty + income_i + ginicnty:income_i + income_cnty +
-      black_cnty + perc_bush04 + pop_cnty + educ_i + age_i + gender_i + unemp_i +
-      union_i + partyid_i + ideo_i + attend_i + survid2006 + survid2007 + survid2009, data = df_pew, family = binomial(link = "logit"))
-
-gtsummary(m5, stars = TRUE, coef_map = c("ginicnty" = "Gini", "income_i" = "income", "ginicnty:income_i" = "Gini X income"))
+m5 <- glm(
+  meritocracy ~ 
+    ginicnty * income_i + #<<
+    income_cnty + black_cnty + perc_bush04 + pop_cnty + 
+    educ_i + age_i + gender_i + unemp_i + union_i + 
+    partyid_i + ideo_i + attend_i + survid2006 + 
+    survid2007 + survid2009,
+  data = df_pew,
+  family = binomial(link = "logit")
+)
 ```
+
+---
+
+```{r inter-egT, echo = FALSE}
+gtsummary(
+  m5,
+  stars = TRUE,
+  coef_map = c(
+    "ginicnty" = "Gini",
+    "income_i" = "income",
+    "ginicnty:income_i" = "Gini X income"
+  )
+)
+```
+
 
 ---
 
@@ -660,19 +674,24 @@ $$\hat{\sigma}_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2v
 
 * Marginal effects + visualization
 
-```{r inter, eval = FALSE}
+```{r inter, eval =FALSE}
 library(interplot)
-interplot(m5, var1 = "ginicnty",var2 = "income_i") + #<<
+
+interplot(m5, #<<
+  var1 = "ginicnty", #<<
+  var2 = "income_i") + #<<
   xlab("income_i") + ylab("Effect of `ginicnty`")
 ```
 
 ---
 
-```{r interFig, echo = FALSE}
+```{r interFig, fig.width = 9, echo = FALSE, message = FALSE}
 library(interplot)
 interplot(m5, var1 = "ginicnty",var2 = "income_i") +
   xlab("income_i") + ylab("Effect of `ginicnty`") +
-  theme(axis.text = element_text(size = 20))
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size = 20),
+        plot.caption = element_text(size = 20))
 ```
 
 ---
@@ -698,11 +717,14 @@ interplot(m5, var1 = "ginicnty",var2 = "income_i",
 
 ---
 
-## Take Home Points
+## 小结
 
-* Being transparent
-* Being modest/scientific
-* Using `dotwhisker` and `interplot`
+* 公开透明
+* 温良恭俭
+
+--
+
+* 请使用 `dotwhisker` 和`interplot`
 
 ---
 
