@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>计算机辅助文本分析</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦 清华大学政治学系" />
+    <meta name="date" content="2019-06-01" />
+    <link href="textAnalaysis_files/remark-css/rladies.css" rel="stylesheet" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <link rel="stylesheet" href="https:\\use.fontawesome.com\releases\v5.6.0\css\all.css" type="text/css" />
+    <link rel="stylesheet" href="https:\\cdnjs.cloudflare.com\ajax\libs\animate.css\3.7.0\animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 计算机辅助文本分析
+## 基础篇
+### 胡悦<br>清华大学政治学系
+### 2019-06-01
+
+---
+
+
+
+
+
+## 清华大学计算社会科学平台
+
+* 清华大学计算社会科学平台(T-CSS)
+    + http://css.ids.tsinghua.edu.cn
+
+--
+
+* 清华计算社会科学工作坊系列
+* 清华计算社会科学专题论坛系列
+* 社科大数据计算环境
+
+---
+
+## 内容提要
+
+### 理论
+
+* Text as Data: 文本与文本分析
+* 文本分析的基本原则
+
+### 操作
+
+* 文本获取
+* 文本整理
+* 基本分析
+* （进阶分析）
+
+
+---
+
+## 技术来源
+
+* 平台：R
+    + [`rvest`](https://rvest.tidyverse.org/)
+    + [`tidytext`](https://www.tidytextmining.com/)
+    + [`jiebaR`](https://qinwenfeng.com/jiebaR/)
+    
+--
+
+* 其他平台：
+    + Python
+    + C++
+    + Java
+
+---
+
+## Text as Data
+
+* 每年： 
+    + 2017-2018年年增量56,530,000人。
+
+--
+
+* 每天：
+    + 百度每天的用户搜索请求，需要1.7天才能扫描一遍；
+    + 微信日增数据500TB——比人类所有书籍存量还多；
+
+--
+
+* 每秒：全世界每秒发送290万封电子邮件，一个人需要5.5年日以继夜才能读完；
+
+---
+
+2020年，数据总量达40ZB，人均5.2TB
+
+`$$1ZB = 1,024EB = 1,024^2PB = 1,024^3TB$$`
+$$ = 1024^4GB.$$
+
+
+???
+Giga Byte &gt; Tera Byte &gt; Peta Byte &gt; 
+Exa Byte &gt; Zetta Byte &gt; Yotta Byte
+
+--
+
+1080p HD视频 1小时左右： 3GB
+
+---
+
+## 社会科学中的文本分析
+
+* 历史悠久而非主流
+    + 文本资料难获取；花时间； 难推广；难管理；难分析
+
+--
+
+* 分析工具的繁荣：
+    + 大规模文本数据采集；
+    + 存储和管理能力增强；
+    + 文本分析方法蓬勃发展：
+    + 可推广、系统化和廉价化；
+    + 文本资料指数级增长；
+    + 通过文本表达的社会意义更广泛；
+
+---
+
+## 何为文本分析？
+
+文本分析是研究者*描述和阐释*一系列记录或可视文本的方法。
+
+--
+
+符号化 + 标准化
+
+???
+
+存在；密度；频次
+
+结构；功能
+
+
+---
+
+## 计算机辅助文本分析
+
+* Text analysis vs. content analysis
+
+--
+
+* Representational analysis vs. Instrumental analysis
+
+???
+
+精确解码，关注外显（manifest）；
+探索意图，关注隐含（latent）
+
+--
+
+* Thematic analysis vs. semantic analysis
+
+???
+
+概念是否出现及何种关系，基于词频和向量；
+识别主题间的具体关系；考虑语法、逻辑等
+
+语法学(syntax, how to say it)
+语义学(semantic, what is said)
+语用学(pragmatic, what is implicated)
+
+---
+
+## 文本分析分析对象
+
+.left-column[
+
+* 语言
+
+* Language matters!
+
+]
+
+--
+
+.right-column[
+
+&lt;img src="image/arrival.jpg" height = 450 /&gt;
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>`"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
