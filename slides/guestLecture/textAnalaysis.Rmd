@@ -7,12 +7,12 @@ output:
   xaringan::moon_reader:
     css: 
       - rladies
-      - "../../../css/zh-CN_custom.css"
-      - "../../../css/styles.css"
+      - "../../css/zh-CN_custom.css"
+      - "../../css/styles.css"
       - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
       - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    chakra: ../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
@@ -24,12 +24,27 @@ output:
         </div>`
 ---
 
-
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       warning = FALSE)
+
+# wrap hook
+
+library(knitr)
+hook_output <- knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
 
 library(pacman)
 
@@ -177,11 +192,11 @@ Exa Byte > Zetta Byte > Yotta Byte
 
 ---
 
-## 文本分析分析对象
+## 分析对象
 
 .left-column[
 
-* 语言
+* .large[语言]
 
 * Language matters!
 
@@ -194,3 +209,824 @@ Exa Byte > Zetta Byte > Yotta Byte
 <img src="image/arrival.jpg" height = 450 />
 
 ]
+
+---
+
+## 分析挑战
+
+--
+
+* 非结构化
+
+--
+
+* 海量潜在维度
+
+--
+
+* 语言复杂且微妙的关系
+
+--
+
+* 大数据问题：过载、失实、 冗余、污染
+
+
+---
+
+## 分析实例
+
+.center[<img src="image/anExample.gif" height = 450 />]
+
+---
+
+### Grimmer, Justin. 2010. “A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.” Political Analysis 18(1): 1–35.
+
+* 目标：美国参议员与选民的政治沟通
+
+--
+
+* 核心方法：贝叶斯分层主题模型
+
+--
+
+* 数据：美国参议院2007年来发布的24000余份新闻通告
+
+--
+
+* 发现：
+    + 关注重点与其他参议员的关注事件相关；
+    + 关注重点的地域分布具集聚性；
+    + 议员对挪用的关注程度与他们对禁止挪用法案的投票呈现出正相关关系。
+
+
+---
+
+### Benoit, Kenneth et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” American Political Science Review 110(2): 278–95.
+
+* 目标：专家与普通人
+* 方法：Crowd-sourced identification
+* 数据：18,263 natural sentences, 1987~2010
+    + 215,107 群众评判
+    + 123,000 专家评判
+
+???
+
+British Conservative, Labour and Liberal Democrat manifesto, 
+
+---
+
+<img src="image/crowd-sourced.jpg" height = 450 />
+
+
+---
+
+<img src="image/expert-crowd.png" height = 400 />
+
+---
+
+### Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
+
+* 目标： 测量情感强烈度
+* 数据：74,158 Congressional floor speeches
+* 方法： 统计音高变化
+
+--
+
+.center[<img src="image/vocalPitch_hcy.png" height = 270 />]
+
+---
+
+<img src="image/vocalPitch.png" height = 600 />
+
+
+???
+
+female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
+
+---
+
+### King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
+
+* 对象：审查的目标是阻止/打击批评政府。
+
+--
+
+* 发现：
+    + 中国允许新媒体上存在大量批评政府的意见；
+    + 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。
+
+---
+
+* 数据
+    + 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖
+        + 随机抽取:127,283
+
+.center[<img src="image/crimson-hexagon.png" height = 200 />]
+
+???
+
+2007年Gary King创办，2018年并入英国Brandwatch.
+
+---
+
+background-image: url(image/chinese-media.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+* 对每个网贴，首次出现时下载；
+* 一段时间后再次访问该网贴，识别是否被删帖； 
+* 使用自动文本分析分析海量文本资料。
+
+<img src="image/censored.png" height = 450 />
+
+---
+
+## 研究设计与假设
+
+* 检测各议题领域；
+* 识别发帖量爆发，找到相关联的真实事件；
+* 识别产生了集体行动的事件；
+* 判断公众发帖与潜在的集体行动相关；
+* 判断支持或批评政府。
+
+???
+
+识别出87件
+
+--
+
+* 理论假设：政府审查所有与潜在集体行动相关发帖。
+
+---
+
+## 有效性检验
+
+1. 发帖量
+1. 引发事件类型
+1. 贴子内容
+
+---
+
+## 发帖量
+
+.center[<img src="image/post-amount.png" height = 500 />]
+
+---
+
+## 事件类型
+
+1. 情感维度：对政府的负面、正面、或中立意见 
+
+--
+
+1. 主题维度：
+    + 潜在集体行动
+    + 对审查者的批评
+    + 色情
+    + 新闻
+    + 政府政策
+
+???
+
+网络外抗议或有组织的群体性事件；
+以往有组织或煽动集体行动的个体；
+以往煽动抗议或集体行动的民族主义或民族情绪；
+
+
+---
+
+.center[<img src="image/post-type.png" height = 500 />]
+
+---
+
+.center[<img src="image/post-censor.png" height = 500 />]
+
+---
+
+.center[<img src="image/inner-mongolia.png" height = 500 />]
+
+???
+
+On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters.
+
+---
+
+.center[<img src="image/post-one-child.png" height = 500 />]
+
+???
+
+Continually high censorship levels：pornography, criticism of the censors
+
+---
+
+## 帖子内容
+
+* 对中文帖子进行标准化编码；
+* 删除标点符号等；
+* 对字符分段形成词语；
+* 按类别计算被审查掉的词语比例；
+
+---
+
+<img src="image/post-content.png" height = 300 />
+
+[`Readme`](https://gking.harvard.edu/readme) in R
+
+???
+
+This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels.
+
+---
+
+## 文本资源: 原生数据
+
+* Email/短信
+* 网站HTML
+* RSS feeds
+* 网络社交媒体
+* 网络论坛
+* 网络问答平台
+* 媒体数据库
+* 网络交易行为
+……
+
+---
+
+## 社交媒体
+
+.center[<img src="image/social-media.gif" height = 400 />]
+
+新浪微博1.4亿，微信用户5.5亿;
+微信日增数据500TB，QQ日增数据200TB。
+
+---
+
+## 公共开放平台
+
+.center[<img src="image/zhongsheng_index.png" height = 500 />]
+
+---
+
+## 网络问政平台
+
+.center[<img src="image/henan-Egovernment.png" height = 400 />]
+
+---
+
+## 社会化问答网站
+
+.center[<img src="image/zhihu.png" height = 350 />]
+
+???
+
+Quora, Stack Overflow
+
+---
+
+## 媒体数据库
+
+.center[<img src="image/renminribao.png" height = 500 />]
+
+---
+
+## 问卷开放性问题
+
+.center[<img src="image/survey_openQuestion.png" height = 450 />]
+
+---
+
+## 文本资源: 档案数据
+
+* 中国知网等数据库（期刊、报刊、年鉴等）
+* Google Books、百度学术
+* Google Trend、百度指数
+* JSTOR Data for Research……
+
+---
+
+## 百度指数
+
+.center[<img src="image/baidu_zhishu.png" height = 400 />]
+
+---
+
+## 文本资源：数字化
+
+* 文本扫描 + OCR
+.center[<img src="image/hongkong_lib.png" height = 400 />]
+
+---
+
+.center[<img src="image/cbdb.png" height = 600 />]
+
+---
+
+## 文本获取
+
+* 档案数据和数字化数据
+* 原生数据：
+    + Spider/crawler/scraper
+    + 清理
+
+---
+
+## 抓取工具
+
+.center[<img src="image/bazhuayu.png" height = 500 />]
+
+---
+
+.center[<img src="image/huochetou.png" height = 550 />]
+
+---
+
+.center[<img src="image/gooseeker.png" height = 550 />]
+
+---
+
+background-image: url(image/gooseekerI.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+background-image: url(image/gooseekerII.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+background-image: url(image/gooseekerIII.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+## 用R进行文本抓取
+
+`SelectorGadget`(Chrome)
+
+.center[<img src="image/zhongsheng_page.png" height = 350 />]
+
+---
+
+`rvest`(R)
+
+```{r zhongsheng-scrape, eval = FALSE, include = FALSE}
+ls_zhongsheng <- read_html("http://politics.people.com.cn/GB/8198/426918/index.html") %>% # index page
+  html_nodes("h5 a") %>% # the nodes of the links
+  html_attr("href") %>% # just the links
+  str_replace("^/n1", "http://politics.people.com.cn/n1")
+
+df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
+  zs_article <- read_html(link, encoding = "GB18030") # read the html
+  
+  zs_title <- html_nodes(zs_article, "h1") %>%
+    html_text
+  
+  zs_time <- html_nodes(zs_article, ".box01 .fl") %>%
+    html_text %>%
+    str_extract("\\d{4}年\\d{2}月\\d{2}日")
+  
+  zs_content <- html_nodes(zs_article, "#rwb_zw p") %>%
+    html_text %>%
+    str_c(collapse = "") %>% # combined the paragraphs
+    str_remove_all("\\s|\\n|\\t") # remove the horizontal spaces
+  
+  zs_data <- data.frame(title = zs_title,
+                        time = zs_time,
+                        content = zs_content) %>%
+    mutate(
+      time = str_replace(time, "(\\d{4})年(\\d{2})月(\\d{2})日", "\\1-\\2-\\3"),
+      time = as.Date(time)
+    )
+})
+
+saveRDS(df_zhongsheng, "zhongsheng.RDS")
+```
+
+```{r zhongsheng-eg, eval = FALSE, echo=TRUE}
+ls_zhongsheng <- read_html("http://politics.people.com.cn/GB/8198/426918/index.html") %>% # index page
+  html_nodes("h5 a") %>% # the nodes of the links
+  html_attr("href") %>% # just the links
+  str_replace("^/n1", "http://politics.people.com.cn/n1")
+
+df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
+  zs_article <- read_html(link, encoding = "GB18030") # read the html
+  
+  zs_title <- html_nodes(zs_article, "h1") %>%
+    html_text
+  
+  zs_time <- html_nodes(zs_article, ".box01 .fl") %>%
+    html_text %>%
+    str_extract("\\d{4}年\\d{2}月\\d{2}日")
+  
+  zs_content <- html_nodes(zs_article, "#rwb_zw p") %>%
+    html_text %>%
+    str_c(collapse = "") %>% # combined the paragraphs
+    str_remove_all("\\s|\\n|\\t") # remove the horizontal spaces
+  
+  zs_data <- data.frame(title = zs_title,
+                        time = zs_time,
+                        content = zs_content) 
+})
+```
+
+---
+
+## Regular Expression
+
+.center[<img src="image/regular_expression.png" height = 500 />]
+
+---
+
+## 结果
+
+```{r zhongsheng-analyze}
+df_zhongsheng <- readRDS("zhongsheng.RDS")
+```
+
+.center[<img src="image/zhongsheng_output.png" height = 300 width = 700 />]
+
+---
+
+## 文本分析方法与流程
+
+* 获取数据
+* 结构化
+* Supervised vs. Unsupervised
+
+---
+
+<img src="image/text-analysis-method.png" height = 550 />
+
+---
+
+## 常见文本分析方法
+
+### 描述
+
+词云(word-cloud)、网络
+
+### 聚类
+
+知类分文、知文分类
+
+### 语义
+
+情感分析(sentiment analysis)
+
+---
+
+## 孤木不成林
+
+* 结合互联网舆情与法院判决信息、股价信息等，评判行业发展前景；
+* 结合交易流水信息，提高消费者画像精确度；
+* 结合网络社交与候选人资料预测国会选举、投票率等
+
+---
+
+## 基本原则
+
+(Grimmer & Stewart 2013)
+
+--
+
+1. 所有现存关于语言的定量模型都是有偏误的——但不乏能提供有用的信息。
+
+--
+
+1. 文本定量模型旨在增强人（作为主体）的辨识范围和能力。
+
+--
+
+1. 不存在通行的文本分析最优模型。
+
+--
+
+1. 有效性！有效性！有效性！
+
+
+---
+
+## 核心假定： A Bag of Words
+
+A text is represented as the bag (multiset) of its words. 
+
+--
+
+<img src="image/bagOfWords.png" width = 700 />
+
+
+---
+
+## 操作化: Tokenization
+
+* 文章打散
+
+* 洗去Syntax
+    + 大小写
+    + stemming (e.g., 美国式、美式)
+    + 标点
+    + 非字符（@#￥%……&*）
+
+* 区别词性
+    + Content vs. function
+    + 名、动、形、副、介、代……
+
+---
+
+### Stop words
+
+
+```{r stop-words-en}
+read_lines(STOPPATH)[883:933]
+```
+
+--
+
+```{r stop-words-ch}
+read_lines(STOPPATH)[157:207]
+```
+
+---
+
+常见中文stop words资源
+
+* 百度停词表
+* 哈工大停词表
+* 网络搜集停词表，如[“最全中文停用词表整理（1893个）”](https://blog.csdn.net/shijiebei2009/article/details/39696571)
+* 自定义
+
+---
+
+.center[<img src="image/bagOfWords2.jpg" height = 500 />]
+
+---
+
+class: small
+
+## 亚洲特色：Segment
+
+"一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"——"难道非要撞了南墙才回头——意孤行必将失败", 《人民日报》（2019年05月30日02版）
+
+
+```{r segment}
+zhongsheng <- "一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"
+cutter <- worker() # segment engine
+new_user_word(cutter, "萨米·卡姆哈维", "nr") # customize segmentation
+
+segment(zhongsheng, cutter)
+```
+
+---
+
+## 词频与词性分析
+
+```{r zhongsheng-clean}
+df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
+  segment(content, cutter) %>% paste(collapse = " ")
+})
+
+df_zhongsheng$phase <- "US_fail"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-22"] <- "theory_test"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-11"] <- "reassessment"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-08"] <- "optimism"
+
+
+df_token <- df_zhongsheng %>% 
+  select(-content) %>% 
+  unnest_tokens(word, segmented) # tokenization
+
+# Show the word counts
+select(df_token, -phase) %>% head
+```
+
+--
+
+去掉停词
+
+```{r zhongsheng-stop}
+# removing the stop words
+df_stopWords <- tibble(word = read_lines(STOPPATH))
+
+df_token <- df_token %>% 
+  anti_join(df_stopWords) 
+
+select(df_token, -phase) %>% head
+```
+
+---
+
+```{r zhongsheng-frequency}
+df_token %>% count(word, sort = TRUE) %>% 
+  filter(n > 151) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  ylab("词频统计") + 
+  theme(axis.text = element_text(size = 20)) +
+  coord_flip()
+```
+
+---
+
+```{r zhongsheng-phase-freq, out.width="90%"}
+df_token %>% 
+  group_by(phase) %>% 
+  count(word, sort = TRUE) %>% 
+  top_n(10) %>%
+  ungroup() %>% 
+  mutate(word = reorder(word, n),
+         word = factor(word, levels = rev(unique(word)))) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  ylab("词频统计") + 
+  theme(axis.text = element_text(size = 18)) +
+  facet_wrap(~ phase, scales = "free")
+```
+
+???
+
+The Economist journalist Simon Rabinovitch
+
+---
+
+```{r zhongsheng-fre-compare, out.width="90%"}
+frequency <- df_token %>% 
+  count(phase, word) %>%
+  group_by(phase) %>%
+  mutate(proportion = n / sum(n)) %>% 
+  select(-n) %>% 
+  spread(phase, proportion) %>% 
+  gather(phase, proportion, optimism:theory_test)
+
+library(scales)
+
+# expect a warning about rows with missing values being removed
+ggplot(frequency, aes(x = proportion, y = `US_fail`, color = abs(`US_fail` - proportion))) +
+  geom_abline(color = "gray40", lty = 2) +
+  geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
+  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5, family = "WenQuanYi Micro Hei") +
+  scale_x_log10(labels = percent_format()) +
+  scale_y_log10(labels = percent_format()) +
+  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+  facet_wrap(~phase, ncol = 2) +
+  theme(legend.position="none") +
+  labs(y = "US Inevitable Failure", x = NULL) +
+  theme(text = element_text(family = "WenQuanYi Micro Hei"))
+```
+
+---
+
+## Keyword Analysis
+
+
+```{r keyword}
+extractor_keyword <- worker("simhash", topn = 5)
+
+simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"], extractor_keyword)
+```
+
+---
+
+## Hamming Distance
+
+.left-column[
+<img src="image/hammingDis_org.png" height = 300 />
+]
+
+.right-column[
+<img src="image/hammingDis_comp.png" height = 300 />
+]
+
+---
+
+05-30 vs. 05-22
+
+```{r keyword-distnace}
+distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+         df_zhongsheng$content[df_zhongsheng$time == "2019-05-22"],
+         extractor_keyword)
+```
+
+05-30 vs. 05-23
+
+```{r keyword-distance2}
+distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+         df_zhongsheng$content[df_zhongsheng$time == "2019-05-23"][1],
+         extractor_keyword)
+```
+
+
+???
+
+the Hamming distance between two strings of equal length is the number of positions at which the corresponding symbols are different. In other words, it measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
+
+---
+
+## 超越A Bag of Words
+
+* Stop words
+* 词性分析
+
+--
+
+* Word order: Markov Model of order N
+    + Unigram: 清华 大学 政治 系
+    + Bigram: 清华大学 政治系/清华 大学政治 系
+    + Trigram：清华大学政治 系/清华 大学政治系
+
+--
+
+* Weighted words: TF-IDF
+
+???
+
+term frequency-inverse document frequency
+
+--
+
+* Word vector: word2vec
+
+???
+
+ word embeddings
+
+---
+
+## 文本比较
+
+* 文本特征：文本长度、用词、词频、关键词等；
+* 语义特征：政治立场、文化、组织间通过文本表达的主张、价值和意义
+
+
+---
+
+## 文本分析“唇典”
+
+* Corpus
+    + Document
+    + DTM/TDM
+
+???
+Document-term matrix
+
+--
+
+* Classification
+    + Dictionary
+    + Machine learning
+    
+--
+
+* Clustering
+    + Membership
+    + Topic modeling
+        + LDA
+        + STM
+        
+???
+Latent Dirichlet Allocation
+
+---
+
+## Take Home Points
+
+.left-column[
+计算机辅助文本分析
+
+* 应用范围广泛
+* 间接研究语言
+* 不断突破限制
+]
+
+.right-column[
+<img src="image/indirect_phone.gif" width = 400 />
+]
+
+--
+
+### 未完待续
+
+* 概念探索
+* 概念分析
+* 情感分析
+
+
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
