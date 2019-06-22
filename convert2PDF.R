@@ -1,3 +1,6 @@
+library(pagedown)
+pagedown::chrome_print("slides/conference/2019-ACPS/migrant_language.Rmd")
+
 library(webshot)
 # install_phantomjs()
 
