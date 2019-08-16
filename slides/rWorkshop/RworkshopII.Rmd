@@ -1,5 +1,5 @@
 ---
-title: "Data Management"
+title: "Dr. Hu's R Workshop"
 output: 
   learnr::tutorial:
     progressive: true
@@ -14,61 +14,67 @@ library(tidyverse)
 library(gapminder)
 ```
 
-**Dr. Hu's "Hello, R!" workshop series II** 
+# Lecture II: Data Munging
 
 ## Preface
 
-### R Workshop Series
+* R basics
+* **Data manipulation**
+* Statistical/econometric analysis
+* Data visualization
+* Reproduction
 
-* R Basic
-* **Data Manipulation**
-* Quantitative Analysis
-* Multilevel Analysis
-* Data Visualization
-* Geographic Data Visualization
-* Professionalization
+## Toy Data
 
-## Data Input and Output
-
-### Input
-
-* Load build-in data: call by name.
-* Load `.rdata`, `.txt`, `.tab`, `.csv` directly.
-* Load almost <span style="color:red">ALL</span> types of data with packages (e.g., `haven`, `readr`).
-
-<br>
-
-Toy data: `gapminder` data, demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
+Demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
 
 ```{r toy, exercise = TRUE}
 library(gapminder)
 gapminder
-
-# If the data is in .csv
-# gapminder2 <- read.csv(file = "./gapminder.csv")
-
-# If the data is in .sav (SPSS data)
-#library(haven)
-#gapminder <- read_sav(file = "./gapminder.sav")
 ```
 
-### Output
+## General Way
 
-* Save the data to the current working directory.
+### What you can do
 
-```{r saveData, eval=FALSE}
-# save as rdata
-save(gapminder, file = "gapminder.Rdata")
-save.image() # save everything in the environment
+1. Glimpse the data
+1. Create, copy, or delete a variable
+1. Replace values 
 
-# Save as csv
-write.csv(gapminder, file = "gapminder.csv")
+### General rule
+
+1. Variable -> vector;
+2. Conditional replacement;
+3. Use functions.
+
+```{r tradition, exercise = TRUE}
+## Glimpse the data
+head(gapminder, n = 5)
+str(gapminder)
 ```
 
+```{r tradition-solution}
+# $, class, table, unique
+gapminder$year2 <- gapminder$year
+gapminder$year2[gapminder$year2 == 1952] <- 2052
+gapminder$year2 <- NULL
 
-## Overview
+mean(gapminder$year, na.rm = TRUE)
+median(gapminder$year)
+min(gapminder$year)
+max(gapminder$year)
+length(gapminder$year)
+unique(gapminder$year)
+table(gapminder$year)
+class(gapminder$gdpPercap)
+typeof(gapminder$gdpPercap)
+class(gapminder$continent)
+levels(gapminder$continent)
+summary(gapminder$year)
+descr::freq(gapminder$year)
+```
 
-### Welcome to the `tidyverse`
+## Tidyverse
 
 * Prevalent toolkid for data manipulation 
     + Hadley Wickman and the Rstudio team. 
