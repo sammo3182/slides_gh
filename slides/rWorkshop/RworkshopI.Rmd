@@ -1,145 +1,173 @@
 ---
-title: "Hello, R!"
-subtitle: "Dr. Hu's R Workshop Series I"
-author: "Yue Hu<br>Department of Political Science<br>Tsinghua University"
+title: "Dr. Hu's R Workshop"
+subtitle: "Series I: Hello R!"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    css: [middlebury, "styles.css", "font-awesome-4.7.0/css/font-awesome.css", "logo.css", "font.css"]
+    css: 
+      - ../../css/zh-CN_custom.css
+      - ../../css/styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
-      slideNumberFormat: |
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
-          </div>
-        </div>`
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable,
+  knitr, # dependency
+  readxl, haven, descr, stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
 
 # R Workshop Series
 
-* **R Basic**
-* Data Manipulation
-* Quantitative Analysis
-* Multilevel Analysis
-* Data Visualization
-* Geographic Data Visualization
-* Professionalization
+* **R basics**
+* Data manipulation
+* Statistical/econometric analysis
+* Data visualization
+* Reproduction
 
 ---
 
 # How to Get the Slides?
 
-All the slides are presented in my personal webpage:
 
-1. Opening [https:\\sammo3182.github.io](https:\\sammo3182.github.io) at any browser you like (even with your phone);
-1. Search for "Hello,R";
+1. Opening my website [https:\\sammo3182.github.io](https:\\sammo3182.github.io) at any browser you like (even your phone);
+1. Search for "Dr Hu's R Workshop";
 1. Click the hyperlink "slides."
 
 ---
 
-# What's R?
+## What's R?
 
-* **Object-oriented** system: Put things in to boxes and carry around.
-* Created for **statistics**
+* **Object-oriented** (OO)
+* A high-level language
+
+--
+
+
+.center[<img src="images/languageLevel.jpg" height = 350 />]
+
+
+???
+
+* Implement of S(tatistical) language, S3, S4 standards.
+
+* Named after Ross Ihaka /i:haka/, and Robert Gentelman
+
+* High-level > assembly language > machine language > hardware
+
+* High-level: C, JAVA, Python, Fortun, R
+
+* Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
 
 ---
 
 class: middle,bottom,small
 
-# What Can R Do?
+## What Can R Do? An Incomplete List
 
 --
-* Doing statistics and data manipulations.
+* Statistics and econometrics.
 
 --
 * Crunching small, middle, or big sizes of data.
 
 --
-* Edit codes from Excel, STATA, Python, C++, ...
+* Edit and running codes from Excel, STATA, Python, C++, ...
 
 --
-* Scrape data from texts, websites, databases, pdf...
+* Scrape data from local files, websites, databases, pdf...
 
 --
-* Create webpages (see, e.g., [`blogdown`](https://bookdown.org/yihui/blogdown/).)
+* Create webpages (e.g., [`blogdown`](https://bookdown.org/yihui/blogdown/).)
 
 --
-* Write an academic article, a book, or a dissertation in html, pdf, or docx (see e.g., [`bookdown`](https://bookdown.org/home/).)
+* Write academic articles, books, or dissertations in html, pdf, or docx (e.g., [`bookdown`](https://bookdown.org/home/).)
 
 --
-* Create presentation slides in pdf (as LaTex beamer), html (as Markdown), or ppt (as PowerPoint).
+* Create presentation slides in pdf, html, or PowerPoint.
 
 --
 * ......
 
 ---
 
-# Why R?
+## Why R?
 
-.pull-left[
-
-* FREE!!!
-
-* Developing
-    + `r nrow(available.packages())`+ packages.
-    + Package and algorthem everyday.
-
-]
+* FREE!!
 
 --
-
-.pull-right[
 
 * Popular
 
-.center[<img src="images/rank.jpeg" height = 300 />]
-.Small[[Source:  IEEE Spectrum ranking](https://spectrum.ieee.org/computing/software/the-2017-top-programming-languages)]
+.center[<img src="images/rank.jpeg" height = 350 />]
 
-]
 
 ---
 
-# Ah, STATA? 
-
-It's like choosing an OS...Mac or PC?
-
-.pull-left[
-
-### STATA
-
-<img src="images/mac.jpg" height = 300 />
-
-] 
-
-.pull-right[
-
-### R
-
-<img src="images/pc.png" height = 300 />
-
-]
-
----
-
-## So, if you choose R,
-
-Be prepare....
+* All platform compatible: Windows, Linux, macOS
 
 --
 
-.center[<img src="images/pc2weeks.gif" height = 400 />]
+* Getting a job
 
+```{r jobs}
+tibble::tribble(
+                            ~Company, ~Application,
+                           "Twitter", "Monitor user experience",
+                              "Ford", "Analyse social media to support design decisions for their cars",
+                    "New York Times", "Infographics, data journalism",
+                         "Microsoft", "Released Microsoft R Open, an enhanced R distribution and Microsoft\n R server after acquiring Revolution Analytics in 2015",
+                            "Google", "Created the R style guide for the R user community inside Google"
+  ) %>% flextable() %>% 
+  align(align = "left", part = "all") %>% 
+  fontsize(size = 20, part = "all")
+```
+
+--
+
+* In Developing
+    + `r nrow(available.packages())`+ packages for cutting-edges
 
 ---
 
-.pull-left[
+## So, how about...
+
+Python, STATA, SPSS, Excel...
+
+---
+
+background-image: url("images/programCompare.jpg")
+background-position: center
+background-size: contain
+
+---
+
+.left-column[
 ### R
 
 #### Advantages
 
-* Updating
+* Fresh
 * Flexible
 
 #### Inconvenience
@@ -149,7 +177,7 @@ Be prepare....
 
 ]
 
-.pull-right[
+.right-column[
 ### STATA
 
 #### Advantages
@@ -161,7 +189,7 @@ Be prepare....
 
 * Use what you get
 * Poor visualization
-* EXPENSIVE: SE?
+* EXPENSIVE: SE
     + Annual:	$235 student/**year**
 
 ]
@@ -169,17 +197,7 @@ Be prepare....
 
 ---
 
-# Hey, Python?
-
-.center[<img src="images/rank2.jpeg" height = 200 />]
-
---
-
-* R vs. Python: "The war that never ends..."
-
----
-
-.pull-left[
+.left-column[
 ### R
 
 #### Advantages
@@ -190,10 +208,9 @@ Be prepare....
 #### Inconvenience
 
 * Large-size (> 1G) data
-* Unreadable codes (in the past)
 ]
 
-.pull-right[
+.right-column[
 ### Python
 
 #### Advantages
@@ -210,33 +227,138 @@ Be prepare....
 
 ---
 
-# Let's start our journey!
+## So, if you choose R,
+
+Be prepared...
+
+.center[<img src="images/LearningCurve.png" height = 400 />]
+.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]
+
+---
+
+### Preparing for the *wonderful* moments~
+
+.center[<img src="images/pc2weeks.gif" height = 480, width = 750 />]
+
+
+
+---
+
+class:inverse
+
+# Ready? Shall We Begin~
 
 .center[<img src="images/begin.gif" height = 300 />]
 
 ---
 
-# Program Installation
+## Program Installation
 
-.pull-left[
+.left-column[
 ### Core program
 
-[<img src="images/Rlogo.png" height = 300 />](https://www.r-project.org/)
+[<img src="images/Rlogo.png" height = 200 />](https://www.r-project.org/)
 
 ]
 
 --
 
-.pull-right[
+.right-column[
 ### Graphic User Interfaces (GUI)
 
-[<img src="images/rstudio.jpg" height = 300 />](https://www.rstudio.com/)
+[<img src="images/rstudio.jpg" height = 250 />](https://www.rstudio.com/)
 
 ]
 
 ---
 
-# Package?
+## Keep Updating
+
+* Keep your R & Rstudio updated!
+    + Keep your R & Rstudio updated!
+        + Keep your R & Rstudio updated!
+        
+--
+
+* [Rstudio Preview](https://www.rstudio.com/products/rstudio/download/preview/)
+* [Rstudio Daily Builds](https://dailies.rstudio.com/)
+
+---
+
+## Startup
+
+### Knowing about your working environment
+
+```{r system}
+Sys.info()
+```
+
+---
+
+```{r session}
+sessionInfo()
+```
+
+---
+
+## Startup Files
+
+### What are they?
+
+* `.Rprofile`/`Rprofile.site`
+* `.Renviron`/`Renviron.site`
+
+--
+
+### Where are they?
+
+* `R_HOME`: Where you installed R
+* `HOME`: User's home directory, `R.home()`
+* WD: working directory, `getwd()`
+
+---
+
+## What can you do with them?
+
+Suggestion: Put your startup files in `./etc/`
+
+--
+
+`Renviron.site`: 
+
+```
+## Windows
+R_LIBS_USER=D:/userLib
+TMPDIR=D:/Rtemp 
+TMP=D:/Rtemp 
+TEMP=D:/Rtemp
+```
+
+---
+
+`Rprofile.site`:
+
+```
+# General options 
+options(tab.width = 2) 
+options(width = 89)
+options(graphics.record=TRUE) 
+
+## Customization
+Sys.setlocale(, "Chinese")
+
+options(Ncpus = 6)
+```
+
+---
+
+## Rstudio Global Options
+
+Let's have a look at how Rstudio works~
+
+---
+
+## Packages
 
 
 <img src="images/apps.jpeg" height = 400 />
@@ -244,31 +366,34 @@ Be prepare....
 
 ---
 
-# Package Installation
+## Package Installation
 
 * Installing:
 
 ```{r installPg, eval=FALSE}
 install.packages(<package name>)
 devtools::install_github("<repositary/package name>")
+remotes::install_github("<repositary/package name>")
 ```
 
 --
 
-* Using:
+* Calling:
 
 ```{r usingPg, eval=FALSE}
 library(<package name>)
 require(<package name>)
+
+package::function
 ```
 
 ---
 
 ## First-Time Using
 
-Set the working directory! Set the working directory! Set the working directory!
-
-.pull-left[
+* Set the working directory! 
+    + Set the working directory! 
+        + Set the working directory!
 
 ```{r eval = FALSE}
 # Find
@@ -278,16 +403,19 @@ getwd()
 setwd("./rworkshop") 
 ```
     
-]
 
---
+---
 
-.pull-right[
-
-<img src=images/wdSetting.gif height = "300"/>
+<img src=images/wdSetting.gif height = "600"/>
 
 
-]
+---
+
+## Better Way: 
+
+Create a project!
+
+Let me show you how amazing it is:
 
 ---
 
@@ -297,17 +425,17 @@ setwd("./rworkshop")
 
 ### Matrix
 
-.pull-left[
+.left-column[
 
-<img src=images/matrix.gif height = "300"/>
+<img src=images/matrix.gif height = "150"/>
 
 ]
 
 --
 
-.pull-right[
+.right-column[
 
-```{r}
+```{r matrix}
 A <- matrix(-8:7, ncol = 4)
 A
 A[2, 3]
@@ -332,7 +460,7 @@ factor(c(1, 2, 2, 3), labels = c("Apple", "Pear", "Orange"))
 
 ```{r}
 # Character
-c("R is hard.", "But I can learn.")
+c("R is hard.", "But I can nail it.")
 
 # Time
 as.POSIXlt("2005-10-21 18:47:22")
@@ -347,12 +475,12 @@ c(TRUE, TRUE, FALSE)
 ### Data frame
 
 ```{r dfEG, echo=FALSE}
-knitr::kable(head(mtcars[1:3, 1:4]), format='html')
+kable(head(mtcars[1:3, 1:4]), format='html')
 ```
 
 --
 
-.pull-left[
+.left-column[
 ```{r}
 mtcars[1,1]
 ```
@@ -360,7 +488,7 @@ mtcars[1,1]
 
 --
 
-.pull-right[
+.right-column[
 ```{r}
 mtcars$mpg[1]
 ```
@@ -375,7 +503,6 @@ A multi-dimension matrix
 
 ```{r}
 array(-9:9, dim = c(3,3,2)) 
-# three dimensions with 3, 3, and 2 elements in each dimension.
 ```
 
 ---
@@ -392,7 +519,41 @@ aList[[2]]
 
 ---
 
-## Functions
+## Quick History
+
+`<-` is equivalent to `=` in R (`<<-` also exists)
+
+.center[<img src=images/APLkeyBoard.png height = "200"/>]
+
+???
+
+Assigned operator
+
+---
+
+## Why do we still use it? 
+
+Readability
+
+```{r arrow, eval = FALSE}
+a <- 12
+25 -> b
+```
+
+---
+
+Side effect
+
+```{r sideEffect, error = TRUE}
+median(x = 1:10); x
+median(x <- 1:10); x
+```
+
+Short key: `Alt + -`
+
+---
+
+### Functions
 
 .center[<img src=images/handShadow.gif height = "250"/>]
 
@@ -409,10 +570,68 @@ handShadow
 
 ---
 
-## Data Input and Output
+## Doing Math with R
+
+```{r eval=FALSE}
+# basic math
+x + (1 - 2) * 3 / 4
+
+# advanced math
+x^2;sqrt(x);log(x);exp(x)
+
+# matrix algebra
+z <- matrix(1:4, ncol = 2)
+z + z - z
+z %*% z  # inner multiplication
+z %o% z  # outter multiplication
+
+# logical evaluation
+x == z; x != Z
+x & z; x | z
+x > z; x <= z
+```
 
 
-### Build-in functions
+---
+
+## Naming Rules
+
+* Don't start with numbers (WRONG: `1stday`)
+
+--
+
+* No special signs except for `.` and `-` (WRONG: `M&M`)
+
+--
+
+* Case sensitivity (`X != x`)
+
+--
+
+* Don't overwrite the build-in functions unless necessary (DON'T: `list <- c(1:5)`)
+
+---
+
+## Coding 
+
+Proper spaces and indents
+
+```{r codingRules}
+AddValues <- function(x, y){
+  return(x + y)
+}
+
+```
+
+---
+
+class: inverse, bottom
+
+# Data Input and Output
+
+---
+
+## Input
 
 ```{r eval=FALSE}
 load("<FileName>.RData")
@@ -423,10 +642,9 @@ df_csv <- read.csv("<FileName>.csv")
 
 ```
 
-
 ---
 
-### Package functions
+## Talk to Others
 
 ```{r eval=FALSE}
 # SPSS, Stata, SAS
@@ -448,125 +666,131 @@ df_json <- fromJSON(file = "<FileName>.json" )
 df_xml <- xmlTreeParse("<url>")
 df_html <- readHTMLTable(url, which=3)
 
+# Featherf
+feather::read_feather("<FileName>.feather")
 ```
+
+---
+
+## Where Do Things Live in R
+
+You know Excel, right? 
+
+---
+## Data 
+
+Excel
+.center[<img src=images/excel-r1.png height = "150"/>]
+
+
+R
+.center[<img src=images/excel-r2.png height = "200"/>]
+
+---
+
+## Operation
+
+Excel
+.center[<img src=images/excel-r3.png height = "150"/>]
+
+
+R
+.center[<img src=images/excel-r4.png height = "200"/>]
+
+---
+
+## Results
+
+Excel
+.center[<img src=images/excel-r3.png height = "150"/>]
+
+
+R
+.center[<img src=images/excel-r5.png height = "250"/>]
 
 
 
 ---
 
-## Data output
+class: small
 
-* Save single object in a `.rds` file
+## Output
+
+* Save a single object in a `.rds` file
 
 ```{r eval = F}
 saveRDS(object, file = "./Data/mydata.Rds")
 ```
 
-* Save multip objects into an R dataset (`.RData`/`.rda`) 
+* Save objects into an R data frame (`.RData`/`.rda`) 
 
 ```{r eval = F}
 save(object, file = "./Data/mydata.Rdata")
 ```
 
-* Save multip objects into a CSV sheet `.csv`
+* Save objects into a CSV sheet `.csv`
 
 ```{r eval = F}
 write.csv(object, file = "mydata.csv")
 ```
 
+* Save objects into a `feather` file
 
----
-
-## Programming Basics: Math
-
-```{r eval=FALSE}
-# basic math
-x + (1 - 2) * 3 / 4
-
-# advanced math
-x^2;sqrt(x);log(x);exp(x)
-
-# matrix algebra
-z <- matrix(1:4, ncol = 2)
-z + z - z
-z %*% z  # inner mul<span style="color:purple">Tip</span>lication 
-z %o% z  # outter mul<span style="color:purple">Tip</span>lication
-
-# logical evaluation
-x == z; x != Z
-x & z; x | z
-x > z; x <= z
-```
-
-
----
-
-## Naming Objects
-
-* Don't start with numbers (WRONG: `1stday`)
-
---
-
-* No special signs except for `.` and `-` (WRONG: `M&M`)
-
---
-
-* Case sensitivity (`X != x`)
-
---
-
-* Don't overwrite the build-in functions unless necessary (DON'T: `list <- c(1:5)`)
-
-
----
-
-## Last Words
-
-* Being aware of the learning curve
-
-.center[<img src=images/LearningCurve.png height="400"/>]
-.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]
-
----
-
-* Preparing for unexpected troubles
-
-```{r}
-testDF <- data.frame(x = c(1, 1, 1, NA, 4, 4),
-                     y = c(2, 2, 2, 2, 2, 2))
-testDF
-```
-
---
-
-```{r eval = FALSE}
-testDF$x[testDF$x < 4] <- testDF$y[testDF$x < 4]
-```
-
-```
-Error in testDF$x[testDF$x < 4] <- testDF$y[testDF$x < 4] * 0 : 
-  NAs are not allowed in subscripted assignments
-```
-
---
-
-```{r}
-testDF$x <- ifelse(testDF$x < 4, testDF$y, testDF$x)
-testDF$x 
+```{r eval = F}
+write_feather(object, file = "mydata.feather")
 ```
 
 ---
 
-* Sufficiently using online sources
+## Which way should you use?
 
-.center[<img src=images/search.png height="400"/>]
+A benchmark:
+
+```{r saving}
+##Unit: seconds
+##        expr   min    lq       mean median    uq   max neval
+##     readCSV 200.0 200.0 211.187125  210.0 220.0 240.0    10
+##    readrCSV  27.0  28.0  29.770890   29.0  32.0  33.0    10
+##       fread  15.0  16.0  17.250016   17.0  17.0  22.0    10
+##   loadRdata   4.4   4.7   5.018918    4.8   5.5   5.9    10
+##     readRds   4.6   4.7   5.053674    5.1   5.3   5.6    10
+## readFeather   1.5   1.8   2.988021    3.4   3.6   4.1    10
+```
+
 
 ---
 
 class: inverse, bottom
 
-background-image: url(http://rescuethepresent.net/tomandjerry/files/2016/05/16-thanks.gif)
-background-position: 50% 50%
-background-size: 100%
 
-# Call It for the Day!
+## Take-Home Points
+
+--
+
+* Being aware of the learning curve
+
+--
+
+* Preparing for unexpected troubles
+
+--
+
+* Sufficiently using online sources
+
+Hint: Search "let me google that for you" in the urban dictionary
+
+--
+
+Just kidding~
+
+---
+
+class: center, middle
+
+# Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
