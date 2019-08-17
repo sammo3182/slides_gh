@@ -33,15 +33,13 @@ library(gapminder)
 gapminder
 ```
 
-## General Way
-
-### What you can do
+## What You Can Do
 
 1. Glimpse the data
 1. Create, copy, or delete a variable
 1. Replace values 
 
-### General rule
+## General Rules
 
 1. Variable -> vector;
 2. Conditional replacement;
@@ -59,6 +57,10 @@ gapminder$year2 <- gapminder$year
 gapminder$year2[gapminder$year2 == 1952] <- 2052
 gapminder$year2 <- NULL
 
+names(gapminder)
+nrow(gapminder)
+ncol(gapminder)
+str(gapminder)
 mean(gapminder$year, na.rm = TRUE)
 median(gapminder$year)
 min(gapminder$year)
@@ -80,7 +82,7 @@ descr::freq(gapminder$year)
     + Hadley Wickman and the Rstudio team. 
     + [A series of packages](https://www.tidyverse.org/packages/) 
     + Loading the packages first
-        + `library(tidyverse)` =  `ggplot2`, `dplyr`, `tidyr`, `readr`, `purrr`, and `tibble`.
+        + `library(tidyverse)` =  `ggplot2`, `dplyr`, `tidyr`, `readr`, `purrr`, `tibble`...
 
 ```{r loadTidy, exercise = TRUE}
 ## install.packages("tidyverse")
@@ -88,7 +90,7 @@ library("tidyverse")
 ```
 
 
-### A Glimpse of `tidyverse` Functions
+## A Glimpse of `dplyr` functions
 
 They do one thing, and they do it well.
 
@@ -96,7 +98,7 @@ They do one thing, and they do it well.
 knitr::include_graphics("images/simple.png")
 ```
 
-### Composable `tidyverse`
+## Composability
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/composable.png")
@@ -109,81 +111,20 @@ Shortcut for `%>%`:
 * Ctrl + Shift + M (Win)
 * Cmd + Shift + M (Mac)
 
-## Single Variable Manipulation
+## Data Overview
 
-### A Glimpse of the Data
+### What Does It Look Like?
+
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/lookInto.gif")
+```
 
 ```{r overview, exercise = TRUE}
+str(gapminder)
 glimpse(gapminder)
 ```
 
-### Data properties
-
-```{r dataProp, exercise = TRUE}
-names(gapminder)
-# nrow(gapminder)
-# ncol(gapminder)
-# str(gapminder)
-```
-
-### Variable properties
-
-```{r varProp, exercise = TRUE}
-summary(gapminder$year)
-# mean(gapminder$year, na.rm = TRUE)
-# median(gapminder$year)
-# min(gapminder$year)
-# max(gapminder$year)
-# length(gapminder$year)
-# unique(gapminder$year)
-# table(gapminder$year)
-# descr::freq(gapminder$year)
-# class(gapminder$gdpPercap)
-# typeof(gapminder$gdpPercap)
-# class(gapminder$continent)
-# levels(gapminder$continent)
-```
-
-### Variable manipulation
-
-```{r varChange}
-gapminder$year_bu <- gapminder$year
-```
-
-* Changing a single value (rarely used)
-
-Let's change the second element of variable `year` to "1956."
-
-```{r singleValue, exercise = TRUE}
-gapminder$year[2]
-```
-
-* Changing values based on conditions
-
-Let's add a hundred years to every year recorded under "China."
-
-```{r conditionChange, exercise = TRUE}
-summary(gapminder$year[gapminder$country == "China"])
-```
-
-Is there a way avoiding typing the brackets so many times? 
-
-* Delete a variable
-
-```{r delete, exercise = TRUE}
-gapminder$year <- NA
-```
-
-* Create a variable
-
-```{r create, exercise = TRUE}
-gapminder$year
-```
-
-
-## Within-Dataset Manipulation
-
-### Ordering the Data
+### View in Order
 
 Q: Which countries have the largest populations?
 
@@ -195,15 +136,26 @@ knitr::include_graphics("images/arrange.png")
 knitr::include_graphics("images/desc.png")
 ```
 
-```{r ex4, exercise = TRUE, exercise.eval = TRUE}
+```{r ex_arrange, exercise = TRUE, exercise.eval = TRUE}
 gapminder
 ```
 
-```{r ex4-solution}
+```{r ex_arrange-solution}
+gapminder %>% 
+  arrange(pop)
+```
+
+### How About Descending
+
+```{r ex_descend, exercise = TRUE, exercise.eval = TRUE}
+gapminder
+```
+
+```{r ex_descend-solution}
 arrange(gapminder, desc(pop))
 ```
 
-### Conditioning
+## Filtering Observations
 
 Q: Which countries had the largest population in *2007*?
 
@@ -211,11 +163,11 @@ Q: Which countries had the largest population in *2007*?
 knitr::include_graphics("images/filter.png")
 ```
 
-```{r ex6, exercise = TRUE, exercise.eval = TRUE}
+```{r ex_filter, exercise = TRUE, exercise.eval = TRUE}
 gapminder
 ```
 
-```{r ex6-solution}
+```{r ex_filter-solution}
 gapminder2007 <- filter(gapminder, year == 2007)
 arrange(gapminder2007, desc(pop))
 
@@ -224,86 +176,135 @@ gapminder %>%
   arrange(desc(pop))
 ```
 
-### Extracting
+## Selecting Variables
 
-Q: What's the life expectancy of the country that had the largest population in 2007?
+Q: Subset data:
+
+1. Only country, year, and population
+2. Everything but not continent
+3. Variables starting with "co"
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/select.png")
 ```
 
-```{r ex7, exercise = TRUE, exercise.eval = TRUE}
+```{r ex_select, exercise = TRUE, exercise.eval = TRUE}
 gapminder
 ```
 
-```{r ex7-solution}
+```{r ex_select-solution}
+gapminder %>% 
+  select(country, year, pop)
+
+gapminder %>% 
+  select(-continent)
+
+gapminder %>% 
+  select(starts_with("co"))
+```
+
+## Combo Attack
+
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("comboAttack.gif")
+```
+
+Q: What's the life expectancy of the country that had the largest population in 2007?
+
+```{r ex_combo, exercise = TRUE, exercise.eval = TRUE}
+gapminder
+```
+
+```{r ex_combo-solution}
 gapminder %>% 
   filter(year == 2007) %>% 
   arrange(desc(pop)) %>% 
   select(country, pop, lifeExp)
 ```
 
-### Modification
+## Modification
 
-Q: What is the gdp of each country?
+Q: What's the total GDP of each country?
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/mutate.png")
 ```
 
-```{r ex8, exercise = TRUE, exercise.eval = TRUE}
+```{r ex_mutate, exercise = TRUE, exercise.eval = TRUE}
 gapminder
 ```
 
-```{r ex8-solution}
+```{r ex_mutate-solution}
 gapminder %>% 
   mutate(gdp = pop * gdpPercap) %>% 
     select(country, pop, gdpPercap, gdp)
 ```
 
+### Batch Modification
 
-### Summarising
+```{r ex_batch, exercise = TRUE, exercise.eval = TRUE}
+gapminder
+```
 
-Q: What was the average gdp?
+```{r ex_batch-solution}
+gapminder %>% 
+  mutate_if(is.double, round, digits = 0)
+```
+
+## Counting
+
+```{r ex_count, exercise = TRUE}
+gapminder
+```
+
+```{r ex_count-solution}
+gapminder %>% 
+  count(continent, year)
+```
+
+Q4U: Are `count(continent, year)` and `count(year, continent)` the same?
+
+## Summarizing
+
+Q: What was the average GDP per capita?
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/summarise.png")
 ```
 
-```{r ex9, exercise = TRUE, exercise.eval = TRUE}
-gapminder %>% 
-  mutate(gdp = pop * gdpPercap)
+```{r ex_summary, exercise = TRUE}
+gapminder
 ```
 
-```{r ex9-solution}
+```{r ex_summary-solution}
 gapminder %>% 
-  mutate(gdp = pop * gdpPercap, mean_gdp = mean(gdp)) %>% 
-  select(country, gdp, mean_gdp)
-
-gapminder %>% 
-  mutate(gdp = pop * gdpPercap) %>% 
-  summarise(mean_gdp = mean(gdp))
+  summarise(mean_gdp = mean(gdpPercap))
 ```
 
-### Clustering
+Q4U: What does the following codes give you?
 
-Q: What was the average gdp for each year?
+```{r eval = FALSE}
+gapminder %>% 
+  mutate(mean_gdp = mean(gdpPercap))
+```
+
+## Munging in Group
+
+Q: What was the average GDP per capita for each continent?
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/group_by.png")
 ```
 
-```{r ex10, exercise = TRUE, exercise.eval = TRUE}
+```{r ex12, exercise = TRUE, exercise.eval = TRUE}
 gapminder %>% 
-  mutate(gdp = pop * gdpPercap) %>% 
-  summarise(mean_gdp = mean(gdp))
+  summarise(mean_gdp = mean(gdpPercap))
 ```
 
-```{r ex10-solution}
+```{r ex12-solution}
 gapminder %>% 
-  mutate(gdp = pop * gdpPercap) %>% 
-  group_by(year) %>% 
-  summarise(mean_gdp = mean(gdp))
+  group_by(continent) %>% 
+  summarise(mean_gdp = mean(gdpPercap))
 ```
 
 ### Important note
@@ -315,7 +316,7 @@ If you want to save the changes, send the result to an object.
 gapminderNew <- gapminder %>% ...
 ```
 
-## Multi-dataset Manipulation
+## Combining Data
 
 ### Appending
 
@@ -323,40 +324,65 @@ gapminderNew <- gapminder %>% ...
 knitr::include_graphics("images/rowbind.png")
 ```
 
-### Combine 2002 and 2007 data
+Q: Assuming we have two separate data for Asia and Europe (how?), how could we combine them into one? 
 
-```{r ex11, exercise = TRUE, exercise.eval = TRUE}
-gapminder2002 <- filter(gapminder, year == 2002)[1:2, ]
-gapminder2007 <- filter(gapminder, year == 2007)[1:2, ]
+```{r ex_append, exercise = TRUE, exercise.eval = TRUE}
+gapminder
 ```
 
-```{r ex11-solution}
-gapminder2002 <- filter(gapminder, year == 2002)[1:2, ]
-gapminder2007 <- filter(gapminder, year == 2007)[1:2, ]
+```{r ex_append-solution}
+gapminder_asia <- filter(gapminder, continent == "Asia")
+gapminder_europe <- filter(gapminder, continent == "Europe")
 
-gapminder0207 <- bind_rows(gapminder2002, gapminder2007)
+gapminder_eurasia <- bind_rows(gapminder_asia, gapminder_europe)
 ```
 
-See also `bind_cols`.
+### Rough Merging
 
-### Merge
+Q: I have several rows and just want to merge them together
+
+```{r out.width = "95%", echo = FALSE}
+knitr::include_graphics("images/columnBind.png")
+```
+
+```{r ex_columnBind, exercise = TRUE}
+gapminder_country <- select(gapminder, country)
+gapminder_year <- select(gapminder, year)
+```
+
+```{r ex_columnBind-solution}
+bind_cols(gapminder_country, gapminder_year)
+```
+
+### Conditional Merging
+
+Q: How can I use two datasets jointly?
 
 ```{r out.width = "95%", echo = FALSE}
 knitr::include_graphics("images/join.png")
 ```
 
-### Create a dataset including both continent and year
-
-```{r ex12, exercise = TRUE, exercise.eval = TRUE}
-gapminder2002 <- filter(gapminder, year == 2002)[1:2, ]
-
-gapminder2002A <- select(gapminder2002, country, continent)
-gapminder2002B <- select(gapminder2002, country, year)
+```{r ex_join, exercise = TRUE}
+gapminder_country <- select(gapminder, country, pop)
+gapminder_year <- select(gapminder, year, pop)
 ```
 
-```{r ex12-solution}
-gapminder2002A <- select(gapminder2002, country, continent)
-gapminder2002B <- select(gapminder2002, country, year)
-
-gapminder2002AB <- left_join(gapminder2002A, gapminder2002B)
+```{r ex_join-solution}
+gapminder_countryYear<- left_join(gapminder_country, gapminder_year)
 ```
+
+## Take-Home Points
+
+1. Be clear about the logic <span style="color:red">before</span>  the moves;
+1. Use the `dplyr` functions wisely and in combo;
+1. You will encounter issues you don't know how to solve;
+    + Please do some research before asking the experts!
+1. Explore more `dplyr` functions.
+
+## Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)

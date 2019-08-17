@@ -1,5 +1,5 @@
 ---
-title: "Quantitative Analysis"
+title: "Dr. Hu's R Workshop"
 output: 
   learnr::tutorial:
     progressive: true
@@ -9,57 +9,118 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
-library(tidyverse)
 library(gapminder)
 library(car)
+library(descr)
+library(arm)
+library(gtsummary)
+library(performance)
+library(tidyverse)
 ```
 
-**Dr. Hu's "Hello, R!" workshop series III** 
+# Lecture III: Data Analysis
 
 ## Preface
 
 ### R Workshop Series
 
-* R Basic
-* Data Manipulation
-* **Quantitative Analysis**
-* Multilevel Analysis
-* Data Visualization
-* Geographic Data Visualization
-* Professionalization
+* R basics
+* Data manipulation
+* **Statistical/econometric analysis**
+* Data visualization
+* Reproduction
 
-## Descriptive Analysis
+## Toy Data
 
-### Data Overview
+Demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
 
-Toy data: `gapminder` data, demographic statistics popularized by [Hans Rosling's TED talks](https://www.ted.com/talks/hans_rosling_shows_the_best_stats_you_ve_ever_seen?utm_campaign=tedspread--b&utm_medium=referral&utm_source=tedcomshare).
-Let's have a check of data structure and sample observations.
-
-```{r structure, exercise = TRUE}
-head(gapminder)
-#glimpse(gapminder)
+```{r toy, exercise = TRUE}
+library(gapminder)
+gapminder
 ```
 
-## Binary Analysis
+## Let the data tell
 
-### Difference in Mean
+HAVE THE DATA!
+
+HOW JUICY THEY ARE !!
+
+HOW...to let it tell...
+ 
+
+## Let's rub the lamp
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/rubLamp.gif")
+```
+
+### Ways to "rub" the data with R
+
+1. *Descriptive statistics;*
+1. *Binary analyses;*
+1. *Multivariate analyses;*
+1. Advanced stuff (multilevel, spatial, network, big-data based text analysis, SEM...)
+
+
+## Descriptive statistics
+
+Means, median, IQR, etc.
+
+```{r descriptive, exercise = TRUE, exercise.eval = TRUE}
+summary(gapminder)
+```
+
+```{r descriptive-solution}
+summary(gapminder$year)
+
+library(broom)
+tb_continent <- summary(gapminder$year) %>% tidy
+
+summary(gapminder$continent)
+
+library(descr)
+freq(gapminder$continent)
+```
+
+## Summary table
+
+```{r descriptive_table, echo = FALSE}
+library(gtsummary)
+
+gapminder %>% 
+  select(continent, lifeExp, pop, gdpPercap) %>% 
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({min}, {max})"))
+  
+```
+
+## Binary analysis
+
+How does one variable relate to another?
+
+1. Are the averages close?
+1. Are the two variables independent to each other?
+1. Does variance matter?
+
+## Difference in mean
 
 Q: Does the average life expectancy changes before and after the Cold War? 
 
 $H_{0}: \bar{LifeExpctancy}_{prio 1991} = \bar{LifeExpctancy}_{post 1991},\ \alpha = .05$
 
 ```{r ttest, exercise = TRUE}
-gapminder %>% filter(year <= 1991) %>% summarise(mean(lifeExp))
-gapminder %>% filter(year > 1991) %>% summarise(mean(lifeExp))
+# T-test
 ```
 
 ```{r ttest-solution}
+gapminder$coldWar <- gapminder$year <= 1992
+gapminder %>% group_by(coldWar) %>% summarise(mean(lifeExp))
+
 t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991])
 
 t.test(gapminder$lifeExp[gapminder$year <= 1991], gapminder$lifeExp[gapminder$year > 1991], alternative = "greater", conf.level = .99)
 ```
 
-### Correlation
+## Correlation
 
 Q: Does a country's average life expectancy associate with its GDP per capital? (How about with populations?)
 
@@ -69,13 +130,17 @@ $H_{0}: \rho_{(LifeExpectancy, GDP)} = 0,\ \alpha = .05$
 cor.test(gapminder$lifeExp, gapminder$gdpPercap)
 ```
 
-```{r corr-solution}
-cor(gapminder[, 4:6]) %>% corrplot::corrplot.mixed()
+## Correlation among multiple variables
+
+```{r corrplot}
+select(gapminder, lifeExp, gdpPercap, pop) %>% 
+  cor %>% 
+  corrplot::corrplot.mixed()
 ```
 
-### ANOVA
+## ANOVA
 
-Does the average life expectancy vary across continents? (And over year?)
+Q: Does the average life expectancy vary across continents? (And over year?)
 
 $H_{0}: \mu_{Africa} = \mu_{Americas} = ... = \mu_{Oceania},\ \alpha = .05$
 
@@ -89,7 +154,7 @@ aov(lifeExp ~ continent + as.factor(year), data = gapminder) %>%
   summary()
 ```
 
-## Multivariate Analysis
+## Multivariate analysis
 
 ### OLS
 
@@ -99,13 +164,12 @@ Q: How does a country's average life expectancy change across continents and ove
 gapminder %>% count(lifeExp, continent, year)
 ```
 
-
 ```{r ols-solution}
 lm(lifeExp ~ continent + year, data = gapminder) %>%
   summary()
 ```
 
-### Nonlinear independent variables
+### Variable transforms
 
 Controlling for time dependency?
 
@@ -118,11 +182,22 @@ lm(lifeExp ~ gdpPercap + year, data = gapminder) %>%
 
 
 ```{r time-solution}
-lm(model, data = gapminder) %>%
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
   summary()
 ```
 
-### Conditional Effect
+### Standardization
+
+```{r standardized}
+library(arm)
+
+lm(lifeExp ~ gdpPercap + year + I(year^2), data = gapminder) %>%
+  standardize() %>% 
+  summary()
+```
+
+
+### Conditional effect
 
 Does the contribution of GDP per captia to a country's life expectancy vary with different sizes of population?
 
@@ -137,7 +212,9 @@ lm(lifeExp ~ gdpPercap * pop + year, data = gapminder) %>%
   summary()
 ```
 
-### Post-Estimate Diagonses
+Hint: You must include both base terms in the model.
+
+### Post-estimate diagnoses
 
 * Residual
 
@@ -158,7 +235,6 @@ outlierTest(fit)
 # car::qqPlot(fit)
 ```
 
-
 * Heteroscedasticity
 
 ```{r heter, exercise = TRUE}
@@ -177,30 +253,54 @@ vif(fit)
 durbinWatsonTest(fit)
 ```
 
-### Limited Dependent Variables
+## Cool shortcut
+
+```{r performance, exercise = TRUE}
+library(performance)
+
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+
+```{r performance-evaluation, exercise = TRUE}
+model_performance(fit)
+check_normality(fit)
+check_outliers(fit)
+```
+
+## Limited dependent variables
 
 * Logit: Does GDP per capita determine if a country's average life expentacy is above the global average after controlling for the population size?
 
 ```{r logit, exercise = TRUE}
-gapminder$avgLife <- if_else(gapminder$lifeExp < mean(gapminder$lifeExp), 0, 1)
+gapminder$asia <- as.numeric(gapminder$continent == "Asia")
 ```
 
 ```{r logit-solution}
-glm(avgLife ~ gdpPercap + pop, data = gapminder, family = "binomial") %>%
+glm(asia ~ gdpPercap + pop + lifeExp, data = gapminder, family = "binomial") %>%
   summary()
 ```
 
 * Interpretation: marginal effect
 
 ```{r margin, exercise = TRUE}
-mfx::logitmfx(avgLife ~ gdpPercap + pop, data = gapminder)
+fit <- glm(asia ~ gdpPercap + pop + lifeExp, data = gapminder, family = "binomial")
+ggeffects::ggpredict(fit)
 ```
 
 
-### Done!
+##
 
 ```{r out.width = "90%", echo = FALSE}
 knitr::include_graphics("images/thatsit.gif")
 ```
 
-Request these interactive slides from yue-hu-1@uiowa.edu.
+## Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
