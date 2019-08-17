@@ -1,5 +1,5 @@
 ---
-title: "Data Presentation"
+title: "Dr. Hu's R Workshop"
 output: 
   learnr::tutorial:
     progressive: true
@@ -10,8 +10,10 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
-library(stargazer)
-library(broom)
+library(gt)
+library(gtsummary)
+library(modelsummary)
+library(flextable)
 library(dotwhisker)
 library(interplot)
 library(magick)
@@ -24,79 +26,126 @@ m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
 ```
 
-**Yue Hu's "Hello, R!" workshop series IV**   
-*Iowa Social Science Research Center (ISRC)*
+# Lecture IV: Presenting Data
 
 ## Preface
 
-*Fall 2018*
+### R Workshop Series
 
-* A overview of R
-* Data manipulation (input/output, row/column selections, etc.)
-* Quantitative Analysis
-* _Basic Data Visualization_
+* R basics
+* Munging Data
+* Analyzing Data
+* **Presenting Data**
+* Reproduction
 
-<br>
-
-Register other workshops in the [ISRC website](http://ppc.uiowa.edu/node/3608).
-
-
-## Data Glimpse
+## Toy Data and Model
 
 Toy data: `mtcars` data, extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).
-Let's have a check of data structure and sample observations.
 
 ```{r structure, exercise = TRUE}
 glimpse(mtcars)
 ```
 
-## Model
-
-```{r model, exercise = TRUE}
-m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
-```
-
-
 ## Tabulating
-There are over twenty packages for [table presentation](http://conjugateprior.org/2013/03/r-to-latex-packages-coverage/) in R. My favorite three are `stargazer`, `xtable`, and `texreg`.
+Over twenty packages for [table presentation](http://conjugateprior.org/2013/03/r-to-latex-packages-coverage/) in R.
 
-(Sorry, but all of them are for **Latex** output)
+My favorite:
+
+* `flextable`: Made by David Gohel, good for any descriptive tables.
+* `gtsummary`: Made by Daniel Sjoberg, good for biostatistician outputs.
+* `modelsummary`: Made by Vincent Arel-Bundock, good for social scientific outputs.
+
+*Downside*: 
+
+* May not work for a limited number of cases.
+    + `DT`-based packages do not work with `bookdown::pdf_document` very well...so far.
+
+*Some backups*:
 
 * `stargazer`: good for summary table and regular regression results
 * `texreg`: when some results can't be presented by `stargazer`, try `texreg` (e.g., MLM results.)
 * `xtable`: the most extensively compatible package, but need more settings to get a pretty output, most of which `stargazer` and `texreg` can automatically do for you.
 
+## Summary Tables
 
-```{r table, exercise = TRUE}
-library(stargazer)
+### Output table
 
-stargazer(m1, type = "text", align = T, header = FALSE)
+```{r table_output, exercise = TRUE, warning = FALSE}
+library(flextable)
+
+tb_freq <-descr::freq(mtcars$cyl, plot = FALSE) %>% 
+  tidy
+
 ```
 
-```{r table-solution}
-stargazer(m1, type = "text", align = T, header = FALSE,
-          title = "An Attracting Title",
-          dep.var.labels = "Miles/(US) gallon",
-          covariate.labels = c("Weight (1000 lbs)", "Number of cylinders", "Displacement (cu.in.)", "Number of forward gears"), 
-          notes = "Adding anything you want readers to notice, such as the source of data and so on.")
+```{r table_output-solution}
+tb_freq <- flextable(tb_freq) %>% 
+  bg(bg = "#C90000", part = "header") %>% 
+  color(color = "white", part = "header") %>% 
+  color(~ Percent < 40, ~ Percent, color = "red") %>% 
+  autofit
+
+tb_freq
+
+# print(tb_freq, preview = "docx")
+# print(tb_freq, preview = "pptx")
 ```
 
-## Printing Publishable Table
+### Descriptive table
 
-```{r print, results='asis'}
-stargazer(m1, type = "html", align = T)
+```{r descriptive, exercise = TRUE}
+summary(mtcars)
+
+library(gtsummary)
 ```
 
-<br><br>
+```{r descriptive-solution}
+mtcars %>% 
+  tbl_summary(statistic = list(all_continuous() ~ "{mean} ({min}, {max})"))
+```
 
-* For Word users, click [here](http://www.r-statistics.com/2010/05/exporting-r-output-to-ms-word-with-r2wd-an-example-session/).
+### Regression table
 
+This is the basic model we'll play with
+
+```{r model, exercise = TRUE}
+m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
+summary(m1)
+
+library(modelsummary)
+```
+
+```{r model-solution}
+msummary(m1, 
+         stars = TRUE,
+         title = "一个漂亮的回归结果表格",
+         subtitle = "A Pretty Regression Table",
+         notes = "来源：Dr Hu's R workshop。",
+         coef_map = c("cyl" = "Number of cylinders",
+                      "disp" = "Displacement (cu.in.)",
+                      "gear" = "Number of forward gears",
+                      "wt" = "Weight (1000 lbs)")) %>% 
+  tab_footnote(
+    footnote = "A footnote just to show I can add a footnote.",
+    locations = cells_column_labels(columns = vars(`Model 1`))
+  )
+
+# msummary(models, filename = 'table.tex')
+# msummary(models, filename = 'table.rtf')
+# msummary(models, filename = 'table.html')
+# msummary(models, filename = 'table.jpeg')
+# msummary(models, filename = 'table.png')
+```
 
 ## Data Visualization
 
-Well, numbers do not speak for themselves, how about...
+A picture worth a thousand words
 
-## R Plot Examples
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/picThanWords.jpg")
+```
+
+## How Fancy You Can Do
 
 ### Networks
 
@@ -107,28 +156,15 @@ Well, numbers do not speak for themselves, how about...
 ### Maps
 
 <div class="center">
-<img src="http://spatial.ly/wp-content/uploads/2012/02/bike_ggplot-1024x676.png" height="600"/>
+<img src="images/ggmap.png" height="600"/>
 </div>
 
 ### Interactive plots
 
 <div class="center">
-<img src="http://i.imgur.com/ELEA9FP.gif" height="550"/>
+<img src="images/interactive3D.gif" height="550"/>
 </div>
 
-### Too "fancy" ? Then...
-
-Dot-whisker coefficient plot:
-
-<div class="centered">
-<img src="http://fsolt.org/blog/dotwhisker1.jpg" height="530"/>
-</div>
-
-Or interaction plot:
-
-<div class="centered">
-<img src="http://fsolt.org/blog/interplot1.png" height="450"/>
-</div>
 
 ## R Visualization
 
@@ -179,12 +215,72 @@ dev.off()
 
 ## `ggplot`
 
-* Built by Hadley Wickham based on Leland Wilkinson's *Grammar of Graphics*.
-* It breaks the plot into components as <span style="color:purple">scales</span> and <span style="color:purple">layers</span>---increase the flexibility.<br><br><div class="centered">
-<img src="images/layers.png" height="450"/>
-</div>
+Built by Hadley Wickham based on Leland Wilkinson's *Grammar of Graphics*.
 
-* To use `ggplot` function, one needs to install the package `ggplot2` first.
+* To use `ggplot` function, you need another `tidyverse` package: `ggplot2`.
+
+### Why not just the build-in plots?
+
+```{r data4plot, echo=FALSE}
+# bit of setup
+library(ggplot2)
+library(dplyr)
+
+load(url("http://varianceexplained.org/files/ggplot2_example.rda"))
+top_data <- cleaned_data %>%
+    semi_join(top_intercept, by = "systematic_name")
+```
+
+
+```{r plot_tradition}
+par(mar = c(1.5, 1.5, 1.5, 1.5))
+
+colors <- 1:6
+names(colors) <- unique(top_data$nutrient)
+
+# legend approach from http://stackoverflow.com/a/10391001/712603
+m <- matrix(c(1:20, 21, 21, 21, 21), nrow = 6, ncol = 4, byrow = TRUE)
+layout(mat = m, heights = c(.18, .18, .18, .18, .18, .1))
+
+top_data$combined <- paste(top_data$name, top_data$systematic_name)
+for (gene in unique(top_data$combined)) {
+    sub_data <- filter(top_data, combined == gene)
+    plot(expression ~ rate, sub_data, col = colors[sub_data$nutrient], main = gene)
+    for (n in unique(sub_data$nutrient)) {
+        m <- lm(expression ~ rate, filter(sub_data, nutrient == n))
+        if (!is.na(m$coefficients[2])) {
+            abline(m, col = colors[n])
+        }
+    }
+}
+
+# create a new plot for legend
+plot(1, type = "n", axes = FALSE, xlab = "", ylab = "")
+legend("top", names(colors), col = colors, horiz = TRUE, lwd = 4)
+```
+
+```{r plot_ggplot, out.width="100%", fig.height=8}
+ggplot(top_data, aes(rate, expression, color = nutrient)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE) +
+    facet_wrap(~name + systematic_name, scales = "free_y")
+```
+
+## Terminology
+
+Hadley: 
+
+* `aes`: Aesthetic, colour, shape, size
+    + Properties that can be perceived on the graphic.
+    + Each aesthetic can be mapped to a variable, or set to a constant value
+* `geom_`: Geometric, points, lines, bars
+    + Over forty types
+
+##
+
+```{r out.width = "100%", echo = FALSE}
+knitr::include_graphics("images/ggplot_geom.png")
+```
 
 ### Example
 
