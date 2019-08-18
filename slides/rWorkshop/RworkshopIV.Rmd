@@ -17,6 +17,7 @@ library(flextable)
 library(dotwhisker)
 library(interplot)
 library(magick)
+library(likert)
 library(tidyverse)
 
 m1 <- lm(mpg ~ cyl + hp + wt, data = mtcars)
@@ -172,7 +173,7 @@ knitr::include_graphics("images/picThanWords.jpg")
 * Lattice plots: e.g., `ggplot()`.
 * Interactive plots: `shiny()`. (save for later)
 
-## Basic plot
+## Basic Plot
 
 Pro:
 
@@ -300,19 +301,8 @@ ggplot(mtcars, aes(x=mpg)) +
 ```
 
 * `data`: The data that you want to visualize
-
 * `aes`: Aesthetic mappings
-describing how variables in the data are mapped to aesthetic attributes
-    + horizontal position (`x`)
-    + vertical position (`y`)
-    + color
-    + size
-* `geoms`: Geometric objects that represent what you actually see on
-the plot
-    + points
-    + lines
-    + polygons
-    + bars
+* `geoms`: Geometric objects 
 * `theme`: background
 * `ggtitle`: plot caption
 * `xlab`, `ylab`: axes labels
@@ -323,20 +313,7 @@ the plot
 mapped to the plane of the graphic.
     + `facet`: a faceting specification describes how to break up the data into sets.
 
-### "Descriptive Statistics"
-
-```{r facet, exercise = TRUE}
-library(dplyr)
-library(tidyr)
-
-df_desc <- select(mtcars, am, carb, cyl, gear,vs) %>% # select the variables
-  gather(var, value) # reshape the wide data to long data
-
-ggplot(data = df_desc, aes(x = as.factor(value))) + geom_bar() + 
-  facet_wrap(~ var, scales = "free", ncol = 3) + xlab("")
-```
-
-### Doing something fun~
+### Oh, histogram is too boring~
 
 ```{r magic, message=FALSE, exercise = TRUE}
 library(magick)
@@ -363,7 +340,6 @@ image_read("https://jeroen.github.io/images/banana.gif") %>%
   image_animate()
 ```
 
-
 ### Saving the output
 
 * `ggsave(<plot project>, "<name + type>")`:
@@ -374,30 +350,117 @@ image_read("https://jeroen.github.io/images/banana.gif") %>%
 saveThis <- ggplot(data = df_desc, aes(x = as.factor(value))) + geom_bar() + 
   facet_wrap(~ var, scales = "free", ncol = 3) + xlab("")
 
-ggsave("A Good Figure.png")
+ggsave(saveThis, "A Good Figure.png")
+#ggsave("A Good Figure.png") # also do the job
 ```
 
+### Descriptive Statistics
 
-## Visualization Packages
+```{r facet, exercise = TRUE}
+library(dplyr)
+library(tidyr)
 
-### `dotwhisker` ![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)
-A quick and easy way to create highly customizable dot-and-whisker plots for presenting and comparing the output of regression models. 
+df_desc <- select(mtcars, am, carb, cyl, gear,vs) %>% # select the variables
+  gather(var, value) # reshape the wide data to long data
+
+ggplot(data = df_desc, aes(x = as.factor(value))) + geom_bar() + 
+  facet_wrap(~ var, scales = "free", ncol = 3) + xlab("")
+```
+
+### Go Beyond Histogram
+
+Let's make up a likert-scale index.
+
+```{r likert, exercise = TRUE}
+input <- ("
+  Pooh    Piglet  Tigger
+  3       2       4
+  5       4       4
+  4       2       4
+  4       2       4
+  4       1       5
+  4       2       3
+  4       3       5
+  4       2       4
+  5       2       4
+  5       3       3
+")
+
+df_likert <- read.table(textConnection(input), header = TRUE)
+
+df_likert$Pooh = factor(df_likert$Pooh,
+                   levels = c("1", "2", "3", "4", "5"),
+                   ordered = TRUE)
+
+df_likert$Piglet = factor(df_likert$Piglet,
+                     levels = c("1", "2", "3", "4", "5"),
+                     ordered = TRUE)
+
+df_likert$Tigger = factor(df_likert$Tigger,
+                     levels = c("1", "2", "3", "4", "5"),
+                     ordered = TRUE)
+
+str(df_likert)
+
+library(likert)
+```
+
+```{r likert-solution}
+likert(df_likert) %>%
+  plot(type = "bar")
+
+likert(df_likert) %>%
+  plot(
+    type = "heat",
+    low.color = "white",
+    high.color = "blue",
+    text.color = "black",
+    text.size = 4,
+    wrap = 50
+  )
+
+likert(df_likert) %>%
+  plot(type = "density",
+       facet = TRUE,
+       bw = 0.5)
+```
+
+### Comparing Experimental Results?
+
+```{r violin, exercise = TRUE}
+ggplot(mtcars, aes(factor(cyl), mpg)) +
+  geom_boxplot()
+```
+
+```{r violin-solution}
+ggplot(mtcars, aes(factor(cyl), mpg)) +
+  geom_violin() + 
+  geom_jitter(height = 0, width = 0.1)
+```
+
+## Regression Results
+
+### Coefficient visualization
+
+`dotwhisker` ![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)
+
+Remember our regression table?
 
 ```{r dotwhisker, exercise = TRUE}
-stargazer(m1, type = "text", align = T, header = FALSE)
+msummary(m1, stars = TRUE)
 ```
 
 ```{r dotwhisker-solution}
 dwplot(m1)
 ```
 
-### How about multiple models
+### Multiple models
 
 ```{r dwMulti, exercise = TRUE}
 m2 <- lm(mpg ~ cyl + hp + wt + hp, data = mtcars)
 m3 <- lm(mpg ~ cyl + hp + wt + hp + am, data = mtcars)
 
-stargazer(list(m1, m2, m3), type = "text", align = T, header = FALSE)
+msummary(list(m1, m2, m3), stars = TRUE)
 ```
 
 ```{r dwMulti-solution}
@@ -409,7 +472,7 @@ dwplot(list(m1, m2, m3)) +
     facet_grid(~model, scales="free_y")
 ```
 
-### A pretty publishable figure
+### Decorated figure
 
 ```{r publishable}
 dwplot(list(m1, m2, m3)) %>% 
@@ -430,21 +493,23 @@ dwplot(list(m1, m2, m3)) %>%
 
 See more details in the [vignette](https://cran.r-project.org/web/packages/dotwhisker/vignettes/dotwhisker-vignette.html).
 
-### You can do even better!
+### `small_multiple`
+
+Comparing variables in their own scales.
 
 ```{r smallMultiple, exercise = TRUE}
-
 small_multiple(list(m1, m2, m3)) +
   ylab("Coefficient Estimate") +
   geom_hline(yintercept = 0, colour = "grey60", linetype = 2) +
   ggtitle("Predicting Gas Mileage") +
   theme(plot.title = element_text(face = "bold"), legend.position = "none",
     axis.text.x  = element_text(angle = 60, hjust = 1)) 
-
 ```
 
 
-### `interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
+### Moderation effects
+
+`interplot` ![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)
 
 Visualizing the changes in the coefficient of one variable in a two-way interaction term conditional on the value of the other included variable.
 
@@ -457,7 +522,7 @@ Visualizing the changes in the coefficient of one variable in a two-way interact
     + Most precise way: calculate the difference between two mean with SEs.
     + Most convenient way: visualizing it
 
-### Interactive effects
+### Plotting moderation
 
 ```{r interact, exercise = TRUE}
 m_cyl <- lm(mpg ~ wt * cyl, data = mtcars)
@@ -471,7 +536,7 @@ interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
 interplot(m = m_cyl, var1 = "wt", var2 = "cyl")
 ```
 
-### How do you know if it is significant?
+### Significant?
 
 ```{r interHist}
 interplot(m = m_cyl, var1 = "cyl", var2 = "wt", hist = TRUE) +
@@ -479,7 +544,7 @@ interplot(m = m_cyl, var1 = "cyl", var2 = "wt", hist = TRUE) +
 ```
 
 
-### Interactive effect with factors
+### Category comparison
 
 ```{r interFactor}
 mtcars$gear <- factor(mtcars$gear)
@@ -488,12 +553,51 @@ m_gear <- lm(mpg ~ gear * wt, data = mtcars)
 interplot(m = m_gear, var1 = "wt", var2 = "gear")
 ```
 
+## Geographic Visualization
 
-## Contact
+```{r map, message=FALSE, cache=TRUE}
+library("ggmap")
+china <- c(left = 72, bottom = 0, right = 135, top = 52)
 
-```{r out.width = "40%", fig.align="center", echo = FALSE}
-knitr::include_graphics("images/thatsit.gif")
+get_stamenmap(china, zoom = 5, maptype = "toner-lite") %>% 
+  ggmap() 
 ```
 
-#### My email: yue-hu-1@uiowa.edu      
-#### My website: https://sammo3182.github.io/
+More information about mapping China, see Jie Zhang's [post](http://www.easycharts.club/post/17). 
+
+
+## Network Visualization
+
+```{r network, message=FALSE}
+library(network)
+library(sna)
+n <- network(rgraph(10, tprob = 0.2), directed = FALSE)
+
+n %v% "family" <- sample(letters[1:3], 10, replace = TRUE)
+n %v% "importance" <- sample(1:3, 10, replace = TRUE)
+
+e <- network.edgecount(n)
+set.edge.attribute(n, "type", sample(letters[24:26], e, replace = TRUE))
+set.edge.attribute(n, "day", sample(1:3, e, replace = TRUE))
+
+library(ggnetwork)
+
+ggplot(n, aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges(aes(linetype = type), color = "grey50") +
+  geom_nodes(aes(color = family, size = importance)) +
+  theme_blank()
+```
+
+## Take-Home Points
+
+1. R is power on visualization.
+1. Pretty &prop; complexity.
+1. The fancier...em...unnecessarily the better.
+
+## Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
