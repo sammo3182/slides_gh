@@ -1,0 +1,66 @@
+---
+title: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r calendar, include=FALSE}
+library(pacman)
+p_load(tidyverse, lubridate)
+
+# Opening Date: 2017-08-21 ####
+start <- ymd("2019-09-09")
+
+# Final Week: 2017-12-11 ####
+end <- start + dweeks(15)
+
+schedule <-
+  data.frame(day = seq(from = start, to = end, by = "days")) %>%
+  mutate(day = ymd(day),
+         weekDay = wday(day, week_start = 1)) %>% # get the relative week number
+  filter(weekDay == 1) %>% # only keep Monday
+  mutate(weekNum = 1:16)
+
+schedule <- tibble::tribble(
+                                     ~topic, ~translation,                  ~lab,
+                   "Descriptive Statistics",      "描述性统计",      "Linear Algebra",
+                       "Probability Theory",        "概率论",            "Calculus",
+     "Population and Sampling Distribution",    "整体和样本分布",          "Intro to R",
+                       "Hypothesis Testing",       "假设检验",          "Rmarkdown",
+                                 "No Class",       "国庆假期",              "Data Input and Recoding",
+             "Correlation and Independence",    "相关性和独立性",        "Data Manipulation",
+                    "Simple OLS and Estimator Derivation ",       "简单回归及推导",        "Hypothesis Test",
+                           "Properties of OLS Estimators",       "OLS 估测值性质",        "Simulation",
+                     "Gauss-Markov Theorem",   "高斯马尔科夫定理",                 "Binary OLS",
+                      "Multiple Regression",       "多元回归",                 "Multivariate OLS",
+                     "Regression Diagnoses",       "定理诊断",           "Diagnosis",
+  "Multicolinearity and Heteroskedasticity",   "共线性与异方差性",       "OLS Visualization",
+          "Autocorrelation and Endogeneity",   "自相关性与内生性",       "Fixed Effect and IV Model",
+                  "Moderation and Missing",    "调节变量与缺失值", "Interplot and Multiple Imputations",
+                  "General Linear Model",     "非连续因变量",                 "GLM",
+  "Guest Lecture: Causal Inference", "讲座：因果推断简介", "N/A"
+  
+  ) %>% bind_cols(schedule) %>% select(day, weekNum, topic, translation, lab)
+
+schedule$caption <- paste0("第", schedule$weekNum, "周 (", schedule$day, "): ", schedule$translation, " (", schedule$topic, ")")
+```
+
+Welcome to Dr. Hu's course of Analysis of Political Data. The course materials are listed as following, and...
+
+<div class="centered">
+<img src="images/goodluck.gif" height="300"/>
+</div>
+
+<br><br>
+
+
+<a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">Course Initiation</a>
+
+<a href="/slides_gh/slides/courses/analysisOfPoliticalData/02_descriptiveStats.html">`r schedule$caption[1]`</a>
+
+<a href="/slides_gh/slides/courses/analysisOfPoliticalData/03_probability.html">`r schedule$caption[2]`</a>
+

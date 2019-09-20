@@ -1,0 +1,445 @@
+---
+title: "Probability Theory"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## What's Probability
+
+* Determinist event: P = 0/1
+
+--
+
+* Probabilist event: [0, 1]
+
+---
+
+## Perspective
+
+* Classic ("objective") view: Coin has two sides, balance means $Pr(head) = 0.5$.
+
+--
+
+* Relative frequency view: ${\displaystyle \lim_{n\to \infty}f(x)/n}$
+    + Random sample (the larger the better)
+
+--
+
+* Subjective view: Bayesian, based on beliefs (prior), game theory
+
+---
+
+## Sample space
+
+Space of all possible outcomes
+
+--
+
+Rules:
+
+1. $\sum P = 1$
+1. All of the probability constitute the probability distribution
+1. For all event in the space, $P(E) + P(\tilde E) = 1$
+
+---
+
+## Sample point method
+
+Get the probability of the event
+
+--
+
+1. Define experiment event
+1. Define sample space
+1. Assign probabilities, $P(E_i) \geq 0, \sum P(E_i) = 1.$
+1. Define event of interest, A
+1. Find P(A) by summing probability of A.
+
+---
+
+## Event composition method
+
+A method used to determine the probabilities by the application of multiplicative and additive rules of probability.
+
+--
+
+e.g., $E_1$: m outcomes, $E_2$: n outcomes, therefore there are $m\times n$ possible outcome for $E_1 E_2$. 
+
+--
+
+e.g., A car dealer has 6 models, 8 colors, and 3 financial plans. How many package? 6 * 8 * 3.
+
+---
+
+## Permutation and Combination
+
+Ordered: $P(n, r) = \frac{n!}{(n - r)!}.$
+
+Order doesn't matter: ${n \choose r} = \frac{n!}{r!(n - r)!}.$
+
+---
+
+## Sampling w./w.o. replacements
+
+W.o. means once picked, it won't be sampled again. 
+
+--
+
+When the population is infinite, or extremely large, then there’s little difference between sampling with and without replacement). 
+
+---
+
+When the population is finite, the variability of our sample is actually less than expected
+
+Apply a finite population correction to account for this greater efficiency in the sampling process. 
+
+$$ FPC = \sqrt{\frac{N - n}{N - 1}}$$
+
+---
+
+e.g., Through a dice for five times: 
+
+w. replacement: $6^5$
+
+w.o. replacement: $P(6, 5) = \frac{6!}{(6 - 5)!}.$ (n! factorial)
+
+--
+
+Q. Is survey sampling a w. or w.o. sampling? 
+
+???
+
+w.o.
+
+---
+
+## Joint, marginal, conditional distributions
+
+* Multinomial: $P(n_1, n_2,\dots, n_i) = {n\bullet\choose n1, n2, \dots, n_i}\Pi \pi_i^n.$
+    + Binomial: $P(n_1, n_2) = {n\bullet\choose n_1}\pi_1^{n_1}(1 - \pi_1)^{n_2}$
+
+--
+
+Marginal and joint totals: 
+
+$$\begin{align} 
+n_{i\bullet} =& \sum_j n_{ij}; n_{\bullet j} = \sum_i n_{ij}; \\
+n_{\bullet\bullet} =& \sum\sum n_{ij}.
+\end{align}$$
+
+
+---
+
+## Independent event
+
+$P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).$
+
+Such event's probability is: 
+
+* Population: $\pi_i = n_i/N$
+* Sample: $\hat{\pi_i} = n_i/n_{\bullet}.$
+
+---
+
+Marginal distribution: 
+
+$$\begin{align}\pi_{i\bullet} =& \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
+\pi_{\bullet j} =& \sum_i \pi_{ij}, \hat{\pi_{\bullet j}} =  n_{\bullet j}/n_{\bullet\bullet}.\end{align}$$
+
+Joint distribution: $\pi_{\bullet\bullet} = \sum\sum \pi_{ij} = 1.$
+
+Conditional distribution: $P(i|j) = \pi_{ij} / \pi_{\bullet j}; \hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}$
+
+---
+
+e.g., A survey asked respondents if they agreed that kids under 18 can take taxi without parents' permission. 
+
+| Gender 	| Yes 	| No 	| Total 	|
+|--------	|-----	|----	|-------	|
+| Male   	| 5   	| 12 	| 17    	|
+| Female 	| 6   	| 5  	| 11    	|
+| Total  	| 11  	| 17 	| 28    	|
+
+What's the probability for each event
+
+--
+
+| Gender 	| Yes  	| No    	|
+|--------	|------	|-------	|
+| Male   	| 5/28 	| 12/28 	|
+| Female 	| 6/28 	| 5/28  	|
+
+---
+
+e.g., A survey asked respondents if they agreed that kids under 18 can take taxi without parents' permission. 
+
+| Gender 	| Yes 	| No 	| Total 	|
+|--------	|-----	|----	|-------	|
+| Male   	| 5   	| 12 	| 17    	|
+| Female 	| 6   	| 5  	| 11    	|
+| Total  	| 11  	| 17 	| 28    	|
+
+
+Conditional probability P(Y|M)
+
+--
+
+Conditional: $P(Y|M) = 5/17$
+
+---
+
+e.g., A survey asked respondents if they agreed that kids under 18 can take taxi without parents' permission. 
+
+| Gender 	| Yes 	| No 	| Total 	|
+|--------	|-----	|----	|-------	|
+| Male   	| 5   	| 12 	| 17    	|
+| Female 	| 6   	| 5  	| 11    	|
+| Total  	| 11  	| 17 	| 28    	|
+
+
+Are gender and agreement on taxi independent? 
+
+--
+
+$P(MY) = 11/28 * 17/28 \neq 5/28$ 
+
+???
+
+$11/28 * 17/28$ is the expected value for independence, then $\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.$
+
+---
+
+## Describe probabilities
+
+* Relative risk: $\hat{\pi}_{1|1}/\hat{\pi}_{1|2} = \frac{n_{11}/n_{\bullet 1}}{n_{12}/n_{\bullet 2}}$
+
+e.g., A traffic bureau tried to test whether seat belt can reduce the fatal ratio. Here's the counts:
+
+| Seatbelt 	| Fatal 	| Nonfatal 	|
+|----------	|-------	|----------	|
+| Yes      	| 1601  	| 162527   	|
+| No       	| 510   	| 412368   	|
+
+$Risk_{fatal} = \frac{1601/(1601 + 162527)}{510/(510 + 412368)} = 7.9$
+
+???
+
+That is, when people have seatbelt, they are 7.9 more times to die in a fatal accident than a non-fatal one.
+
+---
+
+## Odds Ratio
+
+$$\begin{align}
+O_{12} =& \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
+ =& \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
+ =& n_{11}n_{22}/n_{21}n_{12}
+\end{align}$$
+
+--
+
+* Log odds: $ln(O_{12})$
+
+???
+
+For binary, using $log(O_{12})$, i.e., "logistic" transformation of odds, a.k.a., "logit"
+
+---
+
+e.g., A traffic bureau tried to test whether seat belt can reduce the fatal ratio. Here's the counts:
+
+| Seatbelt 	| Fatal 	| Nonfatal 	|
+|----------	|-------	|----------	|
+| Yes      	| 1601  	| 162527   	|
+| No       	| 510   	| 412368   	|
+
+$O_{fatal} = \frac{1601/510}{162527/412368}$
+
+--
+
+If independent, then log odds = 0.
+
+---
+
+RR vs. OR
+
+.center[<img src="images/rrOr.png" height = 300 />]
+
+* For rare cases, both ok.
+* For common cases, RR is better.
+
+---
+
+## Compound events
+
+Event G and H
+
+* Union: G&cup;H = $\{S_i: S_i\in G\ or\ S_i\in H\}$
+    + P(G&cup;H) = P(G) + P(H) - P(G)&cup;P(H).
+* Intersection: G&cap;H = $\{S_i: S_i\in G\ and\ S_i\in H\}$
+* Exclusive: G&cap;H = &empty;
+* Complement: J &sub; -G &cap; H
+* Conditional: $P(H|G) = \frac{P(G\cap H)}{P(G)}$
+* Independent: P(H|G) = P(H); P(G&cap;H) = P(G)P(H)
+
+---
+
+## Bayes' Theorem:
+
+$$
+\begin{aligned}
+P(A|B)P(B) =& P(B|A)P(A) = P(A\cap B)\\
+             P(A|B)=& \frac{P(B|A)P(A)}{P(B)}\\
+                   =& \frac{P(B|A)P(A)}{P(B|A)P(B) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}
+$$
+
+--
+
+1. Conjugate prior: posterior distribution = prior distribution
+1. Cromwell's rule: if a region of the parameter space has 0 prior probability, then it also has 0 posterior probability. 
+ 
+---
+
+class: small
+
+e.g.1: Known in used car deals, 30% of the cars were faulty. When people bring the cars to the mechanic, the mechanic can identify largely 90% faulty car faulty and 80% good car good. Given this information, what's the probability that a car is faulty if a mechanic said it is?
+
+--
+
+.left-column[
+```{r diagramCar, echo = FALSE, out.height="60%"}
+
+library("DiagrammeR")
+
+grViz("
+digraph usedCar {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10]
+
+  # several 'node' statements
+  node [shape = circle,
+        fixedsize = true,
+        width = 0.9] // sets as circles
+  N[label = 'Nature'];
+  MF[label = 'Mechanic'];
+  MS[label = 'Mechanic'];
+  RFF[label = 'Result'];
+  RFS[label = 'Result'];
+  RSF[label = 'Result'];
+  RSS[label = 'Result']
+
+  # several 'edge' statements
+  N -> MF[label='F: .3']
+  N -> MS[label='G: .3']
+  MF -> RFF[label='F: .9']
+  MF -> RFS[label='G: .1']
+  MS -> RSF[label='F: .2']
+  MS -> RSS[label='G: .8']
+  
+}
+")
+
+```
+]
+
+
+.right-column[
+$$\begin{align}
+& P(F|MF) \\
+=& \frac{P(MF|F)P(F)}{P(MF|F)P(F) + P(MF|\tilde F)P(\tilde F)} \\
+=& \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
+\end{align}$$
+]
+
+---
+
+e.g.2: Three types of coins: C1 2 heads, C2 2 tails, C3 1 head 1 tail. Randomly picking one, if knowing you will get heads, what's the probability to have two heads?
+
+???
+
+
+```{r diagramCoin, echo = FALSE}
+
+grViz("
+digraph usedCar {
+
+  # a 'graph' statement
+  graph [overlap = true, fontsize = 10]
+
+  # several 'node' statements
+  node [shape = circle,
+        fixedsize = true,
+        width = 0.9] // sets as circles
+  N[label = 'Nature'];
+  MH[label = '2-Head Coin'];
+  MT[label = '2-Tail Coin'];
+  MF[label = 'Fair Coin'];
+  RHH[label = 'Head'];
+  RHT[label = 'Tail'];
+  RTH[label = 'Head'];
+  RTT[label = 'Tail'];
+  RFH[label = 'Head'];
+  RFT[label = 'Tail'];
+
+  # several 'edge' statements
+  N -> MH[label='.3']
+  N -> MT[label='.3']
+  N -> MF[label='.3']
+  MH -> RHH[label='1']
+  MH -> RHT[label='0']
+  MT -> RTH[label='1']
+  MT -> RTT[label='0']
+  MF -> RFH[label='1']
+  MF -> RFT[label='0']
+  
+}
+")
+
+```
+
+
+
+$\begin{align}
+& P(2H|H) \\
+=& \frac{P(H|2H)P(2H)}{P(H|2H)P(2H) + P(H|2T)P(T) + P(H|Fair)P(Fair)} \\
+=& \frac{1 * 1/3}{1 * 1/3 + 0 * 1/3 + 1/2 * 1/3} = 2/3.
+\end{align}$
+
+
+
+---
+
+* Pro:
+    1. Models vary across unit/group;
+    1. Missing value issue
+    1. Model with latent variables
+    
+--
+
+* Cons: Deciding prior
+
+
+---
+
+* vs. Frequentist
+    1. repeated sample and sampel distribution: when the population data are collected, the repeat-sample makes no sense.
+    1. Future event: it is impossible to have repeat samples for future
+
+

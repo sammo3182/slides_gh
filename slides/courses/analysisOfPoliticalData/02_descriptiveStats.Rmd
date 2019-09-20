@@ -1,0 +1,185 @@
+---
+title: "Descriptive Statistics"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## What's A Variable?
+
+* Constant vs. variables
+    + Dependent variable
+    + Independent/explanatory variable
+
+--
+
+Q. When can a variable be constant?
+
+???
+
+Testing if X is a necessary condition for Y
+
+---
+
+* Level of measurement:
+    + Norminal
+    + Ordinal
+    + Interval (discrete/continuous, zero means absence)
+    + Ratio (meaningful zero)
+
+---
+
+## Population vs. Sample
+
+* Random sampling
+    + Why: 
+        1. Limited resources
+        1. scarcity (only one sample can be used)
+        1. destructive testing
+        1. could be more accurate
+    + How:
+        1. Survey
+        1. Big data
+        
+
+---
+
+Q. Are war data random samples? 
+
+???
+
+1816, Peloponnese War
+
+---
+
+## Randomization might not be possible
+
+* Ethical issues
+* Experiments
+
+--
+
+Q. Are individual exchangable?
+
+---
+
+## Data Generating Process (DGP)
+
+The data collection process (over time);
+
+--
+
+A specific statistical model in a simulation
+
+---
+
+## What to look when you get a dataset?
+
++ Raw data
++ Frequency distribution: $n_i$, $n. = \sum n_i$, $n.. = \sum n_{ij}$
++ Histogram
++ Cross-tabulation
++ Time series plots, scattor plots
++ Percentiles
+
+---
+## Measuring the center
+
++ Mode: most frequent occuring number, not good of central tendency, bimodal (two modes)
++ Median: at 50%
+    + Odd: middle value
+    + Even: mean of two mid values
+    + Sensitive for outliers
++ Mean: $\bar{X}\rightarrow\mu$
+    + Group: $\bar{X} = 1/n\sum xf$, x is the cell midpoint and f is the frequency of $X_i$.
+    + Symmetric distribution, median and mean are identical
+
+---
+
+## Measuring the dispersion of a distribution
+
++ Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
++ Interquartile Range (IQR): [25% quartile, 75% quartile]
++ Mean absolute diviation (MAD): $1/n\sum|X - \bar{X}|$
++ Mean square diviation (MSD): $1/n\sum(X - \bar{X})^2$
+
+??? 
+
+MAD: Intractable, difficult in differentiate absolute values
+
+---
+
++ Variance: 
+
+$$\begin{align}
+\sigma^2 =& \sum(X - \mu)^2p(X)\\
+s^2 =& \sum(X - \bar X)^2p(x) \\
+=& \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}$$
+
+--
+
++ Degree of freedom: n in total, and used out for calculate $\bar{X}$, what does it mean? 
+
+$$\left[\begin{array} {ccc}
+		X_1\\
+		\vdots \\
+		X_n
+		\end{array}\right] = \bar{X}\left[\begin{array} {rrr}
+		1 \\
+		\vdots \\
+		1
+		\end{array}\right] + \left[\begin{array} {rrr}
+		X_1 - \bar{X} \\
+		\vdots \\
+		X_n - \bar{X}
+		\end{array}\right]
+		$$
+
+???
+
+The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is ${\displaystyle {\bar {X}}} {\bar {X}}$. It therefore has 1 degree of freedom.
+
+The second vector is constrained by the relation ${\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}$. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
+
+In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
+ 
+Intuitively, only when there are more than one item, the variance can exist, therefore the d.f. is $n - 1$.
+
+---
+
+d.f. for a crosstable: $(r - 1)(c - 1)$
+
+---
+
+$\sigma^2$ is often written in another format:
+
+$$\begin{aligned}
+  \sigma^2 =& \sum(X - \mu)^2p(x),\\
+  =& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+  =& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+  =& \sum X^2p(x) - \mu^2, given\ \mu = \sum Xp(x), \sum p(x) = 1.
+ \end{aligned}$$
+ 
+---
+
+Standard deviation
+
++ Population: $\sigma = \sqrt{\pi(1 - \pi)}$
++ Group: $\sqrt{f/n\sum(X - \bar{X})^2}$
++ Sample: s
+

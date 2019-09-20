@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Descriptive Statistics</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Descriptive Statistics
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+## What's A Variable?
+
+* Constant vs. variables
+    + Dependent variable
+    + Independent/explanatory variable
+
+--
+
+Q. When can a variable be constant?
+
+???
+
+Testing if X is a necessary condition for Y
+
+---
+
+* Level of measurement:
+    + Norminal
+    + Ordinal
+    + Interval (discrete/continuous, zero means absence)
+    + Ratio (meaningful zero)
+
+---
+
+## Population vs. Sample
+
+* Random sampling
+    + Why: 
+        1. Limited resources
+        1. scarcity (only one sample can be used)
+        1. destructive testing
+        1. could be more accurate
+    + How:
+        1. Survey
+        1. Big data
+        
+
+---
+
+Q. Are war data random samples? 
+
+???
+
+1816, Peloponnese War
+
+---
+
+## Randomization might not be possible
+
+* Ethical issues
+* Experiments
+
+--
+
+Q. Are individual exchangable?
+
+---
+
+## Data Generating Process (DGP)
+
+The data collection process (over time);
+
+--
+
+A specific statistical model in a simulation
+
+---
+
+## What to look when you get a dataset?
+
++ Raw data
++ Frequency distribution: `\(n_i\)`, `\(n. = \sum n_i\)`, `\(n.. = \sum n_{ij}\)`
++ Histogram
++ Cross-tabulation
++ Time series plots, scattor plots
++ Percentiles
+
+---
+## Measuring the center
+
++ Mode: most frequent occuring number, not good of central tendency, bimodal (two modes)
++ Median: at 50%
+    + Odd: middle value
+    + Even: mean of two mid values
+    + Sensitive for outliers
++ Mean: `\(\bar{X}\rightarrow\mu\)`
+    + Group: `\(\bar{X} = 1/n\sum xf\)`, x is the cell midpoint and f is the frequency of `\(X_i\)`.
+    + Symmetric distribution, median and mean are identical
+
+---
+
+## Measuring the dispersion of a distribution
+
++ Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
++ Interquartile Range (IQR): [25% quartile, 75% quartile]
++ Mean absolute diviation (MAD): `\(1/n\sum|X - \bar{X}|\)`
++ Mean square diviation (MSD): `\(1/n\sum(X - \bar{X})^2\)`
+
+??? 
+
+MAD: Intractable, difficult in differentiate absolute values
+
+---
+
++ Variance: 
+
+`$$\begin{align}
+\sigma^2 =&amp; \sum(X - \mu)^2p(X)\\
+s^2 =&amp; \sum(X - \bar X)^2p(x) \\
+=&amp; \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}$$`
+
+--
+
++ Degree of freedom: n in total, and used out for calculate `\(\bar{X}\)`, what does it mean? 
+
+`$$\left[\begin{array} {ccc}
+		X_1\\
+		\vdots \\
+		X_n
+		\end{array}\right] = \bar{X}\left[\begin{array} {rrr}
+		1 \\
+		\vdots \\
+		1
+		\end{array}\right] + \left[\begin{array} {rrr}
+		X_1 - \bar{X} \\
+		\vdots \\
+		X_n - \bar{X}
+		\end{array}\right]
+		$$`
+
+???
+
+The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is `\({\displaystyle {\bar {X}}} {\bar {X}}\)`. It therefore has 1 degree of freedom.
+
+The second vector is constrained by the relation `\({\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}\)`. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
+
+In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
+ 
+Intuitively, only when there are more than one item, the variance can exist, therefore the d.f. is `\(n - 1\)`.
+
+---
+
+d.f. for a crosstable: `\((r - 1)(c - 1)\)`
+
+---
+
+`\(\sigma^2\)` is often written in another format:
+
+`$$\begin{aligned}
+  \sigma^2 =&amp; \sum(X - \mu)^2p(x),\\
+  =&amp; \sum(X^2 -2X\mu + \mu^2)p(x),\\
+  =&amp; \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+  =&amp; \sum X^2p(x) - \mu^2, given\ \mu = \sum Xp(x), \sum p(x) = 1.
+ \end{aligned}$$`
+ 
+---
+
+Standard deviation
+
++ Population: `\(\sigma = \sqrt{\pi(1 - \pi)}\)`
++ Group: `\(\sqrt{f/n\sum(X - \bar{X})^2}\)`
++ Sample: s
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
