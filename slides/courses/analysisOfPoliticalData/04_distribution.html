@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Population and Distrations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Population and Distrations
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+## Probability distribution
+
+* Probability Mass Function: Discrete distribution
+
+???
+
+Draw a histogram
+
+--
+
+* Probability Density Function: Continuous distribution
+    + Cumulative density function: `\(F(x) = P(X &lt; x)\)`
+
+???
+
+Draw a density plot
+
+--
+
+* Property for both PMF and PDF : 
+    1. `\(0 \leq f(x) \leq 1\)`;
+    1. `\(\sum_x f(x) = 1.\)`
+
+---
+
+## Moments of probability distribution
+
+A specific quantitative measure of the shape of a function
+
+---
+
+Physics
+
++ 0th: Total mass
++ 1st: Center of mass
++ 2ed: Rotational inertia
+
+???
+
+Rotational inertia: 惯性矩
+
+--
+
+Statistics
+
++ 0th: Total probability
++ 1st: Mean
++ 2ed: Variance
++ 3id: Skewness
++ 4th: Kurtosis (tailedness)
+
+???
+
+&lt;img src="images/moments.png" height="120"/&gt;
+
+Kurtosis：尖锐程度
+
+---
+
+## Binomial Distribution
+
+`$$PDF = {n \choose r}\pi^r(1 - \pi)^{n - r}$$`
+
+
+???
+
+`$${n \choose s} = \frac{n!}{r!(n - r)!}$$`
+
+--
+
+e.g., S is the head number of tossing n times of a fair coin, then 
+
+`$$P(S) = {n \choose s}P^s(1 - P)^{n - s}.$$`
+
+---
+
+e.g., A school hired 100 faculty members, 25 female and 75 male, in a year. Given the general hired ratio is .4 for women and .6 for men. What's the probability that the employment is fair in this year?
+
+--
+
+`\(P(25) = {100 \choose 25}0.4^{25}0.6^{75} = 0.006\)`
+
+--
+
+Very unlikely.
+
+---
+
+## Continuous Distribution
+
+Relative frequency density
+
++ Total areas of the bars of the distribution = 1
+
+--
+
++ Discrete: `\(\mu = \sum xp(x), \sigma^2 = \sum(X - \mu)^2p(x)\)`
+
+--
+
++ Continuous: 
+    + `\(P(a\leq x\leq b) = \int^b_af(x)d(x)\)`
+    + `\(\sigma^2 = \int^b_a(x - \mu)^2p(x)dx\)`
+
+---
+
+## Properties of PMF/PDF
+
++ none-negative
+
+--
+
++ Total area = `\(\int^{+\infty}_{-\infty}f(x)dx = 1\)`
+
+--
+
++ `\(P(x = c) = \int^c_cf(x)dx = 0\)`
+
+--
+
++ `\(P(a\leq x \leq b) = \int^b_af(x)x.\)`
+    + $ = \int^b_{-\infty}f(x)dx - \int^a_{-\infty}f(x)dx$
+
+--
+
++ CDF: `\(P(X\leq x)\)`
+    + PDF = `\(\frac{\partial CDF}{\partial X}\)`
+    
+---
+
+## Uniform
+
++ CDF: 
+
+`$$F = \begin{cases}
+0, if\ x &lt; a,\\
+\frac{x - a}{b - a}, if\ x \in[a, b),\\p
+1, if\ x \geq b.
+\end{cases}$$`
+
+???
+
+&lt;img src="images/uniform_cdf.png" height="60"/&gt;
+
+--
+
++ PDF: 
+
+`$$f(x) = \begin{cases} 1/(b - a), if x \in [a, b],\\ 0, otherwise.\end{cases}$$`
+
+???
+
+&lt;img src="images/uniform_pdf.png" height="60"/&gt;
+
+`$$\begin{align}
+1 =&amp; \int^b_af(x)dx = \int^b_aKdx\\
+=&amp; |^b_aKx = Kb - Ka \\
+\Rightarrow K=&amp; 1/(b -a)
+\end{align}$$`
+
+---
+
++ Mean: 
+
+`$$\mu = E(x) = \frac{a + b}{2}$$`
+
+???
+
+`$$\begin{align}
+\mu =&amp; E(x) = \int^b_a x \frac{1}{b - a} dx \\
+=&amp; \frac{1}{b - a}\int^b_axdx \\
+=&amp; \frac{1}{b - a}\frac{1}{2}x^2|^b_a \\
+=&amp; \frac{b^2 - a^2}{a(b - a)} \\
+=&amp; \frac{a + b}{2}
+\end{align}$$`
+
+--
+
++ Variance: 
+
+`$$\sigma^2 =  \frac{(b - a)^2}{12}.$$`
+
+???
+
+`$$\begin{align}
+\sigma^2 =&amp; \sum x^2p(x) - \mu^2 \\
+=&amp; \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2 \\
+=&amp; \frac{(b - a)^2}{12}.
+\end{align}$$`
+
+---
+
+## Bernoulli
+
+k is possible outcome
+
+`\(k\in 0, 1,\)` p is P(X = 1)
+
+--
+
++ CDF: 
+
+`$$F = \begin{cases}
+0, if\ k&lt;0,\\
+1 - p, if\ k \in[0, 1),\\
+1, if\ k \geq 1.
+\end{cases}$$`
+
+--
+
++ PMF: `\(f(k;p) = p^k(1 - p)^{1 - k}\)`
+
+???
+
+&lt;img src="images/bernoulli_pmf.gif" height="120"/&gt;
+
+
+--
+
++ Mean: p
++ Variance: p(1 - p)
+
+---
+
+## Binomial: 
+
+n, number of trials; 
+
+p, the success probability in each trial; 
+
+k, the number of success
+
++ PDF: `\(f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}\)`
++ Mean: np
++ Variance: np(1 - p)
+
+???
+
+&lt;img src="images/binomial_pmf.png" height="120"/&gt;
+
+---
+
+## Normal: Gaussian curve
+
++ PDF: `\(f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`
+    + `\(Z = \frac{x - \mu}{\sigma}\)`. When `\(\mu = 1; \sigma = 0\)`, standard normal distribution
+    + `\(f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(z)^2}{2}}\)`
+
+---
+
+Q: Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
+
+`\(Z_1 = \frac{125 - 100}{16} = 1.056\)`
+
+`\(Z_2 = \frac{85 - 100}{16} = -0.9375\)`
+
+Then,  `\(P(X \geq 125)\)` = 0.1454841
+
+P(X &lt; 85) = 0.1742507
+
+Hint: p-value: `\(P(z\leq x)\)`.
+
+---
+
+## Event count:
+
+
+Poisson: `\(\pi_i = f(y_i, \mu) = \frac{e^{-\mu}\mu^{y_i}}{y_i!},\)`, assuming independent events (i.e., `\(\sigma^2 = \mu\)`, !!)
+
++ Dispersion: `\(\alpha = \frac{\sigma^2}{\hat y}\)`
+
+---
+
++ Over dispersion: `\(\sigma^2 &gt; \mu\)`, individual difference are salient, maybe leading to clustering contagion.
+    + Solution: Negative binomial
+    
+--
+
++ Under dispersion: `\(\sigma^2 &lt; \mu\)`, individuals are too similar
+    + Solution: see Gary King's generalized event count model
+        
+---
+
+Negative binomial: `\(\pi_i = f(y_i, v_1) = {c + y_i - 1 \choose y_i}v_1^c(1 - v_1)^{y_i}\)`
+
+`\(v_1\)` probability of an event occurring in a time unit (= `\(1 - v_2\)`), c waiting time until event occurs. 
+
+`\(\sigma^2 = (1 + \alpha\mu)\mu = \mu + \alpha\mu^2\)`
+
+--
+
+When `\(\alpha = 0\)`, NB becomes Poisson.
+
+---
+
+* Expectation (mean, variance) 
+    1. Mean: `\(E(X) = \sum x(px)\)`
+    2. Variance: `\(E(x - \mu)^2 = \sum (x - \mu)^2p(x)\)`
+    3. Rule of expectation:
+        1. E(aX + bY + c) = aE(X) + bE(Y) + c;
+        2. var(aX + bY) = `\(a^2var(x) + b^2var(y) + 2ab cov(x, y)\)`
+
+---
+
+Q. X is the results of tossing a fair dice, the function is g(X) = 2 + 3X, calculate the expectation of g(x)
+
+`$$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6}$$`
+
+$$ = 3.5$$
+
+Therefore,
+`\(E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5\)`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
