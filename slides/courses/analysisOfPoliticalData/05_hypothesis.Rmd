@@ -1,0 +1,191 @@
+---
+title: "Hypothesis Testing"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## Joint Distribution Revisit 
+
+What's joint distribution in the probability theory? 
+
+--
+
+$$n_{\bullet\bullet} = \sum\sum n_{ij}.$$
+
+--
+
+In statistics, joint distribution refers to the joint patterns of two or more variables. 
+
+---
+
+Two common measurements: 
+
+Covariance: 
+
+$$\sigma_{X, Y} = \sum(X - \mu_x)(Y - \mu_y)p(x,y)$$.
+
+--
+
+Correlation: 
+
+$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$.
+
+--
+
+Relations: 
+
+$$\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}$$.
+
+---
+
+## A Little More about Correlation
+
+### Pearson R
+
+For a sample: 
+
+$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$
+
+--
+
+Properties： 
+
+1. $\rho_{XY}\in [-1,1]$, independent 0.
+1. Greater value indicates stronger linear relationship.
+1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
+1. Not robust to skewed data and outliers.
+
+
+---
+
+e.g., n: population 10,000,000, X: education, Y: age, 
+
+| Education 	| 20~35 (mean = 30) 	| 35~55 (mean = 45) 	| 55~100 (mean = 70) 	|
+|-----------	|----------------	|----------------	|-----------------	|
+| 0         	| 1000000        	| 2000000        	| 5000000         	|
+| 1         	| 3000000        	| 6000000        	| 10000000        	|
+| 2         	| 18000000       	| 21000000       	| 15000000        	|
+| 3         	| 7000000        	| 8000000        	| 4000000         	|
+
+---
+
+| Education 	| 30 	| 45 	| 70 	|
+|-----------	|----------------	|----------------	|-----------------	|
+| 0         	| 1000000        	| 2000000        	| 5000000         	|
+| 1         	| 3000000        	| 6000000        	| 10000000        	|
+| 2         	| 18000000       	| 21000000       	| 15000000        	|
+| 3         	| 7000000        	| 8000000        	| 4000000         	|
+
+
+
+$$\begin{align}
+\mu_X =& \sum Xp(x) \\
+      =& 0 * 0.8 + 1 * 0.19 + 2 * 0.54 + 3 * 0.19 = 1.84;\\
+\mu_Y =& 30 * 0.29 + 45 * 0.57 + 70 * 0.34 = 49.15.\\
+\sigma_{x, y} =& (0 - 1.84)(30 - 49.15)* 0.01 \\
+               & + (0 - 1.84)(45 - 49.15)*0.02\dots = -3.636
+\end{align}$$
+
+
+---
+
+### Kendall Rank
+
+For any pair of observations $x_{i},y_{i}$ and $x_{j},y_{j}$, where $i<j$: 
+
+**Concordant pairs**: , if both $x_{i}>x_{j}$ and $y_{i}>y_{j}$; or if both $x_{i}<x_{j}$ and $y_{i}<y_{j}$. 
+
+**Discordant pairs**:  if $x_{i}>x_{j}$ and $y_{i}<y_{j}$; or if $x_{i}<x_{j}$ and $y_{i}>y_{j}$. 
+
+**Tied pairs**: If $x_{i}=x_{j}$ or $y_{i}=y_{j}$, the pair is neither concordant nor discordant.
+
+---
+
+$$\tau=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}}$$
+
+* $n_c$: concordant pair.
+* $n_d$: discordant pair.
+
+--
+
+Properties：
+
+1. $\tau_{XY}\in [-1,1]$, independent 0.
+1. Non-parametric test.
+
+
+### Maximum Likelihood Estimation:
+
+* Goal: model selection
+    + What's the most appropriate estimation?
+    + Point estimation: unbiasdness
+    + Interval estimation: range of plausible values
+    + Goodness of fit: explained variances
+    + Diagnostic estimation: what if the assumptions are violated
+* Hypothesis test:
+    + Null model: $Likelihood(null): Y = \beta_0 + \epsilon$
+    + Theoretical model: $Likelihood(theory): Y = \beta_0 + \beta_1X + \epsilon$
+    + Comparing L(null) and L(theory)
+
+E.g., Binomial: $L(\pi) = {n \choose i}\pi^i(1 - \pi)^{n - i}$
+Then, $log[L(\pi)] = log{n\choose s} + slog(\pi) + (n - s)log(1 - \pi).$
+$\frac{dlog[L(\pi)]}{d\pi} = \frac{s}{\pi} - \frac{n - s}{1 - \pi}.$
+To minimize this, then let it equal 0, then $\pi = \frac{s}{n}$
+
+* Model Comparison: $R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$, k is the nubmer of parameter estimates.
+    + Akaike information criterion: $-log(R) + k$, therefore finding the minimum
+    + Bayesian information criterion: $-log(R) + k\times \frac{log(n)}{2}$
+
+### Sample Distribution
+
+* Population: Total collection of individuals
+* Random sample: every individual has an equal chance of being selected
+    + Sample size: n
+    + Value: {$x_1, x_2,\dots, x_n$} of random variable {$X_1, X_2, \dots, X_n$}.
+    + IID: identically and independently distributed
+        + Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$.
+        + Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$
+* Reliable sample:
+    + $\bar X \rightarrow \mu; p\rightarrow \pi.$
+    + Unbiased Mean: $\begin{align}
+       \bar X =& \frac{\sum X}{n}\\
+       E(\bar X) =& \frac{1}{n}[E(X_1) + E(X_2) + \dots + E(X_n)]\\
+          =& \frac{1}{n}[\mu + \mu + \dots + \mu] = \mu
+       \end{align}$
+    + Unbiased variance (standard error): $\begin{align}
+       s(\bar X)^2 =& \frac{1}{n^2}[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]\\
+          =& \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
+        \therefore\ SE =& \frac{\sigma}{\sqrt{n}}.
+       \end{align}$
+           + When n gets larger, $\bar X$ is more concentrated around $\mu$.
+
+Q: Given the population mean as 69 and standard deviation as 3.2, how would the mean of a random sample of four observations fluctuate? 
+
+$\begin{align}
+E(\bar X) =& \mu = 69\\
+\therefore SE(\bar X) =& \frac{3.2}{\sqrt 4} = 1.6.
+\end{align}$
+
+* Central limit theorem: for a random samply of n, $\bar X$ fluctuate around $\mu$ with a SE
+
+Q: Given $\mu$ = 72 and $\sigma$ = 9, and a random sample of 10. Calculate the probabilities: (1) P(X > 80); (2) P($\bar X$ > 80)
+
+1. $Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z > .89) =$ `r 1 - pnorm(.89)`;
+2. $Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z > 2.81) =$ `r 1 - pnorm(2.81)`
+
+* Comparison with the mean
