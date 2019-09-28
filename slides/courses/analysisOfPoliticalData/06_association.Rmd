@@ -1,0 +1,69 @@
+---
+title: "Association and Independence"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+---
+
+## Correlation Revisit
+
+### Pearson R
+
+$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$.
+
+For a sample: 
+
+$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$
+
+--
+
+Properties： 
+
+1. $\rho_{XY}\in [-1,1]$, independent 0.
+1. Greater value indicates stronger linear relationship.
+1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
+1. Not robust to skewed data and outliers.
+
+---
+
+### Kendall Rank
+
+For any pair of observations $x_{i},y_{i}$ and $x_{j},y_{j}$, where $i<j$: 
+
+**Concordant pairs**: , if both $x_{i}>x_{j}$ and $y_{i}>y_{j}$; or if both $x_{i}<x_{j}$ and $y_{i}<y_{j}$. 
+
+**Discordant pairs**:  if $x_{i}>x_{j}$ and $y_{i}<y_{j}$; or if $x_{i}<x_{j}$ and $y_{i}>y_{j}$. 
+
+**Tied pairs**: If $x_{i}=x_{j}$ or $y_{i}=y_{j}$, the pair is neither concordant nor discordant.
+
+---
+
+$$\tau=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}}$$
+
+* $n_c$: concordant pair.
+* $n_d$: discordant pair.
+
+--
+
+Properties：
+
+1. $\tau_{XY}\in [-1,1]$, independent 0.
+1. Non-parametric test.
+
+---
