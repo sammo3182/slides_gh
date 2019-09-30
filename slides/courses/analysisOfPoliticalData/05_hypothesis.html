@@ -19,66 +19,9 @@ class: center, middle, inverse, title-slide
 ---
 
 
-## Joint Distribution Revisit 
 
-What's joint distribution in the probability theory? 
-
---
-
-`$$n_{\bullet\bullet} = \sum\sum n_{ij}.$$`
-
---
-
-In statistics, joint distribution refers to the joint patterns of two or more variables. 
-
----
-
-## Covariance: 
-
-`$$\sigma_{X, Y} = \sum(X - \mu_x)(Y - \mu_y)p(x,y)$$`.
-
----
 
 class: small
-
-e.g., n: population 10,000,000, X: education, Y: age, 
-
-| Education 	| 20~35 (mean = 30) 	| 35~55 (mean = 45) 	| 55~100 (mean = 70) 	|
-|-----------	|----------------	|----------------	|-----------------	|
-| 0         	| 1000000        	| 2000000        	| 5000000         	|
-| 1         	| 3000000        	| 6000000        	| 10000000        	|
-| 2         	| 18000000       	| 21000000       	| 15000000        	|
-| 3         	| 7000000        	| 8000000        	| 4000000         	|
-
---
-
-`\begin{align}
-\mu_X =&amp; \sum Xp(x) \\
-      =&amp; 0 * 0.8 + 1 * 0.19 + 2 * 0.54 + 3 * 0.19 = 1.84;\\
-\mu_Y =&amp; 30 * 0.29 + 45 * 0.57 + 70 * 0.34 = 49.15.\\
-\sigma_{x, y} =&amp; (0 - 1.84)(30 - 49.15)* 0.01 \\
-               &amp; + (0 - 1.84)(45 - 49.15)*0.02\dots = -3.636
-\end{align}`
-
----
-
-## Correlation
-
-For a population:
-
-`$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$`
-
---
-
-For a sample: 
-
-`\(r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.\)`
-
---
-
-Relations with covariance: `\(\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}\)`
-
----
 
 ## Terminology
 
@@ -202,7 +145,7 @@ Given k is the number of parameter estimates,
 ## Random Sample
 
 + Sample size: n
-+ Value: {$x_1, x_2,\dots, x_n$} of random variable {$X_1, X_2, \dots, X_n$}.
++ Value: `\(x_1, x_2,\dots, x_n\)` of random variable `\(X_1, X_2, \dots, X_n\)`.
 + IID: identically and independently distributed
     + Identical: X and Y are from the same distribution, `\({\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}\)`.
     + Independent: `\({\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}\)`
@@ -233,7 +176,6 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
 \therefore\ SE =&amp; \frac{\sigma}{\sqrt{n}}.
 \end{align}`
 
---
 
 + When n gets larger, `\(\bar X\)` is more concentrated around `\(\mu\)`.
 + Central limit theorem: For a random sample of n, `\(\bar X\)` fluctuate around `\(\mu\)` with a SE
@@ -296,11 +238,9 @@ Minority means `\(P(\pi &lt; 0.5)\)`. Then, `\(Z = \frac{5 - 6}{\sqrt{\frac{6(1 
 
 Without replacement, SE of `\(\bar X\)` is reduced by `\(\sqrt{\frac{N - n}{N - 1}}\)` (finite population correction, FPC). 
 
---
-
 Leading to more uncertainty
 
---
+---
 
 E.g., If only sampling one people, n = 1. Then `\(SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}\)`, no changes; if sampling the entire population, then n = N, SE = 0. For a large sample of a large population (n = 1000, N = 100,000,000), the reductive factor is `\(\sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999\)`, little changes.
 
@@ -308,8 +248,6 @@ E.g., If only sampling one people, n = 1. Then `\(SE = \frac{\sigma}{\sqrt{n}}\s
 
 * Unbiased estimators: produce the right answer on coverage.
     + How to reduce bias? (1) Randomization; (2) Weight.
-    
---
 
 * Efficiency: smaller variance (Hint: mean is 1.57 times more efficient than median for a standard normal)
     + How to increase efficiency? `\(SE = \frac{\sigma}{\sqrt{n}}\)`
@@ -327,7 +265,7 @@ When a sequence of random variables stabilizes to a certain probabilistic behavi
 
 `\(p\lim_{n \to \infty}X_n = a, a\in R.\)`
 
---
+---
 
 ### Two types of meanings
 
@@ -343,14 +281,12 @@ An estimator `\(\theta_n\)` is consistent if the sequence `\(\theta_1\cdots\thet
 
 `\(p\lim_{n \to \infty}\theta_n = \theta.\)`
 
---
-
 * Often seen as a minimal requirement for estimators
 * A consistent estimator may still perform badly in small samples
 
 ---
 
-## Does Unbiasedness Imply Consistency?
+### Does Unbiasedness Imply Consistency?
 
 --
 
@@ -364,9 +300,7 @@ Only if a sequence of estimators is unbiased and converges to a value, then it i
 
 ---
 
-## Does Consistency Imply Unbiasedness?
-
---
+### Does Consistency Imply Unbiasedness?
 
 No, e.g., if the mean is estimated by `\({1 \over n}\sum x_{i}+{1 \over n}\)` it is biased, but as `\(n\rightarrow \infty\)`, it approaches the correct value, and so it is consistent.
 
@@ -383,6 +317,234 @@ w.o., Bressel's correction
 s^2 =&amp; \sum(X - \bar X)^2p(x) \\
 =&amp; \frac{\sum(X - \bar{X})^2}{n - 1}.
 \end{align}`
+
+---
+
+## What's CI
+
+CI Frequentist: 
+
+* Confidence Intervals 
+* In a repeatedly sampling, the percentage of the samples that could contain `\(\mu\)`. 
+* .magenta[Narrative]: "In 100 times sampling of ..., there are ... samples that the CI could contain the true value."
+
+CI for Bayesian:
+
+* Credible intervals
+* Some percentage of the posterior distribution lies within an particular region.
+* .magenta[Narrative]: "There are ...% of the chance that the true value lies in the CI."
+
+---
+
+### Focusing on the confidential intervals for now
+
++ Proportion: `\(\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}\)`
++ Mean: `\(\mu = \bar X \pm SE\)`
++ `\(\alpha\)`: 1 - confidence level
+
+--
+
+How to get smaller CI? 
+
+
+???
+
+1. Large N
+1. Large `\(\alpha\)`
+
+---
+
+## Why 95% CI
+
+![](05_hypothesis_files/figure-html/ci-1.png)&lt;!-- --&gt;
+
+???
+
+.red[Arbitrary!!!]
+
+---
+
+## Student t:
+
+First derived as a posterior distribution in 1876 by Helmert and Lüroth.
+
+Symmetric: `\(\mu = 0\)`
+
+---
+
+Fatter tails
+
+![](05_hypothesis_files/figure-html/zvst-1.png)&lt;!-- --&gt;
+
+???
+
+William Gosset published in English in 1908, used the pseudonym "student." Fisher called it the "student distribution"
+
+---
+
+## Degree of Freedom
+
+T critical points are relative to d.f.
+
++ For s.d.: n - 1
++ For CI: n - 1
++ For regression: n - k - 1
+
+
+---
+
+E.g., For nine cars, the mean mileage per gallon is 29.5 and standard deviation is 3. 
+Is the estimation of 31 for the mileage is likely, in terms of the 95% CI for the sample's mileage?
+
+d.f. = 9 - 1 = 8, therefore $t(\alpha &lt; .975) = $2.3060041, 
+then CI = `\(29.5 \pm t_{\frac{\alpha}{2}}(\frac{3}{\sqrt{9}})\)`, i.e, [27.5, 31.8].
+
+--
+
+.magenta[Narrative]: If we make repeated sampling from these cars, there are 95% of the samples in which the interval between 27.5 and 31.8 contains the true mean of the car mileage.
+
+---
+
+## Summary
+
++ For mean
+    + `\(\sigma\)` known, `\(\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}\)`
+    + `\(\sigma\)` unknown
+        + `\(N \geq 100\)`, `\(\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}\)`
+        + `\(N &lt; 100\)`, `\(\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}\)`
++ For proportion
+    + `\(\pi\)` known, `\(\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}\)`
+    + `\(\pi\)` unknown, calculate the proportion
+
+---
+
+### Difference in means of independent samples
+
+* `\(\sigma\)` is known, `\(\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1}{n_1} + \frac{\sigma_2}{n_2}}\)`.
+* `\(\sigma\)` is unknown, `\(\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}\)`
+   + Assuming the population have the same variance `\(\sigma_1 = \sigma_2\)`, where `\(S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}\)`
+   + d.f. is `\((n_1 - 1) + (n_2 - 1)\)`.
+
+---
+
+Q. In a class, there are two groups, the scores of members in group one are 64, 66, 89, 77, the scores of members in group two are 56, 71, and 53, are the mean scores different between the two groups?
+
+`\begin{align}
+\bar X_1 =&amp; 296/4 = 74; \\
+\bar X_2 =&amp; 60. \\
+S_p^2 =&amp; \frac{398 + 186}{(4 - 1) + (3 - 1)} = 116.5\\
+\mu_1 - \mu_2 =&amp; (74 - 60) \pm 2.57 (\sqrt{116.5}\sqrt{1/4 + 1/3}) \\
+=&amp; 14 \pm 21.
+\end{align}`
+
+--
+
+The 95% CI shows that there's no statistical difference between the means.
+
+---
+
+### Difference in means of matched samples
+
+* Matched samples: `\(D = X_1 - X_2\)`, then `\(\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}\)`, where `\(S_D = \frac{\sum(D - \bar D)^2}{n - 1}\)`. 
+
+---
+
+class: small
+
+E.g., Four students first conducted an examination and went through a review section. Then, they took the examinations again. The scores are shown following. Did they get better after the review?
+
+| Student 	| Amy 	| Bill 	| Becky 	| Mark 	|
+|---------	|-----	|------	|-------	|------	|
+| E2      	| 64  	| 66   	| 89    	| 71   	|
+| E1      	| 57  	| 57   	| 73    	| 65   	|
+
+`\begin{align}
+D =&amp; X_1 - X_2 \Rightarrow \bar D = \sum D / n = (7 + 9 + 16 + 12) / 4 = 11\\
+S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9\\
+\therefore \Delta =&amp; 11 \pm 3.18 \frac{39}{4} = 11 \pm 6
+\end{align}`
+
+--
+
+Students did get better.
+
+---
+
+class: small
+
+### Comparing Proportion for large sample
+
+`$$\Pi_1 - \Pi_2 = P_1 - P_2 \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$$`
+
+---
+
+E.g., Gallop drew a pair of 1500 samples from the American population. In the sample of 1980, there are 52% Democrats, and 46% in the 1985 sample. Were the Democrats the same for two years, given the 95% CI?
+
+`\begin{align}
+\Pi_1 - \Pi_2 =&amp; (0.52 - 0.46) \\
+&amp;\pm 1.96\sqrt{\frac{0.52 * 0.48}{1500} + \frac{0.46 * 0.54}{1500}} \\
+&amp;\approx 0.06 \pm 0.036.
+\end{align}`
+
+--
+
+Thus, the proportion of Democrats decreased in 1984.
+
+---
+
+class: small
+
+## Hypothesis testing 
+
+### Two ways: 
+
+* Using confidence intervals
+* Using critical t/z scores &amp; p-value.
+
+### Element: 
+
+1. Null hypothesis: `\(H_0\)` specifies values for one or more population parameter ( `\(\mu, \pi\)` rather than `\(\bar X, P\)` )
+
+2. Alternative hypothesis: `\(H_1\)` the population parameter is something other than the value in H.
+
+3. `\(\alpha = 1 - CI\)`
+
+4. One-tailed/two-tailed test: Most applications are one-tail tests, while most software gives two-tail results
+
+--
+
+Substantive vs. statistical significance?
+
+---
+
+class: small
+
+## Types of Errors
+
+| Decision 	| Accept                   	| Reject                   	|
+|----------	|--------------------------	|--------------------------	|
+| `\(H_0\)` TRUE  	| P = 1 - `\(\alpha\)`            	| Type I error (P = `\(\alpha\)`) 	|
+| `\(H_0\)` FALSE 	| Type II error (P = `\(\beta\)`) 	| P = 1 - `\(\beta\)`             	|
+
+Hint: `\(\beta\)` is the power of the test.
+
+---
+
+class: small
+
+E.g., Given a virus can influence 10% of the population. Now there's a sample of the older people, n = 527, within which there are 14% infected the virus. Are the older people more likely to be victimized?
+
+`\(H_0: \Pi \leq 10; H_1: \Pi &gt; 10\)` 
+
+Method 1: 
+
+`\(Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06\)`
+
+Given the level of `\(\alpha = 0.05\)`, therefore reject the `\(H_0.\)`
+
+Method 2: 
+
+`\(\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,\)` that is [0.11, 0.17], which does not cover .1, so reject `\(H_0.\)`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>
