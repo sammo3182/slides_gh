@@ -1,0 +1,193 @@
+---
+title: "事件史分析（Event History）"
+subtitle: "a.k.a., 持续期分析（Duration Modeling）"
+author: "胡悦<br>清华大学政治学系"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+class: inverse, bottom
+
+# 总论
+
+---
+
+## 事件史分析
+
+* 事件史分析：event history, “一件事情要发生需要多久？”
+
+--
+
+* 两种建模策略
+    1. Discrete：年、月、天；0s & 1s.
+    1. Continuous: 具体时长
+    
+---
+
+## 模型选择：Big Choice
+
+对于建模策略的学则直接决定了：
+
+1. IVs如何影响事件发生？
+1. 事件是否被视为重复的？
+1. 持续期（duration）是否时完全可见的？
+1. 事件分布（event rate）如何在时间维度上改变？
+
+---
+
+## 常用（英文）描述
+
+1. Survival analysis
+1. Duration analysis
+1. Failure analysis
+1. Event history analysis (EHA, e.g., sociology)
+1. Frailty (e.g., engineer)
+1. Cure models (e.g., medical)
+
+---
+
+class: inverse, bottom
+
+# Discrete Modeling
+
+---
+
+## 重要抉择
+
+1. 决定何时开始计时
+
+???
+虽然分析中各事件看起来是同时开始的，但其实不然
+
+--
+
+1. 决定如何判定事件发生
+
+--
+
+1. 建构因变量：通常该变量在事件发生时记为1，之前均记为0
+
+--
+
+1. 测量自变量：在每个时间点均有记录
+
+--
+
+1. 估计
+
+**Risk set**： 在给定时间点观测单元触发事件的可能性, $R(t)\equiv \{i, y_{it} = 0 | y_{it} = 1\}.$
+
+---
+
+```{r egData, echo = FALSE}
+library(flextable)
+
+df_eg <- tibble::tribble(
+                      ~unit, ~time, ~event, ~IV, ~risk, ~lottery,
+                          1,     1,      0, 4.3,     1,        0,
+                          1,     2,      0, 1.2,     1,        0,
+                          1,     3,      1, 4.2,     1,        1,
+                          1,     4,      NA, 1.6,     0,        1,
+                          2,     5,      0, 6.1,     1,        0,
+                          2,     6,      0, 3.2,     1,        0,
+                          2,     7,      0, 7.2,     1,        0,
+                          2,     4,      1, 3.9,     1,        1
+                      )
+
+knitr::kable(df_eg, format = "html")
+# flextable(df_eg) %>% 
+#   autofit %>% 
+#   colformat_num(col_keys = c("unit", "time", "event", "risk", "lottery"), digits = 0) %>% 
+#   align(align = "left", part = "all")
+```
+
+当事件发生后，该观测单元将不再存在于risk set中。
+
+---
+
+## 分析工具
+
+1. logit/probit
+1. c-log-log
+1. scobit
+1. expit
+
+???
+
+scobit: skewed logit
+expit: exponential logit
+
+---
+
+## 核心概念
+
+1. Survival rate: $S(t) = P(T > t | X)$.
+1. Density: $f(t|x) = P(T = t | X)$, PDF.
+1. Cumulative distribution: $F(t) = P(T\leq t | X) = 1 - S(t)$, CDF.
+1. .magenta[Hazard]: 
+
+$$P(T = t|T\geq t, X) = \frac{f(t|X)}{S(t|X)} = \frac{P(T = t | X)}{P(T > t | X)}$$
+
+???
+
+Hazard: the probability that the event occurs during a specific time point, given that it hasn’t already occurred.
+
+---
+
+class: inverse, bottom
+
+# Continuous Modeling
+
+---
+
+## Parametric Models: 
+
+选择既定分布作为baseline hazard
+
+1. Exponential
+1. Weibull
+1. Log-normal
+1. Gamma
+
+---
+
+## Exponential model
+
+特点：memoryless, hazard constant
+
+--
+
+\begin{align}
+h(u) =& 1\\
+h(y_i|x) =& \lambda_i = exp(-X\beta)\\
+F(u) =& 1 - e^{-u}\\
+S(u) =& e^{-u} = f(u)
+\end{align}
+
+---
+
+## Weibull
+
+特点：以p调节baseline hazard方向
+
+* p < 1, 单减
+* p = 1, 与exponential model拟合
+* p > 1, 单增
+
+---
+
+class: inverse, bottom
+
+# 特殊情况
