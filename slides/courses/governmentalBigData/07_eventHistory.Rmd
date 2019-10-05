@@ -1,6 +1,6 @@
 ---
-title: "事件史分析（Event History）"
-subtitle: "a.k.a., 持续期分析（Duration Modeling）"
+title: "持续期分析事件史分析（Duration Modelin）"
+subtitle: "及事件史分析（Event Historyg）"
 author: "胡悦<br>清华大学政治学系"
 # date: "`r Sys.Date()`"
 output:
@@ -17,6 +17,23 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, 
+  RColorBrewer,# dependency
+  stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
 
 class: inverse, bottom
 
@@ -50,17 +67,26 @@ class: inverse, bottom
 ## 常用（英文）描述
 
 1. Survival analysis
-1. Duration analysis
+1. Event history analysis<sup>1</sup>
 1. Failure analysis
-1. Event history analysis (EHA, e.g., sociology)
+1. Duration analysis<sup>2</sup>
 1. Frailty (e.g., engineer)
 1. Cure models (e.g., medical)
+
+.footnote[
+
+[1] EHA, often used to refer to discrete model
+
+[2] Often used to refer to continous model
+
+]
 
 ---
 
 class: inverse, bottom
 
-# Discrete Modeling
+# Event History
+## Discrete Modeling
 
 ---
 
@@ -91,26 +117,20 @@ class: inverse, bottom
 
 ---
 
-```{r egData, echo = FALSE}
-library(flextable)
-
-df_eg <- tibble::tribble(
-                      ~unit, ~time, ~event, ~IV, ~risk, ~lottery,
-                          1,     1,      0, 4.3,     1,        0,
-                          1,     2,      0, 1.2,     1,        0,
-                          1,     3,      1, 4.2,     1,        1,
-                          1,     4,      NA, 1.6,     0,        1,
-                          2,     5,      0, 6.1,     1,        0,
-                          2,     6,      0, 3.2,     1,        0,
-                          2,     7,      0, 7.2,     1,        0,
-                          2,     4,      1, 3.9,     1,        1
+```{r ehData}
+df_eh <- tibble::tribble(
+                      ~unit, ~time, ~event, ~IV, ~risk, 
+                          1,     1,      0, 4.3,     1,
+                          1,     2,      0, 1.2,     1,
+                          1,     3,      1, 4.2,     1,
+                          1,     4,      NA, 1.6,     0,
+                          2,     5,      0, 6.1,     1,
+                          2,     6,      0, 3.2,     1,
+                          2,     7,      0, 7.2,     1,
+                          2,     4,      1, 3.9,     1
                       )
 
-knitr::kable(df_eg, format = "html")
-# flextable(df_eg) %>% 
-#   autofit %>% 
-#   colformat_num(col_keys = c("unit", "time", "event", "risk", "lottery"), digits = 0) %>% 
-#   align(align = "left", part = "all")
+kable(df_eh, format = "html")
 ```
 
 当事件发生后，该观测单元将不再存在于risk set中。
@@ -146,13 +166,89 @@ Hazard: the probability that the event occurs during a specific time point, give
 
 ---
 
-class: inverse, bottom
+class: small
 
-# Continuous Modeling
+## Logit/Probit Model
+
+令 $Y^*$ 为一不可见变量，它导至可见事件( $Y_{it}$ )的发生，即：
+
+$$Y_{it} =
+  \begin{cases} 
+   1 & \text{if } y^*\geq 0, \\
+   0 & \text{if } y^*< 0.
+  \end{cases}$$
+
+--
+
+由此推出：
+
+\begin{align}
+P(Y_it = 1|X) =& P(Y^* \geq 0|X)\\
+              =& P(X\beta + \epsilon\geq 0|X)\\
+              =& P(\epsilon\geq 0 - X\beta|X)\\
+              =& 1 - P(\epsilon\leq - X\beta|X)\\
+              =& 1 - F(-X\beta|X)
+\end{align}
 
 ---
 
-## Parametric Models: 
+class: small
+
+### Probit
+
+令 $\epsilon\sim i.i.d. N(0, 1)$, 则 $P(Y_it = 1|X) = 1 - \Phi(-X\beta) = \Phi(X\beta).$
+
+
+### Logit
+
+令 $\epsilon\sim logistic$, 则 $P(Y_it = 1|X) = 1 - \Lambda(-X\beta) = \Lambda(X\beta).$
+
+代入logistic分布可得，
+
+\begin{align}
+P(Y_it = 1|X) =& 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
+              =& \frac{e^{X\beta}}{1 + e^{X\beta}}\\
+P(Y_it = 1|X) =& \frac{1}{1 + e^{X\beta}}
+\end{align}
+
+???
+
+$\beta_{probit} = \frac{\sqrt 3}{\pi}\beta_{logit}.$
+
+此处用probability来建构likelihood, 因为likelihood存在scale issue, 通常不可知。此法被Gary称为Unified Maximum Likelihood
+
+---
+
+class: inverse, bottom
+
+# Duration Analysis
+## Continuos Modeling
+
+---
+
+## 与事件史分析的差别
+
+使用事件发生的特定时间，而非总体时间段来建模
+
+
+```{r durData}
+df_dur <- tibble::tribble(
+           ~duration, ~opposition, ~polarization, ~Beilgium, ~Canada,
+                   3,    -0.86792,            11,         1,       0,
+                   7,    -0.86792,            11,         1,       0,
+                  20,    -0.14103,            11,         1,       0,
+                   6,    -0.14103,            11,         0,       1,
+                  17,    -0.58065,             6,         0,       1,
+                   7,    -0.79592,             3,         0,       1
+           )
+
+
+kable(df_dur, format = "html")
+```
+
+---
+
+## Parametric Models
 
 选择既定分布作为baseline hazard
 
@@ -171,23 +267,391 @@ class: inverse, bottom
 
 \begin{align}
 h(u) =& 1\\
-h(y_i|x) =& \lambda_i = exp(-X\beta)\\
 F(u) =& 1 - e^{-u}\\
 S(u) =& e^{-u} = f(u)
 \end{align}
+
+???
+
+exponential: $e^n$
+
+
+---
+
+```{r expFun, fig.height=8, fig.width=10}
+ggplot(data.frame(x = c(0, 5)), aes(x = x)) +
+  stat_function(fun = function(x) dexp(x, rate = 0.5), aes(colour = "0.5")) +
+  stat_function(fun = function(x) dexp(x, rate = 1), aes(colour = "1")) +
+  stat_function(fun = function(x) dexp(x, rate = 1.5), aes(colour = "1.5")) + 
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = expression(lambda))
+```
 
 ---
 
 ## Weibull
 
+.left-column[
 特点：以p调节baseline hazard方向
 
 * p < 1, 单减
 * p = 1, 与exponential model拟合
 * p > 1, 单增
+]
+
+--
+
+.right-column[
+\begin{align}
+h(u) =& pu^{p - 1}\\
+F(u) =& 1 - e^{-u^p}\\
+f(u) =& pu^{p - 1}e^{-u^p}\\
+S(u) =& e^{-u^p}
+\end{align}
+]
+
+---
+
+```{r wbFun, fig.height=8, fig.width=10}
+ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
+  stat_function(fun = function(x) dweibull(x, shape = 0.5), aes(colour = "0.5")) +
+  stat_function(fun = function(x) dweibull(x, shape = 1), aes(colour = "1")) +
+  stat_function(fun = function(x) dweibull(x, shape = 10), aes(colour = "10")) + 
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = "p")
+```
+
+---
+
+## Log-normal
+
+特点： 允许非单调hazard
+
+$ln(u_i)\sim N(0, \sigma^2).$
+
+---
+
+```{r lnFun, fig.height=8, fig.width=10}
+ggplot(data.frame(x = c(0, 2.5)), aes(x = x)) +
+  stat_function(fun = function(x) dlnorm(x, meanlog = 0, sdlog = 1), aes(colour = "0, 1")) +
+  stat_function(fun = function(x) dlnorm(x, meanlog = 0, sdlog = 0.5), aes(colour = "0, 0.5")) +
+  stat_function(fun = function(x) dlnorm(x, meanlog = 0.5, sdlog = 0.5), aes(colour = "0.5., 0.5")) + 
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = expression(mu~","~sigma))
+```
+
+
+---
+
+## Gamma
+
+* p: the scale parameter
+* &kappa;: the shape parameter
+
+--
+
+$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\Gamma(\kappa)}.$$
+
+---
+
+```{r gamma, fig.height=8, fig.width=10}
+ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
+  stat_function(fun = function(x) dgamma(x, shape = 1, scale = 2), aes(color = "1, 2")) +
+  stat_function(fun = function(x) dgamma(x, shape = 9, scale = 2), aes(color = "9, 2")) +
+  stat_function(fun = function(x) dgamma(x, shape = 9, scale = .5), aes(color = "9, .5")) +
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = expression("p, "~kappa))
+```
+
+---
+
+## Generalized Gamma Distribution
+
+$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\beta^{p\kappa}\Gamma(\kappa)}$$
+
+&beta; = 1 &rArr; Gamma;
+
+&kappa; = 0 &rArr; log-normal;
+
+&kappa; = 1 &rArr; Weibull;
+
+&kappa; = p = 1 &rArr; Exponential;
+
+--
+
+Exponential，Weibull，Log-normal, Gamma 都是Generalized Gamma的特殊变形
+
+???
+
+Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution
+
+---
+
+class: small
+
+## 加入自变量
+
+DGP: $Y_i = e^{X_i\beta}u_i$， 那么可以推出
+
+$u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
+
+--
+
+让我们定义： $\lambda\equiv e^{-X_i\beta}$
+
+那么，对于exponential而言
+
+\begin{align}
+u_i =& Y_i\lambda_i \\
+F(Y_i|X) =& 1 - e^{-Y_i\lambda_i}\\
+f(Y_i|X) =& \lambda_ie^{-Y_i\lambda_i}\\
+h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
+\end{align}
+
+$\beta$: 能存活的时间。
+
+--
+
+同理，对于Weibull, $h(Y_i|X) = p\lambda^py^{p - 1}$
+
+---
+
+## Interpretation
+
+* Expected value: 
+    + Exponential: $E(Y_i|X_i) = \lambda_i^{-1} = exp(X_i\beta)$
+    + Weibull: $E(Y_i|X_i) = \Gamma(p)exp(X_i\beta)$
+
+---
+
+* Hazard ratio:
+
+\begin{align}
+\frac{h(Y_i|X + 1)}{h(Y_i|X)} =& \frac{pexp[-(X_i + 1)\beta]^py_i^{p - 1}}{pexp(-X_i\beta)^py_i^{p - 1}}\\
+=& exp(-\beta)^p = e^{-\beta p}
+\end{align}
+
+-&beta;p: proportional hazard metric;
+
+&beta;: accumulative failure time metric.
+
+---
+
+## Semi-parametric Model: Cox model
+
+$$h(y|x) = h_0(y)\lambda_i^p$$
+
+\begin{align}
+P(1fails@y_1|someone\ f@y_1) =& \frac{h_0(y_1)\lambda_i^p}{\sum^n_{i = 1}h_0(y_1)\lambda_i^p}\\
+P(2fails@y_2|someone\ f@y_2) =& \frac{h_0(y_2)\lambda_i^p}{\sum^n_{i = 2}h_0(y_1)\lambda_i^p}
+\end{align}
+
+--
+
+由于不是完全parametric，所以很难进行假设检验，因此在政治学中较少直接使用。
 
 ---
 
 class: inverse, bottom
 
 # 特殊情况
+
+---
+
+## Duration Dependence
+
+Baseline hazard 是否会随时间改变？
+
+--
+
+解决方法:
+
+* Smooth function: $t, t^2, t^3$
+* Fixed effect
+* Spline.
+
+---
+
+## (Right) Censored Data
+
+Censored point为c, 则：
+
+$$L = \prod^{n}_{i=1}f(y_i|x_i)^{1 - c}S(y^c|X_i)^c,$$ where
+
+$$c =
+  \begin{cases} 
+   1 & \text{if } y_i\geq y_c, \\
+   0 & \text{if } y_i< y_c.
+  \end{cases}$$
+  
+---
+
+当censored部分扩大，模型的efficiency会降低。
+
+当将selection effect也考虑进去的时候，需要modeling selection process， 见:
+
+Boehmke, Frederick J., Daniel S. Morey, and Megan Shannon. 2006. “Selection Bias and Continuous-Time Duration Models: Consequences and a Proposed Solution.” *American Journal of Political Science* 50(1): 192–207.
+
+---
+
+## Tie
+
+* Evenly divide &lambda; in the nominators of two tied events.
+* The most popular methods: Efron, Preslow.
+
+---
+
+class: small
+
+## Time Varying Covariates (TVC)
+
+* Discrete model: combine in the logit
+
+* Parametric: Conditional likelihood function (CTD: Continuous Time Duration)
+
+\begin{align}
+P(y_i>1|X_1(1)) =& \frac{P(y_i>2, y_i>1|X_1(2))}{P(y_i>1|X_1(2))}\\
+=& S(1|X_1(1))p(y_i>2|y_i>1, X_1(2))\\
+=& \frac{S(2|X_1(2))}{S(1|X_1(2))}
+\end{align}
+
+* Cox: put the value of that time moment, $X_i(t)$,  at failure time t in continuing the partial likelihood.
+
+???
+
+Partial likelihood:
+
+\begin{align}
+L_p = \prod^K_{i = 1}[\frac{e^{X_i}\beta}{\sum_{j\in R(t_i)}e^{X_i\beta}}]^{\sigma_i}
+\end{align}
+
+Assumption: intervals between successive duration time does not help to explain the relationship between covariates and hazard.
+
+---
+
+class: small
+
+## Repeated Failure
+
+### Type：
+
+1. Total: 每次都重新开始
+1. Gap: 从特定时间点开始计算
+1. Counting: 每个观测点都在同一时间范畴，但允许晚进和censor
+
+
+### Risk set:
+
+* Unrestricted: 在所有failure事件中，所有观测点无论之前经历过多少次failure都会继续在risk set中
+* Semi-restricted: 在第K次failure事件中，risk set中只包含经历过k-1次或少于k-1次事件的观测点
+*Restricted: 在第K次failure事件中，risk set中只包含经历过k-1次事件的观测点
+
+---
+
+background-image: url("images/repeatedFailure.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Competing Risk
+
+法1： 假定竞争事件就怕为独立的，进而分别建模——将竞争性视为censored
+
+法2： 假定竞争事件非独立，引入shared frailties:
+
+\begin{align}
+h(y_1) =& h_0(y)exp(X\beta + v_1)\\
+h(y_2) =& h_0(y)exp(X\beta + v_2)
+\end{align}
+
+$(v_1, v_2)$ jointed distributed 来model非独立性。
+
+---
+
+## Split Population (Cure Models)
+
+0可能有两种意义:
+
+1. Never fail
+1. Right censored
+
+解决方法：
+
+对Cure进行建模，$Z_i$: 1 (cured), 0 (not cured), 其pdf为 $P(Z_i = 1)$ , 那么对于0来说其survial model为 $S(y|x)P(Z = 0)$.
+
+---
+
+## Non-proportional Hazard
+
+每个观测点的basedline hazard function都一样吗？
+
+### 检验
+
+1. Piecewise regression
+1. Model with interaction
+1. Schoenfeld residual plot
+
+---
+
+background-image: url("images/residualPlot.png")
+background-position: center
+background-size: contain
+
+---
+
+### 解决方法
+
+$$y_i = X\beta_1 + Xln(t)\beta_2 + ln(t)\beta_3.$$
+
+---
+
+## Rare Event
+
+对于小概率事件（< 5%），使用通常工具会高估1的概率。
+
+--
+
+解决方法：假定没有其他更好sample
+
+1. Prior correction: 加入基于其他研究或研究者认知的关于总体分布的趋势估计。
+    + 如果模型有误的话，结果也不会稳健。
+1. Post-estimation weighting: $P(Y_i = 1) \approx \tilde{\pi_i} + C_i$， $C_i$输入某些总体分布信息。
+
+---
+
+## 建模选择
+
+重大抉择！
+
+.center[<img src="images/deepBreath.gif" height = 350 />]
+
+---
+
+class: small
+
+## Count, Duration, or Binary?
+
+|          | Pros                                              | Cons                                                                               |
+|----------|---------------------------------------------------|------------------------------------------------------------------------------------|
+| Count    | Aggregative, prevent measurement error            | Lose the ability to record any identified variations over time and the time series |
+| Duration | Record the time and changing moment and sequences | Lose the precision of when within each time unit an event occurs                   |
+| Binary   | Most disaggregate                                 | Lose when the change happens in a time line                                        |
+
+???
+
+这三种models结果可能不一样，因为都是某种对现实的de-information
+
+---
+
+class: inverse, bottom
+
+.center[<img src="images/thatsit.gif" height = 450 />]
+
+# Call it for the day!
+
+
