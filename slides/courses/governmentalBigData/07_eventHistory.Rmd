@@ -1,6 +1,6 @@
 ---
-title: "持续期分析事件史分析（Duration Modelin）"
-subtitle: "及事件史分析（Event Historyg）"
+title: "持续期分析事件史分析"
+subtitle: "及事件史分析"
 author: "胡悦<br>清华大学政治学系"
 # date: "`r Sys.Date()`"
 output:
@@ -27,8 +27,8 @@ library(pacman)
 
 p_load(
   knitr, 
-  RColorBrewer,# dependency
-  stringr, broom, tidyverse
+  RColorBrewer, dotwhisker, # dependency
+  stringr, haven, purrr, broom, tidyverse
 ) # data wrangling # data wrangling
 
 # Functions preload
@@ -219,12 +219,92 @@ $\beta_{probit} = \frac{\sqrt 3}{\pi}\beta_{logit}.$
 
 ---
 
+class: small
+
+## 应用举例
+
+研究美国印第安部落与州协调法案（Indian Gaming Compact）在各州的推行情况。变量包括：religion (`religion`), the number of federally recognized tribes (`fedtrib`), total population (`totpop`), and real income per capita (`rpcpinc`).
+
+```{r eg_discrete_prepare, include=FALSE, eval=FALSE}
+df_eh <- read_dta("D:/MEGAsync/00_Methods/Courses/Method Courses/306 Time and Space/Computer lab/306comp10discrete-indvars.dta")
+df_ehdv <- read.table("D:/MEGAsync/00_Methods/Courses/Method Courses/306 Time and Space/Computer lab/306comp10discrete-adoptions.txt", col.names = c("state", "adopt_year"), stringsAsFactors = FALSE)
+df_iga <- left_join(df_eh, df_ehdv)
+
+saveRDS(df_iga, file = "data/iga.RDS")
+```
+
+
+```{r eg_discrete1}
+# Reading the raw data
+df_iga <- readRDS("data/iga.RDS")
+df_iga
+```
+
+---
+
+```{r eg_discrete2, echo = TRUE}
+# Creating the event history record
+df_iga$adopt_ig <- NA
+df_iga$adopt_ig[df_iga$year == df_iga$adopt_year] <- 1
+df_iga$adopt_ig[df_iga$year < df_iga$adopt_year |
+                  is.na(df_iga$adopt_year)] <- 0
+
+# Creating the risk set
+df_iga$risk_ig <- NA
+df_iga$risk_ig[df_iga$year <= df_iga$adopt_year |
+                 is.na(df_iga$adopt_year)] <- 1
+
+df_igaSum <- group_by(df_iga, year) %>%
+  summarise(
+    sum_adopt = sum(adopt_ig, na.rm = TRUE),
+    sum_risk = sum(risk_ig, na.rm = TRUE)
+  ) %>%
+  mutate(hazard = sum_adopt / sum_risk, survival = sum_risk / 50)
+```
+
+---
+
+```{r eg_discrete3, echo = TRUE, fig.align="center", fig.width=8, fig.height=6}
+ggplot(df_igaSum, aes(x = year, y = survival)) +
+  geom_line() +
+  scale_x_continuous(breaks= scales::pretty_breaks()) +
+  ggtitle("Kaplan-Meier Curve of Adoption")
+```
+
+---
+
+```{r eg_discrete4, echo = TRUE}
+library(survival)
+
+m_logit <-
+  survreg(
+    Surv(time = year, event = adopt_ig) ~ religion + fedtribe + totpop + rpcpinc,
+    data = df_iga,
+    dist = "logistic"
+  )
+
+summary(m_logit)
+```
+
+---
+
 class: inverse, bottom
 
 # Duration Analysis
 ## Continuos Modeling
 
 ---
+
+```{r eg_dur_prepare, include=FALSE, eval=FALSE}
+df_dur <- read_dta("D:/MEGAsync/00_Methods/Courses/Method Courses/306 Time and Space/Homeworks/306hwk07-coalcold.dta")
+
+names(df_dur) <- tolower(names(df_dur))
+
+df_dur <- select(df_dur, durat, invest, fract, polar, numst2, format, eltime2, caretk2) %>% 
+  mutate_at(c("invest", "numst2", "eltime2", "caretk2"), function(var) var = var - 1)
+
+saveRDS(df_dur, file = "data/coalcold.RDS")
+```
 
 ## 与事件史分析的差别
 
@@ -452,7 +532,68 @@ P(2fails@y_2|someone\ f@y_2) =& \frac{h_0(y_2)\lambda_i^p}{\sum^n_{i = 2}h_0(y_1
 
 --
 
-由于不是完全parametric，所以很难进行假设检验，因此在政治学中较少直接使用。
+由于不是完全parametric，所以多只进行局部检验，因此不常在早期政治科学研究中出现。
+
+---
+
+## 应用实例
+
+```{r eg_dur1, fig.width=10}
+df_dur <- readRDS("data/coalcold.RDS")
+
+library(survminer)
+
+survfit(Surv(time = durat) ~ 1, data = df_dur) %>% 
+  ggsurvplot(title = "Kaplan-Meier Curve of Dissolution")
+```
+
+---
+
+```{r eg_dur2, echo=TRUE}
+model_dur <-
+  formula(Surv(time = durat) ~ invest + fract + polar + numst2 + format + eltime2 + caretk2)
+
+m_exp <- survreg(model_dur, data = df_dur, dist = "exponential")
+m_wb <- survreg(model_dur, data = df_dur, dist = "weibull")
+m_ln <- survreg(model_dur, data = df_dur, dist = "lognormal")
+m_cox <- coxph(model_dur, data = df_dur)
+```
+
+???
+
+Random tree for duration: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
+
+---
+
+```{r eg_dur3, fig.width=10, fig.height=8}
+result_dur <- list(m_exp, m_wb, m_ln)
+
+plot_dur <-
+  map2_df(result_dur, c("Exponential", "Weibull", "Log-normal"), function(result, modelNM) {
+    result <- summary(result)$table %>% 
+      as_tibble(rownames = "term")
+    names(result) <-
+      c("term", "estimate", "std.error", "statistic", "p.value")
+    result$model <- modelNM
+    return(result)
+  }) %>% filter(!str_detect(term, "\\(")) # removed noninformal coefs
+
+result_cox <-
+  summary(m_cox)$coefficients %>% 
+  as_tibble(rownames = "term") %>% 
+  select(-`exp(coef)`) %>% 
+  mutate(coef = -coef)
+
+names(result_cox) <-
+  c("term", "estimate", "std.error", "statistic", "p.value")
+
+result_cox$model <- "Cox"
+
+plot_dur <- bind_rows(plot_dur, result_cox)
+
+dwplot(plot_dur) + 
+  ggtitle("Duration Model Comparison")
+```
 
 ---
 
@@ -470,9 +611,16 @@ Baseline hazard 是否会随时间改变？
 
 解决方法:
 
-* Smooth function: $t, t^2, t^3$
 * Fixed effect
-* Spline.
+* Spline 
+* Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").<sup>1</sup>
+
+.footnote[
+
+[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
+
+
+]
 
 ---
 
@@ -508,6 +656,8 @@ Boehmke, Frederick J., Daniel S. Morey, and Megan Shannon. 2006. “Selection Bi
 class: small
 
 ## Time Varying Covariates (TVC)
+
+* Assumption (Cox): Covariates do not vary over time.
 
 * Discrete model: combine in the logit
 
