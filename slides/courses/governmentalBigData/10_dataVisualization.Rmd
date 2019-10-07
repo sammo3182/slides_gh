@@ -1,6 +1,6 @@
 ---
-title: "数据可视化"
-subtitle: "理论与实践"
+title: "Learning Visualization with Dr. Hu"
+subtitle: "数据可视化理论与实践"
 author: "胡悦<br>清华大学政治学系"
 # date: "`r Sys.Date()`"
 output:
@@ -15,6 +15,7 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -28,8 +29,8 @@ library(pacman)
 
 p_load(
   knitr, 
-  RColorBrewer, dotwhisker, interplot, # dependency
-  stringr, haven, purrr, broom, tidyverse
+  RColorBrewer, dotwhisker, interplot, modelsummary, # dependency
+  stringr, haven, purrr, broom, tidyr, tidyverse
 ) # data wrangling # data wrangling
 
 # Functions preload
@@ -70,7 +71,7 @@ Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-V
 
 class: inverse, bottom
 
-# 什么是好的可视化
+# 什么是好的数据可视化
 
 ---
 
@@ -532,6 +533,8 @@ class: inverse, bottom
 
 ---
 
+class: small
+
 ## 编码类型
 
 .left-column[
@@ -577,6 +580,8 @@ class: inverse, bottom
 ]
 
 ---
+
+class: small
 
 ## 如何选择好的通道
 
@@ -726,7 +731,322 @@ http://paletton.com/
 
 class: inverse, bottom
 
+## To Be continued...
+
+---
+
+## Previously in *Learning Visualization with Dr. Hu*
+
+* 什么是好的数据可视化
+    + 表 vs. 图
+    + No-no: 饼状图、面积图
+    + Alternative: 折线图、散点图、雷达图……
+    + 词云（Hem...）
+* 怎么做好的数据可视化
+    + 可视化编码：标记、通道（Accuracy, discriminability, separability, pop-out）
+    + 分组与分层
+    + 色彩挑选
+
+---
+
+class: inverse, bottom
+
 # `ggplot`可视化举例
+
+---
+
+class: small
+
+## `RColorBrewer` Package
+
+### 主要code
+
+`colorRampPalette(brewer.pal(<num.>, <name of pallette>))(n)`
+
+### Alternative
+
+`ggsci`: 包含Nature、Science等期刊配色（Check "Tron Legacy"）
+
+`wesanderson`
+
+`ggthemes`
+
+`ggtech`
+
+---
+
+## Name of Palette
+
+.left-column[<img src="images/color_sequential.png" height = 500 />]
+
+.right-column[
+<img src="images/color_diverging.png" height = 250 />
+<img src="images/color_qualitative.png" height = 200 />
+]
+
+---
+
+## 一维图
+
+```{r data-1D, include=FALSE}
+mydata <-
+  data.frame(
+    Cut = c("Fair", "Good", "Very Good", "Premium", "Ideal"),
+    Price = c(4300, 3800, 3950, 4700, 3500)
+  )
+mydata2 <- arrange(mydata, desc(Price))
+mydata$Cut <- factor(mydata$Cut, levels = mydata2$Cut)
+
+
+mydata2 <-
+  read.csv(
+    "data/MultiColumn_Data.csv",
+    sep = ",",
+    na.strings = "NA",
+    stringsAsFactors = FALSE
+  ) %>% 
+  pivot_longer(-Catergory, names_to = "variable")
+
+```
+
+```{r plot-1D, echo=TRUE, eval=FALSE}
+ggplot(data = mydata, aes(Cut, Price)) +
+  `geom_bar`(
+    stat = "identity",
+    width = 0.8,
+    colour = "black",
+    size = 0.25,
+    fill = "#2ca25f",
+    alpha = 1
+  )
+
+ggplot(data = mydata2, aes(Catergory, value, 
+                           `fill = variable`)) +
+  geom_bar(
+    stat = "identity",
+    color = "black",
+    position = position_dodge(),
+    width = 0.7,
+    size = 0.25
+  ) +
+  scale_fill_manual(values = c("#ef8a62", "#67a9cf")) +
+  ylim(0, 10) +
+  theme(
+    axis.title = element_text(size = 15, face = "plain", color = "black"),
+    axis.text = element_text(size = 12, face = "plain", color = "black"),
+    legend.title = element_text(size = 14, face = "plain", color = "black"),
+    legend.background  = element_blank(),
+    legend.position = c(0.88, 0.88)
+  )
+```
+
+---
+
+.left-column[
+```{r plot-1DI, fig.width=5}
+ggplot(data=mydata,aes(Cut,Price))+ 
+  geom_bar(stat = "identity", width = 0.8,
+           colour="black",size=0.25,fill="#2ca25f",alpha=1)
+```
+]
+
+.right-column[
+```{r plot-1DII, fig.width=5}
+ggplot(data=mydata2,aes(Catergory,value,fill=variable))+
+  geom_bar(stat="identity", color="black", position=position_dodge(),width=0.7,size=0.25)+
+  scale_fill_manual(values= c("#ef8a62", "#67a9cf"))+
+  ylim(0, 10)+
+  theme(
+    axis.title=element_text(size=15,face="plain",color="black"),
+    axis.text = element_text(size=12,face="plain",color="black"),
+    legend.title=element_text(size=14,face="plain",color="black"),
+    legend.background  =element_blank(),
+    legend.position = c(0.88,0.88)
+  )
+```
+]
+
+---
+
+```{r data-radar, include=FALSE}
+coord_radar <- function (theta = "x",
+                         start = 0,
+                         direction = 1)
+{
+  theta <- match.arg(theta, c("x", "y"))
+  r <- if (theta == "x")
+    "y"
+  else
+    "x"
+  ggproto(
+    "CoordRadar",
+    CoordPolar,
+    theta = theta,
+    r = r,
+    start = start,
+    direction = sign(direction),
+    is_linear = function(coord)
+      TRUE
+  )
+}
+
+
+label_data<-data.frame(car=c("Math" , "English" , "Biology" , "Music" , "R-Coding" ),
+                    id=c(1:5) ,
+                    value=c(12 , 2 ,14 ,20, 18))
+
+AddRow<-c(NA,nrow(label_data)+1,label_data[1,ncol(label_data)])
+mydata<-rbind(label_data,AddRow)
+
+myAngle<- 360- 360 * (label_data$id-1) /nrow(label_data)  
+```
+
+.left-column[
+```{r data-radar-show}
+kable(mydata, format = "html")
+```
+]
+
+.right-column[
+```{r plot-radar-code, fig.width=5}
+ggplot() + 
+  geom_polygon(data=mydata,aes(x=id, y=value),color = "black", fill=brewer.pal(7,"Set1")[1],alpha=0.1)+
+  geom_point(data=mydata,aes(x=id, y=value),size=5,shape=21,color = 'black', fill=brewer.pal(7,"Set1")[1])+
+  coord_radar() + #实现为图3-8-1(c) 的圆形雷达图
+  #coord_radar()+  #
+  scale_x_continuous(breaks =label_data$id,labels=label_data$car)+
+  ylim(0,22)+
+  theme_light()+
+  theme(axis.text.x=element_text(size = 11,colour="black",angle = myAngle))
+```
+]
+
+---
+
+```{r plot-radar, echo=TRUE, eval=FALSE}
+ggplot() + 
+  geom_polygon(data=mydata,aes(x=id, y=value),color = "black", fill=brewer.pal(7,"Set1")[1],alpha=0.1)+
+  geom_point(data=mydata,aes(x=id, y=value),size=5,shape=21,color = 'black', fill=brewer.pal(7,"Set1")[1])+
+  `coord_radar`() +
+  scale_x_continuous(breaks =label_data$id,labels=label_data$car)+
+  ylim(0,22)+
+  theme_light()+
+  theme(axis.text.x=element_text(size = 11,colour="black",angle = myAngle))
+```
+
+---
+
+class: small
+
+## 二维图
+
+```{r data-2D, include = FALSE}
+mydata<-read.csv("data/Scatter_Data.csv",stringsAsFactors=FALSE) 
+```
+
+.left-column[
+```{r plot-2D-code, eval=FALSE, echo=TRUE}
+ggplot(data = mydata, aes(x, y)) +
+  `geom_point`(
+    fill = "black",
+    colour = "black",
+    size = 3,
+    shape = 21
+  ) +
+  `geom_smooth`(
+    method = 'loess',
+    span = 0.4,
+    se = TRUE,
+    colour = "#00A5FF",
+    fill = "#00A5FF",
+    alpha = 0.2
+  ) + scale_y_continuous(breaks = seq(0, 125, 25)) +
+  theme(
+    text = element_text(size = 15, color = "black"),
+    plot.title = element_text(
+      size = 15,
+      family = "myfont",
+      hjust = .5,
+      color = "black"
+    ),
+    legend.position = "none"
+  )
+```
+
+]
+
+.right-column[
+```{r plot-2D, fig.width=5}
+ggplot(data = mydata, aes(x,y)) +
+  geom_point(fill="black",colour="black",size=3,shape=21) +
+  #geom_smooth(method="lm",se=TRUE,formula=y ~ splines::bs(x, 5),colour="red")+ #(h)
+  #geom_smooth(method = 'gam',formula=y ~s(x))+   #(g)
+  geom_smooth(method = 'loess',span=0.4,se=TRUE,colour="#00A5FF",fill="#00A5FF",alpha=0.2)+ #(f)
+  scale_y_continuous(breaks = seq(0, 125, 25))+
+  theme(
+    text=element_text(size=15,color="black"),
+    plot.title=element_text(size=15,family="myfont",hjust=.5,color="black"),
+    legend.position="none"
+  )
+```
+]
+
+---
+
+class: small
+
+## 统计图
+
+.left-column[
+```{r ols-table}
+m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
+msummary(m1, stars = TRUE)
+```
+]
+
+.right-column[
+```{r ols-dw, echo=TRUE, fig.width=5}
+library(dotwhisker)
+dwplot(m1)
+```
+]
+
+---
+
+class: small
+
+## 交互效应
+
+```{r interaction-plot, echo=TRUE, fig.width=10, fig.height=5}
+m2 <- lm(mpg ~ wt * cyl, data = mtcars)
+
+library(interplot)
+interplot(m = m2, var1 = "cyl", var2 = "wt")
+```
+
+
+---
+
+## 地图
+
+你需要三个ArcGIS文件：
+
+`bou2_4p.shp`: 多边形要素图形文件
+
+`bou2_4p.dbf`: 要素属性信息
+
+`bou2_4p.shx`: 多边形要素索引文件
+
+
+---
+
+```{r map, results=FALSE, echo = TRUE, fig.height=6, fig.align="center"}
+china_map1 <- rgdal::readOGR("data/bou2_4p.shp")
+
+ggplot(china_map1, aes(x = long, y = lat, group = group)) +
+	geom_polygon(fill = 'beige') + 
+  geom_path(color = "grey40")
+```
 
 ---
 
@@ -738,6 +1058,6 @@ class: inverse, bottom
 
 ---
 
-background-image: url("images/powerWisely.png")
+background-image: url("images/powerWisely.jpg")
 background-position: center
 background-size: contain

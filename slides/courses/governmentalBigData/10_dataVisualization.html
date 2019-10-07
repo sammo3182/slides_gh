@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Learn Visualization with Dr. Hu</title>
+    <title>Learning Visualization with Dr. Hu</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦 清华大学政治学系" />
     <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
@@ -13,7 +13,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Learn Visualization with Dr. Hu
+# Learning Visualization with Dr. Hu
 ## 数据可视化理论与实践
 ### 胡悦<br>清华大学政治学系
 
@@ -99,8 +99,6 @@ background-size: contain
 
 .right-column[
 
-### 图
-
 * 制作费事
 * 信息不“精确”
 * 形式不统一
@@ -150,7 +148,7 @@ background-size: contain
 
 ---
 
-## 怎么才是好的数据可视化？
+## 怎么才是好的可视化？
 
 .left-column[
 
@@ -500,16 +498,6 @@ class: inverse, bottom
 
 ---
 
-## 可视化哲学
-
-.left-column[&lt;img src="images/infoPlot.jpg" height = 500 /&gt;]
-
---
-
-.right-column[&lt;img src="images/statPlot.jpg" height = 400 /&gt;]
-
----
-
 ## 回归本质：可视化是什么？
 
 .center[&lt;img src="images/socialEngineer.jpg" height = 400 /&gt;]
@@ -530,6 +518,8 @@ class: inverse, bottom
 .center[&lt;img src="images/measurement.png" height = 400 /&gt;]
 
 ---
+
+class: small
 
 ## 编码类型
 
@@ -577,6 +567,8 @@ class: inverse, bottom
 
 ---
 
+class: small
+
 ## 如何选择好的通道
 
 * 类型（type）
@@ -614,6 +606,24 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 
 ---
 
+.left-column[
+
+网格处于背景,会不凸显
+
+&lt;img src="images/lattice1.png" height = 400 /&gt;
+
+]
+
+.right-column[
+
+网格处于前景,遮挡地图
+
+&lt;img src="images/lattice2.png" height = 400 /&gt;
+
+]
+
+---
+
 ### 可辨性（Discriminability） 
 
 .center[&lt;img src="images/commuNet.png" height = 500 /&gt;]
@@ -621,6 +631,12 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 ???
 
 通过粗细动态表现范围
+
+---
+
+background-image: url("images/contract.png")
+background-position: center
+background-size: contain
 
 ---
 
@@ -642,6 +658,16 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 background-image: url("images/popOut3.png")
 background-position: center
 background-size: contain
+
+---
+
+## 分组与分层
+
+* 分组会对大部分任务有效
+* 如果不能进行分组，则需要转换任务目标以支持分组
+* 避免过多类别
+* 对数据的每个维度指定一种或一个阶层的颜色
+
 
 ---
 
@@ -686,24 +712,26 @@ http://colorbrewer2.org/
 
 http://paletton.com/
 
----
-
-## Color Brewer
-
-.center[&lt;img src="images/colorBrewer.png" height = 500 /&gt;]
-
----
-
-
-## Paletton
-
-.center[&lt;img src="images/paletton.png" height = 500 /&gt;]
 
 ---
 
 class: inverse, bottom
 
-# To Be Continued...
+## To Be continued...
+
+---
+
+## Previously in *Learning Visualization with Dr. Hu*
+
+* 什么是好的数据可视化
+    + 表 vs. 图
+    + No-no: 饼状图、面积图
+    + Alternative: 折线图、散点图、雷达图……
+    + 词云（Hem...）
+* 怎么做好的数据可视化
+    + 可视化编码：标记、通道（Accuracy, discriminability, separability, pop-out）
+    + 分组与分层
+    + 色彩挑选
 
 ---
 
@@ -713,47 +741,636 @@ class: inverse, bottom
 
 ---
 
-## Previously in Learning Visualization with Dr. Hu...
+class: small
 
-* 何为好的数据可视化？
-    + 目的：与读者交流（精准描述、突出重点、加深印象）
-    + 饼状图要不得；面积图也要三思；词云（Hem……）
-* 怎样才能做出好的可视化？
-    + 两种哲学：信息 vs. 统计
-    + 可视化编码：标记与通道（accuracy, discriminability, separability, pop-out）
-    + 色彩选择（color brewer, paletton）
-    
+## `RColorBrewer` Package
+
+### 主要code
+
+`colorRampPalette(brewer.pal(&lt;num.&gt;, &lt;name of pallette&gt;))(n)`
+
+### Alternative
+
+`ggsci`: 包含Nature、Science等期刊配色（Check "Tron Legacy"）
+
+`wesanderson`
+
+`ggthemes`
+
+`ggtech`
+
 ---
 
-## 在R中实现数据可视化
+## Name of Palette
 
-[Dr. Hu's R Workshop series](https://sammo3182.github.io/slides_gh/slides/rWorkshop/)
+.left-column[&lt;img src="images/color_sequential.png" height = 500 /&gt;]
 
---
+.right-column[
+&lt;img src="images/color_diverging.png" height = 250 /&gt;
+&lt;img src="images/color_qualitative.png" height = 200 /&gt;
+]
+
+---
+
+## 一维图
+
+
+
+
+```r
+ggplot(data = mydata, aes(Cut, Price)) +
+  `geom_bar`(
+    stat = "identity",
+    width = 0.8,
+    colour = "black",
+    size = 0.25,
+    fill = "#2ca25f",
+    alpha = 1
+  )
+
+ggplot(data = mydata2, aes(Catergory, value, 
+                           `fill = variable`)) +
+  geom_bar(
+    stat = "identity",
+    color = "black",
+    position = position_dodge(),
+    width = 0.7,
+    size = 0.25
+  ) +
+  scale_fill_manual(values = c("#ef8a62", "#67a9cf")) +
+  ylim(0, 10) +
+  theme(
+    axis.title = element_text(size = 15, face = "plain", color = "black"),
+    axis.text = element_text(size = 12, face = "plain", color = "black"),
+    legend.title = element_text(size = 14, face = "plain", color = "black"),
+    legend.background  = element_blank(),
+    legend.position = c(0.88, 0.88)
+  )
+```
+
+---
+
+.left-column[
+![](10_dataVisualization_files/figure-html/plot-1DI-1.png)&lt;!-- --&gt;
+]
+
+.right-column[
+![](10_dataVisualization_files/figure-html/plot-1DII-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+
+.left-column[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; car &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Math &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; English &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Biology &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Music &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R-Coding &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.right-column[
+![](10_dataVisualization_files/figure-html/plot-radar-code-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+```r
+ggplot() + 
+  geom_polygon(data=mydata,aes(x=id, y=value),color = "black", fill=brewer.pal(7,"Set1")[1],alpha=0.1)+
+  geom_point(data=mydata,aes(x=id, y=value),size=5,shape=21,color = 'black', fill=brewer.pal(7,"Set1")[1])+
+  `coord_radar`() +
+  scale_x_continuous(breaks =label_data$id,labels=label_data$car)+
+  ylim(0,22)+
+  theme_light()+
+  theme(axis.text.x=element_text(size = 11,colour="black",angle = myAngle))
+```
+
+---
+
+class: small
+
+## 二维图
+
+
 
 .left-column[
 
-### `ggplot`
-
-1. 采用图层的设计方式
-2. 将表征数据和图形细节分开
-3. 扩展包丰富
+```r
+ggplot(data = mydata, aes(x, y)) +
+  `geom_point`(
+    fill = "black",
+    colour = "black",
+    size = 3,
+    shape = 21
+  ) +
+  `geom_smooth`(
+    method = 'loess',
+    span = 0.4,
+    se = TRUE,
+    colour = "#00A5FF",
+    fill = "#00A5FF",
+    alpha = 0.2
+  ) + scale_y_continuous(breaks = seq(0, 125, 25)) +
+  theme(
+    text = element_text(size = 15, color = "black"),
+    plot.title = element_text(
+      size = 15,
+      family = "myfont",
+      hjust = .5,
+      color = "black"
+    ),
+    legend.position = "none"
+  )
+```
 
 ]
 
-.right-column[&lt;img src="images/hadley.png" height = 400 /&gt;]
-
-???
-
-1. 采用图层的设计方式，有利于结构化思维实现数据可视化。图层之间的叠加是靠“+”实现的，越往后，其图层越在上方。
-2. 将表征数据和图形细节分开，能快速将图形表现出来，而且通过stat_函数将常见的统计变换融入绘图中。
-3. 图形美观，扩展包丰富，有专门调整颜色、字体和主题等辅助包。
+.right-column[
+![](10_dataVisualization_files/figure-html/plot-2D-1.png)&lt;!-- --&gt;
+]
 
 ---
 
-background-image: url("images/ggplotGrammar.jpg")
-background-position: center
-background-size: contain
+class: small
+
+## 统计图
+
+.left-column[
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#rfakzmszmb .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+  border-bottom-style: solid;
+  /* table.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table.border.bottom.color */
+}
+
+#rfakzmszmb .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+}
+
+#rfakzmszmb .gt_title {
+  color: #333333;
+  font-size: 125%;
+  /* heading.title.font.size */
+  padding-top: 4px;
+  /* heading.top.padding - not yet used */
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#rfakzmszmb .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  padding-top: 0;
+  padding-bottom: 4px;
+  /* heading.bottom.padding - not yet used */
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#rfakzmszmb .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* heading.border.bottom.color */
+}
+
+#rfakzmszmb .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#rfakzmszmb .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 16px;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  vertical-align: middle;
+  padding: 5px;
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+#rfakzmszmb .gt_columns_top_border {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#rfakzmszmb .gt_columns_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#rfakzmszmb .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#rfakzmszmb .gt_group_heading {
+  padding: 8px;
+  /* row_group.padding */
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#rfakzmszmb .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 16px;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#rfakzmszmb .gt_striped {
+  background-color: #8080800D;
+}
+
+#rfakzmszmb .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#rfakzmszmb .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#rfakzmszmb .gt_row {
+  padding: 8px;
+  /* row.padding */
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#rfakzmszmb .gt_stub {
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#rfakzmszmb .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  padding: 8px;
+  /* summary_row.padding */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+}
+
+#rfakzmszmb .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* grand_summary_row.background.color */
+  padding: 8px;
+  /* grand_summary_row.padding */
+  text-transform: inherit;
+  /* grand_summary_row.text_transform */
+}
+
+#rfakzmszmb .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#rfakzmszmb .gt_first_grand_summary_row {
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#rfakzmszmb .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #D3D3D3;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* table_body.border.bottom.color */
+}
+
+#rfakzmszmb .gt_footnotes {
+  border-top-style: solid;
+  /* footnotes.border.top.style */
+  border-top-width: 2px;
+  /* footnotes.border.top.width */
+  border-top-color: #D3D3D3;
+  /* footnotes.border.top.color */
+}
+
+#rfakzmszmb .gt_footnote {
+  font-size: 90%;
+  /* footnote.font.size */
+  margin: 0px;
+  padding: 4px;
+  /* footnote.padding */
+}
+
+#rfakzmszmb .gt_sourcenotes {
+  border-top-style: solid;
+  /* sourcenotes.border.top.style */
+  border-top-width: 2px;
+  /* sourcenotes.border.top.width */
+  border-top-color: #D3D3D3;
+  /* sourcenotes.border.top.color */
+}
+
+#rfakzmszmb .gt_sourcenote {
+  font-size: 90%;
+  /* sourcenote.font.size */
+  padding: 4px;
+  /* sourcenote.padding */
+}
+
+#rfakzmszmb .gt_center {
+  text-align: center;
+}
+
+#rfakzmszmb .gt_left {
+  text-align: left;
+}
+
+#rfakzmszmb .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#rfakzmszmb .gt_font_normal {
+  font-weight: normal;
+}
+
+#rfakzmszmb .gt_font_bold {
+  font-weight: bold;
+}
+
+#rfakzmszmb .gt_font_italic {
+  font-style: italic;
+}
+
+#rfakzmszmb .gt_super {
+  font-size: 65%;
+}
+
+#rfakzmszmb .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="rfakzmszmb" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  
+  <tr>
+    <th class="gt_col_heading gt_columns_bottom_border gt_columns_top_border gt_left" rowspan="1" colspan="1"></th>
+    <th class="gt_col_heading gt_columns_bottom_border gt_columns_top_border gt_left" rowspan="1" colspan="1">Model 1</th>
+  </tr>
+  <body class="gt_table_body">
+    <tr class="gt_group_heading_row">
+      <td colspan="2" class="gt_empty_group_heading"></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">(Intercept)</td>
+      <td class="gt_row gt_left">43.540***</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub"></td>
+      <td class="gt_row gt_left gt_striped">(4.860)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">cyl</td>
+      <td class="gt_row gt_left">-1.784***</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub"></td>
+      <td class="gt_row gt_left gt_striped">(0.614)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">disp</td>
+      <td class="gt_row gt_left">0.007</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub"></td>
+      <td class="gt_row gt_left gt_striped">(0.012)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">gear</td>
+      <td class="gt_row gt_left">-0.490</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub"></td>
+      <td class="gt_row gt_left gt_striped">(0.790)</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">wt</td>
+      <td class="gt_row gt_left">-3.793***</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub"></td>
+      <td class="gt_row gt_left gt_striped">(1.082)</td>
+    </tr>
+    <tr class="gt_group_heading_row">
+      <td colspan="2" class="gt_empty_group_heading"></td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">Num.Obs.</td>
+      <td class="gt_row gt_left">32</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">R2</td>
+      <td class="gt_row gt_left gt_striped">0.835</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">Adj.R2</td>
+      <td class="gt_row gt_left">0.811</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">AIC</td>
+      <td class="gt_row gt_left gt_striped">159.1</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">BIC</td>
+      <td class="gt_row gt_left">167.9</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_stub">Log.Lik.</td>
+      <td class="gt_row gt_left gt_striped">-73.553</td>
+    </tr>
+  </body>
+  <tfoot class="gt_sourcenotes">
+    <tr>
+      <td class="gt_sourcenote" colspan="2">* p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</td>
+    </tr>
+  </tfoot>
+  
+</table></div>
+]
+
+.right-column[
+
+```r
+library(dotwhisker)
+dwplot(m1)
+```
+
+![](10_dataVisualization_files/figure-html/ols-dw-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: small
+
+## 交互效应
+
+
+```r
+m2 &lt;- lm(mpg ~ wt * cyl, data = mtcars)
+
+library(interplot)
+interplot(m = m2, var1 = "cyl", var2 = "wt")
+```
+
+![](10_dataVisualization_files/figure-html/interaction-plot-1.png)&lt;!-- --&gt;
+
+
+---
+
+## 地图
+
+你需要三个ArcGIS文件：
+
+`bou2_4p.shp`: 多边形要素图形文件
+
+`bou2_4p.dbf`: 要素属性信息
+
+`bou2_4p.shx`: 多边形要素索引文件
+
+
+---
+
+
+```r
+china_map1 &lt;- rgdal::readOGR("data/bou2_4p.shp")
+
+ggplot(china_map1, aes(x = long, y = lat, group = group)) +
+	geom_polygon(fill = 'beige') + 
+  geom_path(color = "grey40")
+```
+
+&lt;img src="10_dataVisualization_files/figure-html/map-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -774,6 +1391,7 @@ background-size: contain
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
