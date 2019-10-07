@@ -1,5 +1,5 @@
 ---
-title: "Association and Independence"
+title: "Association Analysis"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
@@ -9,14 +9,37 @@ output:
     css: 
       - ../../../css/zh-CN_custom.css
       - ../../../css/styles.css
-      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable,
+  knitr, # dependency
+  descr, stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+
+class: inverse, bottom
+
+# Association
+
 ---
 
 ## Joint Distribution Revisit 
@@ -77,17 +100,17 @@ Relations with covariance: $\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}$
 
 ---
 
-## Correlation Revisit
+class: small
 
-### Pearson R
+## Correlations
 
-$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$.
+### Pearson's r
+
+$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$
 
 For a sample: 
 
-$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$
-
---
+$$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$$
 
 Properties： 
 
@@ -98,7 +121,18 @@ Properties：
 
 ---
 
-### Kendall Rank
+.red[ASSUMPTION]
+
+1. Continuous data
+1. Linear Relationship
+
+???
+
+https://statistics.laerd.com/spss-tutorials/pearsons-product-moment-correlation-using-spss-statistics.php
+
+---
+
+### Kendall's &tau;
 
 For any pair of observations $x_{i},y_{i}$ and $x_{j},y_{j}$, where $i<j$: 
 
@@ -123,3 +157,46 @@ Properties：
 1. Non-parametric test.
 
 ---
+
+.red[ASSUMPTION]
+
+???
+
+https://statistics.laerd.com/spss-tutorials/kendalls-tau-b-using-spss-statistics.php
+
+---
+
+class: small
+
+### Spearman &rho;
+
+* Another ranking correlation 
+* Non-parametric version of Pearson R
+
+$$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}$$
+
+$rg$: The rank of the variable
+
+When all n ranks are distinct integers:
+
+$$\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}}$$
+
+$d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i})$
+
+???
+
+https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
+
+---
+
+## Pearson's r vs. Spearman's &rho;
+
+Non-parametric, therefore, useful when Assumption 1 of Pearson's r is violated.
+    
+Pearson's r: Linear relationship
+Spearman's &rho;: monotonic relationship
+
+Kendall's &tau; and Spearman's &rho; can be used for ordinal variables.
+
+---
+
