@@ -17,3 +17,727 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, 
+  RColorBrewer, dotwhisker, interplot, # dependency
+  stringr, haven, purrr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+# 提要
+
+---
+
+## 内容
+
+### 什么是好的可视化
+### 如何做好的可视化
+### `ggplot`可视化举例
+
+---
+
+class: small
+
+## 参考书
+
+Cleveland, William S. 1985. *The Elements of Graphing Data*. 1st Printing edition. Monterey, Cal: Wadsworth, Inc.
+
+Tufte, Edward R. 2001. *The Visual Display of Quantitative Information*. 2nd edition edition. Cheshire, Conn: Graphics Press.
+
+Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-Verlag.
+
+张杰. 2019. 《R语言数据可视化之美：专业图表绘制指南》. 第1版. 电子工业出版社.
+
+---
+
+## 心理准备
+
+.center[<img src="images/cantLearn.gif" height = 500 />]
+
+---
+
+class: inverse, bottom
+
+# 什么是好的可视化
+
+---
+
+class: small
+
+## 数据呈现偏好
+
+Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” Perspectives on Politics 5(4): 755–71.
+
+检验APSR， AJPS和PA 2006年五刊，发现如下结果
+
+.center[<img src="images/graphTable.png" height = 300 />]
+
+--
+
+如何可视化上表？
+
+???
+ mathematical: formal modeling
+
+---
+
+background-image: url("images/tableGraph.png")
+background-position: center
+background-size: contain
+
+---
+
+## 为何有人爱做表？
+
+.left-column[
+
+### 表
+
+* 容易制作
+* 教学、演讲、发表常见
+* 数字有助于后续研究
+]
+
+.right-column[
+
+* 制作费事
+* 信息不“精确”
+* 形式不统一
+
+]
+
+---
+
+## 那……为什么还作图？
+
+.center[<img src="images/picWorthWords.jpg" height = 500 />]
+
+
+---
+
+印象更深
+
+便于比较、突出重点
+
+信息传递高效
+
+比表格占据更小版面
+
+---
+
+background-image: url("images/Os.png")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("images/Os2.png")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("images/Os3.png")
+background-position: center
+background-size: contain
+
+---
+
+哪个年龄段及收入水平人群的三酸甘油脂水平（身体脂肪量）趋势与其他均不同？
+
+.center[<img src="images/triglyceride.png" height = 500 />]
+
+---
+
+## 怎么才是好的可视化？
+
+.left-column[
+
+<img src="images/tryIt.jpg" height = 300 />
+
+]
+
+.right-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie1.png" height = 300 />
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie2.png" height = 300 />
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie3.png" height = 300 />
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie4.png" height = 300 />
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie5.png" height = 300 />
+
+]
+
+---
+
+## 饼状图？
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/pie6.png" height = 280 />
+
+]
+
+---
+
+## Why Is Pie Chart a Big No-No?
+
+* 用于呈现百分比（一维）
+* 容易误导读者（见后）
+* 浪费油墨
+
+被誉为垃圾图形（[junk chart](http://junkcharts.com)）首选
+
+---
+
+## 类似的No-No
+
+墨西哥各政党在大选中得票比例趋势
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+怎么可视化这个数据？
+
+---
+
+<img src="images/areaPlot.png" height = 500 />
+
+
+---
+
+## Why No-no?
+
+1. 比折线图费更多墨。
+
+--
+
+1. 各个时间序列间的比较容易误导读者，而且焦点容易被面积所模糊。
+
+--
+
+1. 应将变化较不明显的序列至于最底端。
+
+
+---
+
+## Alternative to Pie
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/barPlot1.png" height = 300 />
+
+]
+
+---
+
+## Alternative to Pie
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/barPlot2.png" height = 300 />
+
+]
+
+---
+
+## Alternative to Pie
+
+.left-column[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.right-column[
+
+<img src="images/barPlot3.png" height = 300 />
+
+]
+
+---
+
+## Alternative to Pie
+
+.center[<img src="images/radia.png" height = 500 />]
+
+---
+
+## Alternative to Area
+
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+---
+
+.center[<img src="images/linePlot.png" height = 500 />]
+
+---
+
+.center[<img src="images/linePlot2.png" height = 500 />]
+
+---
+
+## 二维最简
+
+.center[<img src="images/scatterPlot.png" height = 400 />]
+
+---
+
+## 二维最简
+
+.center[<img src="images/scatterPlot2.png" height = 400 />]
+
+---
+
+## 三维数据咋办？
+
+.center[<img src="images/facet.png" height = 400 />]
+
+---
+
+## 更复杂的三维数据咋办？
+
+| 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
+|------	|----------	|------------	|----------	|
+| A    	| 712      	| 18         	| 100      	|
+| B    	| 1105     	| 4          	| 57       	|
+| C    	| 690      	| 7          	| 80       	|
+| D    	| 687      	| 27         	| 191      	|
+| E    	| 725      	| 2          	| 5        	|
+| F    	| 1200     	| 25         	| 10       	|
+| G    	| 470      	| 19         	| 25       	|
+| H    	| 752      	| 10         	| 123      	|
+
+
+---
+
+## Bubble Chart
+
+.center[<img src="images/bubblePlot.png" height = 400 />]
+
+--
+
+有什么问题？
+
+---
+
+## Better Bubble Chart
+
+.center[<img src="images/bubblePlot2.png" height = 400 />]
+
+---
+
+## Bubble Chart 优劣
+
+* 散点图变异
+* 通过气泡大小呈现第三维度数据
+
+--
+
+* 气泡大小当接近时可能造成便是困难，信息无法完全精确地传达
+
+---
+
+class: inverse, bottom
+
+# 如何做好的可视化
+
+---
+
+## 回归本质：可视化是什么？
+
+.center[<img src="images/socialEngineer.jpg" height = 400 />]
+
+---
+
+## 可视化的作用
+
+* 记录信息
+* 分析推理
+* 证实假设
+* 交流思想
+
+---
+
+## 可视化编码
+
+.center[<img src="images/measurement.png" height = 400 />]
+
+---
+
+## 编码类型
+
+.left-column[
+
+* 数值型（quantitative）
+    + 10厘米，17厘米，23厘米
+* 定序型（ordinal）
+    + 小，中，大
+    + 周日，周一，周二……
+* 定类性（nominal）
+    + 苹果，桔子，香蕉……
+
+
+]
+
+.right-column[<img src="images/codingType.png" height = 450 />]
+
+---
+
+## 编码因素
+
+标记：点、线、面
+
+<img src="images/sign.png" height = 50 />
+
+--
+
+通道：位置、大小、形状、方向、色调、饱和度、亮度……
+
+<img src="images/pipe.png" height = 100 />
+
+---
+
+## 通道
+
+.left-column[
+<img src="images/category.png" height = 200 />
+<img src="images/group.png" height = 200 />
+]
+
+.right-column[
+<img src="images/order.png" height = 400 />
+]
+
+---
+
+## 如何选择好的通道
+
+* 类型（type）
+    + 是什么/在哪里（what/where）
+    + 何种程度（how much）
+    
+--
+    
+* 有效性（effectiveness）
+    + 通道表现力符合属性的重要性
+    
+--
+
+* 表现力（expressiveness）
+    + 表达且仅表达数据的完整属性
+    + 判断标准：精确性、可辨性、可分离性、视觉突出
+
+---
+
+### 精确性（Accuracy）
+
+.center[<img src="images/stevensPowerLaw.png" height = 500 />]
+
+???
+
+刺激增加：
+
+* 关注度敏感度降：点亮度、声音响度
+* 关注度敏感度不变：线长度
+* 关注度敏感度加：痛感
+
+psychophysicist Stanley Smith Stevens (1957, 1961)
+
+$\displaystyle \psi (I)=kI^{a}$, k proportionality constant that depends on the units used
+
+---
+
+.left-column[
+
+网格处于背景,会不凸显
+
+<img src="images/lattice1.png" height = 400 />
+
+]
+
+.right-column[
+
+网格处于前景,遮挡地图
+
+<img src="images/lattice2.png" height = 400 />
+
+]
+
+---
+
+### 可辨性（Discriminability） 
+
+.center[<img src="images/commuNet.png" height = 500 />]
+
+???
+
+通过粗细动态表现范围
+
+---
+
+background-image: url("images/contract.png")
+background-position: center
+background-size: contain
+
+---
+
+### 可分离性（Separability）
+
+.center[<img src="images/separability.png" height = 200 />]
+
+---
+
+### 视觉突出（Pop-out）
+
+<img src="images/popOut.png" height = 180 />
+
+--
+<img src="images/popOut2.png" height = 300 />
+
+---
+
+background-image: url("images/popOut3.png")
+background-position: center
+background-size: contain
+
+---
+
+## 分组与分层
+
+* 分组会对大部分任务有效
+* 如果不能进行分组，则需要转换任务目标以支持分组
+* 避免过多类别
+* 对数据的每个维度指定一种或一个阶层的颜色
+
+
+---
+
+## 色彩信息
+
+* 灰度值可被认为是有序的 
+
+<img src="images/grey1.png" height = 50 />
+
+* 可用于编码数值型数据
+
+<img src="images/grey2.png" height = 50 />
+
+* 色调通常认为是无序的，可用于编码不同维度的值
+
+<img src="images/rainbow.png" height = 50 />
+
+---
+
+## 色彩意义
+
+.center[<img src="images/colorMeaning.png" height = 300 />]
+
+---
+
+## 色彩设计基本原则
+
+* 使用有限的色调范围
+    + 控制低饱和度色彩中的色彩视觉突出（pop-out）
+    + 避免过多颜色交错导致的杂乱无章
+* 使用中性背景色
+    + 控制对全局色彩的影响
+    + 最小化“同时对比” （simultaneous contrast）
+    
+---
+
+## 对于新手而言
+
+辅助软件来选择合适的色阶：
+
+http://colorbrewer2.org/ 
+
+http://paletton.com/
+
+
+---
+
+class: inverse, bottom
+
+# `ggplot`可视化举例
+
+---
+
+## Take-Home Points
+
+* 好的图形必须进行比较分析。
+* 图形不仅可以呈现原始数据，也可以呈现推论结果。
+* 善用数据可视化，方能成为沟通研究者与读者的工具。
+
+---
+
+background-image: url("images/powerWisely.png")
+background-position: center
+background-size: contain
