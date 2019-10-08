@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Simple OLS and Properties of Estimators</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Simple OLS and Properties of Estimators
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+class: inverse, bottom
+
+# Understanding OLS
+## Theoretical and Methodological Views
+
+---
+
+## Theory
+
+General statement to describe causality and relevant phenomena.
+
+### Good theory
+
+1. Large explanatory power
+    + Importance: How much X affects Y
+    + Range: generality
+    + Applicability: How often affecting in the reality
+1. Parsimony
+1. Satisfying elaboration
+1. Clearly framed (formal?)
+1. Falsifiable
+1. Explaining important phenomena
+1. Prescriptive richness (and policy recommendation)
+
+---
+
+## Conspiracy
+
+.center[&lt;img src="../../guestLecture/image/currencyWars.jpg" height = 380 /&gt;]
+
+What makes a conspiracy different from a theory? 
+
+???
+
+Rothschild family
+
+---
+
+class: small
+
+## How to Test a Theory (Causal Inference)
+
+1. Hoop tests: Predictions of high certitude and no uniqueness provide decisive negative test
+1. Smoking-gun tests: Predictions of high uniqueness and no certitude provide decisive positive tests:
+1. Double-decisive tests: Predictions of high uniqueness and high certitude
+1. Straw-in-the-wind tests: Predictions of low uniqueness and low certitude
+
+(Evera, Stephen Van. 1997. Guide to Methods for Students of Political Science. Ithaca: Cornell University Press.)
+
+???
+
+1. Hoop test: the accused in the state when murder happens? If not innocent, but passing does not mean being guilty.
+1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
+1. Double-decisive test: hoop + smoking-gun, like a camera record
+1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
+
+---
+
+## Ordinary Least Squares
+
+One type of simulation of the reality (and one of a variety of types).
+
+.red[NOT OFFERING CAUSALITY.]
+
+### Used it properly
+
+1. Always getting attention to the detailed data
+1. Don't let the data drive you, you drive the data with appropriate methods.
+
+---
+
+## What We Already Know
+
+* Population vs. sample
+
+--
+
+* Parameter vs. statistics
+
+--
+
+* Random variable 
+
+???
+
+a variable following a distributive feature, but no fixed value before creation.
+
+--
+
+* Distribution
+
+???
+
+For each value of a random variable X, the distribution tells us the probability of that value.
+
+--
+
+* Joint, marginal, and conditional distributions
+
+???
+
+Joint: `\(f(X_1, X_2) = P(X_1 = x_1, X_2 = x_2)\)`
+Marginal: the integral of `\(f(X_1) or f(X_2)\)` to the other variable
+Conditional: `\(f(X_1|X2 = x_2)\)`
+
+---
+
+* Expectation:
+
+`\begin{align}
+E(X)_{discrete} =&amp; \sum^n_{i = 1} X_if(X_i)\\
+E(X)_{continuous} =&amp; \int^{+\infty}_{-\infty}X_if(X_i)dX.
+\end{align}`
+
+* Variance:
+
+`\begin{align}
+\sigma^2 = E[X - E(X)]^2 =&amp; E[(X - \mu)^2]\\
+              =&amp; E(X^2 - 2X\mu + \mu^2)\\
+              =&amp; E(X^2) - 2\mu E(X) + \mu^2\\
+              =&amp; E(X^2) - \mu^2
+\end{align}`
+
+???
+
+Expectation is the mean.
+
+---
+
+class: small
+
+### Rule of variance
+
+1. `\(var(aX + b) = a^2var(X);\)`
+1. `\(var(aX_1 + bX_2 + c) = a^2var(X_1) + b^2var(X_2) + 2ab\cdot cov(X_1, X_2).\)`
+1. When `\(X_i\)` is i.i.d., 
+`\(var(a1X_1 + a_2X_2 + \cdots + a_nX_n) = var(\sum a_iX_i) = \sum a_i^2var(X_i)\)`
+1. `\(var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}\)`
+1. `\(cov(X, Y) = E(XY) - E(X)E(Y)\)`
+    + When X = Y, `\(cov(X, X) = E(X^2) - [E(X)]^2 = var(X)\)`
+
+
+???
+`\begin{align}
+var(aX + b) =&amp; E[(aX + b) - E(aX + b)]^2\\
+            =&amp; E[aX + b - aE(X) - b]^2\\
+            =&amp; E[aX - aE(X)]^2 = a^2E[X - E(X)]^2 = a^2var(X)
+\end{align}`
+
+`\begin{align}
+cov(X, Y) =&amp; E[X - E(X)][Y - E(Y)]\\
+          =&amp; E[XY - XE(Y) - YE(X) + E(X)E(Y)]\\
+          =&amp; E(XY) - E(Y)E(X) - E(X)E(Y) + E(X)E(Y)\\
+          =&amp; E(XY) - E(X)E(Y)
+\end{align}`
+
+
+---
+
+## Property of Estimator `\(\hat \theta\)`
+
+* Unbiased: On average, the estimator gives the right answer, formally, `\(E(\hat\sigma) = \sigma.\)`
+* Consistent: As the sample size increases, the variance decreases.
+
+![](08_simpleOLS_files/figure-html/consistency-1.png)&lt;!-- --&gt;
+
+???
+
+Consistency: n1 &lt; n2 &lt; n3
+
+---
+
+* Efficiency: Smallest variance among unbiased estimators
+
+![](08_simpleOLS_files/figure-html/efficacy-1.png)&lt;!-- --&gt;
+
+* RMES: Root mean square error, `\(\sqrt{bias^2 + var}\)`
+    + Trade off a little bias against variance.
+
+---
+
+class: inverse, bottom
+
+# Regression
+## Getting the mean right is a good thing
+---Frederick J. Boehmke
+
+---
+
+## What Does Regressions Deal with?
+
+How does some outcome variable Y change with some explanatory variable X? 
+
+E.g., Are the political ideology of the three types of voters different? 
+
+`\(\mu_D = \mu_I = \mu_R.\)`
+
+`\(\text{diff} = \frac{\bar X_R - \bar X_D}{SE}.\)`
+
+???
+
+&lt;img src="images/illustrateSimpleOLS.png" height = 200 /&gt;
+
+---
+
+## Linearity
+
+Y changes linearly with X.
+
+In terms of the population regression function,
+
+`$$Y_i = \beta_0 + \beta_1X_1 + u_i$$`
+
+Therefore, 
+
+`\begin{align}
+E(Y_i|X_i) =&amp; E(\beta_0 + \beta_1X_1 + u_i|X_i)\\
+           =&amp; E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i)\\
+           =&amp; \beta_0 + \beta_1X_i + E(u_i|X_i)
+\end{align}`
+
+???
+
+`\(\beta_1X_i\)` consistent
+
+E(u_i|X_i) assumed 0
+
+---
+
+Q. Which one shows a linear relationship between X and Y?
+
+`\begin{align}
+Y_i =&amp; \beta_0 + \beta_1X_i + ui\\
+Y_i =&amp; \beta_0 + \frac{\beta_1}{X_i} + ui\\
+Y_i =&amp; \beta_0 + \beta_1ln(X_i) + ui\\
+Y_i =&amp; \beta_0 + X_i^{\beta_1} + ui\\
+Y_i =&amp; \frac{1}{\beta_0} + \frac{X_i}{\beta_1} + ui
+\end{align}`
+
+???
+
+First three are linear.
+
+The last one isn't linear until redefining.
+
+---
+
+`\begin{align}
+Y_i =&amp; E(Y_i|X_i) + u_i\\
+\Leftrightarrow u_i =&amp; Y_i - E(Y_i|X_i)
+\end{align}`
+
+There are things we don't know (or human errors).
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

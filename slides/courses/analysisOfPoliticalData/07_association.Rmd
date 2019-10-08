@@ -121,6 +121,10 @@ Properties：
 
 ---
 
+Partial correlation in multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$
+
+--
+
 .red[ASSUMPTION]
 
 1. Continuous data
@@ -156,10 +160,6 @@ Properties：
 1. $\tau_{XY}\in [-1,1]$, independent 0.
 1. Non-parametric test.
 
----
-
-.red[ASSUMPTION]
-
 ???
 
 https://statistics.laerd.com/spss-tutorials/kendalls-tau-b-using-spss-statistics.php
@@ -189,14 +189,264 @@ https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation
 
 ---
 
-## Pearson's r vs. Spearman's &rho;
+## r vs. &rho; vs. &tau;
 
-Non-parametric, therefore, useful when Assumption 1 of Pearson's r is violated.
+&rho; vs. &tau; are non-parametric (useful when assumptions of Pearson's r is violated); working for ordinal. 
     
 Pearson's r: Linear relationship
-Spearman's &rho;: monotonic relationship
 
-Kendall's &tau; and Spearman's &rho; can be used for ordinal variables.
+Kendall's &tau; and Spearman's &rho;: monotonic relationship.
+
+&tau; is more robust than &rho;, while &rho; has less cost than &tau;.
 
 ---
 
+## How about Nominal Variables?
+
+### &chi;<sup>2</sup> revisit
+
+
+\begin{align}
+\chi^2 =& \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected}\\
+       =& \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}
+\end{align}
+
+
+Nonparametric test
+
+---
+
+class: small
+
+E.g., Here are the cross-table of the partisan distribution of American fathers and sons. 
+
+| Father/Son 	| D  	| R  	| I  	| Total 	|
+|------------	|----	|----	|----	|-------	|
+| D          	| 45 	| 5  	| 10 	| 60    	|
+| R          	| 2  	| 23 	| 5  	| 30    	|
+| I          	| 3  	| 2  	| 5  	| 10    	|
+| Total      	| 50 	| 30 	| 20 	| 100   	|
+
+How do we know if father's partisanship affect their sons? Let's construct a hypothesis test. If there's an influence, we may expect:
+
+$H_0:$ Sons' party ID has no relation with their fathers' party ID, formally, $\pi_{ij} = \pi_i \pi_j$, for all i, j.
+
+$H_1: \pi_{ij} \neq \pi_i \pi_j$
+
+For the above case, e.g., the expected value for both fathers and sons were Democratic is 50/100 &times; 60/100 &times; 100 = 30. 
+
+Then in this case, $\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07$. 
+
+d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is $\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r qchisq(.975, df = 4)`.
+
+---
+
+## Limitation of &chi;<sup>2</sup>
+
+1. When sample is too small and/or having too many missing data, the distribution might be different from $\chi^2$
+2. When N gets large, $\chi^2$ also increase (esp. over 100,000)
+
+---
+
+## &Phi; and Cramer's V
+
+* $\Phi = \sqrt{\frac{\chi^2}{n}}\in[0, 1]$
+    + 0 means no association
+    + 1 means perfect association
+* Cramer's V: 
+    + Beyond a 2*2 table (when $\Phi$ > 1).
+    + $V = \sqrt{\frac{\chi^2}{n\times min_{r-1, c-1}}}$.
+
+---
+
+class: inverse, bottom
+
+# Analysis of Variance
+
+---
+
+## ANOVA
+
+* Completely randome design
+* Equivalent to t-test, 
+    + when there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
+
+???
+
+Type I: reject a true $H_0$
+Type II: accept a false $H_0$
+
+---
+
+.red[ASSUMPTION]
+
+1. Y is normally distributed in eqch group (Type I &darr;)
+1. Homogeneity of variance (Type I & II &darr;)
+1. Independence of cases (Type I &darr;)
+1. No large outliers (Type II &darr;)
+1. Large sample (Type I & II &darr;)
+    
+---
+
+## One-Way
+
+* Completely randomized design
+    + $\bar X$ is the sample mean
+    + $\bar{\bar{X}} = \frac{\sum \bar{X_i}}{K}$, where K is column number
+        + The grant mean, mean of all the data
+
+---
+
+class: small
+
+Calculation:
+
+.magenta[SST]: Variance between the samples;
+
+.magenta[SSE]: Variance within the samples.
+
+| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------	|-------	|----------------------------------	|
+| Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-1} = MST/MSE$ 	|
+
+$$F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\ of\ Unexplained\ Variance}$$
+---
+
+Q. The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type? 
+
+| NSS 	| MOE 	| BJ 	|
+|-----	|-----	|----	|
+| 27  	| 23  	| 48 	|
+| 22  	| 36  	| 35 	|
+| 33  	| 27  	| 46 	|
+| 25  	| 44  	| 36 	|
+| 38  	| 39  	| 28 	|
+| 29  	| 32  	| 29 	|
+
+
+---
+
+class: small
+
+| NSS 	| MOE 	| BJ 	|
+|-----	|-----	|----	|
+| 27  	| 23  	| 48 	|
+| 22  	| 36  	| 35 	|
+| 33  	| 27  	| 46 	|
+| 25  	| 44  	| 36 	|
+| 38  	| 39  	| 28 	|
+| 29  	| 32  	| 29 	|
+
+$H_0: \mu_1 = \mu_2 = \mu_3.$
+$H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
+
+
+\begin{align}
+\bar X_{NSS} &= 29;\\
+\bar X_{MOE} &= 33.5;\\
+\bar X_{BJ} &= 37;\\
+\bar{\bar{X}} &= (29 + 33.5 + 37)/3 \approx 33.17
+\end{align}
+
+---
+
+class: small
+
+| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------	|-------	|----------------------------------	|
+| Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-1} = MST/MSE$ 	|
+
+
+$\bar X_{NSS} = 29; \bar X_{MOE} = 33.5;\bar X_{BJ} = 37;\bar{\bar{X}} = 33.17$
+
+Then, $SST = \sum 6\times (\bar X - \bar{\bar{X}}) = 193$; 
+$SSE = [(27 - 29)^2 + (22 - 29)^2 + \dots + (29 - 37)^2] = 819.5$.
+
+Given K = 3, N = 18, $F = \frac{193/(3 - 1)}{819.5/(18 - 3)} \approx 1.77$
+
+We know F at the critical value 0.05, $F_{0.05, 2, 15}$ is `r qf(.975, 2, 15)` > F, so fail to reject $H_0$
+
+--
+
+Hint: ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci)
+
+---
+
+## Two-Way ANOVA
+
+* Two-way: 
+    + Randomized block design (i blocks, j groups)
+    + Matched sample in t-test
+
+---
+
+class: small
+
+| Source    	| Sum Square                                                             	| d.f.           	| Mean Square                                    	|
+|-----------	|------------------------------------------------------------------------	|----------------	|------------------------------------------------	|
+| Treat 	| $SS_A: b\sum (\bar X_i - \bar{\bar{X}})^2$                            	| a - 1          	| MST_A = SS_A/(a - 1)                           	|
+| Block     	| $SS_B: a\sum (\bar X_j - \bar{\bar{X}})^2$                            	| b - 1          	| MST_B = SS_B/(b - 1)                           	|
+| Error     	| $SS_E: \sum^{ab} (X_{ij} - \bar{X_i} - \bar{X_j} + \bar{\bar{X}})^2$ 	| (a - 1)(b - 1) 	| $MSE = \frac{SSE}{(a - 1)(b - 1)}$                     	|
+| Total     	| $SS: SS_A + SS_B + SS_E$                                              	| ab - 1         	| $F_{\alpha, a-1, b-1} = \frac{MST_{A or B}}{MSE}$ 	|
+
+---
+
+class: small
+
+Q. Students' GPA in three majors were recorded in the following table. Does the GPA associate with majors?
+
+| Major 	| Poli Sci 	| Sociology 	| Psychology 	|
+|-------	|----------	|-----------	|------------	|
+| A+    	| 41       	| 45        	| 51         	|
+| A     	| 36       	| 38        	| 45         	|
+| B+    	| 27       	| 33        	| 31         	|
+| B     	| 32       	| 29        	| 35         	|
+| C+    	| 26       	| 21        	| 32         	|
+| C     	| 23       	| 25        	| 27         	|
+
+$H_0: \mu_{PS} = \mu_{SO} = \mu_{PY}.$
+
+$H_1: \mu_{PS} \neq \mu_{SO} \neq \mu_{PY}.$
+
+---
+
+class: small
+
+| Major 	| Poli Sci 	| Sociology 	| Psychology 	|
+|-------	|----------	|-----------	|------------	|
+| A+    	| 41       	| 45        	| 51         	|
+| A     	| 36       	| 38        	| 45         	|
+| B+    	| 27       	| 33        	| 31         	|
+| B     	| 32       	| 29        	| 35         	|
+| C+    	| 26       	| 21        	| 32         	|
+| C     	| 23       	| 25        	| 27         	|
+
+$\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83$;
+$\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.$
+$\bar{\bar{X}} = 33.72$
+
+---
+
+class: small
+
+$\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83$;
+$\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.$
+$\bar{\bar{X}} = 33.72$
+
+
+For factor A (major), $SS_A = 6\times [(30.8 - 33.72)^2 + (33.5 - 33.72)^2 + (36.83 - 33.72)^2] = 109.48$
+
+$MSA = SS_A/(a - 1) = 109.48/(3 - 1)$
+
+For factor B (GPA), $SS_B = 3\times [(45.67 - 33.72)^2 + \dots + (25 - 33.72)^2] = 854.94$
+
+$MSB = 854.94 / (6 - 1)$
+
+$SST = \sum^a\sum^b(X_{ij} - \bar{\bar{X}})^2 = 1015.61$
+$SSE = SST - SS_A - SS_B = 52.2$
+
+Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}$ is 10.4 > critical F `r qf(.975, 2, 10)`, reject $H_0$.

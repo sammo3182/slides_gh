@@ -1,0 +1,303 @@
+---
+title: "Simple OLS and Properties of Estimators"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, # dependency
+  descr, stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+class: inverse, bottom
+
+# Understanding OLS
+## Theoretical and Methodological Views
+
+---
+
+## Theory
+
+General statement to describe causality and relevant phenomena.
+
+### Good theory
+
+1. Large explanatory power
+    + Importance: How much X affects Y
+    + Range: generality
+    + Applicability: How often affecting in the reality
+1. Parsimony
+1. Satisfying elaboration
+1. Clearly framed (formal?)
+1. Falsifiable
+1. Explaining important phenomena
+1. Prescriptive richness (and policy recommendation)
+
+---
+
+## Conspiracy
+
+.center[<img src="../../guestLecture/image/currencyWars.jpg" height = 380 />]
+
+What makes a conspiracy different from a theory? 
+
+???
+
+Rothschild family
+
+---
+
+class: small
+
+## How to Test a Theory (Causal Inference)
+
+1. Hoop tests: Predictions of high certitude and no uniqueness provide decisive negative test
+1. Smoking-gun tests: Predictions of high uniqueness and no certitude provide decisive positive tests:
+1. Double-decisive tests: Predictions of high uniqueness and high certitude
+1. Straw-in-the-wind tests: Predictions of low uniqueness and low certitude
+
+(Evera, Stephen Van. 1997. Guide to Methods for Students of Political Science. Ithaca: Cornell University Press.)
+
+???
+
+1. Hoop test: the accused in the state when murder happens? If not innocent, but passing does not mean being guilty.
+1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
+1. Double-decisive test: hoop + smoking-gun, like a camera record
+1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
+
+---
+
+## Ordinary Least Squares
+
+One type of simulation of the reality (and one of a variety of types).
+
+.red[NOT OFFERING CAUSALITY.]
+
+### Used it properly
+
+1. Always getting attention to the detailed data
+1. Don't let the data drive you, you drive the data with appropriate methods.
+
+---
+
+## What We Already Know
+
+* Population vs. sample
+
+--
+
+* Parameter vs. statistics
+
+--
+
+* Random variable 
+
+???
+
+a variable following a distributive feature, but no fixed value before creation.
+
+--
+
+* Distribution
+
+???
+
+For each value of a random variable X, the distribution tells us the probability of that value.
+
+--
+
+* Joint, marginal, and conditional distributions
+
+???
+
+Joint: $f(X_1, X_2) = P(X_1 = x_1, X_2 = x_2)$
+Marginal: the integral of $f(X_1) or f(X_2)$ to the other variable
+Conditional: $f(X_1|X2 = x_2)$
+
+---
+
+* Expectation:
+
+\begin{align}
+E(X)_{discrete} =& \sum^n_{i = 1} X_if(X_i)\\
+E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX.
+\end{align}
+
+* Variance:
+
+\begin{align}
+\sigma^2 = E[X - E(X)]^2 =& E[(X - \mu)^2]\\
+              =& E(X^2 - 2X\mu + \mu^2)\\
+              =& E(X^2) - 2\mu E(X) + \mu^2\\
+              =& E(X^2) - \mu^2
+\end{align}
+
+???
+
+Expectation is the mean.
+
+---
+
+class: small
+
+### Rule of variance
+
+1. $var(aX + b) = a^2var(X);$
+1. $var(aX_1 + bX_2 + c) = a^2var(X_1) + b^2var(X_2) + 2ab\cdot cov(X_1, X_2).$
+1. When $X_i$ is i.i.d., 
+$var(a1X_1 + a_2X_2 + \cdots + a_nX_n) = var(\sum a_iX_i) = \sum a_i^2var(X_i)$
+1. $var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$
+1. $cov(X, Y) = E(XY) - E(X)E(Y)$
+    + When X = Y, $cov(X, X) = E(X^2) - [E(X)]^2 = var(X)$
+
+
+???
+\begin{align}
+var(aX + b) =& E[(aX + b) - E(aX + b)]^2\\
+            =& E[aX + b - aE(X) - b]^2\\
+            =& E[aX - aE(X)]^2 = a^2E[X - E(X)]^2 = a^2var(X)
+\end{align}
+
+\begin{align}
+cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
+          =& E[XY - XE(Y) - YE(X) + E(X)E(Y)]\\
+          =& E(XY) - E(Y)E(X) - E(X)E(Y) + E(X)E(Y)\\
+          =& E(XY) - E(X)E(Y)
+\end{align}
+
+
+---
+
+## Property of Estimator $\hat \theta$
+
+* Unbiased: On average, the estimator gives the right answer, formally, $E(\hat\sigma) = \sigma.$
+* Consistent: As the sample size increases, the variance decreases.
+
+```{r consistency, fig.height=4, fig.width=10}
+ggplot(data.frame(x = c(0, 40)), aes(x = x)) +
+  stat_function(fun = function(x) dgamma(x, shape = 9, scale = .5), aes(color = "n1")) +
+  stat_function(fun = function(x) dgamma(x, shape = 9, scale = 1), aes(color = "n2")) +
+  stat_function(fun = function(x) dgamma(x, shape = 9, scale = 2), aes(color = "n3")) +
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = "Distribution")
+```
+
+???
+
+Consistency: n1 < n2 < n3
+
+---
+
+* Efficiency: Smallest variance among unbiased estimators
+
+```{r efficacy, fig.height=4, fig.width=10}
+ggplot(data.frame(x = c(-7, 7)), aes(x = x)) +
+  stat_function(fun = function(x) dnorm(x, mean = 0, sd = 0.5), aes(color = "n1")) +
+  stat_function(fun = function(x) dnorm(x, mean = 0, sd = 1), aes(color = "n2")) +
+  stat_function(fun = function(x) dnorm(x, mean = 0, sd = 2), aes(color = "n3")) +
+  ylab("Probability Density") + 
+  xlab("X") +
+  labs(color = "Distribution")
+```
+
+* RMES: Root mean square error, $\sqrt{bias^2 + var}$
+    + Trade off a little bias against variance.
+
+---
+
+class: inverse, bottom
+
+# Regression
+## Getting the mean right is a good thing
+---Frederick J. Boehmke
+
+---
+
+## What Does Regressions Deal with?
+
+How does some outcome variable Y change with some explanatory variable X? 
+
+E.g., Are the political ideology of the three types of voters different? 
+
+$\mu_D = \mu_I = \mu_R.$
+
+$\text{diff} = \frac{\bar X_R - \bar X_D}{SE}.$
+
+???
+
+<img src="images/illustrateSimpleOLS.png" height = 200 />
+
+---
+
+## Linearity
+
+Y changes linearly with X.
+
+In terms of the population regression function,
+
+$$Y_i = \beta_0 + \beta_1X_1 + u_i$$
+
+Therefore, 
+
+\begin{align}
+E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + u_i|X_i)\\
+           =& E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i)\\
+           =& \beta_0 + \beta_1X_i + E(u_i|X_i)
+\end{align}
+
+???
+
+$\beta_1X_i$ consistent
+
+E(u_i|X_i) assumed 0
+
+---
+
+Q. Which one shows a linear relationship between X and Y?
+
+\begin{align}
+Y_i =& \beta_0 + \beta_1X_i + ui\\
+Y_i =& \beta_0 + \frac{\beta_1}{X_i} + ui\\
+Y_i =& \beta_0 + \beta_1ln(X_i) + ui\\
+Y_i =& \beta_0 + X_i^{\beta_1} + ui\\
+Y_i =& \frac{1}{\beta_0} + \frac{X_i}{\beta_1} + ui
+\end{align}
+
+???
+
+First three are linear.
+
+The last one isn't linear until redefining.
+
+---
+
+\begin{align}
+Y_i =& E(Y_i|X_i) + u_i\\
+\Leftrightarrow u_i =& Y_i - E(Y_i|X_i)
+\end{align}
+
+There are things we don't know (or human errors).
