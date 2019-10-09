@@ -237,7 +237,7 @@ class: inverse, bottom
 
 ---
 
-## What Does Regressions Deal with?
+## What Do Regressions Deal with?
 
 How does some outcome variable Y change with some explanatory variable X? 
 
@@ -301,3 +301,132 @@ Y_i =& E(Y_i|X_i) + u_i\\
 \end{align}
 
 There are things we don't know (or human errors).
+
+---
+
+## What Do Regressions Do?
+
+Sample regression function: 
+
+\begin{align}
+Y_i =& \hat\beta_0 + \hat\beta_1X_i + \hat u_i\\
+    =& \hat Y_i + \hat u_i
+\end{align}
+
+--
+
+### Goal
+
+To get the right mean, $\sum|\hat u_i| = 0$, then minimze $\sum|Y_i - \hat Y_i|$ (or $\sum|Y_i - (\hat\beta_0 + \hat\beta_1X_i)|$)
+
+---
+
+Since $|\hat u_i|$ is hard to be coped with, thus using $\hat u^2$. 
+
+### Goal changes
+
+Minimizing $|\hat u_i|$ &zigrarr; Minimizing $\hat u^2$ &zigrarr; Minimizing $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2$
+
+---
+
+class: small
+
+## How to Minimizing?
+
+\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
+\Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =& 0\\
+\sum Y_i =& \sum\hat\beta_0 + \sum\hat\beta_1X_i\\
+                         =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\hat\beta_0 =& \frac{\sum Y_i}{n} - \hat\beta_1\frac{\sum X_i}{n}\\
+                        =& \bar Y - \hat\beta_1\bar X
+\end{align}
+
+---
+
+class: small
+
+First, there's a fact; $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
+
+Proof: 
+
+\begin{align}
+\sum X_i(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
+                       =& \sum X_i(Y_i - \bar Y) - \bar X(\sum Y_i - \sum\bar Y)\\
+                       =& \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
+                       =& \sum X_i(Y_i - \bar Y)
+\end{align}
+
+---
+
+class: small
+
+\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} =& -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i)\\
+=& 0\\
+\Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =& 0\\
+\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2\\
+\sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =& 0\\
+\sum X_iY_i - \sum X_i\bar Y + \sum X_i\hat\beta_1\bar X - \sum\hat\beta_1 X_1^2 =& 0\\
+\sum X_i(Y_i - \bar Y) + \hat\beta_1\sum X_i(\bar X - X_i) =& 0\\
+\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X)
+\end{align}
+
+Given we know that $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y),$
+
+\begin{align}
+\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X)\\
+\sum (X_i - \bar X)(Y_i - \bar Y) =& \hat\beta_1\sum (X_i - \bar X)(X_i - \bar X)\\
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}.
+\end{align}
+
+---
+
+Btw, these equations 
+
+$\hat\beta_0, \hat\beta_1$ are called as coefficients;
+
+\begin{align}
+\sum Y_i =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
+\end{align}
+
+are called "normal equations."
+
+---
+
+class: small
+
+## Coefficient and Covariance
+
+\begin{align}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
+        =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2}\sqrt{\sum (Y_i - \bar Y)^2}}\cdot\frac{\sqrt{\sum (Y_i - \bar Y)^2}}{\sqrt{\sum (X_i - \bar X)^2}}\\
+        =& \rho_{X, Y}\frac{s_Y}{s_X}
+\end{align}
+
+So when the variance of Y increases, $\beta_1$ increases.
+
+--
+
+.magenta[Special case]: Standardized X and Y, i.e., $s_Y, s_X$ are 1s, then,
+
+$$\beta_1 = \rho_{X, Y}\frac{s_Y}{s_X} = \rho_{X,Y}.$$
+
+---
+
+class: small
+
+## Back to Linearity
+
+Remember $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
+
+\begin{align}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)Y_i\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + u_i)\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)u_i]\\
+            =& \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}
+\end{align}
+
+Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i$, i.e., a linear combination of errors; the min/max(X) influences the estimation a lot.
