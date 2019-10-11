@@ -279,7 +279,7 @@ There are things we don't know (or human errors).
 
 ## What Do Regressions Do?
 
-Sample regression function: 
+Sample regression function (SRF): 
 
 `\begin{align}
 Y_i =&amp; \hat\beta_0 + \hat\beta_1X_i + \hat u_i\\
@@ -403,6 +403,81 @@ Remember `\(\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).\)`
 \end{align}`
 
 Let `\(k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},\)` then `\(\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i\)`, i.e., a linear combination of errors; the min/max(X) influences the estimation a lot.
+
+---
+
+class: small
+
+## Feature of Regression Coefficients
+
+1. Calculated using observed data
+1. Unique point estimates
+1. SRF passes through `\((\bar X, \bar Y)\)`
+1. `\(\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})\)`, `\(\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}\)`
+1. `\(\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0\\\)`, Proof:
+`\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} = -2\sum(Y_i - \hat{\beta_0} - \hat{\beta_1}X_i) =&amp; 0\\
+\sum (Y_i-\hat Y_i) =&amp; 0\\
+\sum{\hat u_i} =&amp; 0\\
+\Rightarrow \frac{\sum{\hat u_i}}{n} = \bar{\hat u_i} =&amp; 0
+\end{align}`
+1. `\(\sum X_i\hat u_i = cov(X_i, u_i) = 0\)`
+
+???
+
+`\begin{align}
+\sum X_i\hat u_i =&amp; \frac{\sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})}{n} = cov(X_i, u_i)\\
+                 =&amp; \sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})\\
+                 =&amp; \sum [X_i (\hat u_i - \bar{\hat u_i}) - \bar X(\hat u_i - \bar{\hat u_i})]\\
+                 =&amp; \sum X_i (\hat u_i - \bar{\hat u_i}) - \sum\bar X(\hat u_i - \bar{\hat u_i})\\
+                 =&amp; \sum [X_i\hat u_i - X_i\bar{\hat u_i}] - \sum\bar X(\hat u_i - \bar{\hat u_i})\\
+                 =&amp; \sum X_i\hat u_i - \sum\bar X\hat u_i + \sum\bar{\hat u_i} \\
+                 =&amp; \sum X_i\hat u_i - n\bar X\sum\hat u_i + \sum\bar{\hat u_i}
+\end{align}`
+
+---
+
+class: small
+
+## Standard Error of OLS Estimators
+
+`\begin{align}
+\sigma^2 =&amp; var(u_i|X)\\
+         =&amp; var(Y_i - \hat\beta_0 - \hat\beta_1X_i|X)\\
+         =&amp; \frac{\sum(\hat u_i^2)}{n - 2}\\
+         =&amp; \hat\sigma^2
+\end{align}`
+
+n - 2: `\(\hat\beta_0, \hat\beta_1\)`
+---
+
+`\begin{align}
+var(\hat \beta_1|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
+                  =&amp; var(\beta_1\sum k_iX_i + \sum k_iu_i|X)\\
+                  =&amp; var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{is constant}\\
+                  =&amp; \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
+                  =&amp; \sum k_i^2 var(u_i|X)\\
+                  =&amp; \sum[\frac{X_i - \bar X}{\sum (X_i - \bar X)^2}]^2\sigma^2\\
+                  =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum (X_i - \bar X)^2]^2}\sigma^2 = \frac{\sigma^2}{\sum (X_i - \bar X)^2}
+\end{align}`
+
+If `\(u_i\)` is not independent, then `\(cov(k, u) &gt; 0\)`, and thus this estimator is underestimated.
+
+---
+
+class: small
+
+`\begin{align}
+var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X)\\
+                   =&amp; var[\frac{\sum(\beta_0 + \beta_1X_i + u_i)}{n} - \hat\beta_1\bar X|X]\\
+                  =&amp; var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X), \beta_0 + \beta_1X_i\text{constant and two parts indp}\\
+                  =&amp; var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X)\\
+                  =&amp; \frac{var(\sum u_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X)\\
+                  =&amp; \frac{n\sigma^2}{n^2} + \frac{\bar X^2\sigma^2}{\sum (X_i - \bar X)^2}\\
+                  =&amp; \sigma^2[\frac{1}{n} + \frac{\bar X^2}{\sum (X_i - \bar X)^2}]\\
+                  =&amp; \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]\\
+                  =&amp; \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
+\end{align}`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>

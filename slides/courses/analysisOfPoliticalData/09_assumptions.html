@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Gauss-Markov Theorem</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Gauss-Markov Theorem
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+
+class: inverse, bottom
+
+# Gauss-Markov Theorem
+
+---
+
+class: small
+
+## Classic Linear Regression Model (CLRM)
+
+1. Linearity in the parameter
+1. Nonstochastic X ("given X," a.k.a., "X is fixed")
+1. Mean zero errors ($E(u_i|X_i) = 0$)
+1. Homoskedasticity (constant variance of `\(u_i, var(u_i|X) = \sigma^2\)`)
+1. No autocorrelation ($E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$)
+1. Identification (N &gt; K; K = 2 for a simple OLS)
+1. X has positive noninfinite variance ($var(X)$)
+1. Correct specification
+1. No perfect collinearity (when there are more than one X, `\(\nexists X_{i} s.t., X_{i} = a + b\sum_{j = 1}b_jX_j\)`)
+1. No covariance between `\(x_i\)` and `\(u_i\)` ($E(X_iu_i) = cov(x_i, u_i) 0$)
+
+
+???
+
+s.t. such that
+
+---
+
+## What CLRM Assumptions Give US
+
+`\(\hat\beta_0 + \hat\beta_1\)` are unbiased, conssitant, and efficient among the class of linear estimations.
+
+--
+
+This is know as "Gauss–Markov Theorem":
+
+In a linear regression model in which the errors are uncorrelated, have equal variances and expectation value of zero, the .magenta[best linear unbiased estimator (BLUE)] of the coefficients is given by the ordinary least squares (OLS) estimator, provided it exists.
+
+---
+
+.center[&lt;img src="images/blue.gif" height = 200 /&gt;]
+
+---
+
+class: small
+
+## Unbiasedness
+
+`\(E(\hat\beta_1|X) = \beta_1\)`
+
+Proof:
+
+`\begin{align}
+E(\hat\beta_1|X) =&amp; E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X]\\
+                 =&amp; \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X)\\
+                 =&amp; \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + u) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X)\\
+                 =&amp; \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)]\\
+                 =&amp; \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0\\
+                 =&amp; \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1
+\end{align}`
+
+---
+
+class: small
+
+## Consistency
+
+1. `\(var(\beta_1) = \frac{\sigma^2}{\sum (X_i - \bar X)^2}\)`. So when N increases, `\(\sum (X_i - \bar X)^2\)` increases. It results `\(var(\beta_1)\)` decreasing
+    + `\(\displaystyle{\lim_{n\to\infty}} var(\beta_1) = 0.\)`
+1. `\(var(\hat \beta_0|X) =\sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}=\sigma^2\frac{\sum X_i^2}{n\sum X_i^2 - n\bar X^2}\)`
+    + When there's a `\(X_{n + 1}\)`, the nominator `\(\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2)\)`; the denominator `\((n + 1)\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2) - (n + 1)\bar X^2\)`
+    + The denominator increases quicker than the nominator.
+
+---
+
+# Distribution
+
+For a classic normal linear regression model:
+
+`\begin{align}
+u_i\sim&amp; \text{i.i.d.} N(0, \sigma^2)\\
+\hat\beta_1\sim&amp; N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
+\hat\beta_0\sim&amp; N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
+\end{align}`
+
+Let's standardize the variances: 
+
+---
+
+`\begin{align}
+\frac{\hat\beta_1 - \beta_1}{\sqrt{\frac{\hat\sigma^2}{\sum (X_i - \bar X)^2}}}\sim&amp; N(0, 1^2)\\
+\frac{\hat\beta_0 - \beta_0}{\sqrt{\frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2}}}\sim&amp; N(0, 1^2)\\
+\frac{\hat\sigma^2}{\frac{\sigma^2}{n - 2}}\sim&amp; \chi^2_{n - 2}
+\end{align}`
+
+---
+
+![](09_assumptions_files/figure-html/chisq-1.png)&lt;!-- --&gt;
+
+&amp;chi;&lt;sup&gt;2&lt;/sup&gt;: adding up n squared normals, using to test the variance.
+
+---
+
+class: inverse, bottom
+
+# OLS in Matrix
+
+---
+
+## From Elementary to Linear
+
+### Elementary Algebra
+
+`\(Y_i = \beta_0 + \beta_iX_i + \epsilon_i\)`
+
+### Linear Algebra
+
+`\begin{align}
+\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{\epsilon}\\
+\left(Y_1\\
+Y_2\\
+\vdots\\
+Y_n\right)=&amp;
+\end{align}`
+
+
+---
+
+class: inverse, bottom
+
+# OLS vis-&amp;aacute;-vis ANOVA
+
+---
+
+class: small
+
+## Revisiting ANOVA
+
+| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------	|-------	|----------------------------------	|
+| Treat 	| `\(SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2\)` 	| K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| `\(SSE = \sum \sum (X_{ik} - \bar{X_i})^2\)`      	| N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| `\(SS = SST + SSE\)`                              	| N - 1 	| `\(F_{\alpha, K-1, N-1} = MST/MSE\)` 	|
+
+`$$F_{\alpha, K-1, N-1} = MST/MSE$$`
+
+---
+
+## ANOVA in Terms of Regression
+
+|      	| `\(\sum(Y_i - \bar Y)^2\)`               	| `\(= \hat\beta_1^2(X_i - \bar X)^2\)`          	| `\(+ \sum\hat u_i^2\)`             	|
+|------	|--------------------------------------	|--------------------------------------------	|--------------------------------	|
+|      	| SST                                  	| SSE                                        	| SSR                            	|
+| d.f. 	| n - 1                                	| 1                                          	| n - 2                          	|
+| MSS  	| `\(\frac{\sum(Y_i - \bar Y)^2}{n - 1}\)` 	| `\(\frac{\hat\beta_1^2\sum(X_i - \bar X)}{1}\)` 	| `\(\frac{\sum\hat u_i^2}{n - 2}\)` 	|
+
+`\(\frac{MSS_{SSE}}{MSS_{SSR}} = \frac{\hat\beta_1^2(X_i - \bar X)^2\sim\chi^2}{\sigma^2\sim\chi^2}\sim F_{1, n - 2}\)`
+
+???
+
+n-1: Used out 1 to calculate `\(\bar Y\)`;
+1: The only thing varies is `\(\hat\beta_1\)`;
+n-2: Used out to calculate `\(\hat\beta_0, \hat\beta_1\)`.
+
+F is the ratio of `\(\chi^2\)`s. 
+
+---
+
+class: small
+
+`\begin{align}
+E[\hat\beta_1^2\sum(X_i - \bar X)|X] =&amp; E\{[\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}]\sum(X_i - \bar X)^2\}\\
+=&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}E[(\sum(X_i - \bar X)(Y_i - \bar Y))^2|X]\\
+=&amp; \frac{E\{[\sum(X_i - \bar X)Y_i]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\sum(X_i - \bar X)(\beta_0 + \beta_1X_i + u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\sum(X_i - \bar X)(\beta_1X_i + u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\beta_1\sum(X_i - \bar X)X_i + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\beta_1\sum(X_i - \bar X)(X_i - \bar X) + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=&amp; \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}
+\end{align}`
+
+???
+
+nominator transformation
+
+Ignore `\(\beta_0\)` for now
+
+---
+
+class: small
+
+`\begin{align}
+=&amp; \frac{1}{\sum(X_i - \bar X)^2}\{E\{[\beta_1\sum(X_i - \bar X)^2]^2|X\} + E\{[\sum(X_i - \bar X)u_i)]^2|X\}\}\\
+&amp;+ E\{2\beta_1\sum(X_i - \bar X)^2\sum(X_i - \bar X)u_i)|X\}\\
+=&amp; \frac{1}{\sum(X_i - \bar X)^2}\{[\beta_1\sum(X_i - \bar X)^2]^2 + E\{[\sum(X_i - \bar X)u_i)]^2|X\}\\
+&amp;+ 2\beta_1\sum(X_i - \bar X)^2\sum(X_i - \bar X)E(u_i|X)\}\\
+=&amp; \frac{[\beta_1\sum(X_i - \bar X)^2]^2 + \sum(X_i - \bar X)^2\sigma^2 + 0}{\sum(X_i - \bar X)^2}\\
+=&amp; \beta_1^2\sum(X_i - \bar X)^2 + \sigma^2
+\end{align}`
+
+Then `\(F_{1, n - 2}\sim\frac{\hat\beta_1^2(X_i - \bar X)^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2 + \sigma^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2} + 1\)`
+
+Thus `\(F_{1, n - 2}\sim\frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}=\frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = [\frac{\beta_1}{\sqrt{\frac{\sigma^2}{\sum(X_i - \bar X)^2}}}]^2 = (\frac{\bar X - \mu}{\hat\sigma_X})^2\)`
+
+As known, `\(\frac{\bar X - \mu}{\hat\sigma_X}\sim t\)`, therefore, F provides identical information as t.
+
+???
+
+\beta_1\sum(X_i - \bar X)^2]^2, constant
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

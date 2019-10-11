@@ -1,0 +1,253 @@
+---
+title: "Gauss-Markov Theorem"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, # dependency
+  descr, stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+class: inverse, bottom
+
+# Gauss-Markov Theorem
+
+---
+
+class: small
+
+## Classic Linear Regression Model (CLRM)
+
+1. Linearity in the parameter
+1. Nonstochastic X ("given X," a.k.a., "X is fixed")
+1. Mean zero errors ($E(u_i|X_i) = 0$)
+1. Homoskedasticity (constant variance of $u_i, var(u_i|X) = \sigma^2$)
+1. No autocorrelation ($E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$)
+1. Identification (N > K; K = 2 for a simple OLS)
+1. X has positive noninfinite variance ($var(X)$)
+1. Correct specification
+1. No perfect collinearity (when there are more than one X, $\nexists X_{i} s.t., X_{i} = a + b\sum_{j = 1}b_jX_j$)
+1. No covariance between $x_i$ and $u_i$ ($E(X_iu_i) = cov(x_i, u_i) 0$)
+
+
+???
+
+s.t. such that
+
+---
+
+## What CLRM Assumptions Give US
+
+$\hat\beta_0 + \hat\beta_1$ are unbiased, conssitant, and efficient among the class of linear estimations.
+
+--
+
+This is know as "Gauss–Markov Theorem":
+
+In a linear regression model in which the errors are uncorrelated, have equal variances and expectation value of zero, the .magenta[best linear unbiased estimator (BLUE)] of the coefficients is given by the ordinary least squares (OLS) estimator, provided it exists.
+
+---
+
+.center[<img src="images/blue.gif" height = 200 />]
+
+---
+
+class: small
+
+## Unbiasedness
+
+$E(\hat\beta_1|X) = \beta_1$
+
+Proof:
+
+\begin{align}
+E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X]\\
+                 =& \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X)\\
+                 =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + u) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X)\\
+                 =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)]\\
+                 =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0\\
+                 =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1
+\end{align}
+
+---
+
+class: small
+
+## Consistency
+
+1. $var(\beta_1) = \frac{\sigma^2}{\sum (X_i - \bar X)^2}$. So when N increases, $\sum (X_i - \bar X)^2$ increases. It results $var(\beta_1)$ decreasing
+    + $\displaystyle{\lim_{n\to\infty}} var(\beta_1) = 0.$
+1. $var(\hat \beta_0|X) =\sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}=\sigma^2\frac{\sum X_i^2}{n\sum X_i^2 - n\bar X^2}$
+    + When there's a $X_{n + 1}$, the nominator $\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2)$; the denominator $(n + 1)\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2) - (n + 1)\bar X^2$
+    + The denominator increases quicker than the nominator.
+
+---
+
+# Distribution
+
+For a classic normal linear regression model:
+
+\begin{align}
+u_i\sim& \text{i.i.d.} N(0, \sigma^2)\\
+\hat\beta_1\sim& N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
+\hat\beta_0\sim& N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
+\end{align}
+
+Let's standardize the variances: 
+
+---
+
+\begin{align}
+\frac{\hat\beta_1 - \beta_1}{\sqrt{\frac{\hat\sigma^2}{\sum (X_i - \bar X)^2}}}\sim& N(0, 1^2)\\
+\frac{\hat\beta_0 - \beta_0}{\sqrt{\frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2}}}\sim& N(0, 1^2)\\
+\frac{\hat\sigma^2}{\frac{\sigma^2}{n - 2}}\sim& \chi^2_{n - 2}
+\end{align}
+
+---
+
+```{r chisq, fig.width=10, fig.height=6}
+ggplot(data.frame(x = c(0, 10)), aes(x = x)) +
+  stat_function(fun = function(x) dchisq(x, df = 2), aes(colour = "2")) +
+  stat_function(fun = function(x) dchisq(x, df = 4), aes(colour = "4")) +
+  stat_function(fun = function(x) dchisq(x, df = 6), aes(colour = "6")) +
+  ylab("Probability Density") + 
+  xlab("") +
+  labs(color = "d.f.")
+```
+
+&chi;<sup>2</sup>: adding up n squared normals, using to test the variance.
+
+---
+
+class: inverse, bottom
+
+# OLS in Matrix
+
+---
+
+## From Elementary to Linear
+
+### Elementary Algebra
+
+$Y_i = \beta_0 + \beta_iX_i + \epsilon_i$
+
+### Linear Algebra
+
+\begin{align}
+\boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{\epsilon}\\
+\left(Y_1\\
+Y_2\\
+\vdots\\
+Y_n\right)=&
+\end{align}
+
+
+---
+
+class: inverse, bottom
+
+# OLS vis-&aacute;-vis ANOVA
+
+---
+
+class: small
+
+## Revisiting ANOVA
+
+| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------	|-------	|----------------------------------	|
+| Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-1} = MST/MSE$ 	|
+
+$$F_{\alpha, K-1, N-1} = MST/MSE$$
+
+---
+
+## ANOVA in Terms of Regression
+
+|      	| $\sum(Y_i - \bar Y)^2$               	| $= \hat\beta_1^2(X_i - \bar X)^2$          	| $+ \sum\hat u_i^2$             	|
+|------	|--------------------------------------	|--------------------------------------------	|--------------------------------	|
+|      	| SST                                  	| SSE                                        	| SSR                            	|
+| d.f. 	| n - 1                                	| 1                                          	| n - 2                          	|
+| MSS  	| $\frac{\sum(Y_i - \bar Y)^2}{n - 1}$ 	| $\frac{\hat\beta_1^2\sum(X_i - \bar X)}{1}$ 	| $\frac{\sum\hat u_i^2}{n - 2}$ 	|
+
+$\frac{MSS_{SSE}}{MSS_{SSR}} = \frac{\hat\beta_1^2(X_i - \bar X)^2\sim\chi^2}{\sigma^2\sim\chi^2}\sim F_{1, n - 2}$
+
+???
+
+n-1: Used out 1 to calculate $\bar Y$;
+1: The only thing varies is $\hat\beta_1$;
+n-2: Used out to calculate $\hat\beta_0, \hat\beta_1$.
+
+F is the ratio of $\chi^2$s. 
+
+---
+
+class: small
+
+\begin{align}
+E[\hat\beta_1^2\sum(X_i - \bar X)|X] =& E\{[\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}]\sum(X_i - \bar X)^2\}\\
+=& \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}E[(\sum(X_i - \bar X)(Y_i - \bar Y))^2|X]\\
+=& \frac{E\{[\sum(X_i - \bar X)Y_i]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\sum(X_i - \bar X)(\beta_0 + \beta_1X_i + u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\sum(X_i - \bar X)(\beta_1X_i + u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\beta_1\sum(X_i - \bar X)X_i + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\beta_1\sum(X_i - \bar X)(X_i - \bar X) + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
+=& \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}
+\end{align}
+
+???
+
+nominator transformation
+
+Ignore $\beta_0$ for now
+
+---
+
+class: small
+
+\begin{align}
+=& \frac{1}{\sum(X_i - \bar X)^2}\{E\{[\beta_1\sum(X_i - \bar X)^2]^2|X\} + E\{[\sum(X_i - \bar X)u_i)]^2|X\}\}\\
+&+ E\{2\beta_1\sum(X_i - \bar X)^2\sum(X_i - \bar X)u_i)|X\}\\
+=& \frac{1}{\sum(X_i - \bar X)^2}\{[\beta_1\sum(X_i - \bar X)^2]^2 + E\{[\sum(X_i - \bar X)u_i)]^2|X\}\\
+&+ 2\beta_1\sum(X_i - \bar X)^2\sum(X_i - \bar X)E(u_i|X)\}\\
+=& \frac{[\beta_1\sum(X_i - \bar X)^2]^2 + \sum(X_i - \bar X)^2\sigma^2 + 0}{\sum(X_i - \bar X)^2}\\
+=& \beta_1^2\sum(X_i - \bar X)^2 + \sigma^2
+\end{align}
+
+Then $F_{1, n - 2}\sim\frac{\hat\beta_1^2(X_i - \bar X)^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2 + \sigma^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2} + 1$
+
+Thus $F_{1, n - 2}\sim\frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}=\frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = [\frac{\beta_1}{\sqrt{\frac{\sigma^2}{\sum(X_i - \bar X)^2}}}]^2 = (\frac{\bar X - \mu}{\hat\sigma_X})^2$
+
+As known, $\frac{\bar X - \mu}{\hat\sigma_X}\sim t$, therefore, F provides identical information as t.
+
+???
+
+\beta_1\sum(X_i - \bar X)^2]^2, constant
