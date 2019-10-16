@@ -1,0 +1,81 @@
+---
+title: "Model Specification"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+## Misspecification
+
+If the true model is $Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$, but we specify it as $Y_i = \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i$, how does $\tilde\beta_1$ compare to $\beta_1$?
+
+---
+
+## &beta;
+
+\begin{align}
+Y_i =& \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i\\
+Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u)\\
+(Y_i -\bar Y)(X_1 - \bar X_1) =& \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1) + (u_i - \bar u)(X_1 - \bar X_1)\\
+\text{Sum it up,} \frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =& \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\
+\text{That is, } \tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},
+\end{align}
+
+where $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$.
+
+---
+
+\begin{align}
+E(\tilde\beta_1|X_1) =& E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1]\\
+                     =& \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1)\\
+                     =& \hat\beta_1 + \hat\beta_2\delta_1
+\end{align}
+
+Accordingly, if &delta; = 0, $X_1 = \delta_0 + r$, the model may increase the risk of Type I error; otherwise, the model missing a variable will always produce an biased estimation unless X<sub>2</sub> is an irrelevant variable.
+
+---
+
+class: small
+
+## Error
+
+$$Y_i = \beta_0 + \beta_1X_{1} + \epsilon, \epsilon = \beta_2X_{2} + u_i$$
+
+Then, 
+
+* $E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0.$
+* $var(\epsilon|X_1) = var(\beta_2X_{2} + u_i|X_1) = \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2$
+    + All values are fixed, that is, still homoscedasiticity.
+* 
+\begin{align}
+E(\epsilon_i\epsilon_j|X_1) - E(\epsilon_i|X_1)E(\epsilon_j|X_1) =& E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)|X_1] - \beta_2^2\mu^2_{X_2}\\
+=& E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j|X_1) - \beta_2^2\mu^2_{X_2}\\
+=& \beta_2^2E(X_{2i}X_{2j}|X_1) - \beta_2^2\mu^2_{X_2}\\
+=& \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2} = \beta_2^2cov(X_{2i}, X_{2j}).
+\end{align}
+    + Only when $\beta_2^2cov(X_{2i}, X_{2j}) = 0$ (which is often not) there's no autocorrelation
+
+
+---
+
+* 
+\begin{align}
+E(X_1u) =& E[X_1(\beta_2X_2 + u)]\\
+        =& E(X_1\beta_2X_2) + E(X_1u)\\
+        =& \beta_2E(X_1X_2)\\
+        =& \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}]\\
+When cov(X_1,X_2)\neq 0 \neq& 0.
+\end{align}
+    + Increase the difficulty to isolate X from u

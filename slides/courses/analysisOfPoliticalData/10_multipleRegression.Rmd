@@ -1,0 +1,395 @@
+---
+title: "Multiple Regression"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable,
+  knitr, # dependency
+  descr, stringr, broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+class: inverse, bottom
+
+# Regression with More than Two Xs
+
+---
+
+## Multiple Regression
+
+* Population Regression Function (PRF): $Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$
+    + According to CLRM: $E[u_i|\boldsymbol{X}] = 0.$
+
+* Sample Regression Function (SRF): $Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i$
+
+--
+
+### Terminology
+
+Multiple regression vs. multivariate regression vs. multivariate analysis
+
+---
+
+## Goal
+
+$min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat u_i^2\Rightarrow$
+
+\begin{align}
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_0}\to& 0\\
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_1}\to& 0\\
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_2}\to& 0
+\end{align}
+
+---
+
+class: small
+
+When the goal is achieved,
+
+\begin{align}
+\hat\beta_0 =& \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
+\hat\beta_1 =& \frac{[\sum(Y_i - \bar Y)(X_{1i} - \bar X_1)][\sum(X_{2i} - \bar X_2)^2-\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
+            =& \frac{\sum\hat r_{1i}(Y_i - \bar Y)}{\hat r_{1i}^2},
+\end{align}
+
+where $\hat r_{1i}$ are the errors from the regression of $X_{1i}$ on $X_{2i}$ (i.e., $X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$), the proportion that $X_2$cannot explain.
+
+$\hat\sigma^2 = \frac{\sum\hat u_i^2}{n - 3}$
+
+---
+
+## Multiple Coefficient of Determination
+
+a.k.a. R<sup>2</sup>
+
+We've learnt that: 
+
+$$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$
+
+---
+
+class: small
+
+From the SRF, 
+
+\begin{align}
+Y_i =& \hat Y_i + \hat u_i\\
+Y_i - \bar Y =& \hat Y_i  - \bar Y + \hat u_i\\
+\Rightarrow Y_i - \bar Y =& (\hat Y_i  - \bar Y + \hat u_i)^2\\
+                         =& (\hat Y_i  - \bar Y)^2 + \hat u_i^2 + 2u_i(\hat Y_i  - \bar Y)\\
+\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y) =& \sum(\hat Y_i  - \bar Y)^2 + \sum\hat u_i^2\\
+SST =& SSE + SSR\\
+1 =& \frac{SSE}{SST} + \frac{SSR}{SST}\\
+\text{In which, } R^2 =& \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+                      =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+\end{align}
+
+---
+
+background-image: url("images/bad4ya.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Why Is R<sup>2</sup> Bad?
+
+### It could be very low for a correct model? 
+
+\begin{align}
+R^2 =& \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+    =& \frac{\sum[(Y_i - u_i) - \bar Y]^2}{SST}
+\end{align}
+
+When the residual (&sigma;, estimated by u<sub>i</sub> in sample estimations) is large enough, R<sup>2</sup> could approach a very low score towards zero.
+
+---
+
+```{r rsmall, fig.width=10}
+r2 <- function(sig){
+  x <- seq(1,10,length.out = 1000)        # our predictor
+  y <- 2 + 1.2*x + rnorm(1000,0,sd = sig) # our response; a function of x plus some random noise
+  summary(lm(y ~ x))$r.squared           # print the R-squared value
+}
+
+df_r <- tibble(sigma = seq(0.5,20,length.out = 20), 
+               rout = map_dbl(sigma, r2))
+
+ggplot(data = df_r, aes(x = sigmas, y = rout)) +
+  geom_point() + 
+  ylab(expression(R^2)) + 
+  xlab(expression(sigma)) +
+  ggtitle("The R squared is calculated based on the CORRECT model\n with only the residual varying.")
+```
+
+
+---
+
+### It can be very high for a redundant or misspecified model
+
+\begin{align}
+R^2 =& \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+    =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+\end{align}
+
+Therefore, the more Xs are added, the larger SSE (and thus R<sup>2</sup>) is.
+
+???
+
+$\hat Y_i  - \bar Y = 0$
+
+---
+
+Given X and Y has such relationship:
+
+```{r rlarge, fig.width=10}
+df_rLarge <- tibble(x = rexp(50,rate=0.005), # from an exponential distribution
+                    y = (x-1)^2 * runif(50, min=0.8, max=1.2))# non-linear data generation
+
+rout <- summary(lm(y ~ x, data = df_rLarge))$r.squared %>% round(digits = 2) 
+
+ggplot(data = df_rLarge, aes(x, y)) +
+  geom_point() +
+  labs(title = expression("True model:"~ Y == (X - 1)^2),
+       subtitle = expression("Estimated model:"~ Y == beta[0] + beta[1]*X + sigma ),
+       caption = bquote(R^2 == ~ .(rout) ))
+```
+
+---
+
+## How About Adjusted R<sup>2</sup>?
+
+$$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
+
+--
+
+.left-column[
+
+### Issue adjusted
+
+More-Xs booming
+
+]
+
+.right-column[
+
+### Issues not adjusted
+
+* goodness of fit;
+* predictive error;
+* model comparison;
+* X's explanatory power.
+
+]
+
+---
+
+class: inverse, bottom
+
+# Applications of Multiple Regression
+
+---
+
+## Predicted Value 
+
+### Goal
+
+1. Forecast
+1. Interpretation: How the model is close to the reality; what substantive changes can Xs make.
+
+--
+
+### Approach
+
+1. The expected value (average) of $\hat Y$
+1. A one-time draw of $\hat Y$
+
+???
+
+Nota bene: note well
+
+
+---
+
+background-image: url("images/stayHumble.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Expected Value
+
+Let X<sub>0</sub> be the values at which we want to predict, the the expected value of Y is:
+
+\begin{align}
+E(\hat Y_0|X_0) =& E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
+var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
+                   &+ 2cov(\hat\beta_0, \hat\beta_1)X_0\\
+                  =& \sigma^2[\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+\end{align}
+
+---
+
+class: small
+
+$$\hat Y_0\sim [\beta_0 + \beta_1X_0, \sigma^2(\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2})]$$
+
+```{r predicted, fig.width=10}
+ggplot(mtcars, aes(x=mpg, y=wt)) +
+  geom_smooth(method=lm, se=TRUE) +
+  ylab(bquote(hat(Y[0]))) + 
+  xlab(bquote(hat(X[0]))) 
+```
+
+???
+
+Fewer observations at two terminals, thus wider rainbow.
+
+---
+
+## Single Forecast
+
+There is an error term to account for: 
+
+\begin{align}
+\hat Y_0 =& \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
+var(\hat Y_0|X_0) =& \sigma^2[1 + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+\end{align}
+
+In other words, single prediction is more uncertain than the average prediction.
+
+---
+
+class: small
+
+## Hypothesis Testing
+
+1. For some parameter &theta;, typically, 
+    + H<sub>0</sub>: &theta;<sub>0</sub> &equiv; &theta; = 0;
+    + H<sub>1</sub>: &theta; &ne; 0.
+    + Another type: 
+        + H<sub>0</sub>: &pi; = 1/2;
+        + H<sub>1</sub>: &pi; &ne; 1/2.
+1. Pick a level of evidence, typically, &alpha; = 0.05.
+1. Define the test statistics, e.g., $\frac{\hat\theta - \theta}{SE(\theta)}\sim t_{n - k}$.
+1. Calculate $\hat\theta_0$.
+1. Calculate the test statistics.
+1. Evaluate H<sub>0</sub> (reject or fail to reject): p-value is the level of marginal significance within a statistical hypothesis test representing the probability of the occurrence of a given event.
+    + Significance level (&alpha;) is a pre-set p-value.
+
+---
+
+.magenta[NB]:
+
+1. The correct description is, AGAIN, that CI has 95% chance including the true &theta;, rather than  &theta; has 95% chance in CI.
+1. Because the level of evidence is pre-set, there is no difference between p = 0.049 and 0.001, as long as they are under 0.05.
+
+---
+
+## Hypothesis Test for the Coefficient
+
+Let's set &alpha; = 0.05.
+
+--
+
+Hypothesis:
+
+\begin{align}
+H_0: \beta =& \beta^*;\\
+H_1: \beta \neq& \beta^*.
+\end{align}
+
+--
+
+Statistics:
+
+$$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\sim t_{n-k}.$$
+
+---
+
+## Hypothesis Test for the Variance
+
+Let's set &alpha; = 0.05.
+
+--
+
+Hypothesis:
+
+\begin{align}
+H_0: \sigma =& \sigma^*;\\
+H_1: \sigma \neq& \sigma^*.
+\end{align}
+
+--
+
+Statistics:
+
+$$(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.$$
+
+---
+
+class: small
+
+## Hypothesis Test for the Restricted Model
+
+Let's set &alpha; = 0.05.
+
+--
+
+e.g., Hypothesis:
+
+\begin{align}
+H_0:& \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2;\\
+H_1:& \beta_1 + 2\beta_2 \neq 3.
+\end{align}
+
+Then, 
+
+\begin{align}
+Y =& \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)}\\
+  =& \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u\\
+\Leftrightarrow Y - 3X_1 =& \beta_0 + \beta_2(X_2 - 2X_1) + u\\
+Y^* =& \beta_0' + \beta_2'Z + u, \test{(restricted)}
+\end{align}
+where $Y^*=Y - 3X_1; Z = X_2 - 2X_1.$
+
+The test is thus transformed to $H_0: \beta_2' = \beta_2; \beta_0' = \beta_0$
+
+---
+
+Statistics:
+
+$$\frac{\frac{SSR_R - SSR_U}{\Delta k}}{\frac{SSR_U}{n - k_U - 1}} = \frac{\frac{R_U^2 - R_R^2}{\Delta k}}{\frac{1 - R_U^2}{n - k_U - 1}}\sim F_{\Delta k, n - k - 1}$$
+
+Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R<sup>2</sup> to deduct the F test, because $SST_U \neq SST_R$ in this case.
+
+
+--
+
+
+If the hypothesis is rejected, the unrestricted model is better.

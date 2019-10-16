@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Multiple Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Multiple Regression
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+class: inverse, bottom
+
+# Regression with More than Two Xs
+
+---
+
+## Multiple Regression
+
+* Population Regression Function (PRF): `\(Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\)`
+    + According to CLRM: `\(E[u_i|\boldsymbol{X}] = 0.\)`
+
+* Sample Regression Function (SRF): `\(Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i\)`
+
+--
+
+### Terminology
+
+Multiple regression vs. multivariate regression vs. multivariate analysis
+
+---
+
+## Goal
+
+`\(min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat u_i^2\Rightarrow\)`
+
+`\begin{align}
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_0}\to&amp; 0\\
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_1}\to&amp; 0\\
+\frac{\partial \sum \hat u_i^2}{\partial\hat\beta_2}\to&amp; 0
+\end{align}`
+
+---
+
+class: small
+
+When the goal is achieved,
+
+`\begin{align}
+\hat\beta_0 =&amp; \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
+\hat\beta_1 =&amp; \frac{[\sum(Y_i - \bar Y)(X_{1i} - \bar X_1)][\sum(X_{2i} - \bar X_2)^2-\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
+            =&amp; \frac{\sum\hat r_{1i}(Y_i - \bar Y)}{\hat r_{1i}^2},
+\end{align}`
+
+where `\(\hat r_{1i}\)` are the errors from the regression of `\(X_{1i}\)` on `\(X_{2i}\)` (i.e., `\(X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}\)`), the proportion that `\(X_2\)`cannot explain.
+
+`\(\hat\sigma^2 = \frac{\sum\hat u_i^2}{n - 3}\)`
+
+---
+
+## Multiple Coefficient of Determination
+
+a.k.a. R&lt;sup&gt;2&lt;/sup&gt;
+
+We've learnt that: 
+
+`$$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$`
+
+---
+
+class: small
+
+From the SRF, 
+
+`\begin{align}
+Y_i =&amp; \hat Y_i + \hat u_i\\
+Y_i - \bar Y =&amp; \hat Y_i  - \bar Y + \hat u_i\\
+\Rightarrow Y_i - \bar Y =&amp; (\hat Y_i  - \bar Y + \hat u_i)^2\\
+                         =&amp; (\hat Y_i  - \bar Y)^2 + \hat u_i^2 + 2u_i(\hat Y_i  - \bar Y)\\
+\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y) =&amp; \sum(\hat Y_i  - \bar Y)^2 + \sum\hat u_i^2\\
+SST =&amp; SSE + SSR\\
+1 =&amp; \frac{SSE}{SST} + \frac{SSR}{SST}\\
+\text{In which, } R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+                      =&amp; \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+\end{align}`
+
+---
+
+background-image: url("images/bad4ya.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Why Is R&lt;sup&gt;2&lt;/sup&gt; Bad?
+
+### It could be very low for a correct model? 
+
+`\begin{align}
+R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+    =&amp; \frac{\sum[(Y_i - u_i) - \bar Y]^2}{SST}
+\end{align}`
+
+When the residual (&amp;sigma;, estimated by u&lt;sub&gt;i&lt;/sub&gt; in sample estimations) is large enough, R&lt;sup&gt;2&lt;/sup&gt; could approach a very low score towards zero.
+
+---
+
+![](10_multipleRegression_files/figure-html/rsmall-1.png)&lt;!-- --&gt;
+
+
+---
+
+### It can be very high for a redundant or misspecified model
+
+`\begin{align}
+R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+    =&amp; \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+\end{align}`
+
+Therefore, the more Xs are added, the larger SSE (and thus R&lt;sup&gt;2&lt;/sup&gt;) is.
+
+???
+
+`\(\hat Y_i  - \bar Y = 0\)`
+
+---
+
+Given X and Y has such relationship:
+
+![](10_multipleRegression_files/figure-html/rlarge-1.png)&lt;!-- --&gt;
+
+---
+
+## How About Adjusted R&lt;sup&gt;2&lt;/sup&gt;?
+
+`$$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$`
+
+--
+
+.left-column[
+
+### Issue adjusted
+
+More-Xs booming
+
+]
+
+.right-column[
+
+### Issues not adjusted
+
+* goodness of fit;
+* predictive error;
+* model comparison;
+* X's explanatory power.
+
+]
+
+---
+
+class: inverse, bottom
+
+# Applications of Multiple Regression
+
+---
+
+## Predicted Value 
+
+### Goal
+
+1. Forecast
+1. Interpretation: How the model is close to the reality; what substantive changes can Xs make.
+
+--
+
+### Approach
+
+1. The expected value (average) of `\(\hat Y\)`
+1. A one-time draw of `\(\hat Y\)`
+
+???
+
+Nota bene: note well
+
+
+---
+
+background-image: url("images/stayHumble.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Expected Value
+
+Let X&lt;sub&gt;0&lt;/sub&gt; be the values at which we want to predict, the the expected value of Y is:
+
+`\begin{align}
+E(\hat Y_0|X_0) =&amp; E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
+var(\hat Y_0|X_0) =&amp; var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
+                   &amp;+ 2cov(\hat\beta_0, \hat\beta_1)X_0\\
+                  =&amp; \sigma^2[\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+\end{align}`
+
+---
+
+class: small
+
+`$$\hat Y_0\sim [\beta_0 + \beta_1X_0, \sigma^2(\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2})]$$`
+
+![](10_multipleRegression_files/figure-html/predicted-1.png)&lt;!-- --&gt;
+
+???
+
+Fewer observations at two terminals, thus wider rainbow.
+
+---
+
+## Single Forecast
+
+There is an error term to account for: 
+
+`\begin{align}
+\hat Y_0 =&amp; \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
+var(\hat Y_0|X_0) =&amp; \sigma^2[1 + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+\end{align}`
+
+In other words, single prediction is more uncertain than the average prediction.
+
+---
+
+class: small
+
+## Hypothesis Testing
+
+1. For some parameter &amp;theta;, typically, 
+    + H&lt;sub&gt;0&lt;/sub&gt;: &amp;theta;&lt;sub&gt;0&lt;/sub&gt; &amp;equiv; &amp;theta; = 0;
+    + H&lt;sub&gt;1&lt;/sub&gt;: &amp;theta; &amp;ne; 0.
+    + Another type: 
+        + H&lt;sub&gt;0&lt;/sub&gt;: &amp;pi; = 1/2;
+        + H&lt;sub&gt;1&lt;/sub&gt;: &amp;pi; &amp;ne; 1/2.
+1. Pick a level of evidence, typically, &amp;alpha; = 0.05.
+1. Define the test statistics, e.g., `\(\frac{\hat\theta - \theta}{SE(\theta)}\sim t_{n - k}\)`.
+1. Calculate `\(\hat\theta_0\)`.
+1. Calculate the test statistics.
+1. Evaluate H&lt;sub&gt;0&lt;/sub&gt; (reject or fail to reject): p-value is the level of marginal significance within a statistical hypothesis test representing the probability of the occurrence of a given event.
+    + Significance level (&amp;alpha;) is a pre-set p-value.
+
+---
+
+.magenta[NB]:
+
+1. The correct description is, AGAIN, that CI has 95% chance including the true &amp;theta;, rather than  &amp;theta; has 95% chance in CI.
+1. Because the level of evidence is pre-set, there is no difference between p = 0.049 and 0.001, as long as they are under 0.05.
+
+---
+
+## Hypothesis Test for the Coefficient
+
+Let's set &amp;alpha; = 0.05.
+
+--
+
+Hypothesis:
+
+`\begin{align}
+H_0: \beta =&amp; \beta^*;\\
+H_1: \beta \neq&amp; \beta^*.
+\end{align}`
+
+--
+
+Statistics:
+
+`$$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\sim t_{n-k}.$$`
+
+---
+
+## Hypothesis Test for the Variance
+
+Let's set &amp;alpha; = 0.05.
+
+--
+
+Hypothesis:
+
+`\begin{align}
+H_0: \sigma =&amp; \sigma^*;\\
+H_1: \sigma \neq&amp; \sigma^*.
+\end{align}`
+
+--
+
+Statistics:
+
+`$$(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.$$`
+
+---
+
+class: small
+
+## Hypothesis Test for the Restricted Model
+
+Let's set &amp;alpha; = 0.05.
+
+--
+
+e.g., Hypothesis:
+
+`\begin{align}
+H_0:&amp; \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2;\\
+H_1:&amp; \beta_1 + 2\beta_2 \neq 3.
+\end{align}`
+
+Then, 
+
+`\begin{align}
+Y =&amp; \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)}\\
+  =&amp; \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u\\
+\Leftrightarrow Y - 3X_1 =&amp; \beta_0 + \beta_2(X_2 - 2X_1) + u\\
+Y^* =&amp; \beta_0' + \beta_2'Z + u, \test{(restricted)}
+\end{align}`
+where `\(Y^*=Y - 3X_1; Z = X_2 - 2X_1.\)`
+
+The test is thus transformed to `\(H_0: \beta_2' = \beta_2; \beta_0' = \beta_0\)`
+
+---
+
+Statistics:
+
+`$$\frac{\frac{SSR_R - SSR_U}{\Delta k}}{\frac{SSR_U}{n - k_U - 1}} = \frac{\frac{R_U^2 - R_R^2}{\Delta k}}{\frac{1 - R_U^2}{n - k_U - 1}}\sim F_{\Delta k, n - k - 1}$$`
+
+Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R&lt;sup&gt;2&lt;/sup&gt; to deduct the F test, because `\(SST_U \neq SST_R\)` in this case.
+
+
+--
+
+
+If the hypothesis is rejected, the unrestricted model is better.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

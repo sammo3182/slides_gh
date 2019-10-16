@@ -1,0 +1,67 @@
+---
+title: "Multicollinearity & Heteroskedasticity"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+class: inverse, bottom
+
+# Collinearity
+
+---
+
+class: small
+
+## Perfect collinearity
+
+When $cov(X_1, X_2) = 1, r_{1i} = 0$, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
+
+--
+
+e.g., Let's say in the PRF $Y_i = \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u$, $X_2 = 1 + 2X_1$, then
+
+\begin{align}
+Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
+    =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat u \\
+    =& (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat u\\
+\Rightarrow Y_i =& \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
+\end{align}
+
+PRF is non-identifiable. 
+
+???
+
+PRF: population regression function
+
+---
+
+### Multicollinearity
+
+**X**<sub>2</sub> is not a transformation of X<sub>1</sub>.
+
+In this case, the estimators (**&beta;**) remain .magenta[unbiased], yet
+
+\begin{align}
+var(\hat\beta_1|X) =& \frac{\sigma^2\sum(X_2 - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
+                   =& \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},
+\end{align} 
+
+where $\beta_{12} = cov(X_1, X_2)$.
+
+--
+
+As $\beta_{12}$ increases, the variance also increases.`
