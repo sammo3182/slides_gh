@@ -1,0 +1,307 @@
+---
+title: "Moderation Effect"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable, gridExtra,
+  knitr, # dependency
+  descr, stringr, broom, dotwhisker, interplot, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+class: inverse, bottom
+
+# Moderation in Theory
+
+---
+
+class: small
+
+## What's Moderation
+
+Moderation effect aims to test conditional effects of one variable on the contribution of another variable to the dependent variable and has been extensively applied in the empirical research of social science since the 1970s.
+
+--
+
+Unfortunately, the nonlinear nature determines that the statistical estimate of an interactive effect cannot be interpreted as straightforward as the coefficient of a regular regression parameter.
+
+--
+
+Formally
+
+$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + u.$$
+
+Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
+
+---
+
+## Hypothesis
+
+H<sub>0</sub>: If effects of X depends on Z (&beta;<sub>3</sub> = 0).
+
+H<sub>0</sub>: If X has an effect (&beta;<sub>1</sub> + &beta;<sub>3</sub>Z = 0). .magenta[(More useful)]
+
+--
+
+Level set: &alpha; = 0.05
+
+---
+
+## Special Case: Dichotomous Z
+
+* When Z = 0, $\beta_1 = 0;$
+* When Z = 1, $\beta_1 + \beta_3 = 0.$
+* Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
+
+\begin{align}
+\hat Y =& \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
+\Leftrightarrow \hat{\tilde{Y}} =& \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1
+\end{align}
+
+--
+
+* When Z = 0, $H_0: \tilde\beta_1 = 0;$
+* When Z = 1, $H_0: \tilde\beta_3 = 0.$
+
+---
+
+## General Case: Z Is Continuous
+
+Effect of X: 
+
+$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
+
+Statistics:
+
+$$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4}$$
+
+---
+
+## How to Interpret It Wrong?
+
+### Isolated interpretation of &beta;<sub>1</sub>
+
+Let Z increases by c: 
+
+\begin{align}
+Y =& \beta_0' + \beta_1'X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u.\\
+  =& (\beta_0' + \beta_2'c) + (\beta_1' + \beta_3'c)X + \beta_2'Z + \beta_3'XZ \\
+  &+ u
+\end{align}
+
+--
+
+The coefficient of X can change by changing Z.
+
+---
+
+### Interpreting &beta;<sub>3</sub> Omitting X
+
+$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u', u' = \beta_1X + u$$
+
+--
+
+Then 
+
+\begin{align}
+E(u'|X) \neq& 0\\
+E[u'(X,Z)] \neq& 0.
+\end{align}
+
+Unless &beta;<sub>1</sub>X or XZ is zero.
+
+---
+
+### Statistical Significance Overstated
+
+When testing the X's effect $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$
+
+The standard error:
+
+$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
+
+It's perfectly possible for the contribution of X on Y to be statistically significant for certain values of Z, even if all of the model parameters are insignificant. 
+
+???
+
+ Brambor, Clark and Golder 2006
+
+---
+
+$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
+
+In other words, one cannot infer whether X has a meaningful conditional effect on Y .magenta[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
+
+--
+
+Instead, the conditional effect should be examined based on the .magenta[marginal effect] at every observed value of Z.
+
+---
+
+## More Risky Points
+
+* Point estimation may not be reliable
+    + Link function (e.g., logit and probit) is involved
+    
+???
+
+Berry, DeMeritt, and Esarey (2016)
+
+--
+
+* Substantive significance of the conditional effect highly relates to the distribution of the conditioning variable (viz., Z in the above example). 
+
+???
+
+Berry, Golder, and Milton (2012)
+
+---
+
+## Recommendation
+
+1. Plotting the marginal effects.
+1. Showing the confidence intervals
+1. Presenting the frequency distribution of Z
+    + esp., when the effect trend goes across the zero point.
+
+---
+
+## Marginal Effects Isn't a Panacea
+
+The estimation of the regular marginal effects might cause a "multiple comparison problem"
+
+Leading to over- or under-confidence of the confidential intervals.
+
+--
+
+.magenta[Solution]: Adjust the CIs with a critical t-statistics by Benjamini 1995
+
+???
+
+Esarey and Sumner (2017)
+
+---
+
+class: inverse, bottom
+
+# Interaction in Practice
+
+---
+
+## Meritocracy vs. Inequality
+
+Solt, Frederick, Yue Hu, Hudson Kevan, Jungmin Song, Dong Yu. 2017a. “Economic Inequality and Belief in Meritocracy in the United States.” *Research & Politics* 3(4): 1–7.
+
+--
+
+.center[<img src="images/zootopia.gif" height = 300 />]
+
+---
+
+Low-income group &times; Income inequality &rarr; Meritocracy
+
+--
+
+* Poor vs. Rich
+* Social Structure: Self-reproducing vs. self-negating
+
+???
+
+Self-reproducing: relative power theory
+Self-negating: conflict theory
+
+---
+
+## Hypothesis
+
+Conflict theory vs. relative power theory
+
+---
+
+class: small
+
+## Conflict Theory
+
+.center[<img src="images/hulk.gif" height = 400 />]
+
+H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .magenta[less].
+
+---
+
+class: small
+
+## Relative Power Theory
+
+.center[<img src="images/hypnosis.gif" height = 400 />]
+
+H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .magenta[more].
+
+---
+
+## Model and Data
+
+\begin{align}
+& Reject\thinspace Meritocracy_{ij} \\
+=\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
+                      &+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
+\end{align}
+
+[Pew survey](https://www.pewresearch.org/)
+
+Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
+
+---
+
+## Negative Example
+
+.center[<img src="images/NJL_plot.png" height = 500 />]
+
+---
+
+## Correct Presentation
+
+.center[<img src="images/interaction1.jpg" height = 500 />]
+
+---
+
+## More Corrections
+
+.center[<img src="images/three_measures.jpg" height = 500 />]
+
+---
+
+## Moderation with Better Data
+
+.center[<img src="images/SH_plot2.png" height = 500 />]
+
+---
+
+## Alternative Way
+
+.center[<img src="images/interaction2.jpg" height = 500 />]
