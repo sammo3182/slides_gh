@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Model Specification</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Model Specification
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+## Misspecification
+
+If the true model is `\(Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\)`, but we specify it as `\(Y_i = \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i\)`, how does `\(\tilde\beta_1\)` compare to `\(\beta_1\)`?
+
+---
+
+class: small
+
+## &amp;beta;
+
+`\begin{align}
+Y_i =&amp; \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i\\
+Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u)\\
+(Y_i -\bar Y)(X_1 - \bar X_1) =&amp; \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1)\\ 
+            &amp;+ (u_i - \bar u)(X_1 - \bar X_1)\\
+\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =&amp; \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\ 
+           &amp;+ \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\
+\text{That is, } \tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},
+\end{align}`
+
+where `\(\hat\delta_1\)` is the regression coefficient of `\(X_2\)` on `\(X_1\)`.
+
+---
+
+class: small
+
+`\begin{align}
+E(\tilde\beta_1|X_1) =&amp; E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1]\\
+                     =&amp; \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1)\\
+                     =&amp; \hat\beta_1 + \hat\beta_2\delta_1
+\end{align}`
+
+Accordingly, if &amp;delta; = 0, `\(X_1 = \delta_0 + r\)`, the model may increase the risk of Type I error; otherwise, the model missing a variable will always produce an biased estimation unless X&lt;sub&gt;2&lt;/sub&gt; is an irrelevant variable.
+
+---
+
+class: small
+
+## Error
+
+`$$Y_i = \beta_0 + \beta_1X_{1} + \epsilon, \epsilon = \beta_2X_{2} + u_i$$`
+
+* `\(E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0.\)`
+* 
+`\begin{align}
+var(\epsilon|X_1) =&amp; var(\beta_2X_{2} + u_i|X_1)\\ 
+=&amp; \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2
+\end{align}`
+    + All values are fixed, that is, still homoscedasiticity.
+* 
+`\begin{align}
+&amp; E(\epsilon_i\epsilon_j|X_1) - E(\epsilon_i|X_1)E(\epsilon_j|X_1) \\
+=&amp; E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)|X_1] - \beta_2^2\mu^2_{X_2}\\
+=&amp; E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j|X_1) - \beta_2^2\mu^2_{X_2}\\
+=&amp; \beta_2^2E(X_{2i}X_{2j}|X_1) - \beta_2^2\mu^2_{X_2}\\
+=&amp; \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2} = \beta_2^2cov(X_{2i}, X_{2j}).
+\end{align}`
+    + Only when `\(\beta_2^2cov(X_{2i}, X_{2j}) = 0\)` (which is often not) there's no autocorrelation
+
+
+---
+
+* 
+`\begin{align}
+E(X_1u) =&amp; E[X_1(\beta_2X_2 + u)] \\
+=&amp; E(X_1\beta_2X_2) + E(X_1u)\\
+=&amp; \beta_2E(X_1X_2)\\
+=&amp; \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}]\\
+When&amp;\ cov(X_1,X_2)\neq 0 \neq 0.
+\end{align}`
+    + Increase the difficulty to isolate X from u
+    
+---
+
+class: small
+
+## Type of Measurement
+
+* Nominal: Order doesn't matter
+    + e.g., A race variable: white, black, native
+        + H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;black&lt;/sub&gt; = 0, testing the difference between black and white
+        + H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;black&lt;/sub&gt; = &amp;beta;&lt;sub&gt;native&lt;/sub&gt; = 0, testing if the race has any effect.
+    + Can't do regression unless being broken up into indicator variables.
+--
+
+* Indicator: Binary usually, "when x has a value of X, Y is 1", &amp;#x1D7D9;(x = X).
+    + In a regression, the information of the baseline is captured by the intercept
+    + e.g., `\(Y = \beta_0 + \beta_1X_i + u_i,\)` where X is either male (0) or female(1), then
+
+`$$\beta_0: E(Y|X = male); \beta_1: E(Y|X = female) - E(Y|X = male)$$`
+
+???
+
+blackboard 1
+
+---
+
+* Ordinal: 
+    + Non-interval (only the order matters); 
+    + Interval (same intervals)
+
+--
+
+* Continuous (ratio): Can credibly calculate the marginal effects, because marginal effects are derivatives, and only continuous variable can do derivative; other types can do this mathematically, but not accurately.
+
+???
+
+Interval: meaningful distance, feeling thermometer's 0 is not nothing but a strong feeling
+Ratio: interval variables with meaningful zero value (meaning absence); same ratio conveys the same meaning
+
+e.g., -50 to 0 to 50 find two pair of scores with a ratio of 1:3, transform them into 0-100 scale, the ratio changes.
+
+---
+
+## Nonlinear effect
+
+e.g., Y increases with X ( `\(\frac{\partial Y}{\partial X} &gt; 0\)` ) at a decreasing rate ( `\(\frac{\partial^2 Y}{\partial^2 X} &lt; 0\)` )
+
+---
+
+![](11_specification_files/figure-html/nonlinear-1.png)![](11_specification_files/figure-html/nonlinear-2.png)
+
+---
+
+class: small
+
+`$$Y = \beta_0 + \beta_1X + \beta_2X^2 + u$$`
+
+Margins: `\(\frac{\partial Y}{\partial X} = \beta_1 + 2\beta_2X\)`
+
+* H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;1&lt;/sub&gt; + 2&amp;beta;&lt;sub&gt;2&lt;/sub&gt;X = 0;
+* H&lt;sub&gt;1&lt;/sub&gt;: &amp;beta;&lt;sub&gt;1&lt;/sub&gt; + 2&amp;beta;&lt;sub&gt;2&lt;/sub&gt;X &gt; 0
+
+That is, if the increasing speed is positive.
+
+Level set: &amp;alpha; = 0.05
+
+Statistics: `\(\frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim t_{n - 3}\)`
+
+`\begin{align}
+SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)} \\
+=&amp; \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}
+\end{align}`
+
+--
+
+.magenta[NB]: One can't simply say if the null hypothesis is rejected, because it may not be a coherent conclusion in the entire domain of X, due to the nonlinearity. So, a better way to describe it is "in the range from a to b, the hypothesis can be rejected."
+
+---
+
+## Substantive Significance
+
+Substantive interpretation: margins. 
+
+The most important point is the inflation point (where the sign of the derivate changes).
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
