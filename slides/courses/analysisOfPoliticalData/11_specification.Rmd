@@ -1,5 +1,5 @@
 ---
-title: "Model Specification and Missing Data"
+title: "Model and Data Issues"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
@@ -25,7 +25,7 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  flextable,
+  flextable, ggeffects,
   knitr, # dependency
   descr, stringr, broom, tidyverse
 ) # data wrangling # data wrangling
@@ -33,6 +33,12 @@ p_load(
 # Functions preload
 set.seed(114)
 ```
+
+class: inverse, bottom
+
+# Model Issues
+
+---
 
 ## Misspecification
 
@@ -173,7 +179,44 @@ ggplot(data = df_nl2, aes(x, y)) +
 
 ---
 
+## Marginal Effect
+
+Discrete:
+
+$$Pr(Y|x = X_{n + 1}) - Pr(Y|x = X_n)$$
+
+Continuous: 
+
+$$\lim_{\Delta x\to0} \frac{ f(x + \Delta x) - f(x)}{\Delta x}$$
+
+--
+
+.magenta[Hint]: The marignal effect of an OLS is its &beta;s
+
+---
+
+### Averagte Marginal Effect (AME)
+
+1. Calculate the marginal effect of each variable x for each observation
+1. Calculate the average.
+
+--
+
+### Marginal Effect at the Mean (MEM)
+
+1. Calculate the marginal effect of each variable x for each's mean value
+
+--
+
+### Marginal Effect at Representative Values (MER)
+
+1. Calculate the marginal effect of each variable x for value(s) of interest
+
+---
+
 class: small
+
+## Marginal Effect of A Nonlinear Transformation
 
 $$Y = \beta_0 + \beta_1X + \beta_2X^2 + u$$
 
@@ -201,6 +244,127 @@ SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)} \\
 
 ## Substantive Significance
 
-Substantive interpretation: margins. 
+* Max - min
+* First difference
+* Marginal effects
 
-The most important point is the inflation point (where the sign of the derivate changes).
+
+```{r substantive, fig.width=10, fig.height=5, fig.show='hold'}
+
+df_nl3 <- tibble(x = seq(-5, 5,length.out = 1000),
+                y = x - x^2 + rnorm(1000,0,sd = 10))
+
+fit1 <- lm(y ~ x, data = df_nl3)
+me1 <- ggeffect(fit1, terms = "x")
+
+ggplot(data = df_nl3, aes(x, y, color = "Predicted Values")) +
+  geom_smooth() + 
+  geom_line(data = me1, aes(x, predicted, color = "Marginal Effect")) +
+  geom_ribbon(data = me1, aes(x, predicted, ymin=conf.low,ymax=conf.high), alpha = 0.3) +
+  ggtitle(expression(Y == beta[0]*X + beta[1]*X^2 + u)) +
+  ylab("E(Y|X)") + xlab("X")
+
+```
+
+---
+
+class: inverse, bottom
+
+# Data Issues
+
+---
+
+## Missing Data
+
+Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
+
+\begin{align}
+\boldsymbol{D} =& 
+\left(\begin{array}{cc}
+X_1 & Y_1\\
+X_2 & Y_2\\
+X_3 & Y_3\\
+X_4 & Y_4\end{array}\right);
+\boldsymbol{D^{Observed}} =
+\left(\begin{array}{cc}
+X_1 & Y_1\\
+X_2 & Y_2\\
+X_3 & Y_3\\
+X_4 & Y_4\end{array}\right);\\
+\boldsymbol{M} =& 
+\left(\begin{array}{cc}
+0 & 0\\
+1 & 0\\
+0 & 0\\
+1 & 0\end{array}\right);
+\boldsymbol{D^M} =
+\left(\begin{array}{cc}
+ & \\
+X_2 & \\
+ & \\
+X_4 & \end{array}\right)
+\end{align}
+
+---
+
+## Type of Missing
+
+### Missing completely at random (MCAR)
+
+P(M|D) = P(M)
+
+### Missing at random (MAR)
+
+P(M|D) = P(M|D<sup>Observed</sup>)
+
+### Non-ignorable (NI/MNAR)
+
+P(M|D) &ne; P(M|D<sup>Observed</sup>)
+
+---
+
+## Consequence of Missing
+
+|      | Summary Stats | Regression          | SE vs. complete |
+|------|---------------|---------------------|-----------------|
+| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
+| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
+| NI   | Biased        | Biased              | Inefficient     |
+
+???
+
+Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
+Biasedness in NI is because of the censor with an X within the model
+
+---
+
+## Solution
+
+**Ignore it**: listwise deletion
+
+???
+
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often parwise deletion
+
+--
+
+**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
+
+--
+
+**Imputation**
+
+1. Interpolation
+1. Extrapolation
+1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
+    + For multidimentional variable use joint distribution and iterative chain.
+    
+???
+
+<img src="images/interpolation.png" height = 200 />
+<img src="images/extrapolation.png" height = 200 />
+
+    
+---
+
+Multiple imputation: 

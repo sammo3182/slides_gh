@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Model Specification</title>
+    <title>Model and Data Issues</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
     <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
@@ -11,7 +11,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Model Specification
+# Model and Data Issues
 ## Analysis of Political Data (70700173)
 ### Yue Hu
 ### Political Science, Tsinghua University
@@ -20,6 +20,12 @@ class: center, middle, inverse, title-slide
 
 
 
+
+class: inverse, bottom
+
+# Model Issues
+
+---
 
 ## Misspecification
 
@@ -145,7 +151,44 @@ e.g., Y increases with X ( `\(\frac{\partial Y}{\partial X} &gt; 0\)` ) at a dec
 
 ---
 
+## Marginal Effect
+
+Discrete:
+
+`$$Pr(Y|x = X_{n + 1}) - Pr(Y|x = X_n)$$`
+
+Continuous: 
+
+`$$\lim_{\Delta x\to0} \frac{ f(x + \Delta x) - f(x)}{\Delta x}$$`
+
+--
+
+.magenta[Hint]: The marignal effect of an OLS is its &amp;beta;s
+
+---
+
+### Averagte Marginal Effect (AME)
+
+1. Calculate the marginal effect of each variable x for each observation
+1. Calculate the average.
+
+--
+
+### Marginal Effect at the Mean (MEM)
+
+1. Calculate the marginal effect of each variable x for each's mean value
+
+--
+
+### Marginal Effect at Representative Values (MER)
+
+1. Calculate the marginal effect of each variable x for value(s) of interest
+
+---
+
 class: small
+
+## Marginal Effect of A Nonlinear Transformation
 
 `$$Y = \beta_0 + \beta_1X + \beta_2X^2 + u$$`
 
@@ -173,9 +216,115 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)} \\
 
 ## Substantive Significance
 
-Substantive interpretation: margins. 
+* Max - min
+* First difference
+* Marginal effects
 
-The most important point is the inflation point (where the sign of the derivate changes).
+
+![](11_specification_files/figure-html/substantive-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse, bottom
+
+# Data Issues
+
+---
+
+## Missing Data
+
+Let's define  **X**, **Y**, and m&lt;sub&gt;ij&lt;/sub&gt; = 1 if X&lt;sub&gt;i&lt;/sub&gt; is missing.
+
+`\begin{align}
+\boldsymbol{D} =&amp; 
+\left(\begin{array}{cc}
+X_1 &amp; Y_1\\
+X_2 &amp; Y_2\\
+X_3 &amp; Y_3\\
+X_4 &amp; Y_4\end{array}\right);
+\boldsymbol{D^{Observed}} =
+\left(\begin{array}{cc}
+X_1 &amp; Y_1\\
+X_2 &amp; Y_2\\
+X_3 &amp; Y_3\\
+X_4 &amp; Y_4\end{array}\right);\\
+\boldsymbol{M} =&amp; 
+\left(\begin{array}{cc}
+0 &amp; 0\\
+1 &amp; 0\\
+0 &amp; 0\\
+1 &amp; 0\end{array}\right);
+\boldsymbol{D^M} =
+\left(\begin{array}{cc}
+ &amp; \\
+X_2 &amp; \\
+ &amp; \\
+X_4 &amp; \end{array}\right)
+\end{align}`
+
+---
+
+## Type of Missing
+
+### Missing completely at random (MCAR)
+
+P(M|D) = P(M)
+
+### Missing at random (MAR)
+
+P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+
+### Non-ignorable (NI/MNAR)
+
+P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+
+---
+
+## Consequence of Missing
+
+|      | Summary Stats | Regression          | SE vs. complete |
+|------|---------------|---------------------|-----------------|
+| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
+| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
+| NI   | Biased        | Biased              | Inefficient     |
+
+???
+
+Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
+Biasedness in NI is because of the censor with an X within the model
+
+---
+
+## Solution
+
+**Ignore it**: listwise deletion
+
+???
+
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &amp;ne; 0, so often parwise deletion
+
+--
+
+**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
+
+--
+
+**Imputation**
+
+1. Interpolation
+1. Extrapolation
+1. Regression imputation: `\(M = \boldsymbol{X\gamma} + u\)`
+    + For multidimentional variable use joint distribution and iterative chain.
+    
+???
+
+&lt;img src="images/interpolation.png" height = 200 /&gt;
+&lt;img src="images/extrapolation.png" height = 200 /&gt;
+
+    
+---
+
+Multiple imputation:
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>
