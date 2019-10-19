@@ -324,7 +324,93 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
     
 ---
 
-Multiple imputation:
+**Multiple imputations**: 
+
+1. Take multiple guess given estimated distribution
+2. Result `\(\hat\beta(1), \hat\beta(2), \hat\beta(3)\)`,... and their variance.
+3. Combine: Rubin's formula
+
+`\begin{align}
+\hat\beta =&amp; \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
+var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
+\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
+\end{align}`
+
+???
+
+`\(\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}\)` variance within each complete dataset;
+
+`\(\frac{m + 1}{m}W\)` variance across datasets.
+
+---
+
+### Advantages
+
+Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
+
+---
+
+class: small
+
+## When You Shouldn't Use MI
+
+1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
+
+--
+
+1. There is NI missingness in X so that EMs can give incorrect answers.
+
+--
+
+1. Missingness in X is not a function of Y, and there is no unobserved omitted values
+that affects Y.
+
+--
+
+1. The data is large enough that the influence of the listwise is trivial.
+
+--
+
+1. The model is nonlinear and complicated.
+
+--
+
+1. Extreme distributional divergence in missing data from multivariate normal.
+
+---
+
+**Likelihood approach**
+
+Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
+
+e.g., SEM
+
+---
+
+class: small
+
+## Non-Ignorable Missing
+
+*Common types*:
+
+**Censored**: Have .magenta[some] information about values of missing data, e.g., all data &lt;0 are
+coded as 0.
++ Leading to heteroscedasticity and nonnormal error
++ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
+
+???
+
+2SLS: Two-Stage least squares
+
+--
+
+**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
+observable when it &gt; 100.
++ Solution: `tobit`, use the right distribution---a combination of `\(P(Y_i^* &lt; 0|X)\)` and `\(f(Y_i|X_i)\)`.
+
+???
+
+&lt;img src="images/censorTruncated.png" height = 200 /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>
