@@ -1,5 +1,5 @@
 ---
-title: "Model and Data Issues"
+title: "Model Specification"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
@@ -40,9 +40,123 @@ class: inverse, bottom
 
 ---
 
+## Common Model Issues
+
+1. Functional form
+1. Proxy variable
+1. Measurement error
+1. Model misspecification
+
+---
+
+class: small
+
+## Functional Form
+
+When there are two ways to specify the model:
+
+\begin{align}
+Y =& f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
+Y =& f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
+\end{align}
+
+One may want to test the combined version: $$Y = f_1(X) + f_2(X) + u$$
+
+--
+
+### Concern
+
+when one of the models, e.g., f1 is the true model, then the combined version produces unbiased, consistent, yet inefficient estimates: 
+
+$$var(\hat\beta_1) = \frac{\sigma^2}{(X - \bar X)^2(1 - \rho_{12})}.$$
+
+When &rho;<sub>12</sub> increases, the variance is inflated.
+
+---
+
+### Solution
+
+Joint test: $H_0: \beta_1 = \beta_2 = \beta_3 = 0$ or $\beta_4 = \beta_5 = \beta_6 = 0$
+
+Statistics: Davidson-Mackinnon test
+
+1. Run $Y = f_2(X) + u$ and culculate the expected value $\hat Y = E[Y|f_2(X)]$
+1. Run $Y = f_1(X) + \theta\hat Y + u$, and thest if &theta; = 0.
+
+---
+
+class: small
+
+## Proxy Variable
+
+Given the true model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_3^* + u$.
+
+--
+
+However, $X_3^*$ is unobserved, instead, we know $X_3^* = \delta_0 + \delta_1X_3 + v.$ In other words, what we estimate is:
+
+$$Y = (\beta_0 + \beta_3\delta_0) + \beta_1X_1 + \beta_2X_2 + \beta_3\delta_1X_3 + (u + \beta_3v).$$
+
+--
+
+Assuming u and v are independent, then we know $E(u + \beta_3v|X) = 0$, $var(u + \beta_3v|X) = \beta_3^2\sigma_v^2 + \sigma_u^2$.
+
+--
+
+To produce unbiased estimates, one need to ensure that
+
+$$cov(u, X_3) = cov(v, X_1) = cov(v, X_2) = 0.$$
+
+---
+
+## Measurement Error
+
+### Y = Y<sup>*</sup> + e
+
+\begin{align}
+Y^* =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
+Y =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+\end{align}
+
+That is, the estimate of &beta; is unbiaed, yet var(&beta;) goes up.
+
+---
+
+class: small
+
+### X = X<sup>*</sup> + e
+
+If $E(eX) = 0$, then $Y = \beta_0 + \beta_1(X_1 - e) + u = \beta_0 + \beta_1X_1 + (u - \beta_1e)$.
+
+--
+
+If $E(eX) = 0$, then
+
+\begin{align}
+cov(e, X) =& E(eX) - E(e)E(X) = E(eX)\\
+          =& E[e(X^* + e)] = E(eX^*) + E(e^2) = \sigma_e^2\neq0\\
+cov(u - \beta_1e, X_1) =& cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1)\\
+                       =& -\beta_1\sigma_e^2.\\
+\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
+                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}\\
+                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
+                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+\end{align}
+
+---
+
+In this case, only when $var(X_1) = var(X_1^* + e)$, i.e., $\sigma^2_{X_1} = \sigma^{*2}_{X_1} + \sigma^2_e$, the estimate can be unbiased.
+
+-- 
+
+Otherwise, $|\hat\beta_1| < \beta_1$, a.k.a., .magenta[attenuation] bias. The parameter is underestimated and may affect the estimates of other variables in unknown ways.
+
+---
+
 ## Misspecification
 
 If the true model is $Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$, but we specify it as $Y_i = \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i$, how does $\tilde\beta_1$ compare to $\beta_1$?
+
 
 ---
 
@@ -236,7 +350,7 @@ SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)} \\
 =& \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}
 \end{align}
 
---
+---
 
 .magenta[NB]: One can't simply say if the null hypothesis is rejected, because it may not be a coherent conclusion in the entire domain of X, due to the nonlinearity. So, a better way to describe it is "in the range from a to b, the hypothesis can be rejected."
 
@@ -265,192 +379,3 @@ ggplot(data = df_nl3, aes(x, y, color = "Predicted Values")) +
   ylab("E(Y|X)") + xlab("X")
 
 ```
-
----
-
-class: inverse, bottom
-
-# Data Issues
-
----
-
-## Missing Data
-
-Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
-
-\begin{align}
-\boldsymbol{D} =& 
-\left(\begin{array}{cc}
-X_1 & Y_1\\
-X_2 & Y_2\\
-X_3 & Y_3\\
-X_4 & Y_4\end{array}\right);
-\boldsymbol{D^{Observed}} =
-\left(\begin{array}{cc}
-X_1 & Y_1\\
-X_2 & Y_2\\
-X_3 & Y_3\\
-X_4 & Y_4\end{array}\right);\\
-\boldsymbol{M} =& 
-\left(\begin{array}{cc}
-0 & 0\\
-1 & 0\\
-0 & 0\\
-1 & 0\end{array}\right);
-\boldsymbol{D^M} =
-\left(\begin{array}{cc}
- & \\
-X_2 & \\
- & \\
-X_4 & \end{array}\right)
-\end{align}
-
----
-
-## Type of Missing
-
-### Missing completely at random (MCAR)
-
-P(M|D) = P(M)
-
-### Missing at random (MAR)
-
-P(M|D) = P(M|D<sup>Observed</sup>)
-
-### Non-ignorable (NI/MNAR)
-
-P(M|D) &ne; P(M|D<sup>Observed</sup>)
-
----
-
-## Consequence of Missing
-
-|      | Summary Stats | Regression          | SE vs. complete |
-|------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
-| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
-| NI   | Biased        | Biased              | Inefficient     |
-
-???
-
-Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
-Biasedness in NI is because of the censor with an X within the model
-
----
-
-## Solution
-
-**Ignore it**: listwise deletion
-
-???
-
-Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often parwise deletion
-
---
-
-**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
-
---
-
-**Imputation**
-
-1. Interpolation
-1. Extrapolation
-1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
-    + For multidimentional variable use joint distribution and iterative chain.
-    
-???
-
-<img src="images/interpolation.png" height = 200 />
-<img src="images/extrapolation.png" height = 200 />
-
-    
----
-
-**Multiple imputations**: 
-
-1. Take multiple guess given estimated distribution
-2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
-3. Combine: Rubin's formula
-
-\begin{align}
-\hat\beta =& \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
-var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
-\text{where}\ W =& \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
-\end{align}
-
-???
-
-$\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}$ variance within each complete dataset;
-
-$\frac{m + 1}{m}W$ variance across datasets.
-
----
-
-### Advantages
-
-Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
-
----
-
-class: small
-
-## When You Shouldn't Use MI
-
-1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
-
---
-
-1. There is NI missingness in X so that EMs can give incorrect answers.
-
---
-
-1. Missingness in X is not a function of Y, and there is no unobserved omitted values
-that affects Y.
-
---
-
-1. The data is large enough that the influence of the listwise is trivial.
-
---
-
-1. The model is nonlinear and complicated.
-
---
-
-1. Extreme distributional divergence in missing data from multivariate normal.
-
----
-
-**Likelihood approach**
-
-Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
-
-e.g., SEM
-
----
-
-class: small
-
-## Non-Ignorable Missing
-
-*Common types*:
-
-**Censored**: Have .magenta[some] information about values of missing data, e.g., all data <0 are
-coded as 0.
-+ Leading to heteroscedasticity and nonnormal error
-+ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
-
-???
-
-2SLS: Two-Stage least squares
-
---
-
-**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
-observable when it > 100.
-+ Solution: `tobit`, use the right distribution---a combination of $P(Y_i^* < 0|X)$ and $f(Y_i|X_i)$.
-
-???
-
-<img src="images/censorTruncated.png" height = 200 />

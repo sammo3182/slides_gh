@@ -19,6 +19,416 @@ class: center, middle, inverse, title-slide
 ---
 
 
+class: inverse, bottom
+
+# Heteroscedasticity
+
+---
+
+## What's Heteroscedasticity
+
+### Terminology
+
+.small[Homo/heteroscedasticity = Homo/hetergeneity (of variance)]
+
+### Assumption
+
+Homoskedasticity (constant variance of `\(u_i, var(u_i|X) = \sigma^2\)`)
+
+### Heteroscedasticity
+
+`\(var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.\)`
+
+???
+
+Regression: Heteroscedasticity
+
+ANOVA: Hetergeneity (of variance)
+
+---
+
+background-image: url("images/heteroscedasticity1.png")
+background-position: center
+background-size: contain
+
+---
+
+background-image: url("images/heteroscedasticity2.webp")
+background-position: center
+background-size: contain
+
+---
+
+## Consequence
+
+Unbiased, expected consistent
+
+--
+
+`\begin{align}
+var(\hat\beta|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
+                 =&amp; var(\frac{\sum(X_i - \bar X)Y_i}{\sum(X_i - \bar X)^2}|X)\\
+                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}var(Y_i|X)\\
+                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2
+\end{align}`
+
+---
+
+`\begin{align}
+H_0: \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =&amp; \frac{\sigma^2}{\sum(X_i - \bar X)^2}\\
+\sum(X_i - \bar X)^2\frac{\sigma_i^2}{\sigma^2} =&amp; \sum(X_i - \bar X)^2
+\end{align}`
+
+Therefore, only when `\(\frac{\sigma_i^2}{\sigma^2} = 1\)`, the estimate is efficient.
+
+---
+
+## Diagnosis
+
+### Park test
+
+Ocular-inspection test: Use the scalar points of `\(\hat u_i^2\)` against `\(X_i\)`, or `\(\hat u_i^2\)` against `\(Y_i\)`
+
+Regress `\(ln(\hat u_i^2)\)` on some `\(X_{ki}\)`:
+
+`$$ln(\hat u_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.$$`
+
+Do the t-test of coefficient in `\(ln(X_i)\)`: `\(H_0: \hat\delta_1 = 0.\)`
+
+???
+
+&lt;img src="images/parkTest.png" height = 200 /&gt;
+
+---
+
+class: small
+
+### Goldfeld-Quandt test
+
+1. Divide the domain of X to three parts, `\(\frac{n -c}{2}, c, \frac{n -c}{2}\)`. 
+1. Regress Y on X as usual for each part.
+1. Calculate `\(\sigma_L^2\)` from part 1 and `\(\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat u_i^2\)` from part 3.
+1. Then test `\(H_0: \sigma_L^2 = \sigma_H^2\)`
+    + Statistics: `\(\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}\)`
+
+--
+
+Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.
+
+---
+
+### Breusck-Pagan(-Goldfreg) test
+
+Assuming `\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)`
+
+--
+
+Regress `\(\hat u_i^2\)` on `\(X_1, X_2, \cdots, X_{k - 1}\)`, 
+
+`\(H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0\)`
+
+???
+
+H_1: At least one of the &amp;sigma;&amp;ne;0, `\(\sim(\sigma_i = 0)\)`
+
+--
+
+Statistics `\(F_{k - 1, n - k}\)`
+
+---
+
+### White test
+
+1. Regress Y on X to get `\(\hat u_i^2\)`
+1. Regress `\(\hat u_i^2\)` on `\(\sum X_i + \sum X_i^2 + \sum X_iX_j\)` or `\(\hat Y_is\)`.
+1. Test this model against a model with no variables (F test).
+
+---
+
+## Solution
+
+### White covariance matrix (a.k.a., Heteroscedasitic-consistent covariance matrix).
+
+`\(E(u_i|X) = E\{[u_i - E(u_i)]^2|X\}\)`
+
+Since `\(E(u_i|X) = 0\)` by assumption, we can estimate `\(u_i\)` with `\(\hat u_i^2\)` and estimate `\(var(\hat\beta_1|X)\)` with `\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.\)`
+
+The estimates turn out to be biased (esp. for small N), but converge asymptotically in n to the true distribution. 
+
+---
+
+### Weighted least square
+
+Reduce the substantive effect of the change in X by `\(\frac{1}{\sigma_i}\)`, in order to squeeze the value towards the middle:
+
+Given &amp;sigma;&lt;sub&gt;i&lt;/sub&gt; is known, 
+
+`\begin{align}
+\frac{Y_i}{\sigma_i} =&amp; \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{u_i}{\sigma_i};\\
+\text{Then, } var(\frac{u_i}{\sigma_i}) =&amp; \frac{1}{\sigma_i^2}var(u_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
+\Rightarrow Y_i^* =&amp; \beta_0X^*_{0i} + \beta_1X^*_{1i} + u_i^*. 
+\end{align}`
+
+???
+
+The last equation is homscedastistic.
+
+---
+
+class: small
+
+However, in most cases, we don't know &amp;sigma;&lt;sub&gt;i&lt;/sub&gt;. 
+
+--
+
+So, usually we assume `\(var(u_i)\sim X_{1i}\)`, i.e., `\(var(u_i) = \sigma_i^2 = \sigma^2X_i = h_i\sigma^2\)`.
+
+--
+
+.magenta[Goal]: `\(var(u^*_i) = var(u^*_i), \forall i,j.\)` Then,
+
+`\begin{align}
+u^*_i =&amp; \frac{u_i}{\sqrt{h_i}}\\
+var(\frac{u_i}{\sqrt{h_i}}) =&amp; \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2\\
+\Rightarrow Y_i^* =&amp; \frac{Y_i}{\sqrt{h_i}}\\
+            X_{0i}^* =&amp; \frac{1}{\sqrt{h_i}}\\
+            X_{1i}^* =&amp; \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
+\end{align}`
+
+???
+
+In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.
+
+---
+
+## Modeling Heteroscedasticity
+
+Heteroscedasticity can be theoretically meaningful. 
+
+Researchers may want to model it, esp., when they focus on how the variance changes. 
+
+--
+
+e.g., Assuming `\(var(u_i) = \sigma^2e^{\gamma_1X_{2i}}\)`. 
+
+If &amp;gamma;&lt;sub&gt;1&lt;/sub&gt; = 0, then the model is homoscedastistic; otherwise, one has to use MLE to test `\(H_0: \gamma_1 = 0.\)`
+
+---
+
+## Feasible Generalized Linear Squares (FGLS)
+
+`\begin{align}
+\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{u}; \\
+var(\boldsymbol{u}) =&amp; \Omega_{n\times n} = \left(
+       \begin{array}{cccc}
+       \sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
+       0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
+       \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+       0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
+       \end{array}\right)\\
+\text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y})\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} =&amp; \boldsymbol{HH^{-1}},\\
+\text{Then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u}
+\end{align}`
+
+---
+
+In this case
+
+`\begin{align}
+\boldsymbol{H^{-1}u} =&amp; \boldsymbol{H^{-1}(H^{-1})'}var(\boldsymbol{u})\\
+                     =&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I}.\\
+var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}
+\end{align}`
+
+* If there's no heteroscedasticity, `\(\boldsymbol{\Omega} = \sigma\boldsymbol{I}.\)`
+* If there is heteroscedasticity and `\(\boldsymbol{\Omega}\)` is known, then WLS (a special type of GLS).
+* If `\(\boldsymbol{\Omega}\)` is unknown, run `\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{u}\)` to estimate `\(\boldsymbol{\Omega}\)` with `\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat u\hat u'}\)`
+
+--
+
+Hint: This method does not get SE, also biased for small N.
+
+---
+
+class: small
+
+## "Sandwich" Matrix
+
+The above method is a type of "sandwich" estimator.
+
+In a more general view, let `\(\boldsymbol{Q} = \boldsymbol{X'X}\)` and 
+
+`\begin{align}
+\boldsymbol{D} = \left(
+\begin{array}{cccc}
+\sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
+0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
+\end{array}\right)
+\end{align}`
+
+Then for regular OLS, `\(var(\beta) = \sigma^2(\boldsymbol{X'X})^{-1} = \sigma^2\boldsymbol{Q}^{-1}\)`.
+
+But when heteroscedasticity occurs, `\(var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}\)`.
+
+Instead, let `\(\boldsymbol{G} = \boldsymbol{X'GX}\)`, then `\(var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.\)`
+
+---
+
+## Heterogeneity in TSCS Data
+
+TSCS: Time-series cross-sectional data, "pooled data", "panel data"(wrong!)
+
+Dealing with heterogeneity in TSCS data:
+
+1. Robust standard error
+1. Fixed effect
+1. Multilevel modeling
+
+---
+
+class: small
+
+## Robust Standard Error
+
+### Sandwich SE
+
+In the FGLS version, the "meat" can be identified only when T &gt; N, and before this the autocorrelation has to be eliminated.
+
+???
+
+Autocorrelation: `\(cov(u_i, u_j|X_i, X_j) = 0, \forall i, j\)`
+
+--
+
+### Panel-corrected SE
+
+An alternative version of the sandwich SE. 
+
+&amp;Omega; is clustered by time periods: `\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)`
+
+--
+
+### Cluster SE
+
+Adjust SE to account for correlations within clusters
+
+---
+
+class: small
+
+### Within-between model
+
+1. Run separate models in each group
+1. Run an aggregate regression: 
+
+`\begin{align}
+\bar{Y_i} =&amp; \beta_0 + \beta_1\bar{X_i} + \epsilon_i + u_i\\
+Y_{it} - \bar{Y_i} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (u_{it} - u_i)\\
+\hat{Y_i} =&amp; \beta_1\hat{X_{it}} + \hat{u_{it}}, \text{(a.k.a., the within model)}\\
+Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it}, \text{(a.k.a., the between model)}
+\end{align}`
+
+---
+
+class: small
+
+## Fixed Effect
+
+### Least Square with Dummy Variables (LSDV)
+
+Type I: 
+
+`$$Y_it = \beta_1X_{it} + \alpha_i + u_{it},$$` in which &amp;alpha; is unit-specific mean differences (unit fixed effect). 
+
+--
+
+Type II: 
+
+`$$Y_it = \sum^T_{t = 1}\delta_tD_{t_i} + \beta_1X_{it} + u_{it},$$` in which `\(\delta_tD_{t_i}\)` is the fixed effect for time.
+
+---
+
+Concerns of LSDV
+
+1. Adding a lot of variables (risk of using out of the d.f.)
+1. Additional high multicollinearity
+1. Losing time invariant variables
+1. Inefficient estimates of FE on binary and dependent variables
+
+???
+
+For the last two concerns, considering using duration models.
+
+---
+
+Alternatives
+
+1. Demeaning
+1. Fixed effect Vector Decomposition (FEVD)
+
+--
+
+Con: 
+
+1. Can't offer sufficient information about the between-group effects
+1. Difficult to calculate substantive effects, e.g., first differences.
+
+---
+
+## Quick Brief of Multilevel Modeling
+
+### (Two-Level) Random Intercept
+
+`\begin{align}
+Y_ij = \beta_{0j}&amp; + \beta_{1j}X_{ij} + \epsilon_{ij}, \epsilon_{ij}\sim N(0, \sigma^2)\\
+       \beta_{0j}&amp; = \gamma_{00} + \gamma_{01}Z_j + u_{0j}, u_{0j}\sim N(0, \tau^2)
+\end{align}`
+
+--
+
+**Intraclass correlation**: `\(\rho = \frac{\tau^2}{\sigma^2 + \tau^2}.\)`
+
+???
+
+Represent the similarity between individual and group level.
+
+---
+
+### Random Slop
+
+`\begin{align}
+Y_ij = &amp;\beta_{0j} + \beta_{1j}X_{ij} + \epsilon_{ij}\\
+       &amp;\beta_{0j} = \gamma_{00} + \gamma_{01}Z_j + u_{0j}\\
+       &amp;\beta_{1j} = \gamma_{10} + u_{1j}.\\
+\text{Assume }\left(
+\begin{array}{c}
+u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
+0\\0\end{array}\right), \left(\begin{array}{cc}
+\tau_0^2 &amp; \tau_0\tau_1\\ 
+\tau_0\tau_1 &amp; \tau_1^2
+\end{array}\right)\right]
+\end{align}`
+
+---
+
+Covariate Matrix: 
+
+`\begin{align}
+\left(\begin{array}{cc}
+\tau_0^2 &amp; \tau_0\tau_1\\ 
+\tau_0\tau_1 &amp; \tau_1^2
+\end{array}\right)
+\end{align}`
+
+1. Identity: `\(\tau_0^2 = \tau_1^2 = 1\)`;
+1. Exchangable: `\(\tau_0^2 = \tau_1^2\)`;
+1. Independent: `\(\tau_0\tau_1 = 0\)`;
+1. Unstructured: no specific relationships is assumed for the &amp;tau;s.
+
+---
 
 class: inverse, bottom
 
@@ -26,9 +436,11 @@ class: inverse, bottom
 
 ---
 
+class: small
+
 ## Perfect collinearity
 
-When `\(cov(X_1, X_2) = 1, r_{1i} = 0\)`, then `\(\hat\beta_1 =&amp; \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}\)` cannot be estimated.
+When `\(cov(X_1, X_2) = 1, r_{1i} = 0\)`, then `\(\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}\)` cannot be estimated.
 
 --
 
@@ -49,6 +461,8 @@ PRF: population regression function
 
 ---
 
+class: small
+
 ### Multicollinearity
 
 **X**&lt;sub&gt;2&lt;/sub&gt; is not a transformation of X&lt;sub&gt;1&lt;/sub&gt;.
@@ -56,15 +470,35 @@ PRF: population regression function
 In this case, the estimators (**&amp;beta;**) remain .magenta[unbiased], yet
 
 `\begin{align}
-var(\hat\beta_1|X) =&amp; \frac{\sigma^2\sum(X_2 - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
-                   =&amp; \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},
-\end{align} 
-
-where `\(\beta_{12} = cov(X_1, X_2)\)`.
+var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
+=&amp;\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
+\end{align}`
 
 --
 
-As `\(\beta_{12}\)` increases, the
+As `\(\beta_{12}\)` increases, the variance also increases.
+
+---
+
+### Diagnosis
+
+**Variance Inflation Factors (VIF, [1, +&amp;infin;])**: A measure of how much the variance of the estimated coefficient &amp;beta;&lt;sub&gt;k&lt;/sub&gt; is "inflated" by the correlation among the predictor variables.
+
+`$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$`
+
+1 means that no correlation among the k&lt;sup&gt;th&lt;/sup&gt; predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.
+
+---
+
+Rule of thumb: 4, 10
+
+--
+
+Solution: 
+
+1. No need specific solution if not being serious.
+1. Removed the highly correlated variables.
+1. Remeasure the correlated variables (e.g., EFA, CFA, IRT)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>
