@@ -55,12 +55,12 @@ class: inverse, bottom
 
 ## 模型选择：Big Choice
 
-对于建模策略的学则直接决定了：
+对于建模策略的选择直接决定了：
 
 1. IVs如何影响事件发生？
 1. 事件是否被视为重复的？
-1. 持续期（duration）是否时完全可见的？
-1. 事件分布（event rate）如何在时间维度上改变？
+1. 发生周期（duration）是否时完全可见的？
+1. 事件分布（event rate）如何在时间维度上变动？
 
 ---
 
@@ -77,7 +77,7 @@ class: inverse, bottom
 
 [1] EHA, often used to refer to discrete model
 
-[2] Often used to refer to continous model
+[2] Often used to refer to continuous model
 
 ]
 
@@ -90,7 +90,7 @@ class: inverse, bottom
 
 ---
 
-## 重要抉择
+## 建模策略
 
 1. 决定何时开始计时
 
@@ -133,6 +133,8 @@ df_eh <- tibble::tribble(
 kable(df_eh, format = "html")
 ```
 
+--
+
 当事件发生后，该观测单元将不再存在于risk set中。
 
 ---
@@ -146,6 +148,7 @@ kable(df_eh, format = "html")
 
 ???
 
+c-log-log: complementary log-log, $\eta(x) = \log(-\log(1-\pi_x))=\mathbf{x}\beta$
 scobit: skewed logit
 expit: exponential logit
 
@@ -153,7 +156,7 @@ expit: exponential logit
 
 ## 核心概念
 
-1. Survival rate: $S(t) = P(T > t | X)$.
+1. Survival rate: $S(t|X) = P(T > t | X)$.
 1. Density: $f(t|x) = P(T = t | X)$, PDF.
 1. Cumulative distribution: $F(t) = P(T\leq t | X) = 1 - S(t)$, CDF.
 1. .magenta[Hazard]: 
@@ -287,7 +290,7 @@ summary(m_logit)
 ```
 
 ---
-
+p
 class: inverse, bottom
 
 # Duration Analysis
@@ -308,7 +311,8 @@ saveRDS(df_dur, file = "data/coalcold.RDS")
 
 ## 与事件史分析的差别
 
-使用事件发生的特定时间，而非总体时间段来建模
+Event history：使用事件发生的特定时间，
+Duration：总体时间段来建模
 
 
 ```{r durData}
