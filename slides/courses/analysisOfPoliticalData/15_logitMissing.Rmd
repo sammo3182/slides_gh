@@ -1,0 +1,373 @@
+---
+title: "Missing Data and Generalized Linear Model"
+subtitle: "Analysis of Political Data (70700173)"
+author: "Yue Hu"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+---
+
+class: inverse, bottom
+
+# Missing Data
+
+---
+
+## What's Missing Data
+
+Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
+
+\begin{align}
+\boldsymbol{D} =& 
+\left(\begin{array}{cc}
+X_1 & Y_1\\
+X_2 & Y_2\\
+X_3 & Y_3\\
+X_4 & Y_4\end{array}\right);
+\boldsymbol{D^{Observed}} =
+\left(\begin{array}{cc}
+X_2 & Y_1\\
+X_4 & Y_2\\
+X_5 & Y_3\\
+X_6 & Y_4\end{array}\right);\\
+\boldsymbol{M} =& 
+\left(\begin{array}{cc}
+0 & 0\\
+1 & 0\\
+0 & 0\\
+1 & 0\end{array}\right);
+\boldsymbol{D^M} =
+\left(\begin{array}{cc}
+ & \\
+X_2 & \\
+ & \\
+X_4 & \end{array}\right)
+\end{align}
+
+---
+
+## Type of Missing
+
+### Missing completely at random (MCAR)
+
+P(M|D) = P(M)
+
+### Missing at random (MAR)
+
+P(M|D) = P(M|D<sup>Observed</sup>)
+
+### Non-ignorable (NI/MNAR)
+
+P(M|D) &ne; P(M|D<sup>Observed</sup>)
+
+---
+
+## Consequence of Missing
+
+|      | Summary Stats | Regression          | SE vs. complete |
+|------|---------------|---------------------|-----------------|
+| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
+| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
+| NI   | Biased        | Biased              | Inefficient     |
+
+???
+
+Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
+Biasedness in NI is because of the censor with an X within the model
+
+---
+
+## Solution
+
+**Ignore it**: listwise deletion
+
+???
+
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often parwise deletion
+
+--
+
+**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
+
+--
+
+**Imputation**
+
+1. Interpolation
+1. Extrapolation
+1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
+    + For multidimentional variable use joint distribution and iterative chain.
+    
+???
+
+<img src="images/interpolation.png" height = 200 />
+<img src="images/extrapolation.png" height = 200 />
+
+    
+---
+
+**Multiple imputations**: 
+
+1. Take multiple guess given estimated distribution
+2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
+3. Combine: Rubin's formula
+
+\begin{align}
+\hat\beta =& \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
+var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
+\text{where}\ W =& \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
+\end{align}
+
+???
+
+$\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}$ variance within each complete dataset;
+
+$\frac{m + 1}{m}W$ variance across datasets.
+
+---
+
+### Advantages
+
+Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
+
+---
+
+class: small
+
+## When You Shouldn't Use MI
+
+1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
+
+--
+
+1. There is NI missingness in X so that EMs can give incorrect answers.
+
+--
+
+1. Missingness in X is not a function of Y, and there is no unobserved omitted values
+that affects Y.
+
+--
+
+1. The data is large enough that the influence of the listwise is trivial.
+
+--
+
+1. The model is nonlinear and complicated.
+
+--
+
+1. Extreme distributional divergence in missing data from multivariate normal.
+
+---
+
+**Likelihood approach**
+
+Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
+
+e.g., SEM
+
+---
+
+class: small
+
+## Non-Ignorable Missing
+
+*Common types*:
+
+**Censored**: Have .magenta[some] information about values of missing data, e.g., all data <0 are
+coded as 0.
++ Leading to heteroscedasticity and nonnormal error
++ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
+
+???
+
+2SLS: Two-Stage least squares
+
+--
+
+**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
+observable when it > 100.
++ Solution: `tobit`, use the right distribution---a combination of $P(Y_i^* < 0|X)$ and $f(Y_i|X_i)$.
+
+???
+
+<img src="images/censorTruncated.png" height = 200 />
+
+---
+
+class: inverse, bottom
+
+# Generalized Linear Regression
+
+---
+
+## When to Use GLR
+
+1. .magenta[Generalized] linear regression is not .magenta[general] linear regression
+1. Using when the very first assumption of OLS is violated---Y is no longer continuous.
+1. Basic logic: Transforming non-continuous to continuous
+
+--
+
+Let's talk about the simplist siutation: binary Y
+
+---
+
+## Traditional Solutions
+
+### OLS
+
+1. Unrealistic and nonsensitive predicted outcomes
+1. Heteroscedasticity
+
+---
+
+### Linear Probability Model (LPM)
+
+\begin{align}
+\pi_i\equiv P(Y = 1|X) =& \beta_0 + \beta_1X_i\\
+var(\pi_i) =& \pi(1 - \pi) \\
+           =& (\beta_0 +  \beta_1X_i)[1 - (\beta_0 + \beta_1X_i)]
+\end{align}
+
+Advantage: Interpretability
+
+Disadvantage: Not very reliable transformation
+
+???
+
+The specification of var addresses hteroscedasticity
+
+---
+
+## Link Functions
+
+Specifically, latent variable approach
+
+$$P(Y = 1|X) = G(\beta_0 + \beta_1X_i + \cdots + \beta_kX_k)$$
+
+--
+
+This G() is the *link function.*
+
+When G() = &Lambda;(X), the model is called logit (.orange[log]istic un.orange[it])
+
+When G() = &Phi;(X), the model is called progit (.orange[pro]bability un.orange[it])
+
+---
+
+## Logit
+
+Assuming that the outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:
+
+\begin{align}
+Y_i =& \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*> 0.\end{cases}\\
+Y^* =& X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
+\end{align}
+
+---
+
+class: small
+
+Given the PDF of a logistic distribution is $\Lambda(x) = \frac{e^x}{1 + e^x}$, 
+
+\begin{align}
+P(Y_i = 1|X) =& P(Y^* > 0|X)\\
+              =& P(X\beta + u\geq 0|X)\\
+              =& P(u\geq 0 - X\beta|X)\\
+              =& 1 - P(u\leq - X\beta|X)\\
+              =& 1 - \Lambda(-X\beta)\\
+              =& 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
+              =& \frac{1}{1 + e^{-X\beta}}\\
+              =& \frac{e^{XP}}{1 + e^{X\beta}} = \Lambda(X\beta)\\
+P(Y_i = 0|X) =& P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
+             =& \Lambda(-X\beta) = \frac{e^{-X\beta}}{1 + e^{-X\beta}} = \frac{1}{1 + e^{X\beta}}\\
+             =& 1 - \Lambda(X\beta)
+\end{align}
+
+---
+
+## Probit
+
+
+\begin{align}
+Y_i =& \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*> 0.\end{cases}\\
+Y^* =& X\beta + u, u\sim \Phi(0, 1)\\
+\text{Similarly, } P(Y_i = 1|X) =& 1 - \Phi(-X\beta)\\
+f(x) =&\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
+\end{align}
+
+
+---
+
+class: small
+
+## Logit vs. Probit
+
+* Probit is a little computationally costly than logit ( $\frac{e^x}{1 + e^x}$ vs. $\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$)
+
+--
+
+* Logit and probit coefficients are identical but on different scales (var<sub>logit</sub> = &pi;<sup>2</sup>/3, var<sub>probit</sub> = 1)
+
+Let's say the true model is a logit, but we estimate a probit model
+
+\begin{align}
+P(Y = 1|X) =& 1 - P(u \leq -X\beta_{probit}|X)\\
+           =& 1 - \Phi(\frac{-X\beta_{probit}}{\pi^2/3})\\
+           =& 1 - \Lambda(-X\beta_{logit})\\
+\Leftrightarrow\ \beta_{logit} =& \frac{\sqrt{3}}{\pi}\beta_{probit}\approx 0.55\beta_{probit}
+\end{align}
+
+
+---
+
+class: small
+
+## Estimation
+
+We cannot minizing the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ). So, one has to use the likelihood approach to inference.
+
+Maximum likelihood estimation:
+
+$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$
+
+Define: $\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)$
+
+$\hat\theta$ is the maximum likelihood estimate of &theta; from among all possible values of &theta;<sup>*</sup>
+
+???
+
+m: a model
+
+&theta: parameter
+
+k: an arbitrary function, depending on the data.
+
+argmax: when having the argument, the function get the max
+
+
+---
+
+\begin{align}
+\mathcal{L}(\beta|Y, X) =& \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
+                        =& \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
+\Leftrightarrow\ ln(\mathcal{L}) =& \sum ln[F(X\beta)] + \sum ln[1 - F(X\beta)]
+\end{align}

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Missing Data and Generalized Linear Model</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Missing Data and Generalized Linear Model
+## Analysis of Political Data (70700173)
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+---
+
+class: inverse, bottom
+
+# Missing Data
+
+---
+
+## What's Missing Data
+
+Let's define  **X**, **Y**, and m&lt;sub&gt;ij&lt;/sub&gt; = 1 if X&lt;sub&gt;i&lt;/sub&gt; is missing.
+
+`\begin{align}
+\boldsymbol{D} =&amp; 
+\left(\begin{array}{cc}
+X_1 &amp; Y_1\\
+X_2 &amp; Y_2\\
+X_3 &amp; Y_3\\
+X_4 &amp; Y_4\end{array}\right);
+\boldsymbol{D^{Observed}} =
+\left(\begin{array}{cc}
+X_2 &amp; Y_1\\
+X_4 &amp; Y_2\\
+X_5 &amp; Y_3\\
+X_6 &amp; Y_4\end{array}\right);\\
+\boldsymbol{M} =&amp; 
+\left(\begin{array}{cc}
+0 &amp; 0\\
+1 &amp; 0\\
+0 &amp; 0\\
+1 &amp; 0\end{array}\right);
+\boldsymbol{D^M} =
+\left(\begin{array}{cc}
+ &amp; \\
+X_2 &amp; \\
+ &amp; \\
+X_4 &amp; \end{array}\right)
+\end{align}`
+
+---
+
+## Type of Missing
+
+### Missing completely at random (MCAR)
+
+P(M|D) = P(M)
+
+### Missing at random (MAR)
+
+P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+
+### Non-ignorable (NI/MNAR)
+
+P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+
+---
+
+## Consequence of Missing
+
+|      | Summary Stats | Regression          | SE vs. complete |
+|------|---------------|---------------------|-----------------|
+| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
+| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
+| NI   | Biased        | Biased              | Inefficient     |
+
+???
+
+Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
+Biasedness in NI is because of the censor with an X within the model
+
+---
+
+## Solution
+
+**Ignore it**: listwise deletion
+
+???
+
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &amp;ne; 0, so often parwise deletion
+
+--
+
+**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
+
+--
+
+**Imputation**
+
+1. Interpolation
+1. Extrapolation
+1. Regression imputation: `\(M = \boldsymbol{X\gamma} + u\)`
+    + For multidimentional variable use joint distribution and iterative chain.
+    
+???
+
+&lt;img src="images/interpolation.png" height = 200 /&gt;
+&lt;img src="images/extrapolation.png" height = 200 /&gt;
+
+    
+---
+
+**Multiple imputations**: 
+
+1. Take multiple guess given estimated distribution
+2. Result `\(\hat\beta(1), \hat\beta(2), \hat\beta(3)\)`,... and their variance.
+3. Combine: Rubin's formula
+
+`\begin{align}
+\hat\beta =&amp; \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
+var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
+\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
+\end{align}`
+
+???
+
+`\(\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}\)` variance within each complete dataset;
+
+`\(\frac{m + 1}{m}W\)` variance across datasets.
+
+---
+
+### Advantages
+
+Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
+
+---
+
+class: small
+
+## When You Shouldn't Use MI
+
+1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
+
+--
+
+1. There is NI missingness in X so that EMs can give incorrect answers.
+
+--
+
+1. Missingness in X is not a function of Y, and there is no unobserved omitted values
+that affects Y.
+
+--
+
+1. The data is large enough that the influence of the listwise is trivial.
+
+--
+
+1. The model is nonlinear and complicated.
+
+--
+
+1. Extreme distributional divergence in missing data from multivariate normal.
+
+---
+
+**Likelihood approach**
+
+Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
+
+e.g., SEM
+
+---
+
+class: small
+
+## Non-Ignorable Missing
+
+*Common types*:
+
+**Censored**: Have .magenta[some] information about values of missing data, e.g., all data &lt;0 are
+coded as 0.
++ Leading to heteroscedasticity and nonnormal error
++ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
+
+???
+
+2SLS: Two-Stage least squares
+
+--
+
+**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
+observable when it &gt; 100.
++ Solution: `tobit`, use the right distribution---a combination of `\(P(Y_i^* &lt; 0|X)\)` and `\(f(Y_i|X_i)\)`.
+
+???
+
+&lt;img src="images/censorTruncated.png" height = 200 /&gt;
+
+---
+
+class: inverse, bottom
+
+# Generalized Linear Regression
+
+---
+
+## When to Use GLR
+
+1. .magenta[Generalized] linear regression is not .magenta[general] linear regression
+1. Using when the very first assumption of OLS is violated---Y is no longer continuous.
+1. Basic logic: Transforming non-continuous to continuous
+
+--
+
+Let's talk about the simplist siutation: binary Y
+
+---
+
+## Traditional Solutions
+
+### OLS
+
+1. Unrealistic and nonsensitive predicted outcomes
+1. Heteroscedasticity
+
+---
+
+### Linear Probability Model (LPM)
+
+`\begin{align}
+\pi_i\equiv P(Y = 1|X) =&amp; \beta_0 + \beta_1X_i\\
+var(\pi_i) =&amp; \pi(1 - \pi) \\
+           =&amp; (\beta_0 +  \beta_1X_i)[1 - (\beta_0 + \beta_1X_i)]
+\end{align}`
+
+Advantage: Interpretability
+
+Disadvantage: Not very reliable transformation
+
+???
+
+The specification of var addresses hteroscedasticity
+
+---
+
+## Link Functions
+
+Specifically, latent variable approach
+
+`$$P(Y = 1|X) = G(\beta_0 + \beta_1X_i + \cdots + \beta_kX_k)$$`
+
+--
+
+This G() is the *link function.*
+
+When G() = &amp;Lambda;(X), the model is called logit (.orange[log]istic un.orange[it])
+
+When G() = &amp;Phi;(X), the model is called progit (.orange[pro]bability un.orange[it])
+
+---
+
+## Logit
+
+Assuming that the outcome of a binary variable Y&lt;sub&gt;i&lt;/sub&gt; depends on an unobserved continuous probability Y&lt;sup&gt;*&lt;/sup&gt;:
+
+`\begin{align}
+Y_i =&amp; \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*&gt; 0.\end{cases}\\
+Y^* =&amp; X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
+\end{align}`
+
+---
+
+class: small
+
+Given the PDF of a logistic distribution is `\(\Lambda(x) = \frac{e^x}{1 + e^x}\)`, 
+
+`\begin{align}
+P(Y_i = 1|X) =&amp; P(Y^* &gt; 0|X)\\
+              =&amp; P(X\beta + u\geq 0|X)\\
+              =&amp; P(u\geq 0 - X\beta|X)\\
+              =&amp; 1 - P(u\leq - X\beta|X)\\
+              =&amp; 1 - \Lambda(-X\beta)\\
+              =&amp; 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
+              =&amp; \frac{1}{1 + e^{-X\beta}}\\
+              =&amp; \frac{e^{XP}}{1 + e^{X\beta}} = \Lambda(X\beta)\\
+P(Y_i = 0|X) =&amp; P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
+             =&amp; \Lambda(-X\beta) = \frac{e^{-X\beta}}{1 + e^{-X\beta}} = \frac{1}{1 + e^{X\beta}}\\
+             =&amp; 1 - \Lambda(X\beta)
+\end{align}`
+
+---
+
+## Probit
+
+
+`\begin{align}
+Y_i =&amp; \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*&gt; 0.\end{cases}\\
+Y^* =&amp; X\beta + u, u\sim \Phi(0, 1)\\
+\text{Similarly, } P(Y_i = 1|X) =&amp; 1 - \Phi(-X\beta)\\
+f(x) =&amp;\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
+\end{align}`
+
+
+---
+
+class: small
+
+## Logit vs. Probit
+
+* Probit is a little computationally costly than logit ( `\(\frac{e^x}{1 + e^x}\)` vs. `\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`)
+
+--
+
+* Logit and probit coefficients are identical but on different scales (var&lt;sub&gt;logit&lt;/sub&gt; = &amp;pi;&lt;sup&gt;2&lt;/sup&gt;/3, var&lt;sub&gt;probit&lt;/sub&gt; = 1)
+
+Let's say the true model is a logit, but we estimate a probit model
+
+`\begin{align}
+P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
+           =&amp; 1 - \Phi(\frac{-X\beta_{probit}}{\pi^2/3})\\
+           =&amp; 1 - \Lambda(-X\beta_{logit})\\
+\Leftrightarrow\ \beta_{logit} =&amp; \frac{\sqrt{3}}{\pi}\beta_{probit}\approx 0.55\beta_{probit}
+\end{align}`
+
+
+---
+
+class: small
+
+## Estimation
+
+We cannot minizing the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
+
+Maximum likelihood estimation:
+
+`$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$`
+
+Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`
+
+`\(\hat\theta\)` is the maximum likelihood estimate of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
+
+???
+
+m: a model
+
+&amp;theta: parameter
+
+k: an arbitrary function, depending on the data.
+
+argmax: when having the argument, the function get the max
+
+
+---
+
+`\begin{align}
+\mathcal{L}(\beta|Y, X) =&amp; \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
+                        =&amp; \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
+\Leftrightarrow\ ln(\mathcal{L}) =&amp; \sum ln[F(X\beta)] + \sum ln[1 - F(X\beta)]
+\end{align}`
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
