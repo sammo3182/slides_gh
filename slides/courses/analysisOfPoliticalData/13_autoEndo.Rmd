@@ -23,6 +23,8 @@ class: inverse, bottom
 
 ---
 
+class: small
+
 ## Time Series
 
 How does time make effects?
@@ -32,8 +34,9 @@ How does time make effects?
 ### One-period shock
 
 \begin{align}
-Y_t =& \beta_0 + \beta_1(Z_t + 1) + \cdots + u\\
-Y_{t + 1} =& \beta_0 + \beta_1(Z_{t + 1}) + \beta_1(Z_t + 1) + \cdots + u
+Y_t =& \beta_0 + \beta_1(Z_t + 1) + \beta_2Z_{t-1} + \cdots + u\\
+Y_{t + 1} =& \beta_0 + \beta_1Z_{t + 1} + \beta_2(Z_t + 1) + \beta_3Z_{t-1} + \cdots + u\\
+Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \beta_3(Z_t + 1) + \cdots + u
 \end{align}
 
 --
@@ -63,29 +66,28 @@ class: small
 
 ## Solution?
 
-1. De-trend:
+De-trend: $Y_t\sim Z_t$
 
 \begin{align}
 \text{Run } Y_t =& \beta_0 + \beta_1Time + u_t;\\
             Z_t =& \gamma_0 + \gamma_1Time + v_t;\\
 \text{Run } Y'_t =& Y_t - (\hat\beta_0 + \hat\beta_1Time);\\
             Z'_t =& Z_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
-\Rightarrow\ Y'_t = \delta Z'_t + e_t.
+\Rightarrow\ Y'_t =& \delta Z'_t + e_t.
 \end{align}
 
 --
 
-1. Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").<sup>1</sup>
+Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").<sup>1</sup>
 
 --
 
-1. Fixed effect
-1. Spline 
+Fixed effect
+
+Spline 
 
 .footnote[
-
 [1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
-
 ]
 
 ---
@@ -94,9 +96,258 @@ class: small
 
 ### Random work
 
+.center[<img src="images/randomWalk.jpg" height = 400 />]
+
+
+---
+
+Let $\rho\in[-1, 1]$ identify the direction the path will go (-1: down, 1: up, 0, flat).
+
 \begin{align}
-Y_t =& \rho Y_{t-1} + e\\
+Y_t =& \rho Y_{t - 1} + e_t\\
+u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
+\Rightarrow\ u_{t + 1} =& \rho u_t + e_t\\
+                       =& \rho(\rho u_{t - 1} + e_t) + e_{t + 1}\\
+                       =& \rho(\rho (\rho u_{t - 2} + e_{t-1}) + e_t) + e_{t + 1}
 \end{align}
+
+--
+
+1. |&rho;| < 1 implies the effects of previous errors goes away eventually;
+1. |&rho;| = 1, the pass never goes away, and the trend can end anywhere (unit root).
+
+---
+
+class: small
+
+### Stationary: 
+
+For every collection of time periods ( $X_t, X_{t_2}, X_{t_3},\cdots$ where $t < t_2 < t_3,\cdots$ ), their distributions are the same as $X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots$, i.e., the sam joint distribution, or saying the error terms are the same for every period.
+
+--
+
+### Covariance Stationary
+
+Given: 
+
+1. t(X<sub>t</sub>) is constant
+1. var(X<sub>t</sub>) is constant
+1. cov(X<sub>t</sub>X<sub>t + n</sub>)does not rely on t (i.e., cov(X<sub>t</sub>X<sub>t + n</sub>) = cov(X<sub>t + 1</sub>X<sub>t + 2</sub>))
+
+
+Then, a moving average process that is covariance stationary is weakly depend if cov(X<sub>t</sub>X<sub>t + n</sub>)&rarr;0 as h&rarr;&infin;.
+
+--
+
+When covariance stationary plus weakly dependent (e.g., $Y_t = \rho Y_{t - 1} + X_t + e_t$), the OLS is consistent.
+
+---
+
+## Influence on &beta;
+
+Let's assume the mean of X is zero to simplify the maths (not necessary, though).
+
+\begin{align}
+\hat\beta_1 =& \beta_1 + \frac{\sum(X_0 - \bar X)}{\sum(X_0 - \bar X)^2}u_t\\
+            =& \beta_1 + \frac{\sum X_t}{\sum X_t^2}u_t, u_t = \rho u_{t - 1} + e_t
+\end{align}
+
+Only when &rho; = 0 (or cov(X<sub>t</sub>X<sub>t + n</sub>) = 0), the estimate is identical with the OLS estimate.
+
+---
+
+class: small
+
+## Influence on the Variance
+
+\begin{align}
+var(u_t|X) =& var(\rho u_{t - 1} + e_t|X)\\
+           =& var(\rho(\rho u_{t - 2} + e_{t - 1}) + e_t|X)\\
+           =& var(\rho(\rho (\rho u_{t - 3} + e_{t-2}) + e_{t-1}) + e_t|X)\\
+           =& var(\rho^3u_{t - 3} + \rho^2e_{t-2} + \rho e_{t - 1} + e_t |X)\\
+           =& \rho^6var(u_{t - 3}) + \rho^4\sigma_{e_{t-2}} + \rho^2\sigma_{e_{t-2}} + \sigma_e^2
+\end{align}
+
+--
+
+Following this manner, when t increases,
+
+\begin{align}
+var(u_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots...\\
+           =& \sigma_e^2\sum^T_{i = 1}\rho^{2(i - 1)}\\
+           =& \frac{\sigma_e^2}{1 - \rho^2}
+\end{align}
+
+--
+
+When &rho; > 0, the estimation of variance through OLS will be overestimated.
+
+---
+
+class: small
+
+## Testing for Autocorrelation
+
+Testing AR(1): Durbin-Watson test
+
+\begin{align}
+DW =& \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
+   =& \frac{\sum^T_{t = 2}(\rho\hat u_{t-1} + e_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
+   =& \frac{\sum^T_{t = 2}[(\rho - 1)\hat u_{t - 1} + e_t]^2}{\frac{\sigma_e^2}{1 - \rho^2}}\\
+   =& \frac{\sum^T_{t = 2}\{[(1 - \rho)^2\hat u^2_{t - 1}] + 2(\rho - 1)\hat u_{t - 1}e_t + e_t^2\}}{\frac{\sigma_e^2}{1 - \rho^2}}\\
+   \approx& \frac{\sum^T_{t = 2}[(1 - \rho)^2\sigma_u^2 + \sigma_e^2]}{\frac{\sigma_e^2}{1 - \rho^2}} = (1 - \rho)^2 + (1 - \rho^2) = 2(1 - \rho)
+\end{align}
+
+
+---
+
+$$DW = 2(1 - \rho)$$
+
+Since the range of &rho; is [-1, 1], $DW \in [0, 4]$.
+
+In practice, DW test specifies a range of values, [d<sub>l</sub>, d<sub>u</sub>], and set the hypotheses:
+
+> Positive AR: H<sub>0</sub>: &rho; = 0; H<sub>0</sub>: &rho; > 0
+
+---
+
+## Test
+
+1. If DW < d<sub>l</sub>, reject H<sub>0</sub>;
+1. If d<sub>l</sub> < DW < d<sub>u</sub>, inconclusive;
+1. If DW > d<sub>u</sub>, fail to reject H<sub>0</sub>
+
+--
+
+For negative autocorrelation
+
+1. If (4 - DW) < d<sub>l</sub>, reject H<sub>0</sub>;
+1. If d<sub>l</sub> < (4 - DW) < d<sub>u</sub>, inconclusive;
+1. If (4 - DW) > d<sub>u</sub>, fail to reject H<sub>0</sub>
+
+---
+
+## Solution
+
+Time series analysis
+
+MMitchell, Sara B. 2017. “Time Series Analysis for the Social Sciences.” *Contemporary Sociology* 46(5). <sup>1</sup>
+
+.footnote[
+
+[1] Box-Steffensmeier, Janet M. 2014. *Time Series Analysis for the Social Sciences*. New York: Cambridge University Press.
+
+]
+
+---
+
+## Special Case: Panel
+
+Different from time series: T small, N large
+
+General model: $Y_{it} = \beta_0 + \beta_1X_{it} + u_{it}$
+
+---
+
+How to control for the time dependency in panel data?
+
+### Fixed effect
+
+$$Y_{it} = \beta_0 + \beta_1X_{it} + a_i + u_{it}$$
+
+--
+
+### Fixed differencing
+
+\begin{align}
+Y_{i2} - Y_{i1} =& (\beta_0 - \beta_0) + \beta_1(X_{i2} - X_{i1})\\
+                 &+ (u_{i2} - u_{i1})\\
+\Delta Y_i =& \beta_1\Delta X_i + \Delta u_i.
+\end{align}
+
+---
+
+Both are unbiased and consistent, nevertheless: 
+
+When N = 2, FE and FD are identical;
+
+When N > 2, not necessarily;
+
+When autocorrelation is weak in the errors, FE might be better with smaller variance.
+
+--
+
+.magenta[Hint]: Neither methods allows time invariant X.
+
+---
+
+## Special Case: TSCS
+
+General model: 
+
+$$Y_{it} = \beta_0 + \beta_1X_{it} + \beta_2X_t + \beta_3X_i + u_{it}$$
+
+X<sub>t</sub>: Only varying by time.
+
+X<sub>i</sub>: Only varying by unit.
+
+
+---
+
+## TSCS Dealing with Time Dependency
+
+### Detrend
+
+1. Detrending functions, e.t., the time smooth function/spline
+1. Adding lag Y [AR(1)] (.magenta[Hint]: May cause bias).
+
+### Regime switching
+
+\begin{align}
+$Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
+   dZ_t =& 1, \text{if } t \leq t^*.
+\end{align}
+
+Structural break at time t<sup>*</sub> in the relationship between X and Y
+
+---
+
+### Treating time dependency as unit heterogeneity
+
+*LSDV*: $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$
+
+$\delta_td_{t}$: Fixed effect for time
+
+$a_i$: Fixed effect for unit (unit-specific mean differences)
+
+--
+
+Cons : 
+
+1. Using up the d.f.
+1. Aggravating multicollinearity
+1. .magenta[Losing time invariant variables].
+
+---
+
+*Within-between model*
+
+???
+
+Went this through in 12_multiHeter
+
+--
+
+*Random effect*: Modeling time as a level
+
+$$Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$$
+
+Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
+
+.magenta[ASSUMPTION]:
+
+1. cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)
+1. cov(a<sub>i</sub>, u<sub>it</sub>)= 0
 
 ---
 
@@ -106,189 +357,296 @@ class: inverse, bottom
 
 ---
 
-class: inverse, bottom
+## What's the Problem
 
-# Missing Data
-
----
-
-## What's Missing Data
-
-Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
-
-\begin{align}
-\boldsymbol{D} =& 
-\left(\begin{array}{cc}
-X_1 & Y_1\\
-X_2 & Y_2\\
-X_3 & Y_3\\
-X_4 & Y_4\end{array}\right);
-\boldsymbol{D^{Observed}} =
-\left(\begin{array}{cc}
-X_1 & Y_1\\
-X_2 & Y_2\\
-X_3 & Y_3\\
-X_4 & Y_4\end{array}\right);\\
-\boldsymbol{M} =& 
-\left(\begin{array}{cc}
-0 & 0\\
-1 & 0\\
-0 & 0\\
-1 & 0\end{array}\right);
-\boldsymbol{D^M} =
-\left(\begin{array}{cc}
- & \\
-X_2 & \\
- & \\
-X_4 & \end{array}\right)
-\end{align}
+<img src="images/eggChicken.jpg" height = 400 />
 
 ---
 
-## Type of Missing
+## A More Sophisticated Example
 
-### Missing completely at random (MCAR)
+Family income ~ Education
 
-P(M|D) = P(M)
-
-### Missing at random (MAR)
-
-P(M|D) = P(M|D<sup>Observed</sup>)
-
-### Non-ignorable (NI/MNAR)
-
-P(M|D) &ne; P(M|D<sup>Observed</sup>)
+Which leads to which?
 
 ---
 
-## Consequence of Missing
+## Formal Definition
 
-|      | Summary Stats | Regression          | SE vs. complete |
-|------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
-| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
-| NI   | Biased        | Biased              | Inefficient     |
+$$Y_i = \beta_0 + \beta_1X_i + u_i$$
 
-???
-
-Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
-Biasedness in NI is because of the censor with an X within the model
-
----
-
-## Solution
-
-**Ignore it**: listwise deletion
-
-???
-
-Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often parwise deletion
+Endogeneity occurs when .magenta[cov(X<sub>i</sub>, u<sub>i</sub>)&ne;0].
 
 --
 
-**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
-
---
-
-**Imputation**
-
-1. Interpolation
-1. Extrapolation
-1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
-    + For multidimentional variable use joint distribution and iterative chain.
-    
-???
-
-<img src="images/interpolation.png" height = 200 />
-<img src="images/extrapolation.png" height = 200 />
-
-    
----
-
-**Multiple imputations**: 
-
-1. Take multiple guess given estimated distribution
-2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
-3. Combine: Rubin's formula
+Explicitly, 
 
 \begin{align}
-\hat\beta =& \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
-var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
-\text{where}\ W =& \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
+Y =& \beta_0 + \beta_1X + u\\
+X =& \beta_0 + \beta_1Y + v
 \end{align}
-
-???
-
-$\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}$ variance within each complete dataset;
-
-$\frac{m + 1}{m}W$ variance across datasets.
-
----
-
-### Advantages
-
-Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
 
 ---
 
 class: small
 
-## When You Shouldn't Use MI
+## Regarding the Issue in a Multiple Regression
 
-1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_nX_n + u.$$
 
---
-
-1. There is NI missingness in X so that EMs can give incorrect answers.
+Recall that OLS achieves unbiased by assuming $cov(X, u) = 0$.
 
 --
 
-1. Missingness in X is not a function of Y, and there is no unobserved omitted values
-that affects Y.
+Let's say Y and X<sub>n</sub> are not exogenous, then
+
+\begin{align}
+cov(1, u) =& 0\\
+cov(X_1, u) =& 0\\
+cov(X_2, u) =& 0\\
+\vdots & \\
+cov(X_{n - 1}, u) =& 0\\
+\text{Buuuuuut } cov(X_n, u) \neq& 0\\
+\end{align}
 
 --
 
-1. The data is large enough that the influence of the listwise is trivial.
-
---
-
-1. The model is nonlinear and complicated.
-
---
-
-1. Extreme distributional divergence in missing data from multivariate normal.
+In this case, the model cannot identified. Why?
 
 ---
 
-**Likelihood approach**
+Recall when you were young---as young as learning to solve the equation systems:
 
-Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
+\begin{cases}
+y = 3x + 4z\\
+z = 5y - 2x
+\end{cases}
 
-e.g., SEM
+Can you solve it? 
+
+---
+
+In this case, the model is called *underidentified* model.
+
+Consequence : .red[biased, inconsistent] estimate of &beta;.
+
+---
+
+## Testing for Endogeneity
+
+Special case: [Variable omission](https://sammo3182.github.io/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html#15)
+
+Hausman Procedure (using t distribution)
+
+We believe the full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates a constrained model $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
+
+To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test 
+
+.center[H<sub>0</sub>: cov(u', v) = 0.]
+
+---
+
+## Solutions
+
+### Instrumental Variables (IV)
+
+We need a variable Z<sub>i</sub> that .magenta[simultaneously]: 
+
+1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
+1. cov(u<sub>i</sub>, Z<sub>i</sub>) = 0
+
+---
+
+## Example I of IV
+
+When do people go back to school after working already?
+
+DV : Income
+IV : Likelihood of backing to school
+
+How's there an endogeneity issue?
+
+???
+
+Endogeneity : Ability
+
+--
+
+IV candidates: 
+
+1. Proximity to college (Card 1995)
+1. Month of birth (Angrist and Krueger 1991)
+
+---
+
+## Example II of IV
+
+How does economic growth affect within country conflicts? 
+
+DV : Incidence of civil war
+IV : Economic growth per capita
+
+How's there an endogeneity issue?
+
+???
+
+Endogeneity: religious fractionalization, mountainous terrain, and population
+
+--
+
+IV candidate:
+
+1. Rainfall growth (percentage change in rainfall from the previous year) (Miguel, Satyanath, and Sergenti 2004)
+
+???
+
+Journal of Political Economy
+
+--
+
+Concerns? 
+
+???
+
+Agriculture only? 
+
+Drought in one country could make another country's projects more scare and therefore valuable.
+
+---
+
+## How to Find a Proper IV
+
+1. Seeking something seemingly irrelevant
+
+--
+
+1. Seeking back to the time
+
+--
+
+1. Making some assumptions 
+
+--
+
+1. Ok, ok, I have to concede, it is a myth...
+
+
+---
+
+## Solving Underidentification with IVs
+
+### Just-identified model
+
+$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
+
+### Over-identified model
+
+\begin{align}
+\hat{\boldsymbol{\beta}}_{2SLS} =& (\boldsymbol{X'P_ZX})^{-1}(\boldsymbol{X'P_ZY})\\
+                                =& (\boldsymbol{Z'\hat X})^{-1}(\boldsymbol{Z'Y})
+\end{align}
+
+where $\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$ (a.k.a., the projection matrix), and $\boldsymbol{\hat X} = \boldsymbol{P_ZX}$
+
+???
+
+Recommend over-identified model more
+
+---
+
+## Two Stage Least Squares
+
+1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
+1. Regress **Y** on $\boldsymbol{\hat X}$.
 
 ---
 
 class: small
 
-## Non-Ignorable Missing
+## Effect
 
-*Common types*:
+\begin{align}
+cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
+              =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
+              =& \beta_1cov(X_i, Z_i)\\
+\Rightarrow\beta_1 =& \frac{cov(Y_i, Z_i)}{\beta_1cov(X_i, Z_i)} = \frac{\sum(Y_i - \bar Y)(Z_i - \bar Z)}{\sum(X_i - \bar X)(Z_i - \bar Z)},\\
+       var(\hat\beta_1) =& \frac{\sigma^2}{n\sigma_X^2\rho_{XY}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
+\end{align}
 
-**Censored**: Have .magenta[some] information about values of missing data, e.g., all data <0 are
-coded as 0.
-+ Leading to heteroscedasticity and nonnormal error
-+ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
+Trade-off: Unbiased estimates from IV, yet a bigger variance (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
 
-???
+---
 
-2SLS: Two-Stage least squares
+## Weak Instruments
+
+cov(Y, Z) is small but not equal 0.
+
+$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
+
+When cov(X, Z) is salient, no big problem. But when it's small, the estimate will be biased---in which case, OLS might be even better.
 
 --
 
-**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
-observable when it > 100.
-+ Solution: `tobit`, use the right distribution---a combination of $P(Y_i^* < 0|X)$ and $f(Y_i|X_i)$.
+### Check for the Problem
+
+Stock and Watson (2007, 735)
+
+---
+
+## A Broader View of Endogeneity Solutions
+
+Common causes of endogeneity
+
+1. Omitted variable
+    + Model misspecification
+    + .magenta[Selection bias] (Heckman)
+1. Measurement error
+1. Simultaneity (2SLS, 3SLS)
 
 ???
 
-<img src="images/censorTruncated.png" height = 200 />
+Study women's wage given education. The selection point is the data is only the women who were in the labor force.
+
+https://stats.stackexchange.com/questions/172508/two-stage-models-difference-between-heckman-models-to-deal-with-sample-selecti
+
+---
+
+### Additional Regressors
+
+Let Ys being endogenous, and Xs being exogenous.
+
+One may use multiple exogenous variables to instrument the endogenous variable.
+
+---
+
+class: small
+
+For example, 
+
+\begin{align}
+Y_1 =& \beta_0 + \beta_1Y_2 + \beta_2X_1 + u\\
+Y_2 =& \gamma_0 + \gamma_1X_1 + \gamma_2X_2 + \gamma_3X_3 + v\\
+\end{align}
+
+Assuming 
+
+\begin{align}
+cov(Z, v) =& 0\\
+cov(Z, u) =& 0\\
+\gamma_2\neq& 0 | \gamma_3\neq 0
+\end{align}
+
+In other words, Y<sub>2</sub> won't perfectlly collinear with Z<sub>1</sub>. 
+
+--
+
+Estimate
+
+\begin{align}
+\hat Y_2 =& \hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v\\
+Y_1 =& \beta_0 + \beta_1\hat Y_2 + \beta_2X_1 + u\\
+\Rightarrow\ Y_1 =& \beta_0 + \beta_1(\hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v) + \beta_2X_1 + u\\
+                 =& (\beta_0 + \beta_1\hat\gamma_0) + (\beta_2 + \beta_1\hat\gamma_1)X_1 + \beta_1\hat\gamma_2X_2 + \beta_1\hat\gamma_3X_3 + (\beta_1v + u)
+\end{align}
+
+This will produce a unbiased result but not exactly &beta;<sub>1</sub>.
