@@ -371,3 +371,156 @@ argmax: when having the argument, the function get the max
                         =& \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
 \Leftrightarrow\ ln(\mathcal{L}) =& \sum ln[F(X\beta)] + \sum ln[1 - F(X\beta)]
 \end{align}
+
+--
+
+Property
+
+1. Consistent;
+1. Asymptotically unbiased;
+1. Generally asymptotically efficient.
+
+---
+
+## How to Find MLE Solutions
+
+* If there is an analytic solution, one can calculate it.
+* If there is no analytic solution, one needs certain computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
+
+---
+
+## Interpretation
+
+$$P(Y = 1|X) = \frac{e^{XP}}{1 + e^{X\beta}}$$
+
+What's the effect of every one unit change of X on P(Y = 1|X)?
+
+--
+
+Ways to interpret GLM outcomes:
+
+1. Predicted value plots
+1. Marginal effect
+1. First difference
+
+
+---
+
+## Predicted Value Plots
+
+```{r predVal, message=FALSE, echo=FALSE, warning=FALSE, fig.width=10}
+library(ggplot2)
+
+ggplot(data = data.frame(x = c(-3, 3)), aes(x)) + 
+  stat_function(fun = function(x) exp(x)/(1+exp(x)), n = 100, aes(color = "1")) +
+  stat_function(fun = function(x) exp(3*x)/(1+exp(3*x)), n = 100, aes(color = "3")) +
+  ylab("Predicted Values") + 
+  xlab("X") +
+  labs(color = expression(beta))
+```
+
+---
+
+class: small
+
+## Marginal Effects
+
+The instantaneous change
+
+\begin{align}
+&\frac{\partial P(Y = 1|X)}{\partial X} \\
+=& \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
+& -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
+=& \beta_1P(Y = 1|X)P(Y = 0|X)
+\end{align}
+
+--
+
+The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&beta; = 0. In other words, marginal effect depends on the value of X.
+
+In fact, it depends on the value of .magenta[all the X]. This requires the report of marginal effect including the value of the Xs.
+
+---
+
+## First Difference
+
+The discrete version of marginal effect.
+
+$$FD = P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k}),$$
+
+---
+
+X<sub>-k</sub>: 
+
+1. All other independent variables (holding them constant)
+1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
+
+--
+
+X<sub>k</sub><sup>H,L</sup>: 
+
+1. Max &rarr; Min
+1. Median/mean &plusmn; &sigma;<sub>X<sub>k</sub></sub>
+1. Two theoretical interesting values
+1. Discrete: 0/1
+1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
+
+---
+
+## Don't Forget the Uncertainty
+
+How to calculate SEs for margins or FDs?
+
+1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
+1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
+1. Just using the variance of $X\hat\beta$.
+
+---
+
+## Goodness of Fit
+
+### Psedo-R<sup>2</sup>
+
+Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/) to estimate it, but none of them is quite straightforward.
+
+---
+
+class: small
+
+### Proportional reduction in error (PRE) 
+
+Or Percent correctly predicted (PCP)
+
+Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) > 0.5, define Y&#770; = 1, otherwise, Y&#770; = 0. 
+
+Let's denote
+
+|             | Y = 1          | Y = 0          |
+|-------------|----------------|----------------|
+| Y&#770; = 1 | n<sub>11</sub> | n<sub>01</sub> |
+| Y&#770; = 0 | n<sub>10</sub> | n<sub>00</sub> |
+
+$$PCP = \frac{n_{11} + n_{00}}{\sum n}$$
+
+--
+
+Furthermore, one can consider how much better the model predict than plain guess. 
+
+Define *PMC* as the percent modal category (the plain guess). That is,
+
+$$PRE = \frac{PCP - PMC}{1 - PMC}$$
+
+--
+
+An advanced version is *ePRE*. 
+
+---
+
+class: inverse, bottom
+
+.center[<img src="images/done.gif" height = 300 />]
+
+# That's it. You made it!
+## Congratulations!!
