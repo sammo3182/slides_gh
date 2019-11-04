@@ -45,14 +45,14 @@ class: small
 
 1. Linearity in the parameter
 1. Nonstochastic X ("given X," a.k.a., "X is fixed")
-1. Mean zero errors ($E(u_i|X_i) = 0$)
+1. Mean zero errors ( $E(u_i|X_i) = 0$)
 1. Homoskedasticity (constant variance of $u_i, var(u_i|X) = \sigma^2$)
-1. No autocorrelation ($E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$)
+1. No autocorrelation ( $E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$)
 1. Identification (N > K; K = 2 for a simple OLS)
 1. X has positive noninfinite variance ($var(X)$)
 1. Correct specification
 1. No perfect collinearity (when there are more than one X, $\nexists X_{i} s.t., X_{i} = a + b\sum_{j = 1}b_jX_j$)
-1. No covariance between $x_i$ and $u_i$ ($E(X_iu_i) = cov(x_i, u_i) 0$)
+1. No covariance between $x_i$ and $u_i$ ( $E(X_iu_i) = cov(x_i, u_i) =0$)
 
 
 ???
@@ -61,7 +61,7 @@ s.t. such that
 
 ---
 
-## What CLRM Assumptions Give US
+## What CLRM Assumptions Give USp
 
 $\hat\beta_0 + \hat\beta_1$ are unbiased, conssitant, and efficient among the class of linear estimations.
 
@@ -73,7 +73,7 @@ In a linear regression model in which the errors are uncorrelated, have equal va
 
 ---
 
-.center[<img src="images/blue.gif" height = 200 />]
+.center[<img src="images/blue.gif" height = 500 />]
 
 ---
 
@@ -91,8 +91,9 @@ E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]
                  =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + u) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X)\\
                  =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)]\\
                  =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0\\
-                 =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1
+                 =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1\blacksquare
 \end{align}
+
 
 ---
 
@@ -117,6 +118,8 @@ u_i\sim& \text{i.i.d.} N(0, \sigma^2)\\
 \hat\beta_1\sim& N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
 \hat\beta_0\sim& N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
 \end{align}
+
+--
 
 Let's standardize the variances: 
 
@@ -230,7 +233,7 @@ According to the above rules,
 
 class: small
 
-Proof. $\hat\beta = \beta$
+Proof $\hat\beta = \beta$
 
 \begin{align}
 \boldsymbol{\epsilon\epsilon'}=& \frac{d(\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)}{d\hat\beta} = 0\\
@@ -251,8 +254,13 @@ n & \sum X_i\\
 \end{array}\right)\\
 \text{then, } E(\hat\beta) = [\boldsymbol{(X'X)^{-1}X'}](\boldsymbol{X}\beta + \epsilon) =& [\boldsymbol{(X'X)^{-1}X'X}\beta] + [\boldsymbol{(X'X)^{-1}X'\epsilon}]\\
           =& \beta.\\
-var(\beta) =& \sigma^2(X'X)^{-1}, \text{where}\ \sigma^2 = \frac{\epsilon'\epsilon}{n - k}.
+var(\beta) =& \sigma^2(X'X)^{-1}, \text{where}\ \sigma^2 = \frac{\epsilon'\epsilon}{n - k}.\blacksquare
 \end{align}
+
+???
+
+**X**<sup>-1</sup>: Inverse matrix
+**X**': Transposition
 
 ---
 
@@ -271,14 +279,18 @@ Two properties of **H**:
 1. Symmetric: $\boldsymbol{H = H'};\boldsymbol{(I - H) = (I - H)'}$
 2. Idempotent: $\boldsymbol{H^2 = H; (I - H)(I - H) = (I - H)}$
 
+???
+
+Idempotent: 幂等
+
 ---
 
-Proof. $\boldsymbol{X'\epsilon} = 0$
+Proof $\boldsymbol{X'\epsilon} = 0$
 
 \begin{align}
 \boldsymbol{X'Y} =& \boldsymbol{X'X}\hat\beta\\
 \boldsymbol{X'(X\hat\beta + \epsilon)} =& \boldsymbol{X'X}\hat\beta\\
-\boldsymbol{X'\epsilon} =& 0
+\boldsymbol{X'\epsilon} =& 0\blacksquare
 \end{align}
 
 ---
@@ -356,7 +368,11 @@ class: small
 =& \beta_1^2\sum(X_i - \bar X)^2 + \sigma^2
 \end{align}
 
+--
+
 Then $F_{1, n - 2}\sim\frac{\hat\beta_1^2(X_i - \bar X)^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2 + \sigma^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2} + 1$
+
+--
 
 Thus $F_{1, n - 2}\sim\frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}=\frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = [\frac{\beta_1}{\sqrt{\frac{\sigma^2}{\sum(X_i - \bar X)^2}}}]^2 = (\frac{\bar X - \mu}{\hat\sigma_X})^2$
 
