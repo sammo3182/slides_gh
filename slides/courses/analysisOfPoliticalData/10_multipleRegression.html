@@ -66,7 +66,25 @@ When the goal is achieved,
 
 where `\(\hat r_{1i}\)` are the errors from the regression of `\(X_{1i}\)` on `\(X_{2i}\)` (i.e., `\(X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}\)`), the proportion that `\(X_2\)`cannot explain.
 
+--
+
 `\(\hat\sigma^2 = \frac{\sum\hat u_i^2}{n - 3}\)`
+
+---
+
+## Interpretation
+
+What does &amp;beta;&lt;sub&gt;1&lt;/sub&gt; mean?
+
+Every unit change in X&lt;sub&gt;1&lt;/sub&gt; leads to &amp;beta;&lt;sub&gt;1&lt;/sub&gt; changes in Y .magenta[on average], .red[holding everything else constant].
+
+--
+
+* Change the same amount?
+
+--
+
+* Constant how?
 
 ---
 
@@ -87,9 +105,9 @@ From the SRF,
 `\begin{align}
 Y_i =&amp; \hat Y_i + \hat u_i\\
 Y_i - \bar Y =&amp; \hat Y_i  - \bar Y + \hat u_i\\
-\Rightarrow Y_i - \bar Y =&amp; (\hat Y_i  - \bar Y + \hat u_i)^2\\
+\Rightarrow (Y_i - \bar Y)^2 =&amp; (\hat Y_i  - \bar Y + \hat u_i)^2\\
                          =&amp; (\hat Y_i  - \bar Y)^2 + \hat u_i^2 + 2u_i(\hat Y_i  - \bar Y)\\
-\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y) =&amp; \sum(\hat Y_i  - \bar Y)^2 + \sum\hat u_i^2\\
+\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y)^2 =&amp; \sum(\hat Y_i  - \bar Y)^2 + \sum\hat u_i^2\\
 SST =&amp; SSE + SSR\\
 1 =&amp; \frac{SSE}{SST} + \frac{SSR}{SST}\\
 \text{In which, } R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
@@ -106,7 +124,7 @@ background-size: contain
 
 ## Why Is R&lt;sup&gt;2&lt;/sup&gt; Bad?
 
-### It could be very low for a correct model? 
+### Very low for a correct model 
 
 `\begin{align}
 R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
@@ -122,7 +140,9 @@ When the residual (&amp;sigma;, estimated by u&lt;sub&gt;i&lt;/sub&gt; in sample
 
 ---
 
-### It can be very high for a redundant or misspecified model
+### Very high for a redundant or misspecified model
+
+"Trash-can" model:
 
 `\begin{align}
 R^2 =&amp; \frac{SSE}{SST} = \frac{\sum(\hat Y_i - \bar Y)^2}{SST}\\
@@ -137,7 +157,7 @@ Therefore, the more Xs are added, the larger SSE (and thus R&lt;sup&gt;2&lt;/sup
 
 ---
 
-Given X and Y has such relationship:
+Misspecification:
 
 ![](10_multipleRegression_files/figure-html/rlarge-1.png)&lt;!-- --&gt;
 
@@ -170,6 +190,12 @@ More-Xs booming
 
 ---
 
+## Think...
+
+When can R&lt;sup&gt;2&lt;/sup&gt; be useful?
+
+---
+
 class: inverse, bottom
 
 # Applications of Multiple Regression
@@ -181,7 +207,9 @@ class: inverse, bottom
 ### Goal
 
 1. Forecast
-1. Interpretation: How the model is close to the reality; what substantive changes can Xs make.
+1. Interpretation: 
+    + How the model is close to the reality?
+    + What substantive changes can Xs make?
 
 --
 
@@ -189,11 +217,6 @@ class: inverse, bottom
 
 1. The expected value (average) of `\(\hat Y\)`
 1. A one-time draw of `\(\hat Y\)`
-
-???
-
-Nota bene: note well
-
 
 ---
 
@@ -230,14 +253,16 @@ Fewer observations at two terminals, thus wider rainbow.
 
 ## Single Forecast
 
-There is an error term to account for: 
-
 `\begin{align}
 \hat Y_0 =&amp; \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
 var(\hat Y_0|X_0) =&amp; \sigma^2[1 + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}`
 
-In other words, single prediction is more uncertain than the average prediction.
+--
+
+There is an error term to account for.
+
+In other words, single prediction is .magenta[more uncertain] than the average prediction.
 
 ---
 
@@ -265,6 +290,10 @@ class: small
 1. The correct description is, AGAIN, that CI has 95% chance including the true &amp;theta;, rather than  &amp;theta; has 95% chance in CI.
 1. Because the level of evidence is pre-set, there is no difference between p = 0.049 and 0.001, as long as they are under 0.05.
 
+???
+
+Nota bene (NB): note well
+
 ---
 
 ## Hypothesis Test for the Coefficient
@@ -285,6 +314,12 @@ H_1: \beta \neq&amp; \beta^*.
 Statistics:
 
 `$$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\sim t_{n-k}.$$`
+
+--
+
+Interpretation: 
+
+For every unit change of X&lt;sub&gt;1&lt;/sub&gt;, Y changes by &amp;beta;&lt;sub&gt;1&lt;/sub&gt;, .magenta[holding everything else constant].
 
 ---
 
@@ -330,7 +365,7 @@ Then,
 Y =&amp; \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)}\\
   =&amp; \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u\\
 \Leftrightarrow Y - 3X_1 =&amp; \beta_0 + \beta_2(X_2 - 2X_1) + u\\
-Y^* =&amp; \beta_0' + \beta_2'Z + u, \test{(restricted)}
+Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
 \end{align}`
 where `\(Y^*=Y - 3X_1; Z = X_2 - 2X_1.\)`
 
@@ -342,13 +377,35 @@ Statistics:
 
 `$$\frac{\frac{SSR_R - SSR_U}{\Delta k}}{\frac{SSR_U}{n - k_U - 1}} = \frac{\frac{R_U^2 - R_R^2}{\Delta k}}{\frac{1 - R_U^2}{n - k_U - 1}}\sim F_{\Delta k, n - k - 1}$$`
 
-Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R&lt;sup&gt;2&lt;/sup&gt; to deduct the F test, because `\(SST_U \neq SST_R\)` in this case.
+--
 
+If the hypothesis is rejected, the unrestricted model is better.
 
 --
 
+Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R&lt;sup&gt;2&lt;/sup&gt; to deduct the F test, because `\(SST_U \neq SST_R\)` in this case.
 
-If the hypothesis is rejected, the unrestricted model is better.
+---
+
+class: small
+
+## Bonus: Common Latin Terms
+
+* *a fortiori*: Not even saying.
+* *ad hoc*: To this, immediate purpose.
+* *ibid.*: "ibidem", in the same place.
+* .magenta[*ceteris paribus*]: with other conditions remaining the same.
+* *c.f.*: "confer", compare
+* .magenta[*e.g.*]: "exempli gratia," for the sake of example.
+* *etc.*: "et cetera," and the rest.
+* *i.e.*: "id est," that is.
+* .magenta[*n.b./NB*]: "nota bene", note well.
+* *per se*: By/of/for/in itself.
+* .magenta[*QED*]: "quod erat demonstrandum", that which was to have been shown.
+
+
+* Bonus: Good.
+* Vise versa: In a turned position.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="../../../libs/remark-latest.min.js"></script>
