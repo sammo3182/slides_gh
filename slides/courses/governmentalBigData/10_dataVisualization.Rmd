@@ -47,6 +47,14 @@ set.seed(114)
 ### 如何做好的可视化
 ### `ggplot`可视化举例
 
+???
+
+什么不讲：
+
+1. 作图步骤
+1. Data into plots
+1. ...应该用什么图啊？...应该用什么色调啊？
+
 ---
 
 class: small
@@ -79,7 +87,7 @@ class: small
 
 ## 数据呈现偏好
 
-Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” Perspectives on Politics 5(4): 755–71.
+Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.
 
 检验APSR， AJPS和PA 2006年五刊，发现如下结果
 
@@ -315,7 +323,7 @@ background-size: contain
 
 * 用于呈现百分比（一维）
 * 容易误导读者（见后）
-* 浪费油墨
+* 浪费油墨（Why do we care?）
 
 被誉为垃圾图形（[junk chart](http://junkcharts.com)）首选
 
@@ -396,6 +404,45 @@ background-size: contain
 <img src="images/barPlot2.png" height = 300 />
 
 ]
+
+---
+
+## Alternative to Pie
+
+.left-column[
+
+```{r nightinggale}
+mydata <- data.frame( Day=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),
+                      Browse=c(50, 60, 70, 20,90,110,30))
+kable(mydata, format = "html")
+```
+]
+
+.right-column[
+
+```{r fig.width=6}
+myAngle <-seq(-20,-340,length.out =7)
+
+ggplot(mydata) +
+  geom_bar(aes(x=Day, y=Browse),width = 1,stat="identity",
+           colour = "black",fill="#F8766D") +
+  geom_text(aes(x=Day,y = Browse-8,label = Browse),color="white") +
+  coord_polar(theta = "x",start=0) +
+  ylim(c(0,120))+
+  xlab("") + ylab("")+
+  theme_light()+
+  theme( panel.background = element_blank(),
+         panel.grid.major = element_line(colour = "grey80",size=.25),
+         axis.text.y = element_text(size = 12,colour="black"),
+         axis.line.y = element_line(size=0.25),
+         axis.text.x=element_text(size = 13,colour="black",angle = myAngle))
+```
+
+]
+
+???
+
+Good for time series,save space than bars
 
 ---
 
@@ -499,10 +546,14 @@ background-size: contain
 
 ## Bubble Chart 优劣
 
+### Pro
+
 * 散点图变异
 * 通过气泡大小呈现第三维度数据
 
 --
+
+### Con
 
 * 气泡大小当接近时可能造成便是困难，信息无法完全精确地传达
 
@@ -529,6 +580,27 @@ class: inverse, bottom
 
 ---
 
+## “工笔”派
+
+.center[<img src="images/sexism_chart.jpg" height = 500 />]
+
+---
+
+background-image: url("images/sexism_image.jpg")
+background-position: center
+background-size: contain
+
+## “写意”派
+
+---
+
+## 数据可视化
+
+.left-column[<img src="images/africanGDP_image.jpg" height = 300 />]
+.right-column[<img src="images/africanGDP_chart.jpg" height = 400 />]
+
+---
+
 ## 可视化编码
 
 .center[<img src="images/measurement.png" height = 400 />]
@@ -539,12 +611,12 @@ class: inverse, bottom
 
 .left-column[
 
-* 数值型（quantitative）
+* 数值（continuous）
     + 10厘米，17厘米，23厘米
-* 定序型（ordinal）
+* 定序（ordinal）
     + 小，中，大
     + 周日，周一，周二……
-* 定类性（nominal）
+* 定类（nominal）
     + 苹果，桔子，香蕉……
 
 
@@ -682,6 +754,11 @@ background-size: contain
 * 避免过多类别
 * 对数据的每个维度指定一种或一个阶层的颜色
 
+---
+
+background-image: url("images/network_democracy.png")
+background-position: center
+background-size: contain
 
 ---
 
@@ -712,10 +789,17 @@ background-size: contain
 * 使用有限的色调范围
     + 控制低饱和度色彩中的色彩视觉突出（pop-out）
     + 避免过多颜色交错导致的杂乱无章
+    
+--
+
 * 使用中性背景色
     + 控制对全局色彩的影响
     + 最小化“同时对比” （simultaneous contrast）
-    
+
+???
+
+如果纯色为绿色，则灰色色块看起来带有红味,产生颜色偏差
+
 ---
 
 ## 对于新手而言
@@ -1047,6 +1131,15 @@ ggplot(china_map1, aes(x = long, y = lat, group = group)) +
 	geom_polygon(fill = 'beige') + 
   geom_path(color = "grey40")
 ```
+
+
+---
+
+`gganimate`
+
+background-image: url("images/patrioBase9709.gif")
+background-position: center
+background-size: contain
 
 ---
 
