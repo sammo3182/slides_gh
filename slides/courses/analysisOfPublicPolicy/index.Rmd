@@ -1,0 +1,97 @@
+---
+title: "Analysis of Public Policy (30700953)"
+author: "Dr. Yue Hu"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(pacman)
+p_load(tidyverse, lubridate)
+
+# Opening Date
+start <- ymd("2020-02-17")
+
+# Final Week
+end <- start + dweeks(15) 
+
+schedule <-
+  data.frame(day = seq(from = start, to = end, by = "days")) %>%
+  mutate(day = ymd(day),
+         weekDay = wday(day, week_start = 1)) %>% # get the relative week number
+  filter(weekDay == 1) %>% # only keep Monday
+  mutate(weekNum = 1:16, topic = NA, translation = NA)
+
+# Holiday
+tombSweep <- ymd(20200404)%--%ymd(20200406)
+laborDay <- ymd(20200430)%--%ymd(20200504)
+
+schedule$topic[schedule$day %within% tombSweep |
+                 schedule$day %within% laborDay] <- "[Public Holiday]"
+schedule$translation[schedule$day %within% tombSweep |
+                       schedule$day %within% laborDay] <- "[公共假期]"
+
+# Schedule
+content <- tibble::tribble(
+    ~ topic,
+    ~ translation,
+    "Introduction",
+    "课程介绍",
+    "Approach: A Scientific View",
+    "科学视角下的政策分析",
+    "Perspective: Functionalism",
+    "视角：结构功能主义",
+    "Perspective: System Theory",
+    "视角：政治系统理论",
+    "Perspective: Elitism",
+    "视角：精英理论",
+    "Perspective: Group Theory",
+    "视角：团体理论",
+    "Perspective: Decision-Making Theory",
+    "视角：决策过程理论",
+    "Method: Small-N Analysis",
+    "方法：小范围观测分析",
+    "Method: Small-N Analysis in Practice",
+    "方法：小范围分析实施与解释",
+    "Method: Large-N Analysis",
+    "方法：大范围观测分析",
+    "Method: Survey Analysis",
+    "方法：问卷调查分析",
+    "Method: Social Experiment",
+    "方法：社会实验",
+    "Method: \"Big Data\"",
+    "方法：大数据分析",
+    "Example: Informal Education",
+    "案例：非常规教育政策",
+    "Example: Language Policy",
+    "案例：语言政策",
+    "Student Presentations",
+    "期末项目报告"
+  )
+
+schedule$topic[is.na(schedule$topic)] <- content$topic
+schedule$translation[is.na(schedule$translation)] <- content$translation
+
+schedule$topic[nrow(schedule)] <- content$topic[nrow(content)]
+schedule$translation[nrow(schedule)] <- content$translation[nrow(content)]
+
+schedule <- select(schedule, day, weekNum, topic, translation) %>% 
+  mutate(caption = paste0("第", weekNum, "周 (", day, ") ", translation, " (", topic, ")"))
+
+```
+
+
+Welcome to the lecture sources for the *Analysis of Public Policy*. Learn how to analyze public polices with Dr. Hu.
+
+
+<center><img src="../analysisOfPoliticalData/images/goodluck.gif" height="200"/></center>
+
+
+<br><br>
+
+<ul>
+
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">`r schedule$caption[1]`</a>
+
+</ul>
