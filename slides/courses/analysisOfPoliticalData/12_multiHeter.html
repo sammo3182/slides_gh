@@ -29,6 +29,8 @@ class: small
 
 ## Perfect collinearity
 
+`$$X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$$`
+
 When `\(cov(X_1, X_2) = 1, r_{1i} = 0\)`, then `\(\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}\)` cannot be estimated.
 
 --
@@ -42,7 +44,7 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
 \Rightarrow Y_i =&amp; \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
 \end{align}`
 
-PRF is non-identifiable. 
+PRF (&amp;beta;) is non-identifiable. 
 
 ???
 
@@ -69,21 +71,25 @@ As `\(\beta_{12}\)` increases, the variance also increases.
 
 ---
 
+class: small
+
 ### Diagnosis
 
 **Variance Inflation Factors (VIF, [1, +&amp;infin;])**: A measure of how much the variance of the estimated coefficient &amp;beta;&lt;sub&gt;k&lt;/sub&gt; is "inflated" by the correlation among the predictor variables.
 
 `$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$`
 
+--
+
 1 means that no correlation among the k&lt;sup&gt;th&lt;/sup&gt; predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.
-
----
-
-Rule of thumb: 4, 10
 
 --
 
-Solution: 
+Rule of thumb: 4, 10
+
+---
+
+## Solution
 
 1. No need specific solution if not being serious.
 1. Removed the highly correlated variables.
@@ -121,11 +127,11 @@ Homoskedasticity (constant variance of `\(u_i, var(u_i|X) = \sigma^2\)`)
 
 Regression: Heteroscedasticity
 
-ANOVA: Hetergeneity (of variance)
+ANOVA: Heterogeneity (of variance)
 
 ---
 
-background-image: url("images/heteroscedasticity1.png")
+backgroaund-image: url("images/heteroscedasticity1.png")
 background-position: center
 background-size: contain
 
@@ -195,7 +201,7 @@ Theoretically, the smaller the c is, the more power the test has. However, too s
 
 ---
 
-### Breusck-Pagan(-Goldfreg) test
+### Breusck-Pagan(-Godfreg) test
 
 Assuming `\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)`
 
@@ -227,7 +233,7 @@ Statistics `\(F_{k - 1, n - k}\)`
 
 ### White covariance matrix (a.k.a., Heteroscedasitic-consistent covariance matrix).
 
-`\(E(u_i|X) = E\{[u_i - E(u_i)]^2|X\}\)`
+`\(E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}\)`
 
 Since `\(E(u_i|X) = 0\)` by assumption, we can estimate `\(u_i\)` with `\(\hat u_i^2\)` and estimate `\(var(\hat\beta_1|X)\)` with `\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.\)`
 
@@ -249,7 +255,7 @@ Given &amp;sigma;&lt;sub&gt;i&lt;/sub&gt; is known,
 
 ???
 
-The last equation is homscedastistic.
+The last equation is homoscedastistic.
 
 ---
 
@@ -263,7 +269,9 @@ So, usually we assume `\(var(u_i)\sim X_{1i}\)`, i.e., `\(var(u_i) = \sigma_i^2 
 
 --
 
-.magenta[Goal]: `\(var(u^*_i) = var(u^*_i), \forall i,j.\)` Then,
+.magenta[Goal]: `\(var(u^*_i) = var(u^*_j), \forall i,j.\)` 
+
+Then,
 
 `\begin{align}
 u^*_i =&amp; \frac{u_i}{\sqrt{h_i}}\\
@@ -338,7 +346,7 @@ The above method is a type of "sandwich" estimator.
 In a more general view, let `\(\boldsymbol{Q} = \boldsymbol{X'X}\)` and 
 
 `\begin{align}
-\boldsymbol{D} = \left(
+\boldsymbol{Q} = \left(
 \begin{array}{cccc}
 \sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
 0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
@@ -506,7 +514,7 @@ Covariate Matrix:
 \end{align}`
 
 1. Identity: `\(\tau_0^2 = \tau_1^2 = 1\)`;
-1. Exchangable: `\(\tau_0^2 = \tau_1^2\)`;
+1. Exchangeable: `\(\tau_0^2 = \tau_1^2\)`;
 1. Independent: `\(\tau_0\tau_1 = 0\)`;
 1. Unstructured: no specific relationships is assumed for the &amp;tau;s.
     </textarea>
