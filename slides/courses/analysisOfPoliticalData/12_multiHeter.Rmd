@@ -19,19 +19,97 @@ output:
 
 class: inverse, bottom
 
+# Collinearity
+
+---
+
+class: small
+
+## Perfect collinearity
+
+When $cov(X_1, X_2) = 1, r_{1i} = 0$, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
+
+--
+
+e.g., Let's say in the PRF $Y_i = \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u$, $X_2 = 1 + 2X_1$, then
+
+\begin{align}
+Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
+    =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat u \\
+    =& (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat u\\
+\Rightarrow Y_i =& \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
+\end{align}
+
+PRF is non-identifiable. 
+
+???
+
+PRF: population regression function
+
+---
+
+class: small
+
+### Multicollinearity
+
+**X**<sub>2</sub> is not a transformation of X<sub>1</sub>.
+
+In this case, the estimators (**&beta;**) remain .magenta[unbiased], yet
+
+\begin{align}
+var(\hat\beta_1|X) =&\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
+=&\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
+\end{align}
+
+--
+
+As $\beta_{12}$ increases, the variance also increases.
+
+---
+
+### Diagnosis
+
+**Variance Inflation Factors (VIF, [1, +&infin;])**: A measure of how much the variance of the estimated coefficient &beta;<sub>k</sub> is "inflated" by the correlation among the predictor variables.
+
+$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$
+
+1 means that no correlation among the k<sup>th</sup> predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.
+
+---
+
+Rule of thumb: 4, 10
+
+--
+
+Solution: 
+
+1. No need specific solution if not being serious.
+1. Removed the highly correlated variables.
+1. Remeasure the correlated variables (e.g., EFA, CFA, IRT)
+
+---
+
+class: inverse, bottom
+
 # Heteroscedasticity
 
 ---
+
+class: small
 
 ## What's Heteroscedasticity
 
 ### Terminology
 
-.small[Homo/heteroscedasticity = Homo/hetergeneity (of variance)]
+Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance)
+
+--
 
 ### Assumption
 
 Homoskedasticity (constant variance of $u_i, var(u_i|X) = \sigma^2$)
+
+--
 
 ### Heteroscedasticity
 
@@ -95,7 +173,7 @@ Do the t-test of coefficient in $ln(X_i)$: $H_0: \hat\delta_1 = 0.$
 
 ???
 
-<img src="images/parkTest.png" height = 200 />
+<img src="images/parkTest.png" pheight = 200 />
 
 ---
 
@@ -430,74 +508,5 @@ Covariate Matrix:
 1. Independent: $\tau_0\tau_1 = 0$;
 1. Unstructured: no specific relationships is assumed for the &tau;s.
 
----
 
-class: inverse, bottom
 
-# Collinearity
-
----
-
-class: small
-
-## Perfect collinearity
-
-When $cov(X_1, X_2) = 1, r_{1i} = 0$, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
-
---
-
-e.g., Let's say in the PRF $Y_i = \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u$, $X_2 = 1 + 2X_1$, then
-
-\begin{align}
-Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
-    =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat u \\
-    =& (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat u\\
-\Rightarrow Y_i =& \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
-\end{align}
-
-PRF is non-identifiable. 
-
-???
-
-PRF: population regression function
-
----
-
-class: small
-
-### Multicollinearity
-
-**X**<sub>2</sub> is not a transformation of X<sub>1</sub>.
-
-In this case, the estimators (**&beta;**) remain .magenta[unbiased], yet
-
-\begin{align}
-var(\hat\beta_1|X) =&\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
-=&\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
-\end{align}
-
---
-
-As $\beta_{12}$ increases, the variance also increases.
-
----
-
-### Diagnosis
-
-**Variance Inflation Factors (VIF, [1, +&infin;])**: A measure of how much the variance of the estimated coefficient &beta;<sub>k</sub> is "inflated" by the correlation among the predictor variables.
-
-$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$
-
-1 means that no correlation among the k<sup>th</sup> predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.
-
----
-
-Rule of thumb: 4, 10
-
---
-
-Solution: 
-
-1. No need specific solution if not being serious.
-1. Removed the highly correlated variables.
-1. Remeasure the correlated variables (e.g., EFA, CFA, IRT)
