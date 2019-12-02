@@ -1,5 +1,5 @@
 ---
-title: "Autocorrelation, Endogeneity, and Missing Data"
+title: "Endogeneity and Autocorrelation"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
@@ -15,6 +15,312 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+---
+
+class: inverse, bottom
+
+# Endogeneity
+
+---
+
+## What's the Problem
+
+<img src="images/eggChicken.jpg" height = 400 />
+
+---
+
+## A More Sophisticated Example
+
+Family income ~ Education
+
+Which leads to which?
+
+---
+
+## Formal Definition
+
+$$Y_i = \beta_0 + \beta_1X_i + u_i$$
+
+Endogeneity occurs when .magenta[cov(X<sub>i</sub>, u<sub>i</sub>)&ne;0].
+
+--
+
+Explicitly, 
+
+\begin{align}
+Y =& \beta_0 + \beta_1X + u\\
+X =& \beta'_0 + \beta'_1Y + v
+\end{align}
+
+---
+
+class: small
+
+## Regarding the Issue in a Multiple Regression
+
+$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_nX_n + u.$$
+
+Recall that OLS achieves unbiased by assuming $cov(X, u) = 0$.
+
+--
+
+Let's say Y and X<sub>n</sub> are not exogenous, then
+
+\begin{align}
+cov(1, u) =& 0\\
+cov(X_1, u) =& 0\\
+cov(X_2, u) =& 0\\
+\vdots & \\
+cov(X_{n - 1}, u) =& 0\\
+\text{Buuuuuut } cov(X_n, u) \neq& 0\\
+\end{align}
+
+--
+
+In this case, the model cannot identified. (Why?)
+
+---
+
+Recall when you were young---as young as learning to solve the equation systems:
+
+\begin{cases}
+y = 3x + 4z\\
+z = 5y - 2x
+\end{cases}
+
+Can you solve it? 
+
+--
+
+No! In this case, the model is called *underidentified* model.
+
+Serious consequence : .red[biased, inconsistent] estimate of &beta;.
+
+---
+
+## Testing for Endogeneity
+
+Special case: [Variable omission](https://sammo3182.github.io/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html#15)
+
+Hausman Procedure (using t distribution):
+
+Full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
+
+To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test 
+
+.center[H<sub>0</sub>: cov(u', v) = 0.]
+
+---
+
+## Solutions
+
+### Instrumental Variables (IV)
+
+We need a variable Z<sub>i</sub> that .magenta[simultaneously]: 
+
+1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
+1. cov(u<sub>i</sub>, Z<sub>i</sub>) = 0
+
+---
+
+## Example I of IV
+
+The effect of education on earnings
+
+DV : Income  
+IV : Likelihood of going to school
+
+How's there an endogeneity issue?
+
+???
+
+Endogeneity : Ability
+
+--
+
+IV candidates: 
+
+1. Proximity to college (Card 1995)
+1. Month of birth (Angrist and Krueger 1991)
+
+---
+
+## Example II of IV
+
+How does economic growth affect within-country conflicts? 
+
+DV : Incidence of civil war
+IV : Economic growth per capita
+
+How's there an endogeneity issue?
+
+???
+
+Endogeneity: religious fractionalization, mountainous terrain, and population
+
+--
+
+IV candidate:
+
+Rainfall growth (% change in rainfall from the previous year) .small[(Miguel, Satyanath, and Sergenti 2004)]
+
+???
+
+Journal of Political Economy
+
+--
+
+Concerns? 
+
+???
+
+Agriculture only? 
+
+Drought in one country could make another country's projects more scare and therefore valuable.
+
+---
+
+## How to Find a Proper IV
+
+1. Seeking something seemingly irrelevant
+
+--
+
+1. Seeking back to the time
+
+--
+
+1. Making some assumptions 
+
+--
+
+1. Ok, ok, I have to concede, it is a myth...
+
+
+---
+
+## Solving Underidentification with IVs
+
+### Just-identified model
+
+$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
+
+### Over-identified model
+
+\begin{align}
+\hat{\boldsymbol{\beta}}_{2SLS} =& (\boldsymbol{X'P_ZX})^{-1}(\boldsymbol{X'P_ZY})\\
+                                =& (\boldsymbol{Z'\hat X})^{-1}(\boldsymbol{Z'Y})
+\end{align}
+
+where $\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$ (a.k.a., the projection matrix), and $\boldsymbol{\hat X} = \boldsymbol{P_ZX}$
+
+???
+
+Recommend over-identified model more
+
+http://www.soderbom.net/lec2n_final.pdf
+
+because the additional instruments can be used to increase the precision of the estimates, and to construct tests for the validity of the overidentifying restrictions (which sheds some light on the validity of the instruments), but may lead to inefficiency.
+
+---
+
+## Two Stage Least Squares
+
+1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
+1. Regress **Y** on $\boldsymbol{\hat X}$.
+
+---
+
+class: small
+
+## Effect
+
+\begin{align}
+cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
+              =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
+              =& \beta_1cov(X_i, Z_i)\\
+\Rightarrow\beta_1 =& \frac{cov(Y_i, Z_i)}{\beta_1cov(X_i, Z_i)} = \frac{\sum(Y_i - \bar Y)(Z_i - \bar Z)}{\sum(X_i - \bar X)(Z_i - \bar Z)},\\
+       var(\hat\beta_1) =& \frac{\sigma^2}{n\sigma_X^2\rho_{XZ}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
+\end{align}
+
+Trade-off: Unbiased estimates from IV, yet a bigger variance (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
+
+---
+
+## Weak Instruments
+
+cov(Y, Z) is small but not equal 0.
+
+$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
+
+When cov(X, Z) is salient, no big problem. But when it's small, the estimate will be biased---in which case, OLS might be even better.
+
+--
+
+### Check for the Problem
+
+Stock and Watson (2007, 735)
+
+---
+
+## A Broader View of Endogeneity Solutions
+
+Common causes of endogeneity
+
+1. Omitted variable
+    + Model misspecification
+    + .magenta[Selection bias] (Heckman)
+1. Measurement error
+1. Simultaneity (2SLS, 3SLS)
+
+???
+
+Study women's wage given education. The selection point is the data is only the women who were in the labor force.
+
+https://stats.stackexchange.com/questions/172508/two-stage-models-difference-between-heckman-models-to-deal-with-sample-selecti
+
+---
+
+### Additional Regressors
+
+Let Ys being endogenous, and Xs being exogenous.
+
+One may use multiple exogenous variables to instrument the endogenous variable.
+
+---
+
+class: small
+
+For example, 
+
+\begin{align}
+Y_1 =& \beta_0 + \beta_1Y_2 + \beta_2X_1 + u\\
+Y_2 =& \gamma_0 + \gamma_1X_1 + \gamma_2X_2 + \gamma_3X_3 + v\\
+\end{align}
+
+Assuming 
+
+\begin{align}
+cov(Z, v) =& 0\\
+cov(Z, u) =& 0\\
+\gamma_2\neq& 0 | \gamma_3\neq 0
+\end{align}
+
+In other words, Y<sub>2</sub> won't perfectlly collinear with Z<sub>1</sub>. 
+
+--
+
+Estimate
+
+\begin{align}
+\hat Y_2 =& \hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v\\
+Y_1 =& \beta_0 + \beta_1\hat Y_2 + \beta_2X_1 + u\\
+\Rightarrow\ Y_1 =& \beta_0 + \beta_1(\hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v) + \beta_2X_1 + u\\
+                 =& (\beta_0 + \beta_1\hat\gamma_0) + (\beta_2 + \beta_1\hat\gamma_1)X_1 + \beta_1\hat\gamma_2X_2 + \beta_1\hat\gamma_3X_3 + (\beta_1v + u)
+\end{align}
+
+This will produce an unbiased result but not exactly &beta;<sub>1</sub>.
+
 ---
 
 class: inverse, bottom
@@ -349,306 +655,3 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 1. cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)
 1. cov(a<sub>i</sub>, u<sub>it</sub>)= 0
 
----
-
-class: inverse, bottom
-
-# Endogeneity
-
----
-
-## What's the Problem
-
-<img src="images/eggChicken.jpg" height = 400 />
-
----
-
-## A More Sophisticated Example
-
-Family income ~ Education
-
-Which leads to which?
-
----
-
-## Formal Definition
-
-$$Y_i = \beta_0 + \beta_1X_i + u_i$$
-
-Endogeneity occurs when .magenta[cov(X<sub>i</sub>, u<sub>i</sub>)&ne;0].
-
---
-
-Explicitly, 
-
-\begin{align}
-Y =& \beta_0 + \beta_1X + u\\
-X =& \beta_0 + \beta_1Y + v
-\end{align}
-
----
-
-class: small
-
-## Regarding the Issue in a Multiple Regression
-
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_nX_n + u.$$
-
-Recall that OLS achieves unbiased by assuming $cov(X, u) = 0$.
-
---
-
-Let's say Y and X<sub>n</sub> are not exogenous, then
-
-\begin{align}
-cov(1, u) =& 0\\
-cov(X_1, u) =& 0\\
-cov(X_2, u) =& 0\\
-\vdots & \\
-cov(X_{n - 1}, u) =& 0\\
-\text{Buuuuuut } cov(X_n, u) \neq& 0\\
-\end{align}
-
---
-
-In this case, the model cannot identified. Why?
-
----
-
-Recall when you were young---as young as learning to solve the equation systems:
-
-\begin{cases}
-y = 3x + 4z\\
-z = 5y - 2x
-\end{cases}
-
-Can you solve it? 
-
----
-
-In this case, the model is called *underidentified* model.
-
-Consequence : .red[biased, inconsistent] estimate of &beta;.
-
----
-
-## Testing for Endogeneity
-
-Special case: [Variable omission](https://sammo3182.github.io/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html#15)
-
-Hausman Procedure (using t distribution)
-
-We believe the full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates a constrained model $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
-
-To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test 
-
-.center[H<sub>0</sub>: cov(u', v) = 0.]
-
----
-
-## Solutions
-
-### Instrumental Variables (IV)
-
-We need a variable Z<sub>i</sub> that .magenta[simultaneously]: 
-
-1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
-1. cov(u<sub>i</sub>, Z<sub>i</sub>) = 0
-
----
-
-## Example I of IV
-
-When do people go back to school after working already?
-
-DV : Income
-IV : Likelihood of backing to school
-
-How's there an endogeneity issue?
-
-???
-
-Endogeneity : Ability
-
---
-
-IV candidates: 
-
-1. Proximity to college (Card 1995)
-1. Month of birth (Angrist and Krueger 1991)
-
----
-
-## Example II of IV
-
-How does economic growth affect within country conflicts? 
-
-DV : Incidence of civil war
-IV : Economic growth per capita
-
-How's there an endogeneity issue?
-
-???
-
-Endogeneity: religious fractionalization, mountainous terrain, and population
-
---
-
-IV candidate:
-
-1. Rainfall growth (percentage change in rainfall from the previous year) (Miguel, Satyanath, and Sergenti 2004)
-
-???
-
-Journal of Political Economy
-
---
-
-Concerns? 
-
-???
-
-Agriculture only? 
-
-Drought in one country could make another country's projects more scare and therefore valuable.
-
----
-
-## How to Find a Proper IV
-
-1. Seeking something seemingly irrelevant
-
---
-
-1. Seeking back to the time
-
---
-
-1. Making some assumptions 
-
---
-
-1. Ok, ok, I have to concede, it is a myth...
-
-
----
-
-## Solving Underidentification with IVs
-
-### Just-identified model
-
-$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
-
-### Over-identified model
-
-\begin{align}
-\hat{\boldsymbol{\beta}}_{2SLS} =& (\boldsymbol{X'P_ZX})^{-1}(\boldsymbol{X'P_ZY})\\
-                                =& (\boldsymbol{Z'\hat X})^{-1}(\boldsymbol{Z'Y})
-\end{align}
-
-where $\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$ (a.k.a., the projection matrix), and $\boldsymbol{\hat X} = \boldsymbol{P_ZX}$
-
-???
-
-Recommend over-identified model more
-
-http://www.soderbom.net/lec2n_final.pdf
-
----
-
-## Two Stage Least Squares
-
-1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
-1. Regress **Y** on $\boldsymbol{\hat X}$.
-
----
-
-class: small
-
-## Effect
-
-\begin{align}
-cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
-              =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
-              =& \beta_1cov(X_i, Z_i)\\
-\Rightarrow\beta_1 =& \frac{cov(Y_i, Z_i)}{\beta_1cov(X_i, Z_i)} = \frac{\sum(Y_i - \bar Y)(Z_i - \bar Z)}{\sum(X_i - \bar X)(Z_i - \bar Z)},\\
-       var(\hat\beta_1) =& \frac{\sigma^2}{n\sigma_X^2\rho_{XY}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
-\end{align}
-
-Trade-off: Unbiased estimates from IV, yet a bigger variance (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
-
----
-
-## Weak Instruments
-
-cov(Y, Z) is small but not equal 0.
-
-$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
-
-When cov(X, Z) is salient, no big problem. But when it's small, the estimate will be biased---in which case, OLS might be even better.
-
---
-
-### Check for the Problem
-
-Stock and Watson (2007, 735)
-
----
-
-## A Broader View of Endogeneity Solutions
-
-Common causes of endogeneity
-
-1. Omitted variable
-    + Model misspecification
-    + .magenta[Selection bias] (Heckman)
-1. Measurement error
-1. Simultaneity (2SLS, 3SLS)
-
-???
-
-Study women's wage given education. The selection point is the data is only the women who were in the labor force.
-
-https://stats.stackexchange.com/questions/172508/two-stage-models-difference-between-heckman-models-to-deal-with-sample-selecti
-
----
-
-### Additional Regressors
-
-Let Ys being endogenous, and Xs being exogenous.
-
-One may use multiple exogenous variables to instrument the endogenous variable.
-
----
-
-class: small
-
-For example, 
-
-\begin{align}
-Y_1 =& \beta_0 + \beta_1Y_2 + \beta_2X_1 + u\\
-Y_2 =& \gamma_0 + \gamma_1X_1 + \gamma_2X_2 + \gamma_3X_3 + v\\
-\end{align}
-
-Assuming 
-
-\begin{align}
-cov(Z, v) =& 0\\
-cov(Z, u) =& 0\\
-\gamma_2\neq& 0 | \gamma_3\neq 0
-\end{align}
-
-In other words, Y<sub>2</sub> won't perfectlly collinear with Z<sub>1</sub>. 
-
---
-
-Estimate
-
-\begin{align}
-\hat Y_2 =& \hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v\\
-Y_1 =& \beta_0 + \beta_1\hat Y_2 + \beta_2X_1 + u\\
-\Rightarrow\ Y_1 =& \beta_0 + \beta_1(\hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v) + \beta_2X_1 + u\\
-                 =& (\beta_0 + \beta_1\hat\gamma_0) + (\beta_2 + \beta_1\hat\gamma_1)X_1 + \beta_1\hat\gamma_2X_2 + \beta_1\hat\gamma_3X_3 + (\beta_1v + u)
-\end{align}
-
-This will produce an unbiased result but not exactly &beta;<sub>1</sub>.
