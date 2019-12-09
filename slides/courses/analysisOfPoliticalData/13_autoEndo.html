@@ -209,10 +209,12 @@ Drought in one country could make another country's projects more scare and ther
 
 ### Over-identified model
 
+.small[
 `\begin{align}
 \hat{\boldsymbol{\beta}}_{2SLS} =&amp; (\boldsymbol{X'P_ZX})^{-1}(\boldsymbol{X'P_ZY})\\
-                                =&amp; (\boldsymbol{Z'\hat X})^{-1}(\boldsymbol{Z'Y})
+                                =&amp; (\boldsymbol{X'Z(Z'Z)^{-1}Z' X})^{-1}\boldsymbol{X'Z(Z'Z)^{-1}Z'Y}
 \end{align}`
+]
 
 where `\(\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'\)` (a.k.a., the projection matrix), and `\(\boldsymbol{\hat X} = \boldsymbol{P_ZX}\)`
 
@@ -388,15 +390,16 @@ De-trend: `\(Y_t\sim Z_t\)`
 
 Smooth function: `\(t, t^2, t^3\)`("nearly identical substantively [with spline]").&lt;sup&gt;1&lt;/sup&gt;
 
---
+.footnote[
+[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
+]
+---
 
 Fixed effect
 
 Spline 
 
-.footnote[
-[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
-]
+.center[&lt;img src="images/spline.gif" height = 300 /&gt;]
 
 ---
 
@@ -405,7 +408,6 @@ Spline
 ### Random work
 
 .center[&lt;img src="images/randomWalk.jpg" height = 400 /&gt;]
-
 
 ---
 
@@ -430,9 +432,27 @@ class: small
 
 ### Stationary: 
 
-For every collection of time periods ( `\(X_t, X_{t_2}, X_{t_3},\cdots\)` where `\(t &lt; t_2 &lt; t_3,\cdots\)` ), their distributions are the same as `\(X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots\)`, i.e., the sam joint distribution, or saying the error terms are the same for every period.
+.left-column[
+&lt;img src="images/baguazhang.gif" height = 300 /&gt;
+]
 
 --
+
+.right-column[
+&lt;img src="images/zuiquan.gif" height = 300 /&gt;
+]
+
+--
+
+.full-column[
+
+For every collection of time periods ( `\(X_t, X_{t_2}, X_{t_3},\cdots\)` where `\(t &lt; t_2 &lt; t_3,\cdots\)` ), their distributions are the same as `\(X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots\)`, i.e., the same joint distribution, or saying the error terms are the same for every period.
+
+]
+
+---
+
+class: small
 
 ### Covariance Stationary
 
@@ -440,10 +460,10 @@ Given:
 
 1. t(X&lt;sub&gt;t&lt;/sub&gt;) is constant
 1. var(X&lt;sub&gt;t&lt;/sub&gt;) is constant
-1. cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;)does not rely on t (i.e., cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;) = cov(X&lt;sub&gt;t + 1&lt;/sub&gt;X&lt;sub&gt;t + 2&lt;/sub&gt;))
+1. cov(X&lt;sub&gt;t&lt;/sub&gt;,X&lt;sub&gt;t + n&lt;/sub&gt;)does not rely on t (i.e., cov(X&lt;sub&gt;t,&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;) = cov(X&lt;sub&gt;t + 1&lt;/sub&gt;,X&lt;sub&gt;t + 2&lt;/sub&gt;))
 
 
-Then, a moving average process that is covariance stationary is weakly depend if cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;)&amp;rarr;0 as h&amp;rarr;&amp;infin;.
+Then, a moving average process that is covariance stationary is weakly dependent if cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;)&amp;rarr;0 as h&amp;rarr;&amp;infin;.
 
 --
 
@@ -482,7 +502,7 @@ Following this manner, when t increases,
 
 `\begin{align}
 var(u_t|X) =&amp; \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots...\\
-           =&amp; \sigma_e^2\sum^T_{i = 1}\rho^{2(i - 1)}\\
+           =&amp; \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)}\\
            =&amp; \frac{\sigma_e^2}{1 - \rho^2}
 \end{align}`
 
@@ -612,17 +632,17 @@ X&lt;sub&gt;i&lt;/sub&gt;: Only varying by unit.
 ### Regime switching
 
 `\begin{align}
-$Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
+Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
    dZ_t =&amp; 1, \text{if } t \leq t^*.
 \end{align}`
 
-Structural break at time t&lt;sup&gt;*&lt;/sub&gt; in the relationship between X and Y
+Structural break at t&lt;sup&gt;*&lt;/sup&gt; in the X-Y relationship.
 
 ---
 
 ### Treating time dependency as unit heterogeneity
 
-*LSDV*: `\(Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}\)`
+LSDV: `\(Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}\)`
 
 `\(\delta_td_{t}\)`: Fixed effect for time
 

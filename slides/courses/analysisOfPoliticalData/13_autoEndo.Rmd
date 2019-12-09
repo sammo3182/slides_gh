@@ -207,10 +207,12 @@ $$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
 
 ### Over-identified model
 
+.small[
 \begin{align}
 \hat{\boldsymbol{\beta}}_{2SLS} =& (\boldsymbol{X'P_ZX})^{-1}(\boldsymbol{X'P_ZY})\\
-                                =& (\boldsymbol{Z'\hat X})^{-1}(\boldsymbol{Z'Y})
+                                =& (\boldsymbol{X'Z(Z'Z)^{-1}Z' X})^{-1}\boldsymbol{X'Z(Z'Z)^{-1}Z'Y}
 \end{align}
+]
 
 where $\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$ (a.k.a., the projection matrix), and $\boldsymbol{\hat X} = \boldsymbol{P_ZX}$
 
@@ -386,15 +388,16 @@ De-trend: $Y_t\sim Z_t$
 
 Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").<sup>1</sup>
 
---
+.footnote[
+[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
+]
+---
 
 Fixed effect
 
 Spline 
 
-.footnote[
-[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
-]
+.center[<img src="images/spline.gif" height = 300 />]
 
 ---
 
@@ -403,7 +406,6 @@ Spline
 ### Random work
 
 .center[<img src="images/randomWalk.jpg" height = 400 />]
-
 
 ---
 
@@ -428,9 +430,27 @@ class: small
 
 ### Stationary: 
 
-For every collection of time periods ( $X_t, X_{t_2}, X_{t_3},\cdots$ where $t < t_2 < t_3,\cdots$ ), their distributions are the same as $X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots$, i.e., the sam joint distribution, or saying the error terms are the same for every period.
+.left-column[
+<img src="images/baguazhang.gif" height = 300 />
+]
 
 --
+
+.right-column[
+<img src="images/zuiquan.gif" height = 300 />
+]
+
+--
+
+.full-column[
+
+For every collection of time periods ( $X_t, X_{t_2}, X_{t_3},\cdots$ where $t < t_2 < t_3,\cdots$ ), their distributions are the same as $X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots$, i.e., the same joint distribution, or saying the error terms are the same for every period.
+
+]
+
+---
+
+class: small
 
 ### Covariance Stationary
 
@@ -438,10 +458,10 @@ Given:
 
 1. t(X<sub>t</sub>) is constant
 1. var(X<sub>t</sub>) is constant
-1. cov(X<sub>t</sub>X<sub>t + n</sub>)does not rely on t (i.e., cov(X<sub>t</sub>X<sub>t + n</sub>) = cov(X<sub>t + 1</sub>X<sub>t + 2</sub>))
+1. cov(X<sub>t</sub>,X<sub>t + n</sub>)does not rely on t (i.e., cov(X<sub>t,</sub>X<sub>t + n</sub>) = cov(X<sub>t + 1</sub>,X<sub>t + 2</sub>))
 
 
-Then, a moving average process that is covariance stationary is weakly depend if cov(X<sub>t</sub>X<sub>t + n</sub>)&rarr;0 as h&rarr;&infin;.
+Then, a moving average process that is covariance stationary is weakly dependent if cov(X<sub>t</sub>X<sub>t + n</sub>)&rarr;0 as h&rarr;&infin;.
 
 --
 
@@ -480,7 +500,7 @@ Following this manner, when t increases,
 
 \begin{align}
 var(u_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots...\\
-           =& \sigma_e^2\sum^T_{i = 1}\rho^{2(i - 1)}\\
+           =& \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)}\\
            =& \frac{\sigma_e^2}{1 - \rho^2}
 \end{align}
 
@@ -610,17 +630,17 @@ X<sub>i</sub>: Only varying by unit.
 ### Regime switching
 
 \begin{align}
-$Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
+Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
    dZ_t =& 1, \text{if } t \leq t^*.
 \end{align}
 
-Structural break at time t<sup>*</sub> in the relationship between X and Y
+Structural break at t<sup>*</sup> in the X-Y relationship.
 
 ---
 
 ### Treating time dependency as unit heterogeneity
 
-*LSDV*: $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$
+LSDV: $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$
 
 $\delta_td_{t}$: Fixed effect for time
 
