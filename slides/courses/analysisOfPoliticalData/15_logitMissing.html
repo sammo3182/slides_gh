@@ -40,8 +40,8 @@ X_3 &amp; Y_3\\
 X_4 &amp; Y_4\end{array}\right);
 \boldsymbol{D^{Observed}} =
 \left(\begin{array}{cc}
-X_2 &amp; Y_1\\
-X_4 &amp; Y_2\\
+X_1 &amp; Y_1\\
+X_3 &amp; Y_2\\
 X_5 &amp; Y_3\\
 X_6 &amp; Y_4\end{array}\right);\\
 \boldsymbol{M} =&amp; 
@@ -120,10 +120,18 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
     
 ---
 
-**Multiple imputations**: 
+class: small
 
-1. Take multiple guess given estimated distribution
+## Multiple imputations
+
+1. Take multiple guess given estimated distribution (Expectation-Maximization)
+
+--
+
 2. Result `\(\hat\beta(1), \hat\beta(2), \hat\beta(3)\)`,... and their variance.
+
+--
+
 3. Combine: Rubin's formula
 
 `\begin{align}
@@ -142,7 +150,8 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 
 ### Advantages
 
-Imputation process is separated from the analysis process. Therefore, the misspecification of the model does not affect MI.
+Imputation process is separated from the analysis process.  
+Therefore, the misspecification of the model does not affect MI.
 
 ---
 
@@ -150,28 +159,28 @@ class: small
 
 ## When You Shouldn't Use MI
 
-1. The analysis model is conditional on X and the functional form is known to be correctly specified, so that listwise would not affect the analysis.
+1. The analysis model is .magenta[conditional on X] and the functional form is known to be .magenta[correctly specified], so that listwise would not affect the analysis.
 
 --
 
-1. There is NI missingness in X so that EMs can give incorrect answers.
+1. There is .magenta[NI] missingness in X so that EMs can give incorrect answers.
 
 --
 
-1. Missingness in X is not a function of Y, and there is no unobserved omitted values
+1. Missingness in X is .magenta[not a function of Y], and there is no unobserved omitted values
 that affects Y.
 
 --
 
-1. The data is large enough that the influence of the listwise is trivial.
+1. The data is large enough that the influence of the listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
 
 --
 
-1. The model is nonlinear and complicated.
+1. The model is .magenta[nonlinear and complicated].
 
 --
 
-1. Extreme distributional divergence in missing data from multivariate normal.
+1. .magenta[Extreme distributional divergence] in missing data from multivariate normal.
 
 ---
 
@@ -222,13 +231,17 @@ class: inverse, bottom
 1. Using when the very first assumption of OLS is violated---Y is no longer continuous.
 1. Basic logic: Transforming non-continuous to continuous
 
+???
+
+General linear regression is multivariate regression
+
 --
 
 Let's talk about the simplist siutation: binary Y
 
 ---
 
-## Traditional Solutions
+## Traditional Approaches
 
 ### OLS
 
@@ -245,17 +258,27 @@ var(\pi_i) =&amp; \pi(1 - \pi) \\
            =&amp; (\beta_0 +  \beta_1X_i)[1 - (\beta_0 + \beta_1X_i)]
 \end{align}`
 
-Advantage: Interpretability
+--
 
-Disadvantage: Not very reliable transformation
+.left-column[
+### Pro
+
+Interpretability
+]
+
+.right-column[
+### Con
+
+Not very reliable transformation
+]
 
 ???
 
-The specification of var addresses hteroscedasticity
+The specification of var addresses heteroscedasticity
 
 ---
 
-## Link Functions
+## A More Decent Approach: Link Functions
 
 Specifically, latent variable approach
 
@@ -306,7 +329,6 @@ P(Y_i = 0|X) =&amp; P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
 
 ## Probit
 
-
 `\begin{align}
 Y_i =&amp; \begin{cases}
 0, \text{if } Y^*\leq 0,\\
@@ -323,7 +345,8 @@ class: small
 
 ## Logit vs. Probit
 
-* Probit is a little computationally costly than logit ( `\(\frac{e^x}{1 + e^x}\)` vs. `\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`)
+* Probit is a little .magenta[more] computationally costly than logit  
+( `\(\frac{e^x}{1 + e^x}\)` vs. `\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`)
 
 --
 
@@ -345,7 +368,7 @@ class: small
 
 ## Estimation
 
-We cannot minizing the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
+We cannot minize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
 
 Maximum likelihood estimation:
 
@@ -437,13 +460,15 @@ In fact, it depends on the value of .magenta[all the X]. This requires the repor
 
 ---
 
+class: small
+
 ## First Difference
 
 The discrete version of marginal effect.
 
-`$$FD = P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k}),$$`
+`$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$`
 
----
+--
 
 X&lt;sub&gt;-k&lt;/sub&gt;: 
 
@@ -480,13 +505,12 @@ Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-a
 
 ---
 
-class: small
-
 ### Proportional reduction in error (PRE) 
 
 Or Percent correctly predicted (PCP)
 
-Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. 
+Comparing estimates of P(Y = 1|X) to Y:  
+If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. 
 
 Let's denote
 
@@ -497,17 +521,20 @@ Let's denote
 
 `$$PCP = \frac{n_{11} + n_{00}}{\sum n}$$`
 
---
+---
 
-Furthermore, one can consider how much better the model predict than plain guess. 
-
-Define *PMC* as the percent modal category (the plain guess). That is,
+Furthermore, one can consider how much better the model predict than plain guess. Define *PMC* as the percent modal category (the plain guess). That is,
 
 `$$PRE = \frac{PCP - PMC}{1 - PMC}$$`
 
 --
 
-An advanced version is *ePRE*. 
+An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
+
+
+???
+
+ePRE: expected PRE, Herron 1999, PA
 
 ---
 
