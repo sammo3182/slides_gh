@@ -1,0 +1,366 @@
+---
+title: "Method: Small-N Analysis in Practice"
+subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+author: "Yue HU"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - zh-CN_custom.css
+      - styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(pacman)
+p_load(knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       broom, tidyverse) # data wrangling
+
+set.seed(313)
+```
+
+
+
+class: bottom, inverse
+
+background-image: url("images/court.jpg")
+background-position: center
+background-size: contain
+
+# Defense Time
+
+---
+
+## Procedure
+
+1. Drawing a respondent from the audience
+1. The defender talks.
+1. The defender queries.
+1. The respondent queries.
+1. Preparation (30 sec)
+1. The respondent answers.
+1. The defender answers.
+
+```{r stopwatch, echo = FALSE}
+library(countdown)
+
+countdown(minutes = 0,
+          seconds = 30,
+          play_sound = TRUE)
+```
+
+
+---
+
+class: inverse, bottom
+
+# Small-N Methods: Process-Tracing and Beyond
+
+---
+
+background-image: url("images/csi.jpg")
+background-position: bottom
+background-size: 90%
+
+## Process Tracing
+
+What: "CSI"
+
+--
+
+Goal : Theory testing
+
+Hypothesis: Explanation rivalry
+
+---
+
+background-image: url("images/processTracing.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Example: English Recognition in Singapore
+
+.small[Why did English become a recognized official language in the Singaporean language policy, esp. given there were only 21% of the population spoke this language when the country was independent?]
+
+--
+
+### Step 1: Identify Hypotheses
+
+H<sub>0</sub>: State (institutional) capacity  
+H<sub>1</sub>: Prioritization of the education ministry
+
+???
+
+Goh Keng Swee (吴庆瑞): 财政部长、内政及国防部长、副总理, 奠定了新加坡教育的精英主义政策, 取得伦敦政经学院经济学博士学位。
+
+The Goh Report identified and set out recommendations to address three shortcomings: high education wastage, low literacy, and ineffective bilingualism. English was taught to maximize proficiency
+
+---
+
+background-image: url("images/timelineEnglish.jpg")
+background-position: center
+background-size: contain
+
+### Step 2: Establish Time Line
+
+
+???
+
+1. The very second step right after determining the DV
+1. Before the evidence collection
+
+---
+
+### Step 3: Construct Causal Graph
+
+.center[<img src="images/causalEnglish.jpg" height = 500 />]
+
+???
+
+Causal process of X &rarr; Y  
+Used to identify relevant moments and actors that could affect the results.
+
+---
+
+### Step 4: Identify Alternative Choice or Event
+### Step 5: Identify Counterfactual Outcomes
+
+Counterfactual 1: Weak State &rarr; language of the dominant population language.
+
+Counterfactual 2: Leed did not assign Goh as the MOE &rarr; the status quo.
+
+???
+
+A reason that choices might make differences  
+If there's no comparative cases, then conterfactual outcomes.
+
+---
+
+### Step 6: Find Evidence for Primary Hypothesis
+
+| .small[Necessity\\Sufficiency]<sup>&midast;</sup> | Yes             | No                |
+|-----------------------|-----------------|-------------------|
+| Yes                   | Double-Decisive | Smoking Gun       |
+| No                    | Hoop            | Straw-in-the-Wind |
+
+.footnote[
+[&midast;] Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.
+]
+
+???
+
+1. Hoop test: no alibi, the accused in the state when murder happens? If not innocent, but passing does not mean being guilty.
+1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
+1. Double-decisive test: hoop + smoking-gun, like a camera record
+1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
+
+---
+
+background-image: url("images/evidenceEnglish.png")
+background-position: center
+background-size: contain
+
+???
+
+The primary hypothesis failed the hoop test: when recognition happened, the state was not a strong state
+
+---
+
+## Interview
+
+.center[<img src="images/interview.jpg" height = 300 />]
+
+### Procedure
+
+Strategic communication (guiding and listening)
+
+---
+
+.left-column[
+### Outcome: 
++ Open answers
++ Messy details
++ Contradictory points
+]  
+
+--
+
+.right-co[
+### Technique
++ Safe environment
++ More listening, less talking
++ Design the interview strategy + pilots
+]
+
+--
+
+### Be Prepared...
+
+.center[<img src="images/dontLike.gif" height = 250 />]
+
+---
+
+class: small
+
+## Interview 2.0: Focus Group
+
+Procedure:
+
+1. Size: 5--15
+1. Subjects read or watch something.
+1. Researcher ask the questions.
+1. Subjects express the feelings and opinions.
+
+.center[<img src="images/focusGroup.png" height = 350 />]
+
+???
+
+Brexit: Uncivil War
+
+---
+
+
+### Pros:
+
+1. Real-life environment
+1. Flexibility
+1. Low cost
+
+
+--
+
+### Cons:
+
+1. Non-privacy-protection
+1. Who lead the talk?
+1. No SUTVA
+1. Selection interviewees
+
+---
+
+## Content analysis
+
+.center[<img src="images/closeReading.jpg" height = 480 />]
+
+---
+
+## Step 1: Content Sampling
+
+* Terminology:
+    + Content analysis: 100 and below
+    + Text analysis: above 100 (usually above 1,000)
+    + Unit of analysis?
+
+--
+    
+* Sampling technique
+    + Convenient sample
+    + Stratification
+    + Clustering
+
+---
+
+## Step 2: Coding
+
+* Manifest content
+* Latent content
+* Online assistance: [CATMA](http://catma.de/) or eMargin
+
+---
+
+## Example with CATMA
+
+.center[<img src="images/tag.png" height = 500 />]
+
+---
+
+.left-column[<img src="images/topictrend.png" height = 500 />]
+
+--
+
+.right-column[
+
+## Step 3 Analysis
+
+Not much different from other interpretive methods
+
+1. Context analysis
+1. Transparency
+1. Transferability
+
+]
+
+---
+
+### Pros
+
+* Economy
+* Allowing correction
+* Overtime survey
+* Third party
+
+--
+
+### Cons
+
+* Limited content
+* Limited scale
+* Subjective consistency
+
+---
+
+## Techniques in Small-N Analysis
+
+### Coding
+
+<img src="images/openCoding.jpg" width =320 height = 200 />
+<img src="images/axialCoding.jpg" width = 320 height = 200 />
+.center[<img src="images/selectiveCoding.gif" height = 220 />]
+
+???
+
+1. Open
+2. Axial
+3. Selective
+
+---
+
+### Lab Notes
+
+Keep everything in record!!
+
+* Code notes
+* Theoretical notes
+* Operational notes
+
+---
+
+## Take-Home Points
+
+.left-column[
++ Process tracing
+    + Six steps
+    + Four types of evidence 
+]
+
+.right-column[
++ SNA toolkit
+    + Case study
+    + Process-tracing
+    + Interview
+    + Focus group
+    + Content analysis
+    ]

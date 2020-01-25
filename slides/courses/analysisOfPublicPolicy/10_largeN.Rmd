@@ -1,0 +1,366 @@
+---
+title: "Method: Large-N Approach"
+subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+author: "Yue HU"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - zh-CN_custom.css
+      - styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(pacman)
+p_load(knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       summarytools,
+       broom, tidyverse) # data wrangling
+```
+
+
+
+class: bottom, inverse
+
+background-image: url("images/court.jpg")
+background-position: center
+background-size: contain
+
+# Defense Time
+
+---
+
+## Procedure
+
+1. Drawing a respondent from the audience
+1. The defender talks.
+1. The defender queries.
+1. The respondent queries.
+1. Preparation (30 sec)
+1. The respondent answers.
+1. The defender answers.
+
+```{r stopwatch, echo = FALSE}
+library(countdown)
+
+countdown(minutes = 0,
+          seconds = 30,
+          play_sound = TRUE)
+```
+
+
+---
+
+class: inverse, bottom
+
+# Large-N Analysis
+
+---
+
+## Why Large N?
+
+1. Experiment is not a practical option
+    + Esp. in policy analysis
+1. Large amount of observed data
+1. Advancement of statistical methods and techniques
+
+--
+
+Let's take the experimental logic aside for a moment...
+
+---
+
+## How Large Is Large?
+
+Let's toss a fair coin:
+
+Head or Tail?
+
+.center[<img src="images/toss.gif" height = 350 />]
+
+---
+
+How about 1 million times? How many heads?
+
+--
+
+.center[<img src="images/largeNum.png" height = 500 />]
+
+---
+
+## Law of Large Numbers
+
+As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
+
+* Rule of thumb: $> 100$
+
+---
+
+## Large-N Approaches?
+
+* Univariate analysis
+* Bivariate analysis
+* Multivariate analysis
+
+---
+
+## Univariate analysis
+
+.left-column[
+Let's say we'll test a school policy of Internet access management. 
+To do so, researchers surveyed a dorm room, asking the members how many shows they watched in the past week.
+The right table is the records:
+]
+
+.right-column[
+```{r data}
+showWatching <- tibble(Student_ID = paste0("201999", sample(1000:9000, size = 7)), Episodes = c(1, 1, 1, 2, 3, 3, 4))
+
+kable(showWatching, "html", align = "cl")%>%
+  kable_styling(full_width = TRUE, font_size = 25)
+```
+]
+
+---
+
+## How to Describe This Variable
+
++ Given the list: (1, 1, 1, 2, 3, 3, 4)
+
+--
+
++ Mean: $\frac{1 + 1 + 1 + 2 + 3 + 3 + 4}{7} = \frac{15}{7} \approx 2.143.$
+
+--
+
++ Median: 1, 1, 1, .magenta[2], 3, 3, 4
+
+--
+
++ Mode: three .magenta[1]s, one 2, two 3s, and one 4.
+
+---
+
+## Relations among These Ways
+
+Let's Expand the data to 1000 students.
+
+```{r fig.align="center"}
+set.seed(114)
+
+df_var <- data.frame(x = sample(1:10, size = 1000, replace = TRUE))
+
+ggplot(data = df_var, aes(x)) +
+  geom_bar() +
+  ylab("") + xlab("") +
+  scale_x_discrete(limit = 1:10) +
+  geom_vline(xintercept = as.numeric(c(mean(df_var$x), 
+                            names(sort(-table(df_var$x)))[1],
+                            median(df_var$x))), color = 1:3) +
+  annotate("text", x = as.numeric(names(sort(-table(df_var$x)))[1]) - 0.7, y = 100, label = "Mode") + 
+  annotate("text", x = mean(df_var$x) + 0.5, y = 110, label = "Mean") +
+  annotate("text", x = median(df_var$x) - 0.5, y = 110, label = "Median")
+```
+
+---
+
+## Mean, Median, or Mode?
+
+```{r distribution, fig.align='center'}
+df_var <- data.frame(x = rnorm(10000, mean = 0, sd = 1),
+                     y = c(rbeta(9900, shape1 = 5, shape2 = 2), rep(1.5, 100)),
+                     z = rnorm(10000, mean = 10, sd = 1),
+                     w = rbinom(10000, 1, .5)) %>%
+                       mutate(z = w * x + (1 - w) * z) %>%
+                         select(x, y, z) %>%
+                           gather(var, value)
+
+ggplot(df_var, aes(value)) +
+  geom_histogram() +
+  facet_wrap(~ var, scales = "free") +
+  xlab("") + ylab("")
+```
+
+---
+
+## Moments
+
+Mean: $\mu_x = \frac{\sum X_i}{N};$  
+Variance: $\sigma^2_x = E[(X - \mu_x)^2].$
+
+```{r meanVariance, fig.height = 5, fig.align="center"}
+ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
+  stat_function(colour = "red", fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + 
+  stat_function(colour = "blue", fun = dnorm, n = 101, args = list(mean = 0.5, sd = 1.5)) +
+  ylab("") + xlab("") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = 0.5, linetype = "dashed", color = "blue") +
+  annotate("text", x = -1.2, y = .35, label = "Mean = 0\n SD = 1") + 
+  annotate("text", x = 2.5, y = .2, label = "Mean = 0\n SD = 1.5")
+```
+
+---
+
+Skewness: $\gamma_x = E[(\frac{X - \mu_x}{\sigma})^3].$
+
+```{r skewness, fig.align='center'}
+ggplot(data = data.frame(x = c(-.5, 1.5)), aes(x)) +
+  stat_function(colour = "red", fun = dbeta, n = 101, args = list(shape1 = 5, shape2 = 2)) + 
+  stat_function(colour = "blue", fun = dbeta, n = 101, args = list(shape1 = 2, shape2 = 5)) +
+  ylab("") + xlab("") +
+  annotate("text", x = -0.125, y = 1.5, label = "Right skewed") + 
+  annotate("text", x = 1.125, y = 1.5, label = "Left skewed")
+```
+
+---
+
+Kurtosis: $\kappa_x = E[(\frac{X - \mu_X}{\sigma})^4].$
+
+```{r kurtosis, fig.align='center'}
+ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
+  stat_function(colour = "darkgreen", fun = dnorm, n = 101, args = list(mean = 0, sd = .5)) + 
+  stat_function(colour = "red", fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + 
+  stat_function(colour = "blue", fun = dnorm, n = 101, args = list(mean = 0, sd = 2)) +
+  ylab("") + xlab("") +
+  annotate("text", x = 1.2, y = .6, label = "Leptokurtic") +
+  annotate("text", x = 2.25, y = .3, label = "Mesokurtic (Normal)") + 
+  annotate("text", x = 3.5, y = .1, label = "Platykurtic")
+```
+
+---
+
+## Descriptive Statistics
+
+```{r descriptive, results='asis'}
+library(summarytools)
+print(dfSummary(select(mtcars, am, gear), valid.col = FALSE, na.col = FALSE, graph.magnif = 0.75), method = 'render')
+```
+
+---
+
+## Binary Analysis
+
+Contingency table:
+
+```{r crosstable}
+print(ctable(mtcars$gear, mtcars$cyl, prop = 'n', totals = FALSE),
+           headings = FALSE, method = "render")
+```
+
+---
+
+## Scatter plot
+
+```{r scatter}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  ylab("Miles/(US) gallon") +
+  xlab("Weight (1000 lbs)")
+```
+
+---
+
+# Do a multivariate analysis
+## Example: Tang, Hu, and Jin (2016)
+
+Puzzle: Same education level, but difference in labor mobility between Han and Uyghur
+
+<div style="float: left; width: 50%;">
+<div class="centered">
+<img src="image/han.jpeg" height = 300 />
+</div>
+
+</div>
+
+
+<div style="float: right; width: 50%;">
+<div class="centered">
+<img src="image/uyghur.jpg" height = 300 />
+</div>
+
+</div>
+
+
+## Theory
+
+Affirmative inaction language policy reduces Uyghurs' labor mobility.
+
+<div class="centered">
+<img src="image/uyghurStudent.jpg" height = 400 />
+</div>
+
+
+## Hypothesis: 
+* $H_1$: Education is fairly equal between the Han and the Uyghur groups.
+* $H_2$: The linguistically distinctive Uyghurs are far less proficient in Mandarin than the Han majority.
+* $H_3$: Hans enjoy a higher degree of socioeconomic status than the Uyghurs.
+* $H_4$: Language proficiency plays a favorable role in improving the socioeconomic conditions for the Uyghurs.
+    
+## Examination
+
+$H_{1,2}$: Education is fairly equal between the Han and the Uyghur groups.
+
+<div class="centered">
+<img src="image/eduMan.png" height = 400 />
+</div>
+
+----
+
+$H_2$: The linguistically distinctive Uyghurs are far less proficient in Mandarin than the Han majority.
+
+<div class="centered">
+<img src="image/eduMan2.png" height = 450 />
+</div>
+
+----
+
+$H_3$: Hans enjoy a higher labor mobility than the Uyghurs.
+
+<div class="centered">
+<img src="image/jobEth.png" height = 350 />
+</div>
+
+----
+
+$H_4$: Language proficiency plays a favorable role in improving the socioeconomic conditions for the Uyghurs.
+
+<div class="centered">
+<img src="image/sem.png" height = 450 />
+</div>
+
+## Wrap up
+
+<div style="float: left; width: 50%;">
+
+### Understand Large-N Analysis
+
+<div class="centered">
+<img src="image/table.png" height = 450 />
+</div>
+
+</div>
+
+
+<div style="float: right; width: 50%;">
+
+### Do large-N analyses
+
+* Elaborate the puzzle
+* Set up the theory
+* Imply hypotheses
+* Design empirical examination
+* Data analysis
+* Result discussion
+
+</div>

@@ -1,0 +1,414 @@
+---
+title: "Method: Small-N Analysis in Practice"
+subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+author: "Yue HU"
+institute: "Political Science, Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: 
+      - zh-CN_custom.css
+      - styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(pacman)
+p_load(knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       broom, tidyverse) # data wrangling
+
+set.seed(313)
+```
+
+
+
+class: bottom, inverse
+
+background-image: url("images/court.jpg")
+background-position: center
+background-size: contain
+
+# Defense Time
+
+---
+
+## Procedure
+
+1. Drawing a respondent from the audience
+1. The defender talks.
+1. The defender queries.
+1. The respondent queries.
+1. Preparation (30 sec)
+1. The respondent answers.
+1. The defender answers.
+
+```{r stopwatch, echo = FALSE}
+library(countdown)
+
+countdown(minutes = 0,
+          seconds = 30,
+          play_sound = TRUE)
+```
+
+
+---
+
+class: inverse, bottom
+
+# Small-N Analysis
+
+---
+
+## A Survey of Small-N Methods
+
++ Case Study
++ Process Tracing
++ Other Methods
+
+---
+
+## What's Case Study
+
+> An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units ---Gerring (2004: 342).
+
+???
+Gerring, John. 2004. “What Is a Case Study and What Is It Good For?” American Political Science Review 98(2): 341–54.
+
+--
+
+### How to Identify a Case
+
+Boundary of a Case:
+
++ Spatial
++ Temporal
+
+--
+
+Hey, unit of analysis!
+
+---
+
+## An Observation, Variable, Case or Unite?
+
+```{r}
+text_tb <- data.frame(Observed = 1:8,
+                      Gender = rep(c("Male", "Female"), times = 4), 
+                      Country = rep(c("US", "UK"), each = 4))
+
+kable(text_tb, "html", align = "crr")%>%
+  kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
+```
+
+---
+
+## Common Components of a Case Study
+
+### Target
+
+Covariational relations
+
+--
+
+### Basic types
+
+1. One unit over time
+1. N subunit at one time
+1. N subunit over time
+
+--
+
+All about .magenta[comparison]!! (Except for story-telling studies)
+
+---
+    
+## Advanced Types
+
+* Cross-sectional
+* Time-series cross-sectional
+* Hierarchical
+* Comparative historical
+
+---
+
+## When are case studies useful?
+
+* Deep rather than broad, bounded scope of proposition
+* Comparing rather than represent other cases
+* Mechanism rather than effect
+* Deterministic rather than probabilistic relations
+* Exploring rather than confirmatory test
+
+--
+
+* Don't forget transferable implication: what's a like/unlike case?
+
+---
+
+## Why don't we let the case be representative?
+
+Randomization is cool, right?
+
+Why not?!
+
+---
+
+## Fundamental Logic of Case Comparison
+
+* Most similar systems
+* Most different systems
+
+---
+
+## Concomitant variation (most similar systems)
+
+> The belief that systems as similar as possible with respect to as many features as possible constitute the optimal samples for comparative inquiry.
+---Przeworski and Teune (1970, 32)
+
+---
+
+Cases used in Hu, Yue, and Amy H. Liu. 2019. “The Effects of Foreign Language Proficiency on Public Attitudes.” *Journal of East Asian Studies*. 2020:
+
+Mainland China, Taiwan of China, Singapore
+
+
+----
+
+.center[<img src="images/scandinavian.jpg" height = 280 />]
+
+
+---
+
+## Leadership Powerfulness
+
+
+```{r}
+text_tb <- data.frame(US = c("American continent", "Broad territory", "Anglo-Saxon", "Democracy", "Federal", "Presidential"), 
+                      Canada = c("American continent", "Broad territory", "Anglo-Saxon", "Democracy", "Federal", "Parliamentary"))
+rownames(text_tb) <- c("Position", "Size", "Culture", "Polity", "Government", "Legislature")
+
+kable(text_tb, "html", align = "cll")%>%
+  kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
+```
+
+---
+
+## Principles of the Most Similar System
+
+Focus: .magenta[inter]systemic differences
+
+--
+
+Assumption: Characteristics shared by one group of systems, such as can be removed (control)
+
+--
+
+Explanatory: Difference
+
+--
+
+Control: Similarities between the systems
+
+---
+
+## Practice
+
+1. How do we know if the policy of waste sorting works? 
+1. What environmental policies (giving a pair of examples) is best for a given city? 
+1. When another contagion comes, what should a local government do?
+1. What forms the political correctness of a society? 
+
+---
+
+## Principles of Most Different systems
+
+* Focus: .magenta[intra]systemic similarities and differences
+
+--
+
+* Assumption: systemic factors do not play any role in explaining the observed behavior.
+
+--
+
+* Explanatory: Similarity
+
+--
+
+* Control: Differences in the common systemic characteristics
+
+---
+
+## Practice
+
+1. How do we know if the policy of waste sorting works? 
+1. What environmental policies is best for a given city? 
+1. When another contagion comes, what should a local government do?
+1. What forms the political correctness of a society? 
+
+Yeah, yeah, the same questions~~
+
+---
+
+## Comparison
+
+```{r}
+text_tb <- data.frame( Item = c("Assumption", "Focus", "Control", "Target"),
+  MSS = c("Similarity is irrelevant", "Difference", "Shared properties", "Sufficiency"), 
+  MDS = c("Differences is irrelevant", "Similarity", "Different features", "Necessity"))
+
+kable(text_tb, "html", align = "lll") %>%
+  kable_styling(full_width = TRUE, position = "center") %>%
+    column_spec(1, bold = T, border_right = T) %>%
+      column_spec(2:3, border_right = T)
+```
+
+---
+
+## Bonus: Necessity vs. Sufficiency
+
+*Necessity*: You won't see this without .magenta[that].
+
+*Sufficiency*: You'll always see .magenta[that] when this happens.
+
+--
+
+.center[<img src="images/necessitySufficiency.png" height = 280 />]
+
+---
+
+## How to Choose?
+
+Which should I use, MSS or MDS?
+
+--
+
+### Prerequisite:
+
+Whether the variable of interests (usually the core independent variable) is embed in the same or different systems?
+
+---
+
+## How To Pick the Cases?
+
+Core principle: Minimizing .magenta[selection bias]
+
+.center[<img src="images/selectionBias.gif" height = 400 />]
+
+---
+
+## Different Selection, Different Consequences
+
+.center[<img src="images/selectionX.png" height = 500 />]
+
+???
+
+Select X
+
+---
+
+.center[<img src="images/selectionY.png" height = 600 />]
+
+???
+
+Select Y
+
+---
+
+.center[<img src="images/selectionXY.png" height = 600 />]
+
+???
+
+Select XY
+
+---
+
+.center[<img src="images/ideal.png" height = 500 />]
+
+---
+
+## Example of Selection Bias
+
+.small[Question: Why new industrializing countries grows more rapidly?  
+Theory: The repression of labor]
+
+.center[<img src="images/seleCase.png" height = 300 />]
+
+Problem?
+
+???
+Mexico, Brazil, South Korea, Taiwan of China
+
+---
+
+class: small
+
+## When Selection Is not a problem
+
+* Theory-oriented
+    + Labor repression contributes to growth in a mixed economy
+    + Case selection: Communist countries can be excluded.
+    
+--
+
+* Hypothesis-oriented
+    + Theory: Military governments are more likely to negotiate their extrication from power
+than are personalist regimes.
+    + Hypothesis: Incidence of negotiation in military governments during the years in which breakdown occurs is higher than that in personalist regimes.
+    + Case selection: Only breakdown regimes are select.
+   
+---
+    
+## Avoid Selection Bias
+
+1. Being clear about the domain of the variables
+1. Transparent coding sheet
+
+---
+
+## When Selection Can Be Useful
+
+### Most similar/different systems
+
+--
+
+### Least-likely case
+
+If the theory can make it here, it can make it anywhere.
+
+--
+
+### Deviant Cases
+
+Cases that do not conform to the predictions made by the theory
+
+---
+
+## Take-Home Points
+
+.left-column[
++ Case Study
+    + Logics of case comparision
+    + Case selection
++ Process tracing
+    + Six steps
+    + Type of evidence 
+]
+
+.right-column[
++ SNA toolkit
+    + Case study
+    + Process-tracing
+    + Interview
+    + Focus group
+    + Content analysis
+    ]
