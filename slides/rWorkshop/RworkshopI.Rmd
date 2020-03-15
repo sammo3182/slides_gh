@@ -7,8 +7,8 @@ institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../css/zh-CN_custom.css
-      - ../../css/styles.css
+      - zh-CN_custom.css
+      - styles.css
       - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
       - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -39,21 +39,28 @@ set.seed(114)
 
 # R Workshop Series
 
-* **R basics**
-* Munging Data
-* Analyzing Data
-* Presenting Data
-* Reproduction (coming soon)
+.left-column[
+* .magenta[Hello, R!]
+* Data Munging
+* OLS & MLE
+* Data Presentation
+]
 
+.right-column[
+* Data Visualization
+* Text Analysis
+* Spatial Analysis
+* Machine Learning
+]
 ---
 
 ## What's R?
 
 * **Object-oriented** (OO)
-* A high-level language
 
 --
 
+* A high-level .magenta[language]
 
 .center[<img src="images/languageLevel.jpg" height = 350 />]
 
@@ -63,10 +70,13 @@ set.seed(114)
 * Implement of S(tatistical) language, S3, S4 standards.
 
 * Named after Ross Ihaka /i:haka/, and Robert Gentelman
+    + STATA: Stats + Data
+    + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
+    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
 
-* High-level > assembly language > machine language > hardware
+* High-level > assembly language (only using ADD, MOVE, etc.) > machine language (010101) > hardware
 
-* High-level: C, JAVA, Python, Fortun, R
+* High-level: C (), JAVA, Python, Fortun, R
 
 * Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
 
@@ -74,7 +84,7 @@ set.seed(114)
 
 class: middle,bottom,small
 
-## What Can R Do? An Incomplete List
+## What Can R Do?
 
 --
 * Statistics and econometrics.
@@ -104,20 +114,15 @@ class: middle,bottom,small
 
 ## Why R?
 
-* FREE!!
+.center[<img src="images/forFree.gif" height = 350 />]
 
---
+---
 
 * Popular
 
 .center[<img src="images/rank.jpeg" height = 350 />]
 
-
 ---
-
-* All platform compatible: Windows, Linux, macOS
-
---
 
 * Getting a job
 
@@ -131,11 +136,13 @@ tibble::tribble(
                             "Google", "Created the R style guide for the R user community inside Google"
   ) %>% 
   flextable() %>% 
+  autofit() %>% 
   align(align = "left", part = "all") %>% 
   fontsize(size = 20, part = "all")
+
 ```
 
---
+---
 
 * In Developing
     + `r nrow(available.packages())`+ packages for cutting-edges
@@ -230,7 +237,11 @@ Be prepared...
 
 ### Preparing for the *wonderful* moments~
 
-.center[<img src="images/pc2weeks.gif" height = 480, width = 750 />]
+.center[<img src="images/pc2weeks.gif" height = 400, width = 750 />]
+
+---
+
+## But, It's Worth an Effort
 
 
 
@@ -238,7 +249,7 @@ Be prepared...
 
 class:inverse
 
-# Ready? Shall We Begin~
+# Shall We Begin?
 
 .center[<img src="images/begin.gif" height = 300 />]
 
@@ -266,9 +277,8 @@ class:inverse
 
 ## Keep Updating
 
-* Keep your R & Rstudio updated!
-    + Keep your R & Rstudio updated!
-        + Keep your R & Rstudio updated!
+* Keep your R & Rstudio updated!  
+Keep your R & Rstudio updated!
         
 --
 
@@ -321,9 +331,9 @@ Suggestion: Put your startup files in `./etc/`
 ```
 ## Windows
 R_LIBS_USER=D:/userLib
-TMPDIR=D:/Rtemp 
-TMP=D:/Rtemp 
-TEMP=D:/Rtemp
+#TMPDIR=D:/Rtemp 
+#TMP=D:/Rtemp 
+#TEMP=D:/Rtemp
 ```
 
 ---
@@ -407,352 +417,12 @@ setwd("./rworkshop")
 
 Create a project!
 
-Let me show you how amazing it is:
-
----
-
-# Terminology
-
---
-
-### Matrix
-
-.left-column[
-
-<img src=images/matrix.gif height = "150"/>
-
-]
-
---
-
-.right-column[
-
-```{r matrix}
-A <- matrix(-8:7, ncol = 4)
-A
-A[2, 3]
-```
-
-]
-
----
-
-### Vector: 
-
-```{r}
-# Numeric
-c(1, 2, 3) # Integer
-c(1.5, -2.34, NA) #Double
-# Factor
-factor(c(1, 2, 2, 3), labels = c("Apple", "Pear", "Orange"))
-
-```
-
----
-
-```{r}
-# Character
-c("R is hard.", "But I can nail it.")
-
-# Time
-as.POSIXlt("2005-10-21 18:47:22")
-
-# Logic
-c(TRUE, TRUE, FALSE)
-```
-
-
----
-
-### Data frame
-
-```{r dfEG, echo=FALSE}
-kable(head(mtcars[1:3, 1:4]), format='html')
-```
-
---
-
-.left-column[
-```{r}
-mtcars[1,1]
-```
-]
-
---
-
-.right-column[
-```{r}
-mtcars$mpg[1]
-```
-
-]
-
----
-
-### Array
-
-A multi-dimension matrix
-
-```{r}
-array(-9:9, dim = c(3,3,2)) 
-```
-
----
-
-### List
-
-A series of everything.
-
-```{r}
-aList <- list(c(1:5), letters[1:5])
-aList
-aList[[2]]
-```
-
----
-
-## Quick History
-
-`<-` is equivalent to `=` in R (`<<-` also exists)
-
-.center[<img src=images/APLkeyBoard.png height = "200"/>]
-
-???
-
-Assigned operator
-
----
-
-## Why do we still use it? 
-
-Readability
-
-```{r arrow, eval = FALSE}
-a <- 12
-25 -> b
-```
-
----
-
-Side effect
-
-```{r sideEffect, error = TRUE}
-median(x = 1:10); x
-median(x <- 1:10); x
-```
-
-Short key: `Alt + -`
-
----
-
-### Functions
-
-.center[<img src=images/handShadow.gif height = "250"/>]
-
---
-
-```{r}
-light <- function(finger){
-  {{shadow <- finger + 5}}
-}
-
-handShadow <- light(finger = 3)
-handShadow
-```
-
----
-
-## Doing Math with R
-
-```{r eval=FALSE}
-# basic math
-x + (1 - 2) * 3 / 4
-
-# advanced math
-x^2;sqrt(x);log(x);exp(x)
-
-# matrix algebra
-z <- matrix(1:4, ncol = 2)
-z + z - z
-z %*% z  # inner multiplication
-z %o% z  # outter multiplication
-
-# logical evaluation
-x == z; x != Z
-x & z; x | z
-x > z; x <= z
-```
-
-
----
-
-## Naming Rules
-
-* Don't start with numbers (WRONG: `1stday`)
-
---
-
-* No special signs except for `.` and `-` (WRONG: `M&M`)
-
---
-
-* Case sensitivity (`X != x`)
-
---
-
-* Don't overwrite the build-in functions unless necessary (DON'T: `list <- c(1:5)`)
-
----
-
-## Coding rules
-
-Proper spaces, indents, and empty lines
-
-```{r codingRules}
-addValues <- function(x, y){
-  return(x + y)
-}
-
-subtracValues <- function(x, y){
-  return(x - y)
-}
-
-```
-
----
-
-class: inverse, bottom
-
-# Data Input and Output
-
----
-
-## Input
-
-```{r eval=FALSE}
-load("<FileName>.RData")
-
-df_rds <- readRDS("<FileName>.rds")
-df_txt <- read.table("<FileName>.txt")
-df_csv <- read.csv("<FileName>.csv")
-
-```
-
----
-
-## Talk to Others
-
-```{r eval=FALSE}
-# SPSS, Stata, SAS
-library(haven)
-df_spss <- read_spss("<FileName>.sav")
-df_stata <- read_dta("<FileName>.dta") 
-df_sas <- read_sas("<FileName>.sas7bdat")  
-
-# Excel sheets
-library(readxl)
-df_excel <- read_excel("<FileName>.xls")
-df_excel2 <- read_excel("<FileName>.xlsx") 
-
-# JavaScript Object Notation 
-library(rjson)
-df_json <- fromJSON(file = "<FileName>.json" )
-
-# XML/Html
-df_xml <- xmlTreeParse("<url>")
-df_html <- readHTMLTable(url, which=3)
-
-# Featherf
-feather::read_feather("<FileName>.feather")
-```
-
----
-
-## Where Do Things Live in R
-
-You know Excel, right? 
-
----
-## Data 
-
-Excel
-.center[<img src=images/excel-r1.png height = "150"/>]
-
-
-R
-.center[<img src=images/excel-r2.png height = "200"/>]
-
----
-
-## Operation
-
-Excel
-.center[<img src=images/excel-r3.png height = "150"/>]
-
-
-R
-.center[<img src=images/excel-r4.png height = "200"/>]
-
----
-
-## Results
-
-Excel
-.center[<img src=images/excel-r3.png height = "150"/>]
-
-
-R
-.center[<img src=images/excel-r5.png height = "250"/>]
-
-
-
----
-
-class: small
-
-## Output
-
-* Save a single object in a `.rds` file
-
-```{r eval = F}
-saveRDS(object, file = "./Data/mydata.Rds")
-```
-
-* Save objects into an R data frame (`.RData`/`.rda`) 
-
-```{r eval = F}
-save(object, file = "./Data/mydata.Rdata")
-```
-
-* Save objects into a CSV sheet `.csv`
-
-```{r eval = F}
-write.csv(object, file = "mydata.csv")
-```
-
-* Save objects into a `feather` file
-
-```{r eval = F}
-write_feather(object, file = "mydata.feather")
-```
-
----
-
-## Which way should you use?
-
-A benchmark:
-
-```{r saving}
-##Unit: seconds
-##        expr   min    lq       mean median    uq   max neval
-##     readCSV 200.0 200.0 211.187125  210.0 220.0 240.0    10
-##    readrCSV  27.0  28.0  29.770890   29.0  32.0  33.0    10
-##       fread  15.0  16.0  17.250016   17.0  17.0  22.0    10
-##   loadRdata   4.4   4.7   5.018918    4.8   5.5   5.9    10
-##     readRds   4.6   4.7   5.053674    5.1   5.3   5.6    10
-## readFeather   1.5   1.8   2.988021    3.4   3.6   4.1    10
-```
-
+1. Keeping everything together
+1. Replicable with relative addresses
+    + `f:/blabla/blabla/.../data/your-cool-data.rds`  
+    `data/your-cool-data.rds` 
+1. Version control
+1. Searchable and managable
 
 ---
 
