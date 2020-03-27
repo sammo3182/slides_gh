@@ -49,13 +49,55 @@ class: center, middle, inverse, title-slide
 * Machine Learning  
 ......
 ]
+
+---
+
+## Who Should Take the Workshop
+
+* Not R user yet;
+* \&gt; 16 (or 1?);
+* Wanting to be a friend!
+
+---
+
+## About Me
+
+* Background: Liberal arts, bad at math
+* First touch: 2009
+* Fully adopted: 2013
+* First package: 2014
+* First R workshop: 2015
+
+--
+
+### Now
+
+.left-column[
+* R
+* Python
+* C++
+]
+
+.right-column[
+* STATA
+* Mathematica
+* SPSS (...)]
+
+---
+
+class: inverse
+
+## Overview
+
+* R: What &amp; Why
+* R vs. ...
+* Setup
+* Prospect
+* Something (almost) nobody will tell you
+
 ---
 
 ## What's R?
-
-* **Object-oriented** (OO)
-
---
 
 * A high-level .magenta[language]
 
@@ -67,19 +109,27 @@ class: center, middle, inverse, title-slide
 * Implement of S(tatistical) language, S3, S4 standards.
 
 * Named after Ross Ihaka /i:haka/, and Robert Gentelman
+    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
     + STATA: Stats + Data
     + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
-    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
 
 * High-level &gt; assembly language (only using ADD, MOVE, etc.) &gt; machine language (010101) &gt; hardware
 
-* High-level: C (), JAVA, Python, Fortun, R
+* High-level: C, JAVA, Python, Fortun, R
 
 * Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
 
+--
+
+* **Object-oriented** programming (OOP): A "basket"
+
+???
+
+C++, Python, Ruby, Perl, Matlab
+
 ---
 
-class: middle,bottom
+class: center , bottom
 
 ## What Can R Do?
 
@@ -87,7 +137,7 @@ class: middle,bottom
 * Statistics and econometrics.
 
 --
-* Crunching small, middle, or big sizes of data.
+* Crunching almost any sizes of data.
 
 --
 * Edit and running codes from Excel, STATA, Python, C++, ...
@@ -102,7 +152,7 @@ class: middle,bottom
 * Write academic articles, books, or dissertations in html, pdf, or docx (e.g., [`bookdown`](https://bookdown.org/home/).)
 
 --
-* Create presentation slides in pdf, html, or PowerPoint.
+* Create presentation slides.
 
 --
 * ......
@@ -128,7 +178,7 @@ class: middle,bottom
 ---
 
 * In Developing
-    + 15407+ packages for cutting-edges
+    + 15490+ packages for cutting-edges
 
 ---
 
@@ -141,6 +191,10 @@ Python, STATA, SPSS, Excel...
 background-image: url("images/programCompare.jpg")
 background-position: center
 background-size: contain
+
+???
+
+R in SPSS eyes: Heathkit EC-1, an old computer, 
 
 ---
 
@@ -234,11 +288,7 @@ You'll get some *wonderful* moments~
 
 ### Timeliness
 
-&lt;img src="RworkshopI_files/figure-html/cov1-1.png" width="100%" /&gt;
-
----
-
-&lt;img src="RworkshopI_files/figure-html/cov2-1.png" width="100%" /&gt;
+&lt;img src="RworkshopI_files/figure-html/coronavirus-1.png" width="100%" /&gt;
 
 ---
 
@@ -306,14 +356,12 @@ Sys.info()
 ```
 
 ```
-##           sysname           release 
-##         "Windows"          "10 x64" 
-##           version          nodename 
-##     "build 18362" "DESKTOP-SQ16K0K" 
-##           machine             login 
-##          "x86-64"    "Yue Hu_local" 
+##           sysname           release           version 
+##         "Windows"          "10 x64"     "build 18363" 
+##          nodename           machine             login 
+## "LAPTOP-501LJFSJ"          "x86-64"          "Lenovo" 
 ##              user    effective_user 
-##    "Yue Hu_local"    "Yue Hu_local"
+##          "Lenovo"          "Lenovo"
 ```
 
 ---
@@ -324,107 +372,96 @@ sessionInfo()
 ```
 
 ```
-## R version 3.6.0 (2019-04-26)
+## R version 3.6.3 (2020-02-29)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 10 x64 (build 18362)
+## Running under: Windows 10 x64 (build 18363)
 ## 
 ## Matrix products: default
 ## 
 ## locale:
-## [1] LC_COLLATE=Chinese (Simplified)_China.936 
-## [2] LC_CTYPE=Chinese (Simplified)_China.936   
-## [3] LC_MONETARY=Chinese (Simplified)_China.936
-## [4] LC_NUMERIC=C                              
-## [5] LC_TIME=Chinese (Simplified)_China.936    
+## [1] LC_COLLATE=English_United States.1252 
+## [2] LC_CTYPE=English_United States.1252   
+## [3] LC_MONETARY=English_United States.1252
+## [4] LC_NUMERIC=C                          
+## [5] LC_TIME=English_United States.1252    
 ## 
 ## attached base packages:
-## [1] stats     graphics  grDevices utils    
-## [5] datasets  methods   base     
+## [1] stats     graphics  grDevices utils     datasets 
+## [6] methods   base     
 ## 
 ## other attached packages:
-##  [1] scales_1.1.0          
-##  [2] coronavirus_0.1.0.9002
-##  [3] semPlot_1.1.2         
-##  [4] DiagrammeR_1.0.5      
-##  [5] lavaan_0.6-5          
-##  [6] forcats_0.5.0         
-##  [7] dplyr_0.8.5           
-##  [8] purrr_0.3.3           
-##  [9] readr_1.3.1           
-## [10] tidyr_1.0.2           
-## [11] tibble_2.1.3          
-## [12] ggplot2_3.3.0         
-## [13] tidyverse_1.3.0       
-## [14] broom_0.5.5           
-## [15] stringr_1.4.0         
-## [16] descr_1.1.4           
-## [17] haven_2.2.0           
-## [18] readxl_1.3.1          
-## [19] knitr_1.28            
-## [20] flextable_0.5.9       
-## [21] pacman_0.5.1          
+##  [1] scales_1.1.0      coronavirus_0.1.0 semPlot_1.1.2    
+##  [4] DiagrammeR_1.0.5  lavaan_0.6-5      forcats_0.5.0    
+##  [7] dplyr_0.8.5       purrr_0.3.3       readr_1.3.1      
+## [10] tidyr_1.0.2       tibble_2.1.3      ggplot2_3.3.0    
+## [13] tidyverse_1.3.0   broom_0.5.5       stringr_1.4.0    
+## [16] descr_1.1.4       haven_2.2.0       readxl_1.3.1     
+## [19] knitr_1.28        flextable_0.5.9   pacman_0.5.1     
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] uuid_0.1-4          backports_1.1.5    
-##   [3] xaringan_0.15       Hmisc_4.3-1        
-##   [5] BDgraph_2.62        systemfonts_0.1.1  
-##   [7] plyr_1.8.6          igraph_1.2.4.2     
-##   [9] sp_1.4-1            splines_3.6.0      
-##  [11] digest_0.6.25       htmltools_0.4.0    
-##  [13] matrixcalc_1.0-3    fansi_0.4.1        
-##  [15] magrittr_1.5        Rsolnp_1.16        
-##  [17] checkmate_2.0.0     lisrelToR_0.1.4    
-##  [19] cluster_2.1.0       openxlsx_4.1.4     
-##  [21] modelr_0.1.6        officer_0.3.8      
-##  [23] jpeg_0.1-8.1        sem_3.1-9          
-##  [25] colorspace_1.4-1    rvest_0.3.5        
-##  [27] xfun_0.12           crayon_1.3.4       
-##  [29] jsonlite_1.6.1      lme4_1.1-21        
-##  [31] regsem_1.5.2        survival_3.1-11    
-##  [33] glue_1.3.2          gtable_0.3.0       
-##  [35] mi_1.0              abind_1.4-5        
-##  [37] DBI_1.1.0           Rcpp_1.0.4         
-##  [39] xtable_1.8-4        htmlTable_1.13.3   
-##  [41] foreign_0.8-76      Formula_1.2-3      
-##  [43] stats4_3.6.0        truncnorm_1.0-8    
-##  [45] htmlwidgets_1.5.1   httr_1.4.1         
-##  [47] RColorBrewer_1.1-2  ellipsis_0.3.0     
+##   [3] xaringan_0.15       Hmisc_4.4-0        
+##   [5] BDgraph_2.62        servr_0.16         
+##   [7] systemfonts_0.1.1   plyr_1.8.6         
+##   [9] igraph_1.2.5        sp_1.4-1           
+##  [11] splines_3.6.3       digest_0.6.25      
+##  [13] htmltools_0.4.0     matrixcalc_1.0-3   
+##  [15] fansi_0.4.1         magrittr_1.5       
+##  [17] Rsolnp_1.16         checkmate_2.0.0    
+##  [19] lisrelToR_0.1.4     cluster_2.1.0      
+##  [21] openxlsx_4.1.4      modelr_0.1.6       
+##  [23] officer_0.3.8       jpeg_0.1-8.1       
+##  [25] sem_3.1-9           colorspace_1.4-1   
+##  [27] rvest_0.3.5         xfun_0.12          
+##  [29] crayon_1.3.4        jsonlite_1.6.1     
+##  [31] lme4_1.1-21         regsem_1.5.2       
+##  [33] survival_3.1-8      glue_1.3.2         
+##  [35] gtable_0.3.0        mi_1.0             
+##  [37] abind_1.4-5         DBI_1.1.0          
+##  [39] Rcpp_1.0.4          xtable_1.8-4       
+##  [41] htmlTable_1.13.3    foreign_0.8-75     
+##  [43] Formula_1.2-3       stats4_3.6.3       
+##  [45] truncnorm_1.0-8     htmlwidgets_1.5.1  
+##  [47] httr_1.4.1          RColorBrewer_1.1-2 
 ##  [49] acepack_1.4.1       farver_2.0.3       
 ##  [51] pkgconfig_2.0.3     XML_3.99-0.3       
-##  [53] nnet_7.3-13         kutils_1.69        
-##  [55] dbplyr_1.4.2        labeling_0.3       
-##  [57] tidyselect_1.0.0    rlang_0.4.5        
-##  [59] reshape2_1.4.3      munsell_0.5.0      
-##  [61] cellranger_1.1.0    tools_3.6.0        
-##  [63] visNetwork_2.0.9    cli_2.0.2          
-##  [65] generics_0.0.2      fdrtool_1.2.15     
-##  [67] evaluate_0.14       arm_1.10-1         
-##  [69] yaml_2.2.1          fs_1.3.2           
-##  [71] zip_2.0.4           glasso_1.11        
-##  [73] pbapply_1.4-2       nlme_3.1-145       
-##  [75] whisker_0.4         xml2_1.2.5         
-##  [77] compiler_3.6.0      rstudioapi_0.11    
-##  [79] png_0.1-7           pagedown_0.9       
-##  [81] reprex_0.3.0        huge_1.3.4         
-##  [83] pbivnorm_0.6.0      stringi_1.4.6      
-##  [85] qgraph_1.6.5        rockchalk_1.8.144  
-##  [87] gdtools_0.2.1       lattice_0.20-40    
-##  [89] Matrix_1.2-18       psych_1.9.12.31    
-##  [91] nloptr_1.2.2.1      vctrs_0.2.4        
-##  [93] pillar_1.4.3        lifecycle_0.2.0    
-##  [95] OpenMx_2.17.3       data.table_1.12.8  
-##  [97] corpcor_1.6.9       raster_3.0-12      
-##  [99] R6_2.4.1            latticeExtra_0.6-29
-## [101] gridExtra_2.3       codetools_0.2-16   
-## [103] boot_1.3-24         MASS_7.3-51.5      
-## [105] gtools_3.8.1        assertthat_0.2.1   
-## [107] rjson_0.2.20        withr_2.1.2        
-## [109] mnormt_1.5-6        parallel_3.6.0     
-## [111] hms_0.5.3           grid_3.6.0         
-## [113] rpart_4.1-15        coda_0.19-3        
-## [115] minqa_1.2.4         rmarkdown_2.1      
-## [117] carData_3.0-3       d3Network_0.5.2.1  
-## [119] lubridate_1.7.4     base64enc_0.1-3
+##  [53] nnet_7.3-12         kutils_1.69        
+##  [55] dbplyr_1.4.2        later_1.0.0        
+##  [57] labeling_0.3        tidyselect_1.0.0   
+##  [59] rlang_0.4.5         reshape2_1.4.3     
+##  [61] munsell_0.5.0       cellranger_1.1.0   
+##  [63] tools_3.6.3         visNetwork_2.0.9   
+##  [65] cli_2.0.2           generics_0.0.2     
+##  [67] fdrtool_1.2.15      evaluate_0.14      
+##  [69] arm_1.10-1          yaml_2.2.1         
+##  [71] fs_1.3.2            zip_2.0.4          
+##  [73] packrat_0.5.0       glasso_1.11        
+##  [75] pbapply_1.4-2       nlme_3.1-144       
+##  [77] mime_0.9            whisker_0.4        
+##  [79] xml2_1.2.5          compiler_3.6.3     
+##  [81] rstudioapi_0.11     png_0.1-7          
+##  [83] pagedown_0.9        reprex_0.3.0       
+##  [85] huge_1.3.4          pbivnorm_0.6.0     
+##  [87] stringi_1.4.6       qgraph_1.6.5       
+##  [89] rockchalk_1.8.144   gdtools_0.2.1      
+##  [91] lattice_0.20-38     Matrix_1.2-18      
+##  [93] psych_1.9.12.31     nloptr_1.2.2.1     
+##  [95] vctrs_0.2.4         pillar_1.4.3       
+##  [97] lifecycle_0.2.0     OpenMx_2.17.3      
+##  [99] data.table_1.12.8   corpcor_1.6.9      
+## [101] raster_3.0-12       httpuv_1.5.2       
+## [103] R6_2.4.1            latticeExtra_0.6-29
+## [105] promises_1.1.0      gridExtra_2.3      
+## [107] codetools_0.2-16    boot_1.3-24        
+## [109] MASS_7.3-51.5       gtools_3.8.1       
+## [111] assertthat_0.2.1    rjson_0.2.20       
+## [113] withr_2.1.2         mnormt_1.5-6       
+## [115] parallel_3.6.3      hms_0.5.3          
+## [117] grid_3.6.3          rpart_4.1-15       
+## [119] coda_0.19-3         minqa_1.2.4        
+## [121] rmarkdown_2.1       carData_3.0-3      
+## [123] d3Network_0.5.2.1   lubridate_1.7.4    
+## [125] base64enc_0.1-3
 ```
 
 ---
@@ -448,7 +485,7 @@ sessionInfo()
 
 ## What can you do with them?
 
-Suggestion: Put your startup files in `./etc/`
+Suggestion: Put your setup files in `./etc/`
 
 --
 
@@ -460,20 +497,26 @@ R_LIBS_USER=D:/userLib
 #TMPDIR=D:/Rtemp 
 #TMP=D:/Rtemp 
 #TEMP=D:/Rtemp
+
+BAIDUMAP_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+GGMAP_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+PAGEDOWN_CHROME = "%USERPATH%/Application/msedge.exe"
 ```
 
 ---
 
 `Rprofile.site`:
 
-```
+
+```r
 # General options 
 options(tab.width = 2) 
 options(width = 89)
 options(graphics.record=TRUE) 
 
 ## Customization
-Sys.setlocale(, "Chinese")
+*Sys.setlocale(, "Chinese")
 
 options(Ncpus = 6)
 ```
@@ -487,7 +530,6 @@ Let's have a look at how Rstudio works~
 ---
 
 ## Packages
-
 
 &lt;img src="images/apps.jpeg" height = 400 /&gt;
 
@@ -548,27 +590,23 @@ Create a project!
 
 1. Keeping everything together
 1. Replicable with relative addresses
-    + `f:/blabla/blabla/.../data/your-cool-data.rds`  
+    + ~~`f:/blabla/blabla/.../data/your-cool-data.rds`~~  
     `data/your-cool-data.rds` 
 1. Version control
 1. Searchable and manageable
 
 ---
 
-class: center, middle
-
-.large[More workshops are coming!]  
-.large[Keep in touch!]
-
----
-
-## Final Suggestions
+## Something Only Deep R Learner Would Tell You!
 
 *Inspired by Amanda Gadrow*
 
+--
+
 .center[&lt;img src="images/lazyCat.gif" height = 300 /&gt;]
 
-.center[.large[Be lazy, but in the right track]]
+.center[.large[Be lazy,]  
+but in the right track]
 
 ???
 
@@ -576,7 +614,7 @@ class: center, middle
 
 ---
 
-.center[.large[Be lazy, but in the right track]]
+.center[.large[Be lazy,] but in the right track]
 
 .center[&lt;img src="images/lazyCat.gif" height = 150 /&gt;]
 
@@ -660,6 +698,12 @@ JFGI, FGI, STFW
 
 .center[&lt;img src="images/sunCat.gif" height = 450 /&gt;]
 
+---
+
+class: center, middle
+
+.large[More workshops are coming!]  
+.large[Keep in touch!]
 
 ---
 
