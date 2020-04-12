@@ -30,27 +30,25 @@ p_load(knitr, kableExtra, # dependency
 set.seed(313)
 ```
 
-
-
 class: bottom, inverse
 
 background-image: url("images/court.jpg")
 background-position: center
 background-size: contain
 
-# Defense Time
+# Challenging Time
 
 ---
 
 ## Procedure
 
 1. Drawing a respondent from the audience
-1. The defender talks.
-1. The defender queries.
-1. The respondent queries.
+1. The statesperson talks.
+1. The statesperson queries.
+1. The respondent challenges.
 1. Preparation (30 sec)
 1. The respondent answers.
-1. The defender answers.
+1. The statesperson answers.
 
 ```{r stopwatch, echo = FALSE}
 library(countdown)
@@ -60,20 +58,26 @@ countdown(minutes = 0,
           play_sound = TRUE)
 ```
 
+---
+
+## Overview
+
+.right-column[<img src="images/experiment.jpg" height = 300 />]
+
+.left-column[
+
+### About experiment
+
++ What
++ Why
++ How
+]
 
 ---
 
 class: inverse, bottom
 
 # Experimental Analysis
-
----
-
-## Experiment
-
-.center[<img src="images/experiment.jpg" height = 300 />]
-
-The origin, core, foundation of the empirical/applied science.
 
 ---
 
@@ -106,13 +110,34 @@ The origin, core, foundation of the empirical/applied science.
 
 .center[<img src="images/counterfactual.jpg" height = 500 />]
 
+???
+
+Philip Dick "The Man in the High Castle" (also the author of *Do Androids Dream of Electric Sheep*, Blade Runner)
+
+Fogel, Robert William. 1970. *Railroads and American Economic Growth: Essays in Econometric History*. Johns Hopkins Press.
+如果没有铁路，美国的国民生产总值至多减少3%。铁路在美国的经济发展中并不像某些学者所说的那样起着至关重要的作用。
+
+Fogel, Robert William, and Stanley L. Engerman. 1995. *Time on the Cross: The Economics of American Negro Slavery*. W. W. Norton & Company.
+
+南方奴隶制农业比北方家庭农场的生产效率高出 35%。
+
+典型的黑奴并非传统观念认为的那样懒散、无能和低效，平均意义上，黑奴比自由的白人农业工人更加勤奋和高效。
+
+南方奴隶制拥有灵活而高效的激励机制，诸如奖金，休假，年终奖，对「劳动能手」的奖励，对完不成劳动定额的拖后腿者的惩罚，还有班组制和劳动分工，流水线作业等等。
+
+南方奴隶主对奴隶的剥削率比人们通常认为的要低得多。黑奴的平均收入和生活水平高于自由农业工人，营养水平甚至高于美国人在 1964 年的平均水平。
+
+关于奴隶的繁衍、性虐待与滥交摧毁了黑人家庭的观点只是一个传说.像自由人一样，大多数奴隶都拥有独门独户的住宅，几户人家共享一套房屋的情况并不常见。有些种植园甚至有一些专为未婚男女黑奴提供的宿舍，但这些都属例外，奴隶独门独户的房屋才是主流。
+
+南方奴隶制之所以被终结，不是因为它的体系不能有效率地运作，而是由于在道德上不被接受，所以人们要求从政治上消除这种不道德的体制。
+
 ---
 
 ## When Sticking with the Observed
 
 No .magenta[perfect] counterfactual cases
 
-We have to see causation from correlations
+We have to see causation from correlations，but...
 
 --
 
@@ -126,15 +151,13 @@ We have to see causation from correlations
 
 --
 
-How do we divide the groups?
+How to divide the groups?
 
 ---
 
 ## Randomization, Ta-Da~
 
-.center[<img src="images/breakConfounder.jpg" height = 400 />]
-
-Double-blind
+.center[<img src="images/breakConfounder.png" height = 400 />]
 
 ---
 
@@ -143,106 +166,6 @@ Double-blind
 A .magenta[balanced] data
 
 .center[<img src="images/balance-1.png" height = 400 />]
-
----
-
-## Classical experiment
-
-```{r}
-library(knitr)
-library(kableExtra)
-
-text_tb <- data.frame(
-  Test = c("Pre", "Post"),
-  Stim. = rep("Treatment", 2),
-  NonStim. = rep("Control", 2)
-)
-
-kable(text_tb, "html", align = "lcc")%>%
-  kable_styling(full_width = TRUE, font_size = 25) %>%
-    add_header_above(c(" " = 1, "Assignment" = 2)) %>%
-      column_spec(c(2,3), width = "6em")
-```
-
-Pre-post?
-
-Control-treatment?
-
----
-
-## Validity
-
-> The approximate truth of the inference or knowledge claim.  
----Morton & Williams (2010, 254)
-
-+ Internal
-+ External
-+ Ecological
-
----
-
-## Internal Validity
-
-The approximate truth of the inference or knowledge claim .magenta[within] a target population studies.
-
-+ Construct validity
-+ Causal validity
-+ Statistical validity
-    
----
-
-## External vs. Ecological Validities
-
-* External validity: The approximate truth of the inference or knowledge claim .magenta[beyond] a target population studies.
-
-
-* Ecological validity: Whether the methods, materials, and settings of the research are similar to a given target .magenta[environment].
-
----
-
-## Problem of...Validity?
-
-Q: How does the imagination of detectives change overtime?
-
-.center[<img src="images/sherlock.jpg" height = 400 />]
-
-???
-
-Robert Downey Jr: Sherlock Holmes (2009, 2011)
-Benedict Cumberbatch: Sherlock (2010)
-
----
-
-## Problem of...Validity?
-
-Q: Effect of language policy on individuals' language choice
-
-.center[<img src="images/matchedGuise.jpg" height = 400 />]
-
-???
-
-Matched guise
-
----
-
-## Problem of...Validity?
-
-Q: Effect of the waste sorting in terms of the environmental governance
-
-.center[<img src="images/externalEcological.jpg" height = 400 />]
-
----
-
-## What's the Effect?
-
-Rubin's causal model:
-
-.center[<img src="images/rubin.jpg" height = 300 />]
-
---
-
-+ Averaged treatment effect (ATE): $E(\tau_i) = E(Y_{i1}) - E(Y_{i0})$
-
 
 ---
 
@@ -262,9 +185,6 @@ Rubin's causal model:
 
 Subject will have the same effect regardless which group they are in.
 
-E(Y<sub>i1</sub>|T<sub>i</sub> = 1) = E(Y<sub>i1</sub>|T<sub>i</sub> = 0);  
-E(Y<sub>i0</sub>|T<sub>i</sub> = 1) = E(Y<sub>i0</sub>|T<sub>i</sub> = 0).
-
 --
 
 ### Violation
@@ -279,8 +199,6 @@ E(Y<sub>i0</sub>|T<sub>i</sub> = 1) = E(Y<sub>i0</sub>|T<sub>i</sub> = 0).
 ### Definition
 
 Only treatment can make effects.
-
-.center[<img src="images/exclusion.png" height = 200 />]
 
 --
 
@@ -303,13 +221,17 @@ The effect of stimulus on one subject is affected by other subjects.
 
 .center[<img src="images/herdBehavior.jpg" height = 300 />]
 
+???
+
+Stable Unit Treatment Value Assumption
+
 ---
 
 ## Montonicity and nonzero causal effects
 
 ### Definition
 
-* The probability the subject is treated is at least as great when the subject is in the treatment group as when the subject is in the control group.
+* The probability being treated is at least as great in the treatment as in the control.
 * The treatment assignment has an effect on the probability that at least some subjects are treated.
 
 --
@@ -321,40 +243,117 @@ The effect of stimulus on one subject is affected by other subjects.
 
 ---
 
-## When Experiment Is a Proper Choice?
+## Classical experiment
 
-* Well-defined concept 
-* Clear-stated propositions
-* Small-group interaction
+```{r experimentTable}
+library(knitr)
+library(kableExtra)
+
+text_tb <- data.frame(
+  Test = c("Pre", "Post"),
+  Stim. = rep("Treatment", 2),
+  NonStim. = rep("Control", 2)
+)
+
+kable(text_tb, "html", align = "lcc")%>%
+  kable_styling(full_width = TRUE, font_size = 25) %>%
+    add_header_above(c(" " = 1, "Assignment" = 2)) %>%
+      column_spec(c(2,3), width = "6em")
+```
+
+---
+
+## Validity
+
+> The approximate truth of the inference or knowledge claim.  
+---Morton & Williams (2010, 254)
+
++ Internal (".magenta[within]")
++ External(".magenta[beyond]")
++ Ecological (".magenta[around]")
+
+???
+
+Morton, Rebecca B., and Kenneth C. Williams. 2010. *Experimental Political Science and the Study of Causality: From Nature to the Lab*. Cambridge; New York: Cambridge University Press.
+
+
+## Internal Validity
+
+The approximate truth of the inference or knowledge claim .magenta[within] a target population studies.
+
++ Construct validity
++ Causal validity
++ Statistical validity
+
+## External vs. Ecological Validities
+
+* External validity: The approximate truth of the inference or knowledge claim .magenta[beyond] a target population studies.
+
+* Ecological validity: Whether the methods, materials, and settings of the research are similar to a given target .magenta[environment].
+
+---
+
+## Problem of...Validity?
+
+**Question**: How does the imagination of detectives change overtime?  
+**Design**: "Natural experiment" of Holmes  
+**Subjects**: 200 students in Beijing
+
+.center[<img src="images/sherlock.jpg" height = 350 />]
+
+???
+
+Robert Downey Jr: Sherlock Holmes (2009, 2011)
+Benedict Cumberbatch: Sherlock (2010)
+
+---
+
+## Problem of...Validity?
+
+**Question**: Do people treat others differently due to their accent?  
+**Design**: Matched-guise experiment  
+**Subjects**: 400 Sichuannese in Shanghai
+
+<video width="700" height="300" controls>
+    <source src="images/accent.mp4" type="video/mp4">
+</video>
+
+
+---
+
+## What's the Effect?
+
+Rubin's causal model:
+
+.center[<img src="images/rubin.jpg" height = 300 />]
+
+--
+
++ Averaged treatment effect (ATE): $E(\tau_i) = E(Y_{i1}) - E(Y_{i0})$
+
 
 ---
 
 ## Field Experiment
 
-.center[<img src="images/BanerjeeDuflo.jpg" height = 300 />]
-
 * Subject: sample from the target population
 * Pro: Ecological validity
 * Con: Internal and external validity
+
+--
+
+.center[<img src="images/BanerjeeDuflo.jpg" height = 300 />]
 
 ???
 
 Random experiments in schools in urban India in 2007, hiring young women, test score increase .28 sd.
 
-Banerjee, Abhijit V., Shawn Cole, Esther Duflo, and Leigh Linden. 2007. “Remedying Education: Evidence from Two Randomized Experiments in India.” The Quarterly Journal of Economics 122(3): 1235–64.
+**Banerjee, Abhijit** V., Shawn Cole, **Esther Duflo**, and Leigh Linden. 2007. “Remedying Education: Evidence from Two Randomized Experiments in India.” The Quarterly Journal of Economics 122(3): 1235–64.
 
 
 ---
 
 ## Natural Experiment
-
-<iframe width="700" height="480" src="images/naturalExperiment.mp4" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
-
-???
-
-Rural north carolina, mental health of children, 1996, casino opened, profit distributed to some family. Turns out to be effect for improving mental health
-
----
 
 * Stimulation: It just happened.
 * Pro: Ecological and external validity
@@ -362,6 +361,27 @@ Rural north carolina, mental health of children, 1996, casino opened, profit dis
 
 ---
 
-## Practice
+<video width="700" height="600" controls>
+    <source src="images/naturalExperiment.mp4" type="video/mp4">
+</video>
 
-What language/dialect should a street bureaucrat say when communicating with the citizens?
+???
+
+Rural north carolina, mental health of children, 1996, casino opened, profit distributed to some family. Turns out to be effect for improving mental health
+
+
+---
+
+## Take-Home Points
+
++ What: Randomization + aggregation
++ Why: Counterfactual
++ How:
+    1. Valid design (internal, external, ecological)
+    1. Randomly assign groups
+    1. Stimulating
+    1. ATE
+    
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "09_.*.html"), timeout = 300)
+```
