@@ -61,17 +61,20 @@ countdown(minutes = 0,
 
 ## Overview
 
-.right-column[<img src="images/experiment.jpg" height = 300 />]
 
 .left-column[
-
-### About experiment
-
 + Why
-+ What
-+ How
-
+    + Large N?
 ]
+
+.right-column[
++ How
+    + Univariate
+    + Bivariate
+    + Multivariate
+]
+
+.center[<img src="images/econometrics.jpg" height = 300 />]
 
 ---
 
@@ -104,7 +107,7 @@ How about 1 million times? How many heads?
 
 --
 
-```{r, tut=FALSE, fig.width=10, fig.height=6, cache=TRUE}
+```{r, tut=FALSE, cache=TRUE}
 library(emdbook)
 library(plotly)
 library(here)
@@ -116,6 +119,7 @@ m <- list(
   t = 10,
   pad = 4
 )
+
 accumulate_by <- function(dat, var) {
   var <- lazyeval::f_eval(var, dat)
   lvls <- plotly:::getLevels(var)
@@ -124,14 +128,17 @@ accumulate_by <- function(dat, var) {
   })
   dplyr::bind_rows(dats)
 }
+
 d <- do.call(rbind, map(lseq(10, 10000, 300), function(x) {
   d <- data.frame(x = rnorm(x),
                   frame = x / 300,
                   N = x)
   return(d)
 }))
+
 dd <- aggregate(data = d, x ~ frame + N, FUN = mean) %>%
   accumulate_by( ~ N)
+
 p <-
   dd %>% plot_ly(
     x =  ~ log10(N),
@@ -165,8 +172,8 @@ p <-
     y = 0,
     yanchor = "bottom"
   )
+
 p
-# htmltools::save_html(p, here("images/03_mean/Law_of_large_numbers.html"))
 ```
 
 ---
@@ -282,7 +289,7 @@ To do so, researchers surveyed a dorm room, asking the members how many shows th
 
 Let's Expand the data to 1000 students.
 
-```{r fig.align="center", fig.height=6}
+```{r compareMean, fig.align="center", fig.height=6}
 set.seed(114)
 
 df_var <- data.frame(x = sample(1:10, size = 1000, replace = TRUE))
@@ -316,74 +323,6 @@ ggplot(df_var, aes(value)) +
   geom_histogram() +
   facet_wrap(~ var, scales = "free") +
   xlab("") + ylab("")
-```
-
----
-
-## Moments of A Distribution
-
-### Distribution
-
-How much of it there is in each place or at each time.
-
---
-
-### Moments
-
-A specific quantitative measure of the shape.
-
-.small[
-0th. Total probability  
-1st. Mean/median/mode  
-2ed. Variance  
-3id. Skewness  
-4th. Kurtosis (tailedness)
-]
-
----
-
-## Primary Moments
-
-Mean: $\mu_x = \frac{\sum X_i}{N};$  
-Variance: $\sigma^2_x = E[(X - \mu_x)^2].$
-
-```{r meanVariance, fig.height = 5, fig.align="center"}
-ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
-  stat_function(colour = "red", fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + 
-  stat_function(colour = "blue", fun = dnorm, n = 101, args = list(mean = 0.5, sd = 1.5)) +
-  ylab("") + xlab("") +
-  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
-  geom_vline(xintercept = 0.5, linetype = "dashed", color = "blue") +
-  annotate("text", x = -1.2, y = .35, label = "Mean = 0\n SD = 1") + 
-  annotate("text", x = 2.5, y = .2, label = "Mean = 0.5\n SD = 1.5")
-```
-
----
-
-Skewness: $\gamma_x = E[(\frac{X - \mu_x}{\sigma})^3].$
-
-```{r skewness, fig.align='center'}
-ggplot(data = data.frame(x = c(-.5, 1.5)), aes(x)) +
-  stat_function(colour = "red", fun = dbeta, n = 101, args = list(shape1 = 5, shape2 = 2)) + 
-  stat_function(colour = "blue", fun = dbeta, n = 101, args = list(shape1 = 2, shape2 = 5)) +
-  ylab("") + xlab("") +
-  annotate("text", x = -0.125, y = 1.5, label = "Right skewed") + 
-  annotate("text", x = 1.125, y = 1.5, label = "Left skewed")
-```
-
----
-
-Kurtosis: $\kappa_x = E[(\frac{X - \mu_X}{\sigma})^4].$
-
-```{r kurtosis, fig.align='center'}
-ggplot(data = data.frame(x = c(-5, 5)), aes(x)) +
-  stat_function(colour = "darkgreen", fun = dnorm, n = 101, args = list(mean = 0, sd = .5)) + 
-  stat_function(colour = "red", fun = dnorm, n = 101, args = list(mean = 0, sd = 1)) + 
-  stat_function(colour = "blue", fun = dnorm, n = 101, args = list(mean = 0, sd = 2)) +
-  ylab("") + xlab("") +
-  annotate("text", x = 1.2, y = .6, label = "Leptokurtic") +
-  annotate("text", x = 2.25, y = .3, label = "Mesokurtic (Normal)") + 
-  annotate("text", x = 3.5, y = .1, label = "Platykurtic")
 ```
 
 ---
