@@ -29,27 +29,25 @@ p_load(knitr, kableExtra, # dependency
        broom, tidyverse) # data wrangling
 ```
 
-
-
 class: bottom, inverse
 
 background-image: url("images/court.jpg")
 background-position: center
 background-size: contain
 
-# Defense Time
+# Challenging Time
 
 ---
 
 ## Procedure
 
 1. Drawing a respondent from the audience
-1. The defender talks.
-1. The defender queries.
-1. The respondent queries.
+1. The statesperson talks.
+1. The statesperson queries.
+1. The respondent challenges.
 1. Preparation (30 sec)
 1. The respondent answers.
-1. The defender answers.
+1. The statesperson answers.
 
 ```{r stopwatch, echo = FALSE}
 library(countdown)
@@ -59,6 +57,21 @@ countdown(minutes = 0,
           play_sound = TRUE)
 ```
 
+---
+
+## Overview
+
+.right-column[<img src="images/experiment.jpg" height = 300 />]
+
+.left-column[
+
+### About experiment
+
++ Why
++ What
++ How
+
+]
 
 ---
 
@@ -70,14 +83,10 @@ class: inverse, bottom
 
 ## Why Large N?
 
-1. Experiment is not a practical option
+1. Experiment is not practical
     + Esp. in policy analysis
 1. Large amount of observed data
-1. Advancement of statistical methods and techniques
-
---
-
-Let's take the experimental logic aside for a moment...
+1. Well-developed econometric methods
 
 ---
 
@@ -95,7 +104,120 @@ How about 1 million times? How many heads?
 
 --
 
-.center[<img src="images/largeNum.png" height = 500 />]
+```{r, tut=FALSE, fig.width=10, fig.height=6, cache=TRUE}
+library(emdbook)
+library(plotly)
+library(here)
+
+m <- list(
+  l = 50,
+  r = 50,
+  b = 10,
+  t = 10,
+  pad = 4
+)
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- map(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)],], frame = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+d <- do.call(rbind, map(lseq(10, 10000, 300), function(x) {
+  d <- data.frame(x = rnorm(x),
+                  frame = x / 300,
+                  N = x)
+  return(d)
+}))
+dd <- aggregate(data = d, x ~ frame + N, FUN = mean) %>%
+  accumulate_by( ~ N)
+p <-
+  dd %>% plot_ly(
+    x =  ~ log10(N),
+    y =  ~ x,
+    frame =  ~ frame,
+    type = "scatter",
+    mode = "lines",
+    line = list(simplyfy = F, color = "orangered"),
+    width = 550,
+    height = 350
+  ) %>%
+  animation_opts(frame = 10,
+                 transition = 0,
+                 redraw = FALSE) %>%
+  config(displayModeBar = F) %>%
+  layout(
+    xaxis = list(title = "Sample Size (log10)",
+                 zeroline = F),
+    yaxis = list(
+      range = c(-0.7, 0.7),
+      title = "Mean",
+      zeroline = F
+    ),
+    autosize = F,
+    margin = m
+  ) %>%
+  animation_slider(hide = T) %>%
+  animation_button(
+    x = 1,
+    xanchor = "right",
+    y = 0,
+    yanchor = "bottom"
+  )
+p
+# htmltools::save_html(p, here("images/03_mean/Law_of_large_numbers.html"))
+```
+
+---
+
+```{r draws, fig.show="animate", animation.hook = 'gifski', fig.width=10, fig.height=8, results = 'hide', cache=TRUE}
+library(ggplot2)
+
+lims <- data.frame(min = c(0, 0, 0, 0), 
+                   max = c(4, 16, 120, 1200))
+
+cols <- c("brown1", "darkturquoise", "royalblue1", "darkorchid1")
+
+ns <- c("10", "100", "1,000", "10,000")
+
+plot1 <- function(x) {
+  d <- map(c(10, 100, 1000, 10000), function(x) {
+    data.frame(x = rnorm(x), frame = x)
+  })
+  
+  p <- map(1:4, function(y) {
+    ggplot(data = d[[y]], aes(x)) + 
+      geom_histogram(binwidth = 0.25,
+                     color = "white",
+                     fill = cols[y]) +
+      theme_light() +
+      theme(
+        panel.border = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_line(size = 0.2),
+        axis.ticks = element_blank(),
+        strip.background = element_blank(),
+        strip.text.x = element_text(color = "black"),
+        axis.text.x = element_blank(),
+        plot.title = element_text(hjust = 0.5, size = 12)
+      ) +
+      guides(fill = FALSE) + labs(x = NULL, y = NULL) +
+      scale_y_continuous(expand = c(0, 0),
+                         limits = c(lims[y, 1], lims[y, 2])) + xlim(-5, 5) +
+      ggtitle(paste0("N=", ns[y]))
+  })
+  
+  
+  p <-
+    cowplot::plot_grid(p[[1]], p[[2]], p[[3]], p[[4]], 
+                       ncol = 2, 
+                       align = "hv")
+  p
+}
+
+map(1:8, function(x) plot1())
+```
 
 ---
 
@@ -103,11 +225,11 @@ How about 1 million times? How many heads?
 
 As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
 
-* Rule of thumb: $> 100$
+* Rule of thumb: $> 100 ~ 200$
 
 ---
 
-## Large-N Approaches?
+## Large-N Approaches
 
 * Univariate analysis
 * Bivariate analysis
@@ -200,17 +322,23 @@ ggplot(df_var, aes(value)) +
 
 ## Moments of A Distribution
 
-Distribution: How much of it there is in each place or at each time.
+### Distribution
 
-Moments: A specific quantitative measure of the shape of a function.
+How much of it there is in each place or at each time.
 
 --
 
-0th: Total probability  
-1st: Mean  
-2ed: Variance  
-3id: Skewness  
-4th: Kurtosis (tailedness)
+### Moments
+
+A specific quantitative measure of the shape.
+
+.small[
+0th. Total probability  
+1st. Mean/median/mode  
+2ed. Variance  
+3id. Skewness  
+4th. Kurtosis (tailedness)
+]
 
 ---
 
@@ -308,12 +436,25 @@ ggplot(mtcars, aes(wt, mpg)) +
 
 ---
 
-## Multivariate Analysis
+## Bring the Experimental Logic Back
 
-When we stick with observed data... 
+What does experiments do? 
 
-+ All about comparison
-+ ~~randomization~~ matching
+.center[<img src="images/controlTreatment.png" height = 400 />]
+
+???
+
+How to assign the groups?
+
+---
+
+## Why Randomization?
+
+.center[<img src="images/balance-1.png" height = 500 />]
+
+---
+
+## What If You Cannot Randomize?
 
 --
 
@@ -322,7 +463,17 @@ When we stick with observed data...
 
 ---
 
-## Example: Put All the Things Together
+## In Practice
+
+.left-column[<img src="images/fitOLS.gif" height = 400, width = 320 />]
+
+--
+
+.right-column[<img src="images/fitOLS_3d.png" height = 400, width = 320 />]
+
+---
+
+## An Illustration
 
 Tang, Wenfang, Yue Hu, and Shuai Jin. 2016. “Affirmative Inaction: Language Education and Labor Mobility among China’s Muslim Minorities.” *Chinese Sociological Review* 48(4): 346–66.
 
@@ -371,7 +522,7 @@ H<sub>4</sub> Language proficiency plays a favorable role in improving the socio
 --
 
 .small[
-H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
+H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. .magenta[&check;]  
 H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.  
 H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.  
 H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
@@ -385,7 +536,7 @@ H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
 
 .small[
 H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.&check;  
+H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient. .magenta[&check;]  
 H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.  
 H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
 ]
@@ -398,8 +549,8 @@ H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
 
 .small[
 H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.&check;  
-H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.&check;  
+H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient. &check;  
+H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs. .magenta[&check;]  
 H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
 ]
 
@@ -413,7 +564,7 @@ H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
 H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
 H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.&check;  
 H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.&check;  
-H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.&check;
+H<sub>4</sub>: Language proficiency favors Uyghurs in promoting. .magenta[&check;]
 ]
 
 ---
