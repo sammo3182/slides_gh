@@ -1,5 +1,5 @@
 ---
-title: "Method: Small-N Analysis in Practice"
+title: "Method: Case Study"
 subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
@@ -19,18 +19,16 @@ output:
       countIncrementalSlides: false
 ---
 
+
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 library(pacman)
 p_load(knitr, kableExtra, # dependency
        stringr, arm, car, 
+       summarytools,
        broom, tidyverse) # data wrangling
-
-set.seed(313)
 ```
-
-
 
 class: bottom, inverse
 
@@ -38,19 +36,19 @@ background-image: url("images/court.jpg")
 background-position: center
 background-size: contain
 
-# Defense Time
+# Challenging Time
 
 ---
 
 ## Procedure
 
 1. Drawing a respondent from the audience
-1. The defender talks.
-1. The defender queries.
-1. The respondent queries.
+1. The statesperson talks.
+1. The statesperson queries.
+1. The respondent challenges.
 1. Preparation (30 sec)
 1. The respondent answers.
-1. The defender answers.
+1. The statesperson answers.
 
 ```{r stopwatch, echo = FALSE}
 library(countdown)
@@ -60,18 +58,31 @@ countdown(minutes = 0,
           play_sound = TRUE)
 ```
 
+???
+
+Q1. Comparing modernism and postmodernism
+Q2. What are social constructivism and interpretivism
+
+---
+
+## Overview
+
+1. What's case study (what's a case)?
+1. Why case study?
+1. Fundamental logic of case study
+1. How to pick a case
 
 ---
 
 class: inverse, bottom
 
-# Small-N Analysis
+# Small-N Methods
 
 ---
 
 ## A Survey of Small-N Methods
 
-+ Case Study
++ .magenta[Case Study]
 + Process Tracing
 + Other Methods
 
@@ -79,27 +90,24 @@ class: inverse, bottom
 
 ## What's Case Study
 
-> An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units ---Gerring (2004: 342).
+> An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units  
+ ---Gerring (2004: 342).
 
 ???
 Gerring, John. 2004. “What Is a Case Study and What Is It Good For?” American Political Science Review 98(2): 341–54.
 
 --
 
-### How to Identify a Case
+*How to Identify a Case?*
 
 Boundary of a Case:
 
 + Spatial
 + Temporal
 
---
-
-Hey, unit of analysis!
-
 ---
 
-## An Observation, Variable, Case or Unite?
+## An Observation, Variable, Case?
 
 ```{r}
 text_tb <- data.frame(Observed = 1:8,
@@ -126,32 +134,15 @@ Covariational relations
 1. N subunit at one time
 1. N subunit over time
 
---
-
-All about .magenta[comparison]!! (Except for story-telling studies)
-
----
-    
-## Advanced Types
-
-* Cross-sectional
-* Time-series cross-sectional
-* Hierarchical
-* Comparative historical
-
 ---
 
-## When are case studies useful?
+## Why Single Case?
 
 * Deep rather than broad, bounded scope of proposition
 * Comparing rather than represent other cases
 * Mechanism rather than effect
 * Deterministic rather than probabilistic relations
 * Exploring rather than confirmatory test
-
---
-
-* Don't forget transferable implication: what's a like/unlike case?
 
 ---
 
@@ -160,6 +151,11 @@ All about .magenta[comparison]!! (Except for story-telling studies)
 Randomization is cool, right?
 
 Why not?!
+
+
+???
+
+Representativeness roots from large-N analysis
 
 ---
 
@@ -170,22 +166,10 @@ Why not?!
 
 ---
 
-## Concomitant variation (most similar systems)
+## Most Similar Systems (Concomitant Variation)
 
 > The belief that systems as similar as possible with respect to as many features as possible constitute the optimal samples for comparative inquiry.
 ---Przeworski and Teune (1970, 32)
-
----
-
-Cases used in Hu, Yue, and Amy H. Liu. 2019. “The Effects of Foreign Language Proficiency on Public Attitudes.” *Journal of East Asian Studies*. 2020:
-
-Mainland China, Taiwan of China, Singapore
-
-
-----
-
-.center[<img src="images/scandinavian.jpg" height = 280 />]
-
 
 ---
 
@@ -205,19 +189,19 @@ kable(text_tb, "html", align = "cll")%>%
 
 ## Principles of the Most Similar System
 
-Focus: .magenta[inter]systemic differences
+**Focus**: .magenta[inter]systemic differences
 
 --
 
-Assumption: Characteristics shared by one group of systems, such as can be removed (control)
+**Assumption**: Characteristics shared by one group of systems, such as can be removed (control)
 
 --
 
-Explanatory: Difference
+**Explanatory**: Difference
 
 --
 
-Control: Similarities between the systems
+**Control**: Similarities between the systems
 
 ---
 
@@ -230,21 +214,27 @@ Control: Similarities between the systems
 
 ---
 
+## Most Different System
+
+Skocpol, Theda. 1979. States and Social Revolutions: A Comparative Analysis of France, Russia, and China. Cambridge: Cambridge University Press.
+
+---
+
 ## Principles of Most Different systems
 
-* Focus: .magenta[intra]systemic similarities and differences
+* **Focus**: .magenta[intra]systemic similarities and differences
 
 --
 
-* Assumption: systemic factors do not play any role in explaining the observed behavior.
+* **Assumption**: systemic factors do not play any role in explaining the observed behavior.
 
 --
 
-* Explanatory: Similarity
+* **Explanatory**: Similarity
 
 --
 
-* Control: Differences in the common systemic characteristics
+* **Control**: Differences in the common systemic characteristics
 
 ---
 
@@ -274,31 +264,7 @@ kable(text_tb, "html", align = "lll") %>%
 
 ---
 
-## Bonus: Necessity vs. Sufficiency
-
-*Necessity*: You won't see this without .magenta[that].
-
-*Sufficiency*: You'll always see .magenta[that] when this happens.
-
---
-
-.center[<img src="images/necessitySufficiency.png" height = 280 />]
-
----
-
-## How to Choose?
-
-Which should I use, MSS or MDS?
-
---
-
-### Prerequisite:
-
-Whether the variable of interests (usually the core independent variable) is embed in the same or different systems?
-
----
-
-## How To Pick the Cases?
+## How To Pick a Case?
 
 Core principle: Minimizing .magenta[selection bias]
 
@@ -336,45 +302,6 @@ Select XY
 
 ---
 
-## Example of Selection Bias
-
-.small[Question: Why new industrializing countries grows more rapidly?  
-Theory: The repression of labor]
-
-.center[<img src="images/seleCase.png" height = 300 />]
-
-Problem?
-
-???
-Mexico, Brazil, South Korea, Taiwan of China
-
----
-
-class: small
-
-## When Selection Is not a problem
-
-* Theory-oriented
-    + Labor repression contributes to growth in a mixed economy
-    + Case selection: Communist countries can be excluded.
-    
---
-
-* Hypothesis-oriented
-    + Theory: Military governments are more likely to negotiate their extrication from power
-than are personalist regimes.
-    + Hypothesis: Incidence of negotiation in military governments during the years in which breakdown occurs is higher than that in personalist regimes.
-    + Case selection: Only breakdown regimes are select.
-   
----
-    
-## Avoid Selection Bias
-
-1. Being clear about the domain of the variables
-1. Transparent coding sheet
-
----
-
 ## When Selection Can Be Useful
 
 ### Most similar/different systems
@@ -397,7 +324,7 @@ Cases that do not conform to the predictions made by the theory
 
 .left-column[
 + Case Study
-    + Logics of case comparision
+    + Logic of case comparison
     + Case selection
 + Process tracing
     + Six steps
@@ -412,3 +339,7 @@ Cases that do not conform to the predictions made by the theory
     + Focus group
     + Content analysis
     ]
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "13_.*.html"), timeout = 300)
+```
