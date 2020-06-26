@@ -1,0 +1,87 @@
+---
+title: "Learning Latent Variable Analysis with Dr. Hu"
+subtitle: "潜在变量分析"
+author: "胡悦<br>清华大学政治学系"
+# date: "2019-06-01"
+output:
+  xaringan::moon_reader:
+    css: 
+      - ../../../css/zh-CN_custom.css
+      - ../../../css/styles.css
+      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: ../../../libs/remark-latest.min.js # to show slides offline
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(echo = FALSE,
+                      message = FALSE,
+                      warning = FALSE)
+
+# wrap hook
+
+library(knitr)
+hook_output <- knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+
+
+library(pacman)
+
+p_load("tidyverse", "stringr", "rvest", "tidytext", "jiebaR")
+```
+
+## 清华大学计算社会科学平台
+
+* 清华大学计算社会科学平台(T-CSS)
+    + http://css.ids.tsinghua.edu.cn
+
+--
+
+* 清华计算社会科学工作坊系列
+* 清华计算社会科学专题论坛系列
+* 社科大数据计算环境
+
+---
+
+## 内容概要
+
+### 因素分析(Factorial Models)
+
+1. 探索性影子分析(EFA)
+1. 验证性因果分析(CFA)
+1. 结构方程模型(SEM)
+
+### 类型分析(Typological Models)
+
+1. 潜在类型分析(LCA)
+1. 项目反应理论(IRT)
+1. 跨群组比较(MrP, GIRT, DCPO)
+
+
+---
+
+## 操作语言
+
+* R
+    + [`psych`](https://personality-project.org/r/psych/vignettes/intro.pdf)
+    + [`laavan`](https://lavaan.ugent.be/)
+    + [`mirt`](https://www.jstatsoft.org/article/view/v048i06/v48i06.pdf)
+    + [`DCPO`](https://github.com/fsolt/DCPO)
+
+---
+
