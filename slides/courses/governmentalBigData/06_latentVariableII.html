@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Learning Latent Variable Analysis with Dr. Hu (II)</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦 清华大学政治学系" />
+    <script src="06_latentVariableII_files/header-attrs/header-attrs.js"></script>
+    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <link rel="stylesheet" href="https:\\use.fontawesome.com\releases\v5.6.0\css\all.css" type="text/css" />
+    <link rel="stylesheet" href="https:\\cdnjs.cloudflare.com\ajax\libs\animate.css\3.7.0\animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Learning Latent Variable Analysis with Dr. Hu (II)
+## 潜在变量分析II
+### 胡悦<br>清华大学政治学系
+
+---
+
+
+
+
+
+## 内容概要
+
+.gray[
+### 因素分析(Factorial Models)
+
+1. 探索性影子分析(EFA)
+1. 验证性因果分析(CFA)
+1. 结构方程模型(SEM)
+]
+
+### 类型分析(Typological Models)
+
+1. 项目反应理论(IRT)
+1. 跨群组项目反应(MrP, GIRT, DCPO)
+
+
+---
+
+## 操作语言
+
+* R
+    + [`eRm`](https://cran.r-project.org/web/packages/eRm/vignettes/eRm.pdf)
+    + [`ltm`](https://www.jstatsoft.org/article/view/v017i05/v17i05.pdf)
+    + [`DCPO`](https://github.com/fsolt/DCPO)
+
+---
+
+## 项目反应理论 (Item Response Theory, IRT)
+
+因子分析怎么了？
+
+--
+
+1. 假定潜在变量是连续的；
+1. 对于指标不区分变量类型；
+1. 难以捕捉群组差异
+1. EFA无法囊括指标间关系;
+1. CFA面临简略理论vs测量质量的矛盾
+
+???
+
+CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；当囊括更多indices测量质量会高，但不符合理论。
+
+--
+
+IRT优势
+
+1. 天生为.magenta[二元]指标设计（衍生适应定序变量）；
+1. 易于与Bayesian inference结合，解决.magenta[潜在变量scale]不确定问题；
+1. 在Bayesian框架下更好解决.magenta[缺失值和“Don't Know”]问题。
+
+---
+
+## 个人层级IRT
+
+应用场景举例：社会调查
+
+调查问题：
+
+1. Yes/No
+2. 可以转化为二元的问题
+3. 定序问题（e.g., Liker scale questions）
+
+---
+
+## Rasch Model
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = p&lt;sub&gt;iq&lt;/sub&gt; = logist&lt;sup&gt;-1&lt;/sup&gt;(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;)]
+
++ y&lt;sub&gt;iq&lt;/sub&gt;&amp;isin;{0,1}: subject `i`'s score on question `q`
++ &amp;theta;&lt;sub&gt;i&lt;/sub&gt;&amp;isin;{-&amp;infin;, +&amp;infin;}: Unbounded latent trait
++ &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;: Difficulty
+
+
+???
+
+Rasch /resh/  
+
+Difficulty: 不同的问题回答肯定答案的难易度不一样  
++ 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
++ 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
+
+---
+
+## 操作案例：语言暴力量表
+
+24个问题，315人。
+
+
+```
+##    S1wantCurse S1WantScold S1WantShout S2WantCurse S2WantScold
+## 1            0           0           0           0           0
+## 2            0           0           0           0           0
+## 3            1           1           1           1           0
+## 4            1           1           1           1           1
+## 5            1           0           1           1           0
+## 6            1           1           0           1           0
+## 7            1           1           1           1           1
+## 8            0           0           0           0           0
+## 9            0           0           0           1           1
+## 10           1           1           1           1           1
+## 11           1           1           1           1           1
+## 12           1           1           1           1           1
+## 13           1           0           1           1           0
+## 14           1           1           1           1           1
+## 15           1           0           0           1           0
+## 16           1           0           1           1           0
+## 17           1           0           0           1           0
+## 18           1           0           1           1           0
+## 19           0           0           0           0           0
+## 20           1           1           1           1           1
+## 21           1           1           1           1           1
+## 22           1           1           1           1           1
+## 23           1           1           1           1           1
+## 24           1           0           1           1           1
+## 25           0           0           0           0           0
+## 26           0           0           0           1           0
+## 27           1           1           0           1           1
+## 28           1           1           1           1           1
+## 29           1           1           1           1           0
+## 30           1           0           1           1           0
+## 31           1           1           1           1           1
+## 32           1           1           1           1           1
+## 33           0           0           0           1           0
+## 34           1           1           1           1           0
+## 35           1           1           1           1           1
+## 36           1           1           1           1           1
+## 37           0           0           0           0           0
+## 38           0           0           0           0           0
+## 39           0           0           0           1           1
+## 40           0           0           0           0           1
+## 41           1           1           1           0           0
+##    S2WantShout S3WantCurse S3WantScold S3WantShout S4WantCurse
+## 1            0           0           0           1           1
+## 2            0           0           0           0           0
+## 3            1           1           0           0           0
+## 4            1           1           0           0           0
+## 5            0           1           0           0           1
+## 6            0           1           1           1           0
+## 7            1           1           0           1           0
+## 8            0           0           0           0           0
+## 9            0           1           0           1           1
+## 10           1           1           0           1           1
+## 11           1           1           1           1           0
+## 12           1           1           0           1           0
+## 13           0           1           0           0           1
+## 14           1           1           1           1           1
+## 15           1           0           1           1           1
+## 16           1           1           0           0           1
+## 17           1           0           0           0           1
+## 18           1           1           0           1           0
+## 19           0           0           0           0           0
+## 20           1           1           0           0           1
+## 21           0           0           0           0           1
+## 22           1           1           1           1           1
+## 23           1           1           1           1           1
+## 24           0           1           1           1           1
+## 25           0           0           0           1           1
+## 26           0           1           0           0           1
+## 27           1           1           0           0           0
+## 28           1           1           1           1           0
+## 29           1           0           0           0           1
+## 30           1           0           1           1           1
+## 31           1           0           0           0           1
+## 32           0           1           1           1           1
+## 33           0           0           1           0           0
+## 34           1           0           0           0           0
+## 35           1           0           0           0           0
+## 36           1           1           1           1           1
+## 37           1           0           0           1           0
+## 38           1           0           0           0           0
+## 39           1           0           0           0           0
+## 40           0           1           0           0           0
+## 41           0           1           1           1           1
+##    S4WantScold S4WantShout S1DoCurse S1DoScold S1DoShout
+## 1            0           0         1         0         1
+## 2            0           0         0         0         0
+## 3            0           0         0         1         1
+## 4            0           0         1         1         1
+## 5            0           0         1         1         0
+## 6            0           0         1         0         0
+## 7            0           0         1         1         1
+## 8            0           0         1         0         0
+## 9            0           0         1         0         0
+## 10           1           1         1         1         1
+## 11           0           0         1         1         1
+## 12           1           1         1         1         0
+## 13           0           0         1         1         0
+## 14           0           0         1         1         1
+## 15           0           0         1         1         0
+## 16           0           0         1         1         1
+## 17           0           0         1         1         1
+## 18           0           0         1         0         1
+## 19           0           0         0         0         0
+## 20           0           0         1         0         1
+## 21           0           0         1         0         0
+## 22           1           1         1         1         1
+## 23           1           1         1         1         1
+## 24           0           0         1         0         0
+## 25           1           0         1         1         0
+## 26           0           0         0         0         0
+## 27           0           0         0         0         0
+## 28           1           1         1         1         1
+## 29           0           1         1         1         0
+## 30           0           0         1         1         1
+## 31           1           1         1         1         1
+## 32           0           1         1         1         1
+## 33           0           0         1         1         1
+## 34           0           0         1         1         1
+## 35           0           0         1         1         1
+## 36           1           0         1         1         1
+## 37           0           0         0         0         0
+## 38           0           1         1         1         1
+## 39           0           0         0         0         0
+## 40           0           0         0         0         0
+## 41           0           1         0         0         1
+##    S2DoCurse S2DoScold S2DoShout S3DoCurse S3DoScold S3DoShout
+## 1          1         0         0         1         0         0
+## 2          0         0         0         1         0         0
+## 3          0         0         1         0         0         0
+## 4          1         1         1         1         0         0
+## 5          1         0         0         1         0         0
+## 6          1         0         0         1         0         0
+## 7          1         1         1         0         0         0
+## 8          1         0         0         1         0         0
+## 9          1         0         0         1         0         1
+## 10         1         1         1         0         0         0
+## 11         1         1         1         0         0         0
+## 12         1         1         0         0         1         0
+## 13         1         1         0         0         0         0
+## 14         1         1         1         1         1         0
+## 15         1         1         0         1         0         0
+## 16         0         0         0         1         0         0
+## 17         1         1         0         1         1         1
+## 18         1         0         0         0         0         0
+## 19         0         0         0         0         0         0
+## 20         1         1         0         0         0         0
+## 21         1         0         0         0         0         0
+## 22         1         1         0         1         1         0
+## 23         1         1         1         1         1         0
+## 24         0         0         0         0         0         0
+## 25         1         0         0         0         0         0
+## 26         0         0         0         0         0         0
+## 27         0         0         0         0         0         0
+## 28         0         1         1         0         0         1
+## 29         1         0         0         1         0         0
+## 30         1         1         0         1         1         0
+## 31         1         1         1         0         0         0
+## 32         1         1         0         1         0         1
+## 33         1         1         0         1         1         0
+## 34         1         0         0         0         0         0
+## 35         1         1         1         0         0         0
+## 36         1         1         1         1         1         1
+## 37         0         0         0         0         0         0
+## 38         0         0         1         0         0         0
+## 39         1         1         1         0         0         0
+## 40         0         0         0         0         0         0
+## 41         0         0         0         0         0         1
+##    S4DoCurse S4DoScold S4DoShout
+## 1          1         1         1
+## 2          0         0         0
+## 3          1         0         0
+## 4          0         0         0
+## 5          1         0         0
+## 6          1         1         0
+## 7          0         0         0
+## 8          1         0         0
+## 9          0         1         0
+## 10         1         1         1
+## 11         0         0         0
+## 12         1         1         0
+## 13         1         0         0
+## 14         0         1         0
+## 15         1         1         0
+## 16         1         1         0
+## 17         1         1         1
+## 18         0         0         0
+## 19         0         0         0
+## 20         0         0         0
+## 21         0         0         0
+## 22         1         1         0
+## 23         1         1         0
+## 24         0         0         0
+## 25         1         0         0
+## 26         1         0         0
+## 27         1         0         0
+## 28         0         0         1
+## 29         1         1         0
+## 30         1         1         1
+## 31         1         1         1
+## 32         1         1         1
+## 33         1         0         1
+## 34         0         0         0
+## 35         0         0         0
+## 36         1         1         0
+## 37         0         0         0
+## 38         1         0         0
+## 39         0         1         0
+## 40         0         0         0
+## 41         0         0         1
+##  [ reached 'max' / getOption("max.print") -- omitted 275 rows ]
+```
+
+???
+
+https://hansjoerg.me/2018/04/23/rasch-in-r-tutorial/
+
+---
+
+## Difficulty Parameter
+
+
+```
+## 
+## Results of RM estimation: 
+## 
+## Call:  RM(X = df_verbal) 
+## 
+## Conditional log-likelihood: -3049.923 
+## Number of iterations: 31 
+## Number of parameters: 23 
+## 
+## Item (Category) Difficulty Parameters (eta):
+##          S1WantScold S1WantShout S2WantCurse S2WantScold
+## Estimate  -0.7306627  -0.2490192  -1.9092555  -0.8727553
+## Std.Err    0.1306465   0.1283297   0.1534783   0.1320557
+##          S2WantShout S3WantCurse S3WantScold S3WantShout
+## Estimate  -0.1810704  -0.6955739   0.5135346   1.3577046
+## Std.Err    0.1283048   0.1303500   0.1324266   0.1491583
+##          S4WantCurse S4WantScold S4WantShout  S1DoCurse
+## Estimate  -1.2450314   0.1779328   0.8711047 -1.3833980
+## Std.Err    0.1373907   0.1294233   0.1378324  0.1400106
+##           S1DoScold S1DoShout  S2DoCurse  S2DoScold S2DoShout
+## Estimate -0.5565978 0.6981101 -1.0367333 -0.1130967 1.3120493
+## Std.Err   0.1293745 0.1349233  0.1341063  0.1283547 0.1478887
+##           S3DoCurse S3DoScold S3DoShout  S4DoCurse S4DoScold
+## Estimate 0.04034605 1.3347795 2.8709292 -0.8727553 0.2125897
+## Std.Err  0.12874405 0.1485151 0.2219007  0.1320556 0.1296441
+##          S4DoShout
+## Estimate 1.8402462
+## Std.Err  0.1654456
+```
+
+---
+
+## 成了吗：Item Characteristic Curves
+
+![](06_latentVariableII_files/figure-html/icc-1.png)&lt;!-- --&gt;
+
+???
+
+检查各题affirmative的难易程度
+
+---
+
+## 成了吗：Personal Item Map
+
+![](06_latentVariableII_files/figure-html/pi-map-1.png)&lt;!-- --&gt;
+
+???
+
+Person-item maps are useful to compare the range and position of the item measure distribution (lower panel) to the range and position of the person measure distribution (upper panel).  
+Items should ideally be located along the whole scale to meaningfully measure the ‘ability’ of all persons. 
+
+---
+
+## 成了吗： Item Infit
+
+![](06_latentVariableII_files/figure-html/infit-1.png)&lt;!-- --&gt;
+
+???
+
+绿线为t-test的[-1.96，1.96],以内为可。
+
+---
+
+## Two-Parameter Logistic Model (2PL IRT)
+
+Rasch Model的局限：Measurement error
+
+???
+
+人们可能不理解、错理解、不在乎问题。
+
+--
+
+### Solution: Parameter of dispersion
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = p&lt;sub&gt;iq&lt;/sub&gt; = logist&lt;sup&gt;-1&lt;/sup&gt;(.magenta[&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;]&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;)]
+
+&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;: Discrimination
+
+---
+
+另一种常见写法
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(**&amp;theta;&lt;sub&gt;i&lt;/sub&gt;** - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]]
+
+&amp;beta;&lt;sub&gt;q&lt;/sub&gt;: &amp;sigma;&lt;sub&gt;q&lt;/sub&gt; &amp;frasl; &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;, threshold(有时也称difficulty)  
+&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;: &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;&lt;sup&gt;-1&lt;/sup&gt;, dispersion
+
+???
+
+Dispersion: magnitude of the measurement error 
+
+---
+
+![Difficulty &amp; Dispersion](06_latentVariableII_files/figure-html/irt-illustration-1.png)
+
+---
+
+
+```
+## 
+## Call:
+## ltm(formula = df_verbal ~ z1)
+## 
+## Coefficients:
+##              Dffclt  Dscrmn
+## S1wantCurse  -0.913   1.358
+## S1WantScold  -0.409   1.525
+## S1WantShout  -0.078   1.340
+## S2WantCurse  -1.243   1.468
+## S2WantScold  -0.500   1.567
+## S2WantShout  -0.026   1.249
+## S3WantCurse  -0.531   0.880
+## S3WantScold   0.475   1.409
+## S3WantShout   1.455   0.912
+## S4WantCurse  -0.906   1.129
+## S4WantScold   0.214   1.588
+## S4WantShout   0.946   0.967
+## S1DoCurse    -0.821   1.666
+## S1DoScold    -0.251   2.272
+## S1DoShout     0.605   1.420
+## S2DoCurse    -0.630   1.475
+## S2DoScold     0.009   1.987
+## S2DoShout     0.968   1.625
+## S3DoCurse     0.164   1.089
+## S3DoScold     1.098   1.342
+## S3DoShout     2.457   1.126
+## S4DoCurse    -0.537   1.363
+## S4DoScold     0.255   1.430
+## S4DoShout     1.592   1.180
+## 
+## Log.Lik: -4017.413
+```
+
+---
+
+![](06_latentVariableII_files/figure-html/ltm-icc-1.png)&lt;!-- --&gt;
+
+---
+
+## 需要2PL吗？
+
+Likelihood-Ratio Test
+
+
+```
+## 
+##  Likelihood Ratio Table
+##               AIC    BIC  log.Lik   LRT df p.value
+## res_rm_2  8124.80 8218.7 -4037.40                 
+## res_2pl_1 8130.83 8311.1 -4017.41 39.98 23   0.015
+```
+
+
+---
+
+## 延展1：一维到多维
+
+传统IRT：一维聚合
+
+--
+
+Multidimentional IRT (MIRT, Phil Chalmers, 2015)
+
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(**&amp;Theta;&lt;sub&gt;i&lt;/sub&gt;** - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; **&amp;Alpha;&lt;sub&gt;q&lt;/sub&gt;**]]
+
+**&amp;Theta;&lt;sub&gt;i&lt;/sub&gt;**和**&amp;Alpha;&lt;sub&gt;q&lt;/sub&gt;**不再是单一值，而是一个矩阵。
+
+???
+
+Pyschologist
+
+---
+
+## 延展2：二元到定序
+
+Logit &amp;rarr; Cumulative logit
+
+Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) &amp;rarr; `\(Pr(\frac{y_{iq}\leq c}{y_{iq}&gt;c})\)`
+
+---
+
+---
+
+## 延展3：群组效应
+
+.center[&lt;img src="images/countryBias.png" height = 300 /&gt;]
+
+Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
+
+在估测&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;时加入random effect.
+
+???
+
+Daniel Stegmueller, Duke U, poli sci
+
+---
+
+## 超越个体
+
+Individual fallacy: Ecological fallacy 的反面
+
+&lt;video width="700" height="400" controls&gt;
+    &lt;source src="images/antiAsian.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+--
+
+再比如，民主、不平等、政治文化……
+
+---
+
+## Disaggregation
+
+.center[y&lt;sub&gt;kq&lt;/sub&gt; = &amp;Sigma;y&lt;sub&gt;ikq&lt;/sub&gt; &amp;frasl; n.]
+
+--
+
+问题：
+
+1. 如果群组过小，其平均值的代表意义不大
+2. 不同的指标对于潜在变量贡献不一样
+
+---
+
+## Multilevel Regression and Post-stratification (MrP)
+
+经过群组信息（地理、人口）加权的平均值
+
+???
+
+Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Categories Using Hierarchical Logistic Regression.” Survey Methods 23: 127--135.
+
+--
+
+1. 将总体（population）按群组（strata，如国家、地区）切分；
+1. 估测对象为核心变量在每个群组中的平均值/比例， &amp;theta;&lt;sub&gt;h&lt;/sub&gt; (h &amp;isin; {1, H});
+1. 已知各群组以人口变量j（如老年男性、青年女性等）划分，群组人口（N&lt;sub&gt;j&lt;/sub&gt;）或占总人口比；
+1. 各组总体平均值&amp;mu;&lt;sub&gt;j&lt;/sub&gt;可通过multilevel model 进行估算。
+
+---
+
+`$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$`
+
+
+???
+
+N: 总体（来自普查）
+n: 样本（来自sample）
+---
+
+## 操作案例
+
+数据：某年某市五区域2396家产业公司的财政信息  
+目标：估测每个区域的产业平均收入（记为&amp;theta;&lt;sub&gt;1~5&lt;/sub&gt;）
+
+公司规模和区域分布
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; A &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; B &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; E &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Big &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Medium &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 111 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 187 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 138 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 593 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 862 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+???
+
+https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
+
+
+---
+
+实际平均值
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Zone &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; income &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 652.28 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 320.75 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 331.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 684.98 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; E &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 767.39 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+我们随机选取数据中1000个产业公司作为样本：
+
+![](06_latentVariableII_files/figure-html/rawVsTrue-1.png)&lt;!-- --&gt;
+
+---
+
+## Step I: Mr
+
+Income = &amp;beta;&lt;sub&gt;0z&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1z&lt;/sub&gt;Level&lt;sub&gt;iz&lt;/sub&gt; + &amp;epsilon;&lt;sub&gt;iz&lt;/sub&gt;
+
+.center[&amp;beta;&lt;sub&gt;0z&lt;/sub&gt; = &amp;gamma;&lt;sub&gt;00&lt;/sub&gt; + &amp;gamma;&lt;sub&gt;01&lt;/sub&gt;Zone&lt;sub&gt;z&lt;/sub&gt; + u&lt;sub&gt;0z&lt;/sub&gt;]
+
+--
+
+Output: Post-strata means
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; A &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; B &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; E &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Big &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1274.74 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1148.58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1189.59 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1238.51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1251.95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Medium &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 706.19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 580.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 621.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 669.96 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 683.40 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 372.95 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 246.79 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 287.79 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 336.72 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 350.16 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Step II: P
+
+N&lt;sub&gt;z&lt;/sub&gt; * weighted mean / n&lt;sub&gt;z&lt;/sub&gt;
+
+
+```
+##        A        B        C        D        E 
+## 656.4551 318.3753 326.6951 680.8675 754.5761
+```
+
+---
+
+## Comparision
+
+![](06_latentVariableII_files/figure-html/mrpVsraw-1.png)&lt;!-- --&gt;
+
+---
+
+## 聚合层级IRT：DGIRT
+
+MrP: 依然是算术平均数。
+
++ 答题难度的地区差异
++ 题目的scale
++ Measurement error
+
+--
+
+Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey &amp; Warshaw 2015)
+
+---
+
+## DGIRT
+
+1. 在群组层面估测IRT；
+1. 在估测IRT过程中加入群组级别变量；
+1. 将时间变量融入IRT估测；
+1. 用MrP给估测进行权重。
+
+---
+
+## IRT的群组层级估测
+
+个体： Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]
+
+--
+
+群组：
+`\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
+\end{equation}`
+
+`\(\bar{\theta}_k\)` 和 &amp;sigma;&lt;sub&gt;kt&lt;/sub&gt; 是潜在变量在群组k时间t的均值和sd。  
+???
+
+1.7: sd of probit is (&amp;pi;/3)&lt;sup&gt;1/2&lt;/sup&gt; for logit, while Long 1997 found it is more close to 1.7 in actual estimations.
+
+Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of Educational Statistics 8(4): 271–88.
+
+&amp;eta;: eta 
+
+---
+
+## 囊括时间与空间问题
+
+`$$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})$$`
+
+.center[&amp;xi;&lt;sub&gt;t&lt;/sub&gt; ~ N(&amp;xi;&lt;sub&gt;.magenta[t-1]&lt;/sub&gt;;&amp;sigma;&lt;sub&gt;&amp;gamma;&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;)]
+
+.center[&amp;gamma;&lt;sub&gt;pt&lt;/sub&gt; ~ N(&amp;gamma;&lt;sub&gt;p,t-1&lt;/sub&gt;&amp;delta;&lt;sub&gt;t&lt;/sub&gt; + .magenta[**z'&lt;sub&gt;p.&lt;/sub&gt;&amp;eta;&lt;sub&gt;t&lt;/sub&gt;**], &amp;sigma;&lt;sub&gt;&amp;gamma;&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;)]
+
+.center[n&lt;sup&gt;*&lt;/sup&gt;&lt;sub&gt;kqt&lt;/sub&gt;]
+
+???
+ 
+&amp;xi;&lt;sub&gt;t&lt;/sub&gt;: xi
+
+x 为群组级变量  
+t-1, dynamic linearl model  
+**z'&lt;sub&gt;p.&lt;/sub&gt;&amp;eta;&lt;sub&gt;t&lt;/sub&gt;**: geography-level attributes, &amp;eta;是coefficients  
+n&lt;sup&gt;*&lt;/sup&gt;&lt;sub&gt;kqt&lt;/sub&gt;基于MrP
+
+---
+
+DGIRT：
+
++ 囊括诸多因素
++ 可以部分平衡样本代表性问题
+
+--
+
++ 强大而.magenta[复杂]
+
+
+???
+
+Caughey &amp; Warshaw称会跑几个星期
+
+---
+
+## DGIRT简装版 (Claassen 2019)
+
+.small[
+简化1：只作用于代表性样本和国家级别  
+简化2：将国家作用从估测&amp;theta;变为估测difficulty  
+简化3：忽略本地问题分布（如极化现象）
+] 
+
+--
+
+`\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
+\end{equation}`
+
+&amp;darr;
+
+`\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).
+\end{equation}`
+
+???
+
+&amp;delta;&lt;sub&gt;kq&lt;/sub&gt;: 问题的difficulty随国家k变化。
+
+---
+
+## 聚合IRT最新进化态：DCPO
+
+.left-column[
+&lt;img src="images/fsolt.jpeg" height = 400 /&gt;
+]
+
+.right-column[
+.magenta[D]ynamic .magenta[C]omparative .magenta[P]ublic .magenta[O]pinion
+
+复杂程度：
+
+Claasseen 2019 &lt;   
+DCPO &lt;   
+DGIRT
+]
+
+---
+
+background-image: url("images/irtCompare.png")
+background-position: center
+background-size: contain
+
+
+???
+
+Bounded: 使用logit归为0-1
+
+---
+
+## 优化效果
+
+.center[&lt;img src="images/irtFitCompare.png" height = 400 /&gt;]
+
+---
+
+## 操作过程
+
+1. 收集survey数据，明确与感兴趣的变量相关的指标问题
+1. 通过`DCPOtools`对数据进行预处理
+1. 通过`DCPO`进行数据分析
+1. 通过`shinystan`诊断convergence
+
+---
+
+## Bonus: "调得一手好参"
+
+### Bayesian Analysis 参数与Convergence
+
+1. Individual IRT、MrP、DGIRT、DCPO
+1. Convergence是底线
+
+
+---
+
+## Convergence
+
+最常见的Bayesian inference方法：Markov Chain Monte Carlo (MCMC)
+
+--
+
+### 一个Markov Chain何时Converge? 
+
+当Chain的posterior停留在一个.magenta[相对稳定]的区域内(.magenta[ergodic] chain)
+
+`\begin{equation}
+\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.
+\end{equation}`
+
+???
+
++ Homogeneity: at step m the transition probability at this step do not depend on
++ Ergodicity：遍历性
+
+---
+
+## An Ergodic Chain
+
++ Homogeneous/Closed
++ Irreducible
++ Stationary
++ Recurrent
++ Aperodic
+
+???
+
++ Reccurent
+    + Homogeneous/Closed: At step m if the trasition probabilities at this step do not depend on m; for State A, B, p(A, B) = 0
+    + Irreducible: If every reached point/point collection can be reached from every other reached point/point collection; p(&amp;theta;&lt;sub&gt;i&lt;/sub&gt;, &amp;theta;&lt;sub&gt;j&lt;/sub&gt;)&amp;ne; 0, &amp;forall; &amp;theta;&lt;sub&gt;i&lt;/sub&gt;, &amp;theta;&lt;sub&gt;j&lt;/sub&gt;
++ Stationary: no autocorrelation
++ Aperodic: even with a long time there's no identical cycle of chain values repeating
+
+
+---
+
+## "下雪了，天晴了，下雪别忘穿棉袄"
+
+.left-column[
+
+&gt;下雪啦天晴啦
+下雪别忘穿棉袄
+下雪啦天晴啦
+天晴别忘戴草帽
+带草帽~~~
+
+]
+
+--
+
+.right-column[
+
+今晴，明80%也晴；  
+今雪，天60%也雪。
+
+|      |                     | 明天                |                     |
+|------|---------------------|---------------------|---------------------|
+|      |                     | &amp;theta;&lt;sub&gt;1&lt;/sub&gt; | &amp;theta;&lt;sub&gt;2&lt;/sub&gt; |
+| 今天 | &amp;theta;&lt;sub&gt;1&lt;/sub&gt; | 0.8                 | 0.2                 |
+|      | &amp;theta;&lt;sub&gt;2&lt;/sub&gt; | 0.6                 | 0.4                 |
+
+]
+
+???
+
+刘欢：《心中的太阳》, 《雪城》主题曲，1988年，倪萍主演
+
+example of converged
+
+---
+
+起始点: [0.5 0.5]
+
+1. `$$S_1 = [0.5\; 0.5]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.7\; 0.3]$$`
+1. `$$S_2 = [0.7\; 0.3]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.74\; 0.26]$$`
+1. `$$S_3 = [0.74\; 0.26]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.748\; 0.252]$$`
+1. `$$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.749\; 0.250]$$`
+
+---
+
+## Convergence检验
+
+没有办法能够证明一个Markov Chain是converged；
+
+1. 在给定时间内，无法保证Markov chain能够.magenta[达到]目标分布;
+1. 无法预先确定一条Chain能够.magenta[遍历]目标分布的所有区域;
+1. 诊断只能判断一条Chain是否.magenta[未converged]。
+
+---
+
+## Thinning
+
++ 每个Chain记录多少samples
+    + Chain将仅记录第k个值，越高丢失的信息越多
+    + k通常取值：4，5，10
+    
+--
+
++ Thinning 并.magenta[不会]提高Chain的运算速度、帮助convergence或增强估测质量
+    + 仅用于降低autocorrelation
+
+---
+
++ Rule of thumb
+    1. 迭代中autocorrelation太高
+    1. Chain的convergence太低
+    1. 并行运算
+    1. 模型维度过高
+
+---
+
+## Burn-In
+
+给与足够的burnning in以到达目标分布
+
+“炸毛的毛毛虫”（Fuzzy Caterpillar）
+
+.center[&lt;img src="images/fuzzyCaterpillar.png" height = 300 /&gt;]
+
+---
+
+## Autocorrelation
+
+1. Chain间高相关性
+1. 单一parameter高相关性
+
+--
+
+.left-column[
+&lt;img src="images/isAutocorrelation.png" height = 300 /&gt;
+]
+
+.right-column[
+&lt;img src="images/noAutocorrelation.png" height = 300 /&gt;
+]
+
+???
+
+1. Chain间高相关性：Slow convergence
+1. 单一parameter的高相关：Individual nonconvergence
+---
+
+## 实证指标
+
+1. Geweke
+1. Gelman-Rubin
+1. Raftery-Lewis
+1. Heidelberger-Welch
+
+---
+
+## Geweke's G
+
+比较parameters在Chain早期和晚期两个.magenta[不重叠]的窗口内的均值
+
+`$$G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.$$`
+
+
+???
+
+检验Reccurence
+
+A fancy difference of means
+
+converge 则显示不显著差异，增加burn-in
+
+---
+
+## Gelman &amp; Rubin 1992
+
+1. 跑多条chains（5~10），每条长2n
+1. 对每一个感兴趣的parameter计算
+    1. Within chain variance(W)
+    1. Between chain variance(B)
+1. 计算总体variance： var(&amp;theta;) = (1 - 1/n)W + (1/n)B
+1. 计算Scale reduction (亦称shrink factor)
+
+`$$\hat{R}= \sqrt{\frac{\hat{var(\theta)}}{W}}$$`
+
+???
+
+R趋近于1表示chains operating on same distribution
+
+&lt;1.1或1.2是可以接受的
+
+---
+
+## Raftery&amp; Lewis (1991, 1996)
+
++ 分别评价每一个Chain的每一个变量
+    1. 根据Chain间的相关性，并据此提供一个迭代数（iteration number）
+    1. 检验autocorrelation inflation
+    
++ 输出
+    + Burin-in 
+    + Total
+    + Dependence Factor
+
+???
+检验 burn-in  
+
+Burn-in: 是一位数或两位数为佳  
+Total: 建议的burnin数，未考虑cross-chain，因此真正burnin要乘上chain数
+
+---
+
+### Heidelberger and Welch
+
+1. 确定一个迭代数N, 以及准确性（&amp;epsilon;）和显著性数准(&amp;alpha;)
+1. 运行整个chain
+1. 施用Cram&amp;eacute;r-von Mises Test，Null: Chain是stationary
+1. 如检验未通过则依次略去10%、20%,乃至50%的迭代，再次检测；
+1. 如结果表示部分数据不是stationary，则对该部分数据进行halfwidth检验
+1. 如果halfwidth ratio &lt; &amp;epsilon;, 则通过检验
+
+
+
+???
+
+检验Stationary
+
+---
+
+## 总结
+
+类型分析模型
+
+.left-column[
++ 个体IRT
+    + Rasch model
+    + **2PL model**
+    + 多维IRT
++ 群体类型
+    + MrP
+    + DGIRT
+    + **DCPO**
+    ]
+    
+.right-column[
++ Baysian Inference
+    + Convergence基线
+    + 只能验*non*convergence
+    + Geweke
+    + Gelman-Rubin
+    + Raftery-Lewis
+    + Heidelberger-Welch
+]
+
+---
+
+class: inverse, center, middle
+
+# Questions, Comments, and Suggestions?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="../../../libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

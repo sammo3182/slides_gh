@@ -1,6 +1,6 @@
 ---
-title: "Learning Latent Variable Analysis with Dr. Hu"
-subtitle: "潜在变量分析"
+title: "Learning Latent Variable Analysis with Dr. Hu (II)"
+subtitle: "潜在变量分析II"
 author: "胡悦<br>清华大学政治学系"
 # date: "2019-06-01"
 output:
@@ -24,53 +24,33 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE,
                       warning = FALSE)
 
-# wrap hook
-
-library(knitr)
-hook_output <- knit_hooks$get('output')
-knit_hooks$set(output = function(x, options) {
-  # this hook is used only when the linewidth option is not NULL
-  if (!is.null(n <- options$linewidth)) {
-    x = knitr:::split_lines(x)
-    # any lines wider than n should be wrapped
-    if (any(nchar(x) > n)) x = strwrap(x, width = n)
-    x = paste(x, collapse = '\n')
-  }
-  hook_output(x, options)
-})
-
 
 library(pacman)
 
-p_load("tidyverse", "stringr", "rvest", "tidytext", "jiebaR")
+p_load("eRm", "ltm", "difR", 
+       "TeachingSampling", "lme4",
+       "DCPO", 
+       "knitr", "ggalt",
+       "latex2exp", "tidyverse")
+
+set.seed(313)
 ```
 
-## 清华大学计算社会科学平台
-
-* 清华大学计算社会科学平台(T-CSS)
-    + http://css.ids.tsinghua.edu.cn
-
---
-
-* 清华计算社会科学工作坊系列
-* 清华计算社会科学专题论坛系列
-* 社科大数据计算环境
-
----
 
 ## 内容概要
 
+.gray[
 ### 因素分析(Factorial Models)
 
 1. 探索性影子分析(EFA)
 1. 验证性因果分析(CFA)
 1. 结构方程模型(SEM)
+]
 
 ### 类型分析(Typological Models)
 
-1. 潜在类型分析(LCA)
 1. 项目反应理论(IRT)
-1. 跨群组比较(MrP, GIRT, DCPO)
+1. 跨群组项目反应(MrP, GIRT, DCPO)
 
 
 ---
@@ -78,10 +58,921 @@ p_load("tidyverse", "stringr", "rvest", "tidytext", "jiebaR")
 ## 操作语言
 
 * R
-    + [`psych`](https://personality-project.org/r/psych/vignettes/intro.pdf)
-    + [`laavan`](https://lavaan.ugent.be/)
-    + [`mirt`](https://www.jstatsoft.org/article/view/v048i06/v48i06.pdf)
+    + [`eRm`](https://cran.r-project.org/web/packages/eRm/vignettes/eRm.pdf)
+    + [`ltm`](https://www.jstatsoft.org/article/view/v017i05/v17i05.pdf)
     + [`DCPO`](https://github.com/fsolt/DCPO)
 
 ---
 
+## 项目反应理论 (Item Response Theory, IRT)
+
+因子分析怎么了？
+
+--
+
+1. 假定潜在变量是连续的；
+1. 对于指标不区分变量类型；
+1. 难以捕捉群组差异
+1. EFA无法囊括指标间关系;
+1. CFA面临简略理论vs测量质量的矛盾
+
+???
+
+CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；当囊括更多indices测量质量会高，但不符合理论。
+
+--
+
+IRT优势
+
+1. 天生为.magenta[二元]指标设计（衍生适应定序变量）；
+1. 易于与Bayesian inference结合，解决.magenta[潜在变量scale]不确定问题；
+1. 在Bayesian框架下更好解决.magenta[缺失值和“Don't Know”]问题。
+
+---
+
+## 个人层级IRT
+
+应用场景举例：社会调查
+
+调查问题：
+
+1. Yes/No
+2. 可以转化为二元的问题
+3. 定序问题（e.g., Liker scale questions）
+
+---
+
+## Rasch Model
+
+.center[Pr(y<sub>iq</sub> = 1) = p<sub>iq</sub> = logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
+
++ y<sub>iq</sub>&isin;{0,1}: subject `i`'s score on question `q`
++ &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Unbounded latent trait
++ &sigma;<sub>q</sub>: Difficulty
+
+
+???
+
+Rasch /resh/  
+
+Difficulty: 不同的问题回答肯定答案的难易度不一样  
++ 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
++ 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
+
+---
+
+## 操作案例：语言暴力量表
+
+24个问题，315人。
+
+```{r data-verbal}
+data(verbal, package = "difR")
+df_verbal <- verbal %>% select(1:24)
+df_verbal
+```
+
+???
+
+https://hansjoerg.me/2018/04/23/rasch-in-r-tutorial/
+
+---
+
+## Difficulty Parameter
+
+```{r rasch-difficulty}
+res_rm_1 <- RM(df_verbal)
+res_rm_1
+```
+
+---
+
+## 成了吗：Item Characteristic Curves
+
+```{r icc, fig.height=8, fig.width=10}
+plotjointICC(res_rm_1, cex = .6)
+```
+
+???
+
+检查各题affirmative的难易程度
+
+---
+
+## 成了吗：Personal Item Map
+
+```{r pi-map, fig.height=8, fig.width=10}
+plotPImap(res_rm_1, cex.gen = .55, sorted = TRUE)
+```
+
+???
+
+Person-item maps are useful to compare the range and position of the item measure distribution (lower panel) to the range and position of the person measure distribution (upper panel).  
+Items should ideally be located along the whole scale to meaningfully measure the ‘ability’ of all persons. 
+
+---
+
+## 成了吗： Item Infit
+
+```{r infit}
+plotPWmap(res_rm_1)
+```
+
+???
+
+绿线为t-test的[-1.96，1.96],以内为可。
+
+---
+
+## Two-Parameter Logistic Model (2PL IRT)
+
+Rasch Model的局限：Measurement error
+
+???
+
+人们可能不理解、错理解、不在乎问题。
+
+--
+
+### Solution: Parameter of dispersion
+
+.center[Pr(y<sub>iq</sub> = 1) = p<sub>iq</sub> = logist<sup>-1</sup>(.magenta[&kappa;<sub>q</sub>]&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
+
+&kappa;<sub>q</sub>: Discrimination
+
+---
+
+另一种常见写法
+
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[(**&theta;<sub>i</sub>** - &beta;<sub>q</sub>) &frasl; &alpha;<sub>q</sub>]]
+
+&beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold(有时也称difficulty)  
+&alpha;<sub>q</sub>: &kappa;<sub>q</sub><sup>-1</sup>, dispersion
+
+???
+
+Dispersion: magnitude of the measurement error 
+
+---
+
+```{r irt-illustration, fig.height=8, fig.width=10, fig.cap="Difficulty & Dispersion"}
+tibble(
+  theta = rep(seq(-3, 3, length.out = 100), 6),
+  beta = rep(c(-2, 0, 2, 0, 0, 0), each = 100),
+  alpha = rep(c(1, 1, 1, .25, 1, 2), each = 100),
+  pr_y = plogis((theta - beta) / alpha),
+  line_no = rep(1:6, each = 100),
+  plot_facet = rep(
+    c("Varying Question Difficulty", "Varying Question Dispersion"),
+    each = 300
+  )
+) %>%
+  ggplot(aes(theta, pr_y, group = line_no)) +
+  geom_line() +
+  facet_wrap(~ plot_facet) +
+  xlab(TeX("Individual Unbounded Latent Trait $\\theta'_{i}$")) +
+  ylab(TeX("Pr(y_{iq} = 1)")) +
+  theme_bw() +
+  theme(
+    strip.background = element_rect(colour = "white", fill = "white"),
+    plot.title.position = "plot"
+  ) +
+  scale_x_continuous(breaks = seq(-3, 3, 1)) +
+  geom_text(
+    data = tibble(
+      theta = -2.25,
+      pr_y = .65,
+      line_no = 1,
+      plot_facet = "Varying Question Difficulty",
+    ),
+    label = TeX("$\\beta_1 = -2$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = -.6,
+      pr_y = .525,
+      line_no = 1,
+      plot_facet = "Varying Question Difficulty",
+    ),
+    label = TeX("$\\beta_2 = 0$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = .9,
+      pr_y = .4,
+      line_no = 1,
+      plot_facet = "Varying Question Difficulty",
+    ),
+    label = TeX("$\\beta_3 = 2$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = 2.5,
+      pr_y = 0.025,
+      line_no = 1,
+      plot_facet = "Varying Question Difficulty",
+    ),
+    label = TeX("$\\alpha_q = 1$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = -.03,
+      pr_y = .96,
+      line_no = 1,
+      plot_facet = "Varying Question Dispersion",
+    ),
+    label = TeX("$\\alpha_1 = .25$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = 1.4,
+      pr_y = .9,
+      line_no = 1,
+      plot_facet = "Varying Question Dispersion",
+    ),
+    label = TeX("$\\alpha_2 = 1$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = 2.1,
+      pr_y = .66,
+      line_no = 1,
+      plot_facet = "Varying Question Dispersion",
+    ),
+    label = TeX("$\\alpha_3 = 2$", output = "character"),
+    parse = TRUE
+  ) +
+  geom_text(
+    data = tibble(
+      theta = 2.5,
+      pr_y = 0.025,
+      line_no = 1,
+      plot_facet = "Varying Question Dispersion",
+    ),
+    label = TeX("$\\beta_q = 0$", output = "character"),
+    parse = TRUE
+  )
+```
+
+---
+
+```{r ltm}
+res_rm_2 <- rasch(df_verbal) # replicate the rasch for later comparison
+res_2pl_1 <- ltm(df_verbal ~ z1)
+
+res_2pl_1
+```
+
+---
+
+```{r ltm-icc, fig.height=8, fig.width=10}
+plot(res_2pl_1)
+```
+
+---
+
+## 需要2PL吗？
+
+Likelihood-Ratio Test
+
+```{r llr}
+anova(res_rm_2, res_2pl_1)
+```
+
+
+---
+
+## 延展1：一维到多维
+
+传统IRT：一维聚合
+
+--
+
+Multidimentional IRT (MIRT, Phil Chalmers, 2015)
+
+
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[(**&Theta;<sub>i</sub>** - &beta;<sub>q</sub>) &frasl; **&Alpha;<sub>q</sub>**]]
+
+**&Theta;<sub>i</sub>**和**&Alpha;<sub>q</sub>**不再是单一值，而是一个矩阵。
+
+???
+
+Pyschologist
+
+---
+
+## 延展2：二元到定序
+
+Logit &rarr; Cumulative logit
+
+Pr(y<sub>iq</sub> = 1) &rarr; $Pr(\frac{y_{iq}\leq c}{y_{iq}>c})$
+
+---
+
+---
+
+## 延展3：群组效应
+
+.center[<img src="images/countryBias.png" height = 300 />]
+
+Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
+
+在估测&alpha;<sub>q</sub>时加入random effect.
+
+???
+
+Daniel Stegmueller, Duke U, poli sci
+
+---
+
+## 超越个体
+
+Individual fallacy: Ecological fallacy 的反面
+
+<video width="700" height="400" controls>
+    <source src="images/antiAsian.mp4" type="video/mp4">
+</video>
+
+--
+
+再比如，民主、不平等、政治文化……
+
+---
+
+## Disaggregation
+
+.center[y<sub>kq</sub> = &Sigma;y<sub>ikq</sub> &frasl; n.]
+
+--
+
+问题：
+
+1. 如果群组过小，其平均值的代表意义不大
+2. 不同的指标对于潜在变量贡献不一样
+
+---
+
+## Multilevel Regression and Post-stratification (MrP)
+
+经过群组信息（地理、人口）加权的平均值
+
+???
+
+Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Categories Using Hierarchical Logistic Regression.” Survey Methods 23: 127--135.
+
+--
+
+1. 将总体（population）按群组（strata，如国家、地区）切分；
+1. 估测对象为核心变量在每个群组中的平均值/比例， &theta;<sub>h</sub> (h &isin; {1, H});
+1. 已知各群组以人口变量j（如老年男性、青年女性等）划分，群组人口（N<sub>j</sub>）或占总人口比；
+1. 各组总体平均值&mu;<sub>j</sub>可通过multilevel model 进行估算。
+
+---
+
+$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$
+
+
+???
+
+N: 总体（来自普查）
+n: 样本（来自sample）
+---
+
+## 操作案例
+
+数据：某年某市五区域2396家产业公司的财政信息  
+目标：估测每个区域的产业平均收入（记为&theta;<sub>1~5</sub>）
+
+公司规模和区域分布
+
+```{r descriptive-level}
+data(Lucy)
+table(Lucy$Level, Lucy$Zone) %>% 
+  kable(format = "html")
+```
+
+???
+
+https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
+
+
+---
+
+实际平均值
+
+```{r trueMean}
+tb_true <- group_by(Lucy, Zone) %>% 
+  summarise(income = mean(Income) )
+tb_true %>% 
+  kable(format = "html", digits = 2)
+```
+
+---
+
+我们随机选取数据中1000个产业公司作为样本：
+
+```{r rawVsTrue, fig.height=8, fig.width=10}
+SLucy <- sample_n(Lucy, size = 1000)
+Np <- table(Lucy$Level, Lucy$Zone)
+
+
+tb_compare <- group_by(SLucy, Zone) %>% 
+  summarise(income = mean(Income)) %>% 
+  left_join(tb_true, by = c("Zone")) %>% 
+  mutate(incomeTrue = 0,
+         rawDiff = income.x - income.y,)
+
+ggplot(tb_compare, aes(x = incomeTrue, xend = rawDiff, y = Zone)) +
+  geom_dumbbell(
+    size=3, 
+    color="#ffffbf",
+    colour_x = "#0571b0",
+    colour_xend = "#ca0020",
+  ) +
+  labs(subtitle = "Raw Mean vs. True Value")
+```
+
+---
+
+## Step I: Mr
+
+Income = &beta;<sub>0z</sub> + &beta;<sub>1z</sub>Level<sub>iz</sub> + &epsilon;<sub>iz</sub>
+
+.center[&beta;<sub>0z</sub> = &gamma;<sub>00</sub> + &gamma;<sub>01</sub>Zone<sub>z</sub> + u<sub>0z</sub>]
+
+--
+
+Output: Post-strata means
+
+```{r mr}
+# Step 1: <<MR>> - Multilevel regression
+M1 <- lmer(Income ~ Level + (1 | Zone), data = SLucy)
+SLucy$Pred <- predict(M1)
+
+# Summary
+sum <- group_by(SLucy, Zone, Level) %>% 
+  summarise(mean2 = mean(Pred))
+Mupred <- matrix(sum$mean2, ncol = 5, nrow = 3)
+
+rownames(Mupred) <- levels(SLucy$Level)
+colnames(Mupred) <- levels(SLucy$Zone)
+
+Mupred %>% kable(format = "html", digits = 2)
+```
+
+---
+
+## Step II: P
+
+N<sub>z</sub> * weighted mean / n<sub>z</sub>
+
+```{r p}
+colSums(Np * Mupred) / count(Lucy, Zone)$n
+```
+
+---
+
+## Comparision
+
+```{r mrpVsraw, fig.height=8, fig.width=10}
+# Step 2: <<Post-stratification>>
+# Mean income estimation per zone
+tb_compare$mrpDiff <- colSums(Np * Mupred) / count(Lucy, Zone)$n - tb_compare$income.y
+
+tb_compare %>%
+  pivot_longer(rawDiff:mrpDiff, names_to = "methods", values_to = "diff") %>%
+  ggplot(aes(x = incomeTrue, xend = diff, y = Zone, color = methods)) +
+  geom_dumbbell(
+    size = 3,
+    colour_x = "#0571b0",
+    colour_xend = "#ca0020"
+  ) +
+  scale_color_viridis_d(alpha = 0.5, end = 0.7)
+```
+
+---
+
+## 聚合层级IRT：DGIRT
+
+MrP: 依然是算术平均数。
+
++ 答题难度的地区差异
++ 题目的scale
++ Measurement error
+
+--
+
+Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey & Warshaw 2015)
+
+---
+
+## DGIRT
+
+1. 在群组层面估测IRT；
+1. 在估测IRT过程中加入群组级别变量；
+1. 将时间变量融入IRT估测；
+1. 用MrP给估测进行权重。
+
+---
+
+## IRT的群组层级估测
+
+个体： Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[(&theta;<sub>i</sub> - &beta;<sub>q</sub>) &frasl; &alpha;<sub>q</sub>]
+
+--
+
+群组：
+\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
+\end{equation}
+
+$\bar{\theta}_k$ 和 &sigma;<sub>kt</sub> 是潜在变量在群组k时间t的均值和sd。  
+???
+
+1.7: sd of probit is (&pi;/3)<sup>1/2</sup> for logit, while Long 1997 found it is more close to 1.7 in actual estimations.
+
+Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of Educational Statistics 8(4): 271–88.
+
+&eta;: eta 
+
+---
+
+## 囊括时间与空间问题
+
+$$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})$$
+
+.center[&xi;<sub>t</sub> ~ N(&xi;<sub>.magenta[t-1]</sub>;&sigma;<sub>&gamma;</sub><sup>2</sup>)]
+
+.center[&gamma;<sub>pt</sub> ~ N(&gamma;<sub>p,t-1</sub>&delta;<sub>t</sub> + .magenta[**z'<sub>p.</sub>&eta;<sub>t</sub>**], &sigma;<sub>&gamma;</sub><sup>2</sup>)]
+
+.center[n<sup>*</sup><sub>kqt</sub>]
+
+???
+ 
+&xi;<sub>t</sub>: xi
+
+x 为群组级变量  
+t-1, dynamic linearl model  
+**z'<sub>p.</sub>&eta;<sub>t</sub>**: geography-level attributes, &eta;是coefficients  
+n<sup>*</sup><sub>kqt</sub>基于MrP
+
+---
+
+DGIRT：
+
++ 囊括诸多因素
++ 可以部分平衡样本代表性问题
+
+--
+
++ 强大而.magenta[复杂]
+
+
+???
+
+Caughey & Warshaw称会跑几个星期
+
+---
+
+## DGIRT简装版 (Claassen 2019)
+
+.small[
+简化1：只作用于代表性样本和国家级别  
+简化2：将国家作用从估测&theta;变为估测difficulty  
+简化3：忽略本地问题分布（如极化现象）
+] 
+
+--
+
+\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
+\end{equation}
+
+&darr;
+
+\begin{equation}
+\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).
+\end{equation}
+
+???
+
+&delta;<sub>kq</sub>: 问题的difficulty随国家k变化。
+
+---
+
+## 聚合IRT最新进化态：DCPO
+
+.left-column[
+<img src="images/fsolt.jpeg" height = 400 />
+]
+
+.right-column[
+.magenta[D]ynamic .magenta[C]omparative .magenta[P]ublic .magenta[O]pinion
+
+复杂程度：
+
+Claasseen 2019 <   
+DCPO <   
+DGIRT
+]
+
+---
+
+background-image: url("images/irtCompare.png")
+background-position: center
+background-size: contain
+
+
+???
+
+Bounded: 使用logit归为0-1
+
+---
+
+## 优化效果
+
+.center[<img src="images/irtFitCompare.png" height = 400 />]
+
+---
+
+## 操作过程
+
+1. 收集survey数据，明确与感兴趣的变量相关的指标问题
+1. 通过`DCPOtools`对数据进行预处理
+1. 通过`DCPO`进行数据分析
+1. 通过`shinystan`诊断convergence
+
+---
+
+## Bonus: "调得一手好参"
+
+### Bayesian Analysis 参数与Convergence
+
+1. Individual IRT、MrP、DGIRT、DCPO
+1. Convergence是底线
+
+
+---
+
+## Convergence
+
+最常见的Bayesian inference方法：Markov Chain Monte Carlo (MCMC)
+
+--
+
+### 一个Markov Chain何时Converge? 
+
+当Chain的posterior停留在一个.magenta[相对稳定]的区域内(.magenta[ergodic] chain)
+
+\begin{equation}
+\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.
+\end{equation}
+
+???
+
++ Homogeneity: at step m the transition probability at this step do not depend on
++ Ergodicity：遍历性
+
+---
+
+## An Ergodic Chain
+
++ Homogeneous/Closed
++ Irreducible
++ Stationary
++ Recurrent
++ Aperodic
+
+???
+
++ Reccurent
+    + Homogeneous/Closed: At step m if the trasition probabilities at this step do not depend on m; for State A, B, p(A, B) = 0
+    + Irreducible: If every reached point/point collection can be reached from every other reached point/point collection; p(&theta;<sub>i</sub>, &theta;<sub>j</sub>)&ne; 0, &forall; &theta;<sub>i</sub>, &theta;<sub>j</sub>
++ Stationary: no autocorrelation
++ Aperodic: even with a long time there's no identical cycle of chain values repeating
+
+
+---
+
+## "下雪了，天晴了，下雪别忘穿棉袄"
+
+.left-column[
+
+>下雪啦天晴啦
+下雪别忘穿棉袄
+下雪啦天晴啦
+天晴别忘戴草帽
+带草帽~~~
+
+]
+
+--
+
+.right-column[
+
+今晴，明80%也晴；  
+今雪，天60%也雪。
+
+|      |                     | 明天                |                     |
+|------|---------------------|---------------------|---------------------|
+|      |                     | &theta;<sub>1</sub> | &theta;<sub>2</sub> |
+| 今天 | &theta;<sub>1</sub> | 0.8                 | 0.2                 |
+|      | &theta;<sub>2</sub> | 0.6                 | 0.4                 |
+
+]
+
+???
+
+刘欢：《心中的太阳》, 《雪城》主题曲，1988年，倪萍主演
+
+example of converged
+
+---
+
+起始点: [0.5 0.5]
+
+1. $$S_1 = [0.5\; 0.5]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.7\; 0.3]$$
+1. $$S_2 = [0.7\; 0.3]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.74\; 0.26]$$
+1. $$S_3 = [0.74\; 0.26]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.748\; 0.252]$$
+1. $$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.749\; 0.250]$$
+
+---
+
+## Convergence检验
+
+没有办法能够证明一个Markov Chain是converged；
+
+1. 在给定时间内，无法保证Markov chain能够.magenta[达到]目标分布;
+1. 无法预先确定一条Chain能够.magenta[遍历]目标分布的所有区域;
+1. 诊断只能判断一条Chain是否.magenta[未converged]。
+
+---
+
+## Thinning
+
++ 每个Chain记录多少samples
+    + Chain将仅记录第k个值，越高丢失的信息越多
+    + k通常取值：4，5，10
+    
+--
+
++ Thinning 并.magenta[不会]提高Chain的运算速度、帮助convergence或增强估测质量
+    + 仅用于降低autocorrelation
+
+---
+
++ Rule of thumb
+    1. 迭代中autocorrelation太高
+    1. Chain的convergence太低
+    1. 并行运算
+    1. 模型维度过高
+
+---
+
+## Burn-In
+
+给与足够的burnning in以到达目标分布
+
+“炸毛的毛毛虫”（Fuzzy Caterpillar）
+
+.center[<img src="images/fuzzyCaterpillar.png" height = 300 />]
+
+---
+
+## Autocorrelation
+
+1. Chain间高相关性
+1. 单一parameter高相关性
+
+--
+
+.left-column[
+<img src="images/isAutocorrelation.png" height = 300 />
+]
+
+.right-column[
+<img src="images/noAutocorrelation.png" height = 300 />
+]
+
+???
+
+1. Chain间高相关性：Slow convergence
+1. 单一parameter的高相关：Individual nonconvergence
+---
+
+## 实证指标
+
+1. Geweke
+1. Gelman-Rubin
+1. Raftery-Lewis
+1. Heidelberger-Welch
+
+---
+
+## Geweke's G
+
+比较parameters在Chain早期和晚期两个.magenta[不重叠]的窗口内的均值
+
+$$G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.$$
+
+
+???
+
+检验Reccurence
+
+A fancy difference of means
+
+converge 则显示不显著差异，增加burn-in
+
+---
+
+## Gelman & Rubin 1992
+
+1. 跑多条chains（5~10），每条长2n
+1. 对每一个感兴趣的parameter计算
+    1. Within chain variance(W)
+    1. Between chain variance(B)
+1. 计算总体variance： var(&theta;) = (1 - 1/n)W + (1/n)B
+1. 计算Scale reduction (亦称shrink factor)
+
+$$\hat{R}= \sqrt{\frac{\hat{var(\theta)}}{W}}$$
+
+???
+
+R趋近于1表示chains operating on same distribution
+
+<1.1或1.2是可以接受的
+
+---
+
+## Raftery& Lewis (1991, 1996)
+
++ 分别评价每一个Chain的每一个变量
+    1. 根据Chain间的相关性，并据此提供一个迭代数（iteration number）
+    1. 检验autocorrelation inflation
+    
++ 输出
+    + Burin-in 
+    + Total
+    + Dependence Factor
+
+???
+检验 burn-in  
+
+Burn-in: 是一位数或两位数为佳  
+Total: 建议的burnin数，未考虑cross-chain，因此真正burnin要乘上chain数
+
+---
+
+### Heidelberger and Welch
+
+1. 确定一个迭代数N, 以及准确性（&epsilon;）和显著性数准(&alpha;)
+1. 运行整个chain
+1. 施用Cram&eacute;r-von Mises Test，Null: Chain是stationary
+1. 如检验未通过则依次略去10%、20%,乃至50%的迭代，再次检测；
+1. 如结果表示部分数据不是stationary，则对该部分数据进行halfwidth检验
+1. 如果halfwidth ratio < &epsilon;, 则通过检验
+
+
+
+???
+
+检验Stationary
+
+---
+
+## 总结
+
+类型分析模型
+
+.left-column[
++ 个体IRT
+    + Rasch model
+    + **2PL model**
+    + 多维IRT
++ 群体类型
+    + MrP
+    + DGIRT
+    + **DCPO**
+    ]
+    
+.right-column[
++ Baysian Inference
+    + Convergence基线
+    + 只能验*non*convergence
+    + Geweke
+    + Gelman-Rubin
+    + Raftery-Lewis
+    + Heidelberger-Welch
+]
+
+---
+
+class: inverse, center, middle
+
+# Questions, Comments, and Suggestions?
