@@ -27,7 +27,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 library(pacman)
 
-p_load("eRm", "ltm", "difR", 
+p_load("ltm", "mirt",
        "TeachingSampling", "lme4",
        "DCPO", 
        "knitr", "ggalt",
@@ -57,10 +57,11 @@ set.seed(313)
 
 ## 操作语言
 
-* R
-    + [`eRm`](https://cran.r-project.org/web/packages/eRm/vignettes/eRm.pdf)
-    + [`ltm`](https://www.jstatsoft.org/article/view/v017i05/v17i05.pdf)
+* R<sup>1</sup>
+    + [`mirt`](https://github.com/philchalmers/mirt/wiki)
     + [`DCPO`](https://github.com/fsolt/DCPO)
+
+.footnote[现存处理IRT的R packages已超过[50](https://www.tandfonline.com/doi/full/10.1080/15366367.2019.1586404?src=recsys)个。]
 
 ---
 
@@ -102,9 +103,56 @@ IRT优势
 
 ---
 
-## Rasch Model
+## IRT 假定
 
-.center[Pr(y<sub>iq</sub> = 1) = p<sub>iq</sub> = logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
+1. Monotonicity
+1. Unidimensionality
+1. Local independence
+1. Parameter invariance
+
+---
+
+## Monotonicity
+
+单增趋势：随潜在变量增加，获得1的可能性也随之增加
+
+---
+
+## Unidimensionality
+
+聚合的项目均指向同一个潜在变量。  
+基于理论  
+
+--
+
+直到引入multidimensional IRT (后有说到哦！)
+
+---
+
+## Local Independency
+
+对于每一项目（e.g.,一道题）的响应(e.g., 选择的选项)间的关联性.magenta[只]来自.magenta[共同]的潜在变量。
+
+--
+
+换言之，控制潜在变量影响后，问题间响应相互独立
+
+P(y<sub>iq</sub>,y<sub>i'q</sub> | &theta;<sub>q</sub>) = P(y<sub>iq</sub> | &theta;<sub>q</sub>)P(y<sub>i'q</sub> | &theta;<sub>q</sub>)
+
+---
+
+## Parameter Invarance
+
++ Parameters在项目间不变
++ Parameters在响应人群间不变
+    + 当进行Multiple Group IRT时尤可能被违反
+    + 通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF)
+
+---
+
+## Rasch Model (1PL)
+
+.center[Pr(y<sub>iq</sub> = 1) = p<sub>iq</sub> = logist<sup>-1</sup>(&theta;<sub>i</sub> - .magenta[&sigma;<sub>q</sub>])]
 
 + y<sub>iq</sub>&isin;{0,1}: subject `i`'s score on question `q`
 + &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Unbounded latent trait
@@ -121,65 +169,54 @@ Difficulty: 不同的问题回答肯定答案的难易度不一样
 
 ---
 
-## 操作案例：语言暴力量表
+## 操作案例 (Bock & Lieberman 1970)
 
-24个问题，315人。
+Law School Admissions Test, section 7  
+5个yes/no问题
 
 ```{r data-verbal}
-data(verbal, package = "difR")
-df_verbal <- verbal %>% select(1:24)
-df_verbal
+df_lsat <- expand.table(LSAT7)
+df_lsat
 ```
 
 ???
 
-https://hansjoerg.me/2018/04/23/rasch-in-r-tutorial/
+[`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
 
 ---
 
 ## Difficulty Parameter
 
 ```{r rasch-difficulty}
-res_rm_1 <- RM(df_verbal)
-res_rm_1
+m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+coef(m_lsat, simplify = TRUE)
 ```
 
 ---
 
-## 成了吗：Item Characteristic Curves
+## 成了吗? Item Characteristic Curves
 
 ```{r icc, fig.height=8, fig.width=10}
-plotjointICC(res_rm_1, cex = .6)
+plot(m_lsat, type = "trace", facet_items = FALSE)
 ```
 
 ???
 
-检查各题affirmative的难易程度
+检查各题affirmative的难易程度，看逐个是不是大体同一个趋势
 
 ---
 
-## 成了吗：Personal Item Map
+## 成了吗？Test Charactersitic Curve
 
-```{r pi-map, fig.height=8, fig.width=10}
-plotPImap(res_rm_1, cex.gen = .55, sorted = TRUE)
+```{r tcc, fig.height=8, fig.width=10}
+plot(m_lsat, type = "infoSE")
 ```
 
 ???
 
-Person-item maps are useful to compare the range and position of the item measure distribution (lower panel) to the range and position of the person measure distribution (upper panel).  
-Items should ideally be located along the whole scale to meaningfully measure the ‘ability’ of all persons. 
+TCC： 所有ICC之和，体现how reliable, information 越多越好，理想是形成一个钟形
+SE(&theta;) = (test)<sup>-1/2</sup>
 
----
-
-## 成了吗： Item Infit
-
-```{r infit}
-plotPWmap(res_rm_1)
-```
-
-???
-
-绿线为t-test的[-1.96，1.96],以内为可。
 
 ---
 
@@ -189,7 +226,7 @@ Rasch Model的局限：Measurement error
 
 ???
 
-人们可能不理解、错理解、不在乎问题。
+人们对同一个题理解不同，回答出affirmative答案可能性也不同。
 
 --
 
@@ -203,10 +240,10 @@ Rasch Model的局限：Measurement error
 
 另一种常见写法
 
-.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[(**&theta;<sub>i</sub>** - &beta;<sub>q</sub>) &frasl; &alpha;<sub>q</sub>]]
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[(&theta;<sub>i</sub> - .magenta[&beta;<sub>q</sub>]) &frasl; .magenta[&alpha;<sub>q</sub>]]]
 
-&beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold(有时也称difficulty)  
-&alpha;<sub>q</sub>: &kappa;<sub>q</sub><sup>-1</sup>, dispersion
+&beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold("difficulty", 控制location)  
+&alpha;<sub>q</sub>: &kappa;<sub>q</sub><sup>-1</sup>, dispersion (控制斜率)
 
 ???
 
@@ -322,16 +359,8 @@ tibble(
 ---
 
 ```{r ltm}
-res_rm_2 <- rasch(df_verbal) # replicate the rasch for later comparison
-res_2pl_1 <- ltm(df_verbal ~ z1)
-
-res_2pl_1
-```
-
----
-
-```{r ltm-icc, fig.height=8, fig.width=10}
-plot(res_2pl_1)
+m_lsat2PL <-  mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
+coef(m_lsat2PL, simplify = TRUE)
 ```
 
 ---
@@ -341,9 +370,120 @@ plot(res_2pl_1)
 Likelihood-Ratio Test
 
 ```{r llr}
-anova(res_rm_2, res_2pl_1)
+anova(m_lsat, m_lsat2PL)
 ```
 
+---
+
+## Three-Parameter Logistic Model (3PL)
+
+如果有人全凭猜咋办？——大量低&theta;人群
+
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[.magenta[c<sub>i</sub> + (1 - c<sub>i</sub>)](&theta;<sub>i</sub> - &beta;<sub>q</sub>) &frasl; &alpha;<sub>q</sub>]]
+
+c<sub>i</sub>：Item .magenta[lower] asymptote ("guessing")
+
+--
+
+极大增加演算成本&rarr;通常需要1000以上观测点
+
+---
+
+## Four-Parameter Logistic Model (4PL)
+
+如果有人不care咋办？捕捉不在意或不愿意
+
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>[c<sub>i</sub> + (.magenta[d<sub>i</sub>] - c<sub>i</sub>)(&theta;<sub>i</sub> - &beta;<sub>q</sub>) &frasl; &alpha;<sub>q</sub>]]
+
+c<sub>i</sub>：Item lower asymptote ("guessing")  
+d<sub>i</sub>：Item .magenta[upper] asymptote ("carelessness")
+
+--
+
+d < 1  
+鉴于3PL已经需要1000-ish观测点……
+
+---
+
+## 成了吗？专项测试
+
++ 测试层：Global fit
++ 项目层：Item fit & residual
++ 个体层：Personal fit
+
+---
+
+## Global Fit<sup>1</sup>
+
+$$G^2 = 2[\sum_l^s r_lln(\frac{r_l}{N\tilde{P}_l})]$$
+
+N: 参与人数  
+l: 可能的反应  
+r: 做出特定反应的人数
+
+--
+
+当数据过于稀疏时，G<sup>2</sup>较难核算。  
+延伸版本： M2, M2* 
+
+.footnote[
+[1] RMSEA, SRMSR, CFI, TLI对于IRT同样使用
+]
+
+???
+N is the number of subjects, L is number of possible response patterns, $P_ l$ is the estimated probability of observing response pattern l, and $r_ l$ is the number of subjects who have response pattern l
+
+---
+
+
+```{r diagnostics-overall}
+m_lsat
+M2(m_lsat)
+```
+
+---
+
+## Item Diagnostics
+
+Covariation-based residuals
+
+```{r diagnostics-residual}
+residuals(m_lsat)
+```
+
+???
+
+看item residual的协变程度，多用于看multidimensionality, 不应有关联
+infit/outfit, close to 1 is good
+
+---
+
+Single item/person fit 
+
+Item
+```{r item-infit}
+# Item 
+itemfit(m_lsat, fit_stats = "infit")
+```
+
+```{r personfit}
+# Person
+personfit(m_lsat)
+```
+
+
+???
+
+Z<sub>h</sub> > 0 better
+
+---
+
+如果出现问题：
+
+1. 通过S-&chi;<sup>2</sup>)、local dependency等检查观测和估计数值差别
+1. 改变model type, 比如2PL &rarr; 3PL
+1. 如果最初用binary，尝试polytomous或者nomial response models
+1. 尝试non-parametric smoothing techinques
 
 ---
 
@@ -371,6 +511,12 @@ Pyschologist
 Logit &rarr; Cumulative logit
 
 Pr(y<sub>iq</sub> = 1) &rarr; $Pr(\frac{y_{iq}\leq c}{y_{iq}>c})$
+
+```{r twoDimension, fig.height=6, fig.width=10}
+m_lsat2D <- mirt(df_lsat, model = 2, verbose = FALSE)
+plot(m_lsat2D, type = "score")
+```
+
 
 ---
 
