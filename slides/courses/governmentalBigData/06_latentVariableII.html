@@ -5,8 +5,8 @@
     <meta charset="utf-8" />
     <meta name="author" content="胡悦 清华大学政治学系" />
     <script src="06_latentVariableII_files/header-attrs/header-attrs.js"></script>
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <link rel="stylesheet" href="css\zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="css\styles.css" type="text/css" />
     <link rel="stylesheet" href="https:\\use.fontawesome.com\releases\v5.6.0\css\all.css" type="text/css" />
     <link rel="stylesheet" href="https:\\cdnjs.cloudflare.com\ajax\libs\animate.css\3.7.0\animate.min.css" type="text/css" />
   </head>
@@ -23,6 +23,7 @@ class: center, middle, inverse, title-slide
 
 
 
+---
 
 ## 内容概要
 
@@ -48,7 +49,7 @@ class: center, middle, inverse, title-slide
     + [`mirt`](https://github.com/philchalmers/mirt/wiki)
     + [`DCPO`](https://github.com/fsolt/DCPO)
 
-.footnote[现存处理IRT的R packages已超过[50](https://www.tandfonline.com/doi/full/10.1080/15366367.2019.1586404?src=recsys)个。]
+.footnote[[1] 现存处理IRT的R packages已超过[50](https://www.tandfonline.com/doi/full/10.1080/15366367.2019.1586404?src=recsys)个。]
 
 ---
 
@@ -112,7 +113,8 @@ IRT优势
 
 --
 
-直到引入multidimensional IRT (后有说到哦！)
+直到引入multidimensional IRT  
+(后有说到哦！)
 
 ---
 
@@ -139,7 +141,7 @@ P(y&lt;sub&gt;iq&lt;/sub&gt;,y&lt;sub&gt;i'q&lt;/sub&gt; | &amp;theta;&lt;sub&gt
 
 ## Rasch Model (1PL)
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = p&lt;sub&gt;iq&lt;/sub&gt; = logist&lt;sup&gt;-1&lt;/sup&gt;(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - .magenta[&amp;sigma;&lt;sub&gt;q&lt;/sub&gt;])]
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - .magenta[&amp;sigma;&lt;sub&gt;q&lt;/sub&gt;])]
 
 + y&lt;sub&gt;iq&lt;/sub&gt;&amp;isin;{0,1}: subject `i`'s score on question `q`
 + &amp;theta;&lt;sub&gt;i&lt;/sub&gt;&amp;isin;{-&amp;infin;, +&amp;infin;}: Unbounded latent trait
@@ -156,9 +158,22 @@ Difficulty: 不同的问题回答肯定答案的难易度不一样
 
 ---
 
+## Rasch Model (1PL)
+
+`$${\color{orange}{\frac{Pr(y_{iq} = 1|\theta_i)}{1 - Pr(y_{iq} = 1|\theta_i)}}} = logist^{-1} {\color{CornflowerBlue}{(\theta_i - \delta_q)}}$$`
+
+.left-column[
+.orange[Item Response]
+]
+.right-column[
+
+.navy[Response Theory]]
+
+---
+
 ## 操作案例 (Bock &amp; Lieberman 1970)
 
-Law School Admissions Test, section 7  
+Law School Admissions Test, sec 7  
 5个yes/no问题
 
 
@@ -420,7 +435,7 @@ SE(&amp;theta;) = (test)&lt;sup&gt;-1/2&lt;/sup&gt;
 
 ## Two-Parameter Logistic Model (2PL IRT)
 
-Rasch Model的局限：Measurement error
+Rasch局限：Measurement error
 
 ???
 
@@ -430,7 +445,7 @@ Rasch Model的局限：Measurement error
 
 ### Solution: Parameter of dispersion
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = p&lt;sub&gt;iq&lt;/sub&gt; = logist&lt;sup&gt;-1&lt;/sup&gt;(.magenta[&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;]&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;)]
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;(.magenta[&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;]&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;)]
 
 &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;: Discrimination
 
@@ -438,7 +453,8 @@ Rasch Model的局限：Measurement error
 
 另一种常见写法
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - .magenta[&amp;beta;&lt;sub&gt;q&lt;/sub&gt;]) &amp;frasl; .magenta[&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]]]
+`$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{magenta}{\beta_q}}}{\color{magenta}{\alpha_q}}]$$`
+
 
 &amp;beta;&lt;sub&gt;q&lt;/sub&gt;: &amp;sigma;&lt;sub&gt;q&lt;/sub&gt; &amp;frasl; &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;, threshold("difficulty", 控制location)  
 &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;: &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;&lt;sup&gt;-1&lt;/sup&gt;, dispersion (控制斜率)
@@ -496,11 +512,13 @@ Likelihood-Ratio Test
 
 ---
 
+class: Small
+
 ## Three-Parameter Logistic Model (3PL)
 
 如果有人全凭猜咋办？——大量低&amp;theta;人群
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[.magenta[c&lt;sub&gt;i&lt;/sub&gt; + (1 - c&lt;sub&gt;i&lt;/sub&gt;)](&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]]
+`$$Pr(y_{iq} = 1) = \color{magenta}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$`
 
 c&lt;sub&gt;i&lt;/sub&gt;：Item .magenta[lower] asymptote ("guessing")
 
@@ -510,11 +528,13 @@ c&lt;sub&gt;i&lt;/sub&gt;：Item .magenta[lower] asymptote ("guessing")
 
 ---
 
+class: Small
+
 ## Four-Parameter Logistic Model (4PL)
 
-如果有人不care咋办？捕捉不在意或不愿意
+如果有人不care咋办
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[c&lt;sub&gt;i&lt;/sub&gt; + (.magenta[d&lt;sub&gt;i&lt;/sub&gt;] - c&lt;sub&gt;i&lt;/sub&gt;)(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]]
+`$$Pr(y_{iq} = 1) = c_i + (\color{magenta}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$`
 
 c&lt;sub&gt;i&lt;/sub&gt;：Item lower asymptote ("guessing")  
 d&lt;sub&gt;i&lt;/sub&gt;：Item .magenta[upper] asymptote ("carelessness")
@@ -544,8 +564,7 @@ r: 做出特定反应的人数
 
 --
 
-当数据过于稀疏时，G&lt;sup&gt;2&lt;/sup&gt;较难核算。  
-延伸版本： M2, M2* 
+当数据过于稀疏时，M2, M2* 
 
 .footnote[
 [1] RMSEA, SRMSR, CFI, TLI对于IRT同样使用
@@ -1042,7 +1061,7 @@ Z&lt;sub&gt;h&lt;/sub&gt; &gt; 0 better
 
 如果出现问题：
 
-1. 通过S-&amp;chi;&lt;sup&gt;2&lt;/sup&gt;)、local dependency等检查观测和估计数值差别
+1. 通过S-&amp;chi;&lt;sup&gt;2&lt;/sup&gt;、local dependency等检查观测和估计数值差别
 1. 改变model type, 比如2PL &amp;rarr; 3PL
 1. 如果最初用binary，尝试polytomous或者nomial response models
 1. 尝试non-parametric smoothing techinques
@@ -1057,10 +1076,10 @@ Z&lt;sub&gt;h&lt;/sub&gt; &gt; 0 better
 
 Multidimentional IRT (MIRT, Phil Chalmers, 2015)
 
+`$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\boldsymbol{\theta_i} - \beta_q}{\boldsymbol{\alpha_q}}]$$`
 
-.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(**&amp;Theta;&lt;sub&gt;i&lt;/sub&gt;** - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; **&amp;Alpha;&lt;sub&gt;q&lt;/sub&gt;**]]
 
-**&amp;Theta;&lt;sub&gt;i&lt;/sub&gt;**和**&amp;Alpha;&lt;sub&gt;q&lt;/sub&gt;**不再是单一值，而是一个矩阵。
+**&amp;theta;&lt;sub&gt;i&lt;/sub&gt;**和**&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;**不再是单一值，而是一个矩阵。
 
 ???
 
@@ -1076,6 +1095,16 @@ Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) &amp;rarr; `\(Pr(\frac{y_{iq}\leq c}{y_{iq}&g
 
 ![](06_latentVariableII_files/figure-html/twoDimension-1.png)&lt;!-- --&gt;
 
+---
+
+## 三种主要类型
+
+1. (Modified) Graded Response Model
+    + 用于scoring rubrics，比如 Likert
+1. (Generalized) Partial Credit Model，Rating Scale Model
+    + 用于可转化为定序的分类变量
+1. Nominal Response Model
+    + 用于无序分类变量
 
 ---
 
@@ -1097,7 +1126,7 @@ Daniel Stegmueller, Duke U, poli sci
 
 Individual fallacy: Ecological fallacy 的反面
 
-&lt;video width="700" height="400" controls&gt;
+&lt;video width="700" height="200" controls&gt;
     &lt;source src="images/antiAsian.mp4" type="video/mp4"&gt;
 &lt;/video&gt;
 
@@ -1130,21 +1159,23 @@ Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Cate
 
 --
 
+.Small[
 1. 将总体（population）按群组（strata，如国家、地区）切分；
 1. 估测对象为核心变量在每个群组中的平均值/比例， &amp;theta;&lt;sub&gt;h&lt;/sub&gt; (h &amp;isin; {1, H});
 1. 已知各群组以人口变量j（如老年男性、青年女性等）划分，群组人口（N&lt;sub&gt;j&lt;/sub&gt;）或占总人口比；
 1. 各组总体平均值&amp;mu;&lt;sub&gt;j&lt;/sub&gt;可通过multilevel model 进行估算。
+]
 
 ---
 
 `$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$`
 
 
-???
-
-N: 总体（来自普查）
+N: 总体（来自普查）  
 n: 样本（来自sample）
 ---
+
+class: Small
 
 ## 操作案例
 
@@ -1240,6 +1271,8 @@ https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
 
 ---
 
+class: Small
+
 ## Step I: Mr
 
 Income = &amp;beta;&lt;sub&gt;0z&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1z&lt;/sub&gt;Level&lt;sub&gt;iz&lt;/sub&gt; + &amp;epsilon;&lt;sub&gt;iz&lt;/sub&gt;
@@ -1334,18 +1367,22 @@ Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey &amp; Warshaw 2
 
 ---
 
+class: Small
+
 ## IRT的群组层级估测
 
-个体： Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;[(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;beta;&lt;sub&gt;q&lt;/sub&gt;) &amp;frasl; &amp;alpha;&lt;sub&gt;q&lt;/sub&gt;]
+个体
+
+`$$p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$`
 
 --
 
-群组：
-`\begin{equation}
-\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
-\end{equation}`
+群组
 
-`\(\bar{\theta}_k\)` 和 &amp;sigma;&lt;sub&gt;kt&lt;/sub&gt; 是潜在变量在群组k时间t的均值和sd。  
+`$$\eta_{ktq} = logit^{-1}(\frac{\color{magenta}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{magenta}{(1.7\sigma_{kt})^2}}}).$$`
+
+`\(\bar{\theta}_k\)` 和 &amp;sigma;&lt;sub&gt;kt&lt;/sub&gt; 是潜在变量在组k时间t的均值和sd。  
+
 ???
 
 1.7: sd of probit is (&amp;pi;/3)&lt;sup&gt;1/2&lt;/sup&gt; for logit, while Long 1997 found it is more close to 1.7 in actual estimations.
@@ -1393,25 +1430,24 @@ Caughey &amp; Warshaw称会跑几个星期
 
 ---
 
+class: Small
+
 ## DGIRT简装版 (Claassen 2019)
 
-.small[
 简化1：只作用于代表性样本和国家级别  
 简化2：将国家作用从估测&amp;theta;变为估测difficulty  
 简化3：忽略本地问题分布（如极化现象）
-] 
+
 
 --
 
-`\begin{equation}
-\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).
-\end{equation}`
+`$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).$$`
 
-&amp;darr;
+.center[&amp;darr;]
 
-`\begin{equation}
-\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).
-\end{equation}`
+
+`$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).$$`
+
 
 ???
 
@@ -1422,7 +1458,7 @@ Caughey &amp; Warshaw称会跑几个星期
 ## 聚合IRT最新进化态：DCPO
 
 .left-column[
-&lt;img src="images/fsolt.jpeg" height = 400 /&gt;
+&lt;img src="images/fsolt.jpeg" height = 350 /&gt;
 ]
 
 .right-column[
@@ -1465,7 +1501,7 @@ Bounded: 使用logit归为0-1
 
 ## Bonus: "调得一手好参"
 
-### Bayesian Analysis 参数与Convergence
+Bayesian Analysis 参数与Convergence
 
 1. Individual IRT、MrP、DGIRT、DCPO
 1. Convergence是底线
@@ -1483,9 +1519,7 @@ Bounded: 使用logit归为0-1
 
 当Chain的posterior停留在一个.magenta[相对稳定]的区域内(.magenta[ergodic] chain)
 
-`\begin{equation}
-\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.
-\end{equation}`
+`$$\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.$$`
 
 ???
 
@@ -1512,6 +1546,8 @@ Bounded: 使用logit归为0-1
 
 
 ---
+
+class: Small
 
 ## "下雪啦，天晴啦"
 
@@ -1548,6 +1584,8 @@ Bounded: 使用logit归为0-1
 example of converged
 
 ---
+
+class: Small
 
 起始点: [0.5 0.5]
 
@@ -1646,6 +1684,8 @@ converge 则显示不显著差异，增加burn-in
 
 ---
 
+class: Small
+
 ## Gelman &amp; Rubin 1992
 
 1. 跑多条chains（5~10），每条长2n
@@ -1664,6 +1704,8 @@ R趋近于1表示chains operating on same distribution
 &lt;1.1或1.2是可以接受的
 
 ---
+
+class: Small
 
 ## Raftery&amp; Lewis (1991, 1996)
 
@@ -1684,6 +1726,8 @@ Total: 建议的burnin数，未考虑cross-chain，因此真正burnin要乘上ch
 
 ---
 
+class: Small
+
 ### Heidelberger and Welch
 
 1. 确定一个迭代数N, 以及准确性（&amp;epsilon;）和显著性数准(&amp;alpha;)
@@ -1703,27 +1747,21 @@ Total: 建议的burnin数，未考虑cross-chain，因此真正burnin要乘上ch
 
 ## 总结
 
-类型分析模型
-
 .left-column[
 + 个体IRT
     + Rasch model
-    + **2PL model**
+    + 2PL model
     + 多维IRT
 + 群体类型
     + MrP
     + DGIRT
-    + **DCPO**
+    + *DCPO*
     ]
     
 .right-column[
 + Baysian Inference
     + Convergence基线
-    + 只能验*non*convergence
-    + Geweke
-    + Gelman-Rubin
-    + Raftery-Lewis
-    + Heidelberger-Welch
+    + 只能验**non**convergence
 ]
 
 ---
@@ -1846,7 +1884,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
