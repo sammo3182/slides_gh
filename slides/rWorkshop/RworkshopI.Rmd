@@ -1,28 +1,25 @@
 ---
-title: "Dr. Hu & His Friends' R Workshop"
-subtitle: "Lecture I: Hello R!"
+title: "Learn R with Dr. Hu"
+subtitle: "Hello R!"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
-# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    lib_dir: libs
     css: 
       - zh-CN_custom.css
       - styles.css
-      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    # chakra: ../../libs/remark-latest.min.js # to show slides offline
+    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
+htmltools::tagList(rmarkdown::html_dependency_font_awesome()) #fontawesome
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -44,35 +41,37 @@ set.seed(114)
 
 ### Fundation
 
-* .magenta[Hello, R!]
+* Hello, R!
 * Data Munging
-* OLS & MLE
-* Basic Visualization
+* .gray[OLS & MLE]
+* .gray[Basic Visualization]
 ]
 
 .right-column[
 
 ### Topics
 
-* Adv. Visualization
-* Text Analysis
-* Spatial Analysis
-* Simulation
-* Machine Learning  
+* .gray[Adv. Visualization]
+* .gray[Text Analysis]
+* .gray[Spatial Analysis]
+* .gray[Simulation]
+* .gray[Machine Learning]  
 ......
 ]
 
 ---
 
-## Who Should Take the Workshop
+## Should I Still Listen to You?
 
 * Not R user yet;
-* \> 16 (or 1?);
-* Wanting to be a friend!
+* Having experience with Excel/SPSS/STATA/Python/Matlab...and not very into it;
+* Need friends!
 
 ---
 
-## About Me
+## Can I Learn? 
+
+Learn about me:
 
 * Background: Liberal arts, bad at math
 * First touch: 2009
@@ -102,16 +101,16 @@ class: inverse
 ## Overview
 
 * R: What & Why
+* Prospect
 * R vs. ...
 * Setup
-* Prospect
-* Something (almost) nobody will tell you
+
 
 ---
 
 ## What's R?
 
-* A high-level .magenta[language]
+* A high-level .red[language]
 
 .center[<img src="images/languageLevel.jpg" height = 350 />]
 
@@ -177,134 +176,11 @@ class: center , bottom
 
 ---
 
-* Popular
+### Popular
 
 .center[<img src="images/rank.jpeg" height = 500 />]
 
 ---
-
-* Getting a job
-
-```{r jobs, echo = FALSE}
-tibble::tribble(
-                            ~Company, ~Application,
-                           "Twitter", "Monitor user experience",
-                              "Ford", "Analyse social media to support design decisions for their cars",
-                    "New York Times", "Infographics, data journalism",
-                         "Microsoft", "Released Microsoft R Open, an enhanced R distribution and Microsoft\n R server after acquiring Revolution Analytics in 2015",
-                            "Google", "Created the R style guide for the R user community inside Google"
-  ) %>% 
-  flextable() %>% 
-  autofit() %>% 
-  align(align = "left", part = "all") %>% 
-  fontsize(size = 20, part = "all")
-
-```
-
----
-
-* In Developing
-    + `r nrow(available.packages())`+ packages for cutting-edges
-
----
-
-## Then, how about...
-
-Python, STATA, SPSS, Excel...
-
----
-
-background-image: url("images/programCompare.jpg")
-background-position: center
-background-size: contain
-
-???
-
-R in SPSS eyes: Heathkit EC-1, an old computer, 
-
----
-
-.left-column[
-### R
-
-#### Advantages
-
-* Fresh
-* Flexible
-
-#### Inconvenience
-
-* Linear-algebraic calculation
-* Programming
-
-]
-
-.right-column[
-### STATA
-
-#### Advantages
-
-* Stable
-* Reliable
-
-#### Inconvenience
-
-* Use what you get
-* Fair visualization
-* EXPENSIVE: SE
-    + Annual:	$235 student/**year**
-
-]
-
-
----
-
-.left-column[
-### R
-
-#### Advantages
-
-* Statistics
-* Visualization
-
-#### Inconvenience
-
-* Large-size (> 1G) data
-]
-
-.right-column[
-### Python
-
-#### Advantages
-
-* Machine learning
-* Big data
-
-#### Inconvenience
-
-* Setting up & 2.7 vs. 3.5?
-* GUI?
-
-]
-
----
-
-## So, if you still choose R...
-
-Be prepared.
-
-.center[<img src="images/LearningCurve.png" height = 400 />]
-.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]
-
----
-
-You'll get some *wonderful* moments~
-
-.center[<img src="images/pc2weeks.gif" height = 400, width = 750 />]
-
----
-
-## But, It's Worth an Effort
 
 ### Powerful
 
@@ -437,6 +313,129 @@ Sys.sleep(0.2)
 render_snapshot(clear = TRUE)
 ```
 
+
+---
+
+### Getting a job
+
+```{r jobs, echo = FALSE}
+tibble::tribble(
+                            ~Company, ~Application,
+                           "Twitter", "Monitor user experience",
+                              "Ford", "Analyse social media to support design decisions for their cars",
+                    "New York Times", "Infographics, data journalism",
+                         "Microsoft", "Released Microsoft R Open, an enhanced R distribution and Microsoft\n R server after acquiring Revolution Analytics in 2015",
+                            "Google", "Created the R style guide for the R user community inside Google"
+  ) %>% 
+  flextable() %>% 
+  autofit() %>% 
+  align(align = "left", part = "all") %>% 
+  fontsize(size = 20, part = "all")
+
+```
+
+---
+
+### In Developing
+
+`r nrow(available.packages())`+ packages for cutting-edges
+    
+---
+
+class: middle, center
+
+I already live with Python, STATA, SPSS, Excel...
+
+---
+
+background-image: url("images/programCompare.jpg")
+background-position: center
+background-size: contain
+
+???
+
+R in SPSS eyes: Heathkit EC-1, an old computer, 
+
+---
+
+.left-column[
+### R
+
+#### Advantages
+
+* Fresh
+* Flexible
+
+#### Inconvenience
+
+* Linear-algebraic calculation
+* Programming
+
+]
+
+.right-column[
+### STATA
+
+#### Advantages
+
+* Stable
+* Reliable
+
+#### Inconvenience
+
+* Use what you get
+* Fair visualization
+* EXPENSIVE: SE
+    + Annual:	$235 student/**year**
+
+]
+
+
+---
+
+.left-column[
+### R
+
+#### Advantages
+
+* Statistics
+* Visualization
+
+#### Inconvenience
+
+* Large-size (> 1G) data
+]
+
+.right-column[
+### Python
+
+#### Advantages
+
+* Machine learning
+* Big data
+
+#### Inconvenience
+
+* Setting up & 2.7 vs. 3.5?
+* GUI?
+
+]
+
+---
+
+## So, if you still choose R...
+
+Be prepared.
+
+.center[<img src="images/LearningCurve.png" height = 400 />]
+.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]
+
+---
+
+You'll get some *wonderful* moments~
+
+.center[<img src="images/pc2weeks.gif" height = 400, width = 750 />]
+
 ---
 
 class:inverse
@@ -497,26 +496,27 @@ sessionInfo()
 
 ## Setup Files
 
-### What are they?
+### What are they?<sup>*</sup>
 
 * `.Rprofile`/`Rprofile.site`
 * `.Renviron`/`Renviron.site`
 
+.footnote[\* If you can't find them, create one with notepad.]
+
 --
 
-### Where are they?
+### Where to put them
 
 * `R_HOME`: Where you installed R
 * `HOME`: User's home directory, `R.home()`
 * WD: working directory, `getwd()`
 
----
-
-## What can you do with them?
-
 Suggestion: Put your setup files in `./etc/`
 
---
+---
+
+## What Do They Look Like
+
 
 `Renviron.site`: 
 
@@ -590,8 +590,6 @@ package::function
 ## First-Time Using
 
 * Set the working directory! 
-    + Set the working directory! 
-        + Set the working directory!
 
 ```{r eval = FALSE}
 # Find
@@ -606,7 +604,6 @@ setwd("./rworkshop")
 
 <img src=images/wdSetting.gif height = "600"/>
 
-
 ---
 
 ## Better Way: 
@@ -614,120 +611,15 @@ setwd("./rworkshop")
 Create a project!
 
 1. Keeping everything together
-1. Replicable with relative addresses
+1. Replicable with .red[relative addresses]
     + ~~`f:/blabla/blabla/.../data/your-cool-data.rds`~~  
     `data/your-cool-data.rds` 
 1. Version control
 1. Searchable and manageable
 
----
-
-## Something Only Deep R Learner Would Tell You!
-
-*Inspired by Amanda Gadrow*
-
 --
 
-.center[<img src="images/lazyCat.gif" height = 300 />]
-
-.center[.large[Be lazy,]  
-but in the right track]
-
-???
-
-"Lessons about R I learned from my cat"
-
----
-
-.center[.large[Be lazy,] but in the right track]
-
-.center[<img src="images/lazyCat.gif" height = 150 />]
-
-```{r eval = FALSE}
-## Set up
-library(tidyverse)
-set.seed(114)
-source("codes.R")
-
-## Analysis
-df_input <- read.csv("../data/relative_address.Rds")
-An_object <- whatever(df_input) # readable
-No_forLoop <- purrr::map(vars, fun(vars){
-  # analyze each var
-  })
-```
-
----
-
-.center[.large[Trying things...]]
-
-.center[<img src="images/jumpCat.gif" height = 500 />]
-
----
-
-.center[.large[...and land on your feet]]
-
-.center[<img src="images/landCat.gif" height = 450 />]
-
----
-
-.center[.large[Ask for help...]]
-
-.left-column[<img src="images/askCat.gif" height = 450 />]
-
-.right-column[
-+ StackOverflow
-+ Search engines
-+ Local Rstudio Community (us~~)
-+ Github issues
-]
-
-
----
-
-.center[.large[...unless you've already tried]]
-
-.right-column[<img src="images/triedCat.gif" height = 400 />]
-
-.left-column[Please search for "GIYF" alike .magenta[before] asking programming question to anyone!]
-
-???
-
-JFGI, FGI, STFW
-
----
-
-.center[.large[Keep your claws sharp]]
-
-.left-column[<img src="images/clawCat.gif" height = 400 />]
-
-.right-column[
-
-* R-bloggers
-* Package NEWS
-* .magenta[Dr. Hu & his friends' R Workshops]
-* R-Ladies
-
-]
-
----
-
-.center[.large[Hang out with friends]]
-
-.center[<img src="images/friendCat.gif" height = 450 />]
-
----
-
-.center[.large[Bask in the sun]]
-
-.center[<img src="images/sunCat.gif" height = 450 />]
-
----
-
-class: center, middle
-
-.large[More workshops are coming!]  
-.large[Keep in touch!]
+Learn in the "Learn R with Dr. Hu: Become a Decent R User"
 
 ---
 
