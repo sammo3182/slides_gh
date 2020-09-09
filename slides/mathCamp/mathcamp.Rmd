@@ -7,15 +7,13 @@ institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../css/zh-CN_custom.css
-      - ../../css/styles.css
-      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../libs/remark-latest.min.js # to show slides offline
+      - zh-CN_custom.css
+      - styles.css
+    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -24,24 +22,29 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
 library(pacman)
 p_load(dotwhisker, ggplot2, interplot, # Visualization
-       ordinal, RefManageR,# Applied
+       ordinal, # Applied
        # dependency
-       readxl, haven, descr, stringi, stringr, arm, car, stargazer, data.table,
+       readxl, haven, descr, stringr, arm, car, 
        broom, tidyverse) # data wrangling
 
 set.seed(313)
 ```
 
-class: middle, center, inverse
+class: bottom, inverse
 
-# [Anxious about Math?](http://player.bilibili.com/player.html?aid=11303109&cid=18692261&page=1)
-
+# Anxious about Math?
 
 ---
 
-# Function
+<video width="700" height="500" controls>
+    <source src="image/anciousMath.mp4" type="video/mp4">
+</video>
 
-## What's a Function?
+---
+
+## Back to the Basics
+
+### What's a Function?
 
 * Definition: "A relation that assigns one element of the range to each element of the domain (Moore & Siegel 2013, 45)"
     + $Y = f(X).$
@@ -74,7 +77,7 @@ Optimus prime
 
 ## In Math?
 
-* Implicit function: $y = f(X).$
+* Implicit function: y = f(X).
     + y: A function of x.
     + x: Argument.
     + f: Mapping
@@ -83,11 +86,11 @@ Optimus prime
 
 --
 
-* Explicit function: $y = 1 - x^2.$
+* Explicit function: y = 1 - x<sup>2</sup>.
 
 --
 
-* Composition: $g(f(x))$, "g composed with f."
+* Composition: g(f(x)), "g composed with f."
 
 ---
 
@@ -97,18 +100,18 @@ Optimus prime
 
 ## Properties (Continued)
 
-* Identity function: $f(x) = x.$
+* Identity function: f(x) = x.
 * Inverse function: 
-$
+
 \begin{align}
 f(x) =& 2x + 3;\\
 f^{-1}(x) =& \frac{x - 3}{2}.
 \end{align}
-$
 
-* $f(f^{-1}(x)) = x$
+
+* f(f<sup>-1</sup>(x)) = x.
     
-* $f^{-1}(f(x)) = x$
+* f<sup>-1</sup>(f(x)) = x.
 
 ---
 
@@ -137,33 +140,37 @@ $
 
 ## Linear function
 
-$$y = f(x) = ax + bx^0.$$
+.center[y = f(x) = ax + bx<sup>0</sup>.]
 
 * a: slope
 * b: intercept.
 
 --
 
-Properties:
+### Properties:
 
-Additivity (superposition): $f(x_1 + x_2) = f(x_1) + f(x_2).$
+Additivity (superposition): 
++ f(x<sub>1</sub> + x<sub>2</sub>) = f(x<sub>1</sub>) + f(x<sub>2</sub>).
 
-Scaling (homogeneity): $f(ax) = af(x).$
+Scaling (homogeneity): 
++ f(ax) = af(x).
 
 ---
 
 ## Nonlinear function: Exponents
 
-$$b^n = x.$$
+.center[b<sup>n</sup> = x.]
 
 * Exponential function is to solve for x.
-    + e.g., $y = x^2.$
-* Property: x is called the base.
-    + Multiplication: m and n are constant.
-        + $x^m * x^n = x^{m + n};$ 
-        + $x^m * z^m = (xz)^m;$
-        + $(x^m)^n = x^{mn}.$
-        + $x^0 = 1.$
+    + e.g., y = x<sup>2</sup>.
+    
+    
+### Property: x is called the base.
++ Multiplication: m and n are constant.
+    + x<sup>m</sup> * x<sup>n</sup> = x<sup>m + n</sup>;
+    + x<sup>m</sup> * z<sup>m</sup> = (xz)<sup>m</sup>;
+    + (x<sup>m</sup>)<sup>n</sup> = x<sup>mn</sup>.
+    + x<sup>0</sup> = 1.
         
 ---
         
@@ -172,14 +179,14 @@ $$b^n = x.$$
     + $\frac{x^m}{z^m} = (\frac{x}{z})^m.$
     
 * Some terminology
-    + Quadratic (parabola): $y = \beta_0 + \beta_1x + \beta_2x^2.$
-    + Polynomial: $y = \sum_0^n \beta_n x^n$
+    + Quadratic (parabola): y = &beta;<sub>0</sub> + &beta;<sub>1</sub>x + &beta;<sub>2</sub>x<sup>0</sup>;
+    + Polynomial: $y = \sum_0^n \beta_n x^n$.
 
 ---
 
 ## Nonlinear function: Radicals
 
-$$b^n = x.$$
+.center[b<sup>n</sup> = x.]
 
 * Radical function is to solve for b.
     + e.g., $y = \sqrt[n]{x} = x^{\frac{1}{n}}.$
@@ -191,7 +198,7 @@ $$b^n = x.$$
 
 ## Nonlinear function: Logarithms
 
-$$b^n = x.$$
+.center[b<sup>n</sup> = x.]
 
 * Logarithm function is to solve for n.
     + The inverse of exponential functions, such as $y = e^x; y = 10^x$.
@@ -199,19 +206,18 @@ $$b^n = x.$$
     
 ---
 
-* Properties
-    + $ln(1) = 0; log_a(a) = 1$
-    + $ln(x_1\cdot x_2) = ln(x_1) + ln(x_2);$
-    + $ln(\frac{x_1}{x_2}) = ln(x_1) - ln(x_2);$
-        + NB: $ln(x_1\pm x_2)\neq ln(x_1)\pm ln(x_2).$
-    + $ln(x^b) = bln(x).$
+### Properties
++ $ln(1) = 0; log_a(a) = 1$
++ $ln(x_1\cdot x_2) = ln(x_1) + ln(x_2);$
++ $ln(\frac{x_1}{x_2}) = ln(x_1) - ln(x_2);$
+    + $ln(x_1\pm x_2)\neq ln(x_1)\pm ln(x_2).$
++ $ln(x^b) = bln(x).$
 
 ---
 
 class: inverse, bottom
 
 # Linear Algebra
-
 
 ---
 
@@ -224,9 +230,13 @@ class: inverse, bottom
 
 --
 
-* As a lazy guy,
-    + $y = \beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_nX_n + \varepsilon$
-    + $\boldsymbol{Y} = \boldsymbol{X\beta}$
+* As a lazy person,
+
+.center[y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + ... + &beta;<sub>n</sub>X<sub>n</sub> + &varepsilon;]
+
+.center[v.s.]
+
+.center[**Y** = **X&beta;**]
 
 ---
 
@@ -248,7 +258,7 @@ vector is speed and direction.
 
 .center[<img src="image/matrix.gif" height = 400 />]
 
-    
+
 ---
 
 ## Vector Algorithm
@@ -294,14 +304,14 @@ Example: $(1,2) + (5,8) = (1 + 5, 2 + 8) = (6, 10).$
 
 ## Matrix in Types
 
-**Square matrix**: 
+### Square matrix
 
 $$A_{2\times2} = \left(\begin{array}{cc} 
                   1 & 2\\
                   3 & 4
                   \end{array}\right)$$
-                  
-**Zero matrix**: 
+
+### Zero matrix
 
 $$\left(\begin{array}{ccc} 
                   0 & 0 & 0\\
@@ -310,7 +320,7 @@ $$\left(\begin{array}{ccc}
 
 ---
 
-**Diagonal matrix**: 
+### Diagonal matrix 
 
 $$\left(\begin{array}{ccc} 
           1 & 0 & 0\\
@@ -318,7 +328,7 @@ $$\left(\begin{array}{ccc}
           0 & 0 & 3
           \end{array}\right)$$
 
-**Identity matrix **
+### Identity matrix
 
 $$I = \left(\begin{array}{cc} 
                       1 & 0 & 0\\
@@ -328,7 +338,7 @@ $$I = \left(\begin{array}{cc}
 
 ---
 
-**Permutation matrix**
+### Permutation matrix
 
 $$\left(\begin{array}{cc} 
                       0 & 1 & 0\\
@@ -337,7 +347,7 @@ $$\left(\begin{array}{cc}
                       \end{array}\right)$$
 
 
-**Upper/lower matrix**
+### Upper/lower matrix
 
 $$\left(\begin{array}{cc} 
                       1 & 4 & 5\\
@@ -380,7 +390,9 @@ $$A + B = \left(\begin{array}{cc}
 
 ## Matrix Multiplication
 
-### Scalar Multiplication: $cA = ca_{ij}.$
+### Scalar Multiplication: 
+
+.center[c**A** = ca<sub>ij</sub>.]
 
 --
 
