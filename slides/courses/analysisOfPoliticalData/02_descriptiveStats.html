@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Descriptive Statistics</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="02_descriptiveStats_files/header-attrs-2.3.3/header-attrs.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -19,13 +20,16 @@ class: center, middle, inverse, title-slide
 ---
 
 
-## What's A Variable?
+
+## What's a Variable?
 
 * Constant vs. variables
-    + Dependent variable
-    + Independent/explanatory variable
+* Dependent ~
+* Independent/explanatory ~
 
---
+---
+
+class: middle, center
 
 Q. When can a variable be constant?
 
@@ -35,30 +39,37 @@ Testing if X is a necessary condition for Y
 
 ---
 
-* Level of measurement:
-    + Norminal
-    + Ordinal
-    + Interval (discrete/continuous, zero means absence)
-    + Ratio (meaningful zero)
+### Level of measurement:
+
++ Nominal/categorical
++ Ordinal
++ Interval 
+    + Discrete/continuous
+    + Zero means absence
++ Ratio
+    + Meaningful zero
 
 ---
 
 ## Population vs. Sample
 
-* Random sampling
-    + Why: 
-        1. Limited resources
-        1. scarcity (only one sample can be used)
-        1. destructive testing
-        1. could be more accurate
-    + How:
-        1. Survey
-        1. Big data
+My dear randomization 😘
+
++ Why: 
+    1. Limited resources
+    1. scarcity (only one sample can be used)
+    1. destructive testing
+    1. could be more accurate
++ How:
+    1. Survey
+    1. Big data
         
 
 ---
 
-Q. Are war data random samples? 
+class: center, middle
+
+Q. Can regional GDP be randomly sampled?
 
 ???
 
@@ -68,12 +79,17 @@ Q. Are war data random samples?
 
 ## Randomization might not be possible
 
-* Ethical issues
 * Experiments
 
 --
 
-Q. Are individual exchangable?
+* Ethical issues
+
+---
+
+class: middle, center
+
+Q. Are individual exchangeable?
 
 ---
 
@@ -87,53 +103,70 @@ A specific statistical model in a simulation
 
 ---
 
-## What to look when you get a dataset?
+## Diagnosing a Dataset
 
 + Raw data
-+ Frequency distribution: `\(n_i\)`, `\(n. = \sum n_i\)`, `\(n.. = \sum n_{ij}\)`
++ Frequency distribution: 
+  n&lt;sub&gt;i&lt;/sub&gt;, n&lt;sub&gt;.&lt;/sub&gt; = &amp;sum;n&lt;sub&gt;i&lt;/sub&gt;, n&lt;sub&gt;..&lt;/sub&gt; = &amp;sum;n&lt;sub&gt;ij&lt;/sub&gt;
 + Histogram
 + Cross-tabulation
 + Time series plots, scattor plots
 + Percentiles
 
 ---
-## Measuring the center
+## Measuring the Average
 
-+ Mode: most frequent occuring number, not good of central tendency, bimodal (two modes)
-+ Median: at 50%
++ .red[Mode]: most frequent occuring number, not good of central tendency, bimodal (two modes)
+
+
++ .red[Median]: at 50%
     + Odd: middle value
     + Even: mean of two mid values
     + Sensitive for outliers
-+ Mean: `\(\bar{X}\rightarrow\mu\)`
+    
+    
++ .red[Mean]: `\(\bar{X}\rightarrow\mu\)`
     + Group: `\(\bar{X} = 1/n\sum xf\)`, x is the cell midpoint and f is the frequency of `\(X_i\)`.
     + Symmetric distribution, median and mean are identical
 
 ---
 
-## Measuring the dispersion of a distribution
+class: middle, center
+
+
+
+&lt;img src="images/median.gif" height = 400 /&gt;
+
+---
+
+## Measuring the Dispersion
 
 + Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
 + Interquartile Range (IQR): [25% quartile, 75% quartile]
-+ Mean absolute diviation (MAD): `\(1/n\sum|X - \bar{X}|\)`
-+ Mean square diviation (MSD): `\(1/n\sum(X - \bar{X})^2\)`
++ Mean absolute deviation (MAD): `\(1/n\sum|X - \bar{X}|\)`
++ Mean square deviation (MSD): `\(1/n\sum(X - \bar{X})^2\)`
 
-??? 
+???
 
 MAD: Intractable, difficult in differentiate absolute values
 
 ---
 
-+ Variance: 
+.center[&lt;img src="images/dispersion.png" height = 500 /&gt;]
 
-`$$\begin{align}
+---
+
++ Variance: &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; for the population; s&lt;sup&gt;2&lt;/sup&gt; for a sample
+
+`\begin{align}
 \sigma^2 =&amp; \sum(X - \mu)^2p(X)\\
 s^2 =&amp; \sum(X - \bar X)^2p(x) \\
 =&amp; \frac{\sum(X - \bar{X})^2}{n - 1}.
-\end{align}$$`
+\end{align}`
 
 --
 
-+ Degree of freedom: n in total, and used out for calculate `\(\bar{X}\)`, what does it mean? 
++ Why n-1? Degree of freedom
 
 `$$\left[\begin{array} {ccc}
 		X_1\\
@@ -166,14 +199,16 @@ d.f. for a crosstable: `\((r - 1)(c - 1)\)`
 
 ---
 
-`\(\sigma^2\)` is often written in another format:
+&amp;sigma;&lt;sup&gt;2&lt;/sup&gt; is often written in another format:
 
-`$$\begin{aligned}
-  \sigma^2 =&amp; \sum(X - \mu)^2p(x),\\
-  =&amp; \sum(X^2 -2X\mu + \mu^2)p(x),\\
-  =&amp; \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
-  =&amp; \sum X^2p(x) - \mu^2, given\ \mu = \sum Xp(x), \sum p(x) = 1.
- \end{aligned}$$`
+`\begin{aligned}
+\sigma^2 =&amp; \sum(X - \mu)^2p(x),\\
+=&amp; \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=&amp; \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+=&amp; \sum X^2p(x) - \mu^2,
+\end{aligned}`
+ 
+given &amp;mu; = &amp;sum;Xp(x), &amp;sum;p(x) = 1.
  
 ---
 
@@ -182,9 +217,10 @@ Standard deviation
 + Population: `\(\sigma = \sqrt{\pi(1 - \pi)}\)`
 + Group: `\(\sqrt{f/n\sum(X - \bar{X})^2}\)`
 + Sample: s
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
@@ -228,9 +264,25 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -239,7 +291,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

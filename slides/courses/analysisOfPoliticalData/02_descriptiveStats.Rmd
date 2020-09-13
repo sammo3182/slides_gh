@@ -7,25 +7,25 @@ institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
-      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
 
-## What's A Variable?
+
+## What's a Variable?
 
 * Constant vs. variables
-    + Dependent variable
-    + Independent/explanatory variable
+* Dependent ~
+* Independent/explanatory ~
 
---
+---
+
+class: middle, center
 
 Q. When can a variable be constant?
 
@@ -35,30 +35,37 @@ Testing if X is a necessary condition for Y
 
 ---
 
-* Level of measurement:
-    + Norminal
-    + Ordinal
-    + Interval (discrete/continuous, zero means absence)
-    + Ratio (meaningful zero)
+### Level of measurement:
+
++ Nominal/categorical
++ Ordinal
++ Interval 
+    + Discrete/continuous
+    + Zero means absence
++ Ratio
+    + Meaningful zero
 
 ---
 
 ## Population vs. Sample
 
-* Random sampling
-    + Why: 
-        1. Limited resources
-        1. scarcity (only one sample can be used)
-        1. destructive testing
-        1. could be more accurate
-    + How:
-        1. Survey
-        1. Big data
+My dear randomization `r emo::ji("kissing_heart")`
+
++ Why: 
+    1. Limited resources
+    1. scarcity (only one sample can be used)
+    1. destructive testing
+    1. could be more accurate
++ How:
+    1. Survey
+    1. Big data
         
 
 ---
 
-Q. Are war data random samples? 
+class: center, middle
+
+Q. Can regional GDP be randomly sampled?
 
 ???
 
@@ -68,12 +75,17 @@ Q. Are war data random samples?
 
 ## Randomization might not be possible
 
-* Ethical issues
 * Experiments
 
 --
 
-Q. Are individual exchangable?
+* Ethical issues
+
+---
+
+class: middle, center
+
+Q. Are individual exchangeable?
 
 ---
 
@@ -87,53 +99,94 @@ A specific statistical model in a simulation
 
 ---
 
-## What to look when you get a dataset?
+## Diagnosing a Dataset
 
 + Raw data
-+ Frequency distribution: $n_i$, $n. = \sum n_i$, $n.. = \sum n_{ij}$
++ Frequency distribution: 
+  n<sub>i</sub>, n<sub>.</sub> = &sum;n<sub>i</sub>, n<sub>..</sub> = &sum;n<sub>ij</sub>
 + Histogram
 + Cross-tabulation
 + Time series plots, scattor plots
 + Percentiles
 
 ---
-## Measuring the center
+## Measuring the Average
 
-+ Mode: most frequent occuring number, not good of central tendency, bimodal (two modes)
-+ Median: at 50%
++ .red[Mode]: most frequent occuring number, not good of central tendency, bimodal (two modes)
+
+
++ .red[Median]: at 50%
     + Odd: middle value
     + Even: mean of two mid values
     + Sensitive for outliers
-+ Mean: $\bar{X}\rightarrow\mu$
+    
+    
++ .red[Mean]: $\bar{X}\rightarrow\mu$
     + Group: $\bar{X} = 1/n\sum xf$, x is the cell midpoint and f is the frequency of $X_i$.
     + Symmetric distribution, median and mean are identical
 
 ---
 
-## Measuring the dispersion of a distribution
+class: middle, center
+
+```{r, fig.show='animate', animation.hook = 'gifski', fig.width=6, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE, results = 'hide', interval=0.5, eval = FALSE, include=FALSE}
+library(fGarch)
+library(ggplot2)
+library(gifski)
+skew <- seq(0.5, 1, 0.05)
+skew2 <- seq(1.1, 2, 0.1)
+skew3 <- seq(1.9, 1, -0.1)
+skew4 <- seq(0.95, 0.55, -0.05)
+skew <- c(skew, skew2, skew3, skew4)
+plot1 <- function(x){
+	d <- lapply(1:40, function(x){
+		d <- data.frame(x=rsnorm(100000, mean=0, sd=2, xi=skew[x]), frame=x)
+		return(d)
+	})
+medians <- c(seq(0.31,-0.31, -0.031), seq(-0.279,0.279, 0.031))
+#medians <<- lapply(1:40, function(x) median(d[[x]]$x))
+p <- lapply(1:40, function(y) ggplot(data=d[[y]], aes(x))+geom_histogram(binwidth=0.25, color="white", fill="skyblue2")+theme_light()+theme(panel.border=element_blank(),panel.grid.minor=element_blank(), axis.ticks=element_blank(), axis.text=element_blank())+guides(fill=FALSE)+labs(x=NULL, y=NULL)+scale_y_continuous(expand=c(0,0),limits=c(0,5600), breaks=c(0,2000, 4000))+geom_vline(xintercept=0, size=0.5, linetype="dashed")+geom_vline(xintercept=medians[y], size=0.5)+xlim(-5,5)+annotate("text", label="Mean", size=3.4, x=-4.1, y=5300, hjust=0)+annotate("text", label="Median", size=3.4 ,x=-4.1, y=4600, hjust=0)+geom_segment(aes(x=-4.8, xend=-4.3, y=5300, yend=5300), linetype="dashed")+geom_segment(aes(x=-4.8, xend=-4.3, y=4600, yend=4600)))
+print (p)
+}
+
+gif_file <-  file.path(getwd(), 'median.gif')
+save_gif(plot1(), gif_file= gif_file, progress = FALSE, loop= TRUE, delay= 0.5, width=400, height= 133, res= 100)
+
+utils::browseURL(gif_file)
+```
+
+<img src="images/median.gif" height = 400 />
+
+---
+
+## Measuring the Dispersion
 
 + Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
 + Interquartile Range (IQR): [25% quartile, 75% quartile]
-+ Mean absolute diviation (MAD): $1/n\sum|X - \bar{X}|$
-+ Mean square diviation (MSD): $1/n\sum(X - \bar{X})^2$
++ Mean absolute deviation (MAD): $1/n\sum|X - \bar{X}|$
++ Mean square deviation (MSD): $1/n\sum(X - \bar{X})^2$
 
-??? 
+???
 
 MAD: Intractable, difficult in differentiate absolute values
 
 ---
 
-+ Variance: 
+.center[<img src="images/dispersion.png" height = 500 />]
 
-$$\begin{align}
+---
+
++ Variance: &sigma;<sup>2</sup> for the population; s<sup>2</sup> for a sample
+
+\begin{align}
 \sigma^2 =& \sum(X - \mu)^2p(X)\\
 s^2 =& \sum(X - \bar X)^2p(x) \\
 =& \frac{\sum(X - \bar{X})^2}{n - 1}.
-\end{align}$$
+\end{align}
 
 --
 
-+ Degree of freedom: n in total, and used out for calculate $\bar{X}$, what does it mean? 
++ Why n-1? Degree of freedom
 
 $$\left[\begin{array} {ccc}
 		X_1\\
@@ -166,14 +219,16 @@ d.f. for a crosstable: $(r - 1)(c - 1)$
 
 ---
 
-$\sigma^2$ is often written in another format:
+&sigma;<sup>2</sup> is often written in another format:
 
-$$\begin{aligned}
-  \sigma^2 =& \sum(X - \mu)^2p(x),\\
-  =& \sum(X^2 -2X\mu + \mu^2)p(x),\\
-  =& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
-  =& \sum X^2p(x) - \mu^2, given\ \mu = \sum Xp(x), \sum p(x) = 1.
- \end{aligned}$$
+\begin{aligned}
+\sigma^2 =& \sum(X - \mu)^2p(x),\\
+=& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+=& \sum X^2p(x) - \mu^2,
+\end{aligned}
+ 
+given &mu; = &sum;Xp(x), &sum;p(x) = 1.
  
 ---
 
