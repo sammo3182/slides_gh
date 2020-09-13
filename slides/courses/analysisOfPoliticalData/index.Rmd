@@ -12,39 +12,75 @@ knitr::opts_chunk$set(echo = TRUE)
 library(pacman)
 p_load(tidyverse, lubridate)
 
-# Opening Date: 2017-08-21 ####
-start <- ymd("2019-09-09")
+# Opening Date ####
+start <- ymd("2020-09-14")
 
-# Final Week: 2017-12-11 ####
-end <- start + dweeks(15)
+# Final Week ####
+end <- start + dweeks(14) # 10/5 does not have a break due to the COVID-19
 
 schedule <-
   data.frame(day = seq(from = start, to = end, by = "days")) %>%
   mutate(day = ymd(day),
          weekDay = wday(day, week_start = 1)) %>% # get the relative week number
   filter(weekDay == 1) %>% # only keep Monday
-  mutate(weekNum = 1:16)
+  mutate(weekNum = 1:15) # 1:15 for one week less due to COVID-19
 
 schedule <- tibble::tribble(
-                                     ~topic, ~translation,                  ~lab,
-                   "Descriptive Statistics",      "描述性统计",      "Linear Algebra and Calculus",
-                       "Probability Theory",        "概率论",            "Intro to R",
-     "Population and Sampling Distribution",    "整体和样本分布",          "Rmarkdown",
-                       "Hypothesis Testing",       "假设检验",          "Data Input and Recoding",
-                                 "No Class",       "国庆假期",              "(SKIP)",
-"Confidence Intervals and Sample Comparison",    "置信区间与样本比较",        "Data Manipulation (`tidyverse`)",
-                    "Association Analysis",       "关联性分析",        "Simulation",
-"Simple OLS and Properties of Estimators",       "简单OLS回归及性质",        "Hypothesis Test",
-                     "Gauss-Markov Theorem",   "高斯马尔科夫定理",                 "OLS",
-                      "Multiple Regression",       "多元回归",                 "OLS Visualization",
-                     "Model Specification",       "建模隐患与防治",           "Diagnosis",
-  "Multicolinearity and Heteroskedasticity",   "共线性与异方差性",       "Fixed Effect and Visualization",
-    "Autocorrelation and Endogeneity",   "自相关性与内生性",       "IV Model",
-                               "Moderation",    "调节效应", "Interaction and Visualization",
-"Missing Data and Generalized Linear Model",     "缺失值与广义线性模型",                 "Multiple Imputations",
-  "Guest Lecture: Causal Inference", "讲座：因果推断简介", "N/A"
+  ~ topic,
+  ~ translation,
+  ~ lab,
+  "Descriptive Statistics",
+  "描述性统计",
+  "Linear Algebra and Calculus",
+  "Probability Theory",
+  "概率论",
+  "Hello, R!",
+  "Population and Sampling Distribution",
+  "整体和样本分布",
+  "Playing with Data I",
+  # "No Class",
+  # "国庆假期",
+  # "(SKIP)",
+  "Hypothesis Testing",
+  "假设检验",
+  "Playing with Data II",
+  "Confidence Intervals and Sample Comparison",
+  "置信区间与样本比较",
+  "Data Munging I",
+  "Association Analysis",
+  "关联性分析",
+  "Data Munging II",
+  "Simple OLS and Properties of Estimators",
+  "简单OLS回归及性质",
+  "Visualization I ",
+  "Gauss-Markov Theorem",
+  "高斯马尔科夫定理",
+  "Visualization II",
+  "Multiple Regression",
+  "多元回归",
+  "Descriptive Analysis",
+  "Model Specification",
+  "建模隐患与防治",
+  "Assoication Analysis",
+  "Multicolinearity and Heteroskedasticity",
+  "共线性与异方差性",
+  "OLS and Diagnosis",
+  "Autocorrelation and Endogeneity",
+  "自相关性与内生性",
+  "Fixed Effect and Multilevel Model",
+  "Moderation",
+  "调节效应",
+  "Instrumental Variable",
+  "Missing Data and Generalized Linear Model",
+  "缺失值与广义线性模型",
+  "Interaction and Visualization",
+  "Latent Variable Analysis Basic",
+  "潜在变量分析基础",
+  "Multiple Imputations"
   
-  ) %>% bind_cols(schedule) %>% select(day, weekNum, topic, translation, lab)
+) %>% 
+  bind_cols(schedule) %>% 
+  select(-weekDay)
 
 schedule$caption <- paste0("第", schedule$weekNum, "周 (", schedule$day, "): ", schedule$translation, " (", schedule$topic, ")")
 ```
@@ -57,7 +93,7 @@ Learn how to describe, analyze, and diagnose large-N data with Dr. Hu!
 <br><br>
 
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">总论 (Course Initiation)</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">序章 (Course Initiation)</a>
 
 * <a href="/slides_gh/slides/courses/analysisOfPoliticalData/02_descriptiveStats.html">`r schedule$caption[1]`</a>
 
