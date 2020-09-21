@@ -4,7 +4,7 @@
     <title>Probability Theory</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="03_probability_files/header-attrs-2.3.3/header-attrs.js"></script>
+    <script src="03_probability_files/header-attrs-2.3.8/header-attrs.js"></script>
     <script src="03_probability_files/htmlwidgets-1.5.1/htmlwidgets.js"></script>
     <script src="03_probability_files/viz-1.8.2/viz.js"></script>
     <link href="03_probability_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
@@ -206,7 +206,138 @@ Event G and H
 
 ---
 
-## Puting Population Together: Distribution
+## Beyond the Chance: Alternative Ways
+
+1. Relative risk
+1. Odds Ratio
+1. Bayesian method
+
+---
+
+## Relative Risk
+
+* `\(\hat{\pi}_{1|1}/\hat{\pi}_{1|2} = \frac{n_{11}/n_{\bullet 1}}{n_{12}/n_{\bullet 2}}\)`
+
+e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
+
+| Drinking 	| Fatal 	| Nonfatal 	|
+|----------	|-------	|----------	|
+| Yes      	| 1,601  	| 162,527   	|
+| No       	| 510   	| 412,368   	|
+
+`\(Risk_{fatal} = \frac{1601/(1601 + 162527)}{510/(510 + 412368)} = 7.897\)`
+
+???
+
+That is, when people drink, they are 7.9 more times to die in a fatal accident than w/o.
+
+---
+
+## Odds Ratio
+
+`$$\begin{align}
+O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
+ =&amp; \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
+ =&amp; n_{11}n_{22}/n_{21}n_{12}
+\end{align}$$`
+
+---
+
+e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
+
+| Seatbelt 	| Fatal 	| Nonfatal 	|
+|----------	|-------	|----------	|
+| Yes      	| 1,601  	| 162,527   	|
+| No       	| 510   	| 412,368   	|
+
+`\(O_{fatal} = \frac{1601/510}{162527/412368}\)` = 7.965
+
+
+???
+
+The fatal risk of wearing a belt is 8 times larger than not
+
+--
+
+Bonus:  Log odds
+
+???
+
+Log odds, Logit, mapping the range (0,1) to (-&amp;infin;, +&amp;infin;) using log of odds, a.k.a., "logistic unit"
+
+
+If independent, then log odds = 0.
+
+
+---
+
+RR vs. OR
+
+.center[&lt;img src="images/rrOr.png" height = 300 /&gt;]
+
+* For rare cases, both ok.
+* For common cases, RR is better.
+
+---
+
+## Evolutionary View of Probability: Bayes' Theorem
+
+$$
+`\begin{aligned}
+P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B)\\
+             P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
+                   =&amp; \frac{P(B|A)P(A)}{P(B|A)P(B) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}`
+$$
+
+???
+
+1. Conjugate prior: posterior distribution = prior distribution
+1. Cromwell's rule: if a region of the parameter space has 0 prior probability, then it also has 0 posterior probability. 
+ 
+---
+
+class: small
+
+e.g.1: Let's assume Idle Fish provides a verification function for buyers based on machine-learning techniques, and .red[30%] of the products were knockoff in the platform. When people bring a product to verify, the system can tell .red[90%] knockoff  knockoff, and .navy[80%] authentic products authentic. Then, what's the probability that a product is knockoff if the verification system said so?
+
+--
+
+.right-column[
+`$$\begin{align}
+&amp; P(K|VK) \\
+=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
+=&amp; \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
+\end{align}$$`
+]
+
+--
+
+.left-column[
+<div id="htmlwidget-86a9dc9798e4ddca922d" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-86a9dc9798e4ddca922d">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+
+## Why Baysian Estimation?
+
+&lt;video width="700" height="500" controls&gt;
+    &lt;source src="images/bayesianApplication.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+
+---
+
+## Bayesian vs. Frequentist
+
+1. Repeated sample and sample distribution: When the population data are collected, the repeat-sample makes no sense.
+1. Future event: It is impossible to have repeat samples for future
+
+
+---
+
+## Puting Probability Together: Distribution
 
 (Probability) distribution: 
 
@@ -335,135 +466,34 @@ Pr(MY) = .navy[11/28 &amp;times; 17/28] &amp;ne; 5/28
 
 `\(\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.\)`
 
----
-
-## Beyond the Chance: Alternative Ways
-
-1. Relative risk
-1. Odds Ratio
-1. Bayesian method
 
 ---
 
-## Relative Risk
-
-* `\(\hat{\pi}_{1|1}/\hat{\pi}_{1|2} = \frac{n_{11}/n_{\bullet 1}}{n_{12}/n_{\bullet 2}}\)`
-
-e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
-
-| Drinking 	| Fatal 	| Nonfatal 	|
-|----------	|-------	|----------	|
-| Yes      	| 1,601  	| 162,527   	|
-| No       	| 510   	| 412,368   	|
-
-`\(Risk_{fatal} = \frac{1601/(1601 + 162527)}{510/(510 + 412368)} = 7.897\)`
-
-???
-
-That is, when people drink, they are 7.9 more times to die in a fatal accident than w/o.
-
----
-
-## Odds Ratio
-
-`$$\begin{align}
-O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
- =&amp; \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
- =&amp; n_{11}n_{22}/n_{21}n_{12}
-\end{align}$$`
-
----
-
-e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
-
-| Seatbelt 	| Fatal 	| Nonfatal 	|
-|----------	|-------	|----------	|
-| Yes      	| 1,601  	| 162,527   	|
-| No       	| 510   	| 412,368   	|
-
-`\(O_{fatal} = \frac{1601/510}{162527/412368}\)` = 7.965
-
-
-???
-
-The fatal risk of wearing a belt is 8 times larger than not
-
---
-
-Bonus:  Log odds
-
-???
-
-Log odds, Logit, mapping the range (0,1) to (-&amp;infin;, +&amp;infin;) using log of odds, a.k.a., "logistic unit"
-
-
-If independent, then log odds = 0.
-
-
----
-
-RR vs. OR
-
-.center[&lt;img src="images/rrOr.png" height = 300 /&gt;]
-
-* For rare cases, both ok.
-* For common cases, RR is better.
-
----
-
-## Evolutionary View of Probability: Bayes' Theorem
-
-$$
-`\begin{aligned}
-P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B)\\
-             P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
-                   =&amp; \frac{P(B|A)P(A)}{P(B|A)P(B) + P(B|\tilde A)P(\tilde A)}
-\end{aligned}`
-$$
-
-???
-
-1. Conjugate prior: posterior distribution = prior distribution
-1. Cromwell's rule: if a region of the parameter space has 0 prior probability, then it also has 0 posterior probability. 
- 
----
-
-class: small
-
-e.g.1: Let's assume Idle Fish provides a verification function for buyers based on machine-learning techniques, and .red[30%] of the products were knockoff in the platform. When people bring a product to verify, the system can tell .red[90%] knockoff  knockoff, and .navy[80%] authentic products authentic. Then, what's the probability that a product is knockoff if the verification system said so?
-
---
-
-.right-column[
-`$$\begin{align}
-&amp; P(K|VK) \\
-=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
-=&amp; \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
-\end{align}$$`
-]
-
---
+## Wrap Up
 
 .left-column[
-<div id="htmlwidget-26157d8b1014fc850cdb" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-26157d8b1014fc850cdb">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
-]
+* What's probability?
+    + Classic
+    + Relative
+    + Subjective
+* Calculating probabilities
+    + Single event
+    + Compound events
+    ]
 
----
+--
 
-## Why Baysian Estimation?
+.right-column[ 
 
-&lt;video width="700" height="500" controls&gt;
-    &lt;source src="images/bayesianApplication.mp4" type="video/mp4"&gt;
-&lt;/video&gt;
-
-
----
-
-## Bayesian vs. Frequentist
-
-1. Repeated sample and sample distribution: When the population data are collected, the repeat-sample makes no sense.
-1. Future event: It is impossible to have repeat samples for future
+* Presenting probs
+    + Chance
+    + Relative risks
+    + Odds
+    + Bayesian estimates
+* Distribution
+    + Mariginal, joint, conditional
+    + Independence
+    ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
