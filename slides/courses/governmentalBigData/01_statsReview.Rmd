@@ -1,197 +1,152 @@
 ---
-title: "Reviewing Statistics with Dr. Hu"
-subtitle: "统计学回顾"
+title: "Doing Research with Dr. Hu"
+subtitle: "大数据研究设计与方法基础"
 author: "胡悦"
 institute: "清华大学政治系"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
-      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
 
-class: inverse
 
-# 计划
+## 学习计划
 
-1. 统计基础知识回顾
-1. 政治科学研究
-1. 软件与数据资源
+### 研究设计原则
+
+1. 科学研究
+
+--
+
+### 数据收集原则
+
 1. 抽样与权重
 1. 变量测量
+
+--
+
+### 数据分析原则
+
+1. 统计基础
 1. 重复性截面数据分析
-
+1. 软件与数据资源
 
 ---
 
-## 统计学
+class: inverse, bottom
 
-研究如何搜集、整理分析数据资料的一门方法论。
+# 研究设计原则
+
+---
+
+class: middle
+
+.center[.large[
+.navy[政]务大数据研究 &sub; .navy[政]治.red[科学]研究 &sub; 社会.red[科学]研究]]
+
+---
+
+## 科学从何谈起
 
 --
 
-### 分类I:
-
-* 理论统计学：研究统计学的一般理论； 研究统计方法的数学原理
-* 应用统计学：研究统计方法再具体领域中的应用
+1. 程序
+1. **方法**
 
 ---
 
-### 分类II:
+## 研究程序
 
-* 描述统计
-    + 内容：搜集、整理、展示数据
-    + 目的：描述数据特征
-* 推断统计
-    + 内容： 参数估计，假设检验
-    + 目的：推断总体特征
+.left-column[
+### 问题导向
+
+1. .red[问题]提出
+1. 理论.red[假设]
+1. 数据.red[方法]
+1. 实证.red[检验]
+]
 
 --
 
-统计学 vs. 计量经济学？
+.right-column[
+### 数据导向
+
+1. .red[观察]数据
+1. .red[分析]方法
+1. .red[规律]总结
+1. 理论.red[提升]
+
+]
 
 ---
 
-## 统计学应用
+## 研究程序
 
-.center[<img src="images/statProcess.png" height = 350 />]
+.left-column[
+### 问题导向
 
----
-
-## 统计学常用概念
-
-.center[<img src="images/concepts.png" height = 450 />]
-
----
-
-## 统计分析概念
-
-* 总体：在理论上明确界定的个体全部集合。
-* 样本：从总体中按照一定规则和程序抽出来的个体的集合，是总体一个子集。
+1. .red[问题]提出
+1. 理论.red[假设]
+1. 数据.red[方法]
+1. 实证.red[检验]
+]
 
 --
 
-* 抽样误差: 用样本的统计值去推算总体的参数值时总会有差异，这个差异就是抽样误差。
+.right-column[
+.gray[
+### 数据导向
+
+1. 观察数据
+1. 分析方法
+1. 规律总结
+1. 理论提升
+]
+]
+
+
+---
+
+## 好问题+好理论
+
+### 问题来源
+
+梁文道 + Sheldon + .red[卫斯理]
+
+???
+文献
+
+观察与发现
+
+兴趣
 
 --
 
-* 参数：概括总体特征的测度值。
-* 系数（统计量）：概括样本特征的测度值。
+### 研究步骤
 
----
-
-* 期望值: $E(X) = \sum Xp$
-* 不可确定性： 描述数据的离散趋势
-    + Variance: $\sigma^2 = \sum(X - \mu)^2p(X)$
-    + Standard deviation: $\sigma$
-    
----
-
-* 数据
-* 变量、变量值、缺失值
-* 变量标签、变量类型
-
----
-
-## Tidydata
-
-```{r tidy, echo = FALSE}
-head(mtcars)
-```
-
-.center[<img src="images/tidydata.png" height = 240 />]
-
----
-
-class: small
-
-## 测量级别：
-
-1. 定类：每一种不同的数字或符号代表着不同的类别或标记。定类数据只有类别属性之分， 无大小、程度之分。
+理论（一个想法）&rarr; 假设（一个判断）   
+&rarr; 验证（一堆证据）
 
 --
 
-1. 定序：每一种数字或符号代表着事物的等级大小、高低、先后的次序。
+### 研究形式
 
---
+1. 描述
+1. 机制
 
-1. 定距：每一种数字或符号代表着事物的量的间距。定距数据没有绝对的零点，例如，温度、智商，其中的“零”只是一个相对位置，不代表“没有”。
-
---
-
-1. 定比：每一种数字或符号代表着事物的所有算术特征。其取值除了具有类别、次序、间距的属性以外，还可以构成一个有意义的比率，其中的“零” 表示真正的“一无所有” 。
 
 ---
 
-## 你真的理解了吗？
+## 描述
 
-.center[<img src="images/jonSnow.gif" height = 350 />]
-
----
-
-Q1. “调查发现：人们对市政府工作的满意度， 在不同年龄、教育水平、收入、职业，以 及不同户口人群中有显著的差异。”
-
-问题：上述这段描述中提到了几个变量，分别是什么类型的数据？
-
----
-
-Q2: 研究者想了解全市居民上个月的平均通讯 支出是多少元，为此随机抽取了1800个居 民进行了访问，得到了这些居民上个月的平均通讯支出。
-
-问题：总体、样本、参数、系数？
-
----
-
-class: inverse
-
-# 政治科学研究
-
-1. 研究设计
-1. 描述性推论
-1. 因果推论
-1. 挑战因果推论
-
----
-
-## 研究设计
-
-1. 研究问题
-1. 理论假设
-1. 数据与方法
-1. 操作化与验证结果
-
----
-
-## 研究方法
-
-1. 观察与调研
-1. 实验
-1. 内容分析与文本分析
-1. 参与式观察
-1. 田野与扎根
-
----
-
-## 描述性推论
-
-### 推论：从已知信息来探索未知信息的过程
-
---
-
-推论 vs. 诠释？
-
---
-
-1. 期望：众数、中位数、均值
-1. 不可确定性：值域、方差、标准差（误）、四分位数
+已知 &rArr; 未知
 
 --
 
@@ -200,73 +155,86 @@ class: inverse
 
 ---
 
-## 因果推论
+## (因果)推论
 
-* 因果效应 vs. 因果机制
+搞清why & how, but how?
 
---
+### 争论1
 
-* “Correlation is not causality.”
+<img src="images/stat_bookOfWhy.jpg" height = 300 />
 
---
+???
 
-* X: 自变量、解释变量、干预变量
-* Y: 因变量、被解释变量、结果变量
+Definition of causality
+
+时间序列角度
+
+条件角度
+
+未包含：
+
+多重因果
+
+决定论还是概率论
 
 ---
 
-## 因果推论工具：
+### 争论2
 
-1. 方差分析
-1. 非参数检验
-1. 相关系数
-1. 回归分析
-1. 反事实分析
+<img src="images/stat_correlation.png" height = 300 />
+
+???
+
+correlation doesn't imply causation
 
 ---
 
-## 挑战因果
+### 争论3
 
-1. 多重共线性
-1. 选择偏误
-1. 测量误差
-1. 模型设定
-1. 内生性
+Y ~ X 
+
+vs.
+
+Y ~ A &rarr; B  &rarr; C  &rarr; D &rarr; E &rarr; ... &rarr; X
+
+???
+
+效应 vs. 机制
+
+---
+
+## 推论常见工具：
+
++ 反事实分析
 
 --
 
-1. 多重因果？
-1. Determinism vs. Probability
+这些都不是：
+
++ 方差分析
++ 非参数检验
++ 相关系数
++ 回归分析
++ Lasso
++ SEM
++ 倾向只匹配   
+......
+
+---
+
+## Wrap Up
+
+研究设计原则
+
+1. 科学：程序 + 方法
+1. 基础：问题 + 理论 + 假设
+1. 角度：描述 and/or 机制
 
 ---
 
 class: inverse, bottom
 
-# 数据分析与数据源
-
----
-
-## 分析工具
-
-* 分析软件：STATA, SAS, SPSS, EXCEL
-* 程序语言：R, Python, JAVA, C++
-
----
-
-## 数据源
-
-* [中国综合社会调查](http://www.chinagss.org)；
-* 中国劳动力动态调查
-* [中国家庭动态调查](http://www.isss.edu.cn/cfps/)；
-* [东亚民主动态调查](http://140.109.171.198/)；
-* [世界价值观调查](http://www.worldvaluessurvey.org/wvs.jsp)；
-* [北京社会经济调查](http://www.rcccpku.org/datashare/)
-
----
-
-class: inverse, center, middle
-
-.center[<img src="images/breakTime.gif" height = 600/>]
+# 数据收集原则
 
 ---
 
@@ -276,26 +244,76 @@ class: inverse, bottom
 
 ---
 
-## （复杂）抽样设计
+class: center, middle
 
-* 复杂抽样的数据具有下面一个或多个特征：
-    + 不相等的权重（unequal weights）
-    + 分层设计（stratification）
-    + 群组设计（clustering）
-    + 有限总体校正（finite population corrections）
-    
-???
 
-几乎所有大规模抽样调查都采取复杂抽样设计
+“每日1亿条”
+
+“全网数据”
+
+“《人民日报》所有文章”
+
+--
+
+.Large[大数据亦常抽样。]
 
 ---
 
-## 常见大规模抽样设计
+## 抽样
 
-* 分层多阶段抽样 (Strata)
-    + PSU/SSU/TSU
-    + Weight
-    + FPC
+从.blue[一大堆]到.red[一小撮] &rarr; 代表性
+
+???
+
+随机抽样的代表性体现在一定的sample size上
+
+--
+
+### 简单随机抽样
+
+???
+
+计算机伪随机数
+
+SHA算法和MD5
+
+真随机数：物理现象，如内存、硬件、噪音
+
+--
+
+## （复杂）抽样设计
+
+### 设计
+
++ 配额设计（quota）
++ 分群设计（clustering）
++ 分层设计（stratification）
+
+### 矫正
+
++ 有限总体校正（finite population corrections, FPC）
++ 不相等的权重（unequal weights）
+    
+
+---
+
+.center[
+<img src="images/stat_stratifiedCluster.png" height = 300 />
+<img src="images/stat_quota.png" height = 300 />
+]
+
+???
+
+Stratification: 分类，每类中随机抽取，每类成员在总体中配比不变        
+Clustering：直接随机抽取一类        
+Quota：成分配比够就行，不用随机
+
+---
+
+## 常见设计
+
+* Strata + Weight + FPC
+      + PSU/SSU/TSU
     
 ???
 
@@ -309,13 +327,11 @@ Using $s = \frac{\sigma}{\sqrt{n}}\sqrt{(N-n)/(N-1)}.$
 
 FPC is used when you sample without replacement from more than 5% of a finite population, leading to more uncertainty. 
 
----
-
-* Strata: 将人口根据某些特征分组；分层可以减少点估计的标准误；但分层导致不同层（组）的抽样权重不等
-
 --
 
-* PSU： 初级抽样单位，抽样实施中被抽中的具体单位； 整群抽样(Cluster Sampling)，将增加点估计的标准误；忽视PSU会导致较小的标准误（错误的Sig）
+* Strata: 将人口根据某些特征分组；
+    + 减少点估计的标准误；
+    + 不同层抽样权重不等
 
 --
 
@@ -328,48 +344,30 @@ FPC is used when you sample without replacement from more than 5% of a finite po
 
 For example, if you have selected 200 goldfish out of a population of 1000, the reciprocal of the likelihood of being selected is 1000/200, so the sampling weight for the goldfish would be 5
 
+
 ---
 
-## Complex Survey vs. Simply Randomized Sampling
+## 后果
 
-传统统计分析假定样本是简单随机抽样（SRS）样本
+* 不等权重 &rarr; 某些特征分布与总体不一致
+* 分层 &rarr; 层间方差不齐
+* 分群（clustering）&rarr; 群组间方差不齐，群组内不独立
 
 --
 
-* 复杂抽样无法满足：
-    + 因变量是线性的
-    + 各观察值间是独立的（IID）
-    + 自变量取不同值时，因变量的分布是正态的;
-    + 且方差相等
-
----
-
-## 复杂抽样后果
-
-* 不相等的权重（unequal weights）
-    + 样本某些特征分布与总体不一致
-* 分层设计（stratification）
-	+ 层间方差不齐
-* 群组设计（clustering）
-	+ 群组间方差不齐，群组内不独立
-* 有限总体校正（finite population corrections）
-	+ 根源在于复杂抽样设计与简单随机抽样的标准误差在计算上存在很大差异。
+.center[复杂抽样是.red[不得已而为之]]
 
 ---
 
 ## 怎么办？
 
-忽视复杂抽样设计会获得不准确的点估计和点估计的标准误！
-
---
-
-使用Survey analysis
+Post-DGP correction &rarr; 把权重纳入分析
 
 ---
 
 ## 应用实例
 
-Toy: [Behavioral Risk Factor Surveillance System (BRFSS) SMART](https://www.cdc.gov/brfss/smart/smart_2011.htm) county data by Centers of Disease Control and Prevention (CDC)
+[Behavioral Risk Factor Surveillance System (BRFSS) SMART](https://www.cdc.gov/brfss/smart/smart_2011.htm) county data by US Centers of Disease Control and Prevention (CDC)
 
 ```{r survey-example, include=FALSE, eval=FALSE}
 brfss_11 <- Hmisc::sasxport.get("D:/Desktop/CNTY2011.xpt")
@@ -468,120 +466,203 @@ prop.table(table(brfss_11$badhealth, brfss_11$educ), margin=2)
 
 ---
 
-```{r survey-se, message=FALSE, warning=FALSE}
-n<-table(is.na(brfss_11$badhealth)==F)
-p<-prop.table(table(brfss_11$badhealth, brfss_11$educ), margin=2)[2,]
-se<-sqrt((p*(1-p))/n)
-
-data.frame(proportion=p, se=se)
-svyby(formula = ~badhealth, by = ~educ, design = des, FUN = svymean)
+```{r survey-ols, message=FALSE, warning=FALSE}
+raw<-lm(bmi~educ+agec, data=brfss_11)
+freqW<-lm(bmi~educ+agec, data=brfss_11, weights = cntywt)
+surveyW<-svyglm(bmi~educ+agec,des, family=gaussian)
 ```
 
 ???
 
-SE difference
-
----
-
-```{r survey-ols, message=FALSE, warning=FALSE}
-Model1<-lm(bmi~educ+agec, data=brfss_11)
-Model2<-lm(bmi~educ+agec, data=brfss_11, weights = cntywt)
-Model3<-svyglm(bmi~educ+agec,des, family=gaussian)
-```
+survey weight is using the inverse-probability weighting
 
 ---
 
 ```{r survey-ols-plot, echo = FALSE, message=FALSE, warning=FALSE, out.width="100%"}
 library(dotwhisker)
-dwplot(list(Model1, Model2, Model3))
+dwplot(list(raw, freqW, surveyW)) + 
+  theme_minimal()
 ```
 
 ---
 
-## 变量测量
+## Wrap Up
 
-1. 直接数据
-2. 整合数据
-3. 潜在数据
++ 代表性 &rarr；抽样
+    + 简单抽样
+    + 复杂抽样
++ 复杂抽样步骤
+    + 分配额/层/群
+    + 抽
+    + 权重
++ 复杂抽样分析：考虑权重
 
 ---
 
-## 潜在变量估计
+class: inverse, bottom
 
-* 传统：Factor analysis
-* 新锐：IRT
+# 数据分析原则
+
+---
+
+class: center, middle
+
+.Large[统计学 vs. 计量经济学]
+
+???
+
+结果准
+
+方向对
+
+---
+
+## 统计学
+
+### 分类I
+
+* 理论统计学
+* 应用统计学
+
+???
+
+研究统计学的一般理论；研究统计方法的数学原理
+
+研究统计方法再具体领域中的应用
+
+--
+
+### 分类II
+
+* 描述统计
+* 推断统计
+
+
+---
+
+## 统计/计量功能
+
+.center[<img src="images/stat_statProcess.png" height = 350 />]
+
+---
+
+## 统计学常用概念
+
+.center[<img src="images/stat_concepts.png" height = 450 />]
+
+---
+
+.left-column[
+
+### DGP
+
+总体 vs. 样本
+
+抽样误差
+
+### 分析
+
+参数 vs. 系数
+
+期望
+
+Uncertainty
+
+]
+
+
+
+???
+* 总体：在理论上明确界定的个体全部集合。
+* 样本：从总体中按照一定规则和程序抽出来的个体的集合，是总体一个子集。
+
+
+* 抽样误差: 用样本的统计值去推算总体的参数值时总会有差异，这个差异就是抽样误差。
+
+
+* 参数：概括总体特征的测度值。
+* 系数（统计量）：概括样本特征的测度值。
+
+* 期望值: $E(X) = \sum Xp$
+* 不可确定性： 描述数据的离散趋势
+    + Variance: $\sigma^2 = \sum(X - \mu)^2p(X)$
+    + Standard deviation: $\sigma$
+
+--
+
+.right-column[
+
+### 材料
+
+* 数据
+* .red[变量]、变量值、缺失值
+
+]
+
+---
+
+## 练习
+
+研究者想了解全市居民上个月的平均通讯支出是多少元，为此随机抽取了1800个居民进行了访问，得到了这些居民上个月的平均通讯支出。
+
+问题：总体、样本、参数、系数？
+
+
+---
+
+## 测量级别
+
+定类
+
+定序
+
+定距
+
+定比
+
+???
+
+1. 定类：每一种不同的数字或符号代表着不同的类别或标记。定类数据只有类别属性之分， 无大小、程度之分。
+
+1. 定序：每一种数字或符号代表着事物的等级大小、高低、先后的次序。
+
+1. 定距：每一种数字或符号代表着事物的量的间距。定距数据没有绝对的零点，例如，温度、智商，其中的“零”只是一个相对位置，不代表“没有”。
+
+1. 定比：每一种数字或符号代表着事物的所有算术特征。其取值除了具有类别、次序、间距的属性以外，还可以构成一个有意义的比率，其中的“零” 表示真正的“一无所有” 。
+
+
+例子：
+
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
+-100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
+
+在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
+
+---
+
+## 练习
+
+“调查发现：人们对市政府工作的满意度，在不同年龄、教育水平、收入、职业，以 及不同户口人群中有显著的差异。”
+
+问题：上述这段描述中提到了几个变量，分别是什么类型的数据？
+
+---
+
+## 测量手段
+
+直接数据（Raw data）
+
+--
+
+整合变量（Aggregated data）
+
+--
+
+.red[潜在变量测量] (Latent measurement)
+
+* .gray[经典：Factor analysis]
+* .gray[新锐：IRT]
 * 全面：SEM
-
----
-
-## 因子分析
-
-直接利用因子得分（Factor Score）或构建加总指标（Additive Index）。
-
---
-
-e.g., 文化解释、政治控制解释（Shi Tianjian，2001；Wang Zhenxu，2005；马德勇，2007）
-
-
----
-
-## 常见形式
-
-.center[<img src="images/factorAnalysis.png" height = 300 />]
-
-（廖福挺，2007；邱皓政，2008）
-
----
-
-class: small
-
-## 潜在类别分析（LCA）
-
-20世纪60年代，潜变量被认为也可以定义为类别变量，建立在这种 潜变量理解路径下的测量建模方法即是潜在类别分析（LCA）。 
-
---
-
-潜在类别分析的目的是以最少的潜在类别数目来解释测量变量之间 的关联来达到局部独立性。 
-
---
-
-潜在类别分析的统计原理建立在潜在类别概率和条件概率之间关联 性的多变量分析上（邱皓政，2008）。 
-
---
-
-验证性潜在类别分析即是在探索性潜在类别分析的基础上进行参数设限（如定值设限和等值设限），借以检验特定分类模型是否存在。如针对条件概率的平行设限（Parallel Restriction）和针对测量误差的相等误差设限（Equal Error Rate Hypothesis）。
-
----
-
-class: small
-
-## FA vs. LCA
-
-| 项目            	| FA                             	| LCA                        	|
-|-----------------	|--------------------------------	|----------------------------	|
-| 外显变量        	| 连续测量                       	| 类别测量（名义、序列）     	|
-| 潜变量          	| 连续测量                       	| 类别测量（名义、序列）     	|
-| 外显-潜变量关系 	| 线性关系                       	| 非线性关系                 	|
-| 统计原理        	| 回归                           	| 列联表、log-linear         	|
-| 分布假定        	| 潜变量和显变量均为多元正态分布 	| 无                         	|
-| 运算基础        	| 协方差、相关系数               	| 单元格频次（概率）的关联性 	|
-| 缺失值处理      	| 不可直接分析                   	| 需要插补,可视为一类态度     	|
-
----
-
-class: normal
-
-## 项目反应理论（IRT）
-
-项目反应理论也称为潜在特质模型，为了克服经典测量理论之局限性而提出。 
-
---
-
-项目反应理论假定被访人有一种“潜在特质”，潜在特质是在观察分 析测验反应基础上提出的一种统计构想。潜在特质指个体所持有的相对稳定的行为方式或态度模 式，潜在特质不可直接测量，但可以通过外在行为反映。
-
---
-
-项目反应理论认为被访人在测试题目上的反应与其潜在特质有特殊函 数关系，因此，可以通过探讨被访人对题目的反应与其潜在特质间的 概率关系即可预测潜在特质。
 
 
 ---
@@ -590,58 +671,75 @@ class: small
 
 ## 结构方程模型
 
-Tang, Wenfang, Yue Hu, and Shuai Jin. 2017. “Affirmative Inaction: Language Education and Labor Mobility among China’s Muslim Minorities.” Chinese Sociological Review 48(4): 346–66.
+Tang, Wenfang, Yue Hu, and Shuai Jin. 2017. “Affirmative Inaction: Language Education and Labor Mobility among China’s Muslim Minorities.” *Chinese Sociological Review* 48(4): 346–66.
 
-.center[<img src="images/sem_eg.png" height = 400 />]
+.center[<img src="images/stat_sem_eg.png" height = 400 />]
 
 ---
 
-## 重复性横截面数据
+## 变量 &rarr; 很多变量
 
-* 周期性多次重复调查
-* 每次调查是随机样本
-* 蕴含丰富的时间信息
+数据：
+
+1. 变量（variables）
+1. 观测层级
+1. 观测对象（observations）
+
+---
+
+## 结构化数据
+
+Tidy version
+
+```{r tidy, echo = FALSE}
+head(mtcars)
+```
+
+.center[<img src="images/stat_tidydata.png" height = 240 />]
+
+---
+
+## 数据 &rarr; 很多数据
+
+### 面板数据
+
+好
+
+???
+
+动态分析
+
+对比性高
 
 --
 
-e.g. WVS, CGSS, GSS
+（yysy，成本高，样本局限大
 
 ---
 
-## 重复性横截面数据功能
+### 重复抽样数据
 
-* 呈现社会、政治、经济现象的变化趋势
-* 探索特定人群(Cohort)社会行为与态度的变迁模式
-* 对上述现象的因果解释性研究
-* 适用于识别自然实验的效应（effects)
+* 周期性调查
+* 每次随机
+* 时序性信息
 
----
+e.g., WVS, CGSS, GSS, .navy[DCPO datasets]
 
-## 重复性横截面数据 vs. 面板数据
+--
 
-* 样本代表性
-* 数据采集成本
-* 数据可及性
-* 信息量
-* 分析方法
+* 呈现社会、政治、经济现象的变化.red[趋势]
+* 探索特定.red[人群(Cohort)]社会行为与态度的变迁模式
+* 适用于识别.red[自然实验]的效应
 
 ---
 
 ## 描述性分析
 
-* 关注变量随时间的变化趋势；
-* 特定人群关注变量随时间的变化趋势；
-* Cohort analysis
+.center[<img src="images/stat_trust1990_2010.png" height = 500 />]
 
-.center[<img src="images/trust1990_2010.png" height = 300 />]
+???
 
----
-
-class: small
-
-Solt, Frederick et al. 2017. “Economic Inequality and Class Consciousness.” The Journal of Politics 79(3): 1079–83.
-
-.center[<img src="images/three_measures.png" height = 600/>]
+显示、理解变化趋势
 
 ---
 
@@ -657,9 +755,23 @@ Solt, Frederick et al. 2017. “Economic Inequality and Class Consciousness.” 
 	+ 时间效应
 	+ 时间与特定人群的交互效应
 	
+	
 ---
 
-## 分析套路
+class: small
+
+Solt, Frederick, Yue Hu, et al. 2017. “Economic Inequality and Class Consciousness.” The Journal of Politics 79(3): 1079–83.
+
+.center[<img src="images/stat_three_measures.png" height = 600/>]
+
+???
+
+比较变化
+
+	
+---
+
+## 套路
 
 1. 数据整理
 1. 描述性分析
@@ -672,22 +784,51 @@ Solt, Frederick et al. 2017. “Economic Inequality and Class Consciousness.” 
 
 ### 描述
 
-.center[<img src="images/impressionOfUS.png" height = 350/>]
+.center[<img src="images/stat_impressionOfUS.png" height = 350/>]
 
 ---
 
 ### 分年度
 
-.center[<img src="images/impressionOfUS_year.png" height = 280/>]
+.center[<img src="images/stat_impressionOfUS_year.png" height = 280/>]
 
 ---
 
 ### Pooled
 
-.center[<img src="images/impressionOfUS_pool.png" height = 480/>]
+.center[<img src="images/stat_impressionOfUS_pool.png" height = 480/>]
 
 ---
 
-class: inverse, center, middle
+.center[
 
-# Questions, Comments, and Suggestions?
+非规定动作
+
+探索目的为主
+
+研究问题引领
+
+]
+
+---
+
+## 数据分析工具
+
+* 分析软件：STATA, SAS, SPSS, EXCEL
+* 程序语言：R, Python, JAVA, C++
+
+---
+
+## Wrap Up
+
+统计/计量功能
+
+变量
++ 测量级别
++ 测量手段
+
+数据（tidy version）
+
+面板数据/重复抽样数据
+
+数据分析工具
