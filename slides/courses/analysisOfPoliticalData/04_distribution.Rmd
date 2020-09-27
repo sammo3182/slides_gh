@@ -7,21 +7,19 @@ institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
-      # - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      # - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
 
-## Probability distribution
+## Probability Distribution
 
-* Probability Mass Function: Discrete distribution
+* Probability Mass Function: Discrete
 
 ???
 
@@ -29,7 +27,7 @@ Draw a histogram
 
 --
 
-* Probability Density Function: Continuous distribution
+* Probability Density Function: Continuous
     + Cumulative density function: $F(x) = P(X < x)$
 
 ???
@@ -38,17 +36,29 @@ Draw a density plot
 
 --
 
-* Property for both PMF and PDF : 
-    1. $0 \leq f(x) \leq 1$;
-    1. $\sum_x f(x) = 1.$
+.center[<img src="images/dist_pmfPdf.png" height = 300 />]
 
 ---
 
-## Moments of probability distribution
+class: center, middle
 
-A specific quantitative measure of the shape of a function
+.Large[Rethink:<br>What's a Distribution?]
+
+???
+
+a pile of probability
+
+what did we just call a distribution? Function
 
 ---
+
+## Moments of Probability Distribution
+
+A specific quantitative measure of .red[the shape of a function].
+
+---
+
+.pull-left[
 
 Physics
 
@@ -56,12 +66,15 @@ Physics
 + 1st: Center of mass
 + 2ed: Rotational inertia
 
+]
+
 ???
 
 Rotational inertia: 惯性矩
 
 --
 
+.pull-right[
 Statistics
 
 + 0th: Total probability
@@ -69,6 +82,7 @@ Statistics
 + 2ed: Variance
 + 3id: Skewness
 + 4th: Kurtosis (tailedness)
+]
 
 ???
 
@@ -78,56 +92,9 @@ Kurtosis：尖锐程度
 
 ---
 
-## Binomial Distribution
-
-$$PDF = {n \choose r}\pi^r(1 - \pi)^{n - r}$$
-
-
-???
-
-$${n \choose s} = \frac{n!}{r!(n - r)!}$$
-
---
-
-e.g., S is the head number of tossing n times of a fair coin, then 
-
-$$P(S) = {n \choose s}P^s(1 - P)^{n - s}.$$
-
----
-
-e.g., A school hired 100 faculty members, 25 female and 75 male, in a year. Given the general hired ratio is .4 for women and .6 for men. What's the probability that the employment is fair in this year?
-
---
-
-$P(25) = {100 \choose 25}0.4^{25}0.6^{75} = 0.0006$
-
---
-
-Very unlikely.
-
----
-
-## Continuous Distribution
-
-Relative frequency density
-
-+ Total areas of the bars of the distribution = 1
-
---
-
-+ Discrete: $\mu = \sum xp(x), \sigma^2 = \sum(X - \mu)^2p(x)$
-
---
-
-+ Continuous: 
-    + $P(a\leq x\leq b) = \int^b_af(x)d(x)$
-    + $\sigma^2 = \int^b_a(x - \mu)^2p(x)dx$
-
----
-
 ## Properties of PMF/PDF
 
-+ none-negative
++ None-negative
 
 --
 
@@ -146,67 +113,14 @@ Relative frequency density
 
 + CDF: $P(X\leq x)$, PDF = $\frac{\partial CDF}{\partial X}$
     
+    
 ---
 
-## Uniform
+## Common Distributions
 
-+ CDF: 
-
-$$F = \begin{cases}
-0, if\ x < a,\\
-\frac{x - a}{b - a}, if\ x \in[a, b),\\p
-1, if\ x \geq b.
-\end{cases}$$
-
-???
-
-<img src="images/uniform_cdf.png" height="60"/>
-
---
-
-+ PDF: 
-
-$$f(x) = \begin{cases} 1/(b - a), if x \in [a, b],\\ 0, otherwise.\end{cases}$$
-
-???
-
-<img src="images/uniform_pdf.png" height="60"/>
-
-$$\begin{align}
-1 =& \int^b_af(x)dx = \int^b_aKdx\\
-=& |^b_aKx = Kb - Ka \\
-\Rightarrow K=& 1/(b -a)
-\end{align}$$
-
----
-
-+ Mean: 
-
-$$\mu = E(x) = \frac{a + b}{2}$$
-
-???
-
-$$\begin{align}
-\mu =& E(x) = \int^b_a x \frac{1}{b - a} dx \\
-=& \frac{1}{b - a}\int^b_axdx \\
-=& \frac{1}{b - a}\frac{1}{2}x^2|^b_a \\
-=& \frac{b^2 - a^2}{a(b - a)} \\
-=& \frac{a + b}{2}
-\end{align}$$
-
---
-
-+ Variance: 
-
-$$\sigma^2 =  \frac{(b - a)^2}{12}.$$
-
-???
-
-$$\begin{align}
-\sigma^2 =& \sum x^2p(x) - \mu^2 \\
-=& \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2 \\
-=& \frac{(b - a)^2}{12}.
-\end{align}$$
++ Bernoulli (discrete)
++ Binomial (discrete)
++ Uniform (continuous)
 
 ---
 
@@ -218,7 +132,7 @@ $k\in 0, 1,$ p is P(X = 1)
 
 --
 
-+ CDF: 
+### CDF: 
 
 $$F = \begin{cases}
 0, if\ k<0,\\
@@ -228,11 +142,14 @@ $$F = \begin{cases}
 
 --
 
-+ PMF: $f(k;p) = p^k(1 - p)^{1 - k}$
+### PMF: 
 
-???
+$$f(k;p) = p^k(1 - p)^{1 - k}$$
 
-<img src="images/bernoulli_pmf.gif" height="120"/>
+
+---
+
+<img src="images/bernoulli_pmf.gif" height="400"/>
 
 
 --
@@ -244,91 +161,191 @@ $$F = \begin{cases}
 
 ## Binomial: 
 
-n, number of trials; 
+PDF: $f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}$
 
-p, the success probability in each trial; 
-
-k, the number of success
-
-+ PDF: $f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}$
-+ Mean: np
-+ Variance: np(1 - p)
++ n, number of trials; 
++ p, the success probability in each trial; 
++ k, the number of success
 
 ???
 
-<img src="images/binomial_pmf.png" height="120"/>
+$${n \choose k} = \frac{n!}{k!(n - k)!}$$
+
+---
+
+.center[<img src="images/binomial_pmf.png" height="400"/>]
+
++ Mean: np
++ Variance: np(1 - p)
+
+---
+
+## Application
+
+A school hired 100 faculty members, 25 female and 75 male, in a year. Given the general hired ratio is .4 for women and .6 for men. What's the chance that the employment is fair in this year?
+
+$$PDF = {n \choose r}\pi^r(1 - \pi)^{n - r}$$
+
+--
+
+$$P(25) = {100 \choose 25}0.4^{25}(1 - 0.6)^{75} = 0.0006$$
+
+--
+
+Very unlikely.
+
+---
+
+## Uniform
+
+### CDF: 
+
+$$F = \begin{cases}
+0, if\ x < a,\\
+\frac{x - a}{b - a}, if\ x \in[a, b),\\p
+1, if\ x \geq b.
+\end{cases}$$
+--
+
+.center[<img src="images/uniform_cdf.png" height="300"/>]
+
+---
+
+### PDF: 
+
+$$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$
+
+.center[<img src="images/uniform_pdf.png" height="300"/>]
+
+---
+
++ Mean: $\mu = E(x) = \frac{a + b}{2}$
++ Variance: $\sigma^2 =  \frac{(b - a)^2}{12}.$
+
+???
+
+\begin{align}
+\mu =& E(x) = \int^b_a x \frac{1}{b - a} dx \\
+=& \frac{1}{b - a}\int^b_axdx \\
+=& \frac{1}{b - a}\frac{1}{2}x^2|^b_a \\
+=& \frac{b^2 - a^2}{a(b - a)} \\
+=& \frac{a + b}{2}
+\end{align}
+
+\begin{align}
+\sigma^2 =& \sum x^2p(x) - \mu^2 \\
+=& \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2 \\
+=& \frac{(b - a)^2}{12}.
+\end{align}
 
 ---
 
 ## Normal: Gaussian curve
 
-+ PDF: $f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$
-    + $Z = \frac{x - \mu}{\sigma}$. When $\mu = 1; \sigma = 0$, standard normal distribution
-    + $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(z)^2}{2}}$
+### PDF: 
+
+$$f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$$
+
+When $\mu = 1; \sigma = 0$, standard normal distribution
+
+--
+
+.red[Z Score:]
+
+$Z = \frac{x - \mu}{\sigma}$ &rarr; $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(z)^2}{2}}$
+
+???
+
+Knowing Z-score, one can calculate the probability of it accordingly
 
 ---
 
-Q. Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
+## Application
+
+Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
+
+--
 
 $Z_1 = \frac{125 - 100}{16} = 1.056$
 
 $Z_2 = \frac{85 - 100}{16} = -0.9375$
 
-Then,  $P(X \geq 125)$ = `r 1 - pnorm(1.056)`
+---
 
-P(X < 85) = `r pnorm(-0.9375)`
+## Next Step---Conventionally
+
+.center[<img src="images/dist_zScore.gif" height="600"/>]
+
+---
+
+## When You Have R...
+
+`pnorm(<Z-score>)`
+
+P(X &ge; 125) = `1 - pnorm(1.056)` = `r 1 - pnorm(1.056)`
+
+P(X < 85) = `pnorm(-0.9375)` = `r pnorm(-0.9375)`
+
+???
 
 Hint: p-value: $P(z\leq x)$.
 
 ---
 
-## Event count:
+## Expectation
 
-
-Poisson: $\pi_i = f(y_i, \mu) = \frac{e^{-\mu}\mu^{y_i}}{y_i!},$, assuming independent events (i.e., $\sigma^2 = \mu$, !!)
-
-+ Dispersion: $\alpha = \frac{\sigma^2}{\hat y}$
-
----
-
-+ Over dispersion: $\sigma^2 > \mu$, individual difference are salient, maybe leading to clustering contagion.
-    + Solution: Negative binomial
-    
---
-
-+ Under dispersion: $\sigma^2 < \mu$, individuals are too similar
-    + Solution: see Gary King's generalized event count model
-        
----
-
-Negative binomial: $\pi_i = f(y_i, v_1) = {c + y_i - 1 \choose y_i}v_1^c(1 - v_1)^{y_i}$
-
-$v_1$ probability of an event occurring in a time unit (= $1 - v_2$), c waiting time until event occurs. 
-
-$\sigma^2 = (1 + \alpha\mu)\mu = \mu + \alpha\mu^2$
+(Work for all the distributions
 
 --
 
-When $\alpha = 0$, NB becomes Poisson.
+1. Mean: E(X) = &sum; xp(x)
+2. Variance: E(x - &mu;)<sup>2</sup> = &sum; (x - &mu;)<sup>2</sup>p(x)
+
+### Rule of expectation:
+
+1. E(aX + bY + c) = aE(X) + bE(Y) + c;
+2. var(aX + bY) = a<sup>2</sup>var(x) + b<sup>2</sup>var(y) + 2ab&bull;cov(x, y)
 
 ---
 
-* Expectation (mean, variance) 
-    1. Mean: $E(X) = \sum xp(x)$
-    2. Variance: $E(x - \mu)^2 = \sum (x - \mu)^2p(x)$
-    3. Rule of expectation:
-        1. E(aX + bY + c) = aE(X) + bE(Y) + c;
-        2. var(aX + bY) = 
-        $a^2var(x) + b^2var(y) + 2ab cov(x, y)$
+### Application
 
----
+X is the reward generator of a paid module of a video game, the seed of which is based on tossing a fair dice.
+When the dice is tossed, the reward is produced following this function: g(X) = 2 + 3X.
 
-Q. X is the results of tossing a fair dice, the function is g(X) = 2 + 3X, calculate the expectation of g(x)
+What's the expectation of rewards "ke-jin" players can get by purchasing this module?
 
 $$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6}$$
 
 $$ = 3.5$$
 
-Therefore,
 $E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5$
     
+    
+---
+
+## Wrap Up
+
+.pull-left[
+### Describing a Distribution
+
++ PDF/PMF
+    + Five moments
++ CDF
+
+### Common Distributions
+
++ Bernoulli
+    + Binomial
++ Uniform
++ Normal
+]
+
+.pull-right[
+
+### Expectation
+
++ Definition
++ Rules
+
+]

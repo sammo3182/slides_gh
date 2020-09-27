@@ -241,7 +241,7 @@ O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
 
 e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
 
-| Seatbelt 	| Fatal 	| Nonfatal 	|
+| Drinking 	| Fatal 	| Nonfatal 	|
 |----------	|-------	|----------	|
 | Yes      	| 1,601  	| 162,527   	|
 | No       	| 510   	| 412,368   	|
@@ -310,8 +310,8 @@ e.g.1: Let's assume Idle Fish provides a verification function for buyers based 
 --
 
 .left-column[
-<div id="htmlwidget-961cfccc142e5b5c8b8d" style="width:504px;height:504px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-961cfccc142e5b5c8b8d">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-b5f6e2bf76b016d590d8" style="width:504px;height:504px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b5f6e2bf76b016d590d8">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 ]
 
 ---
@@ -330,6 +330,33 @@ e.g.1: Let's assume Idle Fish provides a verification function for buyers based 
 1. Repeated sample and sample distribution: When the population data are collected, the repeat-sample makes no sense.
 1. Future event: It is impossible to have repeat samples for future
 
+
+---
+
+## Special: Correction
+
+### Bayes' Theorem
+
+$$
+`\begin{aligned}
+P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
+     =&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}`
+$$
+
+### Level of measurement:
+
++ Interval 
+    + Zero is a terminal
++ Ratio
+    + Zero means absence
+
+???
+
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
+-100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
+
+在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
 
 ---
 
@@ -373,29 +400,12 @@ n_{\bullet\bullet} =&amp; \sum\sum n_{ij}.
 
 Marginal: 
 
-`$$\begin{align}\pi_{i\bullet} =&amp; \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
-\pi_{\bullet j} =&amp; \sum_i \pi_{ij}, \hat{\pi_{\bullet j}} =  n_{\bullet j}/n_{\bullet\bullet}.\end{align}$$`
+`$$\begin{align}
+\pi_{i\bullet} =&amp; \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
+\pi_{\bullet j} =&amp; \sum_i \pi_{ij}, \hat{\pi_{\bullet j}} =  n_{\bullet j}/n_{\bullet\bullet}.
+\end{align}$$`
 
 Joint: `\(\pi_{\bullet\bullet}\)` = &amp;sum;&amp;sum; &amp;pi;&lt;sub&gt;ij&lt;/sub&gt; = 1.
-
----
-
-### Conditional distribution
-
-`$$\pi_{i|j} = \pi_{ij} / \pi_{\bullet j};$$`
-`$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}$$`
-
----
-
-## Independent Event (Again)
-
-`\(P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).\)`
-
-Such event's probability is: 
-
-* Population: `\(\pi_i = n_i/N\)`
-* Sample: `\(\hat{\pi_i} = n_i/n_{\bullet\bullet}.\)`
-
 
 ---
 
@@ -413,13 +423,12 @@ What's the probability for Female who don't agree?
 
 Kamala Harris, Senator from California, announced VP in 20120
 
---
+---
 
-| Gender 	| Yes  	| No    	|
-|--------	|------	|-------	|
-| Male   	| 5/28 	| 12/28 	|
-| Female 	| 6/28 	| 5/28  	|
+### Conditional distribution
 
+`$$\pi_{i|j} = \pi_{ij} / \pi_{\bullet j};$$`
+`$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}$$`
 ---
 
 e.g., Do you think Kamala Harris is a qualified VP? 
@@ -433,9 +442,20 @@ e.g., Do you think Kamala Harris is a qualified VP?
 
 Probability of "yes" given the respondent is a male.
 
---
+???
 
 Conditional: `\(P(Y|M) = 5/17\)`
+
+---
+
+## Independent Event (Again)
+
+`\(P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).\)`
+
+Such event's probability is: 
+
+* Population: `\(\pi_i = n_i/N\)`
+* Sample: `\(\hat{\pi_i} = n_i/n_{\bullet\bullet}.\)`
 
 ---
 
