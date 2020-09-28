@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Understanding Social Network with Dr. Hu</title>
+    <title>社会网络方法论</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="07_networkAnalysis_files/header-attrs-2.3.3/header-attrs.js"></script>
+    <script src="07_networkAnalysis_files/header-attrs-2.3.8/header-attrs.js"></script>
+    <link href="07_networkAnalysis_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
@@ -12,8 +13,8 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Understanding Social Network with Dr. Hu
-## 社会网络方法论
+# 社会网络方法论
+## Understanding Social Network with Dr. Hu
 ### 胡悦
 ### 清华大学政治学系
 
@@ -44,7 +45,7 @@ class: center, middle, inverse, title-slide
 
 class: inverse, bottom
 
-# 认识网络
+# 网络分析方法论
 
 ---
 
@@ -200,6 +201,12 @@ Mucha, Peter J. et al. 2010. “Community Structure in Time-Dependent, Multiscal
 + Homophily &amp;rarr; Strength of connection
 + Personality &amp;rarr; Who becomes central
 + Organization structure &amp;rarr; Density
+
+---
+
+class: inverse, bottom
+
+# 网络要素
 
 ---
 
@@ -472,15 +479,28 @@ class: inverse, bottom
 
 ## 网络描述
 
+### 规模
+
 + 量级（Size）
 + 密度（Density）
+
+### 相似性
+
 + 同质性（Homophily）
-+ 结构“洞”（Structural Holes）
-+ 中介（Brokerage）
+
+### (未)连结性
+
++ 结构洞（Structural Holes）
++ 掮客（Brokerage）
+
+### 聚合性
+
++ 向心性（Centrality）
++ 小团体（Subgroups）
 
 ---
 
-### 量级
+## 量级
 
 .left-column[
 &lt;img src="images/sna_coauthor.png" height = 400 /&gt;
@@ -494,14 +514,14 @@ n&lt;sub&gt;EM&lt;/sub&gt; = 6.
 
 ---
 
-### 密度
+## 密度
 
 .left-column[
 
 密度公式： `\(d_i = \frac{L_{-i}}{n(n-1)/2}\)`
 
-* L&lt;sub&gt;-i&lt;/sub&gt;: 与他者的连结数
-* n&lt;sub&gt;i&lt;/sub&gt;: 量级（他者数）
+* L&lt;sub&gt;-i&lt;/sub&gt;: 与Alters的连结数
+* n&lt;sub&gt;i&lt;/sub&gt;: 量级（#Alters）
 ]
 
 .right-column[&lt;img src="images/sna_coauthor.png" height = 400 /&gt;]
@@ -514,15 +534,15 @@ n&lt;sub&gt;EM&lt;/sub&gt; = 6.
 
 密度公式： `\(d_i = \frac{L_{-i}}{n(n-1)}\)`
 
-* L&lt;sub&gt;-i&lt;/sub&gt;: 与他者的连结数
-* n&lt;sub&gt;i&lt;/sub&gt;: 量级（他者数）
+* L&lt;sub&gt;-i&lt;/sub&gt;: 与Alters的连结数
+* n&lt;sub&gt;i&lt;/sub&gt;: 量级（#Alters）
 ]
 
 .right-column[&lt;img src="images/sna_coathorDirected.png" height = 400 /&gt;]
 
 ---
 
-## 应用实例：Security Egonets (Maoz 2010)
+## 应用：Security Egonets (Maoz 2010)
 
 ### 数据
 
@@ -538,7 +558,7 @@ MID: Militarized interstate disputes
 
 ### Strategic Reference Group (SRG)
 
-.red[以国家为中心]，测量与其产生敌对关系、冲突的国家及国家联盟
+.red[以国家为Ego]，测量与其产生敌对关系、冲突的国家及国家联盟
 
 --
 
@@ -548,7 +568,7 @@ MID: Militarized interstate disputes
 
 ---
 
-## 应用案例：Weak Ties (Roch et al. 2000)
+## 应用：Weak Ties (Roch et al. 2000)
 
 ### 研究问题
 
@@ -564,41 +584,9 @@ SNA对纳税人税收政策态度影响
 
 Roch, Christine H., John T. Scholz, and Kathleen M. McGraw. 2000. “Social Networks and Citizen Response to Legal Change.” American Journal of Political Science 44(4): 777–91.
 
-
 ---
 
-## 应用案例：Weak Ties
-
-.left-column[
-
-### 强项
-
-+ 数小时深入访谈
-+ 辨析多层决策
-
-]
-
-.right-column[
-
-### 弱项
-
-+ 对关系的先验判断
-
-]
-
-???
-
-同学和同学能一样么~
-
----
-
-class: inverse, bottom
-
-# 网络最“直观”：同质性
-
----
-
-## 同质性：行为体（nodes）间异同
+## 行为体（nodes）间异同: 同/异质性
 
 .center[&lt;img src="images/sna_homophily.bmp" height = 500 /&gt;]
 
@@ -626,7 +614,7 @@ Smith, Jeffrey A., Miller McPherson, and Lynn Smith-Lovin. 2014. “Social Dista
 
 ## 什么创造了同质性
 
-.center[Similarity breeds connection.]
+Similarity breeds connection.
 
 + 人口学因素
 + 状态
@@ -637,35 +625,319 @@ Smith, Jeffrey A., Miller McPherson, and Lynn Smith-Lovin. 2014. “Social Dista
 
 ## 衡量同质性
 
-.center[&lt;img src="images/sna_homophily.png" height = 350 /&gt;]
+.pull-left[&lt;img src="images/sna_homophily.png" height = 350 /&gt;]
 
+.pull-right[
 |        | Same  | Different |
 |--------|-------|-----------|
-| Tie    | (a) 4 | (b) 7     |
-| No tie | (c) 7 | (d) 3     |
+| Tie    | (a) 4 | (b) 6     |
+| No tie | (c) 5 | (d) 6     |
 
----
-
-class: middle
-
-.left-column[
-### Yule's Q
-
-Q = (ad - bc)/(ad + bc)
-
-### EI
+Yule's Q = (ad - bc)/(ad + bc)
 
 EI = (b - a)/(b + a)
 ]
 
-.right-column[
+???
 
-|        | Same  | Different |
-|--------|-------|-----------|
-| Tie    | (a) 4 | (b) 7     |
-| No tie | (c) 7 | (d) 3     |
+Same: n(n - 1)/2: Green 4 * 3 /2  = 6; Blue 3 * 2 /2 = 3
 
-]
+Different: 3 * 4 = 12, 有 tie 6, 无 12 - 6
+
+---
+
+## 衡量异质性
+
+### Blau's H
+
+H = 1 - &amp;sum;p&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;
+
+.small[p: i所属类别连结的比例]
+
+### Index of Qualitative Variation (IQV)
+
+H/(1-1/r)
+
+.small[r: 总共类别]
+
+---
+
+## 应用
+
+某甲有9亲，4友，12同僚，其个人网络异质性几何？
+
+--
+
+Alters = 9 + 4 + 12 = 25
+
+--
+
+p&lt;sub&gt;亲&lt;/sub&gt; = 4/25;    
+p&lt;sub&gt;友&lt;/sub&gt; = 12/25;    
+p&lt;sub&gt;僚&lt;/sub&gt; = 9/25;
+
+--
+
+H = 1 - [(4/25)&lt;sup&gt;2&lt;/sup&gt; + (12/25)&lt;sup&gt;2&lt;/sup&gt; + (9/25)&lt;sup&gt;2&lt;/sup&gt;] = 0.6144
+
+--
+
+IQV = 0.6144/(1 - 1/3) = 0.9216
+
+---
+
+## 同/异质性研究之挑战
+
+1. 同质就是关联吗？关联能代表同质吗？
+1. 同质性关联的时间维度 （Wellman, Wong, Tindall, and Nazer(1996)）
+
+???
+
+Wellman, Barry, Renita Yuk-lin Wong, David Tindall, and Nancy Nazer. 1997. “A Decade of Network Change: Turnover, Persistence and Stability in Personal Communities.” Social Networks 19(1): 27–50.
+
+研究个体流动性，只有27%的亲密关系（提供社会支持、常打电话、亲属）得以持续
+
+---
+
+## 连结性
+
+.red[不]连结之重要性
+
++ 结构洞
++ 掮客
+
+---
+
+## 结构洞 (Structural Holes)
+
+.center[&lt;img src="images/sna_structuralHole.jpg" height = 500 /&gt;]
+
+???
+
+Burt, Ronald S. 2009. Structural Holes: The Social Structure of Competition. Harvard University Press.
+
+---
+
+## 结构洞三种理解视角
+
+### Ego的冗余性: 
+
+Effective Size&lt;sub&gt;binary&lt;/sub&gt; = Ties&lt;sub&gt;Ego&lt;/sub&gt; - Ties&lt;sub&gt;Alters&lt;/sub&gt;
+
+--
+
+### Alters对于Ego的限制
+
+Constraint&lt;sub&gt;ij&lt;/sub&gt; = (p&lt;sub&gt;ij&lt;/sub&gt; + &amp;sum;&lt;sub&gt;q&lt;/sub&gt;p&lt;sub&gt;iq&lt;/sub&gt;p&lt;sub&gt;jq&lt;/sub&gt;)&lt;sup&gt;2&lt;/sup&gt;, q &amp;ne; i,j
+
+???
+
+p&lt;sub&gt;ij&lt;/sub&gt;: proportional strength of i's relationship with j
+
+&lt;img src="images/sna_constraint.png" height = 100 /&gt;
+
+--
+
+### 不考虑Ego情况下Alters的连接情况
+
+Betweenness Centrality: `\(C_B(i) = \sum_{i\neq j\neq k}(\frac{\sigma_{kij}}{\sigma{kj}})\)`
+
+???
+
+&amp;sigma;&lt;kij&gt;: #shortest paths between k and j blocked by i,     
+&amp;sigma;&lt;kj&gt;: #shortest paths between k and j. 
+
+---
+
+## 掮客 (Brokage)
+
+.center[&lt;img src="images/sna_broker.jpg" height =350 /&gt;]
+
+### 角色
+
+Coordinator, consultant, representative, gatekeeper, liaison
+
+
+---
+
+## 聚合性
+
++ 向心性：总体聚合性
++ 小团体：局部聚合性
+
+---
+
+## Centrality
+
+“C位出道”意味着什么（A Deeeeeeeeeeeeeep Thought）
+
+--
+
+.center[&lt;img src="images/sna_qiHun.gif" height =400 /&gt;]
+
+---
+
+### Klein et al 2004
+
+"Who are people turning to" &amp;rarr; in-degree centrality
+
+
+???
+
+团队研究，Academy of Management Journal
+
+Klein, Katherine J., Beng-Chong Lim, Jessica L. Saltz, and David M. Mayer. 2004. “How Do They Get There? An Examination of the Antecedents of Centrality in Team Networks.” Academy of Management Journal 47(6): 952–63.
+--
+
+### Fowler 2006
+
+"Relative importance" &amp;rarr; closeness, betweenness
+
+???
+
+Congress合作， PA
+
+Fowler, James H. 2006. “Connecting the Congress: A Study of Cosponsorship Networks.” Political Analysis 14(4): 456–87.
+
+
+--
+
+### Rossman et al 2010
+
+"Reputation" &amp;rarr; alpha centrality
+
+???
+
+学术网络 American Sociological Review
+
+Rossman, Gabriel, Nicole Esparza, and Phillip Bonacich. 2010. “I’d Like to Thank the Academy, Team Spillovers, and Network Centrality.” American Sociological Review 75(1): 31–51.
+
+--
+
+### Box-Steffensmeier et al. 2013
+
+"Well-connected and powerful" &amp;rarr; eigenvector centrality
+
+???
+
+APSR 司法判决
+
+Box Steffensmeier, Janet, Dino P. Christensen, and Matthew P. Hitt. 2013. “Quality Over Quantity: Amici Influence and Judicial Decision Making.” American Political Science Review 107(3): 446–60.
+
+---
+
+class: bottom, center, small
+
+## Measurement of Centrality&lt;sup&gt;1&lt;/sup&gt;
+
+???
+
+\*可用于directed network; ^可用于weighted network
+
+--
+
+Degree*^
+
+--
+
+K-step reach*^
+
+--
+
+Eigenvector*^
+
+--
+
+Alpha/Katz*^
+
+--
+
+Power*^
+
+--
+
+Beta*^
+
+--
+
+PageRank*^
+
+--
+
+Hubs and Authorities*^
+
+--
+
+Closeness*^
+
+--
+
+Betweenness*
+
+--
+
+Flow Betweenness*
+
+--
+
+Random Walk Betweenness*
+
+--
+
+......
+
+
+---
+
+## Commonly Used Centrality
+
+### Degree centrality
+
+C&lt;sub&gt;D&lt;/sub&gt;(i) = &amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;n&lt;sub&gt;ji&lt;/sub&gt;, j &amp;ne; i
+
+???
+
+Focus on local network, #alters an ego connect
+
+Measuring activity, 与别人连接度
+
+--
+
+### Eigenvector centrality
+
+C&lt;sub&gt;E&lt;/sub&gt;(i) = k&lt;sup&gt;-1&lt;/sup&gt;&amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;A&lt;sub&gt;ji&lt;/sub&gt;C&lt;sub&gt;E&lt;/sub&gt;(j)
+
+???
+
+Eigenvector: AX = &amp;lambda;X, det(A - &amp;lambda;I) = 0
+
+degree 改进版，关注近邻
+
+---
+
+background-image: url("images/sna_dECentrality.bmp")
+background-position: center
+background-size: contain
+
+---
+
+### Betweenness centrality
+
+???
+
+measuring potential control
+
+---
+
+### Closeness centrality
+
+C&lt;sub&gt;C&lt;/sub&gt;(i) = &amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;d&lt;sub&gt;ij&lt;/sub&gt;, j &amp;ne; i
+
+???
+
+与每个结点的关系，measuring independency
+
+d: distance connection i to j
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
