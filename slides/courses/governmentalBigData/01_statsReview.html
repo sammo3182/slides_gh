@@ -4,7 +4,7 @@
     <title>Doing Research with Dr. Hu</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="01_statsReview_files/header-attrs-2.3/header-attrs.js"></script>
+    <script src="01_statsReview_files/header-attrs-2.3.8/header-attrs.js"></script>
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
@@ -135,7 +135,7 @@ class: middle
 
 ### 研究步骤
 
-理论（一个想法）&amp;rarr; 假设（一个判断）   
+理论（一个想法）&amp;rarr; 假设（几个判断）   
 &amp;rarr; 验证（一堆证据）
 
 --
@@ -165,7 +165,7 @@ class: middle
 
 ### 争论1
 
-&lt;img src="images/stat_bookOfWhy.jpg" height = 300 /&gt;
+.center[&lt;img src="images/stat_bookOfWhy.jpg" height = 300 /&gt;]
 
 ???
 
@@ -242,24 +242,20 @@ class: inverse, bottom
 
 ---
 
-class: inverse, bottom
 
 # 抽样与权重
 
----
-
-class: center, middle
-
-
-“每日1亿条”
+.center[
+“每日上亿条”
 
 “全网数据”
 
 “《人民日报》所有文章”
+]
 
 --
 
-.Large[大数据亦常抽样。]
+.Large[大数据亦抽样。]
 
 ---
 
@@ -271,9 +267,9 @@ class: center, middle
 
 随机抽样的代表性体现在一定的sample size上
 
---
+---
 
-### 简单随机抽样
+简单随机抽样
 
 ???
 
@@ -285,7 +281,7 @@ SHA算法和MD5
 
 --
 
-## （复杂）抽样设计
+复杂抽样
 
 ### 设计
 
@@ -297,7 +293,7 @@ SHA算法和MD5
 
 + 有限总体校正（finite population corrections, FPC）
 + 不相等的权重（unequal weights）
-    
+
 
 ---
 
@@ -316,7 +312,7 @@ Quota：成分配比够就行，不用随机
 
 ## 常见设计
 
-* Strata + Weight + FPC
+* Strata + Weight (+ FPC)
       + PSU/SSU/TSU
     
 ???
@@ -369,13 +365,14 @@ Post-DGP correction &amp;rarr; 把权重纳入分析
 
 ---
 
-## 应用实例
+## 应用
 
-[Behavioral Risk Factor Surveillance System (BRFSS) SMART](https://www.cdc.gov/brfss/smart/smart_2011.htm) county data by US Centers of Disease Control and Prevention (CDC)
+[Behavioral Risk Factor Surveillance System (BRFSS) ](https://www.cdc.gov/brfss/smart/smart_2011.htm) 
+.small[County data by US Centers of Disease Control and Prevention (CDC)]
 
 
 
-Set the survey conditions:
+Set the survey conditions
 
 
 ```r
@@ -396,6 +393,8 @@ des &lt;-
 
 ---
 
+Descriptive
+
 
 ```r
 library(questionr)
@@ -404,15 +403,9 @@ prop.table(wtd.table(brfss_11$badhealth, brfss_11$educ, weights = brfss_11$cntyw
 ```
 
 ```
-##        0Prim    1somehs
-## 0 0.54784913 0.69288237
-## 1 0.45215087 0.30711763
-##      2hsgrad   3somecol
-## 0 0.80457219 0.86034095
-## 1 0.19542781 0.13965905
-##     4colgrad
-## 0 0.92834751
-## 1 0.07165249
+##        0Prim    1somehs    2hsgrad   3somecol   4colgrad
+## 0 0.54784913 0.69288237 0.80457219 0.86034095 0.92834751
+## 1 0.45215087 0.30711763 0.19542781 0.13965905 0.07165249
 ```
 
 ```r
@@ -421,20 +414,14 @@ prop.table(table(brfss_11$badhealth, brfss_11$educ), margin=2)
 
 ```
 ##    
-##          0Prim    1somehs
-##   0 0.50102529 0.62285381
-##   1 0.49897471 0.37714619
-##    
-##        2hsgrad   3somecol
-##   0 0.76896442 0.82792701
-##   1 0.23103558 0.17207299
-##    
-##       4colgrad
-##   0 0.91397195
-##   1 0.08602805
+##          0Prim    1somehs    2hsgrad   3somecol   4colgrad
+##   0 0.50102529 0.62285381 0.76896442 0.82792701 0.91397195
+##   1 0.49897471 0.37714619 0.23103558 0.17207299 0.08602805
 ```
 
 ---
+
+Analysis
 
 
 ```r
@@ -533,7 +520,7 @@ class: center, middle
 
 期望
 
-Uncertainty
+不确定性
 
 ]
 
@@ -649,7 +636,7 @@ Tang, Wenfang, Yue Hu, and Shuai Jin. 2017. “Affirmative Inaction: Language Ed
 数据：
 
 1. 变量（variables）
-1. 观测层级
+1. 观测层级 (unit of analysis)
 1. 观测对象（observations）
 
 ---
@@ -660,41 +647,13 @@ Tidy version
 
 
 ```
-##                    mpg cyl disp
-## Mazda RX4         21.0   6  160
-## Mazda RX4 Wag     21.0   6  160
-## Datsun 710        22.8   4  108
-## Hornet 4 Drive    21.4   6  258
-## Hornet Sportabout 18.7   8  360
-## Valiant           18.1   6  225
-##                    hp drat
-## Mazda RX4         110 3.90
-## Mazda RX4 Wag     110 3.90
-## Datsun 710         93 3.85
-## Hornet 4 Drive    110 3.08
-## Hornet Sportabout 175 3.15
-## Valiant           105 2.76
-##                      wt  qsec
-## Mazda RX4         2.620 16.46
-## Mazda RX4 Wag     2.875 17.02
-## Datsun 710        2.320 18.61
-## Hornet 4 Drive    3.215 19.44
-## Hornet Sportabout 3.440 17.02
-## Valiant           3.460 20.22
-##                   vs am gear
-## Mazda RX4          0  1    4
-## Mazda RX4 Wag      0  1    4
-## Datsun 710         1  1    4
-## Hornet 4 Drive     1  0    3
-## Hornet Sportabout  0  0    3
-## Valiant            1  0    3
-##                   carb
-## Mazda RX4            4
-## Mazda RX4 Wag        4
-## Datsun 710           1
-## Hornet 4 Drive       1
-## Hornet Sportabout    2
-## Valiant              1
+##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
 ```
 
 .center[&lt;img src="images/stat_tidydata.png" height = 240 /&gt;]
@@ -757,20 +716,6 @@ e.g., WVS, CGSS, GSS, .navy[DCPO datasets]
 	+ 时间效应
 	+ 时间与特定人群的交互效应
 	
-	
----
-
-class: small
-
-Solt, Frederick, Yue Hu, et al. 2017. “Economic Inequality and Class Consciousness.” The Journal of Politics 79(3): 1079–83.
-
-.center[&lt;img src="images/stat_three_measures.png" height = 600/&gt;]
-
-???
-
-比较变化
-
-	
 ---
 
 ## 套路
@@ -799,6 +744,19 @@ Solt, Frederick, Yue Hu, et al. 2017. “Economic Inequality and Class Conscious
 ### Pooled
 
 .center[&lt;img src="images/stat_impressionOfUS_pool.png" height = 480/&gt;]
+
+---
+
+## 不按套路
+
+.small[Solt, Frederick, Yue Hu, et al. 2017. "Economic Inequality and Class Consciousness." *Journal of Politics* 79(3): 1079–83.]
+
+.center[&lt;img src="images/stat_three_measures.png" height = 450/&gt;]
+
+---
+
+.center[&lt;img src="images/stat_interaction1.jpg" height = 600/&gt;]
+
 
 ---
 

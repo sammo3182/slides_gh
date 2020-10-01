@@ -131,7 +131,7 @@ class: middle
 
 ### 研究步骤
 
-理论（一个想法）&rarr; 假设（一个判断）   
+理论（一个想法）&rarr; 假设（几个判断）   
 &rarr; 验证（一堆证据）
 
 --
@@ -161,7 +161,7 @@ class: middle
 
 ### 争论1
 
-<img src="images/stat_bookOfWhy.jpg" height = 300 />
+.center[<img src="images/stat_bookOfWhy.jpg" height = 300 />]
 
 ???
 
@@ -238,24 +238,20 @@ class: inverse, bottom
 
 ---
 
-class: inverse, bottom
 
 # 抽样与权重
 
----
-
-class: center, middle
-
-
-“每日1亿条”
+.center[
+“每日上亿条”
 
 “全网数据”
 
 “《人民日报》所有文章”
+]
 
 --
 
-.Large[大数据亦常抽样。]
+.Large[大数据亦抽样。]
 
 ---
 
@@ -267,9 +263,9 @@ class: center, middle
 
 随机抽样的代表性体现在一定的sample size上
 
---
+---
 
-### 简单随机抽样
+简单随机抽样
 
 ???
 
@@ -281,7 +277,7 @@ SHA算法和MD5
 
 --
 
-## （复杂）抽样设计
+复杂抽样
 
 ### 设计
 
@@ -293,7 +289,7 @@ SHA算法和MD5
 
 + 有限总体校正（finite population corrections, FPC）
 + 不相等的权重（unequal weights）
-    
+
 
 ---
 
@@ -312,7 +308,7 @@ Quota：成分配比够就行，不用随机
 
 ## 常见设计
 
-* Strata + Weight + FPC
+* Strata + Weight (+ FPC)
       + PSU/SSU/TSU
     
 ???
@@ -365,9 +361,10 @@ Post-DGP correction &rarr; 把权重纳入分析
 
 ---
 
-## 应用实例
+## 应用
 
-[Behavioral Risk Factor Surveillance System (BRFSS) SMART](https://www.cdc.gov/brfss/smart/smart_2011.htm) county data by US Centers of Disease Control and Prevention (CDC)
+[Behavioral Risk Factor Surveillance System (BRFSS) ](https://www.cdc.gov/brfss/smart/smart_2011.htm) 
+.small[County data by US Centers of Disease Control and Prevention (CDC)]
 
 ```{r survey-example, include=FALSE, eval=FALSE}
 brfss_11 <- Hmisc::sasxport.get("D:/Desktop/CNTY2011.xpt")
@@ -436,7 +433,7 @@ brfss_11 <- select(brfss_11, badhealth, black, white, other, hispanic, ins, inc,
 saveRDS(brfss_11, "brfss_11.Rds")
 ```
 
-Set the survey conditions:
+Set the survey conditions
 
 ```{r survey-analysis, message=FALSE, warning=FALSE}
 brfss_11 <- readRDS("data/brfss_11.Rds")
@@ -456,6 +453,8 @@ des <-
 
 ---
 
+Descriptive
+
 ```{r descriptive, message=FALSE, warning=FALSE}
 library(questionr)
 
@@ -465,6 +464,8 @@ prop.table(table(brfss_11$badhealth, brfss_11$educ), margin=2)
 ```
 
 ---
+
+Analysis
 
 ```{r survey-ols, message=FALSE, warning=FALSE}
 raw<-lm(bmi~educ+agec, data=brfss_11)
@@ -566,7 +567,7 @@ class: center, middle
 
 期望
 
-Uncertainty
+不确定性
 
 ]
 
@@ -682,7 +683,7 @@ Tang, Wenfang, Yue Hu, and Shuai Jin. 2017. “Affirmative Inaction: Language Ed
 数据：
 
 1. 变量（variables）
-1. 观测层级
+1. 观测层级 (unit of analysis)
 1. 观测对象（observations）
 
 ---
@@ -755,20 +756,6 @@ e.g., WVS, CGSS, GSS, .navy[DCPO datasets]
 	+ 时间效应
 	+ 时间与特定人群的交互效应
 	
-	
----
-
-class: small
-
-Solt, Frederick, Yue Hu, et al. 2017. “Economic Inequality and Class Consciousness.” The Journal of Politics 79(3): 1079–83.
-
-.center[<img src="images/stat_three_measures.png" height = 600/>]
-
-???
-
-比较变化
-
-	
 ---
 
 ## 套路
@@ -797,6 +784,19 @@ Solt, Frederick, Yue Hu, et al. 2017. “Economic Inequality and Class Conscious
 ### Pooled
 
 .center[<img src="images/stat_impressionOfUS_pool.png" height = 480/>]
+
+---
+
+## 不按套路
+
+.small[Solt, Frederick, Yue Hu, et al. 2017. "Economic Inequality and Class Consciousness." *Journal of Politics* 79(3): 1079–83.]
+
+.center[<img src="images/stat_three_measures.png" height = 450/>]
+
+---
+
+.center[<img src="images/stat_interaction1.jpg" height = 600/>]
+
 
 ---
 
