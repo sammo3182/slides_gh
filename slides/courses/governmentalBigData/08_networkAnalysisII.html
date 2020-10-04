@@ -215,9 +215,84 @@ k-cors &amp;rarr; factions &amp;rarr; modularity
 
 ## K-Core Collapse
 
+The k-core of a network graph G is the maximal subgraph H &amp;sube; G, such that
+
+.center[&lt;img src="images/sna_kcore.png" height = 300 /&gt;]
+
 ???
 
 https://www.youtube.com/watch?v=rHVrgbc_3JA
+
+&lt;img src="images/sna_kcoreSolution.png" height = 300 /&gt;
+
+每个人都与其他若干人相连
+
+---
+
+## Faction
+
+理想状态：
+
+&gt; 邻国相望，鸡犬之声相闻，民至老死，不相往来 ——《老子·第八十》
+
+组内紧密连结，无跨组连结。
+
+--
+
+.center[&lt;img src="images/sna_faction.png" height = 300 /&gt;]
+
+---
+
+## 寻找Factions算法
+
+### 目的
+
+Arranging actors to resemble the ideal as closely as possible.
+
+--
+
+### 步骤
+
+1. Partition
+1. Evaluation
+1. Moving
+1. Evaluation, again
+1. Repeat
+
+???
+
++ Partition the network
++ Evaluate how good the partition is
++ Move some actors from one group to another
++ See if there’s improvement
++ Keep repeating the above steps until further improvement is impossible
+
+---
+
+## 寻找社群
+
+Faction method? 
+
+???
+
+heuristic method, 但难以进行并行运算
+
+--
+
+潜在解法: Hierarchical clustering
+
+---
+
+## Hierarchical Clustering
+
+Agglomerative method
+
+.center[&lt;img src="images/sna_agglomerative.bmp" height = 300 /&gt;]
+
+???
+
+Agglomerative 基于 a wide variety of similarity measures，从empty graph （没有任何ties）开始，将最similar的nodes加在一起
+
 
 ---
 
@@ -244,10 +319,10 @@ https://www.youtube.com/watch?v=rHVrgbc_3JA
 由一点到其他点paths越多可达性越高
 
 ---
+
 ## 最小内聚性与强内聚力
 
 .center[&lt;img src="images/sna_minimalCohesion.png" height = 300 /&gt;]
-
 
 .pull-left[
 .small[
@@ -274,6 +349,68 @@ https://www.youtube.com/watch?v=rHVrgbc_3JA
 ???
 
 Minimal cohesion: without that node, the network will break apart
+
+---
+
+## 回到社群
+
+寻找社群方法：
+
+Agglomerative method
+
+???
+
+可能丢失弱连结vertices
+
+--
+
+Divisive method
+
+.center[&lt;img src="images/sna_divisive.bmp" height = 300 /&gt;]
+
+
+???
+
+Divisive 从complete graph 开始， dedrogram横切二分点）（halting points）
+
+---
+
+## Agglomerative vs. Divisive
+
+.center[&lt;img src="images/sna_agglomerativeDivisive.bmp" height = 400 /&gt;]
+
+???
+
+A善于发现强连结community， D不会地区除peripheral vertices
+
+---
+
+## 社群到社会
+
+&amp;zwj;Modularity: 比起.navy[辨别]出社群，更关注一个社会是否由若干个社群.red[组成]。
+
+.center[&lt;img src="images/sna_moduality.png" height = 400 /&gt;]
+
+---
+
+## 应用：语言与身份认同
+
+Tamburrini et al 2015
+
+.center[&lt;img src="images/sna_languageIdentity.png" height = 450 /&gt;]
+
+???
+
+Tamburrini, Nadine, Marco Cinnirella, Vincent A. A. Jansen, and John Bryden. 2015. “Twitter Users Change Word Usage According to Conversation-Partner Social Identity.” Social Networks 40: 84–89.
+
+modula-rity maximisation algorithm
+
+word-usage frequencies (solid bars at the top of eachplot),   
+word-ending frequencies (slashed bars in the middle)    
+apostrophe usage (crossed bars at the bottom).
+
+1. 人们根据自己的community改变语言特征
+1. communities越独立，语言特征越明显
 
 ---
 
