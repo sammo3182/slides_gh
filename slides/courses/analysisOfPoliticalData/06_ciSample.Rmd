@@ -7,10 +7,10 @@ institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
@@ -35,88 +35,124 @@ p_load(
 set.seed(114)
 ```
 
+---
+
+## Overview
+
+1. Sample properties & CI
+1. Sample comparison with CI
+    + With "nothing happens"
+    + With another sample
+1. Hypothesis testing with CI
+
+---
+
 class: inverse, bottom
 
 # Confidence Intervals
 
 ---
 
-class: small
-
 ## Sample Properties
 
-### Finite-sample properties
+1. Finite sample
+1. Large sample
 
-* Unbiased estimators: produce the right answer on coverage.
-    + How to reduce bias? 
-        1. Randomization;
-        2. Weight.
+---
 
-* Efficiency: smaller variance of .magenta[unbiased estimators]
+## Finite-Sample Properties
+
++ Unbiasedness: Produce the right answer on coverage.
+
+???
+
++ How to reduce bias? 
+    1. Randomization;
+    2. Weight.
+
+--
+
++ Efficiency: smaller variance of .magenta[unbiased estimators]
     + How to increase efficiency? $SE = \frac{\sigma}{\sqrt{n}}$
     
-Hint: mean is 1.57 times more efficient than median for a standard normal
+???
+
+Mean is 1.57 times more efficient than median for a standard normal
     
 ---
 
-### Large-sample properties
+.pull-left[
+.gray[
 
-+ Finite-sample properties properties (unbiasedness + efficiency) holds irrespective of the size of the sample
-+ "Large-sample" properties are asymptotic. 
+.small[Finite-Sample Properties]
 
----
+1. Unbiasedness
+1. Efficiency
 
-## Convergence
+]
 
-When a sequence of random variables stabilizes to a certain probabilistic behavior as n &rarr; &infin; , the sequence is said to show stochastic convergence
 
-$p\lim_{n \to \infty}X_n = a, a\in R.$
+## Large-Sample Properties
 
----
+1. Convergence
+1. Consistency
+]
 
-### Two types of meanings
-
-1. Convergence in .magenta[probability]: values in the sequence eventually take a constant value (i.e. the limiting distribution is a point mass).
-
-1. Convergence in .magenta[distribution]: values in the sequence continue to vary, but the variation eventually comes to follow an unchanging distribution (i.e. the limiting distribution is a well characterized distribution)
-
----
-
-## Consistency: 
-
-An estimator $\theta_n$ is consistent if the sequence $\theta_1\cdots\theta_n$ converges in probability to the true parameter value $\theta$ as sample size n grows to infinity:
-
-$p\lim_{n \to \infty}\theta_n = \theta.$
-
-* Often seen as a minimal requirement for estimators
-* A consistent estimator may still perform badly in small samples
+.pull-right[
+.Large[.red[Not mutually exclusive!]]
+]
 
 ---
 
-### Does Unbiasedness Imply Consistency?
+## Convergence<sup><img src="images/fsmrof.png" height="20"/><sup>
+
+.center[<img src="images/convergence.gif" height = 300 />]
+
+When a sequence of random variables stabilizes to a certain probabilistic behavior as n &rarr; &infin; , the sequence is said to show stochastic convergence.
+
+$$p\lim_{n \to \infty}X_n = a, a\in R.$$
+
+???
+
+*Two Views of Convergence*
+
+1. Convergence in .navy[probability]: Values in the sequence eventually take a .red[constant value] (i.e. the limiting distribution is a point mass).
+
+1. Convergence in .navy[distribution]: Values in the sequence continue to vary, but the variation eventually comes to follow an .red[unchanging distribution] (i.e. the limiting distribution is a well characterized distribution)
+
+---
+
+## Consistency<sup><img src="images/fsmrof.png" height="20"/><sup>
+
+An estimator q<sub>n</sub> is consistent if the sequence q<sub>1</sub>...q<sub>n</sub> converges in probability to the true parameter value &theta; as sample size n grows to infinity:
+
+$$p\lim_{n \to \infty}\hat{\theta}_n = \theta.$$
 
 --
 
-No, e.g., An estimator can be unbiased but not consistent. For example, for an IID sample {x_
-1,..., x_n} one can use $T_n(X) = x_n$ as the estimator of the mean E[x]. 
-$E[T_n(X)] = E[x]$ and it is unbiased, but it does not converge to any value.
+* .red[Minimal] requirement for estimators
+* May perform .red[badly] in small samples
 
 --
 
-Only if a sequence of estimators is unbiased and converges to a value, then it is consistent, as it must converge to the correct value.
++ Only if a sequence of estimators is unbiased and converges to a value, then it is consistent, as it must converge to the correct value.
 
----
+???
 
-### Does Consistency Imply Unbiasedness?
+*Does Unbiasedness Imply Consistency?*
+
+
+Say we want to estimate the mean of a population. While the most used estimator is the average of the sample, another possible estimator is simply the first number drawn from the sample. This estimator is unbiased, because  E(X1)=μ  due to the random sampling of the first number. Yet the estimator is not consistent, because as the sample size increases, the variance of the estimator does not reduce to 0. Rather it stays constant, since  Var(X1)=&sigma;2 , which the population variance, again due to the random sampling. The additional information of an increasing sample size is simply not accounted for in this estimator.
+
+Appendix C of Introductory Econometrics by Jeffrey Wooldridge
+
+
+
+*Does Consistency Imply Unbiasedness?*
 
 No, e.g., if the mean is estimated by ${1 \over n}\sum x_{i}+{1 \over n}$ it is biased, but as $n\rightarrow \infty$, it approaches the correct value, and so it is consistent.
 
---
-
 Another example?
-
-
-???
 
 w.o., Bressel's correction
 
@@ -127,78 +163,78 @@ s^2 =& \sum(pX - \bar X)^2p(x) \\
 
 ---
 
-class: small
+## C I
 
-## What's CI
+Given the Large-Sample Properties,
 
-CI Frequentist: 
+### Frequentist "CI"
 
 * Confidence Intervals 
-* In a repeatedly sampling, the percentage of the samples that could contain $\mu$. 
-* .magenta[Narrative]: "In 100 times sampling of ..., there are ... samples that the CI could contain the true value."
+* In a .red[repeatedly] sampling, the percentage of the samples that could .navy[contain] &mu;
 
-CI for Bayesian:
+
+### Bayesian "CI"
 
 * Credible intervals
-* Some percentage of the posterior distribution lies within an particular region.
-* .magenta[Narrative]: "There are ...% of the chance that the true value lies in the CI."
+* Some percentage of the .red[posterior] distribution lies .navy[within] an particular region.
 
 ---
 
-### Focusing on the confidential intervals for now
+## The Correct Narratives of CI
 
-+ Proportion: $\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}$
-+ Mean: $\mu = \bar X \pm Z_{\alpha/2}SE$
-+ $\alpha$: 1 - confidence level
+### Frequentist
+
+"In 100 times sampling of ..., there are ... samples that the CI could contain the true value."
+
+### Bayesian
+
+.gray["There are ...% of the chance that the true value lies in the CI."]
+
+---
+
+### CI Calculation
+
++ Mean: $\mu = \bar X \pm Z_{\alpha/2}SE$<sup>1</sup>
+    + Proportion: $\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}$
+
+.footnote[&alpha;: 1 - confidence level]
 
 --
 
-How to get smaller CI? 
-
+.center[Q: How to get smaller CI? ]
 
 ???
 
 1. Large N
-1. Large $\alpha$
+1. Large &alpha;
 
----
+--
 
-## Why 95% CI
-
-```{r ci}
-
-funcShaded <- function(x) {
-    y <- dnorm(x, mean = 0, sd = 1)
-    y[x < 0 - 2 | x > (0 + 2)] <- NA
-    return(y)
-}
-
-ggplot(data = data.frame(x = c(-4, 4)), aes(x = x)) +
-  stat_function(fun = dnorm, n = 1000, args = list(mean = 0, sd = 1)) +
-  stat_function(fun=funcShaded, geom="area", fill="#84CA72", alpha=0.2) +
-  ylab("") + xlab("")
-
-```
+.center[Q: Why Z-score?]
 
 ???
 
-.red[Arbitrary!!!]
+See next page
 
 ---
 
-class: inverse, bottom
+## Why CI: Comparing to the Same Ruler
 
-# Sample Comparison
+The ruler: Standard Normal distribution (Z-score)
+
++ Is the sample different from the ruler? (What's that?)
+
+???
+
+hypothesis test
+
+--
+
++ Is sample A different from Sample B in the scale of the ruler
 
 ---
 
-## Student's t:
-
-First derived as a posterior distribution in 1876 by Helmert and Lüroth.
-
-Symmetric: $\mu = 0$
-
----
+## When Not That Normal
 
 Fatter tails
 
@@ -213,6 +249,10 @@ ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
 
 ???
 
+Small N
+
+First derived as a posterior distribution in 1876 by Helmert and Lüroth.
+
 William Gosset published in English in 1908, used the pseudonym "student." Fisher called it the "student distribution"
 
 ---
@@ -221,61 +261,60 @@ William Gosset published in English in 1908, used the pseudonym "student." Fishe
 
 T critical points are relative to d.f.
 
-+ For s.d.: n - 1
 + For CI: n - 1
 + For regression: n - k - 1
 
-
 ---
 
-E.g., For nine cars, the mean mileage per gallon is 29.5 and standard deviation is 3. 
-Is the estimation of 31 for the mileage is likely, in terms of the 95% CI for the sample's mileage?
-
-d.f. = 9 - 1 = 8, therefore $t(\alpha < .975) =$ `r qt(.975, df = 8)`
-
-
-then CI = $29.5 \pm t_{\frac{\alpha}{2}}(\frac{3}{\sqrt{9}})$, i.e, [27.5, 31.8].
-
---
-
-.magenta[Narrative]: If we make repeated sampling from these cars, there are 95% of the samples in which the interval between 27.5 and 31.8 contains the true mean of the car mileage.
-
----
-
-## Z and T Tables
-
-.center[<img src="images/ztable.jpg" height = 1200 />]
-
----
-
-.center[<img src="images/ttable.jpg" height = 550 />]
-
----
-
-## Summary
+## Application
 
 + For mean
-    + $\sigma$ known, $\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}$
-    + $\sigma$ unknown
-        + $N \geq 100$, $\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}$
-        + $N < 100$, $\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}$
+    + &sigma; known, $\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}$
+    + &sigma; unknown
+        + $N \geq 100ish$, $\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}$
+        + $N < 100ish$, $\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}$
         
 --
 
 + For proportion
-    + $\pi$ known, $\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$
-    + $\pi$ unknown, calculate the proportion
+    + &pi; known, $\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$
+    + &pi; unknown, $\Pi = P \pm t_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$
 
 ---
 
-class: small
+E.g., For nine cars, the mean mileage per gallon is 29.5 and standard deviation is 3. Is the estimation of 31 for the mileage is reasonable?
 
-### Difference in means of independent samples
+--
 
-* $\sigma$ is known, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1}{n_1} + \frac{\sigma_2}{n_2}}$.
-* $\sigma$ is unknown, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$
+d.f. = 9 - 1 = 8, therefore $t(\alpha < .975) =$ `r qt(.975, df = 8)`
+
+Then CI = $29.5 \pm t_{\frac{\alpha}{2}}(\frac{3}{\sqrt{9}})$, i.e, [27.5, 31.8].
+
+--
+
+.red[Narrative]: If we make repeated sampling from these cars, there are 95% of the samples in which the interval between 27.5 and 31.8 contains the true mean of the car mileage.
+
+In terms of this, an estimation of 31 sounds fine.
+
+
+---
+
+## Sample Comparison
+
+1. Independent samples
+1. Matched samples
+
+
+---
+
+## Difference in Means 
+
+### Independent sample
+
+* &sigma; is known, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1}{n_1} + \frac{\sigma_2}{n_2}}$.
+* &sigma; is unknown, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$
    + Assuming the population have the same variance $\sigma_1 = \sigma_2$, where $S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 + \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}$
-   + d.f. is $(n_1 - 1) + (n_2 - 1)$.
+   + d.f.: $(n_1 - 1) + (n_2 - 1)$.
 
 ---
 
@@ -295,19 +334,37 @@ S_p^2 =& \frac{398 + 186}{(4 - 1) + (3 - 1)} = 116.5\\
 
 --
 
+.red[Narrative]: If we make repeated sampling from these scores, there are 95% of the samples in which the interval between -7 and 35 contains the true mean of the scores.
+
 The 95% CI shows that there's no statistical difference between the means.
-
----
-
-### Difference in means of matched samples
-
-* Matched samples: $D = X_1 - X_2$, then $\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}$, where $S_D = \frac{\sum(D - \bar D)^2}{n - 1}$. 
 
 ---
 
 class: small
 
-E.g., Four students first conducted an examination and went through a review section. Then, they took the examinations again. The scores are shown following. Did they get better after the review?
+## Difference in Means 
+
+### Independent sample
+
+$\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$, where $S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 + \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}$
+
+### Matched samples
+
+$D = X_1 - X_2$, then $\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}$, where $S_D = \frac{\sum(D - \bar D)^2}{n - 1}$. 
+
+### Matched proportions (large samples)
+
+$D = \Pi_1 - \Pi_2$ ,then $\Delta = D \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$
+
+???
+
+Why using a different method for matched samples? Not IID for individuals, but might for the difference
+
+---
+
+class: small
+
+E.g., Four students first conducted an examination and went through a review section. Then, .red[they took the examinations again]. The scores are shown following. Did they get better after the review?
 
 | Student 	| Amy 	| Bill 	| Becky 	| Mark 	|
 |---------	|-----	|------	|-------	|------	|
@@ -322,15 +379,9 @@ S_D^2 =& 46 / 3 = 15.3 \Rightarrow S_D = 3.9\\
 
 --
 
+.red[Narrative]: If we make repeated sampling from these students, there are 95% of the samples in which the interval between 5 and 17 contains the true mean of the difference.
+
 Students did get better.
-
----
-
-class: small
-
-### Comparing Proportion for large sample
-
-$$\Pi_1 - \Pi_2 = P_1 - P_2 \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$$
 
 ---
 
@@ -344,7 +395,11 @@ E.g., Gallop drew a pair of 1500 samples from the American population. In the sa
 
 --
 
-Thus, the proportion of Democrats decreased in 1984.
+.small[
+.red[Narrative]: If we make repeated sampling from the Amercian population, there are 95% of the samples in which the interval between 0.024 and 0.096 contains the true mean.
+
+Thus, the proportion of Democrats did decrease in 1985.
+]
 
 ---
 
@@ -352,43 +407,22 @@ class: small
 
 ## Hypothesis Testing with CIs 
 
-### Two ways: 
+Two ways: 
 
 * Using confidence intervals
 * Using critical t/z scores & p-value.
 
---
+---
 
-### Element: 
+## Procedure
 
-1. Null hypothesis: $H_0$ specifies values for one or more population parameter ( $\mu, \pi$ rather than $\bar X, P$ )
+1. H<sub>0</sub>: Specifying values for one or more population parameters in a random distribution (&mu;, &pi; rather than $\bar X, P$ )
 
-2. Alternative hypothesis: $H_1$ the population parameter is something other than the value in H.
+2. H<sub>1</sub>: the population parameter is something other than the value in the stochastic status.
 
 3. $\alpha = 1 - CI$
 
 4. One-tailed/two-tailed test: Most applications are one-tail tests, while most software gives two-tail results
-
---
-
-Substantive vs. statistical significance?
-
----
-
-class: small
-
-## Types of Errors
-
-| Decision 	| Accept                   	| Reject                   	|
-|----------	|--------------------------	|--------------------------	|
-| $H_0$ TRUE  	| P = 1 - $\alpha$            	| Type I error (P = $\alpha$) 	|
-| $H_0$ FALSE 	| Type II error (P = $\beta$) 	| P = 1 - $\beta$             	|
-
-Hint: $\beta$ is the power of the test.
-
-???
-
-Avoiding Type I is more emergent.
 
 ---
 
@@ -407,3 +441,86 @@ Given the level of $\alpha = 0.05$, therefore reject the $H_0.$
 Method 2: 
 
 $\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,$ that is [0.11, 0.17], which does not cover .1, so reject $H_0.$
+
+---
+
+## Wrap Up
+
+.pull-left[
+### Sample properties
+
+Unbiasedness, efficiency, convergence, consistency
+
+### Comparision
+
+1. With the ruler
+    + $\mu = \bar X \pm Z_{\alpha/2}SE$
+    + t score
+1. Sample comparison
+    + $\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}$
+]
+
+.pull-right[
+### Hypothesis testing
+
+1. CI approach
+1. Critical-value approach
+]
+---
+
+class: inverse, bottom
+
+# Bonus: Think Deeper as a Social Scientist
+
+---
+
+## Types of Errors
+
+.center[<img src="images/erroType.png" height = 500 />]
+
+???
+
+Type I: 无中生有
+Type II: 闪
+
+---
+
+
+| Decision 	| Reject                   	|  .red[Fall to] Reject                  	|
+|----------	|--------------------------	|--------------------------	|
+| H<sub>0</sub> TRUE  	| Type I error (Pr = &alpha;)            	| Pr = 1 - &alpha; 	|
+| H<sub>0</sub> FALSE 	| P = 1 - &beta; 	|  Type II error (Pr = &beta;)            	|
+
+
+???
+
+&beta; is the power of the test.
+
+Avoiding Type I is more emergent.
+
+--
+
+.center[Substantive vs. statistical significance?]
+
+---
+
+## 95% CI, But Why?
+
+```{r ci, fig.align='center'}
+
+funcShaded <- function(x) {
+    y <- dnorm(x, mean = 0, sd = 1)
+    y[x < 0 - 2 | x > (0 + 2)] <- NA
+    return(y)
+}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm, n = 1000, args = list(mean = 0, sd = 1)) +
+  stat_function(fun=funcShaded, geom="area", fill="#84CA72", alpha=0.2) +
+  ylab("") + xlab("")
+
+```
+
+???
+
+.red[Arbitrary!!!]
