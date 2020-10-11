@@ -33,19 +33,17 @@ p_load("ltm", "mirt",
        "latex2exp", "tidyverse")
 
 set.seed(313)
+
+theme_set(theme_minimal())
 ```
 
----
-
 ## 内容概要
-
-.gray[
 ### 因素分析(Factorial Models)
 
-1. 探索性影子分析(EFA)
-1. 验证性因果分析(CFA)
-1. 结构方程模型(SEM)
-]
+1. .gray[探索性影子分析(EFA)]
+1. .gray[验证性因果分析(CFA)]
+1. .gray[结构方程模型(SEM)]
+
 
 ### 类型分析(Typological Models)
 
@@ -67,7 +65,7 @@ set.seed(313)
 
 ## 项目反应理论 (Item Response Theory, IRT)
 
-因子分析怎么了？
+因子分析不香么？
 
 --
 
@@ -75,7 +73,7 @@ set.seed(313)
 1. 对于指标不区分变量类型；
 1. 难以捕捉群组差异
 1. EFA无法囊括指标间关系;
-1. CFA面临简略理论vs测量质量的矛盾
+1. CFA面临“简略理论vs测量质量”的矛盾
 
 ???
 
@@ -83,17 +81,18 @@ CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；�
 
 ---
 
-IRT优势
+## IRT优势
 
-1. 天生为.magenta[二元]指标设计（衍生适应定序变量）；
-1. 易于与Bayesian inference结合，解决.magenta[潜在变量scale]不确定问题；
-1. 在Bayesian框架下更好解决.magenta[缺失值和“Don't Know”]问题。
+1. 天生为.navy[二元]指标设计（衍生适应定序变量和连续变量）；
+1. 易与Bayesian inference结合，解决.navy[潜在变量scale]不确定问题；
+1. 在Bayesian框架下更好解决.navy[缺失值和“Don't Know”]问题；
+1. 易与跨群组估计结合，实现指标.red[跨组可比]
 
 ---
 
 ## 个人层级IRT
 
-应用场景举例：社会调查
+应用范围：社会调查
 
 调查问题：
 
@@ -114,25 +113,33 @@ IRT优势
 
 ## Monotonicity
 
-单增趋势：随潜在变量增加，获得1的可能性也随之增加
+单增趋势：随潜在变量增加，获得1的可能性也随之增加。
+
+.center[<img src="images/irt_icc.png" height = 400 />]
+
+???
+
+Item characteristic curve
+
+比如随着能力的提高，回答正确答案的机会也就越高
 
 ---
 
 ## Unidimensionality
 
-聚合的项目均指向同一个潜在变量。  
-基于理论  
++ 聚合的项目均指向同一个潜在变量。  
++ 基于理论  
 
 --
 
 直到引入multidimensional IRT  
-(后有说到哦！)
+
 
 ---
 
 ## Local Independency
 
-对于每一项目（e.g.,一道题）的响应(e.g., 选择的选项)间的关联性.magenta[只]来自.magenta[共同]的潜在变量。
+对于每一项目（e.g.,一道题）的响应(e.g., 选择的选项)间的关联性.red[只]来自.red[共同]的潜在变量。
 
 --
 
@@ -145,19 +152,34 @@ P(y<sub>iq</sub>,y<sub>i'q</sub> | &theta;<sub>q</sub>) = P(y<sub>iq</sub> | &th
 ## Parameter Invarance
 
 + Parameters在项目间不变
-+ Parameters在响应人群间不变
++ Parameters在响应人群间不变<sup>1</sup>
     + 当进行Multiple Group IRT时尤可能被违反
-    + 通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF)
+
+.footnote[<sup>1</sup> 通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF).]
+
+---
+
+## Modeling Latent Variables
+
+Rasch Model (1PL)     
+&rarr; Two-Parameter Logistic Model (2PL)     
+&rarr; Three-Parameter Logistic Model (3PL)     
+&rarr; Four-Parameter Logistic Model (4PL)
+
+
+
+Group IRT
 
 ---
 
 ## Rasch Model (1PL)
 
-.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(&theta;<sub>i</sub> - .magenta[&sigma;<sub>q</sub>])]
 
 + y<sub>iq</sub>&isin;{0,1}: subject `i`'s score on question `q`
 + &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Unbounded latent trait
 + &sigma;<sub>q</sub>: Difficulty
+
+.center[.orange[Pr(y<sub>iq</sub> = 1)] = .navy[logist<sup>-1</sup>(&theta;<sub>i</sub> - .red[&sigma;<sub>q</sub>])]]
 
 
 ???
@@ -168,11 +190,7 @@ Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示
 + 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
 + 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
 
----
-
-## Rasch Model (1PL)
-
-$${\color{orange}{\frac{Pr(y_{iq} = 1|\theta_i)}{1 - Pr(y_{iq} = 1|\theta_i)}}} = logist^{-1} {\color{CornflowerBlue}{(\theta_i - \delta_q)}}$$
+--
 
 .left-column[
 .orange[Item Response]
@@ -190,7 +208,7 @@ Law School Admissions Test, sec 7
 
 ```{r data-verbal}
 df_lsat <- expand.table(LSAT7)
-df_lsat
+df_lsat %>% kable(format = "html")
 ```
 
 ???
@@ -201,14 +219,27 @@ df_lsat
 
 ## Difficulty Parameter
 
-```{r rasch-difficulty}
+```{r rasch-difficulty, echo=TRUE}
 m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
-coef(m_lsat, simplify = TRUE)
+coef(m_lsat, simplify = TRUE) %>% 
+  kable(format = "html")
 ```
 
 ---
 
-## 成了吗? Item Characteristic Curves
+class: center, middle
+
+.Large[Please always diagnose your results,]
+
+--
+
+.Large[and .red[understand] what you are diagnosing.]
+
+.pull-right[--- Dr. Yue Hu]
+
+---
+
+## Item Characteristic Curves （ICC）
 
 ```{r icc, fig.height=8, fig.width=10}
 plot(m_lsat, type = "trace", facet_items = FALSE)
@@ -220,7 +251,7 @@ plot(m_lsat, type = "trace", facet_items = FALSE)
 
 ---
 
-## 成了吗？Test Charactersitic Curve
+## Test Charactersitic Curve
 
 ```{r tcc, fig.height=8, fig.width=10}
 plot(m_lsat, type = "infoSE")
@@ -234,8 +265,6 @@ SE(&theta;) = (test)<sup>-1/2</sup>
 
 ---
 
-## Two-Parameter Logistic Model (2PL IRT)
-
 Rasch局限：Measurement error
 
 ???
@@ -244,11 +273,11 @@ Rasch局限：Measurement error
 
 --
 
-### Solution: Parameter of dispersion
+## Two-Parameter Logistic Model (2PL IRT)
 
-.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(.magenta[&kappa;<sub>q</sub>]&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
+.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(.red[&kappa;<sub>q</sub>]&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
 
-&kappa;<sub>q</sub>: Discrimination
+&kappa;<sub>q</sub>: Discrimination (Parameter of dispersion)
 
 ???
 
@@ -256,11 +285,11 @@ Discrimination: how well a question can different people from below to above;
 
 Rule of thumb above 1 meaning a good question in terms of examination
 
----
+--
 
 另一种常见写法
 
-$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{magenta}{\beta_q}}}{\color{magenta}{\alpha_q}}]$$
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{red}{\beta_q}}}{\color{red}{\alpha_q}}]$$
 
 
 &beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold("difficulty", 控制location)  
@@ -379,7 +408,7 @@ tibble(
 
 ---
 
-```{r ltm}
+```{r ltm, echo=TRUE}
 m_lsat2PL <-  mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
 coef(m_lsat2PL, simplify = TRUE)
 ```
@@ -391,46 +420,44 @@ coef(m_lsat2PL, simplify = TRUE)
 Likelihood-Ratio Test
 
 ```{r llr}
-anova(m_lsat, m_lsat2PL)
+anova(m_lsat, m_lsat2PL) %>%  
+  select(AIC, SABIC, HQ, logLik, df, p) %>% 
+  kable(format = "html")
 ```
 
 ---
 
 class: Small
 
-## Three-Parameter Logistic Model (3PL)
-
 如果有人全凭猜咋办？——大量低&theta;人群
 
-$$Pr(y_{iq} = 1) = \color{magenta}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
-
-c<sub>i</sub>：Item .magenta[lower] asymptote ("guessing")
-
 --
+
+## Three-Parameter Logistic Model (3PL)
+
+$$Pr(y_{iq} = 1) = \color{red}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+c<sub>i</sub>：Item .red[lower] asymptote ("guessing")
 
 极大增加演算成本&rarr;通常需要1000以上观测点
 
 ---
 
-class: Small
+如果有人不care咋办
 
 ## Four-Parameter Logistic Model (4PL)
 
-如果有人不care咋办
+$$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
 
-$$Pr(y_{iq} = 1) = c_i + (\color{magenta}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
-
-c<sub>i</sub>：Item lower asymptote ("guessing")  
-d<sub>i</sub>：Item .magenta[upper] asymptote ("carelessness")
+d<sub>i</sub>：Item .red[upper] asymptote ("carelessness"), d < 1
 
 --
 
-d < 1  
 鉴于3PL已经需要1000-ish观测点……
 
 ---
 
-## 成了吗？专项测试
+## IRT 统计检验
 
 + 测试层：Global fit
 + 项目层：Item fit & residual
@@ -450,20 +477,24 @@ r: 做出特定反应的人数
 
 当数据过于稀疏时(item > 10)，M2, M2* 
 
+```{r diagnostics-overall, echo=TRUE}
+M2(m_lsat)
+```
+
+
 .footnote[
 [1] RMSEA, SRMSR, CFI, TLI对于IRT同样使用
 ]
 
 ???
+
 N is the number of subjects, L is number of possible response patterns, $P_ l$ is the estimated probability of observing response pattern l, and $r_ l$ is the number of subjects who have response pattern l
 
----
-
-
-```{r diagnostics-overall}
-m_lsat
-M2(m_lsat)
-```
+&chi; sig   
+Tucker-lewis index, 1 ideal, < .95 poor   
+Comparative fit index, the same   
+Root mean square error of approximation, 0 perfect, <.05 good, [.05, .08] ok, > .1 poor    
+Standardized root mean square residual <.08 acceptable
 
 ---
 
@@ -471,7 +502,7 @@ M2(m_lsat)
 
 Covariation-based residuals
 
-```{r diagnostics-residual}
+```{r diagnostics-residual, echo=TRUE}
 residuals(m_lsat)
 ```
 
@@ -484,13 +515,12 @@ infit/outfit, close to 1 is good
 
 Single item/person fit 
 
-Item
-```{r item-infit}
+```{r item-infit, echo=TRUE}
 # Item 
 itemfit(m_lsat, fit_stats = "infit")
 ```
 
-```{r personfit}
+```{r personfit, echo=TRUE}
 # Person
 personfit(m_lsat)
 ```
@@ -506,8 +536,8 @@ Z<sub>h</sub> > 0 better
 
 1. 通过S-&chi;<sup>2</sup>、local dependency等检查观测和估计数值差别
 1. 改变model type, 比如2PL &rarr; 3PL
-1. 如果最初用binary，尝试polytomous或者nomial response models
-1. 尝试non-parametric smoothing techinques
+1. 如果最初用binary，尝试polytomous或者nominal response models
+1. 尝试non-parametric smoothing techniques
 
 ---
 
@@ -739,8 +769,6 @@ tb_compare %>%
 
 ---
 
-## 聚合层级IRT：DGIRT
-
 MrP: 依然是算术平均数。
 
 + 答题难度的地区差异
@@ -749,7 +777,9 @@ MrP: 依然是算术平均数。
 
 --
 
-Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey & Warshaw 2015)
+## 聚合层级IRT：DGIRT
+
+Dynamic Group-level IRT——结合IRT和MrP (Caughey & Warshaw 2015)
 
 ---
 
@@ -762,7 +792,7 @@ Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey & Warshaw 2015)
 
 ---
 
-class: Small
+class: small
 
 ## IRT的群组层级估测
 
@@ -774,7 +804,7 @@ $$p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$
 
 群组
 
-$$\eta_{ktq} = logit^{-1}(\frac{\color{magenta}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{magenta}{(1.7\sigma_{kt})^2}}}).$$
+$$\eta_{ktq} = logit^{-1}(\frac{\color{red}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{red}{(1.7\sigma_{kt})^2}}}).$$
 
 $\bar{\theta}_k$ 和 &sigma;<sub>kt</sub> 是潜在变量在组k时间t的均值和sd。  
 
@@ -792,9 +822,9 @@ Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of
 
 $$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})$$
 
-.center[&xi;<sub>t</sub> ~ N(&xi;<sub>.magenta[t-1]</sub>;&sigma;<sub>&gamma;</sub><sup>2</sup>)]
+.center[&xi;<sub>t</sub> ~ N(&xi;<sub>.red[t-1]</sub>;&sigma;<sub>&gamma;</sub><sup>2</sup>)]
 
-.center[&gamma;<sub>pt</sub> ~ N(&gamma;<sub>p,t-1</sub>&delta;<sub>t</sub> + .magenta[**z'<sub>p.</sub>&eta;<sub>t</sub>**], &sigma;<sub>&gamma;</sub><sup>2</sup>)]
+.center[&gamma;<sub>pt</sub> ~ N(&gamma;<sub>p,t-1</sub>&delta;<sub>t</sub> + .red[**z'<sub>p.</sub>&eta;<sub>t</sub>**], &sigma;<sub>&gamma;</sub><sup>2</sup>)]
 
 .center[n<sup>*</sup><sub>kqt</sub>]
 
@@ -803,7 +833,7 @@ $$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})
 &xi;<sub>t</sub>: xi
 
 x 为群组级变量  
-t-1, dynamic linearl model  
+t-1, dynamic linear model  
 **z'<sub>p.</sub>&eta;<sub>t</sub>**: geography-level attributes, &eta;是coefficients  
 n<sup>*</sup><sub>kqt</sub>基于MrP
 
@@ -816,7 +846,7 @@ DGIRT：
 
 --
 
-+ 强大而.magenta[复杂]
++ 强大，但.red[复杂]
 
 
 ???
@@ -857,7 +887,7 @@ $$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\al
 ]
 
 .right-column[
-.magenta[D]ynamic .magenta[C]omparative .magenta[P]ublic .magenta[O]pinion
+.red[D]ynamic .red[C]omparative .red[P]ublic .red[O]pinion
 
 复杂程度：
 
@@ -894,6 +924,31 @@ Bounded: 使用logit归为0-1
 
 ---
 
+class: small
+
+## 总结
+
+.pull-left[
++ 个体IRT
+    + Rasch model
+    + nPL model
+    + 多维IRT
+    
++ 检验
+    + Glbal: G2/M2
+    + Item: in/outfit
+]
+
+.pull-right[
++ 群体IRT
+    + MrP
+    + DGIRT
+    + *DCPO*
+]
+
+
+---
+
 ## Bonus: "调得一手好参"
 
 Bayesian Analysis 参数与Convergence
@@ -912,7 +967,7 @@ Bayesian Analysis 参数与Convergence
 
 ### 一个Markov Chain何时Converge? 
 
-当Chain的posterior停留在一个.magenta[相对稳定]的区域内(.magenta[ergodic] chain)
+当Chain的posterior停留在一个.red[相对稳定]的区域内(.red[ergodic] chain)
 
 $$\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.$$
 
@@ -962,7 +1017,7 @@ class: Small
 .right-column[
 
 今晴，明80%也晴；  
-今雪，天60%也雪。
+今雪，明60%也雪。
 
 |      |                     | 明天                |                     |
 |------|---------------------|---------------------|---------------------|
@@ -993,11 +1048,11 @@ $$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.749
 
 ## Convergence检验
 
-没有办法能够证明一个Markov Chain是converged；
+没有办法能够证明一个Markov Chain是converged:
 
-1. 在给定时间内，无法保证Markov chain能够.magenta[达到]目标分布;
-1. 无法预先确定一条Chain能够.magenta[遍历]目标分布的所有区域;
-1. 诊断只能判断一条Chain是否.magenta[未converged]。
+1. 在给定时间内，无法保证Markov chain能够.red[达到]目标分布;
+1. 无法预先确定一条Chain能够.red[遍历]目标分布的所有区域;
+1. 诊断只能判断一条Chain是否.red[未converged]。
 
 ---
 
@@ -1009,22 +1064,23 @@ $$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.749
     
 --
 
-+ Thinning 并.magenta[不会]提高Chain的运算速度、帮助convergence或增强估测质量
++ Thinning 并.red[不会]提高Chain的运算速度、帮助convergence或增强估测质量
     + 仅用于降低autocorrelation
 
 ---
 
-+ Rule of thumb
-    1. 迭代中autocorrelation太高
-    1. Chain的convergence太低
-    1. 并行运算
-    1. 模型维度过高
+## 调Thin?
+
+1. 迭代中autocorrelation太高
+1. Chain的convergence太低
+1. 并行运算
+1. 模型维度过高
 
 ---
 
 ## Burn-In
 
-给与足够的burnning in以到达目标分布
+给与足够的burning in以到达目标分布
 
 “炸毛的毛毛虫”（Fuzzy Caterpillar）
 
@@ -1064,14 +1120,14 @@ $$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.749
 
 ## Geweke's G
 
-比较parameters在Chain早期和晚期两个.magenta[不重叠]的窗口内的均值
+比较parameters在Chain早期和晚期两个.red[不重叠]的窗口内的均值
 
 $$G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.$$
 
 
 ???
 
-检验Reccurence
+检验Recurrence
 
 A fancy difference of means
 
@@ -1102,7 +1158,7 @@ R趋近于1表示chains operating on same distribution
 
 class: Small
 
-## Raftery& Lewis (1991, 1996)
+## Raftery & Lewis (1991, 1996)
 
 + 分别评价每一个Chain的每一个变量
     1. 根据Chain间的相关性，并据此提供一个迭代数（iteration number）
@@ -1137,30 +1193,3 @@ class: Small
 ???
 
 检验Stationary
-
----
-
-## 总结
-
-.left-column[
-+ 个体IRT
-    + Rasch model
-    + 2PL model
-    + 多维IRT
-+ 群体类型
-    + MrP
-    + DGIRT
-    + *DCPO*
-    ]
-    
-.right-column[
-+ Baysian Inference
-    + Convergence基线
-    + 只能验**non**convergence
-]
-
----
-
-class: inverse, center, middle
-
-# Questions, Comments, and Suggestions?
