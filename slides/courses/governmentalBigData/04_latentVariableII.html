@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Learning Latent Variable Analysis with Dr. Hu</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦 清华大学政治学系" />
+    <script src="04_latentVariableII_files/header-attrs/header-attrs.js"></script>
+    <link href="04_latentVariableII_files/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Learning Latent Variable Analysis with Dr. Hu
+## 潜在变量分析
+### 胡悦<br>清华大学政治学系
+
+---
+
+
+
+
+---
+
+## 内容概要
+
+.gray[
+### 因素分析(Factorial Models)
+
+1. 探索性影子分析(EFA)
+1. 验证性因果分析(CFA)
+1. 结构方程模型(SEM)
+]
+
+### 类型分析(Typological Models)
+
+1. 项目反应理论(IRT)
+1. 跨群组项目反应(MrP, GIRT, DCPO)
+
+
+---
+
+## 操作语言
+
+* R&lt;sup&gt;1&lt;/sup&gt;
+    + [`mirt`](https://github.com/philchalmers/mirt/wiki)
+    + [`DCPO`](https://github.com/fsolt/DCPO)
+
+.footnote[[1] 现存处理IRT的R packages已超过[50](https://www.tandfonline.com/doi/full/10.1080/15366367.2019.1586404?src=recsys)个。]
+
+---
+
+## 项目反应理论 (Item Response Theory, IRT)
+
+因子分析怎么了？
+
+--
+
+1. 假定潜在变量是连续的；
+1. 对于指标不区分变量类型；
+1. 难以捕捉群组差异
+1. EFA无法囊括指标间关系;
+1. CFA面临简略理论vs测量质量的矛盾
+
+???
+
+CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；当囊括更多indices测量质量会高，但不符合理论。
+
+---
+
+IRT优势
+
+1. 天生为.magenta[二元]指标设计（衍生适应定序变量）；
+1. 易于与Bayesian inference结合，解决.magenta[潜在变量scale]不确定问题；
+1. 在Bayesian框架下更好解决.magenta[缺失值和“Don't Know”]问题。
+
+---
+
+## 个人层级IRT
+
+应用场景举例：社会调查
+
+调查问题：
+
+1. Yes/No
+2. 可以转化为二元的问题
+3. 定序问题（e.g., Liker scale questions）
+
+---
+
+## IRT 假定
+
+1. Monotonicity
+1. Unidimensionality
+1. Local independence
+1. Parameter invariance
+
+---
+
+## Monotonicity
+
+单增趋势：随潜在变量增加，获得1的可能性也随之增加
+
+---
+
+## Unidimensionality
+
+聚合的项目均指向同一个潜在变量。  
+基于理论  
+
+--
+
+直到引入multidimensional IRT  
+(后有说到哦！)
+
+---
+
+## Local Independency
+
+对于每一项目（e.g.,一道题）的响应(e.g., 选择的选项)间的关联性.magenta[只]来自.magenta[共同]的潜在变量。
+
+--
+
+换言之，控制潜在变量影响后，问题间响应相互独立
+
+P(y&lt;sub&gt;iq&lt;/sub&gt;,y&lt;sub&gt;i'q&lt;/sub&gt; | &amp;theta;&lt;sub&gt;q&lt;/sub&gt;) = P(y&lt;sub&gt;iq&lt;/sub&gt; | &amp;theta;&lt;sub&gt;q&lt;/sub&gt;)P(y&lt;sub&gt;i'q&lt;/sub&gt; | &amp;theta;&lt;sub&gt;q&lt;/sub&gt;)
+
+---
+
+## Parameter Invarance
+
++ Parameters在项目间不变
++ Parameters在响应人群间不变
+    + 当进行Multiple Group IRT时尤可能被违反
+    + 通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF)
+
+---
+
+## Rasch Model (1PL)
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;(&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - .magenta[&amp;sigma;&lt;sub&gt;q&lt;/sub&gt;])]
+
++ y&lt;sub&gt;iq&lt;/sub&gt;&amp;isin;{0,1}: subject `i`'s score on question `q`
++ &amp;theta;&lt;sub&gt;i&lt;/sub&gt;&amp;isin;{-&amp;infin;, +&amp;infin;}: Unbounded latent trait
++ &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;: Difficulty
+
+
+???
+
+Rasch /resh/  
+
+Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示为z scores， 低于0 表示比较简单
++ 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
++ 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
+
+---
+
+## Rasch Model (1PL)
+
+`$${\color{orange}{\frac{Pr(y_{iq} = 1|\theta_i)}{1 - Pr(y_{iq} = 1|\theta_i)}}} = logist^{-1} {\color{CornflowerBlue}{(\theta_i - \delta_q)}}$$`
+
+.left-column[
+.orange[Item Response]
+]
+.right-column[
+
+.navy[Response Theory]]
+
+---
+
+## 操作案例 (Bock &amp; Lieberman 1970)
+
+Law School Admissions Test, sec 7  
+5个yes/no问题
+
+
+```
+##     Item.1 Item.2 Item.3 Item.4 Item.5
+## 1        0      0      0      0      0
+## 2        0      0      0      0      0
+## 3        0      0      0      0      0
+## 4        0      0      0      0      0
+## 5        0      0      0      0      0
+## 6        0      0      0      0      0
+## 7        0      0      0      0      0
+## 8        0      0      0      0      0
+## 9        0      0      0      0      0
+## 10       0      0      0      0      0
+## 11       0      0      0      0      0
+## 12       0      0      0      0      0
+## 13       0      0      0      0      1
+## 14       0      0      0      0      1
+## 15       0      0      0      0      1
+## 16       0      0      0      0      1
+## 17       0      0      0      0      1
+## 18       0      0      0      0      1
+## 19       0      0      0      0      1
+## 20       0      0      0      0      1
+## 21       0      0      0      0      1
+## 22       0      0      0      0      1
+## 23       0      0      0      0      1
+## 24       0      0      0      0      1
+## 25       0      0      0      0      1
+## 26       0      0      0      0      1
+## 27       0      0      0      0      1
+## 28       0      0      0      0      1
+## 29       0      0      0      0      1
+## 30       0      0      0      0      1
+## 31       0      0      0      0      1
+## 32       0      0      0      1      0
+## 33       0      0      0      1      1
+## 34       0      0      0      1      1
+## 35       0      0      0      1      1
+## 36       0      0      0      1      1
+## 37       0      0      0      1      1
+## 38       0      0      0      1      1
+## 39       0      0      0      1      1
+## 40       0      0      1      0      0
+## 41       0      0      1      0      0
+## 42       0      0      1      0      0
+## 43       0      0      1      0      1
+## 44       0      0      1      0      1
+## 45       0      0      1      0      1
+## 46       0      0      1      0      1
+## 47       0      0      1      0      1
+## 48       0      0      1      0      1
+## 49       0      0      1      0      1
+## 50       0      0      1      0      1
+## 51       0      0      1      0      1
+## 52       0      0      1      0      1
+## 53       0      0      1      0      1
+## 54       0      0      1      0      1
+## 55       0      0      1      0      1
+## 56       0      0      1      0      1
+## 57       0      0      1      0      1
+## 58       0      0      1      0      1
+## 59       0      0      1      0      1
+## 60       0      0      1      0      1
+## 61       0      0      1      0      1
+## 62       0      0      1      1      0
+## 63       0      0      1      1      0
+## 64       0      0      1      1      0
+## 65       0      0      1      1      1
+## 66       0      0      1      1      1
+## 67       0      0      1      1      1
+## 68       0      0      1      1      1
+## 69       0      0      1      1      1
+## 70       0      0      1      1      1
+## 71       0      0      1      1      1
+## 72       0      0      1      1      1
+## 73       0      0      1      1      1
+## 74       0      0      1      1      1
+## 75       0      0      1      1      1
+## 76       0      0      1      1      1
+## 77       0      0      1      1      1
+## 78       0      0      1      1      1
+## 79       0      0      1      1      1
+## 80       0      0      1      1      1
+## 81       0      0      1      1      1
+## 82       0      1      0      0      0
+## 83       0      1      0      0      0
+## 84       0      1      0      0      0
+## 85       0      1      0      0      0
+## 86       0      1      0      0      0
+## 87       0      1      0      0      0
+## 88       0      1      0      0      0
+## 89       0      1      0      0      0
+## 90       0      1      0      0      0
+## 91       0      1      0      0      0
+## 92       0      1      0      0      1
+## 93       0      1      0      0      1
+## 94       0      1      0      0      1
+## 95       0      1      0      0      1
+## 96       0      1      0      0      1
+## 97       0      1      0      1      0
+## 98       0      1      0      1      0
+## 99       0      1      0      1      0
+## 100      0      1      0      1      1
+## 101      0      1      0      1      1
+## 102      0      1      0      1      1
+## 103      0      1      0      1      1
+## 104      0      1      0      1      1
+## 105      0      1      0      1      1
+## 106      0      1      0      1      1
+## 107      0      1      1      0      0
+## 108      0      1      1      0      0
+## 109      0      1      1      0      0
+## 110      0      1      1      0      0
+## 111      0      1      1      0      0
+## 112      0      1      1      0      0
+## 113      0      1      1      0      0
+## 114      0      1      1      0      1
+## 115      0      1      1      0      1
+## 116      0      1      1      0      1
+## 117      0      1      1      0      1
+## 118      0      1      1      0      1
+## 119      0      1      1      0      1
+## 120      0      1      1      0      1
+## 121      0      1      1      0      1
+## 122      0      1      1      0      1
+## 123      0      1      1      0      1
+## 124      0      1      1      0      1
+## 125      0      1      1      0      1
+## 126      0      1      1      0      1
+## 127      0      1      1      0      1
+## 128      0      1      1      0      1
+## 129      0      1      1      0      1
+## 130      0      1      1      0      1
+## 131      0      1      1      0      1
+## 132      0      1      1      0      1
+## 133      0      1      1      0      1
+## 134      0      1      1      0      1
+## 135      0      1      1      0      1
+## 136      0      1      1      0      1
+## 137      0      1      1      1      0
+## 138      0      1      1      1      0
+## 139      0      1      1      1      0
+## 140      0      1      1      1      0
+## 141      0      1      1      1      0
+## 142      0      1      1      1      0
+## 143      0      1      1      1      0
+## 144      0      1      1      1      0
+## 145      0      1      1      1      1
+## 146      0      1      1      1      1
+## 147      0      1      1      1      1
+## 148      0      1      1      1      1
+## 149      0      1      1      1      1
+## 150      0      1      1      1      1
+## 151      0      1      1      1      1
+## 152      0      1      1      1      1
+## 153      0      1      1      1      1
+## 154      0      1      1      1      1
+## 155      0      1      1      1      1
+## 156      0      1      1      1      1
+## 157      0      1      1      1      1
+## 158      0      1      1      1      1
+## 159      0      1      1      1      1
+## 160      0      1      1      1      1
+## 161      0      1      1      1      1
+## 162      0      1      1      1      1
+## 163      0      1      1      1      1
+## 164      0      1      1      1      1
+## 165      0      1      1      1      1
+## 166      0      1      1      1      1
+## 167      0      1      1      1      1
+## 168      0      1      1      1      1
+## 169      0      1      1      1      1
+## 170      0      1      1      1      1
+## 171      0      1      1      1      1
+## 172      0      1      1      1      1
+## 173      1      0      0      0      0
+## 174      1      0      0      0      0
+## 175      1      0      0      0      0
+## 176      1      0      0      0      0
+## 177      1      0      0      0      0
+## 178      1      0      0      0      0
+## 179      1      0      0      0      0
+## 180      1      0      0      0      1
+## 181      1      0      0      0      1
+## 182      1      0      0      0      1
+## 183      1      0      0      0      1
+## 184      1      0      0      0      1
+## 185      1      0      0      0      1
+## 186      1      0      0      0      1
+## 187      1      0      0      0      1
+## 188      1      0      0      0      1
+## 189      1      0      0      0      1
+## 190      1      0      0      0      1
+## 191      1      0      0      0      1
+## 192      1      0      0      0      1
+## 193      1      0      0      0      1
+## 194      1      0      0      0      1
+## 195      1      0      0      0      1
+## 196      1      0      0      0      1
+## 197      1      0      0      0      1
+## 198      1      0      0      0      1
+## 199      1      0      0      0      1
+## 200      1      0      0      0      1
+##  [ reached 'max' / getOption("max.print") -- omitted 800 rows ]
+```
+
+???
+
+[`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
+
+---
+
+## Difficulty Parameter
+
+
+```
+## $items
+##        a1     d g u
+## Item.1  1 1.868 0 1
+## Item.2  1 0.791 0 1
+## Item.3  1 1.461 0 1
+## Item.4  1 0.521 0 1
+## Item.5  1 1.993 0 1
+## 
+## $means
+## F1 
+##  0 
+## 
+## $cov
+##       F1
+## F1 1.022
+```
+
+---
+
+## 成了吗? Item Characteristic Curves
+
+![](04_latentVariableII_files/figure-html/icc-1.png)&lt;!-- --&gt;
+
+???
+
+检查各题affirmative的难易程度，看逐个是不是大体同一个趋势
+
+---
+
+## 成了吗？Test Charactersitic Curve
+
+![](04_latentVariableII_files/figure-html/tcc-1.png)&lt;!-- --&gt;
+
+???
+
+TCC： 所有ICC之和，体现how reliable, information 理想是形成一个钟形,顶尖处代表平均水平，据此对比个人&amp;theta;可以判断这人是否是outlier
+SE(&amp;theta;) = (test)&lt;sup&gt;-1/2&lt;/sup&gt;
+
+
+---
+
+## Two-Parameter Logistic Model (2PL IRT)
+
+Rasch局限：Measurement error
+
+???
+
+人们对同一个题理解不同，回答出affirmative答案可能性也不同。
+
+--
+
+### Solution: Parameter of dispersion
+
+.center[Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) = logist&lt;sup&gt;-1&lt;/sup&gt;(.magenta[&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;]&amp;theta;&lt;sub&gt;i&lt;/sub&gt; - &amp;sigma;&lt;sub&gt;q&lt;/sub&gt;)]
+
+&amp;kappa;&lt;sub&gt;q&lt;/sub&gt;: Discrimination
+
+???
+
+Discrimination: how well a question can different people from below to above;
+
+Rule of thumb above 1 meaning a good question in terms of examination
+
+---
+
+另一种常见写法
+
+`$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{magenta}{\beta_q}}}{\color{magenta}{\alpha_q}}]$$`
+
+
+&amp;beta;&lt;sub&gt;q&lt;/sub&gt;: &amp;sigma;&lt;sub&gt;q&lt;/sub&gt; &amp;frasl; &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;, threshold("difficulty", 控制location)  
+&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;: &amp;kappa;&lt;sub&gt;q&lt;/sub&gt;&lt;sup&gt;-1&lt;/sup&gt;, dispersion (控制斜率)
+
+???
+
+Dispersion: magnitude of the measurement error 
+
+---
+
+![Difficulty &amp; Dispersion](04_latentVariableII_files/figure-html/irt-illustration-1.png)
+
+---
+
+
+```
+## $items
+##           a1     d g u
+## Item.1 0.988 1.856 0 1
+## Item.2 1.081 0.808 0 1
+## Item.3 1.706 1.804 0 1
+## Item.4 0.765 0.486 0 1
+## Item.5 0.736 1.855 0 1
+## 
+## $means
+## F1 
+##  0 
+## 
+## $cov
+##    F1
+## F1  1
+```
+
+---
+
+## 需要2PL吗？
+
+Likelihood-Ratio Test
+
+
+```
+## 
+## Model 1: mirt(data = df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+## Model 2: mirt(data = df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
+```
+
+```
+##        AIC     AICc    SABIC       HQ      BIC    logLik     X2  df
+## 1 5341.802 5341.886 5352.192 5352.994 5371.248 -2664.901    NaN NaN
+## 2 5337.610 5337.833 5354.927 5356.263 5386.688 -2658.805 12.192   4
+##       p
+## 1   NaN
+## 2 0.016
+```
+
+---
+
+class: Small
+
+## Three-Parameter Logistic Model (3PL)
+
+如果有人全凭猜咋办？——大量低&amp;theta;人群
+
+`$$Pr(y_{iq} = 1) = \color{magenta}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$`
+
+c&lt;sub&gt;i&lt;/sub&gt;：Item .magenta[lower] asymptote ("guessing")
+
+--
+
+极大增加演算成本&amp;rarr;通常需要1000以上观测点
+
+---
+
+class: Small
+
+## Four-Parameter Logistic Model (4PL)
+
+如果有人不care咋办
+
+`$$Pr(y_{iq} = 1) = c_i + (\color{magenta}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$`
+
+c&lt;sub&gt;i&lt;/sub&gt;：Item lower asymptote ("guessing")  
+d&lt;sub&gt;i&lt;/sub&gt;：Item .magenta[upper] asymptote ("carelessness")
+
+--
+
+d &lt; 1  
+鉴于3PL已经需要1000-ish观测点……
+
+---
+
+## 成了吗？专项测试
+
++ 测试层：Global fit
++ 项目层：Item fit &amp; residual
++ 个体层：Personal fit
+
+---
+
+## Global Fit&lt;sup&gt;1&lt;/sup&gt;
+
+`$$G^2 = 2[\sum_l^s r_lln(\frac{r_l}{N\tilde{P}_l})]$$`
+
+N: 参与人数  
+l: 可能的反应  
+r: 做出特定反应的人数
+
+--
+
+当数据过于稀疏时(item &gt; 10)，M2, M2* 
+
+.footnote[
+[1] RMSEA, SRMSR, CFI, TLI对于IRT同样使用
+]
+
+???
+N is the number of subjects, L is number of possible response patterns, `\(P_ l\)` is the estimated probability of observing response pattern l, and `\(r_ l\)` is the number of subjects who have response pattern l
+
+---
+
+
+
+```
+## 
+## Call:
+## mirt(data = df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+## 
+## Full-information item factor analysis with 1 factor(s).
+## Converged within 1e-04 tolerance after 27 EM iterations.
+## mirt version: 1.32.3 
+## M-step optimizer: nlminb 
+## EM acceleration: Ramsay 
+## Number of rectangular quadrature: 61
+## Latent density type: Gaussian 
+## 
+## Log-likelihood = -2664.901
+## Estimated parameters: 6 
+## AIC = 5341.802; AICc = 5341.886
+## BIC = 5371.248; SABIC = 5352.192
+## G2 (25) = 43.89, p = 0.0112
+## RMSEA = 0.028, CFI = NaN, TLI = NaN
+```
+
+```
+##             M2 df          p      RMSEA    RMSEA_5   RMSEA_95
+## stats 23.17287  9 0.00581954 0.03970314 0.02003961 0.05998303
+##            SRMSR       TLI       CFI
+## stats 0.04744033 0.9284234 0.9355811
+```
+
+---
+
+## Item Diagnostics
+
+Covariation-based residuals
+
+
+```
+## LD matrix (lower triangle) and standardized values:
+## 
+##        Item.1 Item.2 Item.3 Item.4 Item.5
+## Item.1     NA -0.017  0.020  0.022  0.019
+## Item.2  0.292     NA  0.105 -0.042 -0.064
+## Item.3  0.389 10.976     NA  0.007  0.007
+## Item.4  0.474  1.801  0.055     NA -0.052
+## Item.5  0.362  4.063  0.045  2.691     NA
+```
+
+???
+
+看item residual的协变程度，多用于看multidimensionality, 不应有关联
+infit/outfit, close to 1 is good
+
+---
+
+Single item/person fit 
+
+Item
+
+```
+##     item outfit z.outfit infit z.infit
+## 1 Item.1  0.744   -3.597 0.939  -1.025
+## 2 Item.2  0.758   -7.500 0.826  -6.303
+## 3 Item.3  0.711   -5.420 0.860  -3.202
+## 4 Item.4  0.770   -8.877 0.818  -7.962
+## 5 Item.5  0.797   -2.572 0.993  -0.081
+```
+
+
+```
+##        outfit   z.outfit     infit     z.infit          Zh
+## 1   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 2   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 3   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 4   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 5   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 6   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 7   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 8   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 9   0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 10  0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 11  0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 12  0.6420958 -0.9001784 0.6953214 -0.96202244  0.93429336
+## 13  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 14  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 15  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 16  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 17  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 18  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 19  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 20  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 21  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 22  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 23  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 24  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 25  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 26  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 27  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 28  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 29  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 30  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 31  0.8178336 -0.6300162 0.8365515 -0.58965745  0.64983876
+## 32  1.4702553  1.6126462 1.4447540  1.61101087 -1.73598829
+## 33  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 34  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 35  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 36  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 37  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 38  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 39  1.3927122  1.1849894 1.3937871  1.27940982 -1.28637186
+## 40  1.0428516  0.2464647 1.0613929  0.32004646 -0.21273742
+## 41  1.0428516  0.2464647 1.0613929  0.32004646 -0.21273742
+## 42  1.0428516  0.2464647 1.0613929  0.32004646 -0.21273742
+## 43  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 44  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 45  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 46  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 47  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 48  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 49  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 50  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 51  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 52  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 53  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 54  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 55  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 56  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 57  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 58  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 59  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 60  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 61  1.0023472  0.1156527 0.9806210  0.03358782  0.03962718
+## 62  1.6793416  1.8478659 1.5976464  1.80384093 -2.03724960
+## 63  1.6793416  1.8478659 1.5976464  1.80384093 -2.03724960
+## 64  1.6793416  1.8478659 1.5976464  1.80384093 -2.03724960
+## 65  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 66  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 67  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 68  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 69  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 70  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 71  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 72  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 73  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 74  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 75  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 76  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 77  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 78  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 79  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 80  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 81  1.4319232  0.9040008 1.3542229  0.89387872 -0.83441775
+## 82  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 83  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 84  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 85  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 86  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 87  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 88  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 89  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 90  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 91  1.3283603  1.1925623 1.3435562  1.29493298 -1.29902533
+## 92  1.2804056  0.9003924 1.2754654  0.95116392 -0.90599298
+## 93  1.2804056  0.9003924 1.2754654  0.95116392 -0.90599298
+## 94  1.2804056  0.9003924 1.2754654  0.95116392 -0.90599298
+## 95  1.2804056  0.9003924 1.2754654  0.95116392 -0.90599298
+## 96  1.2804056  0.9003924 1.2754654  0.95116392 -0.90599298
+## 97  1.9574000  2.4221949 1.8924908  2.48855647 -2.98286976
+## 98  1.9574000  2.4221949 1.8924908  2.48855647 -2.98286976
+## 99  1.9574000  2.4221949 1.8924908  2.48855647 -2.98286976
+## 100 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 101 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 102 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 103 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 104 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 105 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 106 1.7753892  1.3847459 1.6548212  1.43482759 -1.53366231
+## 107 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 108 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 109 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 110 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 111 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 112 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 113 1.5670351  1.5978712 1.4793247  1.50529970 -1.65687072
+## 114 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 115 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 116 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 117 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 118 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 119 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 120 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 121 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 122 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 123 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 124 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 125 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 126 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 127 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 128 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 129 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 130 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 131 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 132 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 133 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 134 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 135 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 136 1.3208296  0.7321411 1.2189235  0.62398564 -0.55314427
+## 137 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 138 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 139 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 140 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 141 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 142 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 143 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 144 2.2014754  1.9014751 1.8368418  1.73106099 -2.08890342
+## 145 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 146 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 147 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 148 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 149 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 150 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 151 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 152 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 153 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 154 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 155 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 156 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 157 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 158 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 159 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 160 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 161 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 162 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 163 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 164 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 165 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 166 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 167 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 168 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 169 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 170 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 171 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 172 1.7248030  1.0070459 1.3171687  0.66469738 -0.64120315
+## 173 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 174 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 175 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 176 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 177 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 178 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 179 0.8741944 -0.3967143 0.8874432 -0.37066077  0.44763366
+## 180 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 181 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 182 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 183 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 184 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 185 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 186 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 187 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 188 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 189 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 190 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 191 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 192 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 193 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 194 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 195 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 196 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 197 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 198 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 199 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+## 200 0.7925432 -0.5792464 0.8207813 -0.54337697  0.61448416
+##  [ reached 'max' / getOption("max.print") -- omitted 800 rows ]
+```
+
+
+???
+
+Z&lt;sub&gt;h&lt;/sub&gt; &gt; 0 better
+
+---
+
+如果出现问题：
+
+1. 通过S-&amp;chi;&lt;sup&gt;2&lt;/sup&gt;、local dependency等检查观测和估计数值差别
+1. 改变model type, 比如2PL &amp;rarr; 3PL
+1. 如果最初用binary，尝试polytomous或者nomial response models
+1. 尝试non-parametric smoothing techinques
+
+---
+
+## 延展1：一维到多维
+
+传统IRT：一维聚合
+
+--
+
+Multidimentional IRT (MIRT, Phil Chalmers, 2015)
+
+`$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\boldsymbol{\theta_i} - \beta_q}{\boldsymbol{\alpha_q}}]$$`
+
+
+**&amp;theta;&lt;sub&gt;i&lt;/sub&gt;**和**&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;**不再是单一值，而是一个矩阵。
+
+???
+
+Pyschologist
+
+---
+
+## 延展2：二元到定序
+
+Logit &amp;rarr; Cumulative logit
+
+Pr(y&lt;sub&gt;iq&lt;/sub&gt; = 1) &amp;rarr; `\(Pr(\frac{y_{iq}\leq c}{y_{iq}&gt;c})\)`
+
+![](04_latentVariableII_files/figure-html/twoDimension-1.png)&lt;!-- --&gt;
+
+---
+
+## 三种主要类型
+
+1. (Modified) Graded Response Model
+    + 用于scoring rubrics，比如 Likert
+1. (Generalized) Partial Credit Model，Rating Scale Model
+    + 用于可转化为定序的分类变量
+1. Nominal Response Model
+    + 用于无序分类变量
+
+---
+
+## 延展3：群组效应
+
+.center[&lt;img src="images/countryBias.png" height = 300 /&gt;]
+
+Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
+
+在估测&amp;alpha;&lt;sub&gt;q&lt;/sub&gt;时加入random effect.
+
+???
+
+Daniel Stegmueller, Duke U, poli sci
+
+---
+
+## 超越个体
+
+Individual fallacy: Ecological fallacy 的反面
+
+&lt;video width="700" height="200" controls&gt;
+    &lt;source src="images/antiAsian.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+--
+
+再比如，民主、不平等、政治文化……
+
+---
+
+## Disaggregation
+
+.center[y&lt;sub&gt;kq&lt;/sub&gt; = &amp;Sigma;y&lt;sub&gt;ikq&lt;/sub&gt; &amp;frasl; n.]
+
+--
+
+问题：
+
+1. 如果群组过小，其平均值的代表意义不大
+2. 不同的指标对于潜在变量贡献不一样
+
+---
+
+## Multilevel Regression and Post-stratification (MrP)
+
+经过群组信息（地理、人口）加权的平均值
+
+???
+
+Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Categories Using Hierarchical Logistic Regression.” Survey Methods 23: 127--135.
+
+--
+
+.Small[
+1. 将总体（population）按群组（strata，如国家、地区）切分；
+1. 估测对象为核心变量在每个群组中的平均值/比例， &amp;theta;&lt;sub&gt;h&lt;/sub&gt; (h &amp;isin; {1, H});
+1. 已知各群组以人口变量j（如老年男性、青年女性等）划分，群组人口（N&lt;sub&gt;j&lt;/sub&gt;）或占总人口比；
+1. 各组总体平均值&amp;mu;&lt;sub&gt;j&lt;/sub&gt;可通过multilevel model 进行估算。
+]
+
+---
+
+`$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$`
+
+
+N: 总体（来自普查）  
+n: 样本（来自sample）
+---
+
+class: Small
+
+## 操作案例
+
+数据：某年某市五区域2396家产业公司的财政信息  
+目标：估测每个区域的产业平均收入（记为&amp;theta;&lt;sub&gt;1~5&lt;/sub&gt;）
+
+公司规模和区域分布
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; A &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; B &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; E &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Big &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Medium &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 180 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 111 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 187 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 138 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 97 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 593 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 862 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+???
+
+https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
+
+
+---
+
+总体平均值（真值）
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Zone &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; income &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; A &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 652.28 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; B &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 320.75 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; C &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 331.02 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; D &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 684.98 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; E &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 767.39 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+我们随机选取数据中1000个产业公司作为样本：
+
+![](04_latentVariableII_files/figure-html/rawVsTrue-1.png)&lt;!-- --&gt;
+
+---
+
+class: Small
+
+## Step I: Mr
+
+Income = &amp;beta;&lt;sub&gt;0z&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1z&lt;/sub&gt;Level&lt;sub&gt;iz&lt;/sub&gt; + &amp;epsilon;&lt;sub&gt;iz&lt;/sub&gt;
+
+.center[&amp;beta;&lt;sub&gt;0z&lt;/sub&gt; = &amp;gamma;&lt;sub&gt;00&lt;/sub&gt; + &amp;gamma;&lt;sub&gt;01&lt;/sub&gt;Zone&lt;sub&gt;z&lt;/sub&gt; + u&lt;sub&gt;0z&lt;/sub&gt;]
+
+--
+
+Output: Post-strata means
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; A &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; B &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; C &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; D &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; E &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Big &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1274.74 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1148.58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1189.59 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1238.51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1251.95 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Medium &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 706.19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 580.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 621.03 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 669.96 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 683.40 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Small &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 372.95 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 246.79 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 287.79 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 336.72 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 350.16 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Step II: P
+
+N&lt;sub&gt;z&lt;/sub&gt; &amp;times; weighted mean / n&lt;sub&gt;z&lt;/sub&gt;
+
+
+```
+##        A        B        C        D        E 
+## 656.4551 318.3753 326.6951 680.8675 754.5761
+```
+
+---
+
+## Comparision
+
+![](04_latentVariableII_files/figure-html/mrpVsraw-1.png)&lt;!-- --&gt;
+
+---
+
+## 聚合层级IRT：DGIRT
+
+MrP: 依然是算术平均数。
+
++ 答题难度的地区差异
++ 题目的scale
++ Measurement error
+
+--
+
+Solution：Dynamic Group-level IRT——结合IRT和MrP (Caughey &amp; Warshaw 2015)
+
+---
+
+## DGIRT
+
+1. 在群组层面估测IRT；
+1. 在估测IRT过程中加入群组级别变量；
+1. 将时间变量融入IRT估测；
+1. 用MrP给估测进行权重。
+
+---
+
+class: Small
+
+## IRT的群组层级估测
+
+个体
+
+`$$p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$`
+
+--
+
+群组
+
+`$$\eta_{ktq} = logit^{-1}(\frac{\color{magenta}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{magenta}{(1.7\sigma_{kt})^2}}}).$$`
+
+`\(\bar{\theta}_k\)` 和 &amp;sigma;&lt;sub&gt;kt&lt;/sub&gt; 是潜在变量在组k时间t的均值和sd。  
+
+???
+
+1.7: sd of probit is (&amp;pi;/3)&lt;sup&gt;1/2&lt;/sup&gt; for logit, while Long 1997 found it is more close to 1.7 in actual estimations.
+
+Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of Educational Statistics 8(4): 271–88.
+
+&amp;eta;: eta 
+
+---
+
+## 囊括时间与空间问题
+
+`$$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})$$`
+
+.center[&amp;xi;&lt;sub&gt;t&lt;/sub&gt; ~ N(&amp;xi;&lt;sub&gt;.magenta[t-1]&lt;/sub&gt;;&amp;sigma;&lt;sub&gt;&amp;gamma;&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;)]
+
+.center[&amp;gamma;&lt;sub&gt;pt&lt;/sub&gt; ~ N(&amp;gamma;&lt;sub&gt;p,t-1&lt;/sub&gt;&amp;delta;&lt;sub&gt;t&lt;/sub&gt; + .magenta[**z'&lt;sub&gt;p.&lt;/sub&gt;&amp;eta;&lt;sub&gt;t&lt;/sub&gt;**], &amp;sigma;&lt;sub&gt;&amp;gamma;&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;)]
+
+.center[n&lt;sup&gt;*&lt;/sup&gt;&lt;sub&gt;kqt&lt;/sub&gt;]
+
+???
+ 
+&amp;xi;&lt;sub&gt;t&lt;/sub&gt;: xi
+
+x 为群组级变量  
+t-1, dynamic linearl model  
+**z'&lt;sub&gt;p.&lt;/sub&gt;&amp;eta;&lt;sub&gt;t&lt;/sub&gt;**: geography-level attributes, &amp;eta;是coefficients  
+n&lt;sup&gt;*&lt;/sup&gt;&lt;sub&gt;kqt&lt;/sub&gt;基于MrP
+
+---
+
+DGIRT：
+
++ 囊括诸多因素
++ 可以部分平衡样本代表性问题
+
+--
+
++ 强大而.magenta[复杂]
+
+
+???
+
+Caughey &amp; Warshaw称会跑几个星期
+
+---
+
+class: Small
+
+## DGIRT简装版 (Claassen 2019)
+
+简化1：只作用于代表性样本和国家级别  
+简化2：将国家作用从估测&amp;theta;变为估测difficulty  
+简化3：忽略本地问题分布（如极化现象）
+
+
+--
+
+`$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).$$`
+
+.center[&amp;darr;]
+
+
+`$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).$$`
+
+
+???
+
+&amp;delta;&lt;sub&gt;kq&lt;/sub&gt;: 问题的difficulty随国家k变化。
+
+---
+
+## 聚合IRT最新进化态：DCPO
+
+.left-column[
+&lt;img src="images/fsolt.jpeg" height = 350 /&gt;
+]
+
+.right-column[
+.magenta[D]ynamic .magenta[C]omparative .magenta[P]ublic .magenta[O]pinion
+
+复杂程度：
+
+Claasseen 2019 &lt;   
+DCPO &lt;   
+DGIRT
+]
+
+---
+
+background-image: url("images/irtCompare.png")
+background-position: center
+background-size: contain
+
+
+???
+
+Bounded: 使用logit归为0-1
+
+---
+
+## 优化效果
+
+.center[&lt;img src="images/irtFitCompare.png" height = 300 /&gt;]
+
+---
+
+## 操作过程
+
+1. 收集survey数据，明确与感兴趣的变量相关的指标问题
+1. 通过`DCPOtools`对数据进行预处理
+1. 通过`DCPO`进行数据分析
+1. 通过`shinystan`诊断convergence
+
+---
+
+## Bonus: "调得一手好参"
+
+Bayesian Analysis 参数与Convergence
+
+1. Individual IRT、MrP、DGIRT、DCPO
+1. Convergence是底线
+
+
+---
+
+## Convergence
+
+最常见的Bayesian inference方法：Markov Chain Monte Carlo (MCMC)
+
+--
+
+### 一个Markov Chain何时Converge? 
+
+当Chain的posterior停留在一个.magenta[相对稳定]的区域内(.magenta[ergodic] chain)
+
+`$$\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.$$`
+
+???
+
++ Homogeneity: at step m the transition probability at this step do not depend on
++ Ergodicity：遍历性
+
+---
+
+## An Ergodic Chain
+
++ Homogeneous/Closed
++ Irreducible
++ Stationary
++ Recurrent
++ Aperodic
+
+???
+
++ Reccurent
+    + Homogeneous/Closed: At step m if the trasition probabilities at this step do not depend on m; for State A, B, p(A, B) = 0
+    + Irreducible: If every reached point/point collection can be reached from every other reached point/point collection; p(&amp;theta;&lt;sub&gt;i&lt;/sub&gt;, &amp;theta;&lt;sub&gt;j&lt;/sub&gt;)&amp;ne; 0, &amp;forall; &amp;theta;&lt;sub&gt;i&lt;/sub&gt;, &amp;theta;&lt;sub&gt;j&lt;/sub&gt;
++ Stationary: no autocorrelation
++ Aperodic: even with a long time there's no identical cycle of chain values repeating
+
+
+---
+
+class: Small
+
+## "下雪啦，天晴啦"
+
+.left-column[
+
+&gt;下雪啦天晴啦
+下雪别忘穿棉袄
+下雪啦天晴啦
+天晴别忘戴草帽
+带草帽~~~  
+
+&gt;《心中的太阳》
+]
+
+--
+
+.right-column[
+
+今晴，明80%也晴；  
+今雪，天60%也雪。
+
+|      |                     | 明天                |                     |
+|------|---------------------|---------------------|---------------------|
+|      |                     | &amp;theta;&lt;sub&gt;1&lt;/sub&gt; | &amp;theta;&lt;sub&gt;2&lt;/sub&gt; |
+| 今天 | &amp;theta;&lt;sub&gt;1&lt;/sub&gt; | 0.8                 | 0.2                 |
+|      | &amp;theta;&lt;sub&gt;2&lt;/sub&gt; | 0.6                 | 0.4                 |
+
+]
+
+???
+
+刘欢：《心中的太阳》, 《雪城》主题曲，1988年，倪萍主演
+
+example of converged
+
+---
+
+class: Small
+
+起始点: [0.5 0.5]
+
+`$$S_1 = [0.5\; 0.5]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.7\; 0.3]$$`
+`$$S_2 = [0.7\; 0.3]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.74\; 0.26]$$`
+`$$S_3 = [0.74\; 0.26]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.748\; 0.252]$$`
+`$$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.749\; 0.250]$$`
+
+---
+
+## Convergence检验
+
+没有办法能够证明一个Markov Chain是converged；
+
+1. 在给定时间内，无法保证Markov chain能够.magenta[达到]目标分布;
+1. 无法预先确定一条Chain能够.magenta[遍历]目标分布的所有区域;
+1. 诊断只能判断一条Chain是否.magenta[未converged]。
+
+---
+
+## Thinning
+
++ 每个Chain记录多少samples
+    + Chain将仅记录第k个值，越高丢失的信息越多
+    + k通常取值：4，5，10
+    
+--
+
++ Thinning 并.magenta[不会]提高Chain的运算速度、帮助convergence或增强估测质量
+    + 仅用于降低autocorrelation
+
+---
+
++ Rule of thumb
+    1. 迭代中autocorrelation太高
+    1. Chain的convergence太低
+    1. 并行运算
+    1. 模型维度过高
+
+---
+
+## Burn-In
+
+给与足够的burnning in以到达目标分布
+
+“炸毛的毛毛虫”（Fuzzy Caterpillar）
+
+.center[&lt;img src="images/fuzzyCaterpillar.png" height = 300 /&gt;]
+
+---
+
+## Autocorrelation
+
+1. Chain间高相关性
+1. 单一parameter高相关性
+
+--
+
+.left-column[
+&lt;img src="images/isAutocorrelation.png" height = 300 /&gt;
+]
+
+.right-column[
+&lt;img src="images/noAutocorrelation.png" height = 300 /&gt;
+]
+
+???
+
+1. Chain间高相关性：Slow convergence
+1. 单一parameter的高相关：Individual nonconvergence
+---
+
+## 实证指标
+
+1. Geweke
+1. Gelman-Rubin
+1. Raftery-Lewis
+1. Heidelberger-Welch
+
+---
+
+## Geweke's G
+
+比较parameters在Chain早期和晚期两个.magenta[不重叠]的窗口内的均值
+
+`$$G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.$$`
+
+
+???
+
+检验Reccurence
+
+A fancy difference of means
+
+converge 则显示不显著差异，增加burn-in
+
+---
+
+class: Small
+
+## Gelman &amp; Rubin 1992
+
+1. 跑多条chains（5~10），每条长2n
+1. 对每一个感兴趣的parameter计算
+    1. Within chain variance(W)
+    1. Between chain variance(B)
+1. 计算总体variance： var(&amp;theta;) = (1 - 1/n)W + (1/n)B
+1. 计算Scale reduction (亦称shrink factor)
+
+`$$\hat{R}= \sqrt{\frac{\hat{var(\theta)}}{W}}$$`
+
+???
+
+R趋近于1表示chains operating on same distribution
+
+&lt;1.1或1.2是可以接受的
+
+---
+
+class: Small
+
+## Raftery&amp; Lewis (1991, 1996)
+
++ 分别评价每一个Chain的每一个变量
+    1. 根据Chain间的相关性，并据此提供一个迭代数（iteration number）
+    1. 检验autocorrelation inflation
+    
++ 输出
+    + Burin-in 
+    + Total
+    + Dependence Factor
+
+???
+检验 burn-in  
+
+Burn-in: 是一位数或两位数为佳  
+Total: 建议的burnin数，未考虑cross-chain，因此真正burnin要乘上chain数
+
+---
+
+class: Small
+
+### Heidelberger and Welch
+
+1. 确定一个迭代数N, 以及准确性（&amp;epsilon;）和显著性数准(&amp;alpha;)
+1. 运行整个chain
+1. 施用Cram&amp;eacute;r-von Mises Test，Null: Chain是stationary
+1. 如检验未通过则依次略去10%、20%,乃至50%的迭代，再次检测；
+1. 如结果表示部分数据不是stationary，则对该部分数据进行halfwidth检验
+1. 如果halfwidth ratio &lt; &amp;epsilon;, 则通过检验
+
+
+
+???
+
+检验Stationary
+
+---
+
+## 总结
+
+.left-column[
++ 个体IRT
+    + Rasch model
+    + 2PL model
+    + 多维IRT
++ 群体类型
+    + MrP
+    + DGIRT
+    + *DCPO*
+    ]
+    
+.right-column[
++ Baysian Inference
+    + Convergence基线
+    + 只能验**non**convergence
+]
+
+---
+
+class: inverse, center, middle
+
+# Questions, Comments, and Suggestions?
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
