@@ -11,11 +11,30 @@ output:
       - zh-CN_custom.css
       - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: libs/remark-latest.min.js
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  sna, 
+  network, 
+  tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(313)
+```
 
 ## 概要
 
@@ -435,19 +454,20 @@ class: inverse, bottom
 
 ## 联系网络
 
-“Patient 0”效应
+“Patient 0”效应: 谁接触了Patient 0，最终感染了谁
 
-.center[<img src="images/sna_contactNet.bmp" height = 400 />]
+.center[<img src="images/sna_diffusionQ.bmp" height = 400 />]
 
 ???
 
-所有相连点，从A开始
+Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., & Christakis, N. A. (2018). Exposure, Hazard, and Survival Analysis of Diffusion on Social Networks. Statistics in Medicine, 37(17), 2561–2585. https://doi.org/10.1002/sim.7658
+
 
 ---
 
-## 暴露网络
+## 暴露网络：谁是易感人群
 
-.center[<img src="images/sna_exposureNet.bmp" height = 400 />]
+.center[<img src="images/sna_diffusionQ.bmp" height = 400 />]
 
 ???
 
@@ -455,9 +475,9 @@ class: inverse, bottom
 
 ---
 
-## 传动网络
+## 传动网络：传播（传递）路径究竟是怎样的
 
-.center[<img src="images/sna_transmission.bmp" height = 400 />]
+.center[<img src="images/sna_diffusionQ.bmp" height = 400 />]
 
 ---
 
@@ -606,14 +626,162 @@ class: inverse, bottom
 --
 
 .pull-left[
+
+### 传统计量经济学
+
 1. 确定H<sub>0</sub>
 1. 描述H<sub>0</sub>下样本分布特征
 1. 检验观测值是否在“null distribution的尾巴上”
 1. 拒绝/不拒绝H<sub>0</sub>
 
-## Assumption
+.center[Assumption]
 
-+ IID observations
 + Sample distribution 已知
++ IID observations
 
 ]
+
+--
+
+.pull-right[
+
+### 网络分析
+
+1. 如何随机建立网络
+1. H<sub>0</sub>是什么
+
+]
+
+---
+
+## 随机网络构建与测试
+
+1. Conditional Uniform Graph (CUG)
+1. Quadratic Assignment Procedure (QAP)
+
+---
+
+## Conditional Uniform Graph
+
+"Baseline network"比较的一种
+
+.pull-left[
+
+1. 固定属性 (size, prob of edges, dyad census, degree, # of triangles, etc.)
+1. 同等可能
+
+]
+
+.pull-right[
+
+```{r cugNet}
+library(sna)
+rand.gr <- rgraph(20, m=1000, tprob=0.3)
+plot(density(gden(rand.gr)))
+```
+
+]
+
+???
+
+根据特定属性通过bernoulli分布建立随机网络，所有网络都是被视为同等可能出现
+
+Generating 1000 random graphs of size 20; assumes digraph. tprob, probility of any tie existing is 30%. Plotting the density. it is probability, so, some is before 0.3, some beyong 0.3
+
+
+---
+
+## Network Hypotheses (H<sub>0</sub>)
+
+.center[<img src="images/sna_networkHypothesis.png" height = 300 />]
+
+???
+
+检验观测网络与随机网络在这些方面是否相异
+
+---
+
+## Conditional Uniform Graph Test
+
+```{r cugNetReal}
+library(network);data(emon)
+g <- emon$Cheyenne
+g
+```
+
+???
+
+Drabek et al. (1981) provide seven case studies of emergent multi-organizational networks (EMONs) in the context of search and rescue (SAR) activities. Networks of interaction frequency are reported, along with several organizational attributes.
+
+---
+
+```{r cugTestDens, fig.align='center'}
+## Density 
+cug.test(g, gden, mode="digraph", cmode="size", reps=1000) %>% 
+  plot.cug.test()
+```
+
+---
+
+```{r cugTests, eval = FALSE}
+###Reciprocity
+cug.test(g, grecip, mode="digraph", cmode="size", reps=1000)
+
+####Controlling the number of edges & size
+cug.test(g, grecip, mode="digraph", cmode="edges", reps=1000)
+
+####Controlling the dyad census
+cug.test(g, grecip, mode="digraph", cmode="dyad.census", reps=1000) 
+
+###Transitivity
+cug.test(g, gtrans, mode="digraph", cmode="edges", reps=1000) 
+```
+
+---
+
+## Quadratic Assignment Procedure
+
+1. .navy[创建随机网络分布]
+1. .red[控制网络结构]
+
+???
+
+与CUG之异同见颜色
+
+网络结构: centrality 等
+
+
+--
+
+通过permutation test实现
+
+???
+
+non-parametric，从sample中抽出两组，对比stats，看是否一样。
+与t-test等的对比重要不同在于不是跟normal比
+
+---
+
+## 网络Permutation Test
+
+1. 计算原始网络的correlation coefficient<sup>1</sup>;
+1. Permute一些vertices；
+1. 将Permuted 网络和原始网络相对比；
+1. 一顿狂Permute + 狂比
+1. 看看correlation的分布
+1. 确定特定值和原始网络相同的概率
+
+.footnote[<sup>1</sup> Pearson's r correlation or Euclidean distance]
+
+???
+
+网络correlation 根据两点除相互连接外的其他degree (remaining degree)计算
+
+---
+
+## 多元“回归”分析
+
+&zwj;DV: 网络   
+&zwj;IV: 解释变量adjacency matrices
+
+.center[E[Y<sub>ij</sub>] = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1ij</sub> + &beta;<sub>2</sub>X<sub>2ij</sub> + ... + &beta;<sub>k</sub>X<sub>kij</sub>]

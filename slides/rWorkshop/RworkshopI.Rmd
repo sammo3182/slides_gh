@@ -1,20 +1,23 @@
 ---
 title: "Learn R with Dr. Hu"
-subtitle: "Hello R!"
+subtitle: "Hello, R!"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     css: 
+      - default
       - zh-CN_custom.css
       - styles.css
     mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML"
+    chakra: libs/remark-latest.min.js
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
@@ -35,76 +38,56 @@ set.seed(114)
 ```
 
 
-## R Workshop Series
+## R Workshop Series (Fall)
 
 .left-column[
 
 ### Foundations
 
-* Hello, R!
-* .gray[Data Munging]
-* .gray[Basic Visualization]
-* .gray[Data Analysis]
+* .red[Data input/Output]
+* Data munging
+* Basic visualization
+* Data analysis
 ]
 
 .right-column[
 
-### Topics
+### Applications
 
-* .gray[Adv. Visualization]
-* .gray[Text Analysis]
-* .gray[Spatial Analysis]
-* .gray[Simulation]
-* .gray[Machine Learning]  
+* Batch processing
+* Adv. visualization
+* Text analysis
+* Spatial analysis
+* Rmarkdown
 ......
+
 ]
 
 ---
 
-## Who Should Care?
+## Should I Take?
+
+### Foundation Section
 
 * Not R user yet;
 * Having experience with Excel/SPSS/STATA/Python/Matlab...and not very into it;
 * Need friends!
 
----
+### Applied Section
 
-## Can I Learn? 
-
---
-
-Learn about me:
-
-* Background: Liberal arts, bad at math
-* First touch: 2009
-* Fully adopted: 2013
-* First package: 2014
-* First R workshop: 2015
-
---
-
-### Now
-
-.left-column[
-* R
-* Python
-* C++
-]
-
-.right-column[
-* STATA
-* Mathematica
-* SPSS (...)]
++ Mediocre R users
++ Wanting to experience the true power of R
++ Hope to be a R tutor one day
 
 ---
 
-class: inverse
+## Overview of Today
 
-## Overview
-
-* R, the profile?
-* R vs. ...
-* Setup
++ Bio of R
++ Why R, not Python/STATA
++ Inputting almost all types of data into R
++ Storing and combining datasets 
++ Output outcome data
 
 
 ---
@@ -179,47 +162,6 @@ Create presentation slides.
 ---
 
 ## Why R?
-
-.center[<img src="images/forFree.gif" height = 350 />]
-
----
-
-### Popular
-
-.center[<img src="images/rank.jpeg" height = 500 />]
-
----
-
-### Powerful
-
-```{r sem, echo = FALSE, fig.height=4, out.width="100%"}
-
-library("lavaan")
-library("DiagrammeR")
-library("semPlot")
-
-# Linear growth model with a time-varying covariate
-model <- "
-  # intercept and slope with fixed coefficients
-  i =~ 1*t1 + 1*t2 + 1*t3 + 1*t4
-  s =~ 0*t1 + 1*t2 + 2*t3 + 3*t4
-  # regressions
-  i ~ x1 + x2
-  s ~ x1 + x2
-  # time-varying covariates
-  t1 ~ c1
-  t2 ~ c2
-  t3 ~ c3
-  t4 ~ c4
-"
-fit <- growth(model, data = Demo.growth)
-
-semPaths(fit, intercept = FALSE, whatLabel = "est",
-         residuals = FALSE, exoCov = FALSE, mar = c(1,1,1,1))
-
-```
-
----
 
 ### Timeliness
 
@@ -344,16 +286,10 @@ tibble::tribble(
 
 ---
 
-### In Developing
+### Evoluting
 
 `r nrow(available.packages())`+ packages for cutting-edges
     
----
-
-class: middle, center
-
-I already live with Python, STATA, SPSS, Excel...
-
 ---
 
 background-image: url("images/programCompare.jpg")
@@ -486,85 +422,6 @@ Keep your R & Rstudio updated!
 
 ---
 
-## Setup
-
-### Knowing about your working environment
-
-```{r system}
-Sys.info()
-```
-
----
-
-```{r session}
-sessionInfo()
-```
-
----
-
-## Setup Files
-
-### What are they?<sup>*</sup>
-
-* `.Rprofile`/`Rprofile.site`
-* `.Renviron`/`Renviron.site`
-
-.footnote[\* If you can't find them, create one with notepad.]
-
---
-
-### Where to put them
-
-* `R_HOME`: Where you installed R
-* `HOME`: User's home directory, `R.home()`
-* WD: working directory, `getwd()`
-
-Suggestion: Put your setup files in `./etc/`
-
----
-
-## What Do They Look Like
-
-
-`Renviron.site`: 
-
-```
-## Windows
-R_LIBS_USER=D:/userLib
-#TMPDIR=D:/Rtemp 
-#TMP=D:/Rtemp 
-#TEMP=D:/Rtemp
-
-BAIDUMAP_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-GGMAP_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-PAGEDOWN_CHROME = "%USERPATH%/Application/msedge.exe"
-```
-
----
-
-`Rprofile.site`:
-
-```{r eval = FALSE}
-# General options 
-options(tab.width = 2) 
-options(width = 89)
-options(graphics.record=TRUE) 
-
-## Customization
-Sys.setlocale(, "Chinese") #<<
-
-options(Ncpus = 6)
-```
-
----
-
-## Rstudio Global Options
-
-Let's have a look at how Rstudio works~
-
----
-
 ## Packages
 
 <img src="images/apps.jpeg" height = 400 />
@@ -592,42 +449,6 @@ require(<package name>)
 
 package::function
 ```
-
----
-
-## First-Time Using
-
-* Set the working directory! 
-
-```{r eval = FALSE}
-# Find
-getwd() 
-
-# Reset
-setwd("./rworkshop") 
-```
-    
-
----
-
-<img src=images/wdSetting.gif height = "600"/>
-
----
-
-## Better Way: 
-
-Create a project!
-
-1. Keeping everything together
-1. Replicable with .red[relative addresses]
-    + ~~`f:/blabla/blabla/.../data/your-cool-data.rds`~~  
-    `data/your-cool-data.rds` 
-1. Version control
-1. Searchable and manageable
-
---
-
-Learn in the "Learn R with Dr. Hu: Become a Decent R User"
 
 ---
 

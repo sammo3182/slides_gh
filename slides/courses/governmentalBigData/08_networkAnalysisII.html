@@ -6,6 +6,8 @@
     <meta name="author" content="胡悦" />
     <script src="08_networkAnalysisII_files/header-attrs-2.4/header-attrs.js"></script>
     <link href="08_networkAnalysisII_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="08_networkAnalysisII_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="08_networkAnalysisII_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
@@ -19,6 +21,8 @@ class: center, middle, inverse, title-slide
 ### 清华大学政治学系
 
 ---
+
+
 
 
 ## 概要
@@ -439,19 +443,20 @@ class: inverse, bottom
 
 ## 联系网络
 
-“Patient 0”效应
+“Patient 0”效应: 谁接触了Patient 0，最终感染了谁
 
-.center[&lt;img src="images/sna_contactNet.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
 
 ???
 
-所有相连点，从A开始
+Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., &amp; Christakis, N. A. (2018). Exposure, Hazard, and Survival Analysis of Diffusion on Social Networks. Statistics in Medicine, 37(17), 2561–2585. https://doi.org/10.1002/sim.7658
+
 
 ---
 
-## 暴露网络
+## 暴露网络：谁是易感人群
 
-.center[&lt;img src="images/sna_exposureNet.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
 
 ???
 
@@ -459,9 +464,9 @@ class: inverse, bottom
 
 ---
 
-## 传动网络
+## 传动网络：传播（传递）路径究竟是怎样的
 
-.center[&lt;img src="images/sna_transmission.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
 
 ---
 
@@ -602,6 +607,199 @@ Lazer, David et al. 2010. “The Coevolution of Networks and Political Attitudes
 class: inverse, bottom
 
 # 全网分析
+
+---
+
+## Again, 方法论的跃迁
+
+--
+
+.pull-left[
+
+### 传统计量经济学
+
+1. 确定H&lt;sub&gt;0&lt;/sub&gt;
+1. 描述H&lt;sub&gt;0&lt;/sub&gt;下样本分布特征
+1. 检验观测值是否在“null distribution的尾巴上”
+1. 拒绝/不拒绝H&lt;sub&gt;0&lt;/sub&gt;
+
+.center[Assumption]
+
++ Sample distribution 已知
++ IID observations
+
+]
+
+--
+
+.pull-right[
+
+### 网络分析
+
+1. 如何随机建立网络
+1. H&lt;sub&gt;0&lt;/sub&gt;是什么
+
+]
+
+---
+
+## 随机网络构建与测试
+
+1. Conditional Uniform Graph (CUG)
+1. Quadratic Assignment Procedure (QAP)
+
+---
+
+## Conditional Uniform Graph
+
+"Baseline network"比较的一种
+
+.pull-left[
+
+1. 固定属性 (size, prob of edges, dyad census, degree, # of triangles, etc.)
+1. 同等可能
+
+]
+
+.pull-right[
+
+
+```r
+library(sna)
+rand.gr &lt;- rgraph(20, m=1000, tprob=0.3)
+plot(density(gden(rand.gr)))
+```
+
+![](08_networkAnalysisII_files/figure-html/cugNet-1.png)&lt;!-- --&gt;
+
+]
+
+???
+
+根据特定属性通过bernoulli分布建立随机网络，所有网络都是被视为同等可能出现
+
+Generating 1000 random graphs of size 20; assumes digraph. tprob, probility of any tie existing is 30%. Plotting the density. it is probability, so, some is before 0.3, some beyong 0.3
+
+
+---
+
+## Network Hypotheses (H&lt;sub&gt;0&lt;/sub&gt;)
+
+.center[&lt;img src="images/sna_networkHypothesis.png" height = 300 /&gt;]
+
+???
+
+检验观测网络与随机网络在这些方面是否相异
+
+---
+
+## Conditional Uniform Graph Test
+
+
+```r
+library(network);data(emon)
+g &lt;- emon$Cheyenne
+g
+```
+
+```
+##  Network attributes:
+##   vertices = 14 
+##   directed = TRUE 
+##   hyper = FALSE 
+##   loops = FALSE 
+##   multiple = FALSE 
+##   total edges= 83 
+##     missing edges= 0 
+##     non-missing edges= 83 
+## 
+##  Vertex attribute names: 
+##     Command.Rank.Score Decision.Rank.Score Formalization Location Paid.Staff Sponsorship vertex.names Volunteer.Staff 
+## 
+##  Edge attribute names: 
+##     Frequency
+```
+
+???
+
+Drabek et al. (1981) provide seven case studies of emergent multi-organizational networks (EMONs) in the context of search and rescue (SAR) activities. Networks of interaction frequency are reported, along with several organizational attributes.
+
+---
+
+
+```r
+## Density 
+cug.test(g, gden, mode="digraph", cmode="size", reps=1000) %&gt;% 
+  plot.cug.test()
+```
+
+&lt;img src="08_networkAnalysisII_files/figure-html/cugTestDens-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+###Reciprocity
+cug.test(g, grecip, mode="digraph", cmode="size", reps=1000)
+
+####Controlling the number of edges &amp; size
+cug.test(g, grecip, mode="digraph", cmode="edges", reps=1000)
+
+####Controlling the dyad census
+cug.test(g, grecip, mode="digraph", cmode="dyad.census", reps=1000) 
+
+###Transitivity
+cug.test(g, gtrans, mode="digraph", cmode="edges", reps=1000) 
+```
+
+---
+
+## Quadratic Assignment Procedure
+
+1. .navy[创建随机网络分布]
+1. .red[控制网络结构]
+
+???
+
+与CUG之异同见颜色
+
+网络结构: centrality 等
+
+
+--
+
+通过permutation test实现
+
+???
+
+non-parametric，从sample中抽出两组，对比stats，看是否一样。
+与t-test等的对比重要不同在于不是跟normal比
+
+---
+
+## 网络Permutation Test
+
+1. 计算原始网络的correlation coefficient&lt;sup&gt;1&lt;/sup&gt;;
+1. Permute一些vertices；
+1. 将Permuted 网络和原始网络相对比；
+1. 一顿狂Permute + 狂比
+1. 看看correlation的分布
+1. 确定特定值和原始网络相同的概率
+
+.footnote[&lt;sup&gt;1&lt;/sup&gt; Pearson's r correlation or Euclidean distance]
+
+???
+
+网络correlation 根据两点除相互连接外的其他degree (remaining degree)计算
+
+---
+
+## 多元“回归”分析
+
+&amp;zwj;DV: 网络   
+&amp;zwj;IV: 解释变量adjacency matrices
+
+.center[E[Y&lt;sub&gt;ij&lt;/sub&gt;] = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1ij&lt;/sub&gt; + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2ij&lt;/sub&gt; + ... + &amp;beta;&lt;sub&gt;k&lt;/sub&gt;X&lt;sub&gt;kij&lt;/sub&gt;]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
