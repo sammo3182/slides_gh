@@ -6,11 +6,12 @@ institute: "Political Science, Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
@@ -35,152 +36,179 @@ p_load(
 set.seed(114)
 ```
 
+---
+
+## Overview
+
+.pull-left[
+
+### Variable vs. Variable
+
++ Pearson's r
++ Kendall's &tau;
++ Spearman's &rho;
+
++ &chi;<sup>2</sup>, etc.
+
+]
+
+.pull-right[
+
+### Treatments vs. Control
+
++ One-way
++ Two-way
+
+]
+
+--
+
+.center[Please pay attention to the .red[assumptions]!!!]
+
+---
 
 class: inverse, bottom
 
-# Association
+# Variable vs. Variable
 
 ---
 
-## Joint Distribution Revisit 
+## Ways to Measure Relations among Two Variables
 
-What's joint distribution in the probability theory? 
+A.k.a., association.
 
---
+1. Covariance
+1. Correlations
+    + Pearson's r
+    + Kendall's &tau;
+    + Spearman's &rho;
 
-$$n_{\bullet\bullet} = \sum\sum n_{ij}.$$
-
---
-
-In statistics, joint distribution refers to the joint patterns of two or more variables. 
-
----
-
-## Covariance: 
-
-$$\sigma_{X, Y} = \sum(X - \mu_x)(Y - \mu_y)p(x,y)$$.
 
 ---
 
-class: small
+Remember Variance?
 
-e.g., n: population 10,000,000, X: education, Y: age, 
+.center[&sigma;<sup>2</sup><sub>X</sub> = &sum;(X - &mu;<sub>X</sub>)<sup>2</sup>p(x)]
 
-| Education 	| 20~35 (mean = 30) 	| 35~55 (mean = 45) 	| 55~100 (mean = 70) 	|
-|-----------	|----------------	|----------------	|-----------------	|
-| 0         	| 1,000,000        	| 2,000,000        	| 5,000,000         	|
-| 1         	| 3,000,000        	| 6,000,000        	| 10,000,000        	|
-| 2         	| 18,000,000       	| 21,000,000       	| 15,000,000        	|
-| 3         	| 7,000,000        	| 8,000,000        	| 4,000,000         	|
+## Covariance
 
---
+.center[&sigma;<sub>X, Y</sub> = &sum;(X - &mu;<sub>X</sub>)(Y - &mu;<sub>Y</sub>)p(x, y)]
 
-\begin{align}
-\mu_X =& \sum Xp(x) \\
-      =& 0 * 0.8 + 1 * 0.19 + 2 * 0.54 + 3 * 0.19 = 1.84;\\
-\mu_Y =& 30 * 0.29 + 45 * 0.57 + 70 * 0.34 = 49.15.\\
-\sigma_{x, y} =& (0 - 1.84)(30 - 49.15)* 0.1 \\
-               & + (0 - 1.84)(45 - 49.15)*0.2\dots = -3.636
-\end{align}
+Hint: Covariance is the .red[co]-.navy[variance].
 
-???
-
-0.8 = (1000000 + 2000000 + 5000000)/10,000,000
-0.01 = 1,000,000/10,000,000
 
 ---
 
-## Correlation
+## Correlation (Pearson's r)
 
-For a population:
+### Population<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 $$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$
 
-For a sample: 
+In other words, $\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}$
+
+???
+
+Partial correlation in multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$
+
+https://statistics.laerd.com/spss-tutorials/pearsons-product-moment-correlation-using-spss-statistics.php
+
+
+--
+
+### Sample
 
 $r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$
 
 
-Relations with covariance: $\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}$
-
 ---
 
-class: small
-
-## Correlations
-
-### Pearson's r
-
-$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$
-
-For a sample: 
-
-$$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$$
-
-Properties： 
-
-1. $\rho_{XY}\in [-1,1]$, independent 0.
-1. Greater value indicates stronger linear relationship.
-1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
-1. Not robust to skewed data and outliers.
-
----
-
-Partial correlation in multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$
-
---
-
-.red[ASSUMPTION]
+## .red[ASSUMPTION]
 
 1. Continuous data
 1. Linear Relationship
 
-???
+--
 
-https://statistics.laerd.com/spss-tutorials/pearsons-product-moment-correlation-using-spss-statistics.php
+## Properties 
+
+1. &rho;&in; [-1, 1], 0 independent.
+1. Greater value indicates stronger .navy[linear] relationship.
+1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
+1. .red[Not robust] to skewed data and outliers.
 
 ---
 
-### Kendall's &tau;
+## Alternative: Kendall's &tau;
 
-For any pair of observations $x_{i},y_{i}$ and $x_{j},y_{j}$, where $i<j$: 
+For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i < j: 
 
-**Concordant pairs**: , if both $x_{i}>x_{j}$ and $y_{i}>y_{j}$; or if both $x_{i}<x_{j}$ and $y_{i}<y_{j}$. 
+###  Concordant pairs
+x<sub>i</sub> > x<sub>j</sub> & y<sub>i</sub> > y<sub>j</sub> | x<sub>i</sub> < x<sub>j</sub> & y<sub>i</sub> < y<sub>j</sub>
 
-**Discordant pairs**:  if $x_{i}>x_{j}$ and $y_{i}<y_{j}$; or if $x_{i}<x_{j}$ and $y_{i}>y_{j}$. 
+### Discordant pairs
 
-**Tied pairs**: If $x_{i}=x_{j}$ or $y_{i}=y_{j}$, the pair is neither concordant nor discordant.
+x<sub>i</sub> > x<sub>j</sub> & y<sub>i</sub> < y<sub>j</sub> | x<sub>i</sub> < x<sub>j</sub> & y<sub>i</sub> > y<sub>j</sub>
+
+### Tied pairs
+
+x<sub>i</sub> = x<sub>j</sub> & y<sub>i</sub> = y<sub>j</sub>
+
+???
+
+tie on x or tie on y are also not concordant or discordant
 
 ---
 
 $$\tau=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}}$$
 
-* $n_c$: concordant pair.
-* $n_d$: discordant pair.
+* n<sub>c</sub>: concordant pair.
+* n<sub>d</sub>: discordant pair.
+
+--
+
+.center[Problems? Think...<sup><img src="images/fsmrof.png" height="20"/></sup>]
+
+???
+
+When ties are accounted? When numbers of values are not the same?
+
+\tau _{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}}
+where
+
+{\displaystyle {\begin{aligned}n_{0}&=n(n-1)/2\\n_{1}&=\sum _{i}t_{i}(t_{i}-1)/2\\n_{2}&=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&={\text{Number of concordant pairs}}\\n_{d}&={\text{Number of discordant pairs}}\\t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}\end{aligned}}}{\begin{aligned}n_{0}&=n(n-1)/2\\n_{1}&=\sum _{i}t_{i}(t_{i}-1)/2\\n_{2}&=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&={\text{Number of concordant pairs}}\\n_{d}&={\text{Number of discordant pairs}}\\t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}\end{aligned}}
+
+{\displaystyle \tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}}
+where
+
+{\displaystyle {\begin{aligned}n_{c}&={\text{Number of concordant pairs}}\\n_{d}&={\text{Number of discordant pairs}}\\r&={\text{Number of rows}}\\c&={\text{Number of columns}}\\m&=\min(r,c)\end{aligned}}}{\displaystyle {\begin{aligned}n_{c}&={\text{Number of concordant pairs}}\\n_{d}&={\text{Number of discordant pairs}}\\r&={\text{Number of rows}}\\c&={\text{Number of columns}}\\m&=\min(r,c)\end{aligned}}}
 
 --
 
 Properties：
 
-1. $\tau_{XY}\in [-1,1]$, independent 0.
+1. &tau;<sub>XY</sub>, independent 0.
 1. Non-parametric test.
+1. Significant test: $z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$
 
 ???
 
 https://statistics.laerd.com/spss-tutorials/kendalls-tau-b-using-spss-statistics.php
+https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
 
 ---
 
-class: small
+## Alternative: Spearman &rho;
 
-### Spearman &rho;
-
-* Another ranking correlation 
-* Non-parametric version of Pearson R
+* Ranking correlation 
+* Non-parametric version of Pearson R<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 $$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}$$
 
 $rg$: The rank of the variable
+
+
+???
 
 When all n ranks are distinct integers:
 
@@ -188,27 +216,28 @@ $$\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}}$$
 
 $d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i})$
 
-???
-
 https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
 
 ---
 
 ## r vs. &rho; vs. &tau;
 
-&rho; vs. &tau; are non-parametric (useful when assumptions of Pearson's r is violated); working for ordinal. 
+1. Relationship
+    + r: Linear relationship;
+    + &tau; & &rho;: Monotonic relationship.
+
+1. &rho; & &tau; 
+    + Non-parametric;
+    + Useful when assumptions of r is *violated*;
+    + Working for ordinal. 
     
-Pearson's r: Linear relationship
-
-Kendall's &tau; and Spearman's &rho;: monotonic relationship.
-
-&tau; is more robust than &rho;, while &rho; has less cost than &tau;.
+1. &rho; vs. &tau: 
+    + &tau; is more robust than &rho;;
+    + &rho; has less cost than &tau;.
 
 ---
 
-## How about Nominal Variables?
-
-### &chi;<sup>2</sup> revisit
+## Nominal Variables?
 
 
 \begin{align}
@@ -217,7 +246,7 @@ Kendall's &tau; and Spearman's &rho;: monotonic relationship.
 \end{align}
 
 
-Nonparametric test
+(What's n<sub>i&bullet;</sub>?)
 
 ---
 
@@ -236,9 +265,9 @@ How do we know if father's partisanship affect their sons? Let's construct a hyp
 
 $H_0:$ Sons' party ID has no relation with their fathers' party ID, formally, $\pi_{ij} = \pi_i \pi_j$, for all i, j.
 
-For the above case, e.g., the expected value for both fathers and sons were Democratic is 50/100 &times; 60/100 &times; 100 = 30. 
+Expected value for D<sub>f</sub> & D<sub>s</sub>: 50/100 &times; 60/100 &times; 100 = 30. (Why?)
 
-Then in this case, $\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07$. 
+$\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07$. 
 
 d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is $\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`.
 
@@ -249,7 +278,11 @@ d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is $\chi^2_{critical} 
 1. When sample is too small and/or having too many missing data, the distribution might be different from $\chi^2$
 2. When N gets large, $\chi^2$ also increase (esp. over 100,000)
 
----
+--
+
+Solution: &Phi; and Cramer's V
+
+???
 
 ## &Phi; and Cramer's V
 
@@ -264,31 +297,43 @@ d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is $\chi^2_{critical} 
 
 class: inverse, bottom
 
-# Analysis of Variance
+# Treatments vs. Control
 
 ---
 
 ## ANOVA
 
+A more systematic way of variable comparison (in the context of .navy[experiment])
+
 * Completely random design
-* Equivalent to t-test, 
-    + when there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
+* Equivalent to t-test
 
 ???
+
+when there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
 
 Type I: reject a true $H_0$
 Type II: accept a false $H_0$
 
 ---
 
-.red[ASSUMPTION]
+## .red[ASSUMPTION]
 
-1. Y is normally distributed in eqch group (Type I &darr;)
+1. Y normally distributed in eqch group (Type I &darr;)
 1. Homogeneity of variance (Type I & II &darr;)
 1. Independence of cases (Type I &darr;)
 1. No large outliers (Type II &darr;)
 1. Large sample (Type I & II &darr;)
     
+    
+???
+
+1. Y is normally distributed in each group (Type I &darr;)
+1. Homogeneity of variance (Type I & II &darr;)
+1. Independence of cases (Type I &darr;)
+1. No large outliers (Type II &darr;)
+1. Large sample (Type I & II &darr;)
+
 ---
 
 ## One-Way
@@ -319,7 +364,7 @@ $$F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\
 
 Q. The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type? 
 
-| NSS 	| MOE 	| BJ 	|
+| NS 	| ME 	| BJ 	|
 |-----	|-----	|----	|
 | 27  	| 23  	| 48 	|
 | 22  	| 36  	| 35 	|
@@ -333,7 +378,7 @@ Q. The following table shows the funding applications of six faculty members of 
 
 class: small
 
-| NSS 	| MOE 	| BJ 	|
+| NS 	| ME 	| BJ 	|
 |-----	|-----	|----	|
 | 27  	| 23  	| 48 	|
 | 22  	| 36  	| 35 	|
@@ -342,13 +387,13 @@ class: small
 | 38  	| 39  	| 28 	|
 | 29  	| 32  	| 29 	|
 
-$H_0: \mu_1 = \mu_2 = \mu_3.$
+$H_0: \mu_1 = \mu_2 = \mu_3.$     
 $H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
 
 
 \begin{align}
-\bar X_{NSS} &= 29;\\
-\bar X_{MOE} &= 33.5;\\
+\bar X_{NS} &= 29;\\
+\bar X_{ME} &= 33.5;\\
 \bar X_{BJ} &= 37;\\
 \bar{\bar{X}} &= (29 + 33.5 + 37)/3 \approx 33.17
 \end{align}
@@ -364,7 +409,7 @@ class: small
 | Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-K} = MST/MSE$ 	|
 
 
-$\bar X_{NSS} = 29; \bar X_{MOE} = 33.5;\bar X_{BJ} = 37;\bar{\bar{X}} = 33.17$
+$\bar X_{NS} = 29; \bar X_{ME} = 33.5;\bar X_{BJ} = 37;\bar{\bar{X}} = 33.17$
 
 Then, $SST = \sum 6\times (\bar X - \bar{\bar{X}}) = 193$; 
 $SSE = [(27 - 29)^2 + (22 - 29)^2 + \dots + (29 - 37)^2] = 819.5$.
@@ -373,9 +418,11 @@ Given K = 3, N = 18, $F = \frac{193/(3 - 1)}{819.5/(18 - 3)} \approx 1.77$
 
 We know F at the critical value 0.05, $F_{0.05, 2, 15}$ is `r qf(.975, 2, 15)` > F, so fail to reject $H_0$
 
---
+---
 
-*Hint*: ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci)
+class: middle, center
+
+ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci)
 
 ---
 

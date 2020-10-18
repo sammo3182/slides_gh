@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Association Analysis</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="07_association_files/header-attrs-2.4.6/header-attrs.js"></script>
+    <link href="07_association_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="07_association_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="07_association_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -22,152 +26,179 @@ class: center, middle, inverse, title-slide
 
 
 
+---
+
+## Overview
+
+.pull-left[
+
+### Variable vs. Variable
+
++ Pearson's r
++ Kendall's &amp;tau;
++ Spearman's &amp;rho;
+
++ &amp;chi;&lt;sup&gt;2&lt;/sup&gt;, etc.
+
+]
+
+.pull-right[
+
+### Treatments vs. Control
+
++ One-way
++ Two-way
+
+]
+
+--
+
+.center[Please pay attention to the .red[assumptions]!!!]
+
+---
 
 class: inverse, bottom
 
-# Association
+# Variable vs. Variable
 
 ---
 
-## Joint Distribution Revisit 
+## Ways to Measure Relations among Two Variables
 
-What's joint distribution in the probability theory? 
+A.k.a., association.
 
---
+1. Covariance
+1. Correlations
+    + Pearson's r
+    + Kendall's &amp;tau;
+    + Spearman's &amp;rho;
 
-`$$n_{\bullet\bullet} = \sum\sum n_{ij}.$$`
-
---
-
-In statistics, joint distribution refers to the joint patterns of two or more variables. 
-
----
-
-## Covariance: 
-
-`$$\sigma_{X, Y} = \sum(X - \mu_x)(Y - \mu_y)p(x,y)$$`.
 
 ---
 
-class: small
+Remember Variance?
 
-e.g., n: population 10,000,000, X: education, Y: age, 
+.center[&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;X&lt;/sub&gt; = &amp;sum;(X - &amp;mu;&lt;sub&gt;X&lt;/sub&gt;)&lt;sup&gt;2&lt;/sup&gt;p(x)]
 
-| Education 	| 20~35 (mean = 30) 	| 35~55 (mean = 45) 	| 55~100 (mean = 70) 	|
-|-----------	|----------------	|----------------	|-----------------	|
-| 0         	| 1,000,000        	| 2,000,000        	| 5,000,000         	|
-| 1         	| 3,000,000        	| 6,000,000        	| 10,000,000        	|
-| 2         	| 18,000,000       	| 21,000,000       	| 15,000,000        	|
-| 3         	| 7,000,000        	| 8,000,000        	| 4,000,000         	|
+## Covariance
 
---
+.center[&amp;sigma;&lt;sub&gt;X, Y&lt;/sub&gt; = &amp;sum;(X - &amp;mu;&lt;sub&gt;X&lt;/sub&gt;)(Y - &amp;mu;&lt;sub&gt;Y&lt;/sub&gt;)p(x, y)]
 
-`\begin{align}
-\mu_X =&amp; \sum Xp(x) \\
-      =&amp; 0 * 0.8 + 1 * 0.19 + 2 * 0.54 + 3 * 0.19 = 1.84;\\
-\mu_Y =&amp; 30 * 0.29 + 45 * 0.57 + 70 * 0.34 = 49.15.\\
-\sigma_{x, y} =&amp; (0 - 1.84)(30 - 49.15)* 0.1 \\
-               &amp; + (0 - 1.84)(45 - 49.15)*0.2\dots = -3.636
-\end{align}`
+Hint: Covariance is the .red[co]-.navy[variance].
 
-???
-
-0.8 = (1000000 + 2000000 + 5000000)/10,000,000
-0.01 = 1,000,000/10,000,000
 
 ---
 
-## Correlation
+## Correlation (Pearson's r)
 
-For a population:
+### Population&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
 
 `$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$`
 
-For a sample: 
+In other words, `\(\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}\)`
+
+???
+
+Partial correlation in multiple regressions: `\(partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}\)`
+
+https://statistics.laerd.com/spss-tutorials/pearsons-product-moment-correlation-using-spss-statistics.php
+
+
+--
+
+### Sample
 
 `\(r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.\)`
 
 
-Relations with covariance: `\(\rho_{X,Y} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}\)`
-
 ---
 
-class: small
-
-## Correlations
-
-### Pearson's r
-
-`$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}}$$`
-
-For a sample: 
-
-`$$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$$`
-
-Properties： 
-
-1. `\(\rho_{XY}\in [-1,1]\)`, independent 0.
-1. Greater value indicates stronger linear relationship.
-1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
-1. Not robust to skewed data and outliers.
-
----
-
-Partial correlation in multiple regressions: `\(partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}\)`
-
---
-
-.red[ASSUMPTION]
+## .red[ASSUMPTION]
 
 1. Continuous data
 1. Linear Relationship
 
-???
+--
 
-https://statistics.laerd.com/spss-tutorials/pearsons-product-moment-correlation-using-spss-statistics.php
+## Properties 
+
+1. &amp;rho;&amp;in; [-1, 1], 0 independent.
+1. Greater value indicates stronger .navy[linear] relationship.
+1. Parametric test (a.k.a., assuming normal distribution, linearity, and homoscedasticity.)
+1. .red[Not robust] to skewed data and outliers.
 
 ---
 
-### Kendall's &amp;tau;
+## Alternative: Kendall's &amp;tau;
 
-For any pair of observations `\(x_{i},y_{i}\)` and `\(x_{j},y_{j}\)`, where `\(i&lt;j\)`: 
+For any pair of observations x&lt;sub&gt;i&lt;/sub&gt;, y&lt;sub&gt;i&lt;/sub&gt; and x&lt;sub&gt;j&lt;/sub&gt;, y&lt;sub&gt;j&lt;/sub&gt;, i &lt; j: 
 
-**Concordant pairs**: , if both `\(x_{i}&gt;x_{j}\)` and `\(y_{i}&gt;y_{j}\)`; or if both `\(x_{i}&lt;x_{j}\)` and `\(y_{i}&lt;y_{j}\)`. 
+###  Concordant pairs
+x&lt;sub&gt;i&lt;/sub&gt; &gt; x&lt;sub&gt;j&lt;/sub&gt; &amp; y&lt;sub&gt;i&lt;/sub&gt; &gt; y&lt;sub&gt;j&lt;/sub&gt; | x&lt;sub&gt;i&lt;/sub&gt; &lt; x&lt;sub&gt;j&lt;/sub&gt; &amp; y&lt;sub&gt;i&lt;/sub&gt; &lt; y&lt;sub&gt;j&lt;/sub&gt;
 
-**Discordant pairs**:  if `\(x_{i}&gt;x_{j}\)` and `\(y_{i}&lt;y_{j}\)`; or if `\(x_{i}&lt;x_{j}\)` and `\(y_{i}&gt;y_{j}\)`. 
+### Discordant pairs
 
-**Tied pairs**: If `\(x_{i}=x_{j}\)` or `\(y_{i}=y_{j}\)`, the pair is neither concordant nor discordant.
+x&lt;sub&gt;i&lt;/sub&gt; &gt; x&lt;sub&gt;j&lt;/sub&gt; &amp; y&lt;sub&gt;i&lt;/sub&gt; &lt; y&lt;sub&gt;j&lt;/sub&gt; | x&lt;sub&gt;i&lt;/sub&gt; &lt; x&lt;sub&gt;j&lt;/sub&gt; &amp; y&lt;sub&gt;i&lt;/sub&gt; &gt; y&lt;sub&gt;j&lt;/sub&gt;
+
+### Tied pairs
+
+x&lt;sub&gt;i&lt;/sub&gt; = x&lt;sub&gt;j&lt;/sub&gt; &amp; y&lt;sub&gt;i&lt;/sub&gt; = y&lt;sub&gt;j&lt;/sub&gt;
+
+???
+
+tie on x or tie on y are also not concordant or discordant
 
 ---
 
 `$$\tau=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}}$$`
 
-* `\(n_c\)`: concordant pair.
-* `\(n_d\)`: discordant pair.
+* n&lt;sub&gt;c&lt;/sub&gt;: concordant pair.
+* n&lt;sub&gt;d&lt;/sub&gt;: discordant pair.
+
+--
+
+.center[Problems? Think...&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;]
+
+???
+
+When ties are accounted? When numbers of values are not the same?
+
+\tau _{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}}
+where
+
+{\displaystyle {\begin{aligned}n_{0}&amp;=n(n-1)/2\\n_{1}&amp;=\sum _{i}t_{i}(t_{i}-1)/2\\n_{2}&amp;=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&amp;={\text{Number of concordant pairs}}\\n_{d}&amp;={\text{Number of discordant pairs}}\\t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}\end{aligned}}}{\begin{aligned}n_{0}&amp;=n(n-1)/2\\n_{1}&amp;=\sum _{i}t_{i}(t_{i}-1)/2\\n_{2}&amp;=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&amp;={\text{Number of concordant pairs}}\\n_{d}&amp;={\text{Number of discordant pairs}}\\t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}\end{aligned}}
+
+{\displaystyle \tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}}
+where
+
+{\displaystyle {\begin{aligned}n_{c}&amp;={\text{Number of concordant pairs}}\\n_{d}&amp;={\text{Number of discordant pairs}}\\r&amp;={\text{Number of rows}}\\c&amp;={\text{Number of columns}}\\m&amp;=\min(r,c)\end{aligned}}}{\displaystyle {\begin{aligned}n_{c}&amp;={\text{Number of concordant pairs}}\\n_{d}&amp;={\text{Number of discordant pairs}}\\r&amp;={\text{Number of rows}}\\c&amp;={\text{Number of columns}}\\m&amp;=\min(r,c)\end{aligned}}}
 
 --
 
 Properties：
 
-1. `\(\tau_{XY}\in [-1,1]\)`, independent 0.
+1. &amp;tau;&lt;sub&gt;XY&lt;/sub&gt;, independent 0.
 1. Non-parametric test.
+1. Significant test: `\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)`
 
 ???
 
 https://statistics.laerd.com/spss-tutorials/kendalls-tau-b-using-spss-statistics.php
+https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient
 
 ---
 
-class: small
+## Alternative: Spearman &amp;rho;
 
-### Spearman &amp;rho;
-
-* Another ranking correlation 
-* Non-parametric version of Pearson R
+* Ranking correlation 
+* Non-parametric version of Pearson R&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
 
 `$$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}$$`
 
 `\(rg\)`: The rank of the variable
+
+
+???
 
 When all n ranks are distinct integers:
 
@@ -175,27 +206,28 @@ When all n ranks are distinct integers:
 
 `\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i})\)`
 
-???
-
 https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
 
 ---
 
 ## r vs. &amp;rho; vs. &amp;tau;
 
-&amp;rho; vs. &amp;tau; are non-parametric (useful when assumptions of Pearson's r is violated); working for ordinal. 
+1. Relationship
+    + r: Linear relationship;
+    + &amp;tau; &amp; &amp;rho;: Monotonic relationship.
+
+1. &amp;rho; &amp; &amp;tau; 
+    + Non-parametric;
+    + Useful when assumptions of r is *violated*;
+    + Working for ordinal. 
     
-Pearson's r: Linear relationship
-
-Kendall's &amp;tau; and Spearman's &amp;rho;: monotonic relationship.
-
-&amp;tau; is more robust than &amp;rho;, while &amp;rho; has less cost than &amp;tau;.
+1. &amp;rho; vs. &amp;tau: 
+    + &amp;tau; is more robust than &amp;rho;;
+    + &amp;rho; has less cost than &amp;tau;.
 
 ---
 
-## How about Nominal Variables?
-
-### &amp;chi;&lt;sup&gt;2&lt;/sup&gt; revisit
+## Nominal Variables?
 
 
 `\begin{align}
@@ -204,7 +236,7 @@ Kendall's &amp;tau; and Spearman's &amp;rho;: monotonic relationship.
 \end{align}`
 
 
-Nonparametric test
+(What's n&lt;sub&gt;i&amp;bullet;&lt;/sub&gt;?)
 
 ---
 
@@ -223,9 +255,9 @@ How do we know if father's partisanship affect their sons? Let's construct a hyp
 
 `\(H_0:\)` Sons' party ID has no relation with their fathers' party ID, formally, `\(\pi_{ij} = \pi_i \pi_j\)`, for all i, j.
 
-For the above case, e.g., the expected value for both fathers and sons were Democratic is 50/100 &amp;times; 60/100 &amp;times; 100 = 30. 
+Expected value for D&lt;sub&gt;f&lt;/sub&gt; &amp; D&lt;sub&gt;s&lt;/sub&gt;: 50/100 &amp;times; 60/100 &amp;times; 100 = 30. (Why?)
 
-Then in this case, `\(\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07\)`. 
+`\(\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07\)`. 
 
 d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is `\(\chi^2_{critical} = \chi^2_{0.05, 4} =\)` 11.1433.
 
@@ -236,7 +268,11 @@ d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is `\(\chi^2_{critical
 1. When sample is too small and/or having too many missing data, the distribution might be different from `\(\chi^2\)`
 2. When N gets large, `\(\chi^2\)` also increase (esp. over 100,000)
 
----
+--
+
+Solution: &amp;Phi; and Cramer's V
+
+???
 
 ## &amp;Phi; and Cramer's V
 
@@ -251,31 +287,43 @@ d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4, critical value is `\(\chi^2_{critical
 
 class: inverse, bottom
 
-# Analysis of Variance
+# Treatments vs. Control
 
 ---
 
 ## ANOVA
 
+A more systematic way of variable comparison (in the context of .navy[experiment])
+
 * Completely random design
-* Equivalent to t-test, 
-    + when there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
+* Equivalent to t-test
 
 ???
+
+when there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
 
 Type I: reject a true `\(H_0\)`
 Type II: accept a false `\(H_0\)`
 
 ---
 
-.red[ASSUMPTION]
+## .red[ASSUMPTION]
 
-1. Y is normally distributed in eqch group (Type I &amp;darr;)
+1. Y normally distributed in eqch group (Type I &amp;darr;)
 1. Homogeneity of variance (Type I &amp; II &amp;darr;)
 1. Independence of cases (Type I &amp;darr;)
 1. No large outliers (Type II &amp;darr;)
 1. Large sample (Type I &amp; II &amp;darr;)
     
+    
+???
+
+1. Y is normally distributed in each group (Type I &amp;darr;)
+1. Homogeneity of variance (Type I &amp; II &amp;darr;)
+1. Independence of cases (Type I &amp;darr;)
+1. No large outliers (Type II &amp;darr;)
+1. Large sample (Type I &amp; II &amp;darr;)
+
 ---
 
 ## One-Way
@@ -306,7 +354,7 @@ Calculation:
 
 Q. The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type? 
 
-| NSS 	| MOE 	| BJ 	|
+| NS 	| ME 	| BJ 	|
 |-----	|-----	|----	|
 | 27  	| 23  	| 48 	|
 | 22  	| 36  	| 35 	|
@@ -320,7 +368,7 @@ Q. The following table shows the funding applications of six faculty members of 
 
 class: small
 
-| NSS 	| MOE 	| BJ 	|
+| NS 	| ME 	| BJ 	|
 |-----	|-----	|----	|
 | 27  	| 23  	| 48 	|
 | 22  	| 36  	| 35 	|
@@ -329,13 +377,13 @@ class: small
 | 38  	| 39  	| 28 	|
 | 29  	| 32  	| 29 	|
 
-`\(H_0: \mu_1 = \mu_2 = \mu_3.\)`
+`\(H_0: \mu_1 = \mu_2 = \mu_3.\)`     
 `\(H_1: \mu_1 \neq \mu_2 \neq \mu_3.\)`
 
 
 `\begin{align}
-\bar X_{NSS} &amp;= 29;\\
-\bar X_{MOE} &amp;= 33.5;\\
+\bar X_{NS} &amp;= 29;\\
+\bar X_{ME} &amp;= 33.5;\\
 \bar X_{BJ} &amp;= 37;\\
 \bar{\bar{X}} &amp;= (29 + 33.5 + 37)/3 \approx 33.17
 \end{align}`
@@ -351,7 +399,7 @@ class: small
 | Total     	| `\(SS = SST + SSE\)`                              	| N - 1 	| `\(F_{\alpha, K-1, N-K} = MST/MSE\)` 	|
 
 
-`\(\bar X_{NSS} = 29; \bar X_{MOE} = 33.5;\bar X_{BJ} = 37;\bar{\bar{X}} = 33.17\)`
+`\(\bar X_{NS} = 29; \bar X_{ME} = 33.5;\bar X_{BJ} = 37;\bar{\bar{X}} = 33.17\)`
 
 Then, `\(SST = \sum 6\times (\bar X - \bar{\bar{X}}) = 193\)`; 
 `\(SSE = [(27 - 29)^2 + (22 - 29)^2 + \dots + (29 - 37)^2] = 819.5\)`.
@@ -360,9 +408,11 @@ Given K = 3, N = 18, `\(F = \frac{193/(3 - 1)}{819.5/(18 - 3)} \approx 1.77\)`
 
 We know F at the critical value 0.05, `\(F_{0.05, 2, 15}\)` is 4.7650483 &gt; F, so fail to reject `\(H_0\)`
 
---
+---
 
-*Hint*: ANOVA is usually used when `\(K \in [2, 3]\)`; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci)
+class: middle, center
+
+ANOVA is usually used when `\(K \in [2, 3]\)`; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci)
 
 ---
 
@@ -442,7 +492,7 @@ For factor B (GPA), `\(SS_B = 3\times [(45.67 - 33.72)^2 + \dots + (25 - 33.72)^
 Then, `\(F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}\)` is 10.4 &gt; critical F 5.4563955, reject `\(H_0\)`.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
@@ -487,6 +537,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -504,17 +580,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {
