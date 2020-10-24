@@ -4,7 +4,7 @@
     <title>社会网络方法论: 分析网络</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="08_networkAnalysisII_files/header-attrs-2.4/header-attrs.js"></script>
+    <script src="08_networkAnalysisII_files/header-attrs-2.5/header-attrs.js"></script>
     <link href="08_networkAnalysisII_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="08_networkAnalysisII_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
     <link href="08_networkAnalysisII_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -801,52 +801,323 @@ non-parametric，从sample中抽出两组，对比stats，看是否一样。
 
 .center[E[Y&lt;sub&gt;ij&lt;/sub&gt;] = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1ij&lt;/sub&gt; + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2ij&lt;/sub&gt; + ... + &amp;beta;&lt;sub&gt;k&lt;/sub&gt;X&lt;sub&gt;kij&lt;/sub&gt;]
 
---
+---
 
-.center[Logistic regression?]
+QAP can help
+
+
+```r
+reports&lt;-read.csv("data/reports.csv")
+reports&lt;-reports[, -1]
+friends&lt;-read.csv("data/friends.csv", row.names="ID")
+advice&lt;-read.csv("data/advice.csv", row.names="ID")
+
+qap_reg &lt;- netlogit(advice, list(friends, reports), nullhyp="qap", reps=10)
+```
 
 ???
 
-1. Dependent variables among ties
-1. Conditioned on the entire graph
-1. Structure is fun!
+There are also `netlm` etc.
+
+Not 10, often over 1000
+
+nullhyp choices: qap quick, qapspp robust
 
 ---
 
-## 常见的网络回归假定
 
-### Covariate
+```
+## 
+## Network Logit Model
+## 
+## Coefficients:
+##             Estimate   Exp(b)     Pr(&lt;=b) Pr(&gt;=b) Pr(&gt;=|b|)
+## (intercept) -0.4251826  0.6536504 0.3     0.7     0.3      
+## x1           0.5794452  1.7850479 1.0     0.0     0.1      
+## x2           3.0589826 21.3058690 1.0     0.0     0.0      
+## 
+## Goodness of Fit Statistics:
+## 
+## Null deviance: 582.2436 on 420 degrees of freedom
+## Residual deviance: 548.1452 on 417 degrees of freedom
+## Chi-Squared test of fit improvement:
+## 	 34.09844 on 3 degrees of freedom, p-value 1.888613e-07 
+## AIC: 554.1452 	BIC: 566.266 
+## Pseudo-R^2 Measures:
+## 	(Dn-Dr)/(Dn-Dr+dfn): 0.07509042 
+## 	(Dn-Dr)/Dn: 0.05856387 
+## Contingency Table (predicted (rows) x actual (cols)):
+## 
+##          Actual
+## Predicted     0     1
+##         0   188   122
+##         1    42    68
+## 
+## 	Total Fraction Correct: 0.6095238 
+## 	Fraction Predicted 1s Correct: 0.6181818 
+## 	Fraction Predicted 0s Correct: 0.6064516 
+## 	False Negative Rate: 0.6421053 
+## 	False Positive Rate: 0.1826087 
+## 
+## Test Diagnostics:
+## 
+## 	Null Hypothesis: qap 
+## 	Replications: 10 
+## 	Distribution Summary:
+## 
+##        (intercept)      x1      x2
+## Min        -4.1846 -2.6131 -1.4193
+## 1stQ       -3.6973 -1.6503 -0.4873
+## Median     -3.2993 -1.4386  0.1619
+## Mean       -3.2541 -1.0694  0.3365
+## 3rdQ       -2.8198 -0.6054  1.0610
+## Max        -2.1450  0.9575  2.6196
+```
 
-同个党派的议员是否合作得更多
+---
+
+class: middle
+
+.pull-left[
+&lt;img src="images/sna_layangpian.jpeg" height = 500 /&gt;
+]
 
 ???
 
-党派 vs issue
+ERGM就如同从图画到拉洋片/电影
 
 --
+
+.pull-right[
+
+## ERGM
+
+1. Nodal
+1. Edge (Dyadic)
+1. Network (Structural)
+
+]
+
+???
+
+更关键在，在理解一个的时候考虑到其他层次问题，“全方位视听感受”
+
+但如果对structure不感兴趣，不需要用ERGM
+
+Latent space models 也可以控制structure，但目的在于去除而不是care，而且是基于baysian
+
+---
+
+## ERGM能解决的一些问题
 
 ### Interdependence
 
-是否都与第三国开战的两国更不可能开战？
+1. 面对共同的敌人，是否减小彼此敌意？
+1. 合作者选择过程终得Popularity effects
 
-合作者（co-authors）是否存在流行效应(popularity effects)?
+???
+
+联合抗敌 vs "攘外必先安内"
+
+--
+
+### Dyadic Covariate
+
+1. 国家是否与相同政体国家更可能结盟
+1. 同个党派议员是否比不同党派议员合作更多
+
+???
+
+partisanship vs. issues
+
+--
+
+### Structural
+
+1. Cosponsorship是否存在互惠
+1. 教室中指定同桌，是否改变不同人群关系
+
 
 ---
 
-## 实现网络多元分析
+## ERGM成长史
 
 Simple Random Graph Model
 
-`$$P(X = x) = \frac{exp(\theta_LL(x))}{\kappa(\theta)}$$`
+`$$P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}$$`
+
++ L: # of arcs
+
+???
+
+1959，只允许specify links
+
+&amp;theta; 是edge paramenter, k(&amp;theta)只是normalize整个结果sum为1
 
 --
 
 .red[Bernoulli Assumption]
 
-+ Tie variables assumed independent
++ Tie 是独立的（略~）
 + IID ties &amp;rarr; 
     + Log-probability of a graph is proportional to a weighted sum of edge-count
 
+???
+
+基于这个assumption才有simple random graph
+
+---
+
+class: small
+
+### P&lt;sup&gt;1&lt;/sup&gt; Model
+
+`$$P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy_{i+} + \sum_j\beta_iy_{+j}})}{\kappa(\theta)}$$`
+
++ M: # of mutual
++ y&lt;sub&gt;i+&lt;/sub&gt;: # outgoing ties
++ y&lt;sub&gt;+j&lt;/sub&gt;: # incoming ties
+
+.red[Dyad Independence Assumption]
+
++ 允许互惠和不同方向的不同作用
++ 用于binary,有向网络
+
+???
+
++ Allows for reciprocity and differential attractiveness
++ Useful for binary, directed graphs
+
+--
+
+&amp;zwj;缺陷：~~结构~~
+
+???
+
+所有高于degree of reciprocity的性质都不能解决, 没人再用
+
+---
+
+### P&lt;sup&gt;*&lt;/sup&gt; Model
+
+`$$P(X = x) = \frac{exp(\sum_i\theta_i\color{red}{z_i(x)})}{\kappa(\theta)}$$`
+
+???
+
+z&lt;sub&gt;i&lt;/sub&gt;可以是any network statistics，可以把他们加在一起
+
+--
+
+.red[Markov Assumption]
+
++ Ties are (conditionally) independent unless they .navy[share] a node.
+    + Parallels in Markov chains, time series, spatial analysis
++ Think of nodes as .navy[connecting] edges to obtain this dependence structure
++ Ties are conditionally dependent if and only if they .navy[share] a node
+
+???
+
+ERGM基于此发展而来，现在两者区别更多是computational而非想法上的
+
+---
+
+.pull-left[
+&lt;img src="images/sna_pStarParameters.jpg" height = 600 /&gt;
+]
+
+.pull-right[
+&lt;img src="images/sna_pStarParametersII.jpg" height = 600 /&gt;
+]
+
+???
+
+Things one can test in P*, path closure: 多重triangle
+
+算起来更麻烦， necessary 
+
+---
+
+## 你所面对的网络世界
+
+
+```r
+library(ergm)
+?ergm.terms
+search.ergmTerms(keyword = "triangle")
+```
+
+???
+
+GOOGLE上没有全的表
+
+---
+
+## ERGM登场
+
+`$$P(N, \boldsymbol{\theta}) = \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}$$`
+
+.red[Assumptions]
+
+1. Model是正确的
+1. 在设定了network statistics后，观测到任何两个具有同样网络属性的networks的几率是相同的
+
+???
+
+N* 是特定network statistics 的数目
+分母随所加statistics而变得复杂
+
+1. Model is correctly specified
+1. Given a set of network statistics, there's equal probability of observing any two networks with the same values of those statistics.
+
+---
+
+## 解释ERGM
+
+### Network level
+
+.center[Relative likelihood of observing N&lt;sup&gt;i+&lt;/sup&gt; to observing N&lt;sup&gt;i-&lt;/sup&gt;]
+
+???
+
+增加一个network statistics 比不加它变化的likelihood
+
+### Edge level
+
+### Nodal level
+
+---
+
+## ERGM的局限
+
+1. MPLE vs. MLE vs. MCMC-MLE
+
+1. Degeneracy
+
+1. Sensitivity to missing data
+
+???
+
+1. Maximum pseudo LE； 前两个对P1之前还好，之后算不出来
+
+1. Degeneracy： unstable results, random process, model fit; specify too many things, leading to prediction that everyone should connect to everyone or none
+
+Theory really matters!! 来解释要加什么network statistics
+
+怎么解决 geometrically weighted degree distribution
+
+1. Sensitivity
+
+---
+
++ TERGM
+    + STERGM
++ FERGM
+
+???
+
+S TERGM: Network panel data, Separable TERGM for each time point the ties formating and disoluting independently
+
+F ERGM: Frailty ERGM "individual-level random effects" for the propensity for a directed tie
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
