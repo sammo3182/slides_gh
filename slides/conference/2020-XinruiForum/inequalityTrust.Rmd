@@ -1,5 +1,5 @@
 ---
-title: "How Inequality Affects Political Support"
+title: "How Inequality Affects Political Trust"
 subtitle: "A Mediation Analysis"
 author: 
 - Shuai Jin, University of Massachusetts, Boston
@@ -19,6 +19,13 @@ output:
       highlightLines: true
       countIncrementalSlides: false
 ---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+library(icon) # for font awesome
+```
+
 
 ## Object
 
@@ -242,3 +249,76 @@ the most spatially concrete and temporarily updated measurement of socioeconomic
 ### Controls
 
 Individual and prefectural
+
+---
+
+## Results
+
+<img src="images/inequality2efficacyPlots-1.png" height = 500 />
+
+---
+
+<img src="images/mediationCenter-1.png" height = 700 />
+
+---
+
+## Conclusion
+
+1. Over 90%
+1. Mechanisms
+    + Social Conflicts &asymp; Governance Inequality < Judicial Inequality < Corruption
+1. Central vs. Local
+    + Corruption
+    + Governance inequality (Reversed hierarchical trust?)
+
+???
+
+Corruption affects the local more
+
+---
+
+class: center, middle
+
+# Thank you!
+
+`r icon::fa("envelope", size = "lg")`&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+`r icon::fa("globe", size = "lg")`&nbsp; https://sammo3182.github.io/
+
+`r icon::fa("github", size = "lg")`&nbsp; [sammo3182](https://github.com/sammo3182)
+
+---
+
+## SES Indicators
+
+.scroll-output[
+
+```{r ses, echo=FALSE}
+options(knitr.kable.NA = '') # hide "NA" in the table 
+
+tibble::tribble(
+ ~Coding,          ~Education,                                                  ~`Job Prestige`,                ~`Car Value`,                                                        ~`Social Security`,                                              ~`Health Care`,
+      1L,         "No school",                                                      "Farmers",                  "No car",                                                           "No coverage",                                             "No coverage",
+      2L,    "Primary school",                        "Manufacturing, transportation workers",       "Under 100,000 RMB",                          "Social Pension Insurance for Rural Residents",                 "New Rural Cooperative Medical Insurance",
+      3L,     "Middle school",                                              "Service workers",   "100,000 - 200,000 RMB",              "Social Pension Insurance for Non-working Urban Residents", "Basic Medical Insurance for Non-working Urban Residents",
+      4L,       "High school",                                                       "Clerks",   "200,000 - 300,000 RMB",                      "Social Pension Insurance for Urban Working Group",         "Basic Medical Insurance for Urban Working Group",
+      5L, "Vocational school",                                                "Professionals",   "300,000 - 500,000 RMB", "Pension Insurance for Employees in Government and Public Institutions",                       "Publicly Funded Free Medical Care",
+      6L,    "Junior college", "Government officials, principals in public or private sector", "500,000 - 1,000,000 RMB",                                                                      NA,                                                        NA,
+      7L,           "College",                                                             NA,   "Above one million RMB",                                                                      NA,                                                        NA,
+      8L,   "Graduate school",                                                             NA,                        NA,                                                                      NA,                                                        NA
+ ) %>% kable(format = "html")
+
+```
+
+]
+
+---
+
+## Gini Coefficient
+
+\begin{equation}
+G = 1 - \sum(q_i + q_{i - 1})(p_i - p_{i - 1}) 
+\end{equation}
+
+where `q` is the cumulative proportion of SES of prefecture `i`; `p` is cumulative proportion of population within the prefecture. 
+The resulted coefficients ranges from 0.16 to 0.25. 
