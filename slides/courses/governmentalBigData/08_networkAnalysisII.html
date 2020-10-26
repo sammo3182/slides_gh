@@ -65,7 +65,7 @@ class: inverse, bottom
 
 1. None: A &amp;nbsp; B
 1. Arc: A &amp;rarr; B; B &amp;larr; C
-1. Mutuality: A &amp;harr; B
+1. .red[Reciprocal: A &amp;harr; B]
 
 ---
 
@@ -226,7 +226,7 @@ The k-core of a network graph G is the maximal subgraph H &amp;sube; G, such tha
 
 https://www.youtube.com/watch?v=rHVrgbc_3JA
 
-&lt;img src="images/sna_kcoreSolution.png" height = 300 /&gt;
+&lt;img src="images/sna_kcoresSolution.png" height = 300 /&gt;
 
 每个人都与其他若干人相连
 
@@ -238,11 +238,13 @@ https://www.youtube.com/watch?v=rHVrgbc_3JA
 
 &gt; 邻国相望，鸡犬之声相闻，民至老死，不相往来 ——《老子·第八十》
 
-组内紧密连结，无跨组连结。
-
 --
 
 .center[&lt;img src="images/sna_faction.png" height = 300 /&gt;]
+
+???
+
+组内紧密连结，无跨组连结。
 
 ---
 
@@ -267,7 +269,7 @@ Arranging actors to resemble the ideal as closely as possible.
 + Partition the network
 + Evaluate how good the partition is
 + Move some actors from one group to another
-+ See if there’s improvement
++ See if there's improvement
 + Keep repeating the above steps until further improvement is impossible
 
 ---
@@ -445,7 +447,7 @@ class: inverse, bottom
 
 “Patient 0”效应: 谁接触了Patient 0，最终感染了谁
 
-.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.png" height = 400 /&gt;]
 
 ???
 
@@ -456,7 +458,7 @@ Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., &amp; Christakis, N. A. (2018
 
 ## 暴露网络：谁是易感人群
 
-.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.png" height = 400 /&gt;]
 
 ???
 
@@ -466,7 +468,7 @@ Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., &amp; Christakis, N. A. (2018
 
 ## 传动网络：传播（传递）路径究竟是怎样的
 
-.center[&lt;img src="images/sna_diffusionQ.bmp" height = 400 /&gt;]
+.center[&lt;img src="images/sna_diffusionQ.png" height = 400 /&gt;]
 
 ---
 
@@ -831,10 +833,18 @@ nullhyp choices: qap quick, qapspp robust
 ## Network Logit Model
 ## 
 ## Coefficients:
-##             Estimate   Exp(b)     Pr(&lt;=b) Pr(&gt;=b) Pr(&gt;=|b|)
-## (intercept) -0.4251826  0.6536504 0.3     0.7     0.3      
-## x1           0.5794452  1.7850479 1.0     0.0     0.1      
-## x2           3.0589826 21.3058690 1.0     0.0     0.0      
+##             Estimate  
+## (intercept) -0.4251826
+## x1           0.5794452
+## x2           3.0589826
+##             Exp(b)     Pr(&lt;=b)
+## (intercept)  0.6536504 0.3    
+## x1           1.7850479 1.0    
+## x2          21.3058690 1.0    
+##             Pr(&gt;=b) Pr(&gt;=|b|)
+## (intercept) 0.7     0.3      
+## x1          0.0     0.1      
+## x2          0.0     0.0      
 ## 
 ## Goodness of Fit Statistics:
 ## 
@@ -865,13 +875,20 @@ nullhyp choices: qap quick, qapspp robust
 ## 	Replications: 10 
 ## 	Distribution Summary:
 ## 
-##        (intercept)      x1      x2
-## Min        -4.1846 -2.6131 -1.4193
-## 1stQ       -3.6973 -1.6503 -0.4873
-## Median     -3.2993 -1.4386  0.1619
-## Mean       -3.2541 -1.0694  0.3365
-## 3rdQ       -2.8198 -0.6054  1.0610
-## Max        -2.1450  0.9575  2.6196
+##        (intercept)      x1
+## Min        -4.1846 -2.6131
+## 1stQ       -3.6973 -1.6503
+## Median     -3.2993 -1.4386
+## Mean       -3.2541 -1.0694
+## 3rdQ       -2.8198 -0.6054
+## Max        -2.1450  0.9575
+##             x2
+## Min    -1.4193
+## 1stQ   -0.4873
+## Median  0.1619
+## Mean    0.3365
+## 3rdQ    1.0610
+## Max     2.6196
 ```
 
 ---
@@ -1054,7 +1071,10 @@ GOOGLE上没有全的表
 
 ## ERGM登场
 
-`$$P(N, \boldsymbol{\theta}) = \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}$$`
+`\begin{align}
+P(N, \boldsymbol{\theta}) =&amp; \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}\\
+P(N, \boldsymbol{\theta}) =&amp; \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}
+\end{align}`
 
 .red[Assumptions]
 
@@ -1075,15 +1095,68 @@ N* 是特定network statistics 的数目
 
 ### Network level
 
-.center[Relative likelihood of observing N&lt;sup&gt;i+&lt;/sup&gt; to observing N&lt;sup&gt;i-&lt;/sup&gt;]
+.center[.red[exp(&amp;theta;)]]
+
+Relative likelihood of observing N&lt;sup&gt;i+&lt;/sup&gt; to observing N&lt;sup&gt;i-&lt;/sup&gt;
 
 ???
 
 增加一个network statistics 比不加它变化的likelihood
 
+odd-like stuff: 那么 &amp;theta; = 0代表什么？
+
+&amp;theta; = 0 &amp;rArr; exp(&amp;theta;) = 1 &amp;rArr; 增加或不增加这个stats看到observed network几率是一样的，a.k.a., 没用
+
+
+--
+
 ### Edge level
 
+P(N&lt;sub&gt;ij&lt;/sub&gt; = 1|N&lt;sub&gt;-ij&lt;/sub&gt;, &amp;theta) = logit&lt;sup&gt;-1&lt;/sup&gt;&amp;sum;&lt;sub&gt;r=1&lt;/sub&gt;&amp;theta;&lt;sub&gt;r&lt;/sub&gt;&amp;delta;&lt;sub&gt;r&lt;/sub&gt;&lt;sup&gt;(ij)&lt;/sup&gt;(N)
+
+.center[.red[exp(&amp;theta;&lt;sub&gt;r&lt;/sub&gt;&amp;delta;&lt;sub&gt;r&lt;/sub&gt;&lt;sup&gt;(ij))]]
+
+???
+
+&amp;delta;&lt;sub&gt;r&lt;/sub&gt;&lt;sup&gt;(ij)&lt;/sup&gt;: Change parameter
+
+记录改变多少： 比如同样是增加一个edge，对于mutual（包含reciprocal和not conntected），对于i 和 j已经相连的情况，加一个edge是增加了一个mutual，那么&amp;delta; + 1, 但如果i 和 j不相连，那么加一个edge，是把一个互不相连的mutual弄没了，&amp;delta; - 1。 所以实际计算比较复杂，但btergm::interpret
+
+`\(logit^{-1} = frac{1}{1 + e^{-1}}\)`
+
+--
+
 ### Nodal level
+
+Block-wise conditional distributions
+
+???
+
+Blocks are split according to an attribute, complicated
+
+---
+
+## ERGM Diagnoses
+
+Degeneracy
+
+Convergence
+
+???
+
+Degenracy is ERGM goodness of fit, unstable results, random process, model fit, little changes a lot; leading to prediction that everyone should connect to everyone or none
+
+Looking for high p-value (not violate the assumptions)
+
+COnvergence is for Markov Chain
+
+--
+
+Suuuuuuuuuuuuuuuuper Important!
+
+
+但我们只有两堂课……
+
 
 ---
 
@@ -1099,8 +1172,6 @@ N* 是特定network statistics 的数目
 
 1. Maximum pseudo LE； 前两个对P1之前还好，之后算不出来
 
-1. Degeneracy： unstable results, random process, model fit; specify too many things, leading to prediction that everyone should connect to everyone or none
-
 Theory really matters!! 来解释要加什么network statistics
 
 怎么解决 geometrically weighted degree distribution
@@ -1109,15 +1180,39 @@ Theory really matters!! 来解释要加什么network statistics
 
 ---
 
++ GERGM
 + TERGM
     + STERGM
 + FERGM
 
+......
+
 ???
+
+G ERGM: weighted ergm
 
 S TERGM: Network panel data, Separable TERGM for each time point the ties formating and disoluting independently
 
 F ERGM: Frailty ERGM "individual-level random effects" for the propensity for a directed tie
+
+---
+
+## Wrap Up
+
+### Edge Effect (邻居效应)
+
++ Dyad/Triad Census
++ 社群 (Homophily)
+
+### Diffusion Effect (扩散分析)
+
++ 联系
++ 暴露
++ 传动
+
+### Network Effect (全网分析)
+
++ ERGM
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
