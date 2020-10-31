@@ -93,7 +93,7 @@ The latent variable per se can't be directly measured. But its consequences in o
 
 --
 
-".magenta[Cornerstone] of successful scientific inquiry."  
+> .red[Cornerstone] of successful scientific inquiry.  
 ---Delli Carpini and Keeter 1993
 
 ???
@@ -138,7 +138,6 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 
 ### 类型分析模型(Typological Models)
 
-
 1. 项目反应理论(IRT)
 1. 跨群组项目反应(MrP, GIRT, DCPO)
 
@@ -164,7 +163,7 @@ class: inverse, bottom
 
 ### 理论
 
-.megenta[可见]指标(indicators).magenta[&larr;]潜在变量
+.navy[可见]指标(indicators) &larr; .red[潜在]变量(variable)
 
 ???
 
@@ -173,9 +172,9 @@ uncover the underlying structure of a relatively large set of variables.
 --
 
 .left-column[
-### 操作
+### 实现
 
-.magenta[Minimum] factors for the variances
+.red[Minimum] factors for the variances
 
 a.k.a. 变量简化  
 (降维打击？)
@@ -191,7 +190,7 @@ determine the minimum number of hypothetical factors or components that account 
 
 ---
 
-## Like...How?
+## 操作
 
 .center[<img src="images/lv_efa.png" height = 500 />]
 
@@ -270,6 +269,14 @@ df_big5 %>%
 
 ### Horn's Parallel Analysis
 
+```{r parallelAnalysis, fig.align='center', fig.height=6, results='hide'}
+df_big5 %>%
+  select(8:57) %>%
+  fa.parallel(fa = "fa")
+```
+
+???
+
 已知观测数据集**O**<sub>m&times;n</sub>
 
 1. 创建随机数据集**R**<sub>m&times;n</sub>;  
@@ -280,54 +287,34 @@ df_big5 %>%
 A. 如果&lambda;<sub>**Ok**</sub> < &lambda;<sub>**R**</sub>, 则 ~~k~~  
 B. Kaiser criterion
 
-???
-
 &lambda;是相关矩阵特征值
 Kaiser criterion: 特征值<1 不可
 
 ---
 
-```{r parallelAnalysis, fig.align='center', fig.height=8, results='hide'}
-df_big5 %>%
-  select(8:57) %>%
-  fa.parallel(fa = "fa")
-```
-
----
-
 ## 因子提取(Factor Extraction)
 
-+ .magenta[Minimum residual (OLS)]
+常见方法：
+
++ .navy[Minimum residual (OLS)]
 + Principal axes
 + Alpha factoring
 + Weighted least squares
 + Minimum rank
-+ .magenta[Maximum likelihood (ML, minimum &chi;<sup>2</sup> goodness of fit)]
++ .red[Maximum likelihood] (ML, minimum &chi;<sup>2</sup> goodness of fit)
 
 ---
 
 ## Rotation
 
-.center[<img src="images/lv_rotation.jpg" height = 530 />]
+.center[<img src="images/lv_rotation.jpg" height = 400 />]
+
+简化数据结构
 
 ???
 Rotation:
 
 A pattern of loadings where each item loads strongly on only one of the factors, and much more weakly on the other factors.
-
----
-
-简化数据结构
-
-* Orthogonal: Varimax, quartimax, bentlerT, geominT, bifactor  
-* .magenta[Oblique]: Oblimin, quartimin, simplimax, bentlerQ, geominQ, biquartimin
-
-
-???
-
-Orthogonal(正交)
-
-优选Oblique，允许factor间correlate
 
 ---
 
@@ -372,12 +359,6 @@ Crobach's &alpha;: 计算因子分布的variables是不是内部一致，除非�
 
 ---
 
-```{r efa-full}
-result_efa
-```
-
----
-
 ## 因子在哪里？
 
 "score"
@@ -387,59 +368,6 @@ df_score <- result_efa$scores %>%
   as_tibble()
 hist(df_score$MR1)
 ```
-
----
-
-## Principal Component Analysis
-
-除EFA外的另一选择
-
---
-
-
-.center[<img src="images/lv_pca.png" height = 300 />]
-
-
-
-.large[.center[C = w<sub>i</sub>Y<sub>i</sub>]]
-
-???
-
-create one or more index variables (Components) from a larger set of measured variables (Y)
-
----
-
-## PCA vs. EFA
-
-结果或近似，逻辑大不同
-
-.center[<img src="images/lv_pcaVsEfa.PNG" height = 400 />]
-
-???
-PCA: measurement to index   
-
-write all variables in terms of a smaller set of features which allows for a maximum amount of variance to be retained in the data.   
-
-
-EFA: indices to measurement (of a latent variable)   
-
-find a set of features which allow for understanding as much of the correlations between measured variables as possible. individually.
-
----
-
-## 怎么选
-
---
-
-* PCA最大程度保留可见变量信息，EFA旨在提取不可变量特征；
-
---
-
-* 当Variable之间关系不那么紧密或受同一变量影响，PCA > EFA；
-
---
-
-* 当估计潜在变量时，PCA可能夸大可见指标的影响
 
 ---
 
@@ -458,11 +386,10 @@ class: inverse, bottom
 
 1. 实证观察（归纳）
 1. 未知维度
-    + 每个维度都对指标产生影响
+    + 每个维度都产生影响
 1. 多重指标
     + Loading大小之分
 1. 无视测量偏差关联
-1. Underidentified
 
 ]
 
@@ -474,8 +401,7 @@ class: inverse, bottom
     + 维度-指标关系明确
 1. 单一指标
     + Loading有无之分
-1. 允许测量误差相关
-1. 必须identifiable
+1. 允许测量误差具有关联
 ]
 
 ---
@@ -485,32 +411,17 @@ class: inverse, bottom
 1. 严格依据理论
 1. 每维度一指标
 
---
-
-### 例：人际信任
-
-定义：.magenta[相信]他人不会.magenta[伤害自己]或.magenta[违背约定].
-
---
-
-指标：
-.small[
-1. 总体而言，您是认同多数人是值得信任的，还是防人之心不可无？
-1. 您认为多数时候人们是乐于助人的还是自私自利的？
-1. 如果有机会，您认为别人是会占您便宜，还是说会恪守约定、公平行事？
-]
-
 ---
 
 ## CFA 指标选择
 
 操作原则：
 
-1. 每个维度一个指标，但维度拆分.magenta[艺术>技术]
+1. 每个维度一个指标，但维度拆分.navy[艺术>技术]
 
 --
 
-1. 效果.magenta[~~原因~~]指标
+1. 效果.red[~~原因~~]指标
 
 --
 
@@ -533,8 +444,6 @@ s -> {d, j, i}
 )
 ```
 
-???
-CFA多数针对效果指标，因此上述例子不好
 
 ---
 
@@ -551,71 +460,6 @@ CFA多数针对效果指标，因此上述例子不好
 
 ---
 
-.center[.large[**X = &Lambda;<sub>X</sub>&xi; + &delta;**]]
-
-**X**： 指标向量  
-**&xi;**：潜在变量  
-**&Lambda;<sub>X</sub>**: X = f(&xi;)系数(a.k.a., loading, path)  
-**&delta;**：偏误向量  
-
-**&Phi;**: 潜在变量的协方差矩阵  
-**&Theta;<sub>&sigma;</sub>**: 偏误的协方差矩阵
-
-???
-
-**&xi;**: ksi  
-**&delta;**: delta  
-**&Phi;**: phi  
-**&Theta;<sub>&sigma;</sub>**: theta  
-
-在EFA中潜在变量在等号左边，观测变量在右边
-
----
-
-.center[<img src="images/lv_partMultitraitpng.png" height = 300 />]
-
-$$\begin{bmatrix}x_1\\
-x_2\\
-x_3\\
-x_4\\
-x_5
-\end{bmatrix} = \begin{bmatrix}1 & 1 & 0\\
-\lambda_{21} & 1 & 0\\
-\lambda_{31} & 1 & 0\\
-\lambda_{41} & 0 & 1\\
-\lambda_{51} & 0 & 1
-\end{bmatrix} \begin{bmatrix}\xi_1\\
-\xi_2\\
-\xi_3
-\end{bmatrix} + \begin{bmatrix}\delta_1\\
-\delta_2\\
-\delta_3\\
-\delta_4\\
-\delta_5
-\end{bmatrix}$$
-
----
-
-潜在变量矩阵
-
-**&Phi;** = 
-\begin{bmatrix}
-\phi_{11} & & \\
-0 & \phi_{22} & \\
-0 & \phi_{23} & \phi_{33}
-\end{bmatrix}
-
-
-偏误矩阵
-
-diag **&Theta;<sub>&sigma;</sub>** = diag[var(&delta;<sub>1</sub>) var(&delta;<sub>2</sub>)...var(&delta;<sub>5</sub>)]
-
-???
-
-&phi;23$: classical 和showy 裁判的相关性
-
----
-
 ## 你最多能连多少线？：Identification
 
 \begin{cases}
@@ -625,12 +469,9 @@ x = 2y - 3z
 
 --
 
+.center[**X = &Lambda;<sub>X</sub>&xi; + &delta;**]
+
 当**&Lambda;、&Phi;、&Theta;**存在唯一解时，模型是identified.
-
-
-&Lambda;: $X = f(\xi)$系数(a.k.a., loading)  
-&Phi;: 潜在变量的协方差矩阵  
-&Theta; 偏误的协方差矩阵
 
 --
 
@@ -647,109 +488,17 @@ Another way to calculate df.
 
 ---
 
-为保证identifable， 要对CFA进行限制
-
-1. Scaling
-    + &lambda;<sub>11</sub> = 1;
-    + 将潜在变量方差设为1(Standardized metric)
-2. 参数调整
-    + 特定因子loading设为0；
-    + 偏误的协方差设为0；
-    + 偏误的方差设为0；
-
----
-
-## 解方程
-
-**&Sigma;**: 所有可见指标得协方差矩阵
-
-.center[.large[**&Sigma;(&theta;) = &Lambda;<sub>X</sub>&Phi;&Lambda;<sub>X</sub>' + &Theta;<sub>&delta;</sub>**]]
-
-.left-column[
-全信息估计：
-
-Maximum likelihood:   
-Generalized Least Squares  
-Unweighted Least Squares
-]
-
-.right-column[
-有限信息估计：
-
-Two Stage Least Squares
-
-]
-
-???
-
-寻找最优**&Sigma;**
-
----
-
-## 常见问题
-### Matrix to be analyzed not positive definite
-
-+ Typo in data file or covariance matrix
-+ Pairwise deletion of missing data
-+ Perfect collinearity
-+ Outliers/influential cases
-
----
-
-### Improper solutions
-
-+ Typo in program
-+ Population value near the borderline combined with sampling fluctuation
-+ Specification error
-+ Small samples (<150 or so) combined with 2 indicators per factor
-+ “unlucky” sample
-+ Outliers/influential cases
-
----
-
-### Nonconvergence
-
-+ Typo in program, data file, or covariance matrix
-+ Underidentified model
-+ Poor model specification
-+ Bad starting values
-+ Small samples (N<100)
-+ Only 2 indicators per factor
-+ Outliers/influential cases
-+ Observed variables in very different scale
-
----
-
 ## 成了吗？
 
 ### Overall: &chi;<sup>2</sup>
 
 结果显著则说明整体模型可能有问题。
 
----
-
-然而，当N足够大时&chi;<sup>2</sup>通常显著
-
-???
-
-1. Because models are almost always incorrect, any otherwise reasonably fitting model can be rejected when sample size is sufficient
-1. Also a poor fitting model could be accepted if there is insufficient power to detect misspecification.
-
----
-
 ### Incremental Fit Indices
 
 将模型与基线模型比较
 
-???
-
-基线模型：只保留可见变量的方差和协方差
-
---
-
-#### Tucker-Lewis Index (TLI, &rho;<sub>2</sub>, Non-Normed Fit Index)
-
-#### Comparative Fit Index (CFI)
+### Tucker-Lewis Index (TLI) & Comparative Fit Index (CFI)
 
 + 1 理想情况
 + <.95 不可接受
@@ -760,10 +509,7 @@ CFI可以>1, 这种情况视为1
 
 ---
 
-### Absolute Fit Indices
-
-#### Root Mean Square Error of Approximation (RMSEA)
-#### Standardized Root Mean Square Residual (SRMR)
+### Root Mean Square Error of Approximation (RMSEA) & Standardized Root Mean Square Residual (SRMR)
 
 + 0 理想情况
 + &le; 0.05 不错
@@ -782,7 +528,7 @@ CFI可以>1, 这种情况视为1
 ]
 
 .right-column[
-```{r diagram-cfa, fig.align='center', fig.height=4}
+```{r diagram-cfa, fig.align='center', fig.height=8}
 HS.model <- ' visual  =~ x1 + x2 + x3
               textual =~ x4 + x5 + x6
               speed   =~ x7 + x8 + x9 '
@@ -819,9 +565,29 @@ summary(fit, fit.measures=TRUE)
 
 ---
 
+## 总结一下
+
+* 潜在变量分析概述
+    + .magenta[因素分析]
+    + 类型分析
+* 什么是EFA
+    + 探索性因子分析：通过loading找到潜在变量
+    + EFA诊断：Kaiser‘s criterion, reliability
+* 什么是CFA
+    + 验证性因子分析：检验潜在变量对于观察指标是否有影响
+    + CFA诊断：&chi;<sup>2</sup>, TLI/CFI，RMSEA/SRMR
+
+---
+
+class: inverse, center, middle
+
+# Questions, Comments, and Suggestions?
+
+---
+
 class: inverse, bottom
 
-# 结构方程模型
+# 延申：结构方程模型
 ## Structural Equation Model
 
 ---
@@ -991,37 +757,3 @@ summary(fit, fit.measures=TRUE)
 --
 
 1. .magenta[SEM 不能证明因果关系！！]
-
----
-
-## 总结一下
-
-* 潜在变量分析概述
-* 什么是EFA
-    + EFA诊断
-    + EFA vs. PCA
-* 什么是CFA
-    + CFA诊断
-* SEM 入门
-
----
-
-* 潜在变量分析概述
-    + .magenta[因素分析]
-    + 类型分析
-* 什么是EFA
-    + 探索性因子分析：通过loading找到潜在变量
-    + EFA诊断：Kaiser‘s criterion, reliability
-    + EFA vs. PCA: 结果相似，逻辑不同
-* 什么是CFA
-    + 验证性因子分析：检验潜在变量对于观察指标是否有影响
-    + CFA诊断：&chi;<sup>2</sup>, TLI/CFI，RMSEA/SRMR
-* SEM 入门
-    + Latent + measurement models
-    + 不能证明因果关系！
-
----
-
-class: inverse, center, middle
-
-# Questions, Comments, and Suggestions?
