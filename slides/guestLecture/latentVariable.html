@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Learning Latent Variable Analysis with Dr. Hu (I)</title>
+    <title>潜在变量分析与诊断</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="libs/header-attrs/header-attrs.js"></script>
-    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
-    <script src="libs/viz/viz.js"></script>
-    <link href="libs/DiagrammeR-styles/styles.css" rel="stylesheet" />
-    <script src="libs/grViz-binding/grViz.js"></script>
+    <script src="latentVariable_files/header-attrs/header-attrs.js"></script>
+    <link href="latentVariable_files/remark-css/default.css" rel="stylesheet" />
+    <script src="latentVariable_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="latentVariable_files/viz/viz.js"></script>
+    <link href="latentVariable_files/DiagrammeR-styles/styles.css" rel="stylesheet" />
+    <script src="latentVariable_files/grViz-binding/grViz.js"></script>
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="styles.css" type="text/css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" type="text/css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Learning Latent Variable Analysis with Dr. Hu (I)
-## 潜在变量分析I
+# 潜在变量分析与诊断
+## Learning Latent Variable Analysis with Dr. Hu (I)
 ### 胡悦
 ### 清华大学政治学系
 
@@ -37,7 +36,7 @@ class: center, middle, inverse, title-slide
     + EFA vs. PCA
 * 什么是CFA
     + CFA诊断
-* SEM 入门
+* .gray[Bonus：SEM 入门]
 
 ---
 
@@ -83,7 +82,7 @@ The latent variable per se can't be directly measured. But its consequences in o
 
 ## 为什么需要了解潜在变量？
 
-公共舆论、政治文化、政治心理……几乎所有社会科学学科：
+公共舆论、政治心理、政治经济……几乎所有社会科学方向：
 
 * 抽象
 * 复杂
@@ -100,7 +99,7 @@ Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Put
 
 ---
 
-## 怎么找？
+## 举例
 
 例：测量个体的“社会资本”（social capital）
 
@@ -141,7 +140,7 @@ Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Put
 
 ???
 
-鱼玄机《赠邻女》：羞日遮罗袖，愁春懒起妆。易求无价宝，难得有心郎
+晚唐诗人 鱼玄机《赠邻女》：羞日遮罗袖，愁春懒起妆。易求无价宝，难得有心郎
 
 ---
 
@@ -206,7 +205,7 @@ class: inverse, bottom
 
 ---
 
-## 理念背后
+## 规范理念
 
 .center[.large[**X&lt;sup&gt;*&lt;/sup&gt; = &amp;Phi;&amp;Lambda;' + &amp;delta;**]]
 
@@ -220,11 +219,16 @@ class: inverse, bottom
 
 Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses.” Political Analysis 12(4): 338–53.
 
+Phi
+Lambda
+delta
+
 ---
 
-## 操作实现
+## 实际操作
 
 1. 因子个数选择
+1. 因子提取
 1. Rotation
 1. 因子合成
 1. 结果检验
@@ -452,7 +456,7 @@ Uniqueness: 1 - Communality
 RMSR &lt; 0.05
 TLI &gt; 0.9
 
-Crobach's &amp;alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要
+Crobach's &amp;alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要，越高越好，但是对原始数据的测算，而非factor结果
 
 ---
 
@@ -514,12 +518,12 @@ class: inverse, bottom
 
 --
 
-1. 效果.red[~~原因~~]指标
+1. .red[~~原因~~]效果指标
 
 --
 
-<div id="htmlwidget-406b79ac2cc352452e4d" style="width:504px;height:360px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-406b79ac2cc352452e4d">{"x":{"diagram":"digraph {\n\ngraph[layout = dot]\n\nnode[shape = rectangle, style = filled, fillcolor = Linen]\n\ns [label = \"压力\", shape = \"ellipse\"]\nd [label = \"家人\n去世\"]\nj [label =  \"丢失\n工作\"]\ni [label = \"身患\n疾病\"]\n\n# edge definitions with the node IDs\ns -> {d, j, i}\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8dd7656126e9502090ed" style="width:504px;height:360px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8dd7656126e9502090ed">{"x":{"diagram":"digraph {\n\ngraph[layout = dot]\n\nnode[shape = rectangle, style = filled, fillcolor = Linen]\n\ns [label = \"压力\", shape = \"ellipse\"]\nd [label = \"家人\n去世\"]\nj [label =  \"丢失\n工作\"]\ni [label = \"身患\n疾病\"]\n\n# edge definitions with the node IDs\ns -> {d, j, i}\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 
 ---
@@ -546,9 +550,19 @@ x = 2y - 3z
 
 --
 
-.center[**X = &amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;&amp;xi; + &amp;delta;**]
+.center[**X\* = &amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;&amp;xi; + &amp;delta;**]
 
-当**&amp;Lambda;、&amp;Phi;、&amp;Theta;**存在唯一解时，模型是identified.
+当参数存在唯一解时，模型是identified.
+
+???
+
+**X**： 指标向量  
+**&amp;xi;**：潜在变量  
+**&amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;**: X = f(&amp;xi;)系数(a.k.a., loading, path)  
+**&amp;delta;**：偏误向量  
+
+**&amp;Phi;**: 潜在变量的协方差矩阵  
+**&amp;Theta;&lt;sub&gt;&amp;sigma;&lt;/sub&gt;**: 偏误的协方差矩阵
 
 --
 
@@ -739,12 +753,15 @@ CFI可以&gt;1, 这种情况视为1
 ## 总结一下
 
 * 潜在变量分析概述
-    + .magenta[因素分析]
+    + **因素分析**
     + 类型分析
-* 什么是EFA
-    + 探索性因子分析：通过loading找到潜在变量
+* EFA
+    + 探索性因子分析：通过相关性找到潜在变量
+        + 个数
+        + 提取
+        + rotation + 合成
     + EFA诊断：Kaiser‘s criterion, reliability
-* 什么是CFA
+* CFA
     + 验证性因子分析：检验潜在变量对于观察指标是否有影响
     + CFA诊断：&amp;chi;&lt;sup&gt;2&lt;/sup&gt;, TLI/CFI，RMSEA/SRMR
 
@@ -794,7 +811,7 @@ Latent growth curve models
 
 与CFA相比，SEM：
 
-+ 观察变量： X, .magenta[Y]
++ 观察变量： X, .red[Y]
 
 --
 
@@ -995,7 +1012,7 @@ MLE
 
 ---
 
-## 在操作SEM之前，你可能还想知道
+## 在操作SEM之前，你可能还需要学习
 
 1. SEM怎么对待Measurement errors
 1. SEM怎么处理非线性变量(hint: GSEM)
@@ -1004,10 +1021,10 @@ MLE
 
 --
 
-1. .magenta[SEM 不能证明因果关系！！]
+1. .red[SEM 不能证明因果关系！！]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
