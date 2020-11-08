@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Multiple Regression</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="10_multipleRegression_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="10_multipleRegression_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -27,18 +29,22 @@ class: inverse, bottom
 
 ---
 
+## Terminology
+
+Multivariate regression
+
+Multivariate analysis
+
+Multiple regression 
+
+---
+
 ## Multiple Regression
 
 * Population Regression Function (PRF): `\(Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\)`
     + According to CLRM: `\(E[u_i|\boldsymbol{X}] = 0.\)`
 
 * Sample Regression Function (SRF): `\(Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i\)`
-
---
-
-### Terminology
-
-Multiple regression vs. multivariate regression vs. multivariate analysis
 
 ---
 
@@ -56,7 +62,7 @@ Multiple regression vs. multivariate regression vs. multivariate analysis
 
 class: small
 
-When the goal is achieved,
+## When Achieved
 
 `\begin{align}
 \hat\beta_0 =&amp; \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
@@ -76,7 +82,7 @@ where `\(\hat r_{1i}\)` are the errors from the regression of `\(X_{1i}\)` on `\
 
 What does &amp;beta;&lt;sub&gt;1&lt;/sub&gt; mean?
 
-Every unit change in X&lt;sub&gt;1&lt;/sub&gt; leads to &amp;beta;&lt;sub&gt;1&lt;/sub&gt; changes in Y .magenta[on average], .red[holding everything else constant].
+Every unit change in X&lt;sub&gt;1&lt;/sub&gt; leads to &amp;beta;&lt;sub&gt;1&lt;/sub&gt; changes in Y .navy[on average], .red[holding everything else constant].
 
 --
 
@@ -92,13 +98,10 @@ Every unit change in X&lt;sub&gt;1&lt;/sub&gt; leads to &amp;beta;&lt;sub&gt;1&l
 
 a.k.a. R&lt;sup&gt;2&lt;/sup&gt;
 
-We've learnt that: 
 
 `$$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$`
 
----
-
-class: small
+???
 
 From the SRF, 
 
@@ -121,6 +124,7 @@ SST: Sum of Squares Total
 SSR: Sum of Squares Regression
 
 SSE: Sum of Squares Error
+
 ---
 
 background-image: url("images/bad4ya.jpg")
@@ -144,10 +148,15 @@ When the residual (&amp;sigma;, estimated by u&lt;sub&gt;i&lt;/sub&gt; in sample
 
 ![](10_multipleRegression_files/figure-html/rsmall-1.png)&lt;!-- --&gt;
 
+---
+
+### Very high for a misspecified model
+
+![](10_multipleRegression_files/figure-html/rlarge-1.png)&lt;!-- --&gt;
 
 ---
 
-### Very high for a redundant or misspecified model
+### Very high for a redundant model
 
 "Trash-can" model:
 
@@ -164,19 +173,13 @@ Therefore, the more Xs are added, the larger SSE (and thus R&lt;sup&gt;2&lt;/sup
 
 ---
 
-Misspecification:
-
-![](10_multipleRegression_files/figure-html/rlarge-1.png)&lt;!-- --&gt;
-
----
-
 ## How About Adjusted R&lt;sup&gt;2&lt;/sup&gt;?
 
 `$$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$`
 
 --
 
-.left-column[
+.pull-left[
 
 ### Issue adjusted
 
@@ -184,7 +187,7 @@ More-Xs booming
 
 ]
 
-.right-column[
+.pull-right[
 
 ### Issues not adjusted
 
@@ -199,7 +202,11 @@ More-Xs booming
 
 ## Think...
 
-When can R&lt;sup&gt;2&lt;/sup&gt; be useful?
+.center[When can R&lt;sup&gt;2&lt;/sup&gt; be useful?]
+
+???
+
+Model comparison
 
 ---
 
@@ -227,12 +234,6 @@ class: inverse, bottom
 
 ---
 
-background-image: url("images/stayHumble.jpg")
-background-position: center
-background-size: contain
-
----
-
 ## Expected Value
 
 Let X&lt;sub&gt;0&lt;/sub&gt; be the values at which we want to predict, the the expected value of Y is:
@@ -246,9 +247,6 @@ var(\hat Y_0|X_0) =&amp; var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
 
 ---
 
-class: small
-
-`$$\hat Y_0\sim [\beta_0 + \beta_1X_0, \sigma^2(\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2})]$$`
 
 ![](10_multipleRegression_files/figure-html/predicted-1.png)&lt;!-- --&gt;
 
@@ -258,7 +256,7 @@ Fewer observations at two terminals, thus wider rainbow.
 
 ---
 
-## Single Forecast
+## Single-Point Forecast
 
 `\begin{align}
 \hat Y_0 =&amp; \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
@@ -292,7 +290,7 @@ class: small
 
 ---
 
-.magenta[NB]:
+## NB:
 
 1. The correct description is, AGAIN, that CI has 95% chance including the true &amp;theta;, rather than  &amp;theta; has 95% chance in CI.
 1. Because the level of evidence is pre-set, there is no difference between p = 0.049 and 0.001, as long as they are under 0.05.
@@ -326,7 +324,7 @@ Statistics:
 
 Interpretation: 
 
-For every unit change of X&lt;sub&gt;1&lt;/sub&gt;, Y changes by &amp;beta;&lt;sub&gt;1&lt;/sub&gt;, .magenta[holding everything else constant].
+For every unit change of X&lt;sub&gt;1&lt;/sub&gt;, Y changes by &amp;beta;&lt;sub&gt;1&lt;/sub&gt;, .red[holding everything else constant].
 
 ---
 
@@ -415,7 +413,7 @@ class: small
 * Vise versa: In a turned position.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
@@ -460,6 +458,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -477,17 +501,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

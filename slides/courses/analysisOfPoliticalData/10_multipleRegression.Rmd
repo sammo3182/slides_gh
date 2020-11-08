@@ -6,11 +6,12 @@ institute: "Political Science, Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
@@ -40,18 +41,22 @@ class: inverse, bottom
 
 ---
 
+## Terminology
+
+Multivariate regression
+
+Multivariate analysis
+
+Multiple regression 
+
+---
+
 ## Multiple Regression
 
 * Population Regression Function (PRF): $Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$
     + According to CLRM: $E[u_i|\boldsymbol{X}] = 0.$
 
 * Sample Regression Function (SRF): $Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i$
-
---
-
-### Terminology
-
-Multiple regression vs. multivariate regression vs. multivariate analysis
 
 ---
 
@@ -69,7 +74,7 @@ $min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat u_i^2\Rightarrow$
 
 class: small
 
-When the goal is achieved,
+## When Achieved
 
 \begin{align}
 \hat\beta_0 =& \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
@@ -89,7 +94,7 @@ $\hat\sigma^2 = \frac{\sum\hat u_i^2}{n - 3}$
 
 What does &beta;<sub>1</sub> mean?
 
-Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y .magenta[on average], .red[holding everything else constant].
+Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y .navy[on average], .red[holding everything else constant].
 
 --
 
@@ -105,13 +110,10 @@ Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y .mag
 
 a.k.a. R<sup>2</sup>
 
-We've learnt that: 
 
 $$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$
 
----
-
-class: small
+???
 
 From the SRF, 
 
@@ -134,6 +136,7 @@ SST: Sum of Squares Total
 SSR: Sum of Squares Regression
 
 SSE: Sum of Squares Error
+
 ---
 
 background-image: url("images/bad4ya.jpg")
@@ -172,27 +175,9 @@ ggplot(data = df_r, aes(x = sigma, y = rout)) +
   ggtitle("The R squared is calculated based on the CORRECT model\n with only the residual varying.")
 ```
 
-
 ---
 
-### Very high for a redundant or misspecified model
-
-"Trash-can" model:
-
-\begin{align}
-R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i - \bar Y)^2}{SST}\\
-    =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}
-\end{align}
-
-Therefore, the more Xs are added, the larger SSE (and thus R<sup>2</sup>) is.
-
-???
-
-$\hat Y_i  - \bar Y = 0$
-
----
-
-Misspecification:
+### Very high for a misspecified model
 
 ```{r rlarge, fig.width=10}
 df_rLarge <- tibble(x = rexp(50,rate=0.005), # from an exponential distribution
@@ -209,13 +194,30 @@ ggplot(data = df_rLarge, aes(x, y)) +
 
 ---
 
+### Very high for a redundant model
+
+"Trash-can" model:
+
+\begin{align}
+R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i - \bar Y)^2}{SST}\\
+    =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}
+\end{align}
+
+Therefore, the more Xs are added, the larger SSE (and thus R<sup>2</sup>) is.
+
+???
+
+$\hat Y_i  - \bar Y = 0$
+
+---
+
 ## How About Adjusted R<sup>2</sup>?
 
 $$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 
 --
 
-.left-column[
+.pull-left[
 
 ### Issue adjusted
 
@@ -223,7 +225,7 @@ More-Xs booming
 
 ]
 
-.right-column[
+.pull-right[
 
 ### Issues not adjusted
 
@@ -238,7 +240,11 @@ More-Xs booming
 
 ## Think...
 
-When can R<sup>2</sup> be useful?
+.center[When can R<sup>2</sup> be useful?]
+
+???
+
+Model comparison
 
 ---
 
@@ -266,12 +272,6 @@ class: inverse, bottom
 
 ---
 
-background-image: url("images/stayHumble.jpg")
-background-position: center
-background-size: contain
-
----
-
 ## Expected Value
 
 Let X<sub>0</sub> be the values at which we want to predict, the the expected value of Y is:
@@ -285,9 +285,6 @@ var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
 
 ---
 
-class: small
-
-$$\hat Y_0\sim [\beta_0 + \beta_1X_0, \sigma^2(\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2})]$$
 
 ```{r predicted, fig.width=10}
 ggplot(mtcars, aes(x=mpg, y=wt)) +
@@ -302,7 +299,7 @@ Fewer observations at two terminals, thus wider rainbow.
 
 ---
 
-## Single Forecast
+## Single-Point Forecast
 
 \begin{align}
 \hat Y_0 =& \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
@@ -336,7 +333,7 @@ class: small
 
 ---
 
-.magenta[NB]:
+## NB:
 
 1. The correct description is, AGAIN, that CI has 95% chance including the true &theta;, rather than  &theta; has 95% chance in CI.
 1. Because the level of evidence is pre-set, there is no difference between p = 0.049 and 0.001, as long as they are under 0.05.
@@ -370,7 +367,7 @@ $$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\s
 
 Interpretation: 
 
-For every unit change of X<sub>1</sub>, Y changes by &beta;<sub>1</sub>, .magenta[holding everything else constant].
+For every unit change of X<sub>1</sub>, Y changes by &beta;<sub>1</sub>, .red[holding everything else constant].
 
 ---
 
