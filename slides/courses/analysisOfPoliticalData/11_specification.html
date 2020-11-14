@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Model Specification</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="11_specification_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="11_specification_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -21,13 +23,17 @@ class: center, middle, inverse, title-slide
 
 
 
-class: inverse, bottom
-
-# Model Issues
+## Overview
 
 ---
 
-## Common Model Issues
+class: inverse, bottom
+
+# Specification Problem
+
+---
+
+## Common Issues
 
 1. Functional form
 1. Proxy variable
@@ -35,8 +41,6 @@ class: inverse, bottom
 1. Model misspecification
 
 ---
-
-class: small
 
 ## Functional Form
 
@@ -47,28 +51,52 @@ Y =&amp; f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
 Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
 \end{align}`
 
-One may want to test the combined version: `$$Y = f_1(X) + f_2(X) + u$$`
+Which specification is .red[correct]?
+
+---
+
+Test Y = f&lt;sub&gt;1&lt;/sub&gt;(X) + f&lt;sub&gt;2&lt;/sub&gt;(X) + u?
 
 --
 
 ### Concern
 
-When one of the models, e.g., f&lt;sub&gt;1&lt;/sub&gt; is the true model, the combined version produces unbiased, consistent, yet inefficient estimates: 
+Hey, buddy, how many models are correct?
 
-`$$var(\hat\beta_1) = \frac{\sigma^2}{(X - \bar X)^2(1 - \rho_{12})}.$$`
+???
 
-When &amp;rho;&lt;sub&gt;12&lt;/sub&gt; increases, the variance is inflated.
+Only one true model 
+
+--
+
+Let's assume f&lt;sub&gt;1&lt;/sub&gt; is the true model:
+
+`$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$`
+
+When &amp;rho;&lt;sub&gt;12&lt;/sub&gt; &amp;uarr;......
+
+???
+
+&amp;rho;&lt;sub&gt;12&lt;/sub&gt;: correlations between x1 and x2, such as between x and x……2
+
+Variance is inflated when &amp;rho;&lt;sub&gt;12&lt;/sub&gt; &amp;uarr;
 
 ---
 
 ### Solution
 
-Joint test: `\(H_0: \beta_1 = \beta_2 = \beta_3 = 0\)` or `\(\beta_4 = \beta_5 = \beta_6 = 0\)`
+.center[Y = f&lt;sub&gt;1&lt;/sub&gt;(X) + f&lt;sub&gt;2&lt;/sub&gt;(X) + u]
+
+Joint test: H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;1&lt;/sub&gt; = &amp;beta;&lt;sub&gt;2&lt;/sub&gt; = &amp;beta;&lt;sub&gt;3&lt;/sub&gt; = 0 or &amp;beta;&lt;sub&gt;4&lt;/sub&gt; = &amp;beta;&lt;sub&gt;5&lt;/sub&gt; = &amp;beta;&lt;sub&gt;6&lt;/sub&gt; = 0
 
 Statistics: Davidson-Mackinnon test
 
 1. Run `\(Y = f_2(X) + u\)` and calculate the expected value `\(\hat Y = E[Y|f_2(X)]\)`
 1. Run `\(Y = f_1(X) + \theta\hat Y + u\)`, and test if &amp;theta; = 0.
+
+--
+
+.center[&lt;img src="images/dropMic.gif" height = 150 /&gt;]
 
 ---
 
@@ -76,36 +104,56 @@ class: small
 
 ## Proxy Variable
 
-Given the true model is `\(Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_3^* + u\)`.
+True model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt;  + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&lt;sub&gt;3&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; + u.
 
 --
 
-However, `\(X_3^*\)` is unobserved, instead, we know `\(X_3^* = \delta_0 + \delta_1X_3 + v.\)` In other words, what we estimate is:
+However, X&lt;sub&gt;3&lt;/sub&gt;&lt;sup&gt;\*&lt;/sup&gt; is unobserved, instead, we know X&lt;sub&gt;3&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; = &amp;delta;&lt;sub&gt;0&lt;/sub&gt; + &amp;delta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;3&lt;/sub&gt; + v. 
 
-`$$Y = (\beta_0 + \beta_3\delta_0) + \beta_1X_1 + \beta_2X_2 + \beta_3\delta_1X_3 + (u + \beta_3v).$$`
+In other words, 
 
---
-
-Assuming u and v are independent, then we know `\(E(u + \beta_3v|X) = 0\)`, `\(var(u + \beta_3v|X) = \beta_3^2\sigma_v^2 + \sigma_u^2\)`.
+.center[Y = (&amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;&amp;delta;&lt;sub&gt;0&lt;/sub&gt;) + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;&amp;delta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;3&lt;/sub&gt; + (u + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;v).]
 
 --
 
-To produce unbiased estimates, one need to ensure that
+Assuming cov(u,v) = 0, 
 
-`$$cov(u, X_3) = cov(v, X_1) = cov(v, X_2) = 0.$$`
+.center[E(u + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;v|X) = 0;]
+
+.center[var(u + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;v|X) = &amp;beta;&lt;sub&gt;3&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;&amp;sigma;&lt;sub&gt;v&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; + &amp;sigma;&lt;sub&gt;u&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;.]
+
+???
+
+cov(u,v) = 0: u, v independent
+
+--
+
+To produce unbiased estimates:
+
+.center[cov(u, X&lt;sub&gt;3&lt;/sub&gt;) = cov(v, X&lt;sub&gt;1&lt;/sub&gt;) = cov(v, X&lt;sub&gt;2&lt;/sub&gt;) = 0.]
+
+If so, .center[&lt;img src="images/dropMic.gif" height = 100 /&gt;]
 
 ---
 
 ## Measurement Error
 
-### Y = Y&lt;sup&gt;*&lt;/sup&gt; + e
+1. Measurement in Y;
+1. Measurement in X.
+
+---
+
+## Y = Y&lt;sup&gt;*&lt;/sup&gt; + e
 
 `\begin{align}
 Y^* =&amp; \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
 Y =&amp; \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
 \end{align}`
 
-That is, the estimate of &amp;beta; is unbiaed, yet var(&amp;beta;) goes up.
+### Consequence
+
++ Unbiased &amp;beta; 
++ var(&amp;beta;) &amp;uarr;
 
 ---
 
@@ -113,7 +161,7 @@ class: small
 
 ### X = X&lt;sup&gt;*&lt;/sup&gt; + e
 
-If `\(E(eX) = 0\)`, then `\(Y = \beta_0 + \beta_1(X_1 - e) + u = \beta_0 + \beta_1X_1 + (u - \beta_1e)\)`.
+If E(eX) = 0, then Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;(X&lt;sub&gt;1&lt;/sub&gt; - e) + u = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + (u - &amp;beta;&lt;sub&gt;1&lt;/sub&gt;e).
 
 --
 
@@ -371,7 +419,7 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)} \\
 ![](11_specification_files/figure-html/substantive-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
@@ -416,6 +464,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -433,17 +507,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

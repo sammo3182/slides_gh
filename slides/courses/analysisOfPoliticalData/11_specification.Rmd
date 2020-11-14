@@ -6,11 +6,12 @@ institute: "Political Science, Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
@@ -31,16 +32,20 @@ p_load(
 ) # data wrangling # data wrangling
 
 # Functions preload
-set.seed(114)
+set.seed(313)
 ```
 
-class: inverse, bottom
-
-# Model Issues
+## Overview
 
 ---
 
-## Common Model Issues
+class: inverse, bottom
+
+# Specification Problem
+
+---
+
+## Common Issues
 
 1. Functional form
 1. Proxy variable
@@ -48,8 +53,6 @@ class: inverse, bottom
 1. Model misspecification
 
 ---
-
-class: small
 
 ## Functional Form
 
@@ -60,28 +63,52 @@ Y =& f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
 Y =& f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
 \end{align}
 
-One may want to test the combined version: $$Y = f_1(X) + f_2(X) + u$$
+Which specification is .red[correct]?
+
+---
+
+Test Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?
 
 --
 
 ### Concern
 
-When one of the models, e.g., f<sub>1</sub> is the true model, the combined version produces unbiased, consistent, yet inefficient estimates: 
+Hey, buddy, how many models are correct?
 
-$$var(\hat\beta_1) = \frac{\sigma^2}{(X - \bar X)^2(1 - \rho_{12})}.$$
+???
 
-When &rho;<sub>12</sub> increases, the variance is inflated.
+Only one true model 
+
+--
+
+Let's assume f<sub>1</sub> is the true model:
+
+$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$
+
+When &rho;<sub>12</sub> &uarr;......
+
+???
+
+&rho;<sub>12</sub>: correlations between x1 and x2, such as between x and x……2
+
+Variance is inflated when &rho;<sub>12</sub> &uarr;
 
 ---
 
 ### Solution
 
-Joint test: $H_0: \beta_1 = \beta_2 = \beta_3 = 0$ or $\beta_4 = \beta_5 = \beta_6 = 0$
+.center[Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u]
+
+Joint test: H<sub>0</sub>: &beta;<sub>1</sub> = &beta;<sub>2</sub> = &beta;<sub>3</sub> = 0 or &beta;<sub>4</sub> = &beta;<sub>5</sub> = &beta;<sub>6</sub> = 0
 
 Statistics: Davidson-Mackinnon test
 
 1. Run $Y = f_2(X) + u$ and calculate the expected value $\hat Y = E[Y|f_2(X)]$
 1. Run $Y = f_1(X) + \theta\hat Y + u$, and test if &theta; = 0.
+
+--
+
+.center[<img src="images/dropMic.gif" height = 150 />]
 
 ---
 
@@ -89,36 +116,56 @@ class: small
 
 ## Proxy Variable
 
-Given the true model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \beta_3X_3^* + u$.
+True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + u.
 
 --
 
-However, $X_3^*$ is unobserved, instead, we know $X_3^* = \delta_0 + \delta_1X_3 + v.$ In other words, what we estimate is:
+However, X<sub>3</sub><sup>\*</sup> is unobserved, instead, we know X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>X<sub>3</sub> + v. 
 
-$$Y = (\beta_0 + \beta_3\delta_0) + \beta_1X_1 + \beta_2X_2 + \beta_3\delta_1X_3 + (u + \beta_3v).$$
+In other words, 
 
---
-
-Assuming u and v are independent, then we know $E(u + \beta_3v|X) = 0$, $var(u + \beta_3v|X) = \beta_3^2\sigma_v^2 + \sigma_u^2$.
+.center[Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (u + &beta;<sub>3</sub>v).]
 
 --
 
-To produce unbiased estimates, one need to ensure that
+Assuming cov(u,v) = 0, 
 
-$$cov(u, X_3) = cov(v, X_1) = cov(v, X_2) = 0.$$
+.center[E(u + &beta;<sub>3</sub>v|X) = 0;]
+
+.center[var(u + &beta;<sub>3</sub>v|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>v</sub><sup>2</sup> + &sigma;<sub>u</sub><sup>2</sup>.]
+
+???
+
+cov(u,v) = 0: u, v independent
+
+--
+
+To produce unbiased estimates:
+
+.center[cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0.]
+
+If so, .center[<img src="images/dropMic.gif" height = 100 />]
 
 ---
 
 ## Measurement Error
 
-### Y = Y<sup>*</sup> + e
+1. Measurement in Y;
+1. Measurement in X.
+
+---
+
+## Y = Y<sup>*</sup> + e
 
 \begin{align}
 Y^* =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
 Y =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
 \end{align}
 
-That is, the estimate of &beta; is unbiaed, yet var(&beta;) goes up.
+### Consequence
+
++ Unbiased &beta; 
++ var(&beta;) &uarr;
 
 ---
 
@@ -126,7 +173,7 @@ class: small
 
 ### X = X<sup>*</sup> + e
 
-If $E(eX) = 0$, then $Y = \beta_0 + \beta_1(X_1 - e) + u = \beta_0 + \beta_1X_1 + (u - \beta_1e)$.
+If E(eX) = 0, then Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>(X<sub>1</sub> - e) + u = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + (u - &beta;<sub>1</sub>e).
 
 --
 
