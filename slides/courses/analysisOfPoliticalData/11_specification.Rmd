@@ -37,20 +37,155 @@ set.seed(313)
 
 ## Overview
 
+"How can you set things wrong?"
+
+### Measuring wrong variables
+
+1. Proxy variable
+1. Measurement error
+
+### Specifying a wrong model
+
+1. Functional form 
+1. Omitted variable
+
+### Interpreting the result wrong
+
+1. Nonlinear & substantive significance
+
 ---
 
 class: inverse, bottom
 
-# Specification Problem
+# Measurement Problem
 
 ---
 
-## Common Issues
+class: small
 
-1. Functional form
-1. Proxy variable
-1. Measurement error
-1. Model misspecification
+## Proxy Variable
+
+True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + u.
+
+--
+
+However, X<sub>3</sub><sup>\*</sup> is unobserved, instead, we know X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>X<sub>3</sub> + v. 
+
+In other words, 
+
+.center[Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (u + &beta;<sub>3</sub>v).]
+
+--
+
+Assuming cov(u,v) = 0, 
+
+.center[E(u + &beta;<sub>3</sub>v|X) = 0;]
+
+.center[var(u + &beta;<sub>3</sub>v|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>v</sub><sup>2</sup> + &sigma;<sub>u</sub><sup>2</sup>.]
+
+???
+
+cov(u,v) = 0: u, v independent
+
+--
+
+To produce unbiased estimates:
+
+.center[cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0.]
+
+If so, .center[<img src="images/dropMic.gif" height = 100 />]
+
+---
+
+## Measurement Error
+
+1. Measurement in Y;
+1. Measurement in X.
+
+---
+
+## Y = Y<sup>*</sup> + e
+
+\begin{align}
+Y^* =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
+Y =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+\end{align}
+
+### Consequence
+
++ &beta; Unbiased 
++ var(&beta;) &uarr;
+
+---
+
+class: small
+
+### X = X<sup>*</sup> + e<sup><img src="images/fsmrof.png" height="20"/></sup>
+
+If E(eX) = 0, then Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>(X<sub>1</sub> - e) + u = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + (u - &beta;<sub>1</sub>e).
+
+--
+
+If E(eX) &ne; 0, then
+
+\begin{align}
+\hat\beta_1 =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
+                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
+                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
+                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+\end{align}
+
+???
+\begin{align}
+cov(e, X_1) =& E(eX_1) - E(e)E(X_1) = E(eX_1)\\
+          =& E[e(X_1^* + e)] = E(eX_1^*) + E(e^2) = \sigma_e^2\neq0\\
+cov(u - \beta_1e, X_1) =& cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1)\\
+                       =& -\beta_1\sigma_e^2.\\
+\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
+                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
+                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
+                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+\end{align}
+
+
+plim: probability limit operation, convergence in probability
+
+--
+
+Unbiased .navy[only] when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>\*</sup> + e), i.e., &sigma;<sup>2</sup><sub>X<sub>1</sub></sub> = &sigma;X<sub>1</sub><sup>\*2</sup>+ &sigma;<sub>e</sub><sup>2</sup>
+
+Otherwise, $|\hat\beta_1| < \beta_1$, a.k.a., .red[attenuation] bias. 
+
++ &beta;: underestimated;
++ Affecting the estimations of others in unknown ways `r emo::ji("scream")`.
+
+---
+
+class: small
+
+## Type of Measurement
+
+* Nominal: 
+    + e.g., A race variable: white, black, native
+        + H<sub>0</sub>: &beta;<sub>black</sub> = 0, testing the difference between black and white
+        + H<sub>0</sub>: &beta;<sub>black</sub> = &beta;<sub>native</sub> = 0, testing if the race has any effect.
+    + Can't do regression unless being .navy[broken up into indicator] variables.
+--
+
+* Indicator: Binary usually
+    + $Y = \beta_0 + \beta_1X_i + u_i,$ where X is either male (0) or female(1)
+        + &beta;<sub>0</sub>: E(Y|X = male);
+        + &beta;<sub>1</sub>: E(Y|X = female) - E(Y|X = male).
+
+???
+
+In a regression, the information of the baseline is captured by the intercept
+
+---
+
+class: inverse, bottom
+
+# Specification Problems
 
 ---
 
@@ -114,105 +249,30 @@ Statistics: Davidson-Mackinnon test
 
 class: small
 
-## Proxy Variable
-
-True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + u.
-
---
-
-However, X<sub>3</sub><sup>\*</sup> is unobserved, instead, we know X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>X<sub>3</sub> + v. 
-
-In other words, 
-
-.center[Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (u + &beta;<sub>3</sub>v).]
-
---
-
-Assuming cov(u,v) = 0, 
-
-.center[E(u + &beta;<sub>3</sub>v|X) = 0;]
-
-.center[var(u + &beta;<sub>3</sub>v|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>v</sub><sup>2</sup> + &sigma;<sub>u</sub><sup>2</sup>.]
-
-???
-
-cov(u,v) = 0: u, v independent
-
---
-
-To produce unbiased estimates:
-
-.center[cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0.]
-
-If so, .center[<img src="images/dropMic.gif" height = 100 />]
-
----
-
-## Measurement Error
-
-1. Measurement in Y;
-1. Measurement in X.
-
----
-
-## Y = Y<sup>*</sup> + e
+## Omitted Variable<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 \begin{align}
-Y^* =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
-Y =& \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+True: Y_i =& \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
+Specified: Y_i =& \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i
 \end{align}
 
-### Consequence
-
-+ Unbiased &beta; 
-+ var(&beta;) &uarr;
-
----
-
-class: small
-
-### X = X<sup>*</sup> + e
-
-If E(eX) = 0, then Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>(X<sub>1</sub> - e) + u = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + (u - &beta;<sub>1</sub>e).
+How does $\tilde\beta_1$ compare to $\beta_1$?
 
 --
-
-If $E(eX) \neq 0$, then
 
 \begin{align}
-cov(e, X_1) =& E(eX_1) - E(e)E(X_1) = E(eX_1)\\
-          =& E[e(X_1^* + e)] = E(eX_1^*) + E(e^2) = \sigma_e^2\neq0\\
-cov(u - \beta_1e, X_1) =& cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1)\\
-                       =& -\beta_1\sigma_e^2.\\
-\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
-                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
-                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
-                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+\tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
+E(\tilde\beta_1|X_1) =& \hat\beta_1 + \hat\beta_2\delta_1
 \end{align}
 
+where $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
+
+
+$\tilde\beta_1$: .red[Biased], unless X<sub>2</sub> is an irrelevant variable.
+
+Even if &delta;<sub>1</sub> = 0, $X_1 = \delta_0 + r$, the model may increase the risk of [Type I error](https://www.statisticssolutions.com/wp-content/uploads/2017/12/rachnovblog.jpg).
+
 ???
-plim: probability limit operation, convergence in probability
-
---
-
-In this case, only when $var(X_1) = var(X_1^* + e)$, i.e., $\sigma^2_{X_1} = \sigma^{*2}_{X_1} + \sigma^2_e$, the estimate can be unbiased.
-
----
-
-Otherwise, $|\hat\beta_1| < \beta_1$, a.k.a., .magenta[attenuation] bias. The parameter is underestimated and may affect the estimates of other variables in unknown ways.
-
----
-
-## Misspecification
-
-If the true model is $$Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i,$$ but we specify it as $$Y_i = \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i,$$ how does $\tilde\beta_1$ compare to $\beta_1$?
-
-
----
-
-class: small
-
-## &beta;
 
 \begin{align}
 Y_i =& \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i\\
@@ -224,42 +284,47 @@ Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \b
 \text{That is, } \tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},
 \end{align}
 
-where $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$.
-
----
-
-class: small
-
 \begin{align}
 E(\tilde\beta_1|X_1) =& E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1]\\
                      =& \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1)\\
                      =& \hat\beta_1 + \hat\beta_2\delta_1
 \end{align}
 
---
+---
 
-Given $$X_1 = \delta_0 + \delta_1X_2 + r,$$ if &delta;<sub>1</sub> = 0, $X_1 = \delta_0 + r$, the model may increase the risk of [Type I error](https://www.statisticssolutions.com/wp-content/uploads/2017/12/rachnovblog.jpg); 
-
---
-
-Otherwise, the model missing a variable will always produce an biased estimation unless X<sub>2</sub> is an irrelevant variable.
+background-image: url("images/errorType.png")
+background-position: center
+background-size: contain
 
 ---
 
-## Error
+class: small
+
+## How About the Residual<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 $$Y_i = \beta_0 + \beta_1X_{1} + \epsilon,$$
 
 $$\epsilon = \beta_2X_{2} + u_i.$$
 
 
-* $E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0.$
-
++ $E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0$
+    + Against the assumption.
+    
 --
 
-* $var(\epsilon|X_1)$?
-
++ $E(X_1\epsilon) = \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],$ when cov(X<sub>1</sub>, X<sub>2</sub>)&ne;0
+    + Increase the difficulty to isolate X from u.
+    
 --
+
++ $E(\epsilon_i\epsilon_j|X_i) = \beta_2^2cov(X_{2i}, X_{2j})$
+    + Only when $\beta_2^2cov(X_{2i}, X_{2j}) = 0$ (which is often not) there's no autocorrelation.
+
+
+???
+
+$var(\epsilon|X_1)$?
+
 
 \begin{align}
 var(\epsilon|X_1) =& var(\beta_2X_{2} + u_i|X_1)\\ 
@@ -267,12 +332,8 @@ var(\epsilon|X_1) =& var(\beta_2X_{2} + u_i|X_1)\\
 \end{align}
 
 All values are fixed, that is, still homoscedasitic.
-    
----
 
 * $E(\epsilon_i\epsilon_j|X_i)$ ?
-
---
 
 \begin{align}
 & E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) \\
@@ -284,16 +345,7 @@ All values are fixed, that is, still homoscedasitic.
 =& \beta_2^2cov(X_{2i}, X_{2j}).
 \end{align}
 
---
-
-Only when $\beta_2^2cov(X_{2i}, X_{2j}) = 0$ (which is often not) there's no autocorrelation
-
-
----
-
 * $E(X_1\epsilon)$?
-
---
 
 \begin{align}
 E(X_1\epsilon) =& E[X_1(\beta_2X_2 + u)] \\
@@ -302,48 +354,6 @@ E(X_1\epsilon) =& E[X_1(\beta_2X_2 + u)] \\
 =& \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}]\\
 When&\ cov(X_1,X_2)\neq 0.
 \end{align}
-
-Increase the difficulty to isolate X from u
-    
----
-
-class: small
-
-## Type of Measurement
-
-* Nominal: Order doesn't matter
-    + e.g., A race variable: white, black, native
-        + H<sub>0</sub>: &beta;<sub>black</sub> = 0, testing the difference between black and white
-        + H<sub>0</sub>: &beta;<sub>black</sub> = &beta;<sub>native</sub> = 0, testing if the race has any effect.
-    + Can't do regression unless being broken up into indicator variables.
---
-
-* Indicator: Binary usually, "when x has a value of X, Y is 1", &#x1D7D9;(x = X).
-    + In a regression, the information of the baseline is captured by the intercept
-    + e.g., $Y = \beta_0 + \beta_1X_i + u_i,$ where X is either male (0) or female(1), then
-
-$$\beta_0: E(Y|X = male); \beta_1: E(Y|X = female) - E(Y|X = male)$$
-
-???
-
-blackboard 1
-
----
-
-* Ordinal: 
-    + Non-interval (only the order matters); 
-    + Interval (same intervals)
-
---
-
-* Continuous (ratio): Can credibly calculate the marginal effects, because marginal effects are derivatives, and only continuous variable can do derivative; other types can do this mathematically, but not accurately.
-
-???
-
-Interval: meaningful distance, feeling thermometer's 0 is not nothing but a strong feeling
-Ratio: interval variables with meaningful zero value (meaning absence); same ratio conveys the same meaning
-
-e.g., -50 to 0 to 50 find two pair of scores with a ratio of 1:3, transform them into 0-100 scale, the ratio changes.
 
 ---
 
@@ -372,6 +382,10 @@ ggplot(data = df_nl2, aes(x, y)) +
 
 ---
 
+Unbiased efficient estimates, but how to explain it? 
+
+--
+
 ## Marginal Effect
 
 Discrete:
@@ -382,28 +396,27 @@ Continuous:
 
 $$\lim_{\Delta x\to0} \frac{ f(x + \Delta x) - f(x)}{\Delta x}$$
 
---
 
-.magenta[Hint]: The marignal effect of an OLS is its &beta;s
+.navy[Hint]: The marignal effect of an OLS is its &beta;s
 
 ---
 
 ### Averagte Marginal Effect (AME)
 
-1. Calculate the marginal effect of each variable x for .magenta[each observation].
+1. Calculate the marginal effect of each variable x for .red[each observation].
 1. Calculate the average.
 
 --
 
 ### Marginal Effect at the Mean (MEM)
 
-1. Calculate the marginal effect of each variable x for .magenta[each's mean value].
+1. Calculate the marginal effect of each variable x for .red[each's mean value].
 
 --
 
 ### Marginal Effect at Representative Values (MER)
 
-1. Calculate the marginal effect of each variable x for .magenta[value(s) of interest].
+1. Calculate the marginal effect of each variable x for .red[value(s) of interest].
 
 ---
 
@@ -431,7 +444,15 @@ SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)} \\
 
 ---
 
-.magenta[NB]: One can't simply say if the null hypothesis is rejected, because it may not be a coherent conclusion in the entire domain of X, due to the nonlinearity. So, a better way to describe it is "in the range from a to b, the hypothesis can be rejected."
+## Attention!!
+
+One can't simply say if the null hypothesis is rejected, because it may .red[not be a coherent conclusion] in the entire domain of X, due to the .navy[nonlinearity]. 
+
+A better way to describe: "In the range from a to b, the hypothesis can be rejected."
+
+Or
+
+Just plot it.
 
 ---
 
@@ -459,3 +480,33 @@ ggplot(data = df_nl3, aes(x, y, color = "Predicted Values")) +
   ylab("E(Y|X)") + xlab("X")
 
 ```
+
+---
+
+## Wrap Up
+
+### Measuring wrong variables
+
+1. Proxy variable
+    + Unbiased when cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0.
+    
+1. Measurement error
+    + In Y
+        + &beta; Unbiased, var(&beta;) &uarr;
+    + In X
+        + Attenuation bias (&darr;)
+
+1. Type of measurements (normal/binary)
+
+---
+
+### Specifying a wrong model
+
+1. Functional form 
+    + Davidson-Mackinnon test
+1. Omitted variable: .red[Biased]
+
+## Interpreting issues
+
+1. Nonlinear &rArr; marginal effect
+1. Substantive significance
