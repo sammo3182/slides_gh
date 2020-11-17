@@ -1,6 +1,6 @@
 ---
-title: "Learning Basic Text Analysis with Dr. Hu"
-subtitle: "计算机辅助文本分析基础篇"
+title: "计算机辅助文本分析基础篇"
+subtitle: "Learning Basic Text Analysis with Dr. Hu"
 author: "胡悦<br>清华大学政治学系"
 # date: "2019-06-01"
 output:
@@ -44,20 +44,8 @@ library(pacman)
 p_load("tidyverse", "stringr", "rvest", "tidytext", "jiebaR")
 ```
 
-## 清华大学计算社会科学平台
 
-* 清华大学计算社会科学平台(T-CSS)
-    + http://css.ids.tsinghua.edu.cn
-
---
-
-* 清华计算社会科学工作坊系列
-* 清华计算社会科学专题论坛系列
-* 社科大数据计算环境
-
----
-
-## 内容提要
+## Overview
 
 ### 理论
 
@@ -89,66 +77,63 @@ p_load("tidyverse", "stringr", "rvest", "tidytext", "jiebaR")
 
 ---
 
-class: inverse, center, middle
+class: inverse, bottom
 
-## 第一部分
-# 文本分析概况与实例
+# 文本数据与分析概况
 
 ---
 
 ## Text as Data
 
-* 每年： 
-    + 2017-2018年年增量56,530,000人。
+每年： 2017-2018年年增量56,530,000人。
 
 --
 
-* 每天：
-    + 百度每天的用户搜索请求，需要1.7天才能扫描一遍；
-    + 微信日增数据500TB——比人类所有书籍存量还多；
+每天：
++ 百度日用户搜索请求，需1.7天才能扫描一遍；
++ 微信日增数据500TB——比人类所有书籍存量还多。
 
 --
 
-* 每秒：全世界每秒发送290万封电子邮件，一个人需要5.5年日以继夜才能读完；
+每秒：全世界每秒发送290万封电子邮件，一个人需要5.5年日以继夜才能读完。
+
+--
+
+### 1080p HD 2hrs：6GB
+
+--
+
+2019年，数据总量达40ZB，人均5.2TB<sup>1</sup>
+
+.footnote[<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB.]
+
+???
+
+Giga Byte < Tera Byte < Peta Byte < 
+Exa Byte < Zetta Byte < Yotta Byte
 
 ---
 
-2020年，数据总量达40ZB，人均5.2TB
+## 文本之于社会科学
 
-$$1ZB = 1,024EB = 1,024^2PB = 1,024^3TB$$
-$$ = 1024^4GB.$$
-
-
-???
-Giga Byte > Tera Byte > Peta Byte > 
-Exa Byte > Zetta Byte > Yotta Byte
+历史悠久而非主流
++ 资料难获取；花时间；难推广；难管理；难分析
 
 --
 
-1080p HD视频 1小时左右： 3GB
+新兴工具的繁荣：
++ 文本.navy[资料]指数级增长；
++ 大规模文本数据.navy[采集]；
++ .navy[存储和管理]能力增强；
++ 文本分析.navy[方法]蓬勃发展：
++ 可推广、系统化和.navy[廉价]化；
++ 通过文本表达的社会意义更.navy[广泛]。
 
 ---
 
 ## 社会科学中的文本分析
 
-* 历史悠久而非主流
-    + 文本资料难获取；花时间； 难推广；难管理；难分析
-
---
-
-* 分析工具的繁荣：
-    + 大规模文本数据采集；
-    + 存储和管理能力增强；
-    + 文本分析方法蓬勃发展：
-    + 可推广、系统化和廉价化；
-    + 文本资料指数级增长；
-    + 通过文本表达的社会意义更广泛；
-
----
-
-## 何为文本分析？
-
-文本分析是研究者*描述和阐释*一系列记录或可视文本的方法。
+研究者.navy[描述和阐释]一系列记录或可视文本的方法。
 
 --
 
@@ -193,17 +178,17 @@ Exa Byte > Zetta Byte > Yotta Byte
 
 ## 分析对象
 
-.left-column[
+.pull-left[
 
-* .large[语言]
+~~文字~~ 语言
 
-* Language matters!
+ Language matters!
 
 ]
 
 --
 
-.right-column[
+.pull-right[
 
 <img src="images/arrival.jpg" height = 450 />
 
@@ -213,8 +198,6 @@ Exa Byte > Zetta Byte > Yotta Byte
 
 ## 分析挑战
 
---
-
 * 非结构化
 
 --
@@ -223,24 +206,24 @@ Exa Byte > Zetta Byte > Yotta Byte
 
 --
 
-* 语言复杂且微妙的关系
+* 语言复杂且微妙
 
 --
 
-* 大数据问题：过载、失实、 冗余、污染
+* 过载、失实、 冗余、污染
 
 
 ---
 
 ## 分析实例
 
-.center[<img src="images/anExample.gif" height = 450 />]
+Grimmer 2010. 
 
----
+* 目标：美国参议员的政治沟通
 
-### Grimmer, Justin. 2010. “A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.” Political Analysis 18(1): 1–35.
+???
 
-* 目标：美国参议员与选民的政治沟通
+Grimmer, Justin. 2010. “A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.” *Political Analysis* 18(1): 1–35.
 
 --
 
@@ -260,15 +243,17 @@ Exa Byte > Zetta Byte > Yotta Byte
 
 ---
 
-### Benoit, Kenneth et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” American Political Science Review 110(2): 278–95.
+## Benoit et al. 2016. 
 
-* 目标：专家与普通人
+* 问题：专家与普通人对政治理解异同
 * 方法：Crowd-sourced identification
 * 数据：18,263 natural sentences, 1987~2010
     + 215,107 群众评判
     + 123,000 专家评判
 
 ???
+
+Benoit, Kenneth et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” *American Political Science Review* 110(2): 278–95.
 
 British Conservative, Labour and Liberal Democrat manifesto, 
 
@@ -283,14 +268,18 @@ British Conservative, Labour and Liberal Democrat manifesto,
 
 ---
 
-### King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
+## King et al. 2013. 
 
-* 对象：审查的目标是阻止/打击批评政府。
+* 问题：审查的目标是阻止/打击批评政府。
+
+???
+
+King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
 
 --
 
 * 发现：
-    + 中国允许新媒体上存在大量批评政府的意见；
+    + 允许新媒体上存在大量批评政府的意见；
     + 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。
 
 ---
@@ -416,11 +405,15 @@ This approach enables one to define a set of mutually exclusive and exhaustive c
 
 ---
 
-### Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
+## Dietrich et al 2019 
 
 * 目标： 测量情感强烈度
 * 数据：74,158 Congressional floor speeches
 * 方法： 统计音高变化
+
+???
+
+Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
 
 --
 
@@ -438,7 +431,7 @@ female MCs speak with greater emotional intensity when talking about women as co
 
 ---
 
-### Zhang, Han, and Jennifer Pan. 2019. “CASM: A Deep-Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media.” Sociological Methodology 49(1): 1–57.
+## Zhang & Pan 2019
 
 * 目标：从社交媒体中获取集体行动信息
 * 数据：A random sample of 20,000 geocoded posts from Weibo, 2010--2017
@@ -446,6 +439,8 @@ female MCs speak with greater emotional intensity when talking about women as co
 
 
 ???
+
+Zhang, Han, and Jennifer Pan. 2019. “CASM: A Deep-Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media.” Sociological Methodology 49(1): 1–57.
 
 张涵（普林斯顿）
 
@@ -490,6 +485,8 @@ class: inverse, center, middle
 ## 社交媒体
 
 .center[<img src="images/social-media.gif" height = 400 />]
+
+???
 
 新浪微博1.4亿，微信用户5.5亿;
 微信日增数据500TB，QQ日增数据200TB。
@@ -715,9 +712,9 @@ df_zhongsheng <- readRDS("data/zhongsheng.RDS")
 
 ## 孤木不成林
 
-* 结合互联网舆情与法院判决信息、股价信息等，评判行业发展前景；
-* 结合交易流水信息，提高消费者画像精确度；
-* 结合网络社交与候选人资料预测国会选举、投票率等
+* 互联网舆情 + 法院判决信息、股价信息等 &rArr; 行业发展前景；
+* 交易流水信息 &rArr; 提高消费者画像精确度；
+* 网络社交与候选人资料 &rArr; 国会选举、投票率等
 
 ---
 
@@ -963,6 +960,16 @@ the Hamming distance between two strings of equal length is the number of positi
 
 ---
 
+## Topic Modeling
+
+.center[
+<video width="500" height="500" controls>
+<source src="images/text_topicModeling.webm" type="video/webm">
+</video>
+]
+
+---
+
 ## 超越A Bag of Words
 
 * Stop words
@@ -970,7 +977,7 @@ the Hamming distance between two strings of equal length is the number of positi
 
 --
 
-* Word order: Markov Model of order N
+* Word order: Markov Model of Order N
     + Unigram: 清华 大学 政治 系
     + Bigram: 清华大学 政治系/清华 大学政治 系
     + Trigram：清华大学政治 系/清华 大学政治系
@@ -995,13 +1002,29 @@ term frequency-inverse document frequency
 
 ## 文本比较
 
-* 文本特征：文本长度、用词、词频、关键词等；
-* 语义特征：政治立场、文化、组织间通过文本表达的主张、价值和意义
+.pull-left[
+文本特征：
++ 长度
++ 用词
++ 词频
++ 关键词    
+……
 
+]
+
+.pull-right[
+语义特征
++ 政治立场
++ 文化
++ 主张
++ 价值
++ 意义
+……
+]
 
 ---
 
-## 文本分析“唇典”
+## 文本分析“黑话”
 
 * Corpus
     + Document
@@ -1031,35 +1054,43 @@ Latent Dirichlet Allocation
 
 ## Take Home Points
 
-.left-column[
-计算机辅助文本分析
+.pull-left[
+### What You Already Know
 
-* 应用范围广泛
-* 间接研究语言
-* 不断突破限制
-]
+1. 文本之于社会科学
+    + 丰富资源
+    + 分析门槛
+1. 文本分析路径
+    + 词 &dzigrarr; 图
+1. 文本分析步骤
+    + 打散
+    + 聚合
 
-.right-column[
-<img src="images/indirect_phone.gif" width = 400 />
 ]
 
 --
 
-### 未完待续
+.pull-right[
 
-* 概念探索
-* 概念分析
-* 情感分析
+### Prospect
+
+* 应用范围广泛
+* 间接研究语言
+* 不断突破限制
 
 
-<!-- --- -->
+<img src="images/indirect_phone.gif" width = 400 />
+]
 
-<!-- class: inverse, center, middle -->
 
-<!-- # Thank you! -->
+---
 
-<!-- <i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) -->
+class: inverse, center, middle
 
-<!-- <i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/ -->
+# Thank you!
 
-<!-- <i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182) -->
+`r icon::fa("envelope", size = "lg")`&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+`r icon::fa("globe", size = "lg")`&nbsp; https://sammo3182.github.io/
+
+`r icon::fa("github", size = "lg")`&nbsp; [sammo3182](https://github.com/sammo3182)
