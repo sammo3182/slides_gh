@@ -3,18 +3,56 @@ title: "Multicollinearity & Heteroskedasticity"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
-# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - styles.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+---
+
+class: middle, center
+
+Your favorite is coming......
+
+--
+
+.large[.red[Quiz Time!]]
+
+You'll love it~
+
+---
+
+.center[
+<video width="500" height="500" controls>
+<source src="images/quiz.mp4" type="video/webm">
+</video>
+]
+
+Pro and con?
+
+---
+
+## Overview
+
+1. Collinearity
+    + Violation
+    + Diagnosis
+    + Solution
+1. Heteroscedasticity
+    + Violation
+    + Diagnosis
+    + Solution
+        + Sandwich Method
+        + Fixed Effect
+        + Multilevel Model
+
 ---
 
 class: inverse, bottom
@@ -25,15 +63,15 @@ class: inverse, bottom
 
 class: small
 
-## Perfect collinearity
+## Perfect Collinearity
 
 $$X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$$
 
-When $cov(X_1, X_2) = 1, r_{1i} = 0$, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
+When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
 
 --
 
-e.g., Let's say in the PRF $Y_i = \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u$, $X_2 = 1 + 2X_1$, then
+e.g., Let's say in the PRF Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + u, X<sub>2</sub> = 1 + 2X<sub>1</sub>, then
 
 \begin{align}
 Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
@@ -43,6 +81,10 @@ Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
 \end{align}
 
 PRF (&beta;) is non-identifiable. 
+
+--
+
+Problematic, but the .red[only] problematic.
 
 ???
 
@@ -56,22 +98,19 @@ class: small
 
 **X**<sub>2</sub> is not a transformation of X<sub>1</sub>.
 
-In this case, the estimators (**&beta;**) remain .magenta[unbiased], yet
+In this case, the estimators (**&beta;**) remain .red[unbiased], yet
 
 \begin{align}
 var(\hat\beta_1|X) =&\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
 =&\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
 \end{align}
 
---
 
-As $\beta_{12}$ increases, the variance also increases.
+As &beta;<sub>12</sub> increases, the variance also increases.
 
 ---
 
-class: small
-
-### Diagnosis
+## Diagnosis
 
 **Variance Inflation Factors (VIF, [1, +&infin;])**: A measure of how much the variance of the estimated coefficient &beta;<sub>k</sub> is "inflated" by the correlation among the predictor variables.
 
@@ -83,13 +122,18 @@ $$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$
 
 --
 
-Rule of thumb: 4, 10
+Rule of thumb: 4, 10    
+(In most cases, you don't need this, why?)
+
+???
+
+Perfect then unidentified; but if your core X is insignificant.
 
 ---
 
-## Solution
+## Solution(7......)
 
-1. No need specific solution if not being serious.
+1. .red[No need for specific solution.]
 1. Removed the highly correlated variables.
 1. Remeasure the correlated variables (e.g., EFA, CFA, IRT)
 
@@ -101,25 +145,9 @@ class: inverse, bottom
 
 ---
 
-class: small
+##  (Read after Me) Heteroscedasticity
 
-## What's Heteroscedasticity
-
-### Terminology
-
-Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance)
-
---
-
-### Assumption
-
-Homoskedasticity (constant variance of $u_i, var(u_i|X) = \sigma^2$)
-
---
-
-### Heteroscedasticity
-
-$var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$
+Homo/heteroscedasticity &asymp;     Homo/heterogeneity (of variance)
 
 ???
 
@@ -127,9 +155,21 @@ Regression: Heteroscedasticity
 
 ANOVA: Heterogeneity (of variance)
 
+--
+
+### Assumption
+
+Homoskedasticity (var(u<sub>i</sub>|X) = &sigma;<sup>2</sup>)
+
+--
+
+### Violation
+
+$var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$
+
 ---
 
-backgroaund-image: url("images/heteroscedasticity1.png")
+background-image: url("images/heteroscedasticity1.png")
 background-position: center
 background-size: contain
 
@@ -141,11 +181,13 @@ background-size: contain
 
 ---
 
-## Consequence
+class: small
 
-Unbiased, expected consistent
+## Consequence<sup><img src="images/fsmrof.png" height="20"/></sup>
 
---
+.red[Unbiased], expected consistent, but, again, inefficient
+
+???
 
 \begin{align}
 var(\hat\beta|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
@@ -154,18 +196,31 @@ var(\hat\beta|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar 
                  =& \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2
 \end{align}
 
----
-
 \begin{align}
 H_0: \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =& \frac{\sigma^2}{\sum(X_i - \bar X)^2}\\
 \sum(X_i - \bar X)^2\frac{\sigma_i^2}{\sigma^2} =& \sum(X_i - \bar X)^2
 \end{align}
 
-Therefore, only when $\frac{\sigma_i^2}{\sigma^2} = 1$, the estimate is efficient.
+Only when $\frac{\sigma_i^2}{\sigma^2} = 1$, the estimate is efficient.
 
----
+--
 
-## Diagnosis
+### Diagnosis
+
+Park test, Goldfeld-Quandt test, Breusck-Pagan(-Godfreg) test, White test
+
+**Goldfeld-Quandt test**:
+
+1. Divide the domain of X to three parts, $\frac{n -c}{2}, c, \frac{n -c}{2}$. 
+1. Regress Y on X as usual for each part.
+1. Calculate $\sigma_L^2$ from part 1 and $\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat u_i^2$ from part 3.
+1. Then test $H_0: \sigma_L^2 = \sigma_H^2$
+    + Statistics: $\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}$
+
+
+Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.
+
+???
 
 ### Park test
 
@@ -177,67 +232,59 @@ $$ln(\hat u_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.$$
 
 Do the t-test of coefficient in $ln(X_i)$: $H_0: \hat\delta_1 = 0.$
 
-???
 
-<img src="images/parkTest.png" pheight = 200 />
+<img src="images/parkTest.png" height = 200 />
 
----
-
-class: small
-
-### Goldfeld-Quandt test
-
-1. Divide the domain of X to three parts, $\frac{n -c}{2}, c, \frac{n -c}{2}$. 
-1. Regress Y on X as usual for each part.
-1. Calculate $\sigma_L^2$ from part 1 and $\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat u_i^2$ from part 3.
-1. Then test $H_0: \sigma_L^2 = \sigma_H^2$
-    + Statistics: $\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}$
-
---
-
-Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.
-
----
 
 ### Breusck-Pagan(-Godfreg) test
 
 Assuming $\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}$
 
---
 
 Regress $\hat u_i^2$ on $X_1, X_2, \cdots, X_{k - 1}$, 
 
 $H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0$
 
-???
 
 H_1: At least one of the &sigma;&ne;0, $\sim(\sigma_i = 0)$
 
---
 
 Statistics $F_{k - 1, n - k}$
 
----
-
-### White test
+### White Test
 
 1. Regress Y on X to get $\hat u_i^2$
-1. Regress $\hat u_i^2$ on $\sum X_i + \sum X_i^2 + \sum X_iX_j$ or $\hat Y_is$.
+1. Regress $\hat u_i^2$ on $\sum X_i + \sum X_i^2 + \sum X_iX_j$ or $\hat Y_i$.
 1. Test this model against a model with no variables (F test).
 
 ---
 
+class: small
+
 ## Solution
 
-### White covariance matrix (a.k.a., Heteroscedasitic-consistent covariance matrix).
+When do you need a solution? 
+
+--
+
+White covariance matrix, weighted least square, FGLS......
+
+???
+
+When your variable of interest isn't sig or you are interested in the heteroscedasticity
+
+### White covariance matrix     
+(a.k.a., Heteroscedasitic-consistent covariance matrix).
 
 $E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}$
 
-Since $E(u_i|X) = 0$ by assumption, we can estimate $u_i$ with $\hat u_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.$
+Since E(u<sub>i</sub>|X) = 0 by assumption, we can estimate $u_i$ with $\hat u_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.$
 
-The estimates turn out to be biased (esp. for small N), but converge asymptotically in n to the true distribution. 
+The estimates turn out to be .red[biased], but converge asymptotically in n to the true distribution. (What does this imply?) 
 
----
+
+Means it's fine when N is large enough.
+
 
 ### Weighted least square
 
@@ -251,23 +298,16 @@ Given &sigma;<sub>i</sub> is known,
 \Rightarrow Y_i^* =& \beta_0X^*_{0i} + \beta_1X^*_{1i} + u_i^*. 
 \end{align}
 
-???
-
 The last equation is homoscedastistic.
 
----
-
-class: small
 
 However, in most cases, we don't know &sigma;<sub>i</sub>. 
 
---
 
-So, usually we assume $var(u_i)\sim X_{1i}$, i.e., $var(u_i) = \sigma_i^2 = \sigma^2X_i = h_i\sigma^2$.
+So, usually we assume var(u<sub>i</sub>)&sim; X<sub>1i</sub>, i.e., var(u<sub>i</sub>) = &sigma;<sub>i</sub><sup>2</sup> = &sigma;<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>&sigma;<sup>2</sup>.
 
---
 
-.magenta[Goal]: $var(u^*_i) = var(u^*_j), \forall i,j.$ 
+Goal: var(u<sup>\*</sup><sub>i</sub>) = var(u<sup>\*</sup><sub>j</sub>), &forall; i,j. 
 
 Then,
 
@@ -279,27 +319,12 @@ var(\frac{u_i}{\sqrt{h_i}}) =& \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = 
             X_{1i}^* =& \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
 \end{align}
 
-???
 
 In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.
 
----
-
-## Modeling Heteroscedasticity
-
-Heteroscedasticity can be theoretically meaningful. 
-
-Researchers may want to model it, esp., when they focus on how the variance changes. 
-
 --
 
-e.g., Assuming $var(u_i) = \sigma^2e^{\gamma_1X_{2i}}$. 
-
-If &gamma;<sub>1</sub> = 0, then the model is homoscedastistic; otherwise, one has to use MLE to test $H_0: \gamma_1 = 0.$
-
----
-
-## Feasible Generalized Linear Squares (FGLS)
+### Feasible Generalized Linear Squares (FGLS)
 
 \begin{align}
 \boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{u}; \\
@@ -331,7 +356,7 @@ var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omeg
 
 --
 
-Hint: This method does not get SE, also biased for small N.
+&zwnj;Hint: This method does not get SE, and also .red[biased] for small N.
 
 ---
 
@@ -363,7 +388,7 @@ Instead, let $\boldsymbol{G} = \boldsymbol{X'GX}$, then $var(\boldsymbol{\beta}|
 
 ## Heterogeneity in TSCS Data
 
-TSCS: Time-series cross-sectional data, "pooled data", "panel data"(wrong!)
+TSCS: Time-series cross-sectional data, a.k.a., "pooled data", "panel data"(wrong!)
 
 Dealing with heterogeneity in TSCS data:
 
@@ -399,16 +424,12 @@ An alternative version of the sandwich SE.
 
 Adjust SE to account for correlations within clusters
 
----
-
-class: small
+???
 
 ### Within-between model
 
 1. Run separate models in each group
 1. Run an aggregate regression: 
-
---
 
 Let $\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar u_i = \frac{\sum^n_{i=1}u_{it}}{n_i}$. Then, 
 
@@ -457,8 +478,6 @@ Alternatives
 1. Demeaning
 1. Fixed effect Vector Decomposition (FEVD)
 
---
-
 Con : 
 
 1. Can't offer sufficient information (heterogeneous to what extent?).
@@ -466,7 +485,21 @@ Con :
 
 ---
 
-## Quick Brief of Multilevel Modeling
+## Methodologists' Solution: Modeling It
+
+a.k.a., *Pan-Ta*
+
+Heteroscedasticity can be theoretically meaningful,, esp., when researchers focus on how the variance changes. 
+
+e.g., Assuming var(u<sub>i</sub>) = &sigma;<sup>2</sup>e<sup>&gamma;<sub>1</sub>X<sub>2i</sub></sup>. 
+
+If &gamma;<sub>1</sub> = 0, then the model is homoscedastistic; otherwise, one has to use MLE to test H<sub>0</sub>: &gamma;<sub>1</sub> = 0.
+
+---
+
+## Multilevel Modeling
+
+a.k.a., hierarchical modeling
 
 ### (Two-Level) Random Intercept
 
@@ -483,7 +516,7 @@ Z is the group indicator.
 
 ???
 
-Represent the similarity between individual and group level.
+Represent the similarity between individual and group level. 0 means no group effect.
 
 ---
 
@@ -519,10 +552,24 @@ Covariate Matrix:
 \end{array}\right)
 \end{align}
 
-1. Identity: $\tau_0^2 = \tau_1^2 = 1$;
-1. Exchangeable: $\tau_0^2 = \tau_1^2$;
-1. Independent: $\tau_0\tau_1 = 0$;
+1. Identity: &tau;<sub>0</sub><sup>2</sup> = &tau;<sub>1</sub><sup>2</sup> = 1;
+1. .navy[Exchangeable: &tau;<sub>0</sub><sup>2</sup>= &tau;<sub>1</sub><sup>2</sup>;]
+1. Independent: &tau;<sub>0</sub><sup>2</sup>&tau;<sub></sub><sup>2</sup> = 0;
 1. Unstructured: no specific relationships is assumed for the &tau;s.
 
+---
 
+## Wrap Up
+
+1. Collinearity
+    + Violation: Identification
+    + Diagnosis: VIF or...just see the results
+    + Solution: Hmm...
+1. Heteroscedasticity
+    + Violation: Homoscedasticity
+    + Diagnosis: Park test, Goldfeld-Quandt test, Breusck-Pagan(-Godfreg) test, White test
+    + Solution
+        + Sandwich Method
+        + Fixed Effect(!)
+        + Multilevel Model(!!)
 
