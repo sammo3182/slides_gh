@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>数据可视化理论与实践</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦 清华大学政治学系" />
+    <script src="02_dataVisualization_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="02_dataVisualization_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="02_dataVisualization_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="02_dataVisualization_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="02_dataVisualization_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="02_dataVisualization_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="02_dataVisualization_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="02_dataVisualization_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="02_dataVisualization_files/panelset-0.2.4/panelset.js"></script>
+    <script src="02_dataVisualization_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="02_dataVisualization_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="02_dataVisualization_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="02_dataVisualization_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="02_dataVisualization_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <script src="02_dataVisualization_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="02_dataVisualization_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 数据可视化理论与实践
+## Learning Visualization with Dr. Hu
+### 胡悦<br>清华大学政治学系
+
+---
+
+
+
+
+
+class: inverse, centerl, middle
+
+
+
+&lt;video width="700" controls&gt;
+  &lt;source src="images/queensGambit.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+.normal[Before Everything: 可视化能帮你做什么？]
+
+---
+
+## Overview
+
+1. 表 vs. 图
+    + 何时用表，何时用图
+1. 可视化：无效 vs. 有效
+    + 一维数据
+    + 二维数据
+    + 多维数据
+1. 可视化基本原则
+    + 势 vs. 意
+    + 可视化编码
+    + 色彩选择
+1. 可视化操作实例
+
+
+---
+
+class: small
+
+## 可视化不总是首选
+
+Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.
+
+检验APSR，AJPS和PA 2006年五刊，发现如下结果
+
+.center[&lt;img src="images/graphTable.png" height = 300 /&gt;]
+
+--
+
+&amp;zwj; Bonus: 如何可视化上表？
+
+???
+ mathematical: formal modeling
+
+---
+
+class: bottom
+
+background-image: url("images/tableGraph.png")
+background-position: center
+background-size: contain
+
+
+.navy[We'll come back to this.]
+
+---
+
+## 图 vs. 表
+
+.pull-left[
+
+### 表
+
+* 容易制作
+* 发表常见
+* 有助后续
+]
+
+--
+
+.pull-right[
+
+### 图
+
+* 制作费事（yysy...）
+* “不精确”
+* 形式不统一
+
+]
+
+
+---
+
+## 为何可视化流行
+
+.small[
+Even before he became president, Mr Trump had **a history of controversial comments** about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz - the list goes on - he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivialising them."
+]
+
+
+.center[&lt;img src="images/vis_trumpNastyWoman.gif" width = 600 /&gt;]
+
+???
+
+People care about things big, colorful, and moving.
+
+
+Watch Donald Trump Call Hillary Clinton a 'Nasty Woman' --Ritu Prasad BBC
+https://time.com/4537960/donald-trump-hillary-clinton-nasty-woman-debate/
+
+---
+
+class: inverse, bottom
+
+# "听得准，才能读得对"
+
+???
+
+英语读音，可视化也是要知道什么是好图
+
+---
+
+## 从头开始
+
+.pull-left[
+
+&lt;img src="images/tryIt.jpg" height = 300 /&gt;
+
+]
+
+.pull-right[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+---
+
+class: small
+
+## 饼状图
+
+.pull-left[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.pull-right[
+
+.panelset[
+
+.panel[.panel-name[I]
+&lt;img src="images/pie1.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[II]
+&lt;img src="images/pie2.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[III]
+&lt;img src="images/pie3.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[IV]
+&lt;img src="images/pie4.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[V]
+&lt;img src="images/pie5.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[VI]
+&lt;img src="images/pie6.png" height = 300 /&gt;
+]
+
+]
+
+]
+
+---
+
+## Why Is Pie Chart a Big No-No?
+
+* 用于呈现数字就能呈现的东西
+* 容易误导读者（人类对面积不敏感）
+* 浪费油墨（Why should we care?）
+
+被部分从业人士誉为垃圾图形（[junk chart](http://junkcharts.com)）之“冠”
+
+---
+
+## 一维数据可视化：柱状图
+
+
+.pull-left[
+
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+]
+
+.pull-right[
+
+.panelset[
+
+.panel[.panel-name[Bar I]
+&lt;img src="images/barPlot1.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[II]
+&lt;img src="images/barPlot2.png" height = 300 /&gt;
+]
+
+.panel[.panel-name[III]
+&lt;img src="images/barPlot3.png" height = 300 /&gt;
+]
+
+]
+
+]
+
+---
+
+## 一维数可视化据：玫瑰图
+
+.pull-left[
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Day &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Browse &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Monday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Tuesday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Wednesday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Thursday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Friday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 90 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Saturday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 110 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Sunday &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+
+![](02_dataVisualization_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+]
+
+???
+
+Nightingale Rose diagram, created by the famous Florence Nightingale
+
+Good for time series,save space than bars
+
+
+
+---
+
+## 一维数据可视化：“升”维
+
+.center[&lt;img src="images/graphTable.png" height = 200 /&gt;
+&lt;img src="images/tableGraph.png" height = 300 /&gt;]
+
+
+---
+
+background-image: url("images/radiaPlot.png")
+background-position: center
+background-size: contain
+
+???
+
+本质还是一维图，没有讨论两位之间关系
+
+---
+
+## 如何可视化以下数据
+
+墨西哥各政党在大选中得票比例趋势
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+如何可视化这个数据？
+
+???
+
+PRI: Institutional Revolutionary Party
+PAN: National Action Party
+PRD: Democratic Revolutionary Party
+
+---
+
+## 当然堆积图
+
+&lt;img src="images/areaPlot.png" height = 500 /&gt;
+
+
+---
+
+## 当然堆积图……吧？
+
+.center[&lt;img src="images/areaPlot.png" height = 300 /&gt;]
+
+--
+
+1. 比折线图费更多墨。
+
+--
+
+1. 各个时间序列间的比较容易误导读者，而且焦点容易被面积所模糊。
+
+
+???
+
+如果非要用，应将变化较不明显的序列至于最底端。
+
+
+---
+
+## （Again）如何可视化以下数据
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+---
+
+## 二维数据可视化：折现图
+
+.panelset[
+
+.panel[.panel-name[Line (Digital)]
+.center[&lt;img src="images/linePlot.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Line (Printed)]
+.center[&lt;img src="images/linePlot2.png" height = 400 /&gt;]
+]
+
+]
+
+---
+
+## 二维数据可视化：点状图
+
+.panelset[
+
+.panel[.panel-name[Basic Point]
+.center[&lt;img src="images/scatterPlot.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Named Point]
+.center[&lt;img src="images/scatterPlot2.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Point "3D"]
+.center[&lt;img src="images/facet.png" height = 400 /&gt;]
+]
+
+]
+
+???
+
+数字升维可以分屏，也可以增加变化
+
+---
+
+## “高维”点状图
+
+| 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
+|------	|----------	|------------	|----------	|
+| A    	| 712      	| 18         	| 100      	|
+| B    	| 1105     	| 4          	| 57       	|
+| C    	| 690      	| 7          	| 80       	|
+| D    	| 687      	| 27         	| 191      	|
+| E    	| 725      	| 2          	| 5        	|
+| F    	| 1200     	| 25         	| 10       	|
+| G    	| 470      	| 19         	| 25       	|
+| H    	| 752      	| 10         	| 123      	|
+
+
+---
+
+## 气泡图
+
+.panelset[
+
+.panel[.panel-name[Basic Bubble]
+.center[&lt;img src="images/bubblePlot.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Tagged Bubble]
+.center[&lt;img src="images/bubblePlot2.png" height = 400 /&gt;]
+]
+
+
+]
+
+
+???
+
+Bubble chart 图一对大小相近bubbles无法区分
+
+
+---
+
+## 气泡图优劣
+
+### Pro
+
+* 散点图变异
+* 通过气泡大小呈现第三维度数据
+
+--
+
+### Con
+
+* 气泡大小当接近时可能造成辨识困难，信息无法完全精确地传达
+
+---
+
+class: inverse, bottom
+
+# 可视化基本原则
+
+---
+
+## 心理准备
+
+.center[&lt;img src="images/boring.gif" height = 400 /&gt;]
+
+---
+
+## 可视化的作用
+
+* 记录信息
+* 分析推理
+* 证实假设
+* 交流思想
+
+---
+
+## 回归本质：可视化是什么？
+
+.center[&lt;img src="images/socialEngineer.jpg" height = 400 /&gt;]
+
+???
+
+可视化谁为主？主体意识
+
+---
+
+## 见势：统计可视化
+
+.center[&lt;img src="images/sexism_chart.jpg" height = 500 /&gt;]
+
+---
+
+background-image: url("images/sexism_image.jpg")
+background-position: center
+background-size: contain
+
+## 见意：传播可视化
+
+---
+
+## Professional vs. Attractive
+
+.pull-left[&lt;img src="images/africanGDP_chart.jpg" height = 400 /&gt;]
+.pull-right[&lt;img src="images/africanGDP_image.jpg" height = 300 /&gt;]
+
+---
+
+## 吸睛之法：可视化编码
+
+
+* 数值（continuous）
+    + 10厘米，17厘米，23厘米
+* 定序（ordinal）
+    + 小，中，大
+    + 周日，周一，周二……
+* 定类（nominal）
+    + 苹果，桔子，香蕉……
+
+---
+
+## 编码要素
+
+标记：点、线、面
+
+&lt;img src="images/sign.png" height = 50 /&gt;
+
+--
+
+通道：位置、大小、形状、方向、色调、饱和度、亮度……
+
+&lt;img src="images/pipe.png" height = 100 /&gt;
+
+---
+
+## 通道
+
+.pull-left[
+&lt;img src="images/category.png" height = 200 /&gt;
+&lt;img src="images/group.png" height = 200 /&gt;
+]
+
+.pull-right[
+&lt;img src="images/order.png" height = 400 /&gt;
+]
+
+---
+
+## 通道选择
+
+.center[&lt;img src="images/measurement.png" height = 400 /&gt;]
+
+???
+
+是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么
+
+---
+
+## 通道选择
+
+### 类型（Type）
+
++ 是什么/在哪里（what/where）
++ 何种程度（how much）
+    
+--
+    
+### 有效性（Effectiveness）
++ 通道表现力符合属性的重要性
+    
+--
+
+### 表现力（Expressiveness）
+
++ 表达且仅表达数据的完整属性
++ 判断标准（.red[ADSP]）：精确性、可辨性、可分离性、视觉突出
+
+???
+
+Accuracy, Discriminibility, Separability, Pop-out
+
+---
+
+### 精确性（Accuracy）
+
+.center[&lt;img src="images/stevensPowerLaw.png" height = 500 /&gt;]
+
+???
+
+刺激增加：
+
+* 关注度敏感度降：点亮度、声音响度
+* 关注度敏感度不变：线长度
+* 关注度敏感度加：电流
+
+psychophysicist Stanley Smith Stevens (1957, 1961)
+
+`\(\displaystyle \psi (I)=kI^{a}\)`, k proportionality constant that depends on the units used
+
+---
+
+## 精确性上的Social Engineering
+
+.pull-left[
+
+&lt;img src="images/lattice1.png" height = 400 /&gt;
+
+网格处于背景,会不凸显
+
+]
+
+.pull-right[
+
+&lt;img src="images/lattice2.png" height = 400 /&gt;
+
+网格处于前景,遮挡地图
+
+]
+
+---
+
+### 可辨性（Discriminability） 
+
+.center[&lt;img src="images/commuNet.png" height = 500 /&gt;]
+
+???
+
+通过粗细动态表现范围
+
+---
+
+background-image: url("images/contract.png")
+background-position: center
+background-size: contain
+
+
+---
+
+### 可分离性（Separability）
+
+.center[&lt;img src="images/separability.png" height = 200 /&gt;]
+
+---
+
+### 视觉突出（Pop-out）
+
+.center[&lt;img src="images/popOut3.png" height = 500 /&gt;]
+
+---
+
+.panelset[
+
+.panel[.panel-name[Finding Os?]
+.center[&lt;img src="images/Os.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Method I]
+.center[&lt;img src="images/Os2.png" height = 400 /&gt;]
+]
+
+.panel[.panel-name[Method II]
+.center[&lt;img src="images/Os3.png" height = 400 /&gt;]
+]
+
+]
+
+---
+
+## 核心原则：焦点引导
+
+.center[&lt;img src="images/picWorthWords.jpg" height = 500 /&gt;]
+
+---
+
+## 学术型吸睛：分组与分层
+
+* 分组会对.red[大部分]任务有效
+* 如果不能进行分组，则需要.red[转换]任务目标
+* 避免.red[过多]类别
+* 对数据的每个维度指定.red[一种]或一个阶层的颜色
+
+---
+
+background-image: url("images/network_democracy.png")
+background-position: center
+background-size: contain
+
+---
+
+## 色彩编码
+
+* 灰度值可被认为是有序的 
+
+&lt;img src="images/grey1.png" height = 50 /&gt;
+
+* 可用于编码数值型数据
+
+&lt;img src="images/grey2.png" height = 50 /&gt;
+
+* 色调通常认为是无序的，可用于编码不同维度的值
+
+&lt;img src="images/rainbow.png" height = 50 /&gt;
+
+---
+
+## 色彩意义：一种主观感受
+
+.center[&lt;img src="images/colorMeaning.png" height = 300 /&gt;]
+
+---
+
+## 色彩设计基本原则
+
++ 避免.red[过多]颜色交错导致的杂乱无章
++ 注意.blue[饱和度]
+
+???
+
+控制低饱和度色彩中的色彩视觉突出
+
+
+--
+
+.pull-left[&lt;img src="images/redGreen_w.jpg" height = 300 /&gt;]
+
+--
+
+.pull-right[&lt;img src="images/redGreen_r.png" height = 300 /&gt;]
+
+---
+
+* 使用中性背景色
+    + 控制对全局色彩的影响
+    + 最小化“同时对比” （simultaneous contrast）
+
+--
+
+.pull-left[&lt;img src="images/background_apple.jpg" height = 240 /&gt;]
+
+.pull-right[&lt;img src="images/background_huawei.jpeg" height = 240 /&gt;]
+
+
+???
+
+如果纯色为绿色，则灰色色块看起来带有红味,产生颜色偏差
+
+---
+
+## 对于新手而言
+
+色彩其实没.orange[那么]重要
+
+--
+
+如果非要较真，辅助软件来选择合适的色阶：
+
+http://colorbrewer2.org/ 
+
+http://paletton.com/
+
+.navy[请在颜色选择过程中体现人文关怀。]
+
+???
+
+色盲症患者: 红绿色盲是最常见的色盲，其次是蓝黄色盲以及全色盲。北欧族裔的红绿色盲患者约占男性的8%和女性的0.5% (Northern European ancestry , National Eye Institute, 2015)
+
+喜欢打印的人群
+
+---
+
+class: inverse, bottom
+
+# 可视化操作实例
+## 以`ggplot`为例
+
+---
+
+class: small
+
+## 调色板：`RColorBrewer` Package
+
+### 主要code
+
+`colorRampPalette(brewer.pal(&lt;num.&gt;, &lt;name of pallette&gt;))(n)`
+
+### Alternative
+
+`ggsci`: 包含Nature、Science等期刊配色（Check "Tron Legacy"）
+
+`wesanderson`
+
+`ggthemes`
+
+`ggtech`
+
+---
+
+## Name of Palette
+
+.left-column[&lt;img src="images/color_sequential.png" height = 500 /&gt;]
+
+.right-column[
+&lt;img src="images/color_diverging.png" height = 250 /&gt;
+&lt;img src="images/color_qualitative.png" height = 200 /&gt;
+]
+
+---
+
+## 一维图
+
+
+
+
+```r
+ggplot(data = mydata, aes(Cut, Price)) +
+  `geom_bar`(
+    stat = "identity",
+    width = 0.8,
+    colour = "black",
+    size = 0.25,
+    fill = "#2ca25f",
+    alpha = 1
+  )
+
+ggplot(data = mydata2, aes(Catergory, value, 
+                           `fill = variable`)) +
+  geom_bar(
+    stat = "identity",
+    color = "black",
+    position = position_dodge(),
+    width = 0.7,
+    size = 0.25
+  ) +
+  scale_fill_manual(values = c("#ef8a62", "#67a9cf")) +
+  ylim(0, 10) +
+  theme(
+    axis.title = element_text(size = 15, face = "plain", color = "black"),
+    axis.text = element_text(size = 12, face = "plain", color = "black"),
+    legend.title = element_text(size = 14, face = "plain", color = "black"),
+    legend.background  = element_blank(),
+    legend.position = c(0.88, 0.88)
+  )
+```
+
+---
+
+.left-column[
+![](02_dataVisualization_files/figure-html/plot-1DI-1.png)&lt;!-- --&gt;
+]
+
+.right-column[
+![](02_dataVisualization_files/figure-html/plot-1DII-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+
+.left-column[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; car &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; id &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Math &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; English &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Biology &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Music &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R-Coding &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.right-column[
+![](02_dataVisualization_files/figure-html/plot-radar-code-1.png)&lt;!-- --&gt;
+]
+
+---
+
+
+```r
+ggplot() + 
+  geom_polygon(data=mydata,aes(x=id, y=value),color = "black", fill=brewer.pal(7,"Set1")[1],alpha=0.1)+
+  geom_point(data=mydata,aes(x=id, y=value),size=5,shape=21,color = 'black', fill=brewer.pal(7,"Set1")[1])+
+  `coord_radar`() +
+  scale_x_continuous(breaks =label_data$id,labels=label_data$car)+
+  ylim(0,22)+
+  theme_light()+
+  theme(axis.text.x=element_text(size = 11,colour="black",angle = myAngle))
+```
+
+---
+
+class: small
+
+## 二维图
+
+
+
+.left-column[
+
+```r
+ggplot(data = mydata, aes(x, y)) +
+  `geom_point`(
+    fill = "black",
+    colour = "black",
+    size = 3,
+    shape = 21
+  ) +
+  `geom_smooth`(
+    method = 'loess',
+    span = 0.4,
+    se = TRUE,
+    colour = "#00A5FF",
+    fill = "#00A5FF",
+    alpha = 0.2
+  ) + 
+  scale_y_continuous(breaks = seq(0, 125, 25)) +
+  theme(
+    text = element_text(size = 15, color = "black"),
+    plot.title = element_text(
+      size = 15,
+      family = "myfont",
+      hjust = .5,
+      color = "black"
+    ),
+    legend.position = "none"
+  )
+```
+
+]
+
+.right-column[
+![](02_dataVisualization_files/figure-html/plot-2D-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: small
+
+## 统计图
+
+.left-column[
+&lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:center;"&gt; Model 1 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; (Intercept) &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 41.108*** &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; (2.842) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; wt &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -3.636*** &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; (1.040) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cyl &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -1.785*** &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; (0.607) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; disp &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; (0.012) &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Num.Obs. &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 32 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R2 &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.833 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; R2 Adj. &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 0.815 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; AIC &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 157.6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; BIC &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 164.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Log.Lik. &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; -73.779 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; F &lt;/td&gt;
+   &lt;td style="text-align:center;"&gt; 46.424 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;tfoot&gt;
+&lt;tr&gt;
+&lt;td style="padding: 0; border:0;" colspan="100%"&gt;
+&lt;sup&gt;&lt;/sup&gt; * p &amp;lt; 0.1, ** p &amp;lt; 0.05, *** p &amp;lt; 0.01&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tfoot&gt;
+&lt;/table&gt;
+]
+
+.right-column[
+
+```r
+library(dotwhisker)
+dwplot(m1)
+```
+
+![](02_dataVisualization_files/figure-html/ols-dw-1.png)&lt;!-- --&gt;
+]
+
+---
+
+class: small
+
+## 网络图 (Complete Network)
+
+
+```r
+library(network) # for data
+data(emon)
+`library(ggnetwork)`
+
+ggplot(emon[[1]], aes(
+  x = x,
+  y = y,
+  xend = xend,
+  yend = yend
+)) +
+  `geom_edges`(arrow = arrow(length = unit(6, "pt"), type = "closed")) +
+  `geom_nodes`(color = "tomato", size = 4)
+```
+
+---
+
+&lt;img src="02_dataVisualization_files/figure-html/network-plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 网络图 (Sankey/Alluvial)
+
+
+```r
+`library(ggalluvial)`
+data(vaccinations)
+levels(vaccinations$response) &lt;- rev(levels(vaccinations$response))
+
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject,
+           y = freq,
+           fill = response, label = response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  `geom_flow()` +
+  `geom_stratum(alpha = .5)` +
+  geom_text(stat = "stratum", size = 3) +
+  theme(legend.position = "none") +
+  ggtitle("vaccination survey responses at three points in time")
+```
+
+---
+
+&lt;img src="02_dataVisualization_files/figure-html/sankey-plot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 地图
+
+你需要三个ArcGIS文件：
+
+`bou2_4p.shp`: 多边形要素图形文件
+
+`bou2_4p.dbf`: 要素属性信息
+
+`bou2_4p.shx`: 多边形要素索引文件
+
+
+---
+
+
+```r
+china_map1 &lt;- rgdal::readOGR("data/bou2_4p.shp")
+
+ggplot(china_map1, aes(x = long, y = lat, group = group)) +
+	geom_polygon(fill = 'beige') + 
+  geom_path(color = "grey40")
+```
+
+&lt;img src="02_dataVisualization_files/figure-html/map-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+background-image: url("images/patrioBase9709.gif")
+background-position: center
+background-size: contain
+
+## gganimate
+
+---
+
+name: takeHome
+
+## Take-Home Points
+
+* 好的图形必须进行.magenta[比较]分析。
+* 图形不仅可以呈现原始数据，也可以呈现.magenta[推论]结果。
+* .magenta[善用]数据可视化，方能成为沟通研究者与读者的工具。
+
+---
+
+class: small
+
+## 参考书
+
+Cleveland, William S. 1985. *The Elements of Graphing Data*. 1st Printing edition. Monterey, Cal: Wadsworth, Inc.
+
+Tufte, Edward R. 2001. *The Visual Display of Quantitative Information*. 2nd edition edition. Cheshire, Conn: Graphics Press.
+
+Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-Verlag.
+
+张杰. 2019. 《R语言数据可视化之美：专业图表绘制指南》. 第1版. 电子工业出版社.
+
+
+---
+
+
+background-image: url("images/powerWisely.jpg")
+background-position: center
+background-size: contain
+
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+&lt;i class="fa fa-envelope fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+&lt;i class="fa fa-globe fa-lg"&gt;&lt;/i&gt;&amp;nbsp; https://sammo3182.github.io/
+
+&lt;i class="fab fa-github fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [sammo3182](https://github.com/sammo3182)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

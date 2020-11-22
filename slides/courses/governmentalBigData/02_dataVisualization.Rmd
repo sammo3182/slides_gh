@@ -1,18 +1,18 @@
 ---
-title: "Learning Visualization with Dr. Hu"
-subtitle: "数据可视化理论与实践"
+title: "数据可视化理论与实践"
+subtitle: "Learning Visualization with Dr. Hu"
 author: "胡悦<br>清华大学政治学系"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - css/zh-CN_custom.css
-      - css/styles.css
-    # chakra: libs/remark-latest.min.js # to show slides offline
-    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML"
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
-      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -21,6 +21,11 @@ output:
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -35,37 +40,38 @@ p_load(
 set.seed(313)
 ```
 
-## 提要
+class: inverse, centerl, middle
 
-1. 别画什么图
-1. 要画什么图
-1. 如何引导视线
+
+
+<video width="700" controls>
+  <source src="images/queensGambit.mp4" type="video/mp4">
+</video>
+
+.normal[Before Everything: 可视化能帮你做什么？]
+
+---
+
+## Overview
+
+1. 表 vs. 图
+    + 何时用表，何时用图
+1. 可视化：无效 vs. 有效
+    + 一维数据
+    + 二维数据
+    + 多维数据
+1. 可视化基本原则
+    + 势 vs. 意
+    + 可视化编码
+    + 色彩选择
+1. 可视化操作实例
+
 
 ---
 
 class: small
 
-## 参考书
-
-Cleveland, William S. 1985. *The Elements of Graphing Data*. 1st Printing edition. Monterey, Cal: Wadsworth, Inc.
-
-Tufte, Edward R. 2001. *The Visual Display of Quantitative Information*. 2nd edition edition. Cheshire, Conn: Graphics Press.
-
-Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-Verlag.
-
-张杰. 2019. 《R语言数据可视化之美：专业图表绘制指南》. 第1版. 电子工业出版社.
-
----
-
-## 心理准备
-
-.center[<img src="images/boring.gif" height = 400 />]
-
----
-
-class: small
-
-## “全民可视化”？
+## 可视化不总是首选
 
 Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.
 
@@ -75,81 +81,88 @@ Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of T
 
 --
 
-.magenta[如何可视化上表？]
+&zwj; Bonus: 如何可视化上表？
 
 ???
  mathematical: formal modeling
 
 ---
 
+class: bottom
+
 background-image: url("images/tableGraph.png")
 background-position: center
 background-size: contain
+
+
+.navy[We'll come back to this.]
 
 ---
 
 ## 图 vs. 表
 
-.left-column[
+.pull-left[
 
 ### 表
 
 * 容易制作
 * 发表常见
-* “有助于后续研究”
+* 有助后续
 ]
 
 --
 
-.right-column[
+.pull-right[
 
 ### 图
 
-* 制作费事
-* 信息不“精确”
+* 制作费事（yysy...）
+* “不精确”
 * 形式不统一
 
 ]
+
+
+---
+
+## 为何可视化流行
+
+.small[
+Even before he became president, Mr Trump had **a history of controversial comments** about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz - the list goes on - he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivialising them."
+]
+
+
+.center[<img src="images/vis_trumpNastyWoman.gif" width = 600 />]
+
+???
+
+People care about things big, colorful, and moving.
+
+
+Watch Donald Trump Call Hillary Clinton a 'Nasty Woman' --Ritu Prasad BBC
+https://time.com/4537960/donald-trump-hillary-clinton-nasty-woman-debate/
 
 ---
 
 class: inverse, bottom
 
-# 可视化鉴赏家
-## 培养教程
-
----
-
-哪个性别及收入水平人群的三酸甘油脂水平趋势与其他均不同？
-
-.center[<img src="images/triglyceride.png" height = 500 />]
+# "听得准，才能读得对"
 
 ???
 
-身体脂肪量
-
----
-
-印象更深
-
-便于比较、突出重点
-
-信息传递高效
-
-比表格占据更小版面
-
+英语读音，可视化也是要知道什么是好图
 
 ---
 
 ## 从头开始
 
-.left-column[
+.pull-left[
 
 <img src="images/tryIt.jpg" height = 300 />
 
 ]
 
-.right-column[
+.pull-right[
 
 | 政党 	| 得票率 	|
 |------	|--------	|
@@ -162,9 +175,11 @@ class: inverse, bottom
 
 ---
 
-## 饼状图？
+class: small
 
-.left-column[
+## 饼状图
+
+.pull-left[
 
 | 政党 	| 得票率 	|
 |------	|--------	|
@@ -175,114 +190,35 @@ class: inverse, bottom
 
 ]
 
-.right-column[
+.pull-right[
 
+.panelset[
+
+.panel[.panel-name[I]
 <img src="images/pie1.png" height = 300 />
-
 ]
 
----
-
-## 饼状图？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
+.panel[.panel-name[II]
 <img src="images/pie2.png" height = 300 />
-
 ]
 
----
-
-## 饼状图？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
+.panel[.panel-name[III]
 <img src="images/pie3.png" height = 300 />
-
 ]
 
----
-
-## 饼状图？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
+.panel[.panel-name[IV]
 <img src="images/pie4.png" height = 300 />
-
 ]
 
----
-
-## 饼状图？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
+.panel[.panel-name[V]
 <img src="images/pie5.png" height = 300 />
-
 ]
 
----
-
-## 饼状图？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
+.panel[.panel-name[VI]
+<img src="images/pie6.png" height = 300 />
 ]
 
-.right-column[
-
-<img src="images/pie6.png" height = 280 />
+]
 
 ]
 
@@ -290,56 +226,18 @@ class: inverse, bottom
 
 ## Why Is Pie Chart a Big No-No?
 
-* 用于呈现百分比（一维）
-* 容易误导读者（见后）
-* 浪费油墨（Why do we care?）
+* 用于呈现数字就能呈现的东西
+* 容易误导读者（人类对面积不敏感）
+* 浪费油墨（Why should we care?）
 
-被誉为垃圾图形（[junk chart](http://junkcharts.com)）首选
-
----
-
-## 另一个例子
-
-墨西哥各政党在大选中得票比例趋势
-
-| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
-|-------	|------	|------	|------	|--------	|
-| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
-| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
-| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
-| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
-| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
-
-怎么可视化这个数据？
+被部分从业人士誉为垃圾图形（[junk chart](http://junkcharts.com)）之“冠”
 
 ---
 
-<img src="images/areaPlot.png" height = 500 />
+## 一维数据可视化：柱状图
 
 
----
-
-## No?
-
-.center[<img src="images/areaPlot.png" height = 300 />]
-
-1. 比折线图费更多墨。
-
---
-
-1. 各个时间序列间的比较容易误导读者，而且焦点容易被面积所模糊。
-
-
-???
-
-1. 应将变化较不明显的序列至于最底端。
-
-
----
-
-## 高效可视化
-
-.left-column[
+.pull-left[
 
 | 政党 	| 得票率 	|
 |------	|--------	|
@@ -350,38 +248,31 @@ class: inverse, bottom
 
 ]
 
-.right-column[
+.pull-right[
 
+.panelset[
+
+.panel[.panel-name[Bar I]
 <img src="images/barPlot1.png" height = 300 />
-
 ]
 
----
-
-## 高效可视化？
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
+.panel[.panel-name[II]
 <img src="images/barPlot2.png" height = 300 />
+]
+
+.panel[.panel-name[III]
+<img src="images/barPlot3.png" height = 300 />
+]
+
+]
 
 ]
 
 ---
 
-## 高效可视化
+## 一维数可视化据：玫瑰图
 
-.left-column[
+.pull-left[
 
 ```{r nightinggale}
 mydata <- data.frame( Day=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),
@@ -390,7 +281,7 @@ kable(mydata, format = "html")
 ```
 ]
 
-.right-column[
+.pull-right[
 
 ```{r fig.width=6}
 myAngle <-seq(-20,-340,length.out =7)
@@ -418,37 +309,78 @@ Nightingale Rose diagram, created by the famous Florence Nightingale
 
 Good for time series,save space than bars
 
----
 
-## 高效可视化
-
-.left-column[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.right-column[
-
-<img src="images/barPlot3.png" height = 300 />
-
-]
 
 ---
 
-## 一维图升维
+## 一维数据可视化：“升”维
 
-.center[<img src="images/radiaPlot.png" height = 400 />]
+.center[<img src="images/graphTable.png" height = 200 />
+<img src="images/tableGraph.png" height = 300 />]
+
 
 ---
 
-## 二维数据可视化
+background-image: url("images/radiaPlot.png")
+background-position: center
+background-size: contain
 
+???
+
+本质还是一维图，没有讨论两位之间关系
+
+---
+
+## 如何可视化以下数据
+
+墨西哥各政党在大选中得票比例趋势
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+如何可视化这个数据？
+
+???
+
+PRI: Institutional Revolutionary Party
+PAN: National Action Party
+PRD: Democratic Revolutionary Party
+
+---
+
+## 当然堆积图
+
+<img src="images/areaPlot.png" height = 500 />
+
+
+---
+
+## 当然堆积图……吧？
+
+.center[<img src="images/areaPlot.png" height = 300 />]
+
+--
+
+1. 比折线图费更多墨。
+
+--
+
+1. 各个时间序列间的比较容易误导读者，而且焦点容易被面积所模糊。
+
+
+???
+
+如果非要用，应将变化较不明显的序列至于最底端。
+
+
+---
+
+## （Again）如何可视化以下数据
 
 | Party 	| PRI  	| PAN  	| PRD  	| Others 	|
 |-------	|------	|------	|------	|--------	|
@@ -460,33 +392,47 @@ Good for time series,save space than bars
 
 ---
 
-.center[<img src="images/linePlot.png" height = 500 />]
+## 二维数据可视化：折现图
+
+.panelset[
+
+.panel[.panel-name[Line (Digital)]
+.center[<img src="images/linePlot.png" height = 400 />]
+]
+
+.panel[.panel-name[Line (Printed)]
+.center[<img src="images/linePlot2.png" height = 400 />]
+]
+
+]
 
 ---
 
-.center[<img src="images/linePlot2.png" height = 500 />]
+## 二维数据可视化：点状图
 
----
+.panelset[
 
-## 极简主义
-
+.panel[.panel-name[Basic Point]
 .center[<img src="images/scatterPlot.png" height = 400 />]
+]
 
----
-
-## 极简主义
-
+.panel[.panel-name[Named Point]
 .center[<img src="images/scatterPlot2.png" height = 400 />]
+]
 
----
-
-## 极简升维
-
+.panel[.panel-name[Point "3D"]
 .center[<img src="images/facet.png" height = 400 />]
+]
+
+]
+
+???
+
+数字升维可以分屏，也可以增加变化
 
 ---
 
-## 单图多维信息
+## “高维”点状图
 
 | 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
 |------	|----------	|------------	|----------	|
@@ -502,23 +448,30 @@ Good for time series,save space than bars
 
 ---
 
-## Bubble Chart
+## 气泡图
 
+.panelset[
+
+.panel[.panel-name[Basic Bubble]
 .center[<img src="images/bubblePlot.png" height = 400 />]
+]
 
---
-
-有什么问题？
-
----
-
-## Better Bubble Chart
-
+.panel[.panel-name[Tagged Bubble]
 .center[<img src="images/bubblePlot2.png" height = 400 />]
+]
+
+
+]
+
+
+???
+
+Bubble chart 图一对大小相近bubbles无法区分
+
 
 ---
 
-## Bubble Chart 优劣
+## 气泡图优劣
 
 ### Pro
 
@@ -535,14 +488,13 @@ Good for time series,save space than bars
 
 class: inverse, bottom
 
-# 可视化设计家
-## 培养教程
+# 可视化基本原则
 
 ---
 
-## 回归本质：可视化是什么？
+## 心理准备
 
-.center[<img src="images/socialEngineer.jpg" height = 400 />]
+.center[<img src="images/boring.gif" height = 400 />]
 
 ---
 
@@ -555,7 +507,17 @@ class: inverse, bottom
 
 ---
 
-## “工笔”、“写意”之分：统计可视化
+## 回归本质：可视化是什么？
+
+.center[<img src="images/socialEngineer.jpg" height = 400 />]
+
+???
+
+可视化谁为主？主体意识
+
+---
+
+## 见势：统计可视化
 
 .center[<img src="images/sexism_chart.jpg" height = 500 />]
 
@@ -565,25 +527,18 @@ background-image: url("images/sexism_image.jpg")
 background-position: center
 background-size: contain
 
-## “工笔”、“写意”之分：传播可视化
+## 见意：传播可视化
 
 ---
 
-## Attractive vs. Professional
+## Professional vs. Attractive
 
-.left-column[<img src="images/africanGDP_image.jpg" height = 300 />]
-.right-column[<img src="images/africanGDP_chart.jpg" height = 400 />]
-
----
-
-## 可视化编码
-
-.center[<img src="images/measurement.png" height = 400 />]
+.pull-left[<img src="images/africanGDP_chart.jpg" height = 400 />]
+.pull-right[<img src="images/africanGDP_image.jpg" height = 300 />]
 
 ---
 
-## 编码类型
-
+## 吸睛之法：可视化编码
 
 
 * 数值（continuous）
@@ -612,35 +567,45 @@ background-size: contain
 
 ## 通道
 
-.left-column[
+.pull-left[
 <img src="images/category.png" height = 200 />
 <img src="images/group.png" height = 200 />
 ]
 
-.right-column[
+.pull-right[
 <img src="images/order.png" height = 400 />
 ]
 
 ---
 
-class: small
+## 通道选择
+
+.center[<img src="images/measurement.png" height = 400 />]
+
+???
+
+是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么
+
+---
 
 ## 通道选择
 
-* 类型（type）
-    + 是什么/在哪里（what/where）
-    + 何种程度（how much）
+### 类型（Type）
+
++ 是什么/在哪里（what/where）
++ 何种程度（how much）
     
 --
     
-* 有效性（effectiveness）
-    + 通道表现力符合属性的重要性
+### 有效性（Effectiveness）
++ 通道表现力符合属性的重要性
     
 --
 
-* 表现力（expressiveness）
-    + 表达且仅表达数据的完整属性
-    + 判断标准（ADSP）：精确性、可辨性、可分离性、视觉突出
+### 表现力（Expressiveness）
+
++ 表达且仅表达数据的完整属性
++ 判断标准（.red[ADSP]）：精确性、可辨性、可分离性、视觉突出
 
 ???
 
@@ -658,7 +623,7 @@ Accuracy, Discriminibility, Separability, Pop-out
 
 * 关注度敏感度降：点亮度、声音响度
 * 关注度敏感度不变：线长度
-* 关注度敏感度加：痛感
+* 关注度敏感度加：电流
 
 psychophysicist Stanley Smith Stevens (1957, 1961)
 
@@ -666,7 +631,9 @@ $\displaystyle \psi (I)=kI^{a}$, k proportionality constant that depends on the 
 
 ---
 
-.left-column[
+## 精确性上的Social Engineering
+
+.pull-left[
 
 <img src="images/lattice1.png" height = 400 />
 
@@ -674,7 +641,7 @@ $\displaystyle \psi (I)=kI^{a}$, k proportionality constant that depends on the 
 
 ]
 
-.right-column[
+.pull-right[
 
 <img src="images/lattice2.png" height = 400 />
 
@@ -709,50 +676,40 @@ background-size: contain
 
 ### 视觉突出（Pop-out）
 
-<img src="images/popOut.png" height = 180 />
-
---
-<img src="images/popOut2.png" height = 300 />
+.center[<img src="images/popOut3.png" height = 500 />]
 
 ---
 
-## 焦点引导
+.panelset[
+
+.panel[.panel-name[Finding Os?]
+.center[<img src="images/Os.png" height = 400 />]
+]
+
+.panel[.panel-name[Method I]
+.center[<img src="images/Os2.png" height = 400 />]
+]
+
+.panel[.panel-name[Method II]
+.center[<img src="images/Os3.png" height = 400 />]
+]
+
+]
+
+---
+
+## 核心原则：焦点引导
 
 .center[<img src="images/picWorthWords.jpg" height = 500 />]
 
 ---
 
-background-image: url("images/popOut3.png")
-background-position: center
-background-size: contain
+## 学术型吸睛：分组与分层
 
----
-
-background-image: url("images/Os.png")
-background-position: center
-background-size: contain
-
----
-
-background-image: url("images/Os2.png")
-background-position: center
-background-size: contain
-
----
-
-background-image: url("images/Os3.png")
-background-position: center
-background-size: contain
-
-
----
-
-## “看家功夫”：分组与分层
-
-* 分组会对大部分任务有效
-* 如果不能进行分组，则需要转换任务目标以支持分组
-* 避免过多类别
-* 对数据的每个维度指定一种或一个阶层的颜色
+* 分组会对.red[大部分]任务有效
+* 如果不能进行分组，则需要.red[转换]任务目标
+* 避免.red[过多]类别
+* 对数据的每个维度指定.red[一种]或一个阶层的颜色
 
 ---
 
@@ -762,7 +719,7 @@ background-size: contain
 
 ---
 
-## 色彩信息
+## 色彩编码
 
 * 灰度值可被认为是有序的 
 
@@ -786,17 +743,21 @@ background-size: contain
 
 ## 色彩设计基本原则
 
-* 使用有限的色调范围
-    + 控制低饱和度色彩中的色彩视觉突出
-    + 避免过多颜色交错导致的杂乱无章
++ 避免.red[过多]颜色交错导致的杂乱无章
++ 注意.blue[饱和度]
+
+???
+
+控制低饱和度色彩中的色彩视觉突出
+
 
 --
 
-.left-column[<img src="images/redGreen_w.jpg" height = 300 />]
+.pull-left[<img src="images/redGreen_w.jpg" height = 300 />]
 
 --
 
-.right-column[<img src="images/redGreen_r.png" height = 300 />]
+.pull-right[<img src="images/redGreen_r.png" height = 300 />]
 
 ---
 
@@ -806,9 +767,9 @@ background-size: contain
 
 --
 
-.left-column[<img src="images/background_apple.jpg" height = 240 />]
+.pull-left[<img src="images/background_apple.jpg" height = 240 />]
 
-.right-column[<img src="images/background_huawei.jpeg" height = 240 />]
+.pull-right[<img src="images/background_huawei.jpeg" height = 240 />]
 
 
 ???
@@ -819,25 +780,36 @@ background-size: contain
 
 ## 对于新手而言
 
-辅助软件来选择合适的色阶：
+色彩其实没.orange[那么]重要
+
+--
+
+如果非要较真，辅助软件来选择合适的色阶：
 
 http://colorbrewer2.org/ 
 
 http://paletton.com/
 
+.navy[请在颜色选择过程中体现人文关怀。]
+
+???
+
+色盲症患者: 红绿色盲是最常见的色盲，其次是蓝黄色盲以及全色盲。北欧族裔的红绿色盲患者约占男性的8%和女性的0.5% (Northern European ancestry , National Eye Institute, 2015)
+
+喜欢打印的人群
 
 ---
 
 class: inverse, bottom
 
-# 理论应用
+# 可视化操作实例
 ## 以`ggplot`为例
 
 ---
 
 class: small
 
-## `RColorBrewer` Package
+## 调色板：`RColorBrewer` Package
 
 ### 主要code
 
@@ -1207,6 +1179,22 @@ name: takeHome
 * .magenta[善用]数据可视化，方能成为沟通研究者与读者的工具。
 
 ---
+
+class: small
+
+## 参考书
+
+Cleveland, William S. 1985. *The Elements of Graphing Data*. 1st Printing edition. Monterey, Cal: Wadsworth, Inc.
+
+Tufte, Edward R. 2001. *The Visual Display of Quantitative Information*. 2nd edition edition. Cheshire, Conn: Graphics Press.
+
+Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-Verlag.
+
+张杰. 2019. 《R语言数据可视化之美：专业图表绘制指南》. 第1版. 电子工业出版社.
+
+
+---
+
 
 background-image: url("images/powerWisely.jpg")
 background-position: center
