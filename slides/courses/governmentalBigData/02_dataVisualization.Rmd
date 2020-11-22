@@ -13,6 +13,7 @@ output:
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -40,9 +41,7 @@ p_load(
 set.seed(313)
 ```
 
-class: inverse, centerl, middle
-
-
+class: inverse, center, middle
 
 <video width="700" controls>
   <source src="images/queensGambit.mp4" type="video/mp4">
@@ -861,19 +860,20 @@ mydata2 <-
 
 ```
 
-```{r plot-1D, echo=TRUE, eval=FALSE}
-ggplot(data = mydata, aes(Cut, Price)) +
-  `geom_bar`(
-    stat = "identity",
-    width = 0.8,
-    colour = "black",
-    size = 0.25,
-    fill = "#2ca25f",
-    alpha = 1
-  )
+```{r plot-1D, echo=TRUE, fig.align='center', fig.height=5}
+ggplot(data=mydata,aes(Cut,Price))+ 
+  geom_bar(stat = "identity", width = 0.8,
+           colour="black",size=0.25,fill="#2ca25f",alpha=1)
+```
 
-ggplot(data = mydata2, aes(Catergory, value, 
-                           `fill = variable`)) +
+---
+
+.pull-left[
+
+```{r plot1D-2color, echo=TRUE, eval=FALSE}
+ggplot(data = mydata2, 
+       aes(Catergory, value,
+          `fill = variable`)) +
   geom_bar(
     stat = "identity",
     color = "black",
@@ -891,18 +891,9 @@ ggplot(data = mydata2, aes(Catergory, value,
     legend.position = c(0.88, 0.88)
   )
 ```
-
----
-
-.left-column[
-```{r plot-1DI, fig.width=5}
-ggplot(data=mydata,aes(Cut,Price))+ 
-  geom_bar(stat = "identity", width = 0.8,
-           colour="black",size=0.25,fill="#2ca25f",alpha=1)
-```
 ]
 
-.right-column[
+.pull-right[
 ```{r plot-1DII, fig.width=5}
 ggplot(data=mydata2,aes(Catergory,value,fill=variable))+
   geom_bar(stat="identity", color="black", position=position_dodge(),width=0.7,size=0.25)+
@@ -919,6 +910,7 @@ ggplot(data=mydata2,aes(Catergory,value,fill=variable))+
 ]
 
 ---
+class: middle
 
 ```{r data-radar, include=FALSE}
 coord_radar <- function (theta = "x",
@@ -1170,14 +1162,30 @@ background-size: contain
 
 ---
 
-name: takeHome
+## Wrap Up
 
-## Take-Home Points
+1. 表 vs. 图
+    + 在于是否想主导吸睛效应
 
-* 好的图形必须进行.magenta[比较]分析。
-* 图形不仅可以呈现原始数据，也可以呈现.magenta[推论]结果。
-* .magenta[善用]数据可视化，方能成为沟通研究者与读者的工具。
+--
 
+1. 可视化：无效 vs. 有效
+    + 一维： ~~饼状图~~ 柱状图、点状图、玫瑰/雷达图
+    + 二维： ~~堆积图~~ 折线图、散点图、气泡图
+    + 多维数据： 分屏图、多项变化图
+
+--
+    
+1. 可视化基本原则
+    + 势 vs. 意：学术作图重势
+    + 可视化编码：多种通道——主体意识
+    + 色彩选择：人文关怀
+
+--
+
+1. 可视化操作实例
+    + 去学一下R呗~
+    + `install.packages("drhur")`
 ---
 
 class: small
