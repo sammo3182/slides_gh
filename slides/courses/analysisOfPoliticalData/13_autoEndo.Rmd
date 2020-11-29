@@ -6,15 +6,43 @@ institute: "Political Science, Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+## Overview
+
+1. Endogeneity
+    + Issue
+    + Diagnosis
+    + Adjustment
+1. Autocorrelation
+    + Issue
+    + Diagnosis
+    + Adjustment
+
 ---
 
 class: inverse, bottom
@@ -25,23 +53,15 @@ class: inverse, bottom
 
 ## What's the Problem
 
-<img src="images/eggChicken.jpg" height = 400 />
+Grades ~ Language Skill
 
----
+Which influence which?
 
-## A More Sophisticated Example
+--
 
-Family income ~ Education
+Formally, given Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>i</sub> + u<sub>i</sub>,
 
-Which leads to which?
-
----
-
-## Formal Definition
-
-$$Y_i = \beta_0 + \beta_1X_i + u_i$$
-
-Endogeneity occurs when .magenta[cov(X<sub>i</sub>, u<sub>i</sub>)&ne;0].
+Endogeneity occurs when cov(X<sub>i</sub>, u<sub>i</sub>) .red[&ne; 0].
 
 --
 
@@ -52,67 +72,12 @@ Y =& \beta_0 + \beta_1X + u\\
 X =& \beta'_0 + \beta'_1Y + v
 \end{align}
 
----
-
-class: small
-
-## Regarding the Issue in a Multiple Regression
-
-$$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_nX_n + u.$$
-
-Recall that OLS achieves unbiased by assuming $cov(X, u) = 0$.
-
---
-
-Let's say Y and X<sub>n</sub> are not exogenous, then
-
-\begin{align}
-cov(1, u) =& 0\\
-cov(X_1, u) =& 0\\
-cov(X_2, u) =& 0\\
-\vdots & \\
-cov(X_{n - 1}, u) =& 0\\
-\text{Buuuuuut } cov(X_n, u) \neq& 0\\
-\end{align}
-
---
-
-In this case, the model cannot identified. (Why?)
 
 ---
 
-Recall when you were young---as young as learning to solve the equation systems:
+## Diagnosis for Endogeneity
 
-\begin{cases}
-y = 3x + 4z\\
-z = 5y - 2x
-\end{cases}
-
-Can you solve it? 
-
---
-
-How about this? 
-
-\begin{cases}
-y = 3x + 4z\\
-2y = 6x + 8z
-\end{cases}
-
-???
-
-No full rank (不满秩，包含有用信息的方程数, https://zhuanlan.zhihu.com/p/24927272)
-
---
-
-No, *underidentified* model！  
-Serious consequence : .red[biased, inconsistent] &beta;.
-
----
-
-## Testing for Endogeneity
-
-Special case: [Variable omission](https://sammo3182.github.io/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html#15)
+Special case: Variable omission (revisit)
 
 Hausman Procedure (using t distribution):
 
@@ -124,7 +89,7 @@ To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and te
 
 ---
 
-## Solutions
+## Dealing with Endogeneity
 
 ### Instrumental Variables (IV)
 
@@ -135,29 +100,7 @@ We need a variable Z<sub>i</sub> that .magenta[simultaneously]:
 
 ---
 
-## Example I of IV
-
-The effect of education on earnings
-
-DV : Income  
-IV : Likelihood of going to school
-
-How's there an endogeneity issue?
-
-???
-
-Endogeneity : Ability
-
---
-
-IV candidates: 
-
-1. Proximity to college (Card 1995)
-1. Month of birth (Angrist and Krueger 1991)
-
----
-
-## Example II of IV
+## An Example of Instrumental Variable Method<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 How does economic growth affect within-country conflicts? 
 
@@ -190,6 +133,22 @@ Agriculture only?
 
 Drought in one country could make another country's projects more scare and therefore valuable.
 
+
+## Another Example I of Instrumental Variable Method
+
+The effect of education on earnings
+
+DV : Income  
+IV : Likelihood of going to school
+
+Endogeneity : Ability
+
+IV candidates: 
+
+1. Proximity to college (Card 1995)
+1. Month of birth (Angrist and Krueger 1991)
+
+
 ---
 
 ## How to Find a Proper IV
@@ -206,10 +165,18 @@ Drought in one country could make another country's projects more scare and ther
 
 --
 
-1. Ok, ok, I have to concede, it is a myth...
-
+1. Ok, ok, I have to concede, it is a .orange[myth]...
 
 ---
+
+## Let's Assume You've Find One <sup><img src="images/fsmrof.png" height="20"/></sup>
+
+Two Stage Least Squares (2SLS)
+
+1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
+1. Regress **Y** on $\boldsymbol{\hat X}$.
+
+???
 
 ## Solving Underidentification with IVs
 
@@ -228,7 +195,6 @@ $$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
 
 where $\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$ (a.k.a., the projection matrix), and $\boldsymbol{\hat X} = \boldsymbol{P_ZX}$
 
-???
 
 Recommend over-identified model more
 
@@ -236,12 +202,6 @@ http://www.soderbom.net/lec2n_final.pdf
 
 because the additional instruments can be used to increase the precision of the estimates, and to construct tests for the validity of the overidentifying restrictions (which sheds some light on the validity of the instruments), but may lead to inefficiency.
 
----
-
-## Two Stage Least Squares
-
-1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
-1. Regress **Y** on $\boldsymbol{\hat X}$.
 
 ---
 
@@ -259,7 +219,7 @@ cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
 
 Trade-off: Unbiased estimates from IV, yet a bigger variance (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
 
----
+???
 
 ## Weak Instruments
 
@@ -269,7 +229,6 @@ $$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
 
 When cov(X, Z) is salient, no big problem. But when it's small, the estimate will be biased---in which case, OLS might be even better.
 
---
 
 ### Check for the Problem
 
@@ -277,23 +236,22 @@ Stock and Watson (2007, 735)
 
 ---
 
-## A Broader View of Endogeneity Solutions
+## A Broader View of Endogeneity Solutions<sup><img src="images/fsmrof.png" height="20"/></sup>
 
 Common causes of endogeneity
 
 1. Omitted variable
     + Model misspecification
-    + .magenta[Selection bias] (Heckman)
+    + Selection bias (Heckman)
 1. Measurement error
 1. Simultaneity (2SLS, 3SLS)
 
 ???
 
-Study women's wage given education. The selection point is the data is only the women who were in the labor force.
+Study woman wage given education. The selection point is the data is only the women who were in the labor force.
 
 https://stats.stackexchange.com/questions/172508/two-stage-models-difference-between-heckman-models-to-deal-with-sample-selecti
 
----
 
 ### Additional Regressors
 
@@ -301,9 +259,6 @@ Let Ys being endogenous, and Xs being exogenous.
 
 One may use multiple exogenous variables to instrument the endogenous variable.
 
----
-
-class: small
 
 For example, 
 
@@ -322,7 +277,6 @@ cov(Z, u) =& 0\\
 
 In other words, Y<sub>2</sub> won't perfectlly collinear with Z<sub>1</sub>. 
 
---
 
 Estimate
 
@@ -339,7 +293,7 @@ This will produce an unbiased result but not exactly &beta;<sub>1</sub>.
 
 class: inverse, bottom
 
-# Autocorrelation
+# (Temporary) Autocorrelation
 
 ---
 
@@ -370,9 +324,9 @@ Y_{t + 1} =& \beta_0 + \beta_1(Z_{t + 1} + 1) + \beta_1(Z_t + 1) + \cdots + u
 
 ---
 
-## Time Dependency
+## Time Dependency: When Time Per Se Is the Effect
 
-When your data involve a time trend, which assumption is violated?
+Violated assumption?
 
 --
 
@@ -384,7 +338,9 @@ When two variables both have, e.g., positive trend, then they appear correlated 
 
 class: small
 
-## Solution?
+## Dealing with Time Dependency
+
+Fixed Effect
 
 De-trend: $Y_t\sim Z_t$
 
@@ -398,35 +354,39 @@ De-trend: $Y_t\sim Z_t$
 
 --
 
-Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").<sup>1</sup>
-
-.footnote[
-[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
-]
----
-
-Fixed effect
-
 Spline 
 
-.center[<img src="images/spline.gif" height = 300 />]
+.center[<img src="images/spline.gif" height = 200 />]
+
+Smooth function: t, t<sup>2</sup>, t<sup>2</sup>
+
+
+???
+
+"nearly identical substantively [with spline]", Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
 
 ---
 
-## Stationary
+## When Time is More than Time
 
-### Random work
+Affecting the relations between DV and IVs and among IVs
 
-.center[<img src="images/randomWalk.jpg" height = 400 />]
+Time series analysis
+
++ Random work
++ Unit root
++ Stationary
 
 ---
 
-Let $\rho\in[-1, 1]$ identify the direction the path will go (-1: down, 1: up, 0, flat).
+## Random Walk & Unit Root
+
+Let &rho;&in;[-1, 1] identify the direction the path will go (&darr;-1, &uarr;1, &rarr;0).
 
 \begin{align}
 Y_t =& \rho Y_{t - 1} + e_t\\
 u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
-\Rightarrow\ u_{t + 1} =& \rho u_t + e_t\\
+\Rightarrow\ u_{t + 1} =& \rho u_t + e_{t+1}\\
                        =& \rho(\rho u_{t - 1} + e_t) + e_{t + 1}\\
                        =& \rho(\rho (\rho u_{t - 2} + e_{t-1}) + e_t) + e_{t + 1}
 \end{align}
@@ -434,35 +394,32 @@ u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 --
 
 1. |&rho;| < 1 implies the effects of previous errors goes away eventually;
-1. |&rho;| = 1, the pass never goes away, and the trend can end anywhere (unit root).
+1. |&rho;| = 1, the pass never goes away, and the trend can end anywhere,
+
+a.k.a. one .red[Unit Root].
 
 ---
 
 class: small
 
-### Stationary: 
+## Stationary<sup><img src="images/fsmrof.png" height="20"/></sup>
 
-.left-column[
+For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,... where t<sub>1</sub> < t<sub>2</sub> < t<sub>3</sub>...), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
+
+--
+
+.pull-left[
 <img src="images/baguazhang.gif" height = 300 />
 ]
 
 --
 
-.right-column[
+.pull-right[
 <img src="images/zuiquan.gif" height = 300 />
 ]
 
---
 
-.full-column[
-
-For every collection of time periods ( $X_t, X_{t_2}, X_{t_3},\cdots$ where $t < t_2 < t_3,\cdots$ ), their distributions are the same as $X_t + h, X_{t_2} + h, X_{t_3} + h,\cdots$, i.e., the same joint distribution, or saying the error terms are the same for every period.
-
-]
-
----
-
-class: small
+???
 
 ### Covariance Stationary
 
@@ -475,13 +432,12 @@ Given:
 
 Then, a moving average process that is covariance stationary is weakly dependent if cov(X<sub>t</sub>X<sub>t + n</sub>)&rarr;0 as h&rarr;&infin;.
 
---
 
 When covariance stationary plus weakly dependent (e.g., $Y_t = \rho Y_{t - 1} + X_t + e_t$), the OLS is consistent.
 
 ---
 
-## Influence on &beta;
+## Influence on the Coefficient
 
 Let's assume the mean of X is zero to simplify the maths (not necessary, though).
 
@@ -491,6 +447,8 @@ Let's assume the mean of X is zero to simplify the maths (not necessary, though)
 \end{align}
 
 Only when &rho; = 0 (or cov(X<sub>t</sub>X<sub>t + n</sub>) = 0), the estimate is identical with the OLS estimate.
+
+In other cases, &beta; is .red[biased].
 
 ---
 
@@ -511,7 +469,7 @@ var(u_t|X) =& var(\rho u_{t - 1} + e_t|X)\\
 Following this manner, when t increases,
 
 \begin{align}
-var(u_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots...\\
+var(u_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots\\
            =& \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)}\\
            =& \frac{\sigma_e^2}{1 - \rho^2}
 \end{align}
@@ -539,37 +497,47 @@ DW =& \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^
 
 ---
 
-$$DW = 2(1 - \rho)$$
+.center[DW = 2(1 - &rho;)]
 
-Since the range of &rho; is [-1, 1], $DW \in [0, 4]$.
+Since the range of &rho; is [-1, 1], DW &in; [0, 4].
 
 In practice, DW test specifies a range of values, [d<sub>l</sub>, d<sub>u</sub>], and set the hypotheses:
 
-> Positive AR: H<sub>0</sub>: &rho; = 0; H<sub>0</sub>: &rho; > 0
+> 
 
----
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+Positive AR: H<sub>0</sub>: &rho; = 0; H<sub>1</sub>: &rho; > 0
+]
 
-## Test
+.pull-left[
 
-1. If DW < d<sub>l</sub>, reject H<sub>0</sub>;
-1. If d<sub>l</sub> < DW < d<sub>u</sub>, inconclusive;
-1. If DW > d<sub>u</sub>, fail to reject H<sub>0</sub>
+### Positive autocorrelation
+
+DW < d<sub>l</sub>, reject H<sub>0</sub>;   
+d<sub>l</sub> < DW < d<sub>u</sub>, inconclusive;   
+DW > d<sub>u</sub>, fail to reject H<sub>0</sub>
+]
 
 --
 
-For negative autocorrelation
+.pull-right[
+### Negative autocorrelation
 
-1. If (4 - DW) < d<sub>l</sub>, reject H<sub>0</sub>;
-1. If d<sub>l</sub> < (4 - DW) < d<sub>u</sub>, inconclusive;
-1. If (4 - DW) > d<sub>u</sub>, fail to reject H<sub>0</sub>
+(4 - DW) < d<sub>l</sub>, reject H<sub>0</sub>;   
+d<sub>l</sub> < (4 - DW) < d<sub>u</sub>, inconclusive;   
+(4 - DW) > d<sub>u</sub>, fail to reject H<sub>0</sub>
+]
 
 ---
 
-## Solution
+## Dealing with Autocorrelation
 
 Time series analysis
 
+Most common model: Autoregressive distributed lag model, ADL
+
 Mitchell, Sara B. 2017. “Time Series Analysis for the Social Sciences.” *Contemporary Sociology* 46(5). <sup>1</sup>
+
 
 .footnote[
 
@@ -615,9 +583,9 @@ When autocorrelation is weak in the errors, FE might be better with smaller vari
 
 --
 
-.magenta[Hint]: Neither methods allows time invariant X.
+.red[Hint]: Neither methods allows time invariant X.<sup><img src="images/fsmrof.png" height="20"/></sup>
 
----
+???
 
 ## Special Case: TSCS
 
@@ -629,8 +597,6 @@ X<sub>t</sub>: Only varying by time.
 
 X<sub>i</sub>: Only varying by unit.
 
-
----
 
 ## TSCS Dealing with Time Dependency
 
@@ -648,7 +614,6 @@ Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
 
 Structural break at t<sup>*</sup> in the X-Y relationship.
 
----
 
 ### Treating time dependency as unit heterogeneity
 
@@ -658,7 +623,6 @@ $\delta_td_{t}$: Fixed effect for time
 
 $a_i$: Fixed effect for unit (unit-specific mean differences)
 
---
 
 Cons : 
 
@@ -666,15 +630,8 @@ Cons :
 1. Aggravating multicollinearity
 1. .magenta[Losing time invariant variables].
 
----
 
 *Within-between model*
-
-???
-
-Went this through in 12_multiHeter
-
---
 
 *Random effect*: Modeling time as a level
 
@@ -687,3 +644,16 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 1. cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)
 1. cov(a<sub>i</sub>, u<sub>it</sub>)= 0
 
+---
+
+## Wrap Up
+
+1. Endogeneity
+    + Issue: Biased &beta;
+    + Diagnosis: Hausman Procedure
+    + Adjustment: Instrumental Variables (if you could find one)
+1. Autocorrelation
+    + Issue: Biased &beta; overestimated SE
+    + Diagnosis: DW *for AR(1)*
+    + Adjustment: Time series
+        + Panel data: fixed effect/fixed differencing
