@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Moderation Effect</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="14_moderation_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="14_moderation_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="14_moderation_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="14_moderation_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="14_moderation_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="14_moderation_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="14_moderation_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="14_moderation_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="14_moderation_files/panelset-0.2.4/panelset.js"></script>
+    <script src="14_moderation_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="14_moderation_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="14_moderation_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="14_moderation_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="14_moderation_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -22,29 +36,47 @@ class: center, middle, inverse, title-slide
 
 
 
+
+## Wrap Up
+
+### Moderation in Methodology
+
+1. Specialty
+1. Wrong ways
+1. Correct way
+    
+### Moderation in Practice
+
+1. Theory
+1. Data
+1. Interpretation
+
+---
+
 class: inverse, bottom
 
 # Moderation in Theory
 
 ---
 
-class: small
+## Moderation
 
-## What's Moderation
+Conditional effect: the .navy[contribution] of X on the variance of Y .red[varies] when Z has .navy[different] values.
 
-Moderation effect aims to test conditional effects of one variable on the contribution of another variable to the dependent variable and has been extensively applied in the empirical research of social science since the 1970s.
-
---
-
-Unfortunately, the nonlinear nature determines that the statistical estimate of an interactive effect cannot be interpreted as straightforward as the coefficient of a regular regression parameter.
+A.k.a., .red[Non]linear effect.
 
 --
 
-Formally
+Formally,
 
-`$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + u.$$`
+.center[Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.]
 
 Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
+
+--
+
+Nonlinear &amp;rarr; one unit change of X does .red[not] lead to &amp;beta; unit change in Y.
+
 
 ---
 
@@ -62,9 +94,7 @@ Level set: &amp;alpha; = 0.05
 
 ## Special Case: Dichotomous Z
 
-* When Z = 0, `\(\beta_1 = 0;\)`
-* When Z = 1, `\(\beta_1 + \beta_3 = 0.\)`
-* Let X = X&lt;sup&gt;0&lt;/sup&gt; when Z = 0; X = X&lt;sup&gt;1&lt;/sup&gt; when Z = 1, then 
+Let X = X&lt;sup&gt;0&lt;/sup&gt; when Z = 0; X = X&lt;sup&gt;1&lt;/sup&gt; when Z = 1, then 
 
 `\begin{align}
 \hat Y =&amp; \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
@@ -76,9 +106,11 @@ Level set: &amp;alpha; = 0.05
 * When Z = 0, `\(H_0: \tilde\beta_1 = 0;\)`
 * When Z = 1, `\(H_0: \tilde\beta_3 = 0.\)`
 
+Hint: This case applied to DID methodologically
+
 ---
 
-## General Case: Z Is Continuous
+## General Case: Continuous Z
 
 Effect of X: 
 
@@ -92,7 +124,11 @@ Statistics:
 
 ## How to Interpret It Wrong?
 
-### Isolated interpretation of &amp;beta;&lt;sub&gt;1&lt;/sub&gt;
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+True Model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.
+]
+
+### Isolatedly interpretation of &amp;beta;&lt;sub&gt;1&lt;/sub&gt;
 
 Let Z increases by c: 
 
@@ -108,7 +144,12 @@ The coefficient of X can change by changing Z.
 
 ---
 
-### Interpreting &amp;beta;&lt;sub&gt;3&lt;/sub&gt; Omitting X
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+True Model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.
+]
+
+
+### Interpreting &amp;beta;&lt;sub&gt;3&lt;/sub&gt; w.o. X
 
 `$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u', u' = \beta_1X + u$$`
 
@@ -122,6 +163,12 @@ E[u'(X,Z)] \neq&amp; 0.
 \end{align}`
 
 Unless &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X or XZ is zero.
+
+(What does this problem called?)
+
+???
+
+Omitted variable bias; endogeneity
 
 ---
 
@@ -139,15 +186,10 @@ It's perfectly possible for the contribution of X on Y to be statistically signi
 
  Brambor, Clark and Golder 2006
 
----
-
-`$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$`
-
-In other words, one cannot infer whether X has a meaningful conditional effect on Y .magenta[simply from the magnitude and significance of either &amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;3&lt;/sub&gt;].
-
 --
 
-Instead, the conditional effect should be examined based on the .magenta[marginal effect] at every observed value of Z.
+In other words, one cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;3&lt;/sub&gt;].
+
 
 ---
 
@@ -172,7 +214,7 @@ Berry, Golder, and Milton (2012)
 
 ## Recommendation
 
-1. Plotting the marginal effects.
+1. Plotting the .red[marginal effects].
 1. Showing the confidence intervals
 1. Presenting the frequency distribution of Z
     + esp., when the effect trend goes across the zero point.
@@ -187,11 +229,45 @@ Leading to over- or under-confidence of the confidential intervals.
 
 --
 
-.magenta[Solution]: Adjust the CIs with a critical t-statistics by Benjamini 1995
+&amp;rArr; Adjust the CIs with a critical t-statistics by Benjamini 1995
 
 ???
 
 Esarey and Sumner (2017)
+
+---
+
+## Not Only Interpretation
+
+One may consider adding interactions as a "control" (Beiser-McGrath &amp; Beiser-McGrath 2020)
+
+Pr(Civil War) ~ &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;Inequality + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Regime Type + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Inequality &amp;times; Regime Type + &amp;beta;&lt;sub&gt;4&lt;/sub&gt;GDP + &amp;beta;&lt;sub&gt;5&lt;/sub&gt;.golden[Inequality &amp;times; GDP] + u.
+
+What happened if .golden[Inequality &amp;times; GDP] is not in the model?
+
+???
+
+Omitted variable
+
+Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
+
+---
+
+## Adjusting Models
+
+N &lt;= 3,000: 
++ Lasso
+
+N &gt; 3,000:
++ Bayesian Additive Regression Trees (BART)
+
+Unknown or cross: 
++ Kernel Regularized Least Squares (KRLS)
+
+???
+
+Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
+
 
 ---
 
@@ -211,9 +287,22 @@ Solt, Frederick, Yue Hu, Hudson Kevan, Jungmin Song, Dong Yu. 2017a. “Economic
 
 ---
 
-Low-income group &amp;times; Income inequality &amp;rarr; Meritocracy
+.center[
+Low-income &amp;rarr; Meritocracy   
+.red[&amp;uarr;]    
+Income inequality 
+]
+
 
 --
+
+### Hypothesis
+
+Conflict theory vs. relative power theory
+
+--
+
+### Implications
 
 * Poor vs. Rich
 * Social Structure: Self-reproducing vs. self-negating
@@ -223,31 +312,22 @@ Low-income group &amp;times; Income inequality &amp;rarr; Meritocracy
 Self-reproducing: relative power theory
 Self-negating: conflict theory
 
----
-
-## Hypothesis
-
-Conflict theory vs. relative power theory
 
 ---
-
-class: small
 
 ## Conflict Theory
 
 .center[&lt;img src="images/hulk.gif" height = 400 /&gt;]
 
-H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .magenta[less].
+H&lt;sub&gt;0&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[less].
 
 ---
-
-class: small
 
 ## Relative Power Theory
 
 .center[&lt;img src="images/hypnosis.gif" height = 400 /&gt;]
 
-H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .magenta[more].
+H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[more].
 
 ---
 
@@ -268,6 +348,11 @@ Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 ## Negative Example
 
 .center[&lt;img src="images/NJL_plot.png" height = 500 /&gt;]
+
+???
+
+Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
+
 
 ---
 
@@ -292,12 +377,35 @@ Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 ## Alternative Way
 
 .center[&lt;img src="images/interaction2.jpg" height = 500 /&gt;]
+
+---
+
+## Wrap Up
+
+### Moderation in Methodology
+
+1. Specialty: Nonlinear
+1. Wrong ways
+    + Specification w.o. base terms
+    + Interpretation of only the product term
+1. Correct way
+    + Marginal effect
+    
+### Moderation in Practice
+
+1. Theory
+    + Conflict vs. Relative Power
+1. Data
+    + Selective vs. all available
+1. Interpretation
+    + Point estimates vs. `interplot`
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
@@ -339,6 +447,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -356,17 +490,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {

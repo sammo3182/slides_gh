@@ -3,24 +3,28 @@ title: "Moderation Effect"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
-# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
+
 
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -31,9 +35,30 @@ p_load(
   descr, stringr, broom, dotwhisker, interplot, tidyverse
 ) # data wrangling # data wrangling
 
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
 # Functions preload
-set.seed(114)
+set.seed(313)
 ```
+
+## Wrap Up
+
+### Moderation in Methodology
+
+1. Specialty
+1. Wrong ways
+1. Correct way
+    
+### Moderation in Practice
+
+1. Theory
+1. Data
+1. Interpretation
+
+---
 
 class: inverse, bottom
 
@@ -41,23 +66,24 @@ class: inverse, bottom
 
 ---
 
-class: small
+## Moderation
 
-## What's Moderation
+Conditional effect: the .navy[contribution] of X on the variance of Y .red[varies] when Z has .navy[different] values.
 
-Moderation effect aims to test conditional effects of one variable on the contribution of another variable to the dependent variable and has been extensively applied in the empirical research of social science since the 1970s.
-
---
-
-Unfortunately, the nonlinear nature determines that the statistical estimate of an interactive effect cannot be interpreted as straightforward as the coefficient of a regular regression parameter.
+A.k.a., .red[Non]linear effect.
 
 --
 
-Formally
+Formally,
 
-$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3X\times Z + u.$$
+.center[Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.]
 
 Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
+
+--
+
+Nonlinear &rarr; one unit change of X does .red[not] lead to &beta; unit change in Y.
+
 
 ---
 
@@ -75,9 +101,7 @@ Level set: &alpha; = 0.05
 
 ## Special Case: Dichotomous Z
 
-* When Z = 0, $\beta_1 = 0;$
-* When Z = 1, $\beta_1 + \beta_3 = 0.$
-* Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
+Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
 
 \begin{align}
 \hat Y =& \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
@@ -89,9 +113,11 @@ Level set: &alpha; = 0.05
 * When Z = 0, $H_0: \tilde\beta_1 = 0;$
 * When Z = 1, $H_0: \tilde\beta_3 = 0.$
 
+Hint: This case applied to DID methodologically
+
 ---
 
-## General Case: Z Is Continuous
+## General Case: Continuous Z
 
 Effect of X: 
 
@@ -105,7 +131,11 @@ $$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4
 
 ## How to Interpret It Wrong?
 
-### Isolated interpretation of &beta;<sub>1</sub>
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+True Model: Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.
+]
+
+### Isolatedly interpretation of &beta;<sub>1</sub>
 
 Let Z increases by c: 
 
@@ -121,7 +151,12 @@ The coefficient of X can change by changing Z.
 
 ---
 
-### Interpreting &beta;<sub>3</sub> Omitting X
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+True Model: Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.
+]
+
+
+### Interpreting &beta;<sub>3</sub> w.o. X
 
 $$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u', u' = \beta_1X + u$$
 
@@ -135,6 +170,12 @@ E[u'(X,Z)] \neq& 0.
 \end{align}
 
 Unless &beta;<sub>1</sub>X or XZ is zero.
+
+(What does this problem called?)
+
+???
+
+Omitted variable bias; endogeneity
 
 ---
 
@@ -152,15 +193,10 @@ It's perfectly possible for the contribution of X on Y to be statistically signi
 
  Brambor, Clark and Golder 2006
 
----
-
-$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$
-
-In other words, one cannot infer whether X has a meaningful conditional effect on Y .magenta[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
-
 --
 
-Instead, the conditional effect should be examined based on the .magenta[marginal effect] at every observed value of Z.
+In other words, one cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
+
 
 ---
 
@@ -185,7 +221,7 @@ Berry, Golder, and Milton (2012)
 
 ## Recommendation
 
-1. Plotting the marginal effects.
+1. Plotting the .red[marginal effects].
 1. Showing the confidence intervals
 1. Presenting the frequency distribution of Z
     + esp., when the effect trend goes across the zero point.
@@ -200,11 +236,45 @@ Leading to over- or under-confidence of the confidential intervals.
 
 --
 
-.magenta[Solution]: Adjust the CIs with a critical t-statistics by Benjamini 1995
+&rArr; Adjust the CIs with a critical t-statistics by Benjamini 1995
 
 ???
 
 Esarey and Sumner (2017)
+
+---
+
+## Not Only Interpretation
+
+One may consider adding interactions as a "control" (Beiser-McGrath & Beiser-McGrath 2020)
+
+Pr(Civil War) ~ &beta;<sub>0</sub> + &beta;<sub>1</sub>Inequality + &beta;<sub>2</sub>Regime Type + &beta;<sub>3</sub>Inequality &times; Regime Type + &beta;<sub>4</sub>GDP + &beta;<sub>5</sub>.golden[Inequality &times; GDP] + u.
+
+What happened if .golden[Inequality &times; GDP] is not in the model?
+
+???
+
+Omitted variable
+
+Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
+
+---
+
+## Adjusting Models
+
+N <= 3,000: 
++ Lasso
+
+N > 3,000:
++ Bayesian Additive Regression Trees (BART)
+
+Unknown or cross: 
++ Kernel Regularized Least Squares (KRLS)
+
+???
+
+Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
+
 
 ---
 
@@ -224,9 +294,22 @@ Solt, Frederick, Yue Hu, Hudson Kevan, Jungmin Song, Dong Yu. 2017a. “Economic
 
 ---
 
-Low-income group &times; Income inequality &rarr; Meritocracy
+.center[
+Low-income &rarr; Meritocracy   
+.red[&uarr;]    
+Income inequality 
+]
+
 
 --
+
+### Hypothesis
+
+Conflict theory vs. relative power theory
+
+--
+
+### Implications
 
 * Poor vs. Rich
 * Social Structure: Self-reproducing vs. self-negating
@@ -236,31 +319,22 @@ Low-income group &times; Income inequality &rarr; Meritocracy
 Self-reproducing: relative power theory
 Self-negating: conflict theory
 
----
-
-## Hypothesis
-
-Conflict theory vs. relative power theory
 
 ---
-
-class: small
 
 ## Conflict Theory
 
 .center[<img src="images/hulk.gif" height = 400 />]
 
-H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .magenta[less].
+H<sub>0</sub>: Poor people living with high inequality believe in meritocracy .red[less].
 
 ---
-
-class: small
 
 ## Relative Power Theory
 
 .center[<img src="images/hypnosis.gif" height = 400 />]
 
-H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .magenta[more].
+H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .red[more].
 
 ---
 
@@ -281,6 +355,11 @@ Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 ## Negative Example
 
 .center[<img src="images/NJL_plot.png" height = 500 />]
+
+???
+
+Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
+
 
 ---
 
@@ -305,3 +384,25 @@ Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 ## Alternative Way
 
 .center[<img src="images/interaction2.jpg" height = 500 />]
+
+---
+
+## Wrap Up
+
+### Moderation in Methodology
+
+1. Specialty: Nonlinear
+1. Wrong ways
+    + Specification w.o. base terms
+    + Interpretation of only the product term
+1. Correct way
+    + Marginal effect
+    
+### Moderation in Practice
+
+1. Theory
+    + Conflict vs. Relative Power
+1. Data
+    + Selective vs. all available
+1. Interpretation
+    + Point estimates vs. `interplot`
