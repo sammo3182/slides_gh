@@ -3,19 +3,59 @@ title: "Missing Data and Generalized Linear Model"
 subtitle: "Analysis of Political Data (70700173)"
 author: "Yue Hu"
 institute: "Political Science, Tsinghua University"
-# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
-      - ../../../css/zh-CN_custom.css
-      - ../../../css/styles.css
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: ../../../libs/remark-latest.min.js # to show slides offline
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable, gridExtra,
+  knitr, # dependency
+  descr, stringr, broom, dotwhisker, interplot, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+## Overview
+
+### Missing Data
+
++ What's missing
++ Type of missing
++ Dealing with missing
+
+
+### Generalized Linear Model
+
++ OLS(?)
++ Link function
++ Model fitness
 
 ---
 
@@ -25,7 +65,7 @@ class: inverse, bottom
 
 ---
 
-## What's Missing Data
+## Modeling Missing Data
 
 Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
 
@@ -62,15 +102,15 @@ X_4 & \end{array}\right)
 
 ### Missing completely at random (MCAR)
 
-P(M|D) = P(M)
+.center[P(M|D) = P(M)]
 
 ### Missing at random (MAR)
 
-P(M|D) = P(M|D<sup>Observed</sup>)
+.center[P(M|D) = P(M|D<sup>Observed</sup>)]
 
 ### Non-ignorable (NI/MNAR)
 
-P(M|D) &ne; P(M|D<sup>Observed</sup>)
+.center[P(M|D) &ne; P(M|D<sup>Observed</sup>)]
 
 ---
 
@@ -78,9 +118,9 @@ P(M|D) &ne; P(M|D<sup>Observed</sup>)
 
 |      | Summary Stats | Regression          | SE vs. complete |
 |------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
-| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
-| NI   | Biased        | Biased              | Inefficient     |
+| MCAR | Unbiased      | Unbiased/consistent | .navy[Inefficient]     |
+| MAR  | Biased        | Unbiased/consistent | .navy[Inefficient]     |
+| NI   | Biased        | .red[Biased]              | --     |
 
 ???
 
@@ -89,9 +129,9 @@ Biasedness in NI is because of the censor with an X within the model
 
 ---
 
-## Solution
+## Dealing with Missing
 
-**Ignore it**: listwise deletion
+**Ignore it**: Listwise deletion
 
 ???
 
@@ -120,7 +160,7 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
 
 class: small
 
-## Multiple imputations
+## Multiple Imputations (MI)
 
 1. Take multiple guess given estimated distribution (Expectation-Maximization)
 
@@ -148,45 +188,49 @@ $\frac{m + 1}{m}W$ variance across datasets.
 
 ### Advantages
 
-Imputation process is separated from the analysis process.  
-Therefore, the misspecification of the model does not affect MI.
+Imputations are separated from the analysis.  
+&rArr; misspecification of the model does not affect MI.
 
 --
 
-### Issues
+### Concern
 
 1. Not exactly replicable
-1. Rubin's formula does not always work, esp. for complex models.
+1. Rubin's formula does not always work
+    + Esp. for complex models.
 1. Time consuming and times to impute.
+    + Rule of thumb: 10 (...)
 
 ---
 
 class: small
 
-## When You Shouldn't Use MI
+## When MI Isn't a Good Idea
 
-1. The analysis model is .magenta[conditional on X] and the functional form is known to be .magenta[correctly specified], so that listwise would not affect the analysis.
+1. Model is .navy[conditional on X] + .navy[correctly specified]
+    + Listwise would not affect the analysis.
+    
+--
+
+1. .navy[Large] data
+    + Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
+    
+--
+
+1. Missingness in X is .navy[not a function of Y], and there is no unobserved omitted values that affects Y.
 
 --
 
-1. There is .magenta[NI] missingness in X so that EMs can give incorrect answers.
+1. There is .red[NI] missingness in X
+    + EMs incorrect
 
 --
 
-1. Missingness in X is .magenta[not a function of Y], and there is no unobserved omitted values
-that affects Y.
+1. The model is .red[nonlinear] and complicated.
 
 --
 
-1. The data is large enough that the influence of the listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
-
---
-
-1. The model is .magenta[nonlinear and complicated].
-
---
-
-1. .magenta[Extreme distributional divergence] in missing data from multivariate normal.
+1. .red[Extreme distributional divergence] in missing data from multivariate normal.
 
 ---
 
@@ -202,10 +246,13 @@ class: small
 
 ## Non-Ignorable Missing
 
-*Common types*:
+When we know what happened:
 
-**Censored**: Have .magenta[some] information about values of missing data, e.g., all data <0 are
+### Censored
+
+Have .red[some] information about values of missing data, e.g., all data <0 are
 coded as 0.
+
 + Leading to heteroscedasticity and nonnormal error
 + Solution: For Y missing, two-stage process, 2SLS (Heckman model).
 
@@ -215,9 +262,12 @@ coded as 0.
 
 --
 
-**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
+## Truncated
+
+Have .red[no] information about values of missing data, e.g., the data are only
 observable when it > 100.
-+ Solution: `tobit`, use the right distribution---a combination of $P(Y_i^* < 0|X)$ and $f(Y_i|X_i)$.
+
++ `tobit`, use the right distribution---a combination of P(Y<sub>i</sub><sup>*</sup> < 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).
 
 ???
 
@@ -233,9 +283,9 @@ class: inverse, bottom
 
 ## When to Use GLR
 
-1. .magenta[Generalized] linear regression is not .magenta[general] linear regression
-1. Using when the very first assumption of OLS is violated---Y is no longer continuous.
-1. Basic logic: Transforming non-continuous to continuous
++ .red[Generalized] linear regression is not .navy[general] linear regression
++ Using when the very first assumption of OLS is violated---Y is no longer continuous.
++ Basic logic: Transforming non-continuous to continuous
 
 ???
 
@@ -243,7 +293,7 @@ General linear regression is multivariate regression
 
 --
 
-Let's talk about the simplist siutation: binary Y
+simplest situation: binary Y
 
 ---
 
@@ -256,7 +306,7 @@ Let's talk about the simplist siutation: binary Y
 
 ---
 
-### Linear Probability Model (LPM)
+## Linear Probability Model (LPM)
 
 \begin{align}
 \pi_i\equiv P(Y = 1|X) =& \beta_0 + \beta_1X_i\\
@@ -267,15 +317,19 @@ var(\pi_i) =& \pi(1 - \pi) \\
 --
 
 .left-column[
+
 ### Pro
 
-Interpretability
+Interpreted as OLS
+
 ]
 
 .right-column[
+
 ### Con
 
 Not very reliable transformation
+
 ]
 
 ???
@@ -284,25 +338,26 @@ The specification of var addresses heteroscedasticity
 
 ---
 
-## A More Decent Approach: Link Functions
+## Link Functions Method
 
 Specifically, latent variable approach
 
-$$P(Y = 1|X) = G(\beta_0 + \beta_1X_i + \cdots + \beta_kX_k)$$
+.center[P(Y = 1|X) = G(&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + ... + &beta;<sub>k</sub>X<sub>k</sub>)]
 
---
 
-This G() is the *link function.*
+This G() is the *link* function.
 
-When G() = &Lambda;(X), the model is called logit (.orange[log]istic un.orange[it])
+When G() = &Lambda;(X), logit (.orange[log]istic un.orange[it])
 
-When G() = &Phi;(X), the model is called progit (.orange[pro]bability un.orange[it])
+When G() = &Phi;(X), progit (.orange[pro]bability un.orange[it])
 
 ---
 
 ## Logit
 
-Assuming that the outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:
+.red[ASSUMPTION]:
+
+The outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:
 
 \begin{align}
 Y_i =& \begin{cases}
@@ -372,9 +427,9 @@ P(Y = 1|X) =& 1 - P(u \leq -X\beta_{probit}|X)\\
 
 class: small
 
-## Estimation
+## Estimation<sup><img src="images/fsmrof.png" height="20"/></sup>
 
-We cannot minize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ). So, one has to use the likelihood approach to inference.
+We cannot minimize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ). So, one has to use the likelihood approach to inference.
 
 Maximum likelihood estimation:
 
@@ -382,7 +437,7 @@ $$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|
 
 Define: $\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)$
 
-$\hat\theta$ is the maximum likelihood estimate of &theta; from among all possible values of &theta;<sup>*</sup>
+$\hat\theta$ is the .navy[maximum likelihood estimate] of &theta; from among all possible values of &theta;<sup>*</sup>
 
 ???
 
@@ -395,8 +450,6 @@ k: an arbitrary function, depending on the data.
 argmax: when having the argument, the function get the max
 
 
----
-
 \begin{align}
 \mathcal{L}(\beta|Y, X) =& \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
                         =& \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
@@ -405,15 +458,13 @@ argmax: when having the argument, the function get the max
 
 --
 
-Property
+### Property
 
 1. Consistent;
 1. Asymptotically unbiased;
 1. Generally asymptotically efficient.
 
----
-
-## How to Find MLE Solutions
+???
 
 * If there is an analytic solution, one can calculate it.
 * If there is no analytic solution, one needs certain computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
@@ -435,7 +486,7 @@ Ways to interpret GLM outcomes:
 1. First difference
 
 
----
+???
 
 ## Predicted Value Plots
 
@@ -450,9 +501,6 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
   labs(color = expression(beta))
 ```
 
----
-
-class: small
 
 ## Marginal Effects
 
@@ -467,15 +515,11 @@ The instantaneous change
 =& \beta_1P(Y = 1|X)P(Y = 0|X)
 \end{align}
 
---
 
 The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&beta; = 0. In other words, marginal effect depends on the value of X.
 
 In fact, it depends on the value of .magenta[all the X]. This requires the report of marginal effect including the value of the Xs.
 
----
-
-class: small
 
 ## First Difference
 
@@ -483,14 +527,13 @@ The discrete version of marginal effect.
 
 $$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$
 
---
+
 
 X<sub>-k</sub>: 
 
 1. All other independent variables (holding them constant)
 1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
 
---
 
 X<sub>k</sub><sup>H,L</sup>: 
 
@@ -500,7 +543,6 @@ X<sub>k</sub><sup>H,L</sup>:
 1. Discrete: 0/1
 1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
 
----
 
 ## Don't Forget the Uncertainty
 
@@ -522,7 +564,7 @@ Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-a
 
 ### Proportional reduction in error (PRE) 
 
-Or Percent correctly predicted (PCP)
+= Percent correctly predicted (PCP)
 
 Comparing estimates of P(Y = 1|X) to Y:  
 If P(Y = 1|X) > 0.5, define Y&#770; = 1, otherwise, Y&#770; = 0. 
@@ -553,9 +595,33 @@ ePRE: expected PRE, Herron 1999, PA
 
 ---
 
-class: inverse, bottom
+## Wrap Up
 
-.center[<img src="images/done.gif" height = 300 />]
+.pull-left[
+### Missing Data
 
-# That's it. You made it!
-## Congratulations!!
++ What's missing
+    + There is, but there isn't.
++ Type of missing
+    + MCAR
+    + MAR
+    + NI
++ Dealing with missing
+    + Listwise
+    + Manually impute
+    + Multiple imputation
+]
+
+.pull-right[
+### Generalized Linear Model
+
++ OLS(?)
+    + Nonsensitive outcomes
+    + Heteroscedasticity
++ Link function
+    + Logit
+    + Probit
++ Model fitness
+    + Psedo-R<sup>2</sup>
+    + PCP/PRE
+]

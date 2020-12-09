@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>Missing Data and Generalized Linear Model</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <link rel="stylesheet" href="..\..\..\css\zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="..\..\..\css\styles.css" type="text/css" />
+    <script src="15_logitMissing_files/header-attrs-2.5.3/header-attrs.js"></script>
+    <link href="15_logitMissing_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="15_logitMissing_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="15_logitMissing_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="15_logitMissing_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="15_logitMissing_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="15_logitMissing_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/panelset-0.2.4/panelset.js"></script>
+    <script src="15_logitMissing_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="15_logitMissing_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="15_logitMissing_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -19,6 +33,23 @@ class: center, middle, inverse, title-slide
 ---
 
 
+
+
+## Overview
+
+### Missing Data
+
++ What's missing
++ Type of missing
++ Dealing with missing
+
+
+### Generalized Linear Model
+
++ OLS(?)
++ Link function
++ Model fitness
+
 ---
 
 class: inverse, bottom
@@ -27,7 +58,7 @@ class: inverse, bottom
 
 ---
 
-## What's Missing Data
+## Modeling Missing Data
 
 Let's define  **X**, **Y**, and m&lt;sub&gt;ij&lt;/sub&gt; = 1 if X&lt;sub&gt;i&lt;/sub&gt; is missing.
 
@@ -64,15 +95,15 @@ X_4 &amp; \end{array}\right)
 
 ### Missing completely at random (MCAR)
 
-P(M|D) = P(M)
+.center[P(M|D) = P(M)]
 
 ### Missing at random (MAR)
 
-P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+.center[P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)]
 
 ### Non-ignorable (NI/MNAR)
 
-P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+.center[P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)]
 
 ---
 
@@ -80,9 +111,9 @@ P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
 
 |      | Summary Stats | Regression          | SE vs. complete |
 |------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | Inefficient     |
-| MAR  | Biased        | .magenta[Unbiased/consistent] | Inefficient     |
-| NI   | Biased        | Biased              | Inefficient     |
+| MCAR | Unbiased      | Unbiased/consistent | .navy[Inefficient]     |
+| MAR  | Biased        | Unbiased/consistent | .navy[Inefficient]     |
+| NI   | Biased        | .red[Biased]              | --     |
 
 ???
 
@@ -91,9 +122,9 @@ Biasedness in NI is because of the censor with an X within the model
 
 ---
 
-## Solution
+## Dealing with Missing
 
-**Ignore it**: listwise deletion
+**Ignore it**: Listwise deletion
 
 ???
 
@@ -122,7 +153,7 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
 
 class: small
 
-## Multiple imputations
+## Multiple Imputations (MI)
 
 1. Take multiple guess given estimated distribution (Expectation-Maximization)
 
@@ -150,45 +181,49 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 
 ### Advantages
 
-Imputation process is separated from the analysis process.  
-Therefore, the misspecification of the model does not affect MI.
+Imputations are separated from the analysis.  
+&amp;rArr; misspecification of the model does not affect MI.
 
 --
 
-### Issues
+### Concern
 
 1. Not exactly replicable
-1. Rubin's formula does not always work, esp. for complex models.
+1. Rubin's formula does not always work
+    + Esp. for complex models.
 1. Time consuming and times to impute.
+    + Rule of thumb: 10 (...)
 
 ---
 
 class: small
 
-## When You Shouldn't Use MI
+## When MI Isn't a Good Idea
 
-1. The analysis model is .magenta[conditional on X] and the functional form is known to be .magenta[correctly specified], so that listwise would not affect the analysis.
+1. Model is .navy[conditional on X] + .navy[correctly specified]
+    + Listwise would not affect the analysis.
+    
+--
+
+1. .navy[Large] data
+    + Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
+    
+--
+
+1. Missingness in X is .navy[not a function of Y], and there is no unobserved omitted values that affects Y.
 
 --
 
-1. There is .magenta[NI] missingness in X so that EMs can give incorrect answers.
+1. There is .red[NI] missingness in X
+    + EMs incorrect
 
 --
 
-1. Missingness in X is .magenta[not a function of Y], and there is no unobserved omitted values
-that affects Y.
+1. The model is .red[nonlinear] and complicated.
 
 --
 
-1. The data is large enough that the influence of the listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
-
---
-
-1. The model is .magenta[nonlinear and complicated].
-
---
-
-1. .magenta[Extreme distributional divergence] in missing data from multivariate normal.
+1. .red[Extreme distributional divergence] in missing data from multivariate normal.
 
 ---
 
@@ -204,10 +239,13 @@ class: small
 
 ## Non-Ignorable Missing
 
-*Common types*:
+When we know what happened:
 
-**Censored**: Have .magenta[some] information about values of missing data, e.g., all data &lt;0 are
+### Censored
+
+Have .red[some] information about values of missing data, e.g., all data &lt;0 are
 coded as 0.
+
 + Leading to heteroscedasticity and nonnormal error
 + Solution: For Y missing, two-stage process, 2SLS (Heckman model).
 
@@ -217,9 +255,12 @@ coded as 0.
 
 --
 
-**Truncated**: Have .magenta[no] information about values of missing data, e.g., the data are only
+## Truncated
+
+Have .red[no] information about values of missing data, e.g., the data are only
 observable when it &gt; 100.
-+ Solution: `tobit`, use the right distribution---a combination of `\(P(Y_i^* &lt; 0|X)\)` and `\(f(Y_i|X_i)\)`.
+
++ `tobit`, use the right distribution---a combination of P(Y&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &lt; 0|X) and f(Y&lt;sub&gt;i&lt;/sub&gt;|X&lt;sub&gt;i&lt;/sub&gt;).
 
 ???
 
@@ -235,9 +276,9 @@ class: inverse, bottom
 
 ## When to Use GLR
 
-1. .magenta[Generalized] linear regression is not .magenta[general] linear regression
-1. Using when the very first assumption of OLS is violated---Y is no longer continuous.
-1. Basic logic: Transforming non-continuous to continuous
++ .red[Generalized] linear regression is not .navy[general] linear regression
++ Using when the very first assumption of OLS is violated---Y is no longer continuous.
++ Basic logic: Transforming non-continuous to continuous
 
 ???
 
@@ -245,7 +286,7 @@ General linear regression is multivariate regression
 
 --
 
-Let's talk about the simplist siutation: binary Y
+simplest situation: binary Y
 
 ---
 
@@ -258,7 +299,7 @@ Let's talk about the simplist siutation: binary Y
 
 ---
 
-### Linear Probability Model (LPM)
+## Linear Probability Model (LPM)
 
 `\begin{align}
 \pi_i\equiv P(Y = 1|X) =&amp; \beta_0 + \beta_1X_i\\
@@ -269,15 +310,19 @@ var(\pi_i) =&amp; \pi(1 - \pi) \\
 --
 
 .left-column[
+
 ### Pro
 
-Interpretability
+Interpreted as OLS
+
 ]
 
 .right-column[
+
 ### Con
 
 Not very reliable transformation
+
 ]
 
 ???
@@ -286,25 +331,26 @@ The specification of var addresses heteroscedasticity
 
 ---
 
-## A More Decent Approach: Link Functions
+## Link Functions Method
 
 Specifically, latent variable approach
 
-`$$P(Y = 1|X) = G(\beta_0 + \beta_1X_i + \cdots + \beta_kX_k)$$`
+.center[P(Y = 1|X) = G(&amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + ... + &amp;beta;&lt;sub&gt;k&lt;/sub&gt;X&lt;sub&gt;k&lt;/sub&gt;)]
 
---
 
-This G() is the *link function.*
+This G() is the *link* function.
 
-When G() = &amp;Lambda;(X), the model is called logit (.orange[log]istic un.orange[it])
+When G() = &amp;Lambda;(X), logit (.orange[log]istic un.orange[it])
 
-When G() = &amp;Phi;(X), the model is called progit (.orange[pro]bability un.orange[it])
+When G() = &amp;Phi;(X), progit (.orange[pro]bability un.orange[it])
 
 ---
 
 ## Logit
 
-Assuming that the outcome of a binary variable Y&lt;sub&gt;i&lt;/sub&gt; depends on an unobserved continuous probability Y&lt;sup&gt;*&lt;/sup&gt;:
+.red[ASSUMPTION]:
+
+The outcome of a binary variable Y&lt;sub&gt;i&lt;/sub&gt; depends on an unobserved continuous probability Y&lt;sup&gt;*&lt;/sup&gt;:
 
 `\begin{align}
 Y_i =&amp; \begin{cases}
@@ -374,9 +420,9 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 
 class: small
 
-## Estimation
+## Estimation&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
 
-We cannot minize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
+We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
 
 Maximum likelihood estimation:
 
@@ -384,7 +430,7 @@ Maximum likelihood estimation:
 
 Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`
 
-`\(\hat\theta\)` is the maximum likelihood estimate of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
+`\(\hat\theta\)` is the .navy[maximum likelihood estimate] of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
 
 ???
 
@@ -397,8 +443,6 @@ k: an arbitrary function, depending on the data.
 argmax: when having the argument, the function get the max
 
 
----
-
 `\begin{align}
 \mathcal{L}(\beta|Y, X) =&amp; \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
                         =&amp; \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
@@ -407,15 +451,13 @@ argmax: when having the argument, the function get the max
 
 --
 
-Property
+### Property
 
 1. Consistent;
 1. Asymptotically unbiased;
 1. Generally asymptotically efficient.
 
----
-
-## How to Find MLE Solutions
+???
 
 * If there is an analytic solution, one can calculate it.
 * If there is no analytic solution, one needs certain computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
@@ -437,15 +479,12 @@ Ways to interpret GLM outcomes:
 1. First difference
 
 
----
+???
 
 ## Predicted Value Plots
 
 ![](15_logitMissing_files/figure-html/predVal-1.png)&lt;!-- --&gt;
 
----
-
-class: small
 
 ## Marginal Effects
 
@@ -460,15 +499,11 @@ The instantaneous change
 =&amp; \beta_1P(Y = 1|X)P(Y = 0|X)
 \end{align}`
 
---
 
 The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&amp;beta; = 0. In other words, marginal effect depends on the value of X.
 
 In fact, it depends on the value of .magenta[all the X]. This requires the report of marginal effect including the value of the Xs.
 
----
-
-class: small
 
 ## First Difference
 
@@ -476,14 +511,13 @@ The discrete version of marginal effect.
 
 `$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$`
 
---
+
 
 X&lt;sub&gt;-k&lt;/sub&gt;: 
 
 1. All other independent variables (holding them constant)
 1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
 
---
 
 X&lt;sub&gt;k&lt;/sub&gt;&lt;sup&gt;H,L&lt;/sup&gt;: 
 
@@ -493,7 +527,6 @@ X&lt;sub&gt;k&lt;/sub&gt;&lt;sup&gt;H,L&lt;/sup&gt;:
 1. Discrete: 0/1
 1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
 
----
 
 ## Don't Forget the Uncertainty
 
@@ -515,7 +548,7 @@ Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-a
 
 ### Proportional reduction in error (PRE) 
 
-Or Percent correctly predicted (PCP)
+= Percent correctly predicted (PCP)
 
 Comparing estimates of P(Y = 1|X) to Y:  
 If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. 
@@ -546,18 +579,43 @@ ePRE: expected PRE, Herron 1999, PA
 
 ---
 
-class: inverse, bottom
+## Wrap Up
 
-.center[&lt;img src="images/done.gif" height = 300 /&gt;]
+.pull-left[
+### Missing Data
 
-# That's it. You made it!
-## Congratulations!!
++ What's missing
+    + There is, but there isn't.
++ Type of missing
+    + MCAR
+    + MAR
+    + NI
++ Dealing with missing
+    + Listwise
+    + Manually impute
+    + Multiple imputation
+]
+
+.pull-right[
+### Generalized Linear Model
+
++ OLS(?)
+    + Nonsensitive outcomes
+    + Heteroscedasticity
++ Link function
+    + Logit
+    + Probit
++ Model fitness
+    + Psedo-R&lt;sup&gt;2&lt;/sup&gt;
+    + PCP/PRE
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="../../../libs/remark-latest.min.js"></script>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
@@ -599,6 +657,32 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
 // adds .remark-code-has-line-highlighted class to <pre> parent elements
 // of code chunks containing highlighted lines with class .remark-code-line-highlighted
 (function(d) {
@@ -616,17 +700,6 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   }
   preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
 })(document);</script>
-
-<script>
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-</script>
 
 <script>
 slideshow._releaseMath = function(el) {
