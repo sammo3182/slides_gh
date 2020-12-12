@@ -6,9 +6,20 @@
     <meta name="author" content="胡悦 清华大学政治学系" />
     <script src="06_textAnalaysis_files/header-attrs/header-attrs.js"></script>
     <link href="06_textAnalaysis_files/remark-css/default.css" rel="stylesheet" />
-    <link href="06_textAnalaysis_files/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/tile-view/tile-view.js"></script>
+    <link href="06_textAnalaysis_files/tachyons/tachyons.min.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/panelset/panelset.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/panelset/panelset.js"></script>
+    <script src="06_textAnalaysis_files/js-cookie/js.cookie.js"></script>
+    <script src="06_textAnalaysis_files/peerjs/peerjs.min.js"></script>
+    <script src="06_textAnalaysis_files/tiny.toast/toast.min.js"></script>
+    <link href="06_textAnalaysis_files/xaringanExtra-broadcast/broadcast.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/xaringanExtra-broadcast/broadcast.js"></script>
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -191,10 +202,176 @@ Exa Byte &lt; Zetta Byte &lt; Yotta Byte
 
 * 过载、失实、 冗余、污染
 
+---
+
+## 研究设计实例
+
+King et al. 2013. 
+
+* 问题：网络审查目标
+
+???
+
+是阻止/打击批评政府?
+
+King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
+
+--
+
+* 发现：
+    + 批评意见；
+    + 集体行动。
+
+???
+
++ 允许新媒体上存在大量批评政府的意见；
++ 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。
 
 ---
 
-## 分析实例
+* 数据
+    + 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖
+        + 随机抽取:127,283
+
+.center[&lt;img src="images/crimson-hexagon.png" height = 200 /&gt;]
+
+???
+
+2007年Gary King创办，2018年并入英国Brandwatch.
+
+---
+
+background-image: url(images/chinese-media.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+* 对每个网贴，首次出现时下载；
+* 一段时间后再次访问该网贴，识别是否被删帖； 
+* 使用自动文本分析分析海量文本资料。
+
+&lt;img src="images/censored.png" height = 450 /&gt;
+
+---
+
+## 研究设计
+
+检测各议题领域    
+&amp;rarr;识别发帖量爆发，找到相关真实事件    
+&amp;rarr;识别集体行动事件    
+&amp;rarr;判断发帖与行动关联    
+&amp;rarr;判断支持或批评政府    
+
+???
+
+识别出87件
+
+
+--
+
+## 操作化
+
+1. 发帖量
+1. 事件类型
+1. 贴子内容
+
+---
+
+## 发帖量
+
+.center[&lt;img src="images/post-amount.png" height = 500 /&gt;]
+
+---
+
+## 事件类型
+
+1. 情感维度：对政府的负面、正面、或中立意见 
+
+--
+
+1. 主题维度：
+    + 集体行动
+    + 对审查者的批评
+    + 色情内容
+    + 新闻
+    + 政府政策
+
+???
+
+网络外抗议或有组织的群体性事件；
+以往有组织或煽动集体行动的个体；
+以往煽动抗议或集体行动的民族主义或民族情绪；
+
+
+---
+
+.center[&lt;img src="images/post-type.png" height = 500 /&gt;]
+
+---
+
+.center[&lt;img src="images/post-censor.png" height = 500 /&gt;]
+
+---
+
+.center[&lt;img src="images/inner-mongolia.png" height = 500 /&gt;]
+
+???
+
+On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters.
+
+---
+
+.center[&lt;img src="images/post-one-child.png" height = 500 /&gt;]
+
+???
+
+Continually high censorship levels：pornography, criticism of the censors
+
+---
+
+## 帖子内容
+
+* 对中文帖子进行结构化编码；
+* 按类别计算被审查掉的词语比例；
+
+--
+
+&lt;img src="images/post-content.png" height = 300 /&gt;
+
+[`Readme`](https://gking.harvard.edu/readme) in R
+
+???
+
+This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels.
+
+---
+
+## 问题
+
+### 理论
+
+Single causal mechanism
+
+### 数据
+
++ 随机抽取    
++ Only posted   
++ One-time censor (Su et al. 2020)
+
+### 方法
+
+"A bag of word" assumption
+
+???
+
+审查已经使用 machine learning
+
+Su, Y.-S., Y. Ruan, S. Sun, and Y.-T. Chang. 2020. “A Pattern Recognition Framework for Detecting Changes in Chinese Internet Management System.” Journal of Social Computing 1(1): 28–39.
+
+---
+
+## 分析方法实例
 
 Grimmer 2010. 
 
@@ -583,56 +760,16 @@ A text is represented as the bag (multiset) of its words.
 
 
 ```
-##  [1] "to"           
-##  [2] "can"          
-##  [3] "could"        
-##  [4] "dare"         
-##  [5] "do"           
-##  [6] "did"          
-##  [7] "does"         
-##  [8] "may"          
-##  [9] "might"        
-## [10] "would"        
-## [11] "should"       
-## [12] "must"         
-## [13] "will"         
-## [14] "ought"        
-## [15] "shall"        
-## [16] "need"         
-## [17] "is"           
-## [18] "a"            
-## [19] "am"           
-## [20] "are"          
-## [21] "about"        
-## [22] "according"    
-## [23] "after"        
-## [24] "against"      
-## [25] "all"          
-## [26] "almost"       
-## [27] "also"         
-## [28] "although"     
-## [29] "among"        
-## [30] "an"           
-## [31] "and"          
-## [32] "another"      
-## [33] "any"          
-## [34] "anything"     
-## [35] "approximately"
-## [36] "as"           
-## [37] "asked"        
-## [38] "at"           
-## [39] "back"         
-## [40] "because"      
-## [41] "before"       
-## [42] "besides"      
-## [43] "between"      
-## [44] "both"         
-## [45] "but"          
-## [46] "by"           
-## [47] "call"         
-## [48] "called"       
-## [49] "currently"    
-## [50] "despite"      
+##  [1] "to"            "can"           "could"         "dare"          "do"           
+##  [6] "did"           "does"          "may"           "might"         "would"        
+## [11] "should"        "must"          "will"          "ought"         "shall"        
+## [16] "need"          "is"            "a"             "am"            "are"          
+## [21] "about"         "according"     "after"         "against"       "all"          
+## [26] "almost"        "also"          "although"      "among"         "an"           
+## [31] "and"           "another"       "any"           "anything"      "approximately"
+## [36] "as"            "asked"         "at"            "back"          "because"      
+## [41] "before"        "besides"       "between"       "both"          "but"          
+## [46] "by"            "call"          "called"        "currently"     "despite"      
 ## [51] "did"
 ```
 
@@ -640,32 +777,14 @@ A text is represented as the bag (multiset) of its words.
 
 
 ```
-##  [1] "一些"     "一何"    
-##  [3] "一切"     "一则"    
-##  [5] "一方面"   "一旦"    
-##  [7] "一来"     "一样"    
-##  [9] "一般"     "一转眼"  
-## [11] "万一"     "上"      
-## [13] "上下"     "下"      
-## [15] "不"       "不仅"    
-## [17] "不但"     "不光"    
-## [19] "不单"     "不只"    
-## [21] "不外乎"   "不如"    
-## [23] "不妨"     "不尽"    
-## [25] "不尽然"   "不得"    
-## [27] "不怕"     "不惟"    
-## [29] "不成"     "不拘"    
-## [31] "不料"     "不是"    
-## [33] "不比"     "不然"    
-## [35] "不特"     "不独"    
-## [37] "不管"     "不至于"  
-## [39] "不若"     "不论"    
-## [41] "不过"     "不问"    
-## [43] "与"       "与其"    
-## [45] "与其说"   "与否"    
-## [47] "与此同时" "且"      
-## [49] "且不说"   "且说"    
-## [51] "两者"
+##  [1] "一些"     "一何"     "一切"     "一则"     "一方面"   "一旦"     "一来"    
+##  [8] "一样"     "一般"     "一转眼"   "万一"     "上"       "上下"     "下"      
+## [15] "不"       "不仅"     "不但"     "不光"     "不单"     "不只"     "不外乎"  
+## [22] "不如"     "不妨"     "不尽"     "不尽然"   "不得"     "不怕"     "不惟"    
+## [29] "不成"     "不拘"     "不料"     "不是"     "不比"     "不然"     "不特"    
+## [36] "不独"     "不管"     "不至于"   "不若"     "不论"     "不过"     "不问"    
+## [43] "与"       "与其"     "与其说"   "与否"     "与此同时" "且"       "且不说"  
+## [50] "且说"     "两者"
 ```
 
 ---
@@ -696,61 +815,17 @@ class: small
 ```
 
 ```
-##  [1] "一场"         
-##  [2] "经贸"         
-##  [3] "摩擦"         
-##  [4] "让"           
-##  [5] "世界"         
-##  [6] "看到"         
-##  [7] "了"           
-##  [8] "一个"         
-##  [9] "有"           
-## [10] "担当"         
-## [11] "负责"         
-## [12] "任"           
-## [13] "的"           
-## [14] "中国"         
-## [15] "和"           
-## [16] "一个"         
-## [17] "一意孤行"     
-## [18] "的"           
-## [19] "美国"         
-## [20] "埃及"         
-## [21] "金字塔"       
-## [22] "报"           
-## [23] "资深"         
-## [24] "记者"         
-## [25] "萨米·卡姆哈维"
-## [26] "的话"         
-## [27] "意味深长"     
-## [28] "近年来"       
-## [29] "美国"         
-## [30] "一些"         
-## [31] "政客"         
-## [32] "被"           
-## [33] "美国"         
-## [34] "优先"         
-## [35] "遮住"         
-## [36] "了"           
-## [37] "双眼"         
-## [38] "大"           
-## [39] "搞"           
-## [40] "贸易"         
-## [41] "保护主义"     
-## [42] "单边主义"     
-## [43] "肆意"         
-## [44] "挥舞"         
-## [45] "关税"         
-## [46] "大棒"         
-## [47] "全然不顾"     
-## [48] "中美"         
-## [49] "两国人民"     
-## [50] "和"           
-## [51] "全世界"       
-## [52] "人民"         
-## [53] "的"           
-## [54] "强烈"         
-## [55] "反对"
+##  [1] "一场"          "经贸"          "摩擦"          "让"            "世界"         
+##  [6] "看到"          "了"            "一个"          "有"            "担当"         
+## [11] "负责"          "任"            "的"            "中国"          "和"           
+## [16] "一个"          "一意孤行"      "的"            "美国"          "埃及"         
+## [21] "金字塔"        "报"            "资深"          "记者"          "萨米·卡姆哈维"
+## [26] "的话"          "意味深长"      "近年来"        "美国"          "一些"         
+## [31] "政客"          "被"            "美国"          "优先"          "遮住"         
+## [36] "了"            "双眼"          "大"            "搞"            "贸易"         
+## [41] "保护主义"      "单边主义"      "肆意"          "挥舞"          "关税"         
+## [46] "大棒"          "全然不顾"      "中美"          "两国人民"      "和"           
+## [51] "全世界"        "人民"          "的"            "强烈"          "反对"
 ```
 
 ---
@@ -759,20 +834,13 @@ class: small
 
 
 ```
-##                                              title
-## 1   难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.1 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.2 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.3 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.4 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.5 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-##           time word
-## 1   2019-05-30   一
-## 1.1 2019-05-30   场
-## 1.2 2019-05-30 经贸
-## 1.3 2019-05-30 摩擦
-## 1.4 2019-05-30   让
-## 1.5 2019-05-30 世界
+##                                              title       time word
+## 1   难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   一
+## 1.1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
+## 1.2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
+## 1.3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
+## 1.4 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   让
+## 1.5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界
 ```
 
 --
@@ -781,20 +849,13 @@ class: small
 
 
 ```
-##                                              title
-## 1.1 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.2 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.3 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.5 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.6 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-## 1.8 难道非要撞了南墙才回头——意孤行必将失败（钟声）
-##           time word
-## 1.1 2019-05-30   场
-## 1.2 2019-05-30 经贸
-## 1.3 2019-05-30 摩擦
-## 1.5 2019-05-30 世界
-## 1.6 2019-05-30 看到
-## 1.8 2019-05-30 一个
+##                                              title       time word
+## 1.1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
+## 1.2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
+## 1.3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
+## 1.5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界
+## 1.6 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 看到
+## 1.8 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 一个
 ```
 
 ---
@@ -824,10 +885,8 @@ The Economist journalist Simon Rabinovitch
 ## [1] "9551059633200593385"
 ## 
 ## $keyword
-## 99.7583 56.3389 37.4295 35.7857 
-##  "美国"  "政客"  "别国"  "国际" 
-## 34.9402 
-##  "世界"
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界"
 ```
 
 ---
@@ -842,6 +901,14 @@ The Economist journalist Simon Rabinovitch
 &lt;img src="images/text_hammingDis_comp.png" height = 300 /&gt;
 ]
 
+???
+
+the Hamming distance between two strings of equal length is the number of .navy[positions] at which the .red[corresponding symbols are different]. 
+
+It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
+
+Two example distances: 100→011 has distance 3; 010→111 has distance 2
+
 ---
 
 05-30 vs. 05-22
@@ -852,16 +919,12 @@ The Economist journalist Simon Rabinovitch
 ## [1] 30
 ## 
 ## $lhs
-## 99.7583 56.3389 37.4295 35.7857 
-##  "美国"  "政客"  "别国"  "国际" 
-## 34.9402 
-##  "世界" 
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界" 
 ## 
 ## $rhs
-## 171.456 135.966 123.366 114.446 
-##  "磋商"  "美方"  "中方"  "背弃" 
-## 93.1847 
-##  "倒退"
+## 171.456 135.966 123.366 114.446 93.1847 
+##  "磋商"  "美方"  "中方"  "背弃"  "倒退"
 ```
 
 05-30 vs. 05-23
@@ -872,24 +935,14 @@ The Economist journalist Simon Rabinovitch
 ## [1] 18
 ## 
 ## $lhs
-## 99.7583 56.3389 37.4295 35.7857 
-##  "美国"  "政客"  "别国"  "国际" 
-## 34.9402 
-##  "世界" 
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界" 
 ## 
 ## $rhs
-##    137.594    91.4451 
-##     "规则"     "美国" 
-##    63.4508    53.6785 
-##     "美方"     "国际" 
-##    37.6035 
-## "世贸组织"
+##    137.594    91.4451    63.4508    53.6785    37.6035 
+##     "规则"     "美国"     "美方"     "国际" "世贸组织"
 ```
 
-
-???
-
-the Hamming distance between two strings of equal length is the number of positions at which the corresponding symbols are different. In other words, it measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
 
 ---
 
@@ -1022,17 +1075,18 @@ class: inverse, center, middle
 
 # Thank you!
 
-<i class="fas  fa-envelope fa-lg "></i>&amp;nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+&lt;i class="fa fa-envelope fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
-<i class="fas  fa-globe fa-lg "></i>&amp;nbsp; https://sammo3182.github.io/
+&lt;i class="fa fa-globe fa-lg"&gt;&lt;/i&gt;&amp;nbsp; https://sammo3182.github.io/
 
-<i class="fab  fa-github fa-lg "></i>&amp;nbsp; [sammo3182](https://github.com/sammo3182)
+&lt;i class="fab fa-github fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [sammo3182](https://github.com/sammo3182)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
