@@ -1,33 +1,40 @@
 ---
-title: "Learning Latent Variable Analysis with Dr. Hu (I)"
-subtitle: "潜在变量分析I"
+title: "潜在变量分析（基础）"
+subtitle: "Learning Latent Variable Analysis with Dr. Hu (Basic)"
 author: "胡悦"
 institute: "清华大学政治学系"
-# date: "2019-06-01"
 output:
   xaringan::moon_reader:
-    lib_dir: libs
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
+      - default
       - zh-CN_custom.css
-      - styles.css
-      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = FALSE,
-                      message = FALSE,
-                      warning = FALSE)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
 
 library(pacman)
 
 p_load("psych", "lavaan", "semPlot", "qgraph", "haven", "corrplot",  "tidyverse")
+
+# Functions preload
+set.seed(313)
 ```
 
 
@@ -79,6 +86,8 @@ Anna Kendrick's 2020 show, showing how difficult to find "the one." This "being 
 
 ???
 
+兜里有多少钱，不可见，但维度单一，不宜用潜变量分析，更好的办法是翻兜
+
 The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
 
 ---
@@ -93,7 +102,7 @@ The latent variable per se can't be directly measured. But its consequences in o
 
 --
 
-".magenta[Cornerstone] of successful scientific inquiry."  
+".red[Cornerstone] of successful scientific inquiry."  
 ---Delli Carpini and Keeter 1993
 
 ???
@@ -118,7 +127,7 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 
 ---
 
-看起来可能有用……
+Getting the mean right (?)
 
 --
 
@@ -136,11 +145,11 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 1. 验证性因子分析(CFA)
 1. 结构方程模型(SEM)
 
-### 类型分析模型(Typological Models)
+### .gray[类型分析模型(Typological Models)]
 
 
-1. 项目反应理论(IRT)
-1. 跨群组项目反应(MrP, GIRT, DCPO)
+1. .grayLight[项目反应理论(IRT)]
+1. .grayLight[跨群组项目反应(MrP, GIRT, DCPO)]
 
 ???
 
@@ -164,7 +173,7 @@ class: inverse, bottom
 
 ### 理论
 
-.megenta[可见]指标(indicators).magenta[&larr;]潜在变量
+.navy[可见]指标(indicators) .red[&larr;] 潜在变量
 
 ???
 
@@ -172,16 +181,16 @@ uncover the underlying structure of a relatively large set of variables.
 
 --
 
-.left-column[
+.pull-left[
 ### 操作
 
-.magenta[Minimum] factors for the variances
+.red[Minimum] factors for the variances
 
 a.k.a. 变量简化  
 (降维打击？)
 ]
 
-.right-column[
+.pull-right[
 <img src="images/lv_jiangwei.jpg" height = 300 />
 ]
 
@@ -209,7 +218,7 @@ class: inverse, bottom
 
 ---
 
-## 理念背后
+## 概念公式
 
 .center[.large[**X<sup>*</sup> = &Phi;&Lambda;' + &delta;**]]
 
@@ -225,7 +234,7 @@ Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and 
 
 ---
 
-## 操作实现
+## 一顿操作
 
 1. 因子个数选择
 1. 因子提取
@@ -298,12 +307,12 @@ df_big5 %>%
 
 ## 因子提取(Factor Extraction)
 
-+ .magenta[Minimum residual (OLS)]
++ .navy[Minimum residual (OLS)]
 + Principal axes
 + Alpha factoring
 + Weighted least squares
 + Minimum rank
-+ .magenta[Maximum likelihood (ML, minimum &chi;<sup>2</sup> goodness of fit)]
++ .red[Maximum likelihood (ML, minimum &chi;<sup>2</sup> goodness of fit)]
 
 ---
 
@@ -318,10 +327,10 @@ A pattern of loadings where each item loads strongly on only one of the factors,
 
 ---
 
-简化数据结构
+## 简化数据结构
 
 * Orthogonal: Varimax, quartimax, bentlerT, geominT, bifactor  
-* .magenta[Oblique]: Oblimin, quartimin, simplimax, bentlerQ, geominQ, biquartimin
+* .red[Oblique]: Oblimin, quartimin, simplimax, bentlerQ, geominQ, biquartimin
 
 
 ???
@@ -334,7 +343,7 @@ Orthogonal(正交)
 
 ## 因子合成
 
-```{r efa}
+```{r efa, eval = TRUE}
 result_efa <- df_big5 %>%
   select(8:57) %>%
   fa(nfactors = 5,
@@ -346,9 +355,7 @@ print(result_efa$loadings, cutoff = .296) # the point was picked for the purpose
 
 ---
 
-## 成了吗？
-
-### 常见诊断指标
+## 诊断指标
 
 1. Sum of squared (SS) loading<sup>1</sup>
 1. Communality & Uniqueness
@@ -393,14 +400,11 @@ hist(df_score$MR1)
 
 ## Principal Component Analysis
 
-除EFA外的另一选择
+与EFA比肩的选择
 
 --
 
-
 .center[<img src="images/lv_pca.png" height = 300 />]
-
-
 
 .large[.center[C = w<sub>i</sub>Y<sub>i</sub>]]
 
@@ -412,7 +416,7 @@ create one or more index variables (Components) from a larger set of measured va
 
 ## PCA vs. EFA
 
-结果或近似，逻辑大不同
+结果或近似，逻辑大不同（注意箭头方向！）
 
 .center[<img src="images/lv_pcaVsEfa.PNG" height = 400 />]
 
@@ -459,7 +463,7 @@ class: inverse, bottom
 
 1. 实证观察（归纳）
 1. 未知维度
-    + 每个维度都对指标产生影响
+    + 每个维度都产生影响
 1. 多重指标
     + Loading大小之分
 1. 无视测量偏差关联
@@ -490,7 +494,7 @@ class: inverse, bottom
 
 ### 例：人际信任
 
-定义：.magenta[相信]他人不会.magenta[伤害自己]或.magenta[违背约定].
+定义：.red[相信]他人不会.navy[伤害自己]或.navy[违背约定].
 
 --
 
@@ -507,7 +511,7 @@ class: inverse, bottom
 
 操作原则：
 
-1. 每个维度一个指标，但维度拆分.magenta[艺术>技术]
+1. 每个维度一个指标，但维度拆分.navy[艺术>技术]
 
 --
 
@@ -534,8 +538,6 @@ s -> {d, j, i}
 )
 ```
 
-???
-CFA多数针对效果指标，因此上述例子不好
 
 ---
 
@@ -551,6 +553,8 @@ CFA多数针对效果指标，因此上述例子不好
 双侧: factor complexity > 1
 
 ---
+
+## 定义公式
 
 .center[.large[**X\* = &Lambda;<sub>X</sub>&xi; + &delta;**]]
 
@@ -666,7 +670,7 @@ Another way to calculate df.
 
 .center[.large[**&Sigma;(&theta;) = &Lambda;<sub>X</sub>&Phi;&Lambda;<sub>X</sub>' + &Theta;<sub>&delta;</sub>**]]
 
-.left-column[
+.pull-left[
 全信息估计：
 
 Maximum likelihood:   
@@ -674,7 +678,7 @@ Generalized Least Squares
 Unweighted Least Squares
 ]
 
-.right-column[
+.pull-right[
 有限信息估计：
 
 Two Stage Least Squares
@@ -721,13 +725,13 @@ Two Stage Least Squares
 
 ---
 
-## 成了吗？
+## 结果诊断
 
 ### Overall: &chi;<sup>2</sup>
 
 结果显著则说明整体模型可能有问题。
 
----
+--
 
 然而，当N足够大时&chi;<sup>2</sup>通常显著
 
@@ -775,14 +779,14 @@ CFI可以>1, 这种情况视为1
 
 ## 实例：Holzinger & Swineford 1939
 
-.left-column[
+.pull-left[
 对初中生精神状况的调查：
 + 视觉因素：x<sub>1~3</sub>
 + 阅读因素：x<sub>4~6</sub>
 + 表达因素：x<sub>7~9</sub>
 ]
 
-.right-column[
+.pull-right[
 ```{r diagram-cfa, fig.align='center', fig.height=4}
 HS.model <- ' visual  =~ x1 + x2 + x3
               textual =~ x4 + x5 + x6
@@ -814,7 +818,8 @@ semPaths(
 
 ---
 
-```{r results-hsModel}
+```{r results-hsModel, eval = TRUE}
+fit <- cfa(HS.model, data = HolzingerSwineford1939)
 summary(fit, fit.measures=TRUE)
 ```
 
@@ -858,7 +863,7 @@ Latent growth curve models
 
 与CFA相比，SEM：
 
-+ 观察变量： X, .magenta[Y]
++ 观察变量： X, .red[Y]
 
 --
 
@@ -877,7 +882,7 @@ Latent growth curve models
 
 MLE
 
----
+--
 
 ## 诊断
 
@@ -977,12 +982,13 @@ qgraph(Graph, layout = L, arrowAngle = 0.5)
 ---
 
 ```{r results-semModel}
+fit <- sem(model, data = PoliticalDemocracy)
 summary(fit, fit.measures=TRUE)
 ```
 
 ---
 
-## 在操作SEM之前，你可能还想知道
+## SEM "骚操作"
 
 1. SEM怎么对待Measurement errors
 1. SEM怎么处理非线性变量(hint: GSEM)
@@ -991,24 +997,14 @@ summary(fit, fit.measures=TRUE)
 
 --
 
-1. .magenta[SEM 不能证明因果关系！！]
+.red[SEM 不能证明因果关系！！]
 
 ---
 
 ## 总结一下
 
 * 潜在变量分析概述
-* 什么是EFA
-    + EFA诊断
-    + EFA vs. PCA
-* 什么是CFA
-    + CFA诊断
-* SEM 入门
-
----
-
-* 潜在变量分析概述
-    + .magenta[因素分析]
+    + .navy[因素分析]
     + 类型分析
 * 什么是EFA
     + 探索性因子分析：通过loading找到潜在变量
@@ -1020,9 +1016,17 @@ summary(fit, fit.measures=TRUE)
 * SEM 入门
     + Latent + measurement models
     + 不能证明因果关系！
+class: inverse, center, middle
+
 
 ---
 
-class: inverse, center, middle
+class: inverse, middle, center
 
-# Questions, Comments, and Suggestions?
+# Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
