@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>持续期分析及事件史分析</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦 清华大学政治学系" />
+    <script src="05_eventHistory_files/header-attrs-2.6/header-attrs.js"></script>
+    <link href="05_eventHistory_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 持续期分析及事件史分析
+## Learning Duration Analysis with Dr. Hu
+### 胡悦<br>清华大学政治学系
+
+---
+
+
+
+
+class: inverse, bottom
+
+# 总论
+
+---
+
+## 事件史分析
+
+* 事件史分析：event history, “一件事情要发生需要多久？”
+
+--
+
+* 两种建模策略
+    1. Discrete：年、月、天；0s &amp; 1s.
+    1. Continuous: 具体时长
+    
+---
+
+## 模型选择：Big Choice
+
+对于建模策略的选择直接决定了：
+
+1. IVs如何影响事件发生？
+1. 事件是否被视为重复的？
+1. 发生周期（duration）是否时完全可见的？
+1. 事件分布（event rate）如何在时间维度上变动？
+
+---
+
+## 常用（英文）描述
+
+1. Survival analysis
+1. Event history analysis&lt;sup&gt;1&lt;/sup&gt;
+1. Failure analysis
+1. Duration analysis&lt;sup&gt;2&lt;/sup&gt;
+1. Frailty (e.g., engineer)
+1. Cure models (e.g., medical)
+
+.footnote[
+
+[1] EHA, often used to refer to discrete model
+
+[2] Often used to refer to continuous model
+
+]
+
+---
+
+class: inverse, bottom
+
+# Event History
+## Discrete Modeling
+
+---
+
+## 建模策略
+
+1. 决定何时开始计时
+
+???
+虽然分析中各事件看起来是同时开始的，但其实不然
+
+--
+
+1. 决定如何判定事件发生
+
+--
+
+1. 建构因变量：通常该变量在事件发生时记为1，之前均记为0
+
+--
+
+1. 测量自变量：在每个时间点均有记录
+
+--
+
+1. 估计
+
+**Risk set**： 在给定时间点观测单元触发事件的可能性, `\(R(t)\equiv \{i, y_{it} = 0 | y_{it} = 1\}.\)`
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; unit &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; time &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; event &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; IV &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; risk &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+当事件发生后，该观测单元将不再存在于risk set中。
+
+---
+
+## 分析工具
+
+1. logit/probit
+1. c-log-log
+1. scobit
+1. expit
+
+???
+
+c-log-log: complementary log-log, `\(\eta(x) = \log(-\log(1-\pi_x))=\mathbf{x}\beta\)`
+scobit: skewed logit
+expit: exponential logit
+
+---
+
+## 核心概念
+
+1. Survival rate: `\(S(t|X) = P(T &gt; t | X)\)`.
+1. Density: `\(f(t|x) = P(T = t | X)\)`, PDF.
+1. Cumulative distribution: `\(F(t) = P(T\leq t | X) = 1 - S(t)\)`, CDF.
+1. .magenta[Hazard]: 
+
+`$$P(T = t|T\geq t, X) = \frac{f(t|X)}{S(t|X)} = \frac{P(T = t | X)}{P(T &gt; t | X)}$$`
+
+???
+
+Hazard: the probability that the event occurs during a specific time point, given that it hasn’t already occurred.
+
+---
+
+class: small
+
+## Logit/Probit Model
+
+令 `\(Y^*\)` 为一不可见变量，它导至可见事件( `\(Y_{it}\)` )的发生，即：
+
+`$$Y_{it} =
+  \begin{cases} 
+   1 &amp; \text{if } y^*\geq 0, \\
+   0 &amp; \text{if } y^*&lt; 0.
+  \end{cases}$$`
+
+--
+
+由此推出：
+
+`\begin{align}
+P(Y_{it} = 1|X) =&amp; P(Y^* \geq 0|X)\\
+              =&amp; P(X\beta + \epsilon\geq 0|X)\\
+              =&amp; P(\epsilon\geq 0 - X\beta|X)\\
+              =&amp; 1 - P(\epsilon\leq - X\beta|X)\\
+              =&amp; 1 - F(-X\beta|X)
+\end{align}`
+
+---
+
+class: small
+
+### Probit
+
+令 `\(\epsilon\sim i.i.d. N(0, 1)\)`, 则 `\(P(Y_it = 1|X) = 1 - \Phi(-X\beta) = \Phi(X\beta).\)`
+
+
+### Logit
+
+令 `\(\epsilon\sim logistic\)`, 则 `\(P(Y_it = 1|X) = 1 - \Lambda(-X\beta) = \Lambda(X\beta).\)`
+
+代入logistic分布可得，
+
+`\begin{align}
+P(Y_{it} = 1|X) =&amp; 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
+              =&amp; \frac{e^{X\beta}}{1 + e^{X\beta}}\\
+P(Y_{it} = 0|X) =&amp; \frac{1}{1 + e^{X\beta}}
+\end{align}`
+
+???
+
+`\(\beta_{probit} = \frac{\sqrt 3}{\pi}\beta_{logit}.\)`
+
+此处用probability来建构likelihood, 因为likelihood存在scale issue, 通常不可知。此法被Gary称为Unified Maximum Likelihood
+
+---
+
+class: small
+
+## 应用举例
+
+研究美国印第安部落与州协调法案（Indian Gaming Compact）在各州的推行情况。变量包括：religion (`religion`), the number of federally recognized tribes (`fedtrib`), total population (`totpop`), and real income per capita (`rpcpinc`).
+
+
+
+
+
+```
+## # A tibble: 528 x 9
+##    state stateno  year totpop rpcpinc ideology fedtribe religion adopt_year
+##    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;      &lt;int&gt;
+##  1 AL          1  1989   4.10    18.0    -23.1        1     33.9         NA
+##  2 AL          1  1990   4.12    17.9    -23.1        1     33.9         NA
+##  3 AL          1  1991   4.09    18.0    -23.1        1     33.9         NA
+##  4 AL          1  1992   4.13    18.6    -23.1        1     33.9         NA
+##  5 AL          1  1993   4.18    18.7    -23.1        1     33.9         NA
+##  6 AL          1  1994   4.22    19.1    -23.1        1     33.9         NA
+##  7 AL          1  1995   4.26    19.8    -23.1        1     33.9         NA
+##  8 AL          1  1996   4.27    20.1    -23.1        1     33.9         NA
+##  9 AL          1  1997   4.32    20.4    -23.1        1     33.9         NA
+## 10 AL          1  1998   4.35    21.2    -23.1        1     33.9         NA
+## # ... with 518 more rows
+```
+
+---
+
+
+```r
+# Creating the event history record
+df_iga$adopt_ig &lt;- NA
+df_iga$adopt_ig[df_iga$year == df_iga$adopt_year] &lt;- 1
+df_iga$adopt_ig[df_iga$year &lt; df_iga$adopt_year |
+                  is.na(df_iga$adopt_year)] &lt;- 0
+
+# Creating the risk set
+df_iga$risk_ig &lt;- NA
+df_iga$risk_ig[df_iga$year &lt;= df_iga$adopt_year |
+                 is.na(df_iga$adopt_year)] &lt;- 1
+
+df_igaSum &lt;- group_by(df_iga, year) %&gt;%
+  summarise(
+    sum_adopt = sum(adopt_ig, na.rm = TRUE),
+    sum_risk = sum(risk_ig, na.rm = TRUE)
+  ) %&gt;%
+  mutate(hazard = sum_adopt / sum_risk, survival = sum_risk / 50)
+```
+
+---
+
+
+```r
+ggplot(df_igaSum, aes(x = year, y = survival)) +
+  geom_line() +
+  scale_x_continuous(breaks= scales::pretty_breaks()) +
+  ggtitle("Kaplan-Meier Curve of Adoption")
+```
+
+&lt;img src="05_eventHistory_files/figure-html/eg_discrete3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+library(survival)
+
+m_logit &lt;-
+  survreg(
+    Surv(time = year, event = adopt_ig) ~ religion + fedtribe + totpop + rpcpinc,
+    data = df_iga,
+    dist = "logistic"
+  )
+
+summary(m_logit)
+```
+
+```
+## 
+## Call:
+## survreg(formula = Surv(time = year, event = adopt_ig) ~ religion + 
+##     fedtribe + totpop + rpcpinc, data = df_iga, dist = "logistic")
+##                 Value Std. Error      z       p
+## (Intercept) 1977.9938     4.7775 414.02 &lt; 2e-16
+## religion       0.2099     0.0596   3.52 0.00043
+## fedtribe      -0.1534     0.0396  -3.87 0.00011
+## totpop         0.0669     0.1353   0.49 0.62090
+## rpcpinc        0.8822     0.2154   4.10 4.2e-05
+## Log(scale)     0.7109     0.1530   4.65 3.4e-06
+## 
+## Scale= 2.04 
+## 
+## Logistic distribution
+## Loglik(model)= -105.4   Loglik(intercept only)= -130.1
+## 	Chisq= 49.28 on 4 degrees of freedom, p= 5.1e-10 
+## Number of Newton-Raphson Iterations: 5 
+## n=362 (166 observations deleted due to missingness)
+```
+
+---
+
+class: inverse, bottom
+
+# Duration Analysis
+## Continuos Modeling
+
+---
+
+
+
+## 与事件史分析的差别
+
+Event history：使用事件发生的特定时间，
+Duration：总体时间段来建模
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; duration &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; opposition &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; polarization &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Beilgium &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Canada &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.86792 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.86792 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.14103 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.14103 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.58065 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.79592 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Parametric Models
+
+选择既定分布作为baseline hazard
+
+1. Exponential
+1. Weibull
+1. Log-normal
+1. Gamma
+
+---
+
+## Exponential model
+
+特点：memoryless, hazard constant
+
+--
+
+`\begin{align}
+h(u) =&amp; 1\\
+F(u) =&amp; 1 - e^{-u}\\
+S(u) =&amp; e^{-u} = f(u)
+\end{align}`
+
+???
+
+exponential: `\(e^n\)`
+
+
+---
+
+![](05_eventHistory_files/figure-html/expFun-1.png)&lt;!-- --&gt;
+
+---
+
+## Weibull
+
+.left-column[
+特点：以p调节baseline hazard方向
+
+* p &lt; 1, 单减
+* p = 1, 与exponential model拟合
+* p &gt; 1, 单增
+]
+
+--
+
+.right-column[
+`\begin{align}
+h(u) =&amp; pu^{p - 1}\\
+F(u) =&amp; 1 - e^{-u^p}\\
+f(u) =&amp; pu^{p - 1}e^{-u^p}\\
+S(u) =&amp; e^{-u^p}
+\end{align}`
+]
+
+---
+
+![](05_eventHistory_files/figure-html/wbFun-1.png)&lt;!-- --&gt;
+
+---
+
+## Log-normal
+
+特点： 允许非单调hazard
+
+`\(ln(u_i)\sim N(0, \sigma^2).\)`
+
+---
+
+![](05_eventHistory_files/figure-html/lnFun-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Gamma
+
+* p: the scale parameter
+* &amp;kappa;: the shape parameter
+
+--
+
+`$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\Gamma(\kappa)}.$$`
+
+---
+
+![](05_eventHistory_files/figure-html/gamma-1.png)&lt;!-- --&gt;
+
+---
+
+## Generalized Gamma Distribution
+
+`$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\beta^{p\kappa}\Gamma(\kappa)}$$`
+
+&amp;beta; = 1 &amp;rArr; Gamma;
+
+&amp;kappa; = 0 &amp;rArr; log-normal;
+
+&amp;kappa; = 1 &amp;rArr; Weibull;
+
+&amp;kappa; = p = 1 &amp;rArr; Exponential;
+
+--
+
+Exponential，Weibull，Log-normal, Gamma 都是Generalized Gamma的特殊变形
+
+???
+
+Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution
+
+---
+
+class: small
+
+## 加入自变量
+
+DGP: `\(Y_i = e^{X_i\beta}u_i\)`， 那么可以推出
+
+`\(u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}\)`.
+
+--
+
+让我们定义： `\(\lambda\equiv e^{-X_i\beta}\)`
+
+那么，对于exponential而言
+
+`\begin{align}
+u_i =&amp; Y_i\lambda_i \\
+F(Y_i|X) =&amp; 1 - e^{-Y_i\lambda_i}\\
+f(Y_i|X) =&amp; \lambda_ie^{-Y_i\lambda_i}\\
+h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
+\end{align}`
+
+`\(\beta\)`: 能存活的时间。
+
+--
+
+同理，对于Weibull, `\(h(Y_i|X) = p\lambda^py^{p - 1}\)`
+
+---
+
+## Interpretation
+
+* Expected value: 
+    + Exponential: `\(E(Y_i|X_i) = \lambda_i^{-1} = exp(X_i\beta)\)`
+    + Weibull: `\(E(Y_i|X_i) = \Gamma(p)exp(X_i\beta)\)`
+
+---
+
+* Hazard ratio:
+
+`\begin{align}
+\frac{h(Y_i|X + 1)}{h(Y_i|X)} =&amp; \frac{pexp[-(X_i + 1)\beta]^py_i^{p - 1}}{pexp(-X_i\beta)^py_i^{p - 1}}\\
+=&amp; exp(-\beta)^p = e^{-\beta p}
+\end{align}`
+
+-&amp;beta;p: proportional hazard metric;
+
+&amp;beta;: accumulative failure time metric.
+
+---
+
+## Semi-parametric Model: Cox model
+
+`$$h(y|x) = h_0(y)\lambda_i^p$$`
+
+`\begin{align}
+P(1fails@y_1|someone\ f@y_1) =&amp; \frac{h_0(y_1)\lambda_i^p}{\sum^n_{i = 1}h_0(y_1)\lambda_i^p}\\
+P(2fails@y_2|someone\ f@y_2) =&amp; \frac{h_0(y_2)\lambda_i^p}{\sum^n_{i = 2}h_0(y_1)\lambda_i^p}
+\end{align}`
+
+--
+
+由于不是完全parametric，所以多只进行局部检验，因此不常在早期政治科学研究中出现。
+
+---
+
+## 应用实例
+
+![](05_eventHistory_files/figure-html/eg_dur1-1.png)&lt;!-- --&gt;
+
+---
+
+
+```r
+model_dur &lt;-
+  formula(Surv(time = durat) ~ invest + fract + polar + numst2 + format + eltime2 + caretk2)
+
+m_exp &lt;- survreg(model_dur, data = df_dur, dist = "exponential")
+m_wb &lt;- survreg(model_dur, data = df_dur, dist = "weibull")
+m_ln &lt;- survreg(model_dur, data = df_dur, dist = "lognormal")
+m_cox &lt;- coxph(model_dur, data = df_dur)
+```
+
+???
+
+Random tree for duration: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
+
+---
+
+![](05_eventHistory_files/figure-html/eg_dur3-1.png)&lt;!-- --&gt;
+
+---
+
+class: inverse, bottom
+
+# 特殊情况
+
+---
+
+## Duration Dependence
+
+Baseline hazard 是否会随时间改变？
+
+--
+
+解决方法:
+
+* Fixed effect
+* Spline 
+* Smooth function: `\(t, t^2, t^3\)`("nearly identical substantively [with spline]").&lt;sup&gt;1&lt;/sup&gt;
+
+.footnote[
+
+[1] Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
+
+
+]
+
+---
+
+## (Right) Censored Data
+
+Censored point为c, 则：
+
+`$$L = \prod^{n}_{i=1}f(y_i|x_i)^{1 - c}S(y^c|X_i)^c,$$` where
+
+`$$c =
+  \begin{cases} 
+   1 &amp; \text{if } y_i\geq y_c, \\
+   0 &amp; \text{if } y_i&lt; y_c.
+  \end{cases}$$`
+  
+---
+
+当censored部分扩大，模型的efficiency会降低。
+
+当将selection effect也考虑进去的时候，需要modeling selection process， 见:
+
+Boehmke, Frederick J., Daniel S. Morey, and Megan Shannon. 2006. “Selection Bias and Continuous-Time Duration Models: Consequences and a Proposed Solution.” *American Journal of Political Science* 50(1): 192–207.
+
+---
+
+## Tie
+
+* Evenly divide &amp;lambda; in the nominators of two tied events.
+* The most popular methods: Efron, Preslow.
+
+---
+
+class: small
+
+## Time Varying Covariates (TVC)
+
+* Assumption (Cox): Covariates do not vary over time.
+
+* Discrete model: combine in the logit
+
+* Parametric: Conditional likelihood function (CTD: Continuous Time Duration)
+
+`\begin{align}
+P(y_i&gt;1|X_1(1)) =&amp; \frac{P(y_i&gt;2, y_i&gt;1|X_1(2))}{P(y_i&gt;1|X_1(2))}\\
+=&amp; S(1|X_1(1))p(y_i&gt;2|y_i&gt;1, X_1(2))\\
+=&amp; \frac{S(2|X_1(2))}{S(1|X_1(2))}
+\end{align}`
+
+* Cox: put the value of that time moment, `\(X_i(t)\)`,  at failure time t in continuing the partial likelihood.
+
+???
+
+Partial likelihood:
+
+`\begin{align}
+L_p = \prod^K_{i = 1}[\frac{e^{X_i}\beta}{\sum_{j\in R(t_i)}e^{X_i\beta}}]^{\sigma_i}
+\end{align}`
+
+Assumption: intervals between successive duration time does not help to explain the relationship between covariates and hazard.
+
+---
+
+class: small
+
+## Repeated Failure
+
+### Type：
+
+1. Total: 每次都重新开始
+1. Gap: 从特定时间点开始计算
+1. Counting: 每个观测点都在同一时间范畴，但允许晚进和censor
+
+
+### Risk set:
+
+* Unrestricted: 在所有failure事件中，所有观测点无论之前经历过多少次failure都会继续在risk set中
+* Semi-restricted: 在第K次failure事件中，risk set中只包含经历过k-1次或少于k-1次事件的观测点
+*Restricted: 在第K次failure事件中，risk set中只包含经历过k-1次事件的观测点
+
+---
+
+background-image: url("images/repeatedFailure.jpg")
+background-position: center
+background-size: contain
+
+---
+
+## Competing Risk
+
+法1： 假定竞争事件就怕为独立的，进而分别建模——将竞争性视为censored
+
+法2： 假定竞争事件非独立，引入shared frailties:
+
+`\begin{align}
+h(y_1) =&amp; h_0(y)exp(X\beta + v_1)\\
+h(y_2) =&amp; h_0(y)exp(X\beta + v_2)
+\end{align}`
+
+`\((v_1, v_2)\)` jointed distributed 来model非独立性。
+
+---
+
+## Split Population (Cure Models)
+
+0可能有两种意义:
+
+1. Never fail
+1. Right censored
+
+解决方法：
+
+对Cure进行建模，$Z_i$: 1 (cured), 0 (not cured), 其pdf为 `\(P(Z_i = 1)\)` , 那么对于0来说其survial model为 `\(S(y|x)P(Z = 0)\)`.
+
+---
+
+## Non-proportional Hazard
+
+每个观测点的basedline hazard function都一样吗？
+
+### 检验
+
+1. Piecewise regression
+1. Model with interaction
+1. Schoenfeld residual plot
+
+---
+
+background-image: url("images/residualPlot.png")
+background-position: center
+background-size: contain
+
+---
+
+### 解决方法
+
+`$$y_i = X\beta_1 + Xln(t)\beta_2 + ln(t)\beta_3.$$`
+
+---
+
+## Rare Event
+
+对于小概率事件（&lt; 5%），使用通常工具会高估1的概率。
+
+--
+
+解决方法：假定没有其他更好sample
+
+1. Prior correction: 加入基于其他研究或研究者认知的关于总体分布的趋势估计。
+    + 如果模型有误的话，结果也不会稳健。
+1. Post-estimation weighting: `\(P(Y_i = 1) \approx \tilde{\pi_i} + C_i\)`， `\(C_i\)`输入某些总体分布信息。
+
+---
+
+## 建模选择
+
+重大抉择！
+
+.center[&lt;img src="images/deepBreath.gif" height = 350 /&gt;]
+
+---
+
+class: small
+
+## Count, Duration, or Binary?
+
+|          | Pros                                              | Cons                                                                               |
+|----------|---------------------------------------------------|------------------------------------------------------------------------------------|
+| Count    | Aggregative, prevent measurement error            | Lose the ability to record any identified variations over time and the time series |
+| Duration | Record the time and changing moment and sequences | Lose the precision of when within each time unit an event occurs                   |
+| Binary   | Most disaggregate                                 | Lose when the change happens in a time line                                        |
+
+???
+
+这三种models结果可能不一样，因为都是某种对现实的de-information
+
+---
+
+class: inverse, bottom
+
+.center[&lt;img src="images/thatsit.gif" height = 450 /&gt;]
+
+# Call it for the day!
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

@@ -1,18 +1,22 @@
 ---
-title: "Doing Research with Dr. Hu"
-subtitle: "大数据研究设计与方法基础"
+title: "大数据研究数据与分析收集原则"
+subtitle: "Learning DGP for Big-Data Research with Dr. Hu"
 author: "胡悦"
 institute: "清华大学政治系"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
+      - default
       - zh-CN_custom.css
-      - styles.css
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -368,6 +372,8 @@ Post-DGP correction &rarr; 把权重纳入分析
 ```{r survey-example, include=FALSE, eval=FALSE}
 brfss_11 <- Hmisc::sasxport.get("D:/Desktop/CNTY2011.xpt")
 
+brfss_11 <- haven::read_sas("data/CNTY11_SASOUT.SAS")
+
 library(car)
 
 nams<-names(brfss_11)
@@ -429,7 +435,7 @@ library(dplyr)
 brfss_11 <- select(brfss_11, badhealth, black, white, other, hispanic, ins, inc, educ, employ, marst, agec, bmi, x.ststr, x.cntywt) %>% 
   rename(ststr = x.ststr, cntywt = x.cntywt)
 
-saveRDS(brfss_11, "brfss_11.Rds")
+saveRDS(brfss_11, "data/brfss_11.Rds")
 ```
 
 Set the survey conditions
