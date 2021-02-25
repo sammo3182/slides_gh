@@ -1,6 +1,6 @@
 ---
-title: "Perspective: A Scientific View"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Understanding Policies: A Scientific Approach"
+subtitle: "Understanding Policies: Interdisciplinary Perspectives and Case Illustrations (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -19,26 +19,49 @@ output:
       countIncrementalSlides: false
 ---
 
-<audio controls>
-  <source src="tsinghuaBell.mp3" type="audio/mpeg">
-</audio>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  flextable, gridExtra,
+  knitr, # dependency
+  descr, stringr, broom, dotwhisker, interplot, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+
 
 ## Overview
 
-1. Landscape of the Area
-1. What does being Scientific mean?
-1. Scientific paradigm 
-1. Being scientific is not welcomed
-
+1. .blue[Landscape] of policy analysis (.small[left from last class])
+1. Understanding policies .red[scientifically]
+    + Steps of scientific inquiries
+    + Necessity to understand policies scientifically
+    
 ---
 
 class: inverse, bottom
 
-# How Do People Learn in the World
+# Previously in the *Understanding Policies*...
 
 ---
 
-## The Discipline
+## A Taste of the Professional Area in an Atypical PA course
+
+Who are learning policy analysis professionally?
 
 + Major: 
     + Public Policy/Administration
@@ -53,15 +76,15 @@ class: inverse, bottom
 
 ## The Top Dogs
 
-.left-column[<img src="images/qs20191.png" height = 500 />]
+.left-column[<img src="images/sci_qs20191.png" height = 500 />]
 
 --
 
-.right-column[<img src="images/qs20192.png" height = 500 />]
+.right-column[<img src="images/sci_qs20192.png" height = 500 />]
 
 ---
 
-.center[<img src="images/qs20193.png" height = 600 />]
+.center[<img src="images/sci_qs20193.png" height = 600 />]
 
 ???
 
@@ -72,9 +95,17 @@ Previous known as "Times Higher Education-QS World University Rankings"
 
 ---
 
-## How the Top Dogs Were Found
+## What Makes Them the Best? 
 
-.center[<img src="images/measureDogs.jpg" height = 500 />]
+.center[<img src="images/sci_measureDogs.jpg" height = 450 />]
+
+--
+
+.center[*Spoiler alert: the .red[evaluation]*]
+
+???
+
+Goal of the policies
 
 ---
 
@@ -87,40 +118,13 @@ Previous known as "Times Higher Education-QS World University Rankings"
 
 --
 
-Weighted results
+&rArr; .red[Weighted] results
 
 ???
 
-Weight: based on area, e.g. publication rates are very high, research citations and the h-index account for 25% of each university’s total score.
+Weight: based on area, e.g. publication rates are very high, research citations and the h-index account for 25% of each university's total score.
 
-Scientific? 
-
-
-Most dominant paradigm is positivism
-Paradigm: a distinct set of concepts or thought patterns, including theories, research methods, postulates, and standards for what constitutes legitimate contributions to a field
-
----
-
-## Positivist Paradigm
-
-+ Positivist: 
-    + *Data*-based
-    + Problem solving through systematic, scientific queries
-
-???
-实证主义
-Re-imported from the French word positivisme(/positee vish men/), derived from positif in its sense of 'imposed on the mind by experience'. 
-
---
-
-+ Post-positivist
-    + *Culture*-based (norms, morality, values)
-    + Normative, ethical process
-
-
-???
-
-Compara the U.S. and China, Talk about approach, content, and instructors
+.orange[NEXT]: Let's compare the U.S. and China, Talk about approach, content, and instructors
 
 ---
 
@@ -128,19 +132,19 @@ Compara the U.S. and China, Talk about approach, content, and instructors
 
 | Approach         | China | U.S. |
 |------------------|-------|------|
-| Outsider         | 55%   |      |
-| Limited insider  | 15%   | 75%  |
-| In-depth insider | 30%   | 25%  |
-.small[Source: He et al 2016, Table 4]
+| Outsider<sup>1</sup>         | 55%   |      |
+| Limited insider<sup>2</sup>  | 15%   | 75%  |
+| In-depth insider<sup>3</sup> | 30%   | 25%  |
 
+.right[.small[Source: He et al 2016, Table 4]]
 
-???
+.footnote[
 
-positivist vs. non-positivist
+[1] Solely of public policy .blue[theories].  
+[2] Positivist .blue[framework] and .red[analysis] based on welfare economics.  
+[3] Strong .red[analytic orientation]
 
-[1] Solely of public policy theories.  
-[2] Positivist framework and analysis based on welfare economics.  
-[3] Strong analytical orientation
+]
 
 
 ---
@@ -160,38 +164,39 @@ Welfare economics, rational modeling, utilities
 
 ---
 
-background-image: url("images/heetal2016tb3.png")
+background-image: url("images/sci_heetal2016tb3.png")
 background-position: center
 background-size: contain
 
 ???
 
-Focus on Cost-benefit analysis and below, strategy of policy making
+The U.S, on Cost-benefit analysis and below, strategy of policy making
 
 ---
 
 ## Instructors
 
-.center[<img src="images/heetal2016tb2.png" height = 500 />]
+.center[<img src="images/sci_heetal2016tb2.png" height = 500 />]
 
 ???
 
 Few Chinese instructors focus on applied policy research
 
-In this class, teaching positivist policy analysis based on social scientific paradigm
+**NEXT**: In this class, teaching positivist policy analysis based on *social scientific paradigm*. 
 
-How could social research be scientific
+Is that even possible?
+
 
 ---
 
 class: inverse, bottom
 
 <video width="700" height="500" controls preload>
-    <source src="images/sheldon_socialScience.mp4" type="video/mp4">
+    <source src="images/sci_sheldon_socialScience.mp4" type="video/mp4">
 </video>
 
 
-# Being Scientific! Well...
+# Being a Scientist of the Human Society
 
 ???
 
@@ -199,59 +204,92 @@ Why do we need being scientific
 
 ---
 
-## A Story
+## Paradigms to Understand Policies
 
-Somehow in the Internet, there a rumor that a Doc in traditional medicine told a [story](http://szyyj.gd.gov.cn/zyyfw/ysbj/content/post_2541293.html) about drinking water. 
+> Paradigm: a bag of theories, research methods, postulates, and standards for what constitutes contributions to a field.
 
----
+--
 
-> 每天早晨喝一杯凉水，是一个错误的养生做法……[医生]他是偶然发现这个问题的，当时他在给一位女士调理身体，本来调理得很好……突然有一天，再诊脉的时候，发现她的舌质又淡白了，舌体胖大，病情反复，忙问这是怎么回事儿？她回答，半个月前，看到电视里面有养生专家让晨起喝凉水，于是坚持了这些天，已经腹泻了很多次了。这么样，损失了阳气，导致水湿重。有位中医也被这一说法骗了……最后竟然收集了几百例的病例，都是晨起喝凉水，导致的各种复杂古怪的病症的。
++ Positivist: 
+    + *Data*-based
+    + Problem solving through systematic queries
 
 ???
 
-How do you feel? Convincing?
+Dominant, 实证主义
+
+Re-imported from the French word positivisme(/positee vish men/), derived from positif in its sense of 'imposed on the mind by experience'. 
+
+--
+
++ Post-positivist
+    + *Culture*-based (norms, morality, values)
+    + Normative, ethical process
+
+
+???
+
+.greenLight[Q]: Does Positivist mean scientific? 
+
+---
+
+## A Story
+
+On the Omniscience Internet, a doc of traditional medicine told a [story](http://szyyj.gd.gov.cn/zyyfw/ysbj/content/post_2541293.html) about drinking water. 
+
+.center[《为什么外国人喝凉水没事》 之 
+
+“每天早晨喝一杯凉水，是一个错误的养生做法”]
+
+---
+
+> 每天早晨喝一杯凉水，是一个错误的养生做法……[大历害老医师]是偶然发现这个问题的，当时他在给一位女士调理身体，本来调理得很好……突然有一天，再诊脉的时候，发现她的舌质又淡白了，舌体胖大，病情反复，忙问这是怎么回事儿？她回答，半个月前，看到电视里面有养生专家让晨起喝凉水，于是坚持了这些天，已经腹泻了很多次了。这么样，损失了阳气，导致水湿重。有位中医也被这一说法骗了……最后竟然收集了几百例的病例，都是晨起喝凉水，导致的各种复杂古怪的病症的。
+
+???
+
+.greenLight[Q]: How do you feel? Convincing?
 
 ---
 
 class: small
 
-## Decompose It
+## Let's Decompose It
 
 *Problem* 
 
-"给一位女士调理身体，本来调理得很好……突然有一天，再诊脉的时候，发现她的舌质又淡白了，舌体胖大，病情反复"
+"给一位女士调理身体，本来调理得很好……突然有一天，再诊脉的时候，发现她的舌质又淡白了，舌体胖大，.red[病情反复]。"
 
 --
 
 *Theory*
 
-"损失了阳气，导致水湿重"
+".blue[损失了阳气]，导致水湿重。"
 
 --
 
 *Evidence*
 
-"晨起喝凉水，于是坚持了这些天，已经腹泻了很多次了"
+"晨起喝凉水，于是坚持了这些天，已经.blue[腹泻]了很多次了。"
 
 --
 
 *Conclusion*
 
-"每天早晨喝一杯凉水，是一个错误的养生做法"
+"每天早晨喝一杯凉水，是一个.red[错误]的养生做法"
 
 
 ---
 
-## Why's the Story Convincing?
+## Why's this Story Convincing?
 
 "Seeing is believing"
 
 --
 
-Half way of a scientific inquiry
+Half-way scientific inquiry: A human inquiry
 
 <video width="700" height="500" controls preload>
-    <source src="images/Charle's_Angle_ScientistScene.mp4" type="video/mp4">
+    <source src="images/sci_Charle's_Angle_ScientistScene.mp4" type="video/mp4">
 </video>
 
 
@@ -259,7 +297,7 @@ Half way of a scientific inquiry
 
 Charle's Angle, 2019, Columbia Pictures, Elizabeth Banks' film
 
-Another example: mushroom
+Let's see another example: mushroom
 
 ---
 
@@ -267,7 +305,7 @@ Another example: mushroom
 
 ### Eatable?
 
-<img src="images/mushroom.jpg" height = 300 />
+<img src="images/sci_mushroom.jpg" height = 300 />
 
 ]
 
@@ -277,30 +315,29 @@ Another example: mushroom
 
 ### Find your BFF and observe...
 
-<img src="images/mushroomT.jpg" height = 300 />
+<img src="images/sci_mushroomT.jpg" height = 300 />
 
 ]
 
+--
+
+What's the Problem Then?
+
 ---
 
-## What's the Problem?
+## An eclipse in 2017
 
-An eclipse in 2017
+.center[<img src="images/sci_trumpEclipse.jpg" height = 300 />]
 
 ???
 /ɪkl'ɪps/
-
 --
 
-.center[<img src="images/trumpEclipse.jpg" height = 300 />]
-
---
-
-So, was the POTUS idiot?
+Was the former POTUS idiot?
 
 ---
 
-## Well...
+## Depending on Whether You Observe Enough
 
 <video width="700" height="500" controls preload>
     <source src="images/Trump Watches Eclipse From White House.mp4" type="video/mp4">
@@ -325,46 +362,45 @@ Overgeneralization
 
 Illogical reasoning  
 
---
-
 ......
 
 
 ???
 
-What should we do?
+
+.orange[NEXT]: What should we do?
 
 ---
 
-## Scientific Inquiry
+## Human &rarr; Scientific Inquiries
 
 After the guessing/hypothesis...
 
 --
 
-.left-column[
+.pull-left[
 
 ### Data Collection
 
-Valid
+.blue[Valid]
 + Representative
 
-Sufficient
+.blue[Sufficient]
 + Diverse
 
 ]
 
 --
 
-.right-column[
+.pull-right[
 
 ### Analysis
 
-Proper
+.blue[Proper]
 
 P &rarr; A &rarr; M & M
 
-before the conclution.
+&rArr; implications/conclusions
 ]
 
 ???
@@ -373,11 +409,11 @@ Perspective, approach, method and measurement
 
 Approach includes inductive and deductive, elaborated later
 
-Why are these scientific? 
+.orange[NEXT]: Why are these scientific? 
 
 ---
 
-## Back to the Original Aspiration
+## Original Aspiration
 
 What does the "scientific" even mean?
 
@@ -389,27 +425,29 @@ What does the "scientific" even mean?
 
 ## Why Being Scientific?
 
-Data alone is not enough~ 
+Data (observations) alone are not enough~ 
 
 1. Where to find data?
-1. How data are legit?
-1. How to make sense of data?
+1. Are the data legit?
+1. How to make sense of the data?
 
 --
 
-Conducting credible analyses
+&rArr; Conducting .red[credible] analyses
 
-Assumption + Theory &rarr; Method + Data &rarr; Conclusion
+Assumption + Theory   
+&rarr; Method + Data    
+&rarr; Conclusion
 
 ???
 
-Perspective, approach, method and measurement
+Another way to say: Perspective, approach, method and measurement
 
 ---
 
 ## Scientific Process in Scientific Terms
 
-.left-column[
+.pull-left[
 
 ### Three(Four) Steps<sup>1</sup>
 
@@ -427,9 +465,13 @@ Explanation
 [1] NB: No need to complete in one piece
 ]
 
+???
+
+NB: Notare bene (note well)
+
 --
 
-.right-column[
+.pull-right[
 
 ### Two Approaches
 
@@ -439,11 +481,10 @@ Deductive
 
 ]
 
+
 ???
 
-NB: Notare bene (note well)
-
-see the next page of plot for inductive and deductive
+.orange[NEXT]: Explained in the next page
 
 ---
 
@@ -457,30 +498,27 @@ The mushroom, the traditional medicine are inductive
 
 ---
 
-## Always the Best?
+class: inverse, bottom
 
-
-.center[<img src="images/phiSci2.png" height = 350 />]
-
-???
-
-Something the scientific figure may not be able to answer
+# Is Science always Wannted?
 
 ---
 
+.center[Credibility vs. Strong conclusions]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[
 ## The Law of Decreasing Credibility
 
-The credibility of inference .magenta[decreases] with the .magenta[strength] of the assumptions maintained.
+Credibility .red[&darr;] when strength of assumptions .blue[&uarr;]]
+]
 
---
-
-So,
-
-.center[Credibility vs. Strong conclusions?]
 
 ???
 
-我们最终会打败新冠病毒！
+只要有疫苗了，我们就安全了
+
+疫苗是战胜新冠病毒之制胜关键
 
 ---
 
@@ -496,7 +534,7 @@ Congressional Budget Office & Joint Committee on Taxation:
 .left-column[<img src="images/elemendorf.jfif" height = 200 />]
 .right-column[<img src="images/pelosi.jpg" height = 200 />]
 
-> CBO and JCT estimate that enacting both pieces of legislation...would produce a .magenta[net reduction] of changes in federal deficits of .magenta[$138 billion] over the 2010–-2019 period as a result of changes in direct spending and revenue.
+> CBO and JCT estimate that enacting both pieces of legislation...would produce a .blue[net reduction] of changes in federal deficits of .red[$138 billion] over the 2010–-2019 period as a result of changes in direct spending and revenue.
 
 
 ???
@@ -504,18 +542,17 @@ Congressional Budget Office & Joint Committee on Taxation:
 Congressional Budget Office, CBO;  
 Joint Committee on Taxation, JCT
 
-Predictions that are generally accepted as true, but that are not necessarily true.
 Douglas Elmendorf: dean and Don K. Price Professor of Public Policy at Harvard Kennedy School
+
 House of Representatives Speaker Nancy Pelosi
 
+.orange[NEXT]: What's the problem
 
 ---
 
 ## Problem?
 
---
-
-> All such estimates are uncertain and that actual future impacts could differ significantly from the estimates of any given organization.--- U.S. Dep of Health and Human Services
+> All such estimates are .red[uncertain] and that actual future impacts could differ significantly from the estimates of any given organization.--- U.S. Dep of Health and Human Services
 
 ???
 
@@ -529,20 +566,29 @@ On a separate estimation of the health care legislation
 
 ## Uncertainty/Alternative Assumptions
 
-Douglas Holtz-Eakin: 
+CBO:
 
-> The health care reform legislation would .magenta[raise], not lower, federal deficits, by .magenta [$562 billion].
+> ...a .blue[net reduction] of changes in federal deficits of .red[$138 billion]...
+
+Douglas Holtz-Eakin (Syracuse University): 
+
+> The health care reform legislation would .magenta[raise], not lower, federal deficits, by .red[$562 billion].
 
 --
 
-Difference: **138+562 (700)** billion
+.center[**138+562 (700)** billion]
 
 ???
 an economics professor at Syracuse University, 2003 director of CBO, Director of the Congressional Budget Office, and chief economic policy adviser to Senator John McCain's 2008 presidential campaign
 
+.orange[NEXT]: why do people tend to ignore the uncertainties
+
++ Complicated
++ Leader
+
 ---
 
-## Why Ignoring?
+## Why Nobody Like Uncertainty?
 
 .center[<img src="images/uncertainty.png" height = 500 />]
 
@@ -553,49 +599,49 @@ left-up: fan chart from the Bank of England about inflation forecast
 
 ---
 
-## Why Ignoring?
+## Why Nobody Like Uncertainty?
 
 Lyndon Johnson, the 36th POTUS:
 
-> Ranges are for cattle. Give me a number
+> Ranges are for cattles. Give me a number.
 
 --
 
 Jerry Hausman, MIT economist, the inventor of the Durbin-Wu-Hausman test:
 
-> You can’t give the client a bound. The client needs a point.
+> You can't give the client a bound. The client needs a point.
 
 ---
 
 class: middle, center
 
-## What Should You Do?
+.Large[What Should I Do?]
+
+--
+
+.large[Being scientific, and in a .blue[flexible] way!]
+
+--
+
+Especially when someone is .red[hearing] you!
+
 
 ---
 
-background-image: url("images/stayHumble.jpg")
-background-position: center
-background-size: contain
-
----
-
-.large[Especially When Someone Is Hearing You!]
-
----
 
 ## Take-Home Points
 
-1. Area Overview
-    + Positivist
+1. Landscape of the Field
+    + Positivist vs. post-positivist
     
 --
 
-1. Scientific approach:   
+1. Steps of scientific inquiries:   
     + Assumption + Theory &rarr; Method + Data &rarr; Conclusion
     
 --
 
-1. Being scientific, being humble
+1. Being scientific, being flexible.
 
 ---
 
