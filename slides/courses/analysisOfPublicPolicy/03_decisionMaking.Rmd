@@ -1,8 +1,7 @@
 ---
-title: "Perspective: Decision Making Theory"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Economic Perspective: Decision Making Theory"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -19,36 +18,80 @@ output:
       countIncrementalSlides: false
 ---
 
-class: bottom, inverse
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
-background-image: url("images/court.jpg")
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  emo
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
 
-<audio controls>
-  <source src="tsinghuaBell.mp3" type="audio/mpeg">
-</audio>
-
-# Challenging Time
 
 ---
 
 ## Procedure
 
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
+.pull-left[
+### Presenting
 
-```{r stopwatch, echo = FALSE}
+The presenter talks.
+
+### Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 350 />
+]
+
+.pull-right[
+### Challenging
+
+1. Presenter queries.
+1. Challenger responds.
+1. Challenger queries.
+1. Presenter responds.
+]
+
+---
+
+## Challenging
+
+You have 15 sec to prepare for the responses.
+
+```{r stopwatch_presenter, echo = FALSE}
 library(countdown)
 
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
+countdown(
+  minutes = 0,
+  seconds = 15,
+  warn_when = 5,
+  right = "20%",
+  bottom = "40%",
+  font_size = "3.5em",
+  play_sound = TRUE
+)
+
+countdown(
+  minutes = 0,
+  seconds = 15,
+  right = "20%",
+  bottom = "10%",
+  warn_when = 5,
+  play_sound = TRUE
+)
 ```
 
 
@@ -62,14 +105,14 @@ class: inverse, bottom
 
 ## Decision Making Models
 
-### Rational-Choice Based
+### Rational-Choice Based Models
 
-+ Economic Rational-Choice Model
-+ Bounded Rational-Choice Model
++ Economic Rational-Choice
++ Bounded Rational-Choice
 
 --
 
-### Irrational Model
+### Irrational Models
 
 + Bureaucratic Organization
 + Belief System
@@ -79,9 +122,19 @@ class: inverse, bottom
 
 ## Classic Rational-Choice Model
 
-Goal : Utility = Earning - Cost
+.center[Goal &rArr; preference &rArr; decisions]
 
-Being rational means being a .magenta[utility maximizer].
+.center[Goal: Utility = .navy[Earning] - .red[Cost]]
+
+--
+
+.bg-black.golden.ba.shadow-5.ph1.mt1[
+.center[Being rational &rarr; Utility **maximizer**.]
+]
+
+--
+
+.center[.large[How beeeautiful is it 🙏]]
 
 --
 
@@ -96,15 +149,19 @@ class: small
 
 ### Earning
 
-*Mediocre A*: Working 8 h/d + [22 d/m](https://zhuanlan.zhihu.com/p/59137037) + [nationally average wage](https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTMyMg==&mid=2459900748&idx=1&sn=4eb6074e1483ba65681b287a21be4af4&chksm=fdac6d09cadbe41f560d73e87a91de5318b5e39ebd071c9e4232c93ad2b8c25e41fd6820e838&token=808700715&lang=zh_CN#rd), which means:
+*Mediocre Shechu*: 
+
+Working 8 h/d + [22 d/m](https://zhuanlan.zhihu.com/p/59137037) + [nationally average wage](https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTMyMg==&mid=2459900748&idx=1&sn=4eb6074e1483ba65681b287a21be4af4&chksm=fdac6d09cadbe41f560d73e87a91de5318b5e39ebd071c9e4232c93ad2b8c25e41fd6820e838&token=808700715&lang=zh_CN#rd)
 
 6000RMB/22d/8h &approx; `r round(6000/22/8, digits = 1)` (RMB/h)
 
 --
 
-*Mediocre B*:[Average college student](https://k.sina.com.cn/article_2634151773_9d01f75d01900fkx7.html),
+[*Mediocre Student*:](https://k.sina.com.cn/article_2634151773_9d01f75d01900fkx7.html)
 
-(20298.63<sup>&midast;</sup> + 8506.2 + 2000 * 12m + 900)RMB /10m/22d/8h &approx; `r round((20298.63 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` (RMB/h)
+.navy[教育事业费 + 公用经费] + daily cost * 12 + specific entertainments
+
+(20298.63<sup>&midast;</sup> + 8506.2 + 2000 \* 12m + 900)RMB /10m/22d/8h &approx; `r round((20298.63 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` (RMB/h)
 
 .footnote[
 [&midast;] 4 ~ 5 times for a high-tier university, which means about `r round((20298.63 * 5 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` RMD/h
@@ -118,7 +175,7 @@ https://k.sina.com.cn/article_2634151773_9d01f75d01900fkx7.html
 8506.2: 2017 公用经费
 2000: 2017 平均消费
 
---
+---
 
 Given a Chinese citizen watch [3 episodes per day](https://new.qq.com/rain/a/20190806A0GAH4), and there is an average 90sec ads before each episode,
 
