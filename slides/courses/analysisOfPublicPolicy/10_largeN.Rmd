@@ -6,16 +6,17 @@ institute: "Political Science, Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    lib_dir: libs
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
+      - default
       - zh-CN_custom.css
-      - styles.css
-      - "https://use.fontawesome.com/releases/v5.6.0/css/all.css"
-      - "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css"
+      - style_ui.css
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
 ---
 
@@ -355,7 +356,7 @@ Relations between variables
 
 ```{r crosstable}
 print(
-  ctable(mtcars$gear, mtcars$cyl, prop = 'n', totals = FALSE),
+  ctable(tobacco$gender, tobacco$smoker, prop = 'n', totals = FALSE),
   headings = FALSE,
   method = "render",
   footnote = NA
@@ -367,10 +368,10 @@ print(
 ## Scatter plot
 
 ```{r scatter}
-ggplot(mtcars, aes(wt, mpg)) +
+ggplot(tobacco, aes(age, cigs.per.day)) +
   geom_point() +
-  ylab("Miles/(US) gallon") +
-  xlab("Weight (1000 lbs)")
+  ylab("Cigrate per day") +
+  xlab("Age")
 ```
 
 ---
