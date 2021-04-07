@@ -1,6 +1,6 @@
 ---
-title: "Perspective: Group Theory"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Macro in a Micro View: Group Theory"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -17,47 +17,41 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-class: bottom, inverse
 
-background-image: url("images/court.jpg")
-background-position: center
-background-size: contain
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
-# Challenging Time
 
----
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
 
-## Procedure
+p_load(
+  emo
+) # data wrangling # data wrangling
 
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
 
-```{r stopwatch, echo = FALSE}
-library(countdown)
+xaringanExtra::use_fit_screen() # Alt + F
 
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
+# Functions preload
+set.seed(313)
 ```
 
-
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
 
 ---
 
 class: inverse, bottom
 
 # Group Theory
-
-???
-
-Bring the society in
 
 ---
 
@@ -69,37 +63,43 @@ Bring the society in
 
 ---
 
-## Development of the Theory
+class: middle, center
 
-<img src="images/madison.jpg" width = 120 />
-<img src="images/bentley.jpg" width = 120 />
-<img src="images/truman.jpg" width = 120 height = 150 />
-<img src="images/olson.jpg" width = 120 height = 160  />
-<img src="images/ostrom.jpg" width = 120 height = 170 />
+## Milestone Theorists of Group Theory
+
+<img src="images/group_madison.jpg" width = 190 />
+<img src="images/group_bentley.jpg" width = 190 />
+<img src="images/group_truman.jpg" width = 190 height = 230 />
+<img src="images/group_olson.jpg" width = 180 height = 230  />
+<img src="images/group_ostrom.jpg" width = 180 height = 230 />
 
 ???
 James Madison &rarr; Arthur Bentley &rarr; David Truman &rarr; Mancur Olson &rarr; Elinor Ostrom
 
 --
 
-<img src="images/evolution.jfif" width = 600 />
+<img src="images/group_evolution.jfif" width = 800 />
 
 ---
 
 ## Madison's Pluralism
 
-> .small[By a faction, I understand a number of citizens, whether amounting to a majority or a minority of the whole, who are united and actuated by some common impulse of passion, or of interest, .magenta[adversed] to the rights of other citizens, or to the permanent and aggregate interests of the community.   
---- Madison, *Federalist* #10]
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+By a faction, I understand a number of citizens, whether amounting to a majority or a minority of the whole, who are united and actuated by some common impulse of passion, or of interest, .magenta[adversed] to the rights of other citizens, or to the permanent and aggregate interests of the community.
+
+.tr[
+--- Madison, *Federalist* #10 
+
+"The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection"
+]
+]
 
 ???
 
-"The Utility of the Union as a Safeguard Against Domestic Faction and Insurrection," *Federalist*, No. 10
+Remove the causes of faction
++ Destroying liberty
++ Creating a society homogeneous in opinions and interests
 
-1. Remove the causes of faction
-    + Destroying liberty
-    + Creating a society homogeneous in opinions and interests
-
---
 
 Faction and Prevent Faction (?)
 
@@ -110,27 +110,38 @@ Faction and Prevent Faction (?)
 
 Control "only working in a republic"
 
-+ A large one (diverse interest groups)
-+ Under federalism (making local matter)
++ A .blue[large] one (diverse interest groups)
++ Under federalism (making .red[local] matter)
+
+Not fit pure democracy:
++ Only the representatives can construct common interests (Madison).
 
 ???
 
 The principle of popular sovereignty should prevent minority factions from gaining power.  
-Not fit pure democracy, only the representatives can construct common interests
 
 https://en.wikipedia.org/wiki/Federalist_No._10#Madison's_arguments
+
+--
+
+.center[.large[How do interest groups work?]]
 
 ---
 
 ## Bentley's Interest Group
 
+
+.large[
 + Activity of a group
 + Expression of an interest
 + Exertion of pressure
-
-???
+]
 
 Bentley, Arthur Fisher. 1908. *The Process of Government: A Study of Social Pressures*. Principia Press.
+
+.center[.large[*How About the Government*?]]
+
+???
 
 https://www.britannica.com/biography/Arthur-F-Bentley#ref164555
 
@@ -138,14 +149,16 @@ https://www.britannica.com/biography/Arthur-F-Bentley#ref164555
 
 ## Truman's Group Theory
 
+
+.large[
 Government Process: 
 
-.magenta[Via] interest groups (Bentley) &rarr;  
-.magenta[As] interactions of interest groups (Truman)
+.blue[Via] interest groups (Bentley) &rarr;  
+.red[As] interactions of interest groups (Truman)
+]
+Truman, David B. 1951. *The Governmental Process: Political Interests and Public Opinion*. New York: Knopf.
 
 ???
-
-Truman, David B. 1951. *The Governmental Process: Political Interests and Public Opinion*. New York: Knopf.
 
 The government plays an active role in establishing the conditions for interest groups to act.
 
@@ -153,9 +166,34 @@ The government plays an active role in establishing the conditions for interest 
 
 ## Truman's Interest Group
 
-+ Politicized interest groups is government institutions. 
-+ The interest groups' characteristics influence governmental decisions. 
-+ Diversity makes policy-making flexible.
+
+### Interest groups' strategic position
++ Status & prestige
++ Standing against the rule
++ Government membersion in the group
++ Usefulness as a source of information
+
+--
+
+### Interest groups's internal characteristics
++ Degree of organization
++ Skills of the leadership
++ Resources/money
+
+--
+
+### Governmental Institutions
++ Operating structure
++ Groups' effects on particular branches of the government
+
+---
+
+.center[Position + Characteristics + Institutions &rArr; Policies]
+
++ Government institutions: .red[Politicized] interest groups. 
++ Interest groups' .blue[characteristics] influence governmental decisions. 
++ Diversity makes policy-making .blue[flexible].
+
 
 ???
 
@@ -167,12 +205,32 @@ https://adambrown.info/p/notes/truman_the_governmental_process
 
 ---
 
-## Olson's Collective Action
+background-image: url("images/group_goods.jfif")
+background-position: center
+background-size: contain
 
-<img src="images/yogurt.jpg" width = 300 height = 200 />
-<img src="images/qingfen.jpeg" width = 300 />
-<img src="images/soldout.jfif" width = 300 height = 200 />
-<img src="images/ui.jpg" width = 300  />
+## Goods
+
+???
+
+A more general view beyond politics (just like neo-institutionalism over institutionalism)
+
+Olson's Collective Action
+
+Private: Software?  
+Club: Water network?  
+Common: Freshwater?  
+Public: Dam?
+
+
+---
+
+.center[
+<img src="images/group_yogurt.jpg" width = 450 height = 280 />
+<img src="images/group_qingfen.jpeg" width = 450 height = 280 />
+<img src="images/group_robTolietPaper.jpg" width = 450 height = 280 />
+<img src="images/group_ui.jpg" width = 450 height = 280 />
+]
 
 ???
 
@@ -183,35 +241,27 @@ public good
 
 ---
 
-background-image: url("images/goods.jfif")
-background-position: center
-background-size: contain
+.center[<img src="images/group_inspiring.png" width = 400  />]
 
-???
+## Examples of each type of goods  
+(Or a good belonging to two types?)
 
-Private: Software?  
-Club: Water network?  
-Common: Freshwater?  
-Public: Dam?
-
----
-
-.center[<img src="images/inspiring.png" width = 400  />]
-
-Examples of each type of goods  
-.small[or a good for two types? ]
-
-G1. Private  
-G2. Club  
-G3. Common  
-G4. Public
+1. Private  
+2. Club  
+3. Common  
+4. Public
 
 ```{r, echo = FALSE}
 library(countdown)
 
-countdown(minutes = 2,
-          seconds = 0,
-          play_sound = TRUE)
+countdown(
+  minutes = 2,
+  seconds = 0,
+  warn_when = 5,
+  bottom = "10%",
+  font_size = "3.5em",
+  play_sound = TRUE
+)
 ```
 
 
@@ -219,11 +269,11 @@ countdown(minutes = 2,
 
 class: right
 
-background-image: url("images/freeRider.png")
+background-image: url("images/group_freeRider.png")
 background-position: center
 background-size: contain
 
-## Collective Action Problem: Free Rider
+## Olson's Collective Action Problem: Free Rider
 
 ???
 
@@ -235,7 +285,7 @@ a situation in a shared-resource system where individual users, acting independe
 
 ---
 
-background-image: url("images/brexit.png")
+background-image: url("images/group_brexit.png")
 background-position: center
 background-size: contain
 
@@ -249,9 +299,9 @@ British people fells the marjority of the Europe is free rider
 
 ## Olson's Solutions
 
-### Size: .magenta[Small] is good
+### Size: .red[Small] is good
 
-.center[<img src="images/lianZuo.jpg" height = 400 />]
+.center[<img src="images/group_lianZuo.jpg" height = 450 />]
 
 ???
 
@@ -261,9 +311,9 @@ British people fells the marjority of the Europe is free rider
 
 ---
 
-### Privileged: Benefited groups work better
+### .red[Privileged]: Benefited groups work better
 
-.center[<img src="images/deliverInsurance.png" height = 400 />]
+.center[<img src="images/group_deliverInsurance.png" height = 400 />]
 
 ???
 
@@ -272,9 +322,9 @@ British people fells the marjority of the Europe is free rider
 
 ---
 
-### Selective Incentives
+### Selective .red[Incentives]
 
-.center[<img src="images/bloodDonation.jpg" height = 400 />]
+.center[<img src="images/group_bloodDonation.jpg" height = 450 />]
 
 ???
 
@@ -285,13 +335,13 @@ British people fells the marjority of the Europe is free rider
 
 ---
 
-### Coercion
+### .red[Coercion]
 
-.center[<img src="images/laJi.jpg" height = 500 />]
+.center[<img src="images/group_laJi.jpg" height = 500 />]
 
 ---
 
-## Rereasoning Collective Action
+## Going Beyond Olson: Rereasoning Collective Action
 
 *Critical Mass Theory* (Oliver & Marwell 1993)
 
@@ -299,26 +349,18 @@ Production functions determines the critical mass
 
 + Accelerating (bandwagon effects)
 + Decelerating (free-rider)
+
+--
+
+.pull-left[
 + S-shape
 
-???
+> People worry more about losing what they have than gaining more.
 
-
-
----
-
-## Introducing Institutions In
-
-Institutional arrangement for collective actions (Ostrom 1990)
-
-+ People are not autonomous
-+ Rules can reduce collective action issues
+]
+.pull-right[<img src="images/group_sshape.jpg" height = 250 />]
 
 ???
-
-Ostrom, Elinor. 1990. *Governing the Commons: The Evolution of Institutions for Collective Action*. Cambridge University Press.
-
-Other solutions
 
 1. Critical mass theory
 
@@ -326,22 +368,44 @@ Marwell, Gerald, and Pamela Oliver. 1993. The Critical Mass in Collective Action
 
 1. Each additional contribution has an increasing effect on the public
 good: BT downloading
+
 1. Each additional contribution has a declining effect on the public
 good: EU
+
 1. First a problem of overcoming start-up costs, then
-heightened mobilization, then declining marginal payoffs: 垃圾分类
-Partially caused by the pyschological utility curve: people worry more about losing what they have than gaining more.
+heightened mobilization, then declining marginal payoffs:
 
-1. Network Solution
+垃圾分类
+Partially caused by the pyschological utility curve:
 
-Scholz, John T., Ramiro Berardo, and Brad Kile. 2008. “Do Networks Solve Collective Action Problems? Credibility, Search, and Collaboration.” *The Journal of Politics* 70(2): 393–406.
+---
 
-Social capital: Credibility solves the collective action
+## Network & Cooperation
+
+
+Social capital: .red[Credibility] solves the collective action
 
 Cooperation
 
 + Activists: Seeking for central positions and more connections
-+ Resource users: Embedding in smaller, denser networks.
++ Resource users: Embedding in .blue[smaller, denser] networks.
+
+???
+
+Scholz, John T., Ramiro Berardo, and Brad Kile. 2008. “Do Networks Solve Collective Action Problems? Credibility, Search, and Collaboration.” *The Journal of Politics* 70(2): 393–406.
+
+
+---
+
+## Bringing Institutions In
+
+Ostrom, Elinor. 1990. *Governing the Commons: The Evolution of Institutions for Collective Action*. Cambridge University Press.
+
+Institutional arrangement for collective actions
+
++ People are .red[not] autonomous
++ Rules can .blue[reduce] collective action issues
+
 
 ---
 
@@ -354,13 +418,7 @@ Pluralism
 
 --
 
-Decision making theory
-Elitism
-
-Group theory
-
-System, structural functionalism
-
+.center[<img src="images/group_perspective.png" height = 380 />]
 
 
 ---
@@ -394,21 +452,19 @@ Where did the collective action happen?
 
 ## Solution
 
-.left-column[
-*转变传统观念, 优化参与环境*
+.pull-left[
+### 转变传统观念, 优化参与环境*
 + 确立服务型政府和共同治理的理念
 + 确立责任政府的理念
 + 转变“官本位”思想
 
-*培养公民意识, 增强参与能力*
+### 培养公民意识, 增强参与能力*
 + 培养公民意识
-
++ 提高公民素质
     ]
     
-.right-column[
-+ 提高公民素质
-
-*完善制度建设, 扩大参与渠道*
+.pull-right[
+### 完善制度建设, 扩大参与渠道*
 + 完善听证制度
 + 完善信息公开制度
 + 建立民意调查制度
@@ -418,7 +474,7 @@ Where did the collective action happen?
 
 ---
 
-.center[<img src="images/inspiring.png" width = 400  />]
+.center[<img src="images/group_inspiring.png" width = 400  />]
 
 Do they use collective action theory appropriately?
 
@@ -430,6 +486,6 @@ countdown(minutes = 2,
           play_sound = TRUE)
 ```
 
-```{r pdfPrinting, eval = TRUE, include = FALSE}
+```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "07_.*.html"), timeout = 300)
 ```
