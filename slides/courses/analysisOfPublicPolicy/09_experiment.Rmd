@@ -1,6 +1,6 @@
 ---
-title: "Method: Experimental Analysis"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Crown of Causal Inference: Experimental Analysis"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -19,50 +19,43 @@ output:
       countIncrementalSlides: false
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
-library(pacman)
-p_load(knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       broom, tidyverse) # data wrangling
 
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  emo
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
 set.seed(313)
 ```
 
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
 
-# Challenging Time
-
 ---
 
-## Procedure
+class: inverse, bottom
 
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
+# Experiment
 
 ---
 
 ## Overview
 
-.right-column[<img src="images/experiment.jpg" height = 300 />]
+.right-column[<img src="images/lab_experiment.jpg" height = 300 />]
 
 .left-column[
 
@@ -75,23 +68,29 @@ countdown(minutes = 0,
 
 ---
 
-class: inverse, bottom
+## Facts You May not Know
 
-# Experimental Analysis
+1. Not every research .red[in the lab] is .blue[an experiment].
 
----
+???
 
-## Facts about Experimental Methods
-
-1. Not every type of research in the lab is an experiment.
+what you did in chemistry in middle school.
 
 --
 
-1. Not every experiment has to be conducted in the lab.
+1. Not every .red[experiment] has to be conducted .blue[in the lab].
+
+???
+
+field, survey
 
 --
 
 1. Not every method called "experiment" is an experiment.
+
+???
+
+natural experiment
 
 --
 
@@ -100,15 +99,15 @@ class: inverse, bottom
 
 ---
 
-## Why Experiment
+## Why Bother?
 
-.center[<img src="images/correlationCausation.jpg" height = 500 />]
+.center[<img src="images/lab_correlationCausation.jpg" height = 500 />]
 
 ---
 
-## Logic of Counterfactual
+## Counterfactual Logic
 
-.center[<img src="images/counterfactual.jpg" height = 500 />]
+.center[<img src="images/lab_counterfactual.jpg" height = 500 />]
 
 ???
 
@@ -135,19 +134,19 @@ Fogel, Robert William, and Stanley L. Engerman. 1995. *Time on the Cross: The Ec
 
 ## When Sticking with the Observed
 
-No .magenta[perfect] counterfactual cases
+No .red[perfect] counterfactual cases
 
-We have to see causation from correlations，but...
+We have to see causation .red[from correlations]，but...
 
 --
 
-.center[<img src="images/confounder.jpg" height = 300 />]
+.center[<img src="images/lab_confounder.jpg" height = 300 />]
 
 ---
 
 ## Solution: Watching from an Aggregated Level
 
-.center[<img src="images/controlTreatment.png" height = 400 />]
+.center[<img src="images/lab_controlTreatment.png" height = 400 />]
 
 --
 
@@ -157,15 +156,15 @@ How to divide the groups?
 
 ## Randomization, Ta-Da~
 
-.center[<img src="images/breakConfounder.png" height = 400 />]
+.center[<img src="images/lab_breakConfounder.png" height = 450 />]
 
 ---
 
 ## Result of Randomization
 
-A .magenta[balanced] data
+A .red[balanced] data
 
-.center[<img src="images/balance-1.png" height = 400 />]
+.center[<img src="images/lab_balance.png" height = 450 />]
 
 ---
 
@@ -207,7 +206,7 @@ Only treatment can make effects.
 * Subjects change their behaviors
 * Third party effects
 
----
+???
 
 ## SUTVA
 
@@ -215,17 +214,17 @@ Only treatment can make effects.
 
 The effect of stimulus on one subject is affected by other subjects.
 
---
+
 
 ### Violation (e.g., Herd Effect)
 
 .center[<img src="images/herdBehavior.jpg" height = 300 />]
 
-???
+
 
 Stable Unit Treatment Value Assumption
 
----
+
 
 ## Montonicity and nonzero causal effects
 
@@ -234,7 +233,7 @@ Stable Unit Treatment Value Assumption
 * The probability being treated is at least as great in the treatment as in the control.
 * The treatment assignment has an effect on the probability that at least some subjects are treated.
 
---
+
 
 ### Violation
 
@@ -268,9 +267,9 @@ kable(text_tb, "html", align = "lcc")%>%
 > The approximate truth of the inference or knowledge claim.  
 ---Morton & Williams (2010, 254)
 
-+ Internal (".magenta[within]")
-+ External(".magenta[beyond]")
-+ Ecological (".magenta[around]")
++ Internal (".red[within]")
++ External(".red[beyond]")
++ Ecological (".red[around]")
 
 ???
 
@@ -279,7 +278,7 @@ Morton, Rebecca B., and Kenneth C. Williams. 2010. *Experimental Political Scien
 
 ## Internal Validity
 
-The approximate truth of the inference or knowledge claim .magenta[within] a target population studies.
+The approximate truth of the inference or knowledge claim .red[within] a target population studies.
 
 + Construct validity
 + Causal validity
@@ -287,9 +286,9 @@ The approximate truth of the inference or knowledge claim .magenta[within] a tar
 
 ## External vs. Ecological Validities
 
-* External validity: The approximate truth of the inference or knowledge claim .magenta[beyond] a target population studies.
+* External validity: The approximate truth of the inference or knowledge claim .red[beyond] a target population studies.
 
-* Ecological validity: Whether the methods, materials, and settings of the research are similar to a given target .magenta[environment].
+* Ecological validity: Whether the methods, materials, and settings of the research are similar to a given target .red[environment].
 
 ---
 

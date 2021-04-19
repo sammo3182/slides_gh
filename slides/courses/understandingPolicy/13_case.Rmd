@@ -1,0 +1,336 @@
+---
+title: "Method: Case Study"
+subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+author: "Yue HU"
+institute: "Political Science, Tsinghua University"
+output:
+  xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+---
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(pacman)
+p_load(knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       summarytools,
+       broom, tidyverse) # data wrangling
+```
+
+class: bottom, inverse
+
+background-image: url("images/court.jpg")
+background-position: center
+background-size: contain
+
+# Challenging Time
+
+---
+
+## Procedure
+
+1. Drawing a respondent from the audience
+1. The statesperson talks.
+1. The statesperson queries.
+1. The respondent challenges.
+1. Preparation (30 sec)
+1. The respondent answers.
+1. The statesperson answers.
+
+```{r stopwatch, echo = FALSE}
+library(countdown)
+
+countdown(minutes = 0,
+          seconds = 30,
+          play_sound = TRUE)
+```
+
+???
+
+Q1. Comparing modernism and postmodernism
+Q2. What are social constructivism and interpretivism
+
+---
+
+## Overview
+
+1. What's case study (what's a case)?
+1. Why case study?
+1. Fundamental logic of case study
+1. How to pick a case
+
+---
+
+class: inverse, bottom
+
+# Small-N Methods
+
+---
+
+## A Survey of Small-N Methods
+
++ .magenta[Case Study]
++ Process Tracing
++ Other Methods
+
+---
+
+## What's Case Study
+
+> An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units  
+ ---Gerring (2004: 342).
+
+???
+Gerring, John. 2004. “What Is a Case Study and What Is It Good For?” American Political Science Review 98(2): 341–54.
+
+--
+
+*How to Identify a Case?*
+
+Boundary of a Case:
+
++ Spatial
++ Temporal
+
+---
+
+## An Observation, Variable, Case?
+
+```{r}
+text_tb <- data.frame(Observed = 1:8,
+                      Gender = rep(c("Male", "Female"), times = 4), 
+                      Country = rep(c("US", "UK"), each = 4))
+
+kable(text_tb, "html", align = "crr")%>%
+  kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
+```
+
+---
+
+## Common Components of a Case Study
+
+### Target
+
+Covariational relations
+
+--
+
+### Basic types
+
+1. One unit over time
+1. N subunit at one time
+1. N subunit over time
+
+---
+
+## Why Single Case?
+
+* Deep rather than broad, bounded scope of proposition
+* Comparing rather than represent other cases
+* Mechanism rather than effect
+* Deterministic rather than probabilistic relations
+* Exploring rather than confirmatory test
+
+---
+
+## Why don't we let the case be representative?
+
+Randomization is cool, right?
+
+Why not?!
+
+
+???
+
+Representativeness roots from large-N analysis
+
+---
+
+## Fundamental Logic of Case Comparison
+
+* Most similar systems
+* Most different systems
+
+---
+
+## Most Similar Systems (Concomitant Variation)
+
+> The belief that systems as similar as possible with respect to as many features as possible constitute the optimal samples for comparative inquiry.
+---Przeworski and Teune (1970, 32)
+
+---
+
+## Leadership Powerfulness
+
+
+```{r}
+text_tb <- data.frame(US = c("American continent", "Broad territory", "Anglo-Saxon", "Democracy", "Federal", "Presidential"), 
+                      Canada = c("American continent", "Broad territory", "Anglo-Saxon", "Democracy", "Federal", "Parliamentary"))
+rownames(text_tb) <- c("Position", "Size", "Culture", "Polity", "Government", "Legislature")
+
+kable(text_tb, "html", align = "cll")%>%
+  kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
+```
+
+---
+
+## Principles of the Most Similar System
+
+**Focus**: .magenta[inter]systemic differences
+
+--
+
+**Assumption**: Characteristics shared by one group of systems, such as can be removed (control)
+
+--
+
+**Explanatory**: Difference
+
+--
+
+**Control**: Similarities between the systems
+
+---
+
+## Practice
+
+1. How do we know if the policy of waste sorting works? 
+1. What environmental policies (giving a pair of examples) is best for a given city? 
+1. When another contagion comes, what should a local government do?
+1. What forms the political correctness of a society? 
+
+---
+
+## Most Different System
+
+Skocpol, Theda. 1979. States and Social Revolutions: A Comparative Analysis of France, Russia, and China. Cambridge: Cambridge University Press.
+
+---
+
+## Principles of Most Different systems
+
+* **Focus**: .magenta[intra]systemic similarities and differences
+
+--
+
+* **Assumption**: systemic factors do not play any role in explaining the observed behavior.
+
+--
+
+* **Explanatory**: Similarity
+
+--
+
+* **Control**: Differences in the common systemic characteristics
+
+---
+
+## Practice
+
+1. How do we know if the policy of waste sorting works? 
+1. What environmental policies is best for a given city? 
+1. When another contagion comes, what should a local government do?
+1. What forms the political correctness of a society? 
+
+Yeah, yeah, the same questions~~
+
+---
+
+## Comparison
+
+```{r}
+text_tb <- data.frame( Item = c("Assumption", "Focus", "Control", "Target"),
+  MSS = c("Similarity is irrelevant", "Difference", "Shared properties", "Sufficiency"), 
+  MDS = c("Differences is irrelevant", "Similarity", "Different features", "Necessity"))
+
+kable(text_tb, "html", align = "lll") %>%
+  kable_styling(full_width = TRUE, position = "center") %>%
+    column_spec(1, bold = T, border_right = T) %>%
+      column_spec(2:3, border_right = T)
+```
+
+---
+
+## How To Pick a Case?
+
+Core principle: Minimizing .magenta[selection bias]
+
+.center[<img src="images/selectionBias.gif" height = 400 />]
+
+---
+
+## Different Selection, Different Consequences
+
+.center[<img src="images/selectionX.png" height = 500 />]
+
+???
+
+Select X
+
+---
+
+.center[<img src="images/selectionY.png" height = 600 />]
+
+???
+
+Select Y
+
+---
+
+.center[<img src="images/selectionXY.png" height = 600 />]
+
+???
+
+Select XY
+
+---
+
+.center[<img src="images/ideal.png" height = 500 />]
+
+---
+
+## When Selection Can Be Useful
+
+### Most similar/different systems
+
+--
+
+### Least-likely case
+
+If the theory can make it here, it can make it anywhere.
+
+--
+
+### Deviant Cases
+
+Cases that do not conform to the predictions made by the theory
+
+---
+
+## Take-Home Points
+
++ Logic of case comparison
+  + Most similar
+  + Most different
++ Case selection
+  + Selection on X
+  + Selection on Y
+  + Selection on XY
+
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "13_.*.html"), timeout = 300)
+```
