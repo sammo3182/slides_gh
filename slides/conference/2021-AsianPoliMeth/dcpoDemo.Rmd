@@ -1,5 +1,6 @@
 ---
-title: "Democracy, Public Support, and Measurement Uncertainty"
+title: "Understanding Public Opinions Across Regions, Time, and Surveys"
+subtitle: "New Method and New Evidence with Dynamic Comparative Public Opinion (DCPO)"
 author: 
 - Yuehong 'Cassandra' Tai, University of Iowa
 - Yue Hu, Tsinghua University
@@ -23,12 +24,13 @@ output:
 class: inverse, bottom
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
 xaringanExtra::use_xaringan_extra(c("tile_view", # O
                                     "broadcast", 
                                     "panelset",
                                     "tachyons"))
+
 
 library(pacman)
 
@@ -36,69 +38,28 @@ library(pacman)
 set.seed(313)
 ```
 
-<!-- https://sites.google.com/view/asian-polmeth-2021/home -->
-
 # Overview
 
-+ Puzzle: Democracy &larr;?&rarr; Public support
++ Methods to Handle Cross-Survey Comparisons
 
-+ Recent findings
++ A New Method: Dynamic Comparative Public Opinion (DCPO)
 
-+ .red[Uncertainty] matters
++ Method Comparison
 
-+ Reliable evidence
-
-+ Rethinking: Democracy &harr; Public support
++ Application: Democracy &larr;?&rarr; Public support
 
 ---
 
-## Democracy &larr;?&rarr; Public support
+## Cross-Region/Time/Survey Analysis
+
+~~Meta analysis~~
+
++ .blue[Efficient] allocation
++ .blue[Diverse] perspectives
++ .red[Incomparable] data
 
 
-.bg-black.golden.ba.shadow-5.ph4.mt3.center[
-Democracy &rarr; public support
-]
-
-???
-
-Democratic governance &rarr; robust public support
-
-Lipset, Seymour Martin. 1959. “Some Social Requisites of Democracy: Economic Development and Political Legitimacy.” *American Political Science Review* 53(1):69–105.
-
-Easton, David. 1965. *A Systems Analysis of Political Life*. New York: Wiley
-
---
-
-### Empirics
-
-Support .navy[&uarr;] &rarr; democracy .navy[&uarr;] .small[(e.g., Inglehart & Welzel 2005)]    
-Support .navy[&uarr;] &rarr; democracy .orange[&#8675;] .small[(e.g., Fails & Pierce 2010)]
-
-???
-
-Countries with greater democratic support have been found to become stronger and more stable democracies
-
-Inglehart, Ronald and Christian Welzel. 2005. *Modernization, Cultural Change, and Democracy*. Cambridge: Cambridge University Press. 
-
-Fails, Matthew D. and Heather Nicole Pierce. 2010. “Changing Mass Attitudes and Democratic Deepening.” *Political Research Quarterly* 63(1):174–187.
-
-(Insignificant positive with one-year survey, and insig negative with multiple years)
-
---
-
-Democracy .navy[&uarr;] &rarr; support .navy[&uarr;] .small[(e.g., Wuttke et. al. 2020) ]   
-Democracy .navy[&uarr;] &rarr; support .red[&darr;] .small[(e.g., Foa & Mounk 2017)]  
-???
-More experience with democracy yields more democratic support 
-vs.
-Long-established democracies are suffering from democratic fatigue 
-
-Wuttke, Alexander, Christian Schimpf and Harald Schoen. 2020. “When the Whole Is Greater
-than the Sum of Its Parts: On the Conceptualization and Measurement of Populist Attitudes and Other Multidimensional Constructs.” *American Political Science Review* 114(2):356–374.
-
-Foa, Roberto Stefan and Yascha Mounk. 2017. “The Signs of Deconsolidation.” *Journal of Democracy* 28(1):5–15
 ---
-
 
 ## Puzzle Makers: Invisible Opinions
 
@@ -133,32 +94,69 @@ across countries, overtime.
 ]
 
 ???
+
 Different respondents have different concepts of democracy and different way to support democracy. 
 United Kindom, lawmakers leave. 
 Swarming Capital defending democracy.  
 
 ---
 
-class: center
+class: center, middle, large
 
-.red[Different] questions   
-.red[Different] respondents
-
-.center[&rArr; .red[Incomparable] data]
+.blue[Different] questions   
+.blue[Different] people   
+&dArr;    
+.red[Incomparable] data   
+&dArr;    
 
 --
 
-Potential solution: Latent variable analysis
+ Solution:     
+.green[Latent variable analysis]
 
 ---
 
-## Latent Variable Analysis Saving the World?
+## Two-Parameter Item Response Theory (2PL-IRT)
 
-Solt (2020b)
+.center[<img src="images/2pirt.png" height = 500 />]
+
+???
+
+Difficulty/discrimination: how well a question can different people from below to above
+
+Dispersion: magnitude of the measurement error
+
+---
+
+## Newest Development
+
+.center[IRT &rarr; Ordered IRT &rarr; DGIRT &rarr; ]
+
+
+.pull-left[
+<img src="images/fsolt.jpeg" height = 350 />
+]
+
+.pull-right[
+.red[D]ynamic .red[C]omparative .red[P]ublic .red[O]pinion
+
+Running time:
+Claasseen 2019 <   
+DCPO <   
+DGIRT
+]
+
+
+???
+
+Stegmueller 2011+ Caughey & Warshaw 2016, DGIRT, Claassen 2019, 2020
+
+---
+
+## DCPO
 
 $$Pr(y_{ktqr} = 1) = logist^{-1}[\frac{\bar{\theta}'_{kt} - {(\beta_{qr} + \color{orange}{\delta_{kq}})}}{\sqrt{\alpha^2_q + (1.7\times \color{red}{\sigma_{kt}})^2}}]$$
 
-$$y_{ktqr}\sim  BetaBinomial (y_{ktqr}, \alpha_{ktqr}, \beta_{ktqr})$$
 
 .pull-left[
 $\bar{\theta}$: Mean public opinion    
@@ -169,6 +167,12 @@ $\bar{\theta}$: Mean public opinion
 .pull-right[
 .orange[&delta;]: Country-specific item bias   
 .red[&sigma;:] Polarization in public opinion]
+
+--
+
+.green[Random walk priors] for opinion mean and sd
+
+$$\bar{\theta}_{ktqr}\sim N(\bar{\theta}'_{k, \color{green}{t-1}}, \sigma^2_{\bar{\theta}'}),\sigma_{kt}\sim LN(\sigma_{k, \color{green}{t-1}}, \sigma^2_{\sigma})$$
 
 ???
 D(dynamic)C(comparative)PO
@@ -188,15 +192,73 @@ Solt, Frederick. 2020b. “Modeling Dynamic Comparative Public Opinion.” SocAr
 
 ---
 
-## Recent Findings 
-
-Claassen (2020a; 2020b)
-
-+ Support .navy[&uarr;] &rarr; democracy (endurance) .navy[&uarr;] 
-+ Democracy .red[&darr;] &rarr; support .navy[&uarr;]
+background-image: url("images/irtCompare.png")
+background-position: center
+background-size: contain
 
 
 ???
+
+Bounded: 使用logit归为0-1
+
+---
+
+class: inverse, bottom
+
+# Application: 
+# Democracy &harr; Public support
+
+---
+
+## Democracy &larr;?&rarr; Public support
+
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+Democracy &rarr; public support
+]
+
+???
+
+Democratic governance &rarr; robust public support
+
+Lipset, Seymour Martin. 1959. “Some Social Requisites of Democracy: Economic Development and Political Legitimacy.” *American Political Science Review* 53(1):69–105.
+
+Easton, David. 1965. *A Systems Analysis of Political Life*. New York: Wiley
+
+--
+
+### Empirics
+
+
+Support .navy[&uarr;] &rarr; democracy .orange[&#8675;] .small[(e.g., Fails & Pierce 2010)]    
+Support .navy[&uarr;] &rarr; democracy) .navy[&uarr;] .small[(Claassen 2019)]
+
+???
+
+Countries with greater democratic support have been found to become stronger and more stable democracies
+
+Inglehart, Ronald and Christian Welzel. 2005. *Modernization, Cultural Change, and Democracy*. Cambridge: Cambridge University Press. 
+
+Fails, Matthew D. and Heather Nicole Pierce. 2010. “Changing Mass Attitudes and Democratic Deepening.” *Political Research Quarterly* 63(1):174–187.
+
+(Insignificant positive with one-year survey, and insig negative with multiple years)
+
+--
+
+Democracy .navy[&uarr;] &rarr; support .navy[&uarr;] .small[(e.g., Wuttke et. al. 2020)]   
+Democracy .red[&darr;] &rarr; support .navy[&uarr;] .small[(Claassen 2020)]
+
+???
+More experience with democracy yields more democratic support 
+vs.
+Long-established democracies are suffering from democratic fatigue 
+
+Wuttke, Alexander, Christian Schimpf and Harald Schoen. 2020. “When the Whole Is Greater
+than the Sum of Its Parts: On the Conceptualization and Measurement of Populist Attitudes and Other Multidimensional Constructs.” *American Political Science Review* 114(2):356–374.
+
+Foa, Roberto Stefan and Yascha Mounk. 2017. “The Signs of Deconsolidation.” *Journal of Democracy* 28(1):5–15
+
+
 thermostatic effect. 
 
 ---
@@ -204,25 +266,29 @@ thermostatic effect.
 ## Uncertainty Matters
 
 
-Claassen (2020a; 2020b) .red[IGNORE] uncertainty.
+No uncertainty engaged
 
-&hArr; The latent variable is measured .orange["perfectly"].
+&hArr; The latent variable is measured .orange["~~perfectly~~"].
 
 &rArr; Biased coefficients and standard errors.
 
----
+--
 
-## Better Method, Better Data
-
-### Incorporation Uncertainty
+### Incorporating Uncertainty (Tai, Hu & Fred 2021)
 
 1. Latent variable estimation &times; .red[1000];
 1. Regressing with the .navy[distribution];
 1. .navy[Combination] with Rubin's Rule.
 
---
+---
 
-### Enriched data
+## Better Method + Enriched data
+
+DCPO 
+
+.center[<img src="images/irtFitCompare.png" height = 250 />]
+
+--
 
 1988~2020 (144 countries, 33 years)
 
@@ -231,11 +297,6 @@ Comparing with Claassen (2020a, 2020b):
 > 26.2% .red[more] questions;     
 33.3% .red[more] survey sources
 
----
-
-### Superior Measurement
-
-.center[<img src="images/irtCompare.png" height = 450 />]
 
 ---
 
@@ -291,16 +352,16 @@ Qi, Lingling and Doh Chull Shin. 2011. “How Mass Political Attitudes Affect De
 
 ## Take-Home Points
 
-
-1. Uncertainty matters (a lot)
-    + Latent variable analysis
-    + Public support of democracy
+1. Rethinking Democracy &harr; Public support: .red[~~Sanguine~~] assessment
+1. Cross-section time-series diverse-question    .blue[DCPO]
+    + `DCPO`
+    + `DCPOtools`
     
-1. Rethinking Democracy &harr; Public support
-    + ~~Sanguine~~ assessment
-    + Plenty room for future research
+<iframe src="https://ctai.shinyapps.io/dmsweb/" height = 300 width = 1000></iframe>
+    
+
 ???
-Uncertanty caused by measurement and in concept. 
+Uncertainty caused by measurement and in concept. 
 without taking uncertainty into account, no way of knowing whether their conclusions are correct or not even their studies have been published in top journals. 
 
 Sanguine, super optimistic fate of democracies rely on their public, but is not well grounded. 
@@ -319,20 +380,4 @@ class: inverse, center, middle
 
 `r icon::fontawesome("github")`&nbsp; [sammo3182](https://github.com/sammo3182)
 
----
 
-class: inverse, bottom
-
-# Appendix
-
----
-
-### Superior Measurement
-
-.center[<img src="images/validationTest.PNG" height = 350 />]
-
----
-
-## DCPO-Democracy Data
-
-<iframe src="https://ctai.shinyapps.io/dmsweb/" height = 550 width = 1000></iframe>
