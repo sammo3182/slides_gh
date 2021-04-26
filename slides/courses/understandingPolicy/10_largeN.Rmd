@@ -30,7 +30,7 @@ library(pacman)
 p_load(
   emo, knitr, kableExtra, # dependency
        stringr, arm, car, 
-       summarytools,
+       modelsummary,
        broom, tidyverse
 ) # data wrangling # data wrangling
 
@@ -128,8 +128,8 @@ Let's play a .orange[happy-happy] kid game:
 
 ---
 
-<video width="700" height="600" controls>
-    <source src="images/lar_normalDistribution_bbc" type="video/mp4">
+<video width="1000" height="600" controls>
+    <source src="images/lar_normalDistribution_bbc.mp4" type="video/mp4">
 </video>
 
 ---
@@ -248,19 +248,12 @@ class: small
 ## Descriptive Statistics
 
 ```{r descriptive}
-library(summarytools)
+df_descrptive <- select(mtcars, -am, -carb) %>% 
+  mutate(across(where(~length(unique(.x)) == 2), as.logical),
+         across(where(~length(unique(.x)) < 7 & !is.logical(.x)), as.factor))
 
-print(dfSummary(
-  select(tobacco, gender, BMI, disease),
-  valid.col = FALSE,
-  na.col = FALSE,
-  silent = TRUE,
-  plain.ascii = FALSE,
-  headings = FALSE,
-  graph.magnif = 0.75
-),
-method = 'render',
-footnote = NA)
+datasummary_skim(df_descrptive)
+datasummary_skim(df_descrptive, type = "categorical")
 ```
 
 ---
@@ -270,10 +263,10 @@ footnote = NA)
 Relations between variables
 
 ```{r scatter, fig.align='center'}
-ggplot(tobacco, aes(age, cigs.per.day)) +
+ggplot(mtcars, aes(wt, mpg)) +
   geom_point() +
-  ylab("Cigrate per day") +
-  xlab("Age")
+  ylab("Mileage per Gallon") +
+  xlab("Weight")
 ```
 
 ---
@@ -300,17 +293,14 @@ ggplot(tobacco, aes(age, cigs.per.day)) +
 
 + Goodness of fit
 
-Hint: Wonder how to conduct such analysis?
 
-Ta-da~~~
-
-.green["治理技术专题：政治数据分析" (70700173)]
 ]
 
 ---
 
 ## Take-Home Points
 
+.pull-left[
 + When large-N: When experiments are not available
 + Why large-N: 
     + Law of Large Number
@@ -320,12 +310,17 @@ Ta-da~~~
     + Univariate
     + Bivariate
     + Multivariate
-    
+]
+
 --
 
-Again,
+.pull-right[
+### Bonus: Wonder how to conduct such analysis?
+
+Ta-da~~~
 
 .large[.green["治理技术专题：政治数据分析" (70700173)] 😋]
+]
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "10_.*.html"), timeout = 300)
