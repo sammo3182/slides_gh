@@ -1,6 +1,6 @@
 ---
-title: "Method: Small-N Approach"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Interpretive Research: Small-N Approach"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -17,104 +17,72 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
+
+p_load(
+  emo, knitr, kableExtra, # dependency
        stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
+set.seed(313)
 ```
 
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
 
 ---
 
 ## Overview
 
-1. What's a small-N (interpretive) approach?
+1. What's a small-N analysis?
 1. What can it do?
 1. How can you tell a small-N based research is good?
 1. How different it is from LNA?
 
----
-
-class: inverse, bottom
-
-# Small-N Approach (SNA)
 
 ---
 
-## How Small Is Small?
+## Small-N Analysis
 
-One, a couple, or several...hundreds
-
-???
-
-hundreds of documents
+a.k.a., interpretive approach (vs. naturalist approach)
 
 --
 
-Don't forget some large-N analyses (LNA) also focus on one, a pair, or several hundreds.
+Why small N? The data doesn't allow large N analysis...
 
----
+--
 
-## Why Small?
+.pull-left[
+WRONG!
 
-.left-column[
+.center[<img src="images/small_badAss.jpg" height = 350 />]
 
-### Hey, LNA guys...
-
-+ Emotional distance? 
-+ Context?
-+ Value (of researchers)?
 ]
 
 --
 
-.right-column[
+.pull-right[
 
-.small[What does Monk Tang mean?]
-<img src="images/chaPing.jpg" />
-
-]
-
-???
-
-The real world is very complex, dude~
-
----
-
-## What Can SNA Do?
+### What Can an Interpretive Approach Do?
 
 1. Value judging
 1. Story telling
@@ -122,16 +90,19 @@ The real world is very complex, dude~
 1. Dramaturgical analysis
 1. Category analysis
 
+]
+
+
 ---
 
 ### Value Judging
 
-.left-column[
+.pull-left[
 + Identifying "communities of meaning"
 + Studying the framing and interactions among the communities
 ]
 
-.right-column[
+.pull-right[
 <img src="images/essenceOfDecision.jpg" />
 ]
 
@@ -139,14 +110,19 @@ The real world is very complex, dude~
 
 Graham Tillett Allison Jr. , American political scientist and professor at the John F. Kennedy School of Government at Harvard
 
+Another example: George Lakoff: Don't Think of an Elephant! 
+
+Writing about framing and metaphor, a book writing for liberal peoples. Thus called them (Democrats) the 进步的, the Republicans 保守派
+
 ---
 
 ### Story Telling
 
+.pull-left[
 Telling stories about a certain group or policy based on archives and interviews.
+]
 
-
-.center[<img src="images/semiQueer.jpg" height = 150 />]
+.pull-right[<img src="images/semiQueer.jpg" height = 250 width = 400 />]
 
 ???
 
@@ -154,13 +130,20 @@ Balay, Anne. 2018. Semi Queer: Inside the World of Gay, Trans, and Black Truck D
 
 Winner of the Lambda Literary Emerging Writers Award. PhD students at University of Michigan’s American Culture.
 
+Another example: 1587, a Year of No Significance: The Ming Dynasty in Decline，一个皇帝和五个名臣的故事
+
 --
 
 ### Narrative Analysis
 
-Going beyond telling a story  
-Using story to .magenta[make an argument]  
-Putting an argument in the .magenta[thick context]
+Going .red[beyond] telling a story  
+Using story to make an argument
+Putting an argument in the .blue[thick context]
+
+???
+
+Skocpol, Theda. 1979. States and Social Revolutions: A Comparative Analysis of France, Russia and China. Cambridge University Press.
+
 
 ---
 
@@ -168,7 +151,7 @@ Putting an argument in the .magenta[thick context]
 
 How do policy and policy makers "act"?
 
-.left-column[
+.pull-left[
 + "Actors"
 + "Content"
 + "Theme"
@@ -177,13 +160,15 @@ How do policy and policy makers "act"?
 
 --
 
-.right-column[
+.pull-right[
 <img src="images/theoVanGogh.jpg" />
 ]
 
 ???
 
-Dutch film actor Theo van Gogh was assassinated by a Dutch-Moroccan Muslim wo ojbected to the director's movie Submission that critcized the treatment of women in Islam.
+Dutch film actor Theo van Gogh was assassinated by a Dutch-Moroccan Muslim wo ojbected to the director's movie Submission that criticized the treatment of women in Islam.
+
+Application: 被套路，人生如戏
 
 ---
 
@@ -204,7 +189,7 @@ Strüver, Georg. 2017. “China’s Partnership Diplomacy: International Alignme
 
 ---
 
-## Speciality of SNA Researchers (vs. LNA Researchers)
+## Small-N vs. Large-N
 
 + Role
 + Data collection
@@ -212,35 +197,37 @@ Strüver, Georg. 2017. “China’s Partnership Diplomacy: International Alignme
 
 ---
 
+.pull-left[
 ### Role
 
-1. Researchers are human
+1. Researchers are .blue[human]
     + Experiences
     + Cognitive differences
-    
-???
 
-Cognitive differences: men and women; allowing tourists entering the campus
+1. Researchers have .blue[value]
 
---
-
-1. Researchers have value
-
---
-
-1. Researchers participate
+1. Researchers .blue[participate]
     + Observer vs. Insider
     + Undercover vs. Activist
+]
 
 ???
+Cognitive differences: men and women; allowing tourists entering the campus
 
 Researchers generalize/create culture, etc.
 
----
+--
+
+.pull-right[
 
 ### Data Collection
 
-Observing .magenta[with intention to understand];
+1. Observing with intention to .red[understand];
+
+1. Interviewing with respondents as .red[conversational] partner;  
+
+1. Reading the documents as they were writing .red[meaningfully].
+]
 
 ???
 
@@ -248,20 +235,9 @@ Observing .magenta[with intention to understand];
 
 Using American view of occupancy (and thus housing policy enforcement) is discriminated.
 
---
-
-Interviewing with respondents as .magenta[conversational partner];  
-
-???
 2. Schaffer, Frederic Charles. 2000. Democracy in Translation: Understanding Politics in an Unfamiliar Culture. Cornell University Press.
 
 Interview of people in Senegal about democracy and American democracy
-
---
-
-Reading the documents as they were writing .magenta[meaningfully].
-
-???
 
 3. Chock, Phyllis Pease. 1995. “Ambiguity in Policy Discourse: Congressional Talk about Immigration.” Policy Sciences 28(2): 165–84.
 
@@ -271,7 +247,7 @@ By examining the written record of spoken language, she was able to analyze the 
 
 ### Analysis
 
-"No need to transform words into numbers"
+.center["No need to transform words into numbers"]
 
 + Numbers are not the results but the sources
 
@@ -299,36 +275,35 @@ Analysis and collection are intertwined.
 
 ## Evaluating SNA
 
-.left-column[
+.pull-left[
 
 ~~Be objective~~
 
-Reality is universal;
-Policy is not constructed.
-
-In large N, implications are clear at least.
+Reality is not universal;
+Policy is constructed.
 
 ]
 
 --
 
-.right-column[
+.pull-right[
 
-~~Be voiceless~~
-
-<img src="images/Beauvoir.jpg" height = 350 />
+~~Be voiceless~~    
+.center[<img src="images/Beauvoir.jpg" height = 200 />]
 
 ]
 
 ???
 
+西蒙娜·德·波伏娃
+
 Simone de Beauvoir, The Second Sex, gender is constructed.
 
 One is not born a woman, but becomes one.
 
----
+--
 
-.left-column[
+.pull-left[
 
 ~~Be experimental~~
 
@@ -338,10 +313,10 @@ The SNA assumes impacts and multicausality are data and useful.
 
 --
 
-.right-column[
+.pull-right[
 ~~Be replicated~~
 
-<img src="images/twins.gif" height = 300 />
+.center[<img src="images/twins.gif" height = 150 />]
 
 ]
 
@@ -353,23 +328,7 @@ The SNA assumes impacts and multicausality are data and useful.
 
 ---
 
-## A Different Paradigm
-
-Philosophically, epistemologically, and ideologically
-
-+ Perfect validity is impossible
-+ The society is constructed
-+ Data do not talk, researchers do
-
-
-???
-
-researchers interpret data
-researchers generalize conclusions
-
----
-
-## Novel Evaluation System
+## Alternative Evaluation System
 
 + Credibility
 + Transferability

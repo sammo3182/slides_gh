@@ -1,9 +1,8 @@
 ---
-title: "Method: 'Big-Data' Analysis"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Hottest Method: 'Big-Data' Analysis"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
-# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -18,75 +17,67 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
+
+p_load(
+  emo, knitr, kableExtra, # dependency
        stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
+set.seed(313)
 ```
 
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
 
 ---
 
 ## Overview
 
 * What's "big" data?
-* Why (not) big data?
 * What can big data do?
-* Common big-data approaches
 * Limitation of big-data analysis
 
 ---
 
 class: inverse, bottom
 
-# "Big-Data" Analysis
+# "Big-Data" Analysis (Data Sciene) 
 
 ---
 
 ## What's Big Data?
 
-> Data sets characterized by huge amounts<sup>1</sup> of frequently updated<sup>2</sup> data in various formats<sup>3</sup>, such as numeric, textual, or images/videos.<sup>4</sup>  
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+Data sets characterized by huge amounts<sup>1</sup> of frequently updated<sup>2</sup> data in various formats<sup>3</sup>, such as numeric, textual, or images/videos.<sup>4</sup>  
+]
 
 --
 
-[1] Volume  
-[2] Velocity  
-[3] Variety
+[1] **.red[V]olume**  
+[2] **.red[V]elocity**  
+[3] **.red[V]ariety**
 
-[4] Two more "v"s: veracity and value
+[4] Two more "**.red[v]**"s: veracity and value
 
 ???
 
@@ -95,22 +86,9 @@ value: how much value for each unit of data?
 
 ---
 
-## Big Data for Policy Analysis
-
-Volume : Probably more than Excel and SPSS can handle;  
-
---
-
-Velocity : More relate to commercial, but also the information background setting of policy implementation;  
-
---
-
-Variety : statistical techniques + social-science ideas
-
----
-
 ## Policy Analysis with Big Data
 
+.pull-left[
 ### Sources
 
 1. Data from e-government, civil service hotlines, government-citizen interactions
@@ -120,9 +98,11 @@ Variety : statistical techniques + social-science ideas
 1. Official document archives
 1. Judicial documents  
 ......
+]
 
----
+--
 
+.pull-right[
 ### Goals
 
 1. Initiation of the agenda
@@ -132,24 +112,36 @@ Variety : statistical techniques + social-science ideas
 1. Policy evaluation
 1. Prediction of policy outcomes  
 ......
+]
 
 ---
+
+
+.pull-left[
 
 ### Methods
 
-1. Description
+1. Description✨
 1. Relationship analysis
-1. Pattern (mechine) learning
+1. Pattern (machine) learning
 1. Text analysis
-1. Audio/video analysis  
 ......
+]
 
+.pull-right[
+### Ta-Da~~
+
+.large[.green[政务大数据应用与分析(80700673)]]
+
+]
 ---
 
-## Example: Description
+## Description
 
-.left-column[<img src="images/wuhanFlight.png" height = 500 />]
-.right-column[<img src="images/wuhanFlight2.jpg" height = 400 />]
+.pull-left[
+.center[<img src="images/big_wuhanFlight.png" height = 450 width = 300 />]
+]
+.pull-right[<img src="images/big_wuhanFlight2.jpg" height = 500 />]
 
 ---
 
@@ -163,7 +155,7 @@ background-size: contain
 
 Petition -?&rarr; *Dibao*
 
-.center[<img src="images/JiangMengZhao2019.png" height = 400 />]
+.center[<img src="images/big_JiangMengZhao2019.png" height = 400 />]
 
 ???
 
@@ -185,7 +177,7 @@ Jiang, Junyan, Tianguang Meng, and Qing Zhang. 2019. “From Internet to Social 
 
 ## Example: Pattern (Mechine) Learning
 
-.center[<img src="images/ideologyPrediction.png" />]
+.center[<img src="images/big_ideologyPrediction.png" height = 550 />]
 
 ???
 
@@ -199,7 +191,7 @@ A subset of 55,932 sentences.
 
 class: bottom
 
-background-image: url("images/pd0.png")
+background-image: url("images/big_pd0.png")
 background-position: center
 background-size: contain
 
@@ -207,13 +199,13 @@ background-size: contain
 
 ---
 
-background-image: url("images/pd7.png")
+background-image: url("images/big_pd7.png")
 background-position: center
 background-size: contain
 
 ---
 
-background-image: url("images/pdregression.png")
+background-image: url("images/big_pdregression.png")
 background-position: center
 background-size: contain
 
@@ -221,33 +213,13 @@ background-size: contain
 
 ## Example: Audio/video analysis  
 
-.center[<img src="images/vocalPitch.png" height = 450 />]
+.center[<img src="images/big_vocalPitch.png" height = 550 />]
 
 ???
 
 Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
 
 female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
-
----
-
-## The Fourth(Second) Paradigm
-
-.right-column[<img src="images/fourthParadigm.jpg" />]
-
---
-
-.left-column[
-P1: Theory-driven  
-vs.  
-P2: Data-driven
-]
-
-???
-
-Hey, Tony (MS), Stewart Tansley (FB), and Kristin Tolle(MS), eds. 2009. *The Fourth Paradigm: Data-Intensive Scientific Discovery*. 1 edition. Redmond, Washington: Microsoft Research.
-
-empirical evidence, scientific theory, and computational science
 
 ---
 
@@ -263,20 +235,24 @@ empirical evidence, scientific theory, and computational science
 
 ## How Big is Big
 
-.center[<img src="images/largeNum.png" height = 450 />]
+.center[<img src="images/lar_largeNumber.gif" height = 450 />]
 
 ---
 
 ## Anything new?
 
-[<img src="images/alreadyKnow1.png" height = 200 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
-.center[[<img src="images/alreadyKnow2.png" height = 200 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)]
+.center[
+[<img src="images/alreadyKnow1.png" height = 250 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
+[<img src="images/alreadyKnow2.png" height = 250 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)
+]
 
 ---
 
 ## Where are they from?
 
-[.center[<img src="images/illegalCollection.png" height = 450 />]](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
+.center[
+[<img src="images/illegalCollection.png" height = 550 />](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
+]
 
 ???
 
@@ -286,14 +262,16 @@ FTC, New York Attorney General allege YouTube channels collected kids’ persona
 
 ## How do we understand?
 
+.center[
 Sampling bias,  
 Provenance conflicts,  
 Increased fluctuations,  
 Error rates...
+]
 
 --
 
-.center[<img src="images/dataDontTalk.png" />]
+.center[<img src="images/big_dataDontTalk.png" height = 300 />]
 
 ???
 
@@ -306,7 +284,7 @@ Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Ch
 
 ## Is It Morally Correct?
 
-.center[<img src="images/zuckerberg.jpg" height = 400 />]
+.center[<img src="images/big_zuckerberg.jpg" height = 400 />]
 
 ???
 
@@ -314,35 +292,30 @@ Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Ch
 
 Cambridge Analytica助选
 
----
-
-## Practice
-
-.center[**What can you do? And any limitations?**]
-
-* The lockdown policy: 2020-01-23 to 2020-04-07 Weibo sample
-    + G1,3
-* The hukou relaxing policy: Official documents about Hukou
-    + G2,4
-
-???
-
-Medium-sized cities, and small cities, 2019 Urbanization Plan published by the National Development and Reform Commission (NDRC) 
 
 ---
 
 ## Take-Home Points
 
-+ Paradigm changes.
-+ Large potential of policy analysis w. BD
-    + Numbers, documents, and audio/videos
-    + Origin, process, consequences
+.pull-left[
++ What's BD?
+    + Non-intentional
+    + 3 or 5 Vs
 + What BD can do
     + Description
     + Relation analysis
     + Pattern identification
     + Text analysis
-+ Big thoughts about BD
+]
+
+.pull-right[
++ Limitations of BD
+    1. Data size
+    1. Substantive meaning
+    1. Representativenss
+    1. Patten identification
+    1. Ethnicity
+]
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "11_.*.html"), timeout = 300)
