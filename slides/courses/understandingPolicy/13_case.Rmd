@@ -1,6 +1,6 @@
 ---
-title: "Method: Case Study"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Smallest-N Method: Case Study"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -17,106 +17,104 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
+
+p_load(
+  emo, knitr, kableExtra, # dependency
        stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
+set.seed(313)
 ```
 
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
-
-???
-
-Q1. Comparing modernism and postmodernism
-Q2. What are social constructivism and interpretivism
 
 ---
 
 ## Overview
 
-1. What's case study (what's a case)?
-1. Why case study?
+1. What's a case study (what's a case)?
+1. Why doing case study?
 1. Fundamental logic of case study
 1. How to pick a case
 
----
+--
 
-class: inverse, bottom
+## A Glimpse of Interpretive Methods
 
-# Small-N Methods
++ Case study
 
----
+.gray[
++ Process tracing
 
-## A Survey of Small-N Methods
-
-+ .magenta[Case Study]
-+ Process Tracing
-+ Other Methods
++ Interviews and others
+]
 
 ---
 
-## What's Case Study
+## What's a Case Study
 
-> An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units  
- ---Gerring (2004: 342).
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+An intensive study of a .magenta[single unit] for the purpose of understanding a larger class of (similar) units.
+
+.tr[
+---Gerring (2004: 342)
+]
+]
+
 
 ???
 Gerring, John. 2004. “What Is a Case Study and What Is It Good For?” American Political Science Review 98(2): 341–54.
 
 --
 
-*How to Identify a Case?*
+.pull-left[
 
-Boundary of a Case:
+### A Case?
+
+Common understanding:
+
+A unit within a boundary
 
 + Spatial
 + Temporal
+]
 
----
+--
 
-## An Observation, Variable, Case?
+.pull-right[
 
-```{r}
-text_tb <- data.frame(Observed = 1:8,
-                      Gender = rep(c("Male", "Female"), times = 4), 
-                      Country = rep(c("US", "UK"), each = 4))
+### Observations, Variable, or Cases?
+
+```{r cases}
+text_tb <- data.frame(Observed = 1:4,
+                      Gender = rep(c("Male", "Female"), times = 2), 
+                      Country = rep(c("US", "UK"), each = 2))
 
 kable(text_tb, "html", align = "crr")%>%
   kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
 ```
+]
 
 ---
 
