@@ -1,6 +1,6 @@
 ---
-title: "Method: Small-N Analysis in Practice"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Interpretive Toolkit: Process Tracing, Interview, and Other Methods"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -17,91 +17,96 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
+
+p_load(
+  emo, knitr, kableExtra, # dependency
        stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
+set.seed(313)
 ```
 
-class: bottom, inverse
+## Presentation
 
-background-image: url("images/court.jpg")
++ Time: 10 presentation + 3 Q & A
++ Content:
+    + Intro of the Policy (Why should we care?)
+    + Theory and hypothesis (What's your OV & EV and how are they connected)
+    + Method and data (How do you test your theory?)
+    + Operation (Can you actually do it?)
++ Questions (Randomly drawing a challenger)
+
+---
+
+background-image: url("images/cha_challenge.gif")
 background-position: center
 background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
-
----
-
-class: inverse, bottom
-
-# Small-N Methods: Process-Tracing and Beyond
 
 ---
 
 ## Overview
-
+.pull-left[
 ### Process tracing
-+ What's that?
-+ Steps
-+ Evidence
++ What's that
++ How to conduct it
++ How to draw a conclusion
 
-### SNA toolkit:
-
-+ .gray[Case study]
-+ .gray[Process tracing]
-+ Interview
-+ Focus group
-+ Content analysis
-
----
-
-background-image: url("images/csi.jpg")
-background-position: bottom
-background-size: 90%
-
-## Process Tracing
-
-What: "CSI"
+### Overview
++ Interview-based methods
+    + Interview
+    + Focus group
++ Discourse-based method
+    + Content analysis
+]
 
 --
 
-Goal : Theory testing
+.pull-right[
+## A Glimpse of Interpretive Methods
 
-Hypothesis: Explanation rivalry
++ Case study
+
++ Process tracing
+
++ Interview
+
++ Focus group
+
++ Content analysis
+]
 
 ---
 
-background-image: url("images/processTracing.jpg")
-background-position: center
-background-size: contain
+## Process Tracing
+
+.center[
+
+Tenet in a case
+
+<img src="images/process_tenet.gif" height = 300 />
+
+**Goal**: Theory testing
+
+**Hypothesis**: Explanation rivalry
+]
 
 ---
 
@@ -112,12 +117,25 @@ Why did English become a recognized official language in the Singaporean languag
 
 Esp. given there were only 21% of the population spoke this language when the country was independent.
 
+
 ---
+
+background-image: url("images/process_routine.gif")
+background-position: center
+background-size: contain
+
+
+---
+
+class: large, middle, center
 
 ### Step 1: Identify Hypotheses
 
-H<sub>0</sub>: State (institutional) capacity  
-H<sub>1</sub>: Prioritization of the education ministry
+State (institutional) capacity  
+
+vs.
+
+Prioritization of the education ministry
 
 ???
 
@@ -127,7 +145,7 @@ The Goh Report identified and set out recommendations to address three shortcomi
 
 ---
 
-background-image: url("images/timelineEnglish.jpg")
+background-image: url("images/process_timelineEnglish.jpg")
 background-position: center
 background-size: contain
 
@@ -141,9 +159,11 @@ background-size: contain
 
 ---
 
+class: center
+
 ### Step 3: Construct Causal Graph
 
-.center[<img src="images/causalEnglish.jpg" height = 500 />]
+<img src="images/process_causalEnglish.jpg" height = 500 />
 
 ???
 
@@ -152,8 +172,9 @@ Used to identify relevant moments and actors that could affect the results.
 
 ---
 
-### Step 4: Identify Alternative Choice or Event
-### Step 5: Identify Counterfactual Outcomes
+class: center, middle
+
+### Step 4, 5: Identify Alternative Choice or Event and Counterfactual Outcomes
 
 Counterfactual 1: Weak State &rarr; language of the dominant population language.
 
@@ -173,47 +194,49 @@ If there's no comparative cases, then conterfactual outcomes.
 When A is a .magenta[sufficient] condition of B, then once A happens, B must happen.  
 When A is a .magenta[necessary] condition of B, then there must be A for B to happen.
 
+.center[<img src="images/process_necessarySufficient.ppm" height = 590 />]
+
 ---
 
 ## Practice
 
-+ Being 2, 4, 6, or 8 is _ for being an even number.
-+ Being 2, 4, 6, or 8 is _ for being an even number <10.
++ Being 2, 4, 6, or 8 is __ for being an even number.
++ Being 2, 4, 6, or 8 is __ for being an even number <10.
 
 --
 
-+ Being highly intelligent is _ for being a student of Tsinghua.
-+ Showing up to class is _ for getting an A.
-+ Being mortal is _ for being human.
-+ Being a rational animal is _ for being human.
++ Being highly intelligent is __ for being a student of Tsinghua.
++ Showing up to class is __ for getting an A.
++ Being mortal is __ for being human.
++ Being a rational animal is __ for being human.
 
 --
 
-*Let's back to process tracing*
+*Let's back to learning process tracing*
 
 ---
 
 ### Step 6: Find Evidence for Primary Hypothesis
 
-| .small[Necessity\\Sufficiency]<sup>&midast;</sup> | Yes             | No                |
+|<sup>&midast;</sup>.small[Necessity\\Sufficiency] | Yes             | No                |
 |-----------------------|-----------------|-------------------|
-| Yes                   | Double-Decisive | Smoking Gun       |
-| No                    | Hoop            | Straw-in-the-Wind |
+| Yes                   | Double-Decisive <img src="images/process_kenan.jpg" height = 150 />| Smoking Gun  <img src="images/process_gaosu.gif" height = 150 width = 220/>|
+| No                    | Hoop Test <img src="images/process_dingLou.jpg" height = 150 />| Straw-in-the-Wind <img src="images/process_liuQD.jpg" height = 150 width = 230 />|
 
 .footnote[
-[&midast;] Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.
+&midast; Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.
 ]
 
 ???
 
-1. Hoop test: no alibi, the accused in the state when murder happens? If not innocent, but passing does not mean being guilty.
-1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
-1. Double-decisive test: hoop + smoking-gun, like a camera record
-1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
+1. Hoop test: no alibi, the accused in the state when murder happens? If not innocent, but passing does not mean being guilty. 《顶楼》中女孩儿死时最上面女主在现场，但并不代表就是她造成的女孩儿的死亡（虽然其实是）
+1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent. 途中确实是收费人员不动，但司机之前戏耍收费人员在先
+1. Double-decisive test: hoop + smoking-gun, like a camera record 柯南说是就是
+1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl. 之前女主挽着Richard上电梯，并不代表之后不存在sexual harassment或rape
 
 ---
 
-background-image: url("images/evidenceEnglish.png")
+background-image: url("images/process_evidenceEnglish.png")
 background-position: center
 background-size: contain
 
@@ -223,21 +246,25 @@ The primary hypothesis failed the hoop test: when recognition happened, the stat
 
 ---
 
+class: inverse, bottom
+
+# Other Tools of the Interpretive Approach
+
+---
+
 ## Interview
 
-.center[<img src="images/interview.jpg" height = 300 />]
-
-### Procedure
-
-Strategic communication (guiding and listening)
+.center[<img src="images/process_interview.jpg" height = 500 />]
 
 ---
 
 ### How a Interview Processes
 
+.center[
 <video width="700" height="500" controls>
     <source src="images/interview.mp4" type="video/mp4">
 </video>
+]
 
 ???
 
@@ -247,27 +274,41 @@ Benedict Cumberbatch as Dominic Cummings, main political strategist for Vote Lea
 
 ---
 
-.left-column[
+.pull-left[
+
+### Techniques
+
++ Structured interview
++ Semi-structured interview
++ Unstructured interview
+
 ### Outcome: 
 + Open answers
 + Messy details
 + Contradictory points
+
 ]  
 
 --
 
-.right-co[
-### Technique
+.pull-right[
+### Conditions
 + Safe environment
-+ More listening, less talking
 + Design the interview strategy + pilots
++ More listening, less talking
+
+.center[<img src="images/process_hamilton.gif" height = 400 />]
 ]
 
---
+???
+
+Aaron Burr
+
+---
 
 ### Be Prepared...
 
-.center[<img src="images/dontLike.gif" height = 200 />]
+.center[<img src="images/process_dontLike.gif" height = 500 />]
 
 ---
 
@@ -288,10 +329,11 @@ Procedure:
 
 ## How Focus Group Works
 
+.center[
 <video width="700" height="500" controls>
     <source src="images/focusGroup.mp4" type="video/mp4">
 </video>
-
+]
 
 ???
 
@@ -301,28 +343,29 @@ Rory Kinnear as Craig Oliver, the former Director of Politics and Communications
 
 ---
 
-
+.pull-left[
 ### Pros:
 
-1. Real-life environment
+1. Real-life (conversational) environment
 1. Flexibility
-1. Low cost
-
+1. Low cost (< case studies)
+]
 
 --
 
+.pull-right[
 ### Cons:
 
 1. Non-privacy-protection
 1. Who lead the talk?
 1. No SUTVA
 1. Selection interviewees
-
+]
 ---
 
 ## Content analysis
 
-.center[<img src="images/closeReading.jpg" height = 480 />]
+.center[<img src="images/process_closeReading.jpg" height = 480 />]
 
 ---
 
@@ -348,18 +391,15 @@ Rory Kinnear as Craig Oliver, the former Director of Politics and Communications
 * Latent content
 * Online assistance: [CATMA](http://catma.de/) or eMargin
 
----
 
-## Example with CATMA
-
-.center[<img src="images/tag.png" height = 500 />]
+.center[<img src="images/process_tag.png" height = 400 />]
 
 ---
 
-.left-column[<img src="images/topictrend.png" height = 500 />]
+.pull-left[<img src="images/process_topictrend.png" height = 500 />]
 
 
-.right-column[
+.pull-right[
 
 ## Step 3 Analysis
 
@@ -373,30 +413,47 @@ Not much different from other interpretive methods
 
 ---
 
+.pull-left[
 ### Pros
 
 * Economic
 * Allowing correction
 * Overtime survey
 * Third party
+]
 
 --
 
+.pull-right[
 ### Cons
 
 * Limited content
 * Limited scale
 * Subjective consistency
-
+]
 ---
 
-## Techniques in Small-N Analysis
+## Techniques for Interpretive Methods
+
+.pull-left[
 
 ### Coding
 
-<img src="images/openCoding.jpg" width =320 height = 200 />
-<img src="images/axialCoding.jpg" width = 320 height = 200 />
-.center[<img src="images/selectiveCoding.gif" height = 220 />]
+Open coding
+<img src="images/process_openCoding.jpg" width =320 height = 200 />     
+]
+
+--
+
+.pull-right[
+
+Axial coding
+<img src="images/process_axialCoding.jpg" width = 320 height = 200 />
+
+
+Selective coding
+<img src="images/process_selectiveCoding.gif" height = 220 />
+]
 
 ???
 
@@ -418,9 +475,9 @@ Keep everything in record!!
 
 ## Take-Home Points
 
-### Process tracing
+.pull-left[
 
-.left-column[
+### Process tracing
 
 + Six steps
     1. Hypotheses
@@ -429,6 +486,13 @@ Keep everything in record!!
     1. Alternative choice
     1. Counterfacutal outcomes
     1. Evidence
+
+
++ Evidence types
+    1. Straw-in-the-wind
+    1. Hoop
+    1. Smoking gun
+    1. Double-decisive
     
 ]
 
@@ -443,26 +507,13 @@ Keep everything in record!!
     
 --
 
-.right-column[
-
-+ Evidence types
-    1. Straw-in-the-wind
-    1. Hoop
-    1. Smoking gun
-    1. Double-decisive
-        
-    ]
-
----
-
-### SNA toolkit
+.pull-right[
+### Interpretive Toolkit
 
 + Case study
 + Process-tracing
 + Interview
 + Focus group
 + Content analysis
-
-```{r pdfPrinting, eval = FALSE, include = FALSE}
-pagedown::chrome_print(list.files(pattern = "14_.*.html"), timeout = 300)
-```
+        
+]
