@@ -27,10 +27,19 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  emo, knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       modelsummary,
-       broom, tidyverse
+  emo,
+  knitr,
+  kableExtra,
+  # dependency
+  stringr,
+  arm,
+  car,
+  here,
+  modelsummary,
+  countdown,
+  socialroulette,
+  broom,
+  tidyverse
 ) # data wrangling # data wrangling
 
 xaringanExtra::use_xaringan_extra(c("tile_view", # O
@@ -81,17 +90,30 @@ countdown(minutes = 0,
 
 ## Timing You Up
 
-```{r ranNm-generator, include = FALSE}
-studentNM <- readxl::read_xls(file.path('学生信息.xls'))
+```{r ranNm-generator, echo = TRUE, eval=FALSE}
+# The file downloaded from the Web Learning
 
-set.seed(114)
+studentNM <- readxl::read_excel(here("slides",
+                             "courses",
+                             "understandingPolicy",
+                             'student.xls')) %>% 
+  select(id = `姓名`) %>% 
+  mutate(date = Sys.Date())
 
-studentNM[sample(1:nrow(studentNM), size = 7),]$`姓名`
-studentNM[sample(1:nrow(studentNM), size = 7),]$`姓名`
+day1 <- rsocialroulette(studentNM, m = 2)
+past <- list(day1) %>% setNames(Sys.Date())
+
+day2 <- studentNM %>% 
+  mutate(date = Sys.Date() + 1) %>% 
+  rsocialroulette(past_partitions = past, m = 2)
+
+df_present <- partitions_to_pairs(list(day1, day2))
+write.csv(df_present, file = "D:/MEGAsync/00_Methods/Courses/Nonmethod Courses/Teaching/01_courses/02_Analysis_of_Public_Policy/students/presentationList.csv", 
+            fileEncoding = "UTF8")
 ```
 
-```{r speech15, echo = FALSE}
-countdown(minutes = 15,
+```{r speech10, echo = FALSE}
+countdown(minutes = 10,
           seconds = 0,
           play_sound = TRUE)
 ```
@@ -127,7 +149,7 @@ https://www.youtube.com/watch?v=cef35Fk7YD8
 
 class: bottom, inverse
 
-# Efficient Slides
+# Efficient Slide Building
 
 ---
 
@@ -242,9 +264,10 @@ People can only have one mental point per time. 周伯通; forget both
 
 ---
 
-## What's Big Data?
+## What's a Grounded Theory?
 
-> Data sets characterized by huge amounts (volume) of frequently updated (velocity) data in various formats (variety), such as numeric, textual, or images/videos.
+> Data sets characterized by huge amounts (.magenta[volume]) of frequently updated (.magenta[velocity]) data in various formats (.magenta[variety]), such as numeric, textual, or images/videos.
+
 
 ???
 
