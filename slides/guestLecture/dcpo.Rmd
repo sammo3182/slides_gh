@@ -2,7 +2,7 @@
 title: "Cross-Survey Analysis and Dynamic Comparative Public Opinion"
 date: "2021-06-10"
 author: 
-- Yue Hu (Tsinghua University)
+- Yue Hu
 
 output:
   xaringan::moon_reader:
@@ -166,21 +166,21 @@ class: center, middle, large
 Different questions   
 Different people   
 &dArr;    
-Incomparable data   
+.red[Incomparable] data   
 
 
 --
 
 w. 
 
-.red[Latent variable analysis]
+.blue[Latent variable analysis]
 
 
 ---
 
 class: inverse, bottom
 
-+ Typological model
++ Typological modeling
 + Individual IRT
 + Group IRT
 + DCPO
@@ -240,7 +240,9 @@ CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；�
 
 class: middle
 
+.center[
 ## Why IRT
+]
 
 1. Created for .red[noncontinuous] variables (binary &rarr; ordinal + continuous);
 
@@ -258,7 +260,7 @@ class: middle
 
 ---
 
-## Individual IRT
+## Individual-Level IRT
 
 Usage: Within-survey latent variable analysis
 
@@ -344,7 +346,6 @@ class: middle, large
 
 + Invariance among items
 + Invariance among respondents<sup>\*</sup>
-    + Easy to be avoide when involving multip group IRT
 
 .footnote[<sup>\*</sup> Check the differential item functioning (DIF) with Wald and likelihood-ratio approach.]
 
@@ -354,11 +355,11 @@ class: middle, large
 + Parameters在响应人群间不变<sup>1</sup>
     + 当进行Multiple Group IRT时尤可能被违反
 
+Easy to be avoid when involving multi-group IRT
+
 ---
 
-class: large
-
-## Modeling Latent Variables
+## IRT Models
 
 ### Individual IRT
 Rasch Model (1PL)     
@@ -380,7 +381,8 @@ MIRT
 + &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Unbounded latent trait
 + &sigma;<sub>q</sub>: Difficulty
 
-.center[.orange[Pr(y<sub>iq</sub> = 1)] = .navy[logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>])]
+.pull-left[.center[.orange[Pr(y<sub>iq</sub> = 1)] = ]]
+.pull-right[.navy[logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>])]
 
 
 ???
@@ -427,17 +429,71 @@ coef(m_lsat, simplify = TRUE) %>%
   kable(format = "html")
 ```
 
+???
+
+The difficulty parameter is the `d`
+
+The rest parameters we'll talk in 2pl and 3pl
+
 ---
 
 class: center, middle
 
-.Large[Please always diagnose your results,]
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[Please always diagnose your results]
+]
 
 --
 
-.Large[and .red[understand] what you are diagnosing.]
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[and .red[understand] what you are diagnosing.]
 
-.pull-right[--- Dr. Yue Hu]
+.tr[
+— Dr. Hu
+]]
+
+---
+
+## IRT Diagnoses
+
++ General level：Global fit
++ Item level：Item fit & residual
++ Respondent level：Personal fit
+
+---
+
+## Global Fit<sup>1</sup>
+
+$$G^2 = 2[\sum_l^s r_lln(\frac{r_l}{N\tilde{P}_l})]$$
+
+N: Number of respondents  
+l: Possible options   
+r: Number of respondents who respond with l
+
+--
+
+When item > 10，M<sup>2</sup>, M<sup>2</sup>* (Modified version of G<sup>2</sup>)
+
+```{r diagnostics-overall, echo=TRUE}
+M2(m_lsat)
+```
+
+
+.footnote[
+[1] RMSEA, SRMSR, CFI, TLI also works
+]
+
+???
+
+REDO: @Maydeu-Olivares2013
+
+N is the number of subjects, L is number of possible response patterns, $P_ l$ is the estimated probability of observing response pattern l, and $r_ l$ is the number of subjects who have response pattern l
+
+&chi; sig   
+Tucker-lewis index, 1 ideal, < .95 poor   
+Comparative fit index, the same   
+Root mean square error of approximation, 0 perfect, <.05 good, [.05, .08] ok, > .1 poor    
+Standardized root mean square residual <.08 acceptable
 
 ---
 
@@ -464,20 +520,77 @@ plot(m_lsat, type = "infoSE")
 TCC： 所有ICC之和，体现how reliable, information 理想是形成一个钟形,顶尖处代表平均水平，据此对比个人&theta;可以判断这人是否是outlier
 SE(&theta;) = (test)<sup>-1/2</sup>
 
+---
+
+## Item Diagnostics
+
+Covariation-based residuals
+
+```{r diagnostics-residual, echo=TRUE}
+residuals(m_lsat)
+```
+
+???
+
+看item residual的协变程度，多用于看multidimensionality, 不应有关联
+
 
 ---
 
-Rasch局限：Measurement error
+Single item/person fit 
+
+```{r item-infit, echo=TRUE}
+# Item 
+itemfit(m_lsat, fit_stats = "infit")
+```
+
+```{r personfit, echo=TRUE}
+# Person
+personfit(m_lsat)
+```
+
+
+???
+
+Z<sub>h</sub> > 0 better
+
+infit/outfit, close to 1 is good
+
+
+
+---
+
+## If There's a Problem
+
+
+1. Check S-&chi;<sup>2</sup>, local dependency
+1. Using more complex model types, e.g.,&rarr; 2PL, 3PL;
+1. Binary to polytomous or nominal response models
+1. Non-parametric smoothing techniques
+
+---
+
+## Cons for Rasch Model
+
+Measurement error
+
+.center[<img src="../courses/governmentalBigData/images/irt_elementarySchool2G.png" height = 450 />]
 
 ???
 
 人们对同一个题理解不同，回答出affirmative答案可能性也不同。
 
---
+---
 
 ## Two-Parameter Logistic Model (2PL IRT)
 
-.center[Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(.red[&kappa;<sub>q</sub>]&theta;<sub>i</sub> - &sigma;<sub>q</sub>)]
+.center[
+
+**Rasch**: Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>)
+
+**2PL**: Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(.red[&kappa;<sub>q</sub>]&theta;<sub>i</sub> - &sigma;<sub>q</sub>)
+
+]
 
 &kappa;<sub>q</sub>: Discrimination (Parameter of dispersion)
 
@@ -489,13 +602,13 @@ Rule of thumb above 1 meaning a good question in terms of examination
 
 --
 
-另一种常见写法
+### Another format
 
 $$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{red}{\beta_q}}}{\color{red}{\alpha_q}}]$$
 
 
-&beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold("difficulty", 控制location)  
-&alpha;<sub>q</sub>: &kappa;<sub>q</sub><sup>-1</sup>, dispersion (控制斜率)
+&beta;<sub>q</sub>: &sigma;<sub>q</sub> &frasl; &kappa;<sub>q</sub>, threshold("difficulty", location)  
+&alpha;<sub>q</sub>: &kappa;<sub>q</sub><sup>-1</sup>, dispersion (slop)
 
 ???
 
@@ -503,7 +616,7 @@ Dispersion: magnitude of the measurement error
 
 ---
 
-```{r irt-illustration, fig.height=8, fig.width=10, fig.cap="Difficulty & Dispersion"}
+```{r irt-illustration, fig.height=8, fig.width=10, fig.cap="Difficulty & Dispersion", fig.align='center'}
 tibble(
   theta = rep(seq(-3, 3, length.out = 100), 6),
   beta = rep(c(-2, 0, 2, 0, 0, 0), each = 100),
@@ -615,13 +728,22 @@ m_lsat2PL <-  mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
 coef(m_lsat2PL, simplify = TRUE)
 ```
 
+???
+
+a1: dispersion
+
 ---
 
-## 需要2PL吗？
+## Do We Really Need 2PL?
+
+
+.center[<img src="../courses/governmentalBigData/images/irt_OccamsRazor.gif" height = 100 />]
+
+--
 
 Likelihood-Ratio Test
 
-```{r llr}
+```{r llr, echo = TRUE}
 anova(m_lsat, m_lsat2PL) %>%  
   select(AIC, SABIC, HQ, logLik, df, p) %>% 
   kable(format = "html")
@@ -629,11 +751,18 @@ anova(m_lsat, m_lsat2PL) %>%
 
 ---
 
-class: Small
+## What If...
 
-如果有人全凭猜咋办？——大量低&theta;人群
+.center[<img src="../courses/governmentalBigData/images/irt_purelyGuess.jpg" height = 400 />]
 
---
+
+.center[A lot of .red[low &theta;] respondents]
+
+???
+
+很多人全凭猜怎么办？
+
+---
 
 ## Three-Parameter Logistic Model (3PL)
 
@@ -641,13 +770,23 @@ $$Pr(y_{iq} = 1) = \color{red}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \be
 
 c<sub>i</sub>：Item .red[lower] asymptote ("guessing")
 
+--
+
+ Tip: Recommend N > 1,000
+
+???
+
 极大增加演算成本&rarr;通常需要1000以上观测点
 
 ---
 
-如果有人不care咋办
+## What If...
 
-## Four-Parameter Logistic Model (4PL)
+.center[<img src="../courses/governmentalBigData/images/irt_idontcare.gif" height = 400 />]
+
+---
+
+### Four-Parameter Logistic Model (4PL)
 
 $$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
 
@@ -655,116 +794,39 @@ d<sub>i</sub>：Item .red[upper] asymptote ("carelessness"), d < 1
 
 --
 
+ Tip: Considering we already need .red[1,000] for 3PL....
+
+???
+
 鉴于3PL已经需要1000-ish观测点……
 
 ---
 
-## IRT 统计检验
+## Extentions: Unidimentional to Multidimentional
 
-+ 测试层：Global fit
-+ 项目层：Item fit & residual
-+ 个体层：Personal fit
+~~Unidimensionality~~
 
----
-
-## Global Fit<sup>1</sup>
-
-$$G^2 = 2[\sum_l^s r_lln(\frac{r_l}{N\tilde{P}_l})]$$
-
-N: 参与人数  
-l: 可能的反应  
-r: 做出特定反应的人数
-
---
-
-当数据过于稀疏时(item > 10)，M2, M2* 
-
-```{r diagnostics-overall, echo=TRUE}
-M2(m_lsat)
-```
-
-
-.footnote[
-[1] RMSEA, SRMSR, CFI, TLI对于IRT同样使用
-]
-
-???
-
-REDO: @Maydeu-Olivares2013
-
-N is the number of subjects, L is number of possible response patterns, $P_ l$ is the estimated probability of observing response pattern l, and $r_ l$ is the number of subjects who have response pattern l
-
-&chi; sig   
-Tucker-lewis index, 1 ideal, < .95 poor   
-Comparative fit index, the same   
-Root mean square error of approximation, 0 perfect, <.05 good, [.05, .08] ok, > .1 poor    
-Standardized root mean square residual <.08 acceptable
-
----
-
-## Item Diagnostics
-
-Covariation-based residuals
-
-```{r diagnostics-residual, echo=TRUE}
-residuals(m_lsat)
-```
-
-???
-
-看item residual的协变程度，多用于看multidimensionality, 不应有关联
-infit/outfit, close to 1 is good
-
----
-
-Single item/person fit 
-
-```{r item-infit, echo=TRUE}
-# Item 
-itemfit(m_lsat, fit_stats = "infit")
-```
-
-```{r personfit, echo=TRUE}
-# Person
-personfit(m_lsat)
-```
-
-
-???
-
-Z<sub>h</sub> > 0 better
-
----
-
-如果出现问题：
-
-1. 通过S-&chi;<sup>2</sup>、local dependency等检查观测和估计数值差别
-1. 改变model type, 比如2PL &rarr; 3PL
-1. 如果最初用binary，尝试polytomous或者nominal response models
-1. 尝试non-parametric smoothing techniques
-
----
-
-## 延展1：一维到多维
-
-传统IRT：一维聚合
-
---
 
 Multidimentional IRT (MIRT, Phil Chalmers, 2015)
 
 $$Pr(y_{iq} = 1) = logist^{-1}[\frac{\boldsymbol{\theta_i} - \beta_q}{\boldsymbol{\alpha_q}}]$$
 
 
-**&theta;<sub>i</sub>**和**&alpha;<sub>q</sub>**不再是单一值，而是一个矩阵。
+.center[**&theta;<sub>i</sub>** and **&alpha;<sub>q</sub>**: Scalar &rarr; Matrix。]
 
 ???
 
 Pyschologist
 
+
+1. Monotonicity
+1. Unidimensionality
+1. Local independence
+1. Parameter invariance
+
 ---
 
-## 延展2：二元到定序
+## Extension: Binary to Ordinal
 
 Logit &rarr; Cumulative logit
 
@@ -777,54 +839,70 @@ plot(m_lsat2D, type = "score")
 
 ---
 
-## 三种主要类型
+## Ordinal IRT: Three Oft-Used Modeling
 
-1. (Modified) Graded Response Model
-    + 用于scoring rubrics，比如 Likert
-1. (Generalized) Partial Credit Model，Rating Scale Model
-    + 用于可转化为定序的分类变量
+1. (Modified) Graded Response Model (GRM)
+    + Better for scoring rubrics, e.g., Likert
+
+--
+
+1. (Generalized) Partial Credit Model (PCM)，Rating Scale Model (RSM)
+    + Quit similar to GRM
+    + Not require boundary parameters to be ordered
+    + Need larger sample size
+
+--
+
 1. Nominal Response Model
-    + 用于无序分类变量
+    + Better for categorical
 
 ???
 
 https://stats.stackexchange.com/questions/402440/how-should-we-select-between-various-item-response-theory-models-e-g-rsm-grm
 
+The rating scale model (RSM) and partial credit model (PCM) are Rasch models. The graded response model (GRM) and the generalized partial credit model are non-Rasch (multinomial).
+
+
+https://studylib.net/doc/18099752/irt-models-for-polytomous-response-data
+
 ---
 
-## 延展3：群组效应
+class: inverse, bottom
 
-.center[<img src="images/countryBias.png" height = 300 />]
+# Group IRT
+
+---
+
+.center[<img src="../courses/governmentalBigData/images/countryBias.png" height = 300 />]
 
 Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
 
-在估测&alpha;<sub>q</sub>时加入random effect.
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\beta_q}}{\color{red}{\alpha_q}}]$$
+
+
+Using random effect estimating &alpha;<sub>q</sub>
+
 
 ???
 
 Daniel Stegmueller, Duke U, poli sci
 
----
-
-## 超越个体
-
-Individual fallacy: Ecological fallacy 的反面
-
-<video width="700" height="200" controls>
-    <source src="images/antiAsian.mp4" type="video/mp4">
-</video>
-
---
-
-再比如，民主、不平等、政治文化……
+&alpha;: Dispersion: magnitude of the measurement error 
 
 ---
 
-## Disaggregation
+## Aggregation
 
 .center[y<sub>kq</sub> = &Sigma;y<sub>ikq</sub> &frasl; n.]
 
 --
+
+Concerns:
+
+1. The mean does not have much substantial influence to the result if the group k is too small.
+1. Different ys have different contributions to the latent variable.
+
+???
 
 问题：
 
@@ -833,15 +911,37 @@ Individual fallacy: Ecological fallacy 的反面
 
 ---
 
-## Multilevel Regression and Post-stratification (MrP)
+## Getting the Mean Right When Aggregating
 
-经过群组信息（地理、人口）加权的平均值
+Multilevel Regression and Post-stratification (MrP)
+
+.red[Predict] a parameter of interest within .red[small domains] through .red[modeling the mean] of the variable of interest .red[conditional on poststratification counts]. 
+
 
 ???
 
 Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Categories Using Hierarchical Logistic Regression.” Survey Methods 23: 127--135.
 
+
+经过群组信息（地理、人口）加权的平均值
+
+
 --
+
+1. A population is .red[divided] into `H` strata of interest (for example states);
+2. The parameters of interest are the .red[means in each strata] &theta;<sub>h</sub> (h = 1...H);
+3. Every stratum is cross-classified by some .red[demographics] j &isin; H, besides every .red[population count] N<sub>j</sub> is known;
+4. All of the population means &mu;<sub>j</sub> can be estimated by using some statistical technique, such as .red[multilevel regression].
+
+.pull-left[
+$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$
+]
+.pull-right[
+N: Population (Census)    
+n: Sample
+]
+
+???
 
 .Small[
 1. 将总体（population）按群组（strata，如国家、地区）切分；
@@ -850,13 +950,6 @@ Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Cate
 1. 各组总体平均值&mu;<sub>j</sub>可通过multilevel model 进行估算。
 ]
 
----
-
-$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$
-
-
-N: 总体（来自普查）  
-n: 样本（来自sample）
 ---
 
 class: Small
