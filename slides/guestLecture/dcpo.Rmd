@@ -43,6 +43,7 @@ p_load(
   "DCPO",
   "knitr",
   "ggalt",
+  "drhutools",
   "latex2exp",
   "tidyverse"
 )
@@ -616,121 +617,13 @@ Dispersion: magnitude of the measurement error
 
 ---
 
-```{r irt-illustration, fig.height=8, fig.width=10, fig.cap="Difficulty & Dispersion", fig.align='center'}
-tibble(
-  theta = rep(seq(-3, 3, length.out = 100), 6),
-  beta = rep(c(-2, 0, 2, 0, 0, 0), each = 100),
-  alpha = rep(c(1, 1, 1, .25, 1, 2), each = 100),
-  pr_y = plogis((theta - beta) / alpha),
-  line_no = rep(1:6, each = 100),
-  plot_facet = rep(
-    c("Varying Question Difficulty", "Varying Question Dispersion"),
-    each = 300
-  )
-) %>%
-  ggplot(aes(theta, pr_y, group = line_no)) +
-  geom_line() +
-  facet_wrap(~ plot_facet) +
-  xlab(TeX("Individual Unbounded Latent Trait $\\theta'_{i}$")) +
-  ylab(TeX("Pr(y_{iq} = 1)")) +
-  theme_bw() +
-  theme(
-    strip.background = element_rect(colour = "white", fill = "white"),
-    plot.title.position = "plot"
-  ) +
-  scale_x_continuous(breaks = seq(-3, 3, 1)) +
-  geom_text(
-    data = tibble(
-      theta = -2.25,
-      pr_y = .65,
-      line_no = 1,
-      plot_facet = "Varying Question Difficulty",
-    ),
-    label = TeX("$\\beta_1 = -2$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = -.6,
-      pr_y = .525,
-      line_no = 1,
-      plot_facet = "Varying Question Difficulty",
-    ),
-    label = TeX("$\\beta_2 = 0$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = .9,
-      pr_y = .4,
-      line_no = 1,
-      plot_facet = "Varying Question Difficulty",
-    ),
-    label = TeX("$\\beta_3 = 2$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = 2.5,
-      pr_y = 0.025,
-      line_no = 1,
-      plot_facet = "Varying Question Difficulty",
-    ),
-    label = TeX("$\\alpha_q = 1$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = -.03,
-      pr_y = .96,
-      line_no = 1,
-      plot_facet = "Varying Question Dispersion",
-    ),
-    label = TeX("$\\alpha_1 = .25$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = 1.4,
-      pr_y = .9,
-      line_no = 1,
-      plot_facet = "Varying Question Dispersion",
-    ),
-    label = TeX("$\\alpha_2 = 1$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = 2.1,
-      pr_y = .66,
-      line_no = 1,
-      plot_facet = "Varying Question Dispersion",
-    ),
-    label = TeX("$\\alpha_3 = 2$", output = "character"),
-    parse = TRUE
-  ) +
-  geom_text(
-    data = tibble(
-      theta = 2.5,
-      pr_y = 0.025,
-      line_no = 1,
-      plot_facet = "Varying Question Dispersion",
-    ),
-    label = TeX("$\\beta_q = 0$", output = "character"),
-    parse = TRUE
-  )
-```
-
----
-
-```{r ltm, echo=TRUE}
-m_lsat2PL <-  mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
-coef(m_lsat2PL, simplify = TRUE)
-```
+.center[<img src="../conference/2021-AsianPoliMeth/images/2pirt.png" height = 600 />]
 
 ???
 
-a1: dispersion
+Difficulty/discrimination: how well a question can different people from below to above
+
+Dispersion: magnitude of the measurement error
 
 ---
 
@@ -873,6 +766,8 @@ class: inverse, bottom
 
 ---
 
+## Fixing the Measurement Error Due to the Group Variance
+
 .center[<img src="../courses/governmentalBigData/images/countryBias.png" height = 300 />]
 
 Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
@@ -891,13 +786,15 @@ Daniel Stegmueller, Duke U, poli sci
 
 ---
 
-## Aggregation
+## Finding the Group-Level Latent Variables
+
+Group mean of individual responses
 
 .center[y<sub>kq</sub> = &Sigma;y<sub>ikq</sub> &frasl; n.]
 
 --
 
-Concerns:
+Aggregation Issues:
 
 1. The mean does not have much substantial influence to the result if the group k is too small.
 1. Different ys have different contributions to the latent variable.
@@ -911,7 +808,7 @@ Concerns:
 
 ---
 
-## Getting the Mean Right When Aggregating
+## Getting the Group Mean Right
 
 Multilevel Regression and Post-stratification (MrP)
 
@@ -934,11 +831,10 @@ Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Cate
 4. All of the population means &mu;<sub>j</sub> can be estimated by using some statistical technique, such as .red[multilevel regression].
 
 .pull-left[
-$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} n_j}$$
+$$\theta_h = \frac{\sum_{j \in h} N_j \mu_j }{\sum_{j \in h} N_j}$$
 ]
 .pull-right[
-N: Population (Census)    
-n: Sample
+N: Population of the stratum (Census)
 ]
 
 ???
@@ -952,14 +848,13 @@ n: Sample
 
 ---
 
-class: Small
+## Example
 
-## 操作案例
+Source: Economic variables of 2,396 industrial companies in a particular year
 
-数据：某年某市五区域2396家产业公司的财政信息  
-目标：估测每个区域的产业平均收入（记为&theta;<sub>1~5</sub>）
+Goal: Average income of industries by .red[each of the five existing zones](&theta;<sub>1~5</sub>). 
 
-公司规模和区域分布
+Company levels and zones (the population, "company census")
 
 ```{r descriptive-level}
 data(Lucy)
@@ -974,7 +869,8 @@ https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
 
 ---
 
-总体平均值（真值）
+Fortunately, we know the .red[true] averages at this time.
+
 
 ```{r trueMean}
 tb_true <- group_by(Lucy, Zone) %>% 
@@ -985,25 +881,27 @@ tb_true %>%
 
 ---
 
-我们随机选取数据中1000个产业公司作为样本：
+A random sample of 1,000 from the 2,396 population
 
-```{r rawVsTrue, fig.height=7, fig.width=10}
+```{r rawVsTrue, fig.cap="Sample Means vs. True Means", fig.align='center', fig.height=7, fig.width=10}
 SLucy <- sample_n(Lucy, size = 1000)
 Np <- table(Lucy$Level, Lucy$Zone)
 
 
-tb_compare <- group_by(SLucy, Zone) %>% 
-  summarise(income = mean(Income)) %>% 
-  left_join(tb_true, by = c("Zone")) %>% 
+tb_compare <- group_by(SLucy, Zone) %>%
+  summarise(income = mean(Income)) %>%
+  left_join(tb_true, by = c("Zone")) %>%
   mutate(incomeTrue = 0,
-         rawDiff = income.x - income.y,)
+         rawDiff = income.x - income.y, )
 
 ggplot(tb_compare, aes(x = incomeTrue, xend = rawDiff, y = Zone)) +
   geom_dumbbell(
-    size=4, 
-    color="#ffffbf",
-    colour_x = "#0571b0",
-    colour_xend = "#ca0020",
+    size = 4,
+    size_x = 8,
+    size_xend = 8,
+    color = gb_cols("gold"),
+    colour_x = gb_cols("red"),
+    colour_xend = gb_cols("black"),
   ) +
   labs(subtitle = "Raw Mean vs. True Value")
 ```
@@ -1014,15 +912,16 @@ class: Small
 
 ## Step I: Mr
 
+.center[
 Income = &beta;<sub>0z</sub> + &beta;<sub>1z</sub>Level<sub>iz</sub> + &epsilon;<sub>iz</sub>
 
-.center[&beta;<sub>0z</sub> = &gamma;<sub>00</sub> + &gamma;<sub>01</sub>Zone<sub>z</sub> + u<sub>0z</sub>]
+&beta;<sub>0z</sub> = &gamma;<sub>00</sub> + &gamma;<sub>01</sub>Zone<sub>z</sub> + u<sub>0z</sub>]
 
 --
 
 Output: Post-strata means
 
-```{r mr}
+```{r mr, echo=TRUE}
 # Step 1: <<MR>> - Multilevel regression
 M1 <- lmer(Income ~ Level + (1 | Zone), data = SLucy)
 SLucy$Pred <- predict(M1)
@@ -1042,9 +941,9 @@ Mupred %>% kable(format = "html", digits = 2)
 
 ## Step II: P
 
-N<sub>z</sub> &times; weighted mean / n<sub>z</sub>
+N<sub>z</sub> &times; weighted mean / N<sub>z</sub>
 
-```{r p}
+```{r p, echo=TRUE}
 colSums(Np * Mupred) / count(Lucy, Zone)$n
 ```
 
@@ -1052,62 +951,87 @@ colSums(Np * Mupred) / count(Lucy, Zone)$n
 
 ## Comparision
 
-```{r mrpVsraw, fig.height=8, fig.width=10}
+```{r mrpVsraw, fig.height=8, fig.width=10, fig.align='center'}
 # Step 2: <<Post-stratification>>
 # Mean income estimation per zone
-tb_compare$mrpDiff <- colSums(Np * Mupred) / count(Lucy, Zone)$n - tb_compare$income.y
+tb_compare$mrpDiff <-
+  colSums(Np * Mupred) / count(Lucy, Zone)$n - tb_compare$income.y
+tb_compare <- rename(tb_compare,
+                     Raw = rawDiff,
+                     MrP = mrpDiff)
 
 tb_compare %>%
-  pivot_longer(rawDiff:mrpDiff, names_to = "methods", values_to = "diff") %>%
-  ggplot(aes(x = incomeTrue, xend = diff, y = Zone, color = methods)) +
+  pivot_longer(Raw:MrP, names_to = "methods", values_to = "diff") %>%
+  ggplot(aes(
+    x = incomeTrue,
+    xend = diff,
+    y = Zone,
+    color = methods
+  )) +
   geom_dumbbell(
-    size = 4,
-    colour_x = "#0571b0",
-    colour_xend = "#ca0020"
-  ) +
-  scale_color_viridis_d(alpha = 0.5, end = 0.7)
+    size = 3,
+    size_x = 8,
+    size_xend = 8,
+    colour_x = gb_cols("red"),
+    alpha = 0.7) +
+  scale_color_gb(palette = "digitMixed")
 ```
 
 ---
 
-MrP: 依然是算术平均数。
+## What MrP Can't Solve
 
-+ 答题难度的地区差异
-+ 题目的scale
-+ Measurement error
++ Question uniqueness &times; Zones
++ Scale of questions
++ Measurement Error
++ Time trend
 
 --
 
-## 聚合层级IRT：DGIRT
+After, all, MrP is still a mean measurement of the latent variable.
 
-Dynamic Group-level IRT——结合IRT和MrP (Caughey & Warshaw 2015)
+--
+
+### Solution
+
+Dynamic Group-level IRT (DGIRT, Caughey & Warshaw 2015)
+
+???
+
+Combining IRT and MrP plus dynamic element
 
 ---
 
 ## DGIRT
 
-1. 在群组层面估测IRT；
-1. 在估测IRT过程中加入群组级别变量；
-1. 将时间变量融入IRT估测；
-1. 用MrP给估测进行权重。
+1. Estimate IRT within each group;    
+&rarr; .red[Latent variable] in
+1. Embed the group IRT in a multilevel framework;    
+&rarr; .red[Group] in
+1. Allowing hierarchical parameters to evolve according to a dynamic model;    
+&rarr; .red[Time] in
+1. Weight the estimates with for groups.    
+&rarr; .red[MrP] in
+
 
 ---
 
-class: small
+## Latent Variable Estimates at the Group Level
 
-## IRT的群组层级估测
-
-个体
+Individual
 
 $$p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$
 
 --
 
-群组
+Group     
+(k &isin; {1...K})
 
 $$\eta_{ktq} = logit^{-1}(\frac{\color{red}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{red}{(1.7\sigma_{kt})^2}}}).$$
 
-$\bar{\theta}_k$ 和 &sigma;<sub>kt</sub> 是潜在变量在组k时间t的均值和sd。  
+.center[
+$\bar{\theta}_kt$ and &sigma;<sub>kt</sub> is the mean and SD the latent variable in Group `k` at time `t`.
+]
 
 ???
 
@@ -1119,7 +1043,7 @@ Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of
 
 ---
 
-## 囊括时间与空间问题
+## Modeling Time and Space
 
 $$\bar{\theta}_k\sim N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}})$$
 
@@ -1140,39 +1064,33 @@ n<sup>*</sup><sub>kqt</sub>基于MrP
 
 ---
 
-DGIRT：
+.pull-left[
+### Pros
 
-+ 囊括诸多因素
-+ 可以部分平衡样本代表性问题
++ Including time, space, and questions
++ Increasing representativeness
+]
 
 --
 
-+ 强大，但.red[复杂]
+.pull-right[
+### Cons
 
++ Complicated
+    + In weeks
+]
 
 ???
 
 Caughey & Warshaw称会跑几个星期
 
----
-
-class: Small
-
-## DGIRT简装版 (Claassen 2019)
-
-简化1：只作用于代表性样本和国家级别  
-简化2：将国家作用从估测&theta;变为估测difficulty  
-简化3：忽略本地问题分布（如极化现象）
-
-
 --
 
-$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).$$
+### Simpler DGIRT (Claassen 2019)
 
-.center[&darr;]
-
-
-$$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\alpha_q}).$$
+Simplified 1. Only at the state level   
+Simplified 2. From estimating &alpha; (dispersion) to &beta; (difficulty)  
+Simplified 3. Ignoring polarization.
 
 
 ???
@@ -1181,86 +1099,25 @@ $$\eta_{ktq} = logit^{-1}(\frac{\bar{\theta}'_{kt}- (\beta_q + \delta_{kq})}{\al
 
 ---
 
-## 聚合IRT最新进化态：DCPO
-
-.left-column[
-<img src="images/fsolt.jpeg" height = 350 />
-]
-
-.right-column[
-.red[D]ynamic .red[C]omparative .red[P]ublic .red[O]pinion
-
-复杂程度：
-
-Claasseen 2019 <   
-DCPO <   
-DGIRT
-]
-
----
-
-background-image: url("images/irtCompare.png")
-background-position: center
-background-size: contain
-
-
-???
-
-Bounded: 使用logit归为0-1
-
----
-
-## 优化效果
-
-.center[<img src="images/irtFitCompare.png" height = 300 />]
-
----
-
-## 操作过程
-
-1. 收集survey数据，明确与感兴趣的变量相关的指标问题
-1. 通过`DCPOtools`对数据进行预处理
-1. 通过`DCPO`进行数据分析
-1. 通过`shinystan`诊断convergence
-
-
----
-
-## Two-Parameter Item Response Theory (2PL-IRT)
-
-.center[<img src="../conference/2021-AsianPoliMeth/images/2pirt.png" height = 500 />]
-
-???
-
-Difficulty/discrimination: how well a question can different people from below to above
-
-Dispersion: magnitude of the measurement error
-
----
-
-## Newest Development at Group Level
-
-.center[IRT &rarr; MIRT &rarr; DGIRT &rarr; .red[D]ynamic .red[C]omparative .red[P]ublic .red[O]pinion]
-
+## The Newest Development in Group IRT: DCPO
 
 .pull-left[
-<img src="../conference/2021-AsianPoliMeth/images/fsolt.jpeg" height = 350 />
+.red[D]ynamic .red[C]omparative .red[P]ublic .red[O]pinion (Bayesian-Based)
+
+### Complexity 
+
+Claasseen 2019 < DCPO < DGIRT
+
 ]
 
 .pull-right[
-Running time:   
-Claasseen 2019 <
-DCPO <
-DGIRT
+<img src="../courses/governmentalBigData/images/fsolt.jpeg" height = 350 />
+
+Frederick Solt (University of Iowa)
 ]
 
-
-???
-multilevel mixture ordinal item response model Stegmueller 2011
-
-Caughey & Warshaw 2016, DGIRT, Claassen 2019, 2020
-
 ---
+
 
 ## DCPO
 
@@ -1299,9 +1156,10 @@ Mass Publics, 1981–2016.” American Political Science Review 113(3):674–693
 Solt, Frederick. 2020b. “Modeling Dynamic Comparative Public Opinion.” SocArXiv
 10.31235/osf.io/d5n9p.
 
+
 ---
 
-background-image: url("../conference/2021-AsianPoliMeth/images/irtCompare.png")
+background-image: url("../courses/governmentalBigData/images/irtCompare.png")
 background-position: center
 background-size: contain
 
@@ -1311,35 +1169,67 @@ background-size: contain
 Bounded: 使用logit归为0-1
 
 ---
-background-image: url("../conference/2021-AsianPoliMeth/images/irtFitCompare.png")
-background-position: center
-background-size: contain
+
+## Validations
+
+.center[<img src="../courses/governmentalBigData/images/irtFitCompare.png" height = 300 />]
 
 ---
 
-## Uncertainty Matters
+## Operation
+
+1. Collect survey data and identify the survey items;
+1. Generate raw dataset (using `DCPOtools`);
+1. Reformat dataset for model (using `DCPOtools`);
+1. Analyze the data with `DCPO`
+1. Diagnosis for convergence with `shinystan`.
 
 
-No uncertainty engaged &hArr; The latent variable is measured .orange["~~perfectly~~"].
+---
 
-&rArr; Biased coefficients and standard errors.
+class: middle, center
+
+## One More Thing, An .red[Important] Thing!
+
+No uncertainty engaged &hArr; The latent variable is measured .red["perfectly"].
+
+&dArr; 
+
+Biased coefficients and standard errors.
+
 
 --
 
-### Incorporating Uncertainty (Tai, Hu & Fred 2021)
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+Uncertainty Matters!
+]
+
+---
+
+### How?
+
+Overimputations (Alternative: model of compositions)
 
 1. .red[Repeated] Latent variable estimation (e.g., DCPO &times; 1000);
-1. Regressing with the .navy[distribution];
-1. .navy[Combination] with Rubin's Rule.
+1. Regressing with the .red[distribution];
+1. .red[Combination] with Rubin's Rule.
+
+???
+
+Blackwell, Matthew, James Honaker, and Gary King. 2017. “A Unified Approach to Measurement Error and Missing Data: Overview.” Sociological Methods & Research: 303–41.
+
 
 ---
 
-## Application: Replicate the Most Recent Findings 
+## Going Against the Most Recent Findings 
 
-Claassen 2020, AJPS; Claassen 2020 APSR
+Claassen 2020 AJPS; Claassen 2020 APSR
+
+.pull-left[<img src="../courses/governmentalBigData/images/irt_idontcare.gif" height = 400 />]
 
 --
 
+.pull-right[
 ### More Data together with Better Method
 
 1988~2020 (144 countries, 33 years)
@@ -1348,6 +1238,7 @@ Comparing with Claassen (2020a, 2020b):
 
 > 26.2% .red[more] questions;     
 33.3% .red[more] survey sources
+]
 
 ---
 
@@ -1370,9 +1261,9 @@ background-size: contain
 .pull-left[
 ### Methodology
 
-1. .navy[Multidimensional] support;
-1. Conceptual .navy[Difference];
-1. Relations with .navy[other values].
+1. .red[Multidimensional] support;
+1. Conceptual .red[Difference];
+1. Relations with .red[other values].
 
 ]
 
