@@ -55,10 +55,10 @@ theme_set(theme_minimal())
 ```
 
 
-+ Common issue in comparative politics
++ Common problem
 + Methodological solution
-+ A new method: DCPO
-+ New findings 
++ A new weapon
++ [Un]expected findings 
 
 # Overview
 
@@ -67,22 +67,22 @@ theme_set(theme_minimal())
 class: center, middle
 
 .bg-black.golden.ba.shadow-5.ph4.mt3.center[
-Social scientists aim for patterns in a society.
+Social scientists are interested in complex, abstract concepts.
 ]
 
 
-.large[Common issues]    
-.small[Development, culture, democracy...]
+.large[Common objectives]    
+Development, culture, democracy...
 
 \+ 
 
 .large[Rich data]    
-.small[WVS, Global Barometers, ?GSS, Pew ...]
+WVS, Global Barometers, ?GSS, Pew ...
 
 
 .large[.red[&#10504;]]
 
-.large[General patterns]
+.large[Clear patterns]
 
 
 ---
@@ -181,7 +181,7 @@ w.
 
 class: inverse, bottom
 
-+ Typological modeling
++ Variable extraction
 + Individual IRT
 + Group IRT
 + DCPO
@@ -203,7 +203,7 @@ class: inverse, bottom
 .pull-right[
 ### Typological Models
 
-1. Item Response Theory
+1. Item Response Theory (IRT)
 1. Cross-Group Comparison(MrP, GIRT, DCPO)
 ]
 
@@ -221,7 +221,7 @@ R<sup>\*</sup>
 
 ---
 
-## Item Response Theory, IRT
+## IRT
 
 Why not factor analyses?
 
@@ -241,9 +241,9 @@ CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；�
 
 class: middle
 
-.center[
+
 ## Why IRT
-]
+
 
 1. Created for .red[noncontinuous] variables (binary &rarr; ordinal + continuous);
 
@@ -341,14 +341,13 @@ Responses given to the separate items in a test are mutually independent given a
 
 ---
 
-class: middle, large
+class: center, middle, large
 
 # Parameter Invariance
 
-+ Invariance among items
-+ Invariance among respondents<sup>\*</sup>
+Invariance among items    
+Invariance among respondents (DIF)
 
-.footnote[<sup>\*</sup> Check the differential item functioning (DIF) with Wald and likelihood-ratio approach.]
 
 ???
 
@@ -357,6 +356,8 @@ class: middle, large
     + 当进行Multiple Group IRT时尤可能被违反
 
 Easy to be avoid when involving multi-group IRT
+
+.footnote[<sup>\*</sup> Check the differential item functioning (DIF) with Wald and likelihood-ratio approach.]
 
 ---
 
@@ -397,11 +398,11 @@ Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示
 --
 
 .pull-left[
-.orange[.large[Item Response]]
+.orange[Item Response]
 ]
 
 .pull-right[
-.navy[.large[Response Theory]]
+.navy[Response Theory]
 ]
 
 ---
@@ -441,13 +442,7 @@ The rest parameters we'll talk in 2pl and 3pl
 class: center, middle
 
 .bg-black.golden.ba.shadow-5.ph4.mt3.center[
-.large[Please always diagnose your results]
-]
-
---
-
-.bg-black.golden.ba.shadow-5.ph4.mt3.center[
-.large[and .red[understand] what you are diagnosing.]
+.large[Please always diagnose your results and .red[understand] what you are diagnosing.]
 
 .tr[
 — Dr. Hu
@@ -500,7 +495,7 @@ Standardized root mean square residual <.08 acceptable
 
 ## Item Characteristic Curves （ICC）
 
-```{r icc, fig.height=8, fig.width=10}
+```{r icc, fig.height=8, fig.width=10, fig.align='center'}
 plot(m_lsat, type = "trace", facet_items = FALSE)
 ```
 
@@ -512,7 +507,7 @@ plot(m_lsat, type = "trace", facet_items = FALSE)
 
 ## Test Charactersitic Curve
 
-```{r tcc, fig.height=8, fig.width=10}
+```{r tcc, fig.height=8, fig.width=10, fig.align='center'}
 plot(m_lsat, type = "infoSE")
 ```
 
@@ -571,7 +566,7 @@ infit/outfit, close to 1 is good
 
 ---
 
-## Cons for Rasch Model
+## Cons of Rasch Model
 
 Measurement error
 
@@ -627,8 +622,14 @@ Dispersion: magnitude of the measurement error
 
 ---
 
-## Do We Really Need 2PL?
+```{r ltm, echo=TRUE}
+m_lsat2PL <-  mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
+coef(m_lsat2PL, simplify = TRUE)
+```
 
+---
+
+## Do We Really Need 2PL?
 
 .center[<img src="../courses/governmentalBigData/images/irt_OccamsRazor.gif" height = 100 />]
 
@@ -649,7 +650,12 @@ anova(m_lsat, m_lsat2PL) %>%
 .center[<img src="../courses/governmentalBigData/images/irt_purelyGuess.jpg" height = 400 />]
 
 
-.center[A lot of .red[low &theta;] respondents]
+.center[
+
+&dArr;    
+A lot of .red[low &theta;] respondents
+
+]
 
 ???
 
@@ -661,7 +667,7 @@ anova(m_lsat, m_lsat2PL) %>%
 
 $$Pr(y_{iq} = 1) = \color{red}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
 
-c<sub>i</sub>：Item .red[lower] asymptote ("guessing")
+c<sub>i</sub>：Item lower asymptote ("guessing")
 
 --
 
@@ -683,6 +689,8 @@ c<sub>i</sub>：Item .red[lower] asymptote ("guessing")
 
 $$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
 
+
+c<sub>i</sub>：Item lower asymptote ("guessing")    
 d<sub>i</sub>：Item .red[upper] asymptote ("carelessness"), d < 1
 
 --
@@ -725,7 +733,9 @@ Logit &rarr; Cumulative logit
 
 Pr(y<sub>iq</sub> = 1) &rarr; $Pr(\frac{y_{iq}\leq c}{y_{iq}>c})$
 
-```{r twoDimension, fig.height=4, fig.width=10}
+--
+
+```{r twoDimension, fig.height=8, fig.width=20, fig.align='center'}
 m_lsat2D <- mirt(df_lsat, model = 2, verbose = FALSE)
 plot(m_lsat2D, type = "score")
 ```
@@ -796,8 +806,8 @@ Group mean of individual responses
 
 Aggregation Issues:
 
-1. The mean does not have much substantial influence to the result if the group k is too small.
-1. Different ys have different contributions to the latent variable.
+1. The mean does not have much substantial influence to the result if the group `k` is too small.
+1. Different `y`s have different contributions to the latent variable.
 
 ???
 
@@ -826,8 +836,17 @@ Gelman, Andrew, and Thomas C. Little. 1997. “Poststratification Into Many Cate
 --
 
 1. A population is .red[divided] into `H` strata of interest (for example states);
+
+--
+
 2. The parameters of interest are the .red[means in each strata] &theta;<sub>h</sub> (h = 1...H);
+
+--
+
 3. Every stratum is cross-classified by some .red[demographics] j &isin; H, besides every .red[population count] N<sub>j</sub> is known;
+
+--
+
 4. All of the population means &mu;<sub>j</sub> can be estimated by using some statistical technique, such as .red[multilevel regression].
 
 .pull-left[
@@ -883,7 +902,7 @@ tb_true %>%
 
 A random sample of 1,000 from the 2,396 population
 
-```{r rawVsTrue, fig.cap="Sample Means vs. True Means", fig.align='center', fig.height=7, fig.width=10}
+```{r rawVsTrue, fig.cap="Sample Means vs. True Means", fig.align='center', fig.height=6, fig.width=10}
 SLucy <- sample_n(Lucy, size = 1000)
 Np <- table(Lucy$Level, Lucy$Zone)
 
@@ -1088,7 +1107,7 @@ Caughey & Warshaw称会跑几个星期
 
 ### Simpler DGIRT (Claassen 2019)
 
-Simplified 1. Only at the state level   
+Simplified 1. Only at the country level (no MrP then 😝)   
 Simplified 2. From estimating &alpha; (dispersion) to &beta; (difficulty)  
 Simplified 3. Ignoring polarization.
 
@@ -1178,9 +1197,9 @@ Bounded: 使用logit归为0-1
 
 ## Operation
 
-1. Collect survey data and identify the survey items;
-1. Generate raw dataset (using `DCPOtools`);
-1. Reformat dataset for model (using `DCPOtools`);
+1. Collect survey data and identify the survey items (.red[mostly automated]);
+1. Generate raw dataset (using `DCPOtools`, .red[automated]);
+1. Reformat dataset for model (using `DCPOtools`, .red[automated]);
 1. Analyze the data with `DCPO`
 1. Diagnosis for convergence with `shinystan`.
 
@@ -1189,9 +1208,9 @@ Bounded: 使用logit归为0-1
 
 class: middle, center
 
-## One More Thing, An .red[Important] Thing!
+## One More Thing and An .red[Important] Thing to Use DCPO .red[Correctly]!
 
-No uncertainty engaged &hArr; The latent variable is measured .red["perfectly"].
+No uncertainty engaged &hArr; The latent variable is measured "perfectly".
 
 &dArr; 
 
@@ -1206,7 +1225,7 @@ Uncertainty Matters!
 
 ---
 
-### How?
+### How to Cope?
 
 Overimputations (Alternative: model of compositions)
 
@@ -1310,7 +1329,11 @@ we point several potential explanations, but we dont' know which one is right. e
 
 ---
 
-class: inverse, center, middle
+background-image: url("images/hives.png")
+background-position: right bottom
+background-size: 50%
+
+class: inverse
 
 # Thank you!
 
