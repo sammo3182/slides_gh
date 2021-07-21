@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>计算机辅助文本分析概论</title>
+    <title>计算机辅助文本分析·概论</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="06_textAnalaysis_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="06_textAnalaysis_files/header-attrs-2.9/header-attrs.js"></script>
     <link href="06_textAnalaysis_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="06_textAnalaysis_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
     <link href="06_textAnalaysis_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
@@ -25,7 +25,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# 计算机辅助文本分析概论
+# 计算机辅助文本分析·概论
 ## Dr. Hu’s Intro to Text Analysis
 ### 胡悦
 ### 清华大学政治学系
@@ -38,65 +38,60 @@ class: center, middle, inverse, title-slide
 
 ## Overview
 
+.pull-left[
 ### 理论
 
-* Text as Data: 文本与文本分析
-* 文本分析的基本原则
+* .red[见字如数]：文本与文本数据
+* .red[以字当数]：文本分析研究模式
+]
 
+.pull-right[
 ### 操作
 
-* 文本获取
-* 文本整理
+.red[化字为数]: 文本数据化原则
+
+* 数据获取
+* 数据整理
 * 基本分析
-* （进阶分析）
+* .grayLight[进阶分析]
+]
 
----
-
-## 技术来源
-
-* 平台：R
-    + [`rvest`](https://rvest.tidyverse.org/)
-    + [`tidytext`](https://www.tidytextmining.com/)
-    + [`jiebaR`](https://qinwenfeng.com/jiebaR/)
-    
 --
 
-* 其他平台：
-    + Python
-    + C++
-    + Java
+
+### 技术来源 （R）
+
+[`rvest`](https://rvest.tidyverse.org/)   
+[`tidytext`](https://www.tidytextmining.com/)   
+[`jiebaR`](https://qinwenfeng.com/jiebaR/)/[`TopWORDS`](http://www.stat.tsinghua.edu.cn/kdeng/r-package/)    
+   
+
 
 ---
 
 class: inverse, bottom
 
-# 文本数据与分析概况
+# 见字如数：文本与文本数据化
 
 ---
 
-## Text as Data
+## 文本的数据
 
-每年： 2017-2018年年增量56,530,000人。
+每年： 社交媒体用户2017--2018年年增量56,530,000人。
 
---
 
 每天：
-+ 百度日用户搜索请求，需1.7天才能扫描一遍；
-+ 微信日增数据500TB——比人类所有书籍存量还多。
++ 百度.blue[日]用户搜索请求，需.blue[1.7天]才能扫描一遍；
++ 微信.blue[日]增数据.blue[500TB]——比人类所有书籍存量还多。
+
+
+每秒：全世界每秒发送290万封电子邮件，一个人需要.blue[5.5年]日以继夜才能读完。
 
 --
 
-每秒：全世界每秒发送290万封电子邮件，一个人需要5.5年日以继夜才能读完。
+.center[2019年，数据总量达40ZB，人均5.2TB&lt;sup&gt;1&lt;/sup&gt;]
 
---
-
-### 1080p HD 2hrs：6GB
-
---
-
-2019年，数据总量达40ZB，人均5.2TB&lt;sup&gt;1&lt;/sup&gt;
-
-.footnote[&lt;sup&gt;1&lt;/sup&gt; 1ZB = 1,024EB = 1,024&lt;sup&gt;2&lt;/sup&gt;PB = 1,024&lt;sup&gt;3&lt;/sup&gt;TB  = 1024&lt;sup&gt;4&lt;/sup&gt;GB.]
+.footnote[&lt;sup&gt;1&lt;/sup&gt; 1ZB = 1,024EB = 1,024&lt;sup&gt;2&lt;/sup&gt;PB = 1,024&lt;sup&gt;3&lt;/sup&gt;TB  = 1024&lt;sup&gt;4&lt;/sup&gt;GB; 1080p HD 2hrs：6GB]
 
 ???
 
@@ -105,264 +100,79 @@ Exa Byte &lt; Zetta Byte &lt; Yotta Byte
 
 ---
 
-## 文本之于社会科学
+## 文本之于研究人类
 
-历史悠久而非主流
-+ 资料难获取；花时间；难推广；难管理；难分析
+历史悠久而非主流 
+
+&amp;uarr; 资料难获取；花时间；难推广；难管理；难分析
 
 --
 
 新兴工具的繁荣：
-+ 文本.navy[资料]指数级增长；
-+ 大规模文本数据.navy[采集]；
-+ .navy[存储和管理]能力增强；
-+ 文本分析.navy[方法]蓬勃发展：
-+ 可推广、系统化和.navy[廉价]化；
-+ 通过文本表达的社会意义更.navy[广泛]。
 
----
++ 通过文本表达的社会意义更.blue[广泛];
++ 文本.blue[资料]指数级增长；
++ 大规模文本数据.blue[采集]；
++ .blue[存储和管理]能力增强；
++ 可推广、系统化和.blue[廉价]化；
 
-## 社会科学中的文本分析
 
-研究者.navy[描述和阐释]一系列记录或可视文本的方法。
-
---
-
-符号化 + 标准化
-
-???
-
-存在；密度；频次
-
-结构；功能
++ 文本分析.blue[方法]蓬勃发展
 
 
 ---
 
-## 计算机辅助文本分析
+## (计算机辅助）文本分析
+
+.pull-left[
+## 对象
+
+~~文字~~ 语言
+
+## 类型
 
 * Text analysis vs. content analysis
-
---
-
 * Representational analysis vs. Instrumental analysis
-
-???
-
-精确解码，关注外显（manifest）；
-探索意图，关注隐含（latent）
-
---
-
 * Thematic analysis vs. semantic analysis
+]
 
 ???
-
-概念是否出现及何种关系，基于词频和向量；
-识别主题间的具体关系；考虑语法、逻辑等
+Representational 精确解码，关注外显（manifest）；
+Instrumental 探索意图，关注隐含（latent）
+Thematic 概念是否出现及何种关系，基于词频和向量；
+Semantic 识别主题间的具体关系；考虑语法、逻辑等
 
 语法学(syntax, how to say it)
 语义学(semantic, what is said)
 语用学(pragmatic, what is implicated)
 
----
-
-## 分析对象
-
-.pull-left[
-
-~~文字~~ 语言
-
- Language matters!
-
-]
-
 --
 
 .pull-right[
 
-&lt;img src="images/text_arrival.jpg" height = 450 /&gt;
-
-]
-
----
-
-## 分析挑战
-
-* 非结构化
-
---
-
-* 海量潜在维度
-
---
-
-* 语言复杂且微妙
-
---
-
-* 过载、失实、 冗余、污染
-
----
-
-## 研究设计实例
-
-King et al. 2013. 
-
-* 问题：网络审查目标
-
-???
-
-是阻止/打击批评政府?
-
-King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
-
---
-
-* 发现：
-    + 批评意见；
-    + 集体行动。
-
-???
-
-+ 允许新媒体上存在大量批评政府的意见；
-+ 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。
-
----
-
-* 数据
-    + 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖
-        + 随机抽取:127,283
-
-.center[&lt;img src="images/crimson-hexagon.png" height = 200 /&gt;]
-
-???
-
-2007年Gary King创办，2018年并入英国Brandwatch.
-
----
-
-background-image: url(images/chinese-media.png)
-background-position: 50% 50%
-background-size: 100%
-
----
-
-* 对每个网贴，首次出现时下载；
-* 一段时间后再次访问该网贴，识别是否被删帖； 
-* 使用自动文本分析分析海量文本资料。
-
-&lt;img src="images/censored.png" height = 450 /&gt;
-
----
-
-## 研究设计
-
-检测各议题领域    
-&amp;rarr;识别发帖量爆发，找到相关真实事件    
-&amp;rarr;识别集体行动事件    
-&amp;rarr;判断发帖与行动关联    
-&amp;rarr;判断支持或批评政府    
-
-???
-
-识别出87件
-
-
---
-
-## 操作化
-
-1. 发帖量
-1. 事件类型
-1. 贴子内容
-
----
-
-## 发帖量
-
-.center[&lt;img src="images/post-amount.png" height = 500 /&gt;]
-
----
-
-## 事件类型
-
-1. 情感维度：对政府的负面、正面、或中立意见 
-
---
-
-1. 主题维度：
-    + 集体行动
-    + 对审查者的批评
-    + 色情内容
-    + 新闻
-    + 政府政策
-
-???
-
-网络外抗议或有组织的群体性事件；
-以往有组织或煽动集体行动的个体；
-以往煽动抗议或集体行动的民族主义或民族情绪；
-
-
----
-
-.center[&lt;img src="images/post-type.png" height = 500 /&gt;]
-
----
-
-.center[&lt;img src="images/post-censor.png" height = 500 /&gt;]
-
----
-
-.center[&lt;img src="images/inner-mongolia.png" height = 500 /&gt;]
-
-???
-
-On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters.
-
----
-
-.center[&lt;img src="images/post-one-child.png" height = 500 /&gt;]
-
-???
-
-Continually high censorship levels：pornography, criticism of the censors
-
----
-
-## 帖子内容
-
-* 对中文帖子进行结构化编码；
-* 按类别计算被审查掉的词语比例；
-
---
-
-&lt;img src="images/post-content.png" height = 300 /&gt;
-
-[`Readme`](https://gking.harvard.edu/readme) in R
-
-???
-
-This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels.
-
----
-
-## 问题
+## 挑战
 
 ### 理论
 
-Single causal mechanism
+Single causal mechanism 
 
 ### 数据
 
-+ 随机抽取    
-+ Only posted   
-+ One-time censor (Su et al. 2020)
+* DGP
+    + 随机抽取    
+    + Only posted   
+    + One-time censor
+* 非结构化
+* 海量潜在维度
+* 内容复杂且微妙
 
-### 方法
+### 前提
 
 "A bag of word" assumption
+
+]
+
+
 
 ???
 
@@ -416,12 +226,12 @@ British Conservative, Labour and Liberal Democrat manifesto,
 
 ---
 
-&lt;img src="images/text_crowd-sourced.jpg" height = 450 /&gt;
+.center[&lt;img src="images/text_crowd-sourced.jpg" height = 600 /&gt;]
 
 
 ---
 
-&lt;img src="images/text_expert-crowd.png" height = 400 /&gt;
+.center[&lt;img src="images/text_expert-crowd.png" height = 600 /&gt;]
 
 
 ---
@@ -438,11 +248,11 @@ Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfec
 
 --
 
-.center[&lt;img src="images/text_vocalPitch_hcy.png" height = 270 /&gt;]
+.center[&lt;img src="images/text_vocalPitch_hcy.png" height = 400 /&gt;]
 
 ---
 
-&lt;img src="images/text_vocalPitch.png" height = 600 /&gt;
+.center[&lt;img src="images/text_vocalPitch.png" height = 600 /&gt;]
 
 
 ???
@@ -475,16 +285,248 @@ background-size: 100%
 
 ---
 
+.center[
+
 Validation
 
 &lt;img src="images/text_runningMan.png" height = 250 /&gt;
 &lt;img src="images/text_banner.png" height = 250 /&gt;
 
+]
+
 ---
 
 class: inverse, bottom
 
-# 文本分析操作
+# 以字当数：文本分析研究模式
+
+---
+
+class: center, middle
+
+## 文本分析研究思路（以King et al. 2013为例）
+
+问题：Censorship
+
+&amp;vellip;    
+&amp;vellip;    
+&amp;vellip;    
+&amp;vellip;    
+&amp;vellip;    
+&amp;dArr;
+
+发现：
++ 批评意见；
++ 集体行动。
+
+???
+
+是阻止/打击批评政府?
+
+King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43.
+
++ 允许新媒体上存在大量批评政府的意见；
++ 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。
+
+---
+
+## DGP
+
++ 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖
++ 随机抽取:127,283 .center[&lt;img src="images/crimson-hexagon.png" height = 50 /&gt;]
+
+* 对每个网贴，首次出现时下载；
+* 一段时间后再次访问该网贴，识别是否被删帖； 
+* 使用自动文本分析分析海量文本资料。
+
+.center[&lt;img src="images/censored.png" height = 300 /&gt;]
+
+
+???
+
+2007年Gary King创办，2018年并入英国Brandwatch.
+
+---
+
+background-image: url(images/chinese-media.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+class: center
+
+## 研究设计
+
+检测各议题领域    
+&amp;darr;    
+识别发帖量爆发点及相关事件    
+&amp;darr;    
+识别集体行动事件    
+&amp;darr;    
+判断发帖与行动关联    
+&amp;darr;    
+判断支持或批评政府    
+
+???
+
+识别出87件
+
+--
+
+## 观测指标
+
+发帖量   
+事件类型   
+贴子内容
+
+---
+
+## 发帖量
+
+.pull-left[
+.center[
+检测各议题领域    
+&amp;darr;    
+.red[识别发帖量爆发点及相关事件]    
+]
+]
+
+.pull-right[&lt;img src="images/post-amount.png" height = 500 /&gt;]
+
+---
+
+## 事件类型
+
+.pull-left[
+1. 情感维度：对政府的负面、正面、或中立意见 
+1. 主题维度：
+    + 集体行动
+    + 对审查者的批评
+    + 色情内容
+    + 新闻
+    + 政府政策
+]
+
+.pull-right[
+.center[
+检测各议题领域    
+&amp;darr;    
+识别发帖量爆发点及相关事件    
+&amp;darr;    
+.red[识别集体行动事件]    
+]
+]
+
+???
+
+网络外抗议或有组织的群体性事件；
+以往有组织或煽动集体行动的个体；
+以往煽动抗议或集体行动的民族主义或民族情绪；
+
+
+---
+
+.pull-left[&lt;img src="images/post-type.png" height = 500 /&gt;]
+
+.pull-right[&lt;img src="images/post-censor.png" height = 500 /&gt;]
+
+---
+
+class: middle
+
+.pull-left[
+.center[
+检测各议题领域    
+&amp;darr;    
+识别发帖量爆发点及相关事件    
+&amp;darr;    
+识别集体行动事件    
+&amp;darr;    
+.red[判断发帖与行动关联] 
+] 
+
+]
+
+.pull-right[&lt;img src="images/inner-mongolia.png" height = 500 /&gt;]
+
+
+
+???
+
+On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters.
+
+
+---
+
+## 帖子内容
+
+.pull-left[
+* 对中文帖子进行结构化编码；
+* 按类别计算被审查掉的词语比例；
+
+&lt;img src="images/post-content.png" height = 300 /&gt;
+
+[`Readme`](https://gking.harvard.edu/readme) in R
+]
+
+.pull-right[
+.center[
+检测各议题领域    
+&amp;darr;    
+识别发帖量爆发点及相关事件    
+&amp;darr;    
+识别集体行动事件    
+&amp;darr;    
+判断发帖与行动关联    
+&amp;darr;    
+.red[判断支持或批评政府]
+]  
+]
+
+???
+
+This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels.
+
+---
+
+class: center, middle
+
+1. .gold[问题：Censorship]    
+&amp;dArr;    
+1. 数据收集    
+&amp;darr;    
+1. 检测各议题领域    
+&amp;darr;    
+1. 识别发帖量爆发点及相关事件    
+&amp;darr;    
+1. 识别集体行动事件    
+&amp;darr;    
+1. 判断发帖与行动关联    
+&amp;darr;    
+1. 判断支持或批评政府    
+&amp;dArr;
+1. .gold[发现]：
++ 批评意见；
++ 集体行动。
+
+
+---
+
+class: inverse, bottom
+
+# 化字为数: 文本数据化原则
+
+---
+
+class: large,center
+
+本节要回答之问题：
+
+1. 文本资源哪里找？
+1. 文本资源怎么得？
+1. 文本信息如何理？
+1. 文本数据能干啥？
 
 ---
 
@@ -562,10 +604,10 @@ Quora, Stack Overflow
 
 ---
 
-## 文本资源：数字化
+## 文本数字化
 
 * 文本扫描 + OCR
-.center[&lt;img src="images/text_hongkong_lib.png" height = 400 /&gt;]
+.center[&lt;img src="images/text_hongkong_lib.png" height = 500 /&gt;]
 
 ---
 
@@ -575,30 +617,28 @@ Quora, Stack Overflow
 
 ## 文本获取
 
-* 档案数据和数字化数据
-* 原生数据：
-    + Spider/crawler/scraper
-    + 清理
+* 二手数据：档案数据和数字化数据
+* 原生数据：Spider/crawler/scraper
+
+Some foolproof scrapers
+
+.center[&lt;img src="images/text_bazhuayu.png" height = 400 /&gt;]
 
 ---
 
-## 抓取工具
+.pull-left[&lt;img src="images/text_huochetou.png" height = 550 /&gt;]
 
-.center[&lt;img src="images/text_bazhuayu.png" height = 500 /&gt;]
-
----
-
-.center[&lt;img src="images/text_huochetou.png" height = 550 /&gt;]
+.pull-right[&lt;img src="images/text_gooseeker.png" height = 550 /&gt;]
 
 ---
 
-.center[&lt;img src="images/text_gooseeker.png" height = 550 /&gt;]
-
----
+class: bottom
 
 background-image: url(images/text_gooseekerI.png)
 background-position: 50% 50%
 background-size: 100%
+
+## 使用案例: 冰箱信息
 
 ---
 
@@ -618,7 +658,7 @@ background-size: 100%
 
 `SelectorGadget`(Chrome)
 
-.center[&lt;img src="images/text_zhongsheng_page.png" height = 350 /&gt;]
+.center[&lt;img src="images/text_zhongsheng_page.png" height = 500 /&gt;]
 
 ---
 
@@ -656,53 +696,50 @@ df_zhongsheng &lt;- map_df(ls_zhongsheng, function(link) {
 
 ---
 
-## Regular Expression
+## 抓取特定形式：Regular Expression
 
 .center[&lt;img src="images/text_regular_expression.png" height = 500 /&gt;]
 
 ---
 
-## 结果
+## 结果·结构化文本数据
 
 
 
-.center[&lt;img src="images/text_zhongsheng_output.png" height = 300 width = 700 /&gt;]
-
----
-
-## 文本分析方法与流程
-
-* 获取数据
-* 结构化
-* Supervised vs. Unsupervised
+.center[&lt;img src="images/text_zhongsheng_output.png" height = 450 width = 900 /&gt;]
 
 ---
 
-&lt;img src="images/text_analysis-method.png" height = 550 /&gt;
+## 文本分析方法概览
+
+.center[&lt;img src="images/text_analysis-method.png" height = 550 /&gt;]
+
+???
+
+Grimmer, Justin (Stanford), and Brandon M. Stewart (Princeton). 2013. “Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts.” Political Analysis 21(3): 267–97.
+
 
 ---
 
-## 常见文本分析方法
+## 常见文本分析层次
 
 ### 描述
 
 词云(word-cloud)、网络
 
+.center[
 ### 聚类
 
 知类分文、知文分类
+]
 
+.pull-right[
+.center[
 ### 语义
 
 情感分析(sentiment analysis)
-
----
-
-## 孤木不成林
-
-* 互联网舆情 + 法院判决信息、股价信息等 &amp;rArr; 行业发展前景；
-* 交易流水信息 &amp;rArr; 提高消费者画像精确度；
-* 网络社交与候选人资料 &amp;rArr; 国会选举、投票率等
+]
+]
 
 ---
 
@@ -712,47 +749,49 @@ df_zhongsheng &lt;- map_df(ls_zhongsheng, function(link) {
 
 --
 
-1. 所有现存关于语言的定量模型都是有偏误的——但不乏能提供有用的信息。
+1. 所有现存关于语言的定量模型都是有.blue[偏误]的——但不乏能提供有用的信息。
 
 --
 
-1. 文本定量模型旨在增强人（作为主体）的辨识范围和能力。
+1. 文本定量模型旨在.blue[增强人]（作为主体）的辨识范围和能力。
 
 --
 
-1. 不存在通行的文本分析最优模型。
+1. .blue[不存在]通行的文本分析最优模型。
 
 --
 
-1. 有效性！有效性！有效性！
-
+1. .blue[Validation! Validation! Validation!]
 
 ---
 
-## 核心假定： A Bag of Words
+## "偏误“的假定： A Bag of Words
 
 A text is represented as the bag (multiset) of its words. 
 
 --
 
+.center[
 &lt;img src="images/text_bagOfWords.png" width = 700 /&gt;
-
+]
 
 ---
 
 ## 操作化: Tokenization
 
-* 文章打散
+1.  文章打散
 
-* 洗去Syntax
+1. 洗去Syntax
     + 大小写
     + stemming (e.g., 美国式、美式)
     + 标点
     + 非字符（@#￥%……&amp;*）
 
-* 区别词性
+1. 区别词性
     + Content vs. function
     + 名、动、形、副、介、代……
+
+
 
 ---
 
@@ -761,31 +800,26 @@ A text is represented as the bag (multiset) of its words.
 
 
 ```
-##  [1] "to"            "can"           "could"         "dare"          "do"           
-##  [6] "did"           "does"          "may"           "might"         "would"        
-## [11] "should"        "must"          "will"          "ought"         "shall"        
-## [16] "need"          "is"            "a"             "am"            "are"          
-## [21] "about"         "according"     "after"         "against"       "all"          
-## [26] "almost"        "also"          "although"      "among"         "an"           
-## [31] "and"           "another"       "any"           "anything"      "approximately"
-## [36] "as"            "asked"         "at"            "back"          "because"      
-## [41] "before"        "besides"       "between"       "both"          "but"          
-## [46] "by"            "call"          "called"        "currently"     "despite"      
-## [51] "did"
+##  [1] "to"            "can"           "could"         "dare"          "do"            "did"           "does"         
+##  [8] "may"           "might"         "would"         "should"        "must"          "will"          "ought"        
+## [15] "shall"         "need"          "is"            "a"             "am"            "are"           "about"        
+## [22] "according"     "after"         "against"       "all"           "almost"        "also"          "although"     
+## [29] "among"         "an"            "and"           "another"       "any"           "anything"      "approximately"
+## [36] "as"            "asked"         "at"            "back"          "because"       "before"        "besides"      
+## [43] "between"       "both"          "but"           "by"            "call"          "called"        "currently"    
+## [50] "despite"       "did"
 ```
 
 --
 
 
 ```
-##  [1] "一些"     "一何"     "一切"     "一则"     "一方面"   "一旦"     "一来"    
-##  [8] "一样"     "一般"     "一转眼"   "万一"     "上"       "上下"     "下"      
-## [15] "不"       "不仅"     "不但"     "不光"     "不单"     "不只"     "不外乎"  
-## [22] "不如"     "不妨"     "不尽"     "不尽然"   "不得"     "不怕"     "不惟"    
-## [29] "不成"     "不拘"     "不料"     "不是"     "不比"     "不然"     "不特"    
-## [36] "不独"     "不管"     "不至于"   "不若"     "不论"     "不过"     "不问"    
-## [43] "与"       "与其"     "与其说"   "与否"     "与此同时" "且"       "且不说"  
-## [50] "且说"     "两者"
+##  [1] "一些"     "一何"     "一切"     "一则"     "一方面"   "一旦"     "一来"     "一样"     "一般"     "一转眼"  
+## [11] "万一"     "上"       "上下"     "下"       "不"       "不仅"     "不但"     "不光"     "不单"     "不只"    
+## [21] "不外乎"   "不如"     "不妨"     "不尽"     "不尽然"   "不得"     "不怕"     "不惟"     "不成"     "不拘"    
+## [31] "不料"     "不是"     "不比"     "不然"     "不特"     "不独"     "不管"     "不至于"   "不若"     "不论"    
+## [41] "不过"     "不问"     "与"       "与其"     "与其说"   "与否"     "与此同时" "且"       "且不说"   "且说"    
+## [51] "两者"
 ```
 
 ---
@@ -799,7 +833,9 @@ A text is represented as the bag (multiset) of its words.
 
 ---
 
-.center[&lt;img src="images/text_bagOfWords2.jpg" height = 500 /&gt;]
+## 转化结果
+
+.center[&lt;img src="images/text_bagOfWords2.jpg" height = 550 /&gt;]
 
 ---
 
@@ -811,69 +847,102 @@ class: small
 
 
 
+```r
+library(jiebaR)
+
+zhongsheng &lt;- "一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"
+cutter &lt;- worker() # segment engine
+new_user_word(cutter, "萨米·卡姆哈维", "nr") # customize segmentation
+```
+
 ```
 ## [1] TRUE
 ```
 
+```r
+segment(zhongsheng, cutter)
 ```
-##  [1] "一场"          "经贸"          "摩擦"          "让"            "世界"         
-##  [6] "看到"          "了"            "一个"          "有"            "担当"         
-## [11] "负责"          "任"            "的"            "中国"          "和"           
-## [16] "一个"          "一意孤行"      "的"            "美国"          "埃及"         
-## [21] "金字塔"        "报"            "资深"          "记者"          "萨米·卡姆哈维"
-## [26] "的话"          "意味深长"      "近年来"        "美国"          "一些"         
-## [31] "政客"          "被"            "美国"          "优先"          "遮住"         
-## [36] "了"            "双眼"          "大"            "搞"            "贸易"         
-## [41] "保护主义"      "单边主义"      "肆意"          "挥舞"          "关税"         
-## [46] "大棒"          "全然不顾"      "中美"          "两国人民"      "和"           
-## [51] "全世界"        "人民"          "的"            "强烈"          "反对"
+
+```
+##  [1] "一场"          "经贸"          "摩擦"          "让"            "世界"          "看到"          "了"           
+##  [8] "一个"          "有"            "担当"          "负责"          "任"            "的"            "中国"         
+## [15] "和"            "一个"          "一意孤行"      "的"            "美国"          "埃及"          "金字塔"       
+## [22] "报"            "资深"          "记者"          "萨米·卡姆哈维" "的话"          "意味深长"      "近年来"       
+## [29] "美国"          "一些"          "政客"          "被"            "美国"          "优先"          "遮住"         
+## [36] "了"            "双眼"          "大"            "搞"            "贸易"          "保护主义"      "单边主义"     
+## [43] "肆意"          "挥舞"          "关税"          "大棒"          "全然不顾"      "中美"          "两国人民"     
+## [50] "和"            "全世界"        "人民"          "的"            "强烈"          "反对"
 ```
 
 ---
 
+"壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！"
+
+
+```r
+tx_huangGai &lt;- "壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！"
+
+library(TopWORDS) # Made by Ke Deng
+
+topwords(tx_huangGai)
+```
+
+
+---
+
+class: small
+
 ## 词频与词性分析
 
 
-```
-##                                            title       time word
-## 1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   一
-## 2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
-## 3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
-## 4 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
-## 5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   让
-## 6 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界
-```
+|title                                          |time       |word |
+|:----------------------------------------------|:----------|:----|
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |一   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |场   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |经贸 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |摩擦 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |让   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |世界 |
 
 --
 
 去掉停词
 
 
-```
-##                                            title       time word
-## 1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
-## 2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
-## 3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
-## 4 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界
-## 5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 看到
-## 6 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 一个
-```
+|title                                          |time       |word |
+|:----------------------------------------------|:----------|:----|
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |场   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |经贸 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |摩擦 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |世界 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |看到 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |一个 |
 
 ---
 
-![](06_textAnalaysis_files/figure-html/zhongsheng-frequency-1.png)&lt;!-- --&gt;
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-frequency-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-phase-freq-1.png" width="90%" /&gt;
+.pull-left[
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-phase-freq-1.png" width="100%" /&gt;
+]
 
 ???
 
 The Economist journalist Simon Rabinovitch
 
----
+--
 
-&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-fre-compare-1.png" width="90%" /&gt;
+.pull-right[
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-fre-compare-1.png" width="100%" /&gt;
+]
+
+???
+
+x = proportion, y = `US_fail`
+
+proportion = n / sum(n)
 
 ---
 
@@ -892,26 +961,27 @@ The Economist journalist Simon Rabinovitch
 
 ---
 
-## Hamming Distance
+class: small
 
-.left-column[
-&lt;img src="images/text_hammingDis_org.png" height = 300 /&gt;
-]
+Hamming Distance
 
-.right-column[
-&lt;img src="images/text_hammingDis_comp.png" height = 300 /&gt;
+.pull-left[
+&lt;img src="images/text_hammingDis_org.png" height = 250 /&gt;
+&lt;img src="images/text_hammingDis_comp.png" height = 250 /&gt;
 ]
 
 ???
 
-the Hamming distance between two strings of equal length is the number of .navy[positions] at which the .red[corresponding symbols are different]. 
+the Hamming distance between two strings of equal length is the number of .blue[positions] at which the .red[corresponding symbols are different]. 
 
 It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
 
 Two example distances: 100→011 has distance 3; 010→111 has distance 2
 
----
 
+--
+
+.pull-right[
 05-30 vs. 05-22
 
 
@@ -943,6 +1013,7 @@ Two example distances: 100→011 has distance 3; 010→111 has distance 2
 ##    137.594    91.4451    63.4508    53.6785    37.6035 
 ##     "规则"     "美国"     "美方"     "国际" "世贸组织"
 ```
+]
 
 
 ---
@@ -979,7 +1050,7 @@ term frequency-inverse document frequency
 
 --
 
-* Word vector: word2vec
+* Word vector: word2vec; text2vec; doc2vec
 
 ???
 
@@ -1011,7 +1082,7 @@ term frequency-inverse document frequency
 
 ---
 
-## 文本分析“黑话”
+## Bonus: 文本分析de1“黑话”
 
 * Corpus
     + Document
@@ -1044,7 +1115,7 @@ Latent Dirichlet Allocation
 .pull-left[
 ### What You Already Know
 
-1. 文本之于社会科学
+1. 文本之于研究
     + 丰富资源
     + 分析门槛
 1. 文本分析路径
@@ -1061,9 +1132,10 @@ Latent Dirichlet Allocation
 
 ### Prospect
 
-* 应用范围广泛
-* 间接研究语言
-* 不断突破限制
++ 文本分类
++ 情感标记
++ 主题分析
++ 语义网络
 
 
 &lt;img src="images/text_indirect_phone.gif" width = 400 /&gt;
@@ -1088,7 +1160,8 @@ class: inverse, center, middle
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
