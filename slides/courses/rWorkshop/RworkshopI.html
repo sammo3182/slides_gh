@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Learning R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <script src="RworkshopI_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="RworkshopI_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="RworkshopI_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="RworkshopI_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="RworkshopI_files/tabwid-1.0.0/tabwid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Learning R
+## With Dr. Hu and His Friends
+### Yue Hu
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+
+
+## Workshop Series (Fall)
+
+.pull-left[
+
+### Foundations
+
++ .red[Should I learn R]
++ .red[Data input/Output]
++ Data munging
++ Data visualization
++ Data analysis
+
+]
+
+.pull-right[
+
+### R Ecology
+
++ Batch processing
++ Adv. visualization
++ Rmarkdown and Academic Writing
++ Version control w. R
+]
+
+--
+
+.full-column[
+.center[
+### R Survivor (Badge)
+
+&lt;img src="https://user-images.githubusercontent.com/58319029/114663100-59769e80-9d2c-11eb-912b-64303aad256d.png" height = 200 /&gt;]
+]
+
+---
+
+## Workshop Series (Spring)
+
+.pull-left[
+### Applied Econometrics
+
++ Multilevel modeling
++ Latent variable analysis
++ Time series analysis
++ Bayesian analysis
+
+]
+
+.pull-right[
+### Computing Social Science
+
++ Text analysis
++ Spatial analysis
++ Network analysis
++ Machine learning
++ R Salon
+]
+
+--
+
+.full-column[
+.center[
+### R Expert (Certificate)
+
+&lt;img src="https://user-images.githubusercontent.com/58319029/109610431-b5fc7080-7b67-11eb-9bfb-988bd1759c50.png" height = 200 /&gt;]
+]
+
+---
+
+## Should I Take?
+
+### Fall series
+
+* Not R user yet;
+* Knowing Excel/SPSS/STATA/Python/Matlab...and not very into it;
+* My advisor/boss/mom ordering me to learn it;
+* Needing friends!
+
+--
+
+### Spring series
+
++ Mediocre R users;
++ Wanting to see the true power of R;
++ Hoping to be the cool kid among peers;
++ Having something to teach others.
+
+---
+
+## Overview of Today
+
++ Bio of R
++ Why R, not Python/STATA
++ Inputting almost all types of data into R
++ Storing and combining datasets 
++ Output outcome data
+
+
+---
+
+## What's R?
+
+* A high-level .red[language]
+
+.center[&lt;img src="images/languageLevel.jpg" height = 350 /&gt;]
+
+
+???
+
+* Implement of S(tatistical) language, S3, S4 standards.
+
+* Named after Ross Ihaka /i:haka/, and Robert Gentelman
+    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
+    + STATA: Stats + Data
+    + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
+
+* High-level &gt; assembly language (only using ADD, MOVE, etc.) &gt; machine language (010101) &gt; hardware
+
+* High-level: C, JAVA, Python, Fortun, R
+
+* Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
+
+--
+
+* **Object-oriented** programming (OOP): Class &amp;rarr; objects
+    + Carb &amp;rarr; Steam ban
+    + University &amp;rarr; Tsinghua
+
+???
+
+C++, Python, Ruby, Perl, Matlab
+
+---
+
+class: center , bottom
+
+## What Can R Do?
+
+--
+
+Statistics and econometrics.
+
+--
+
+Crunching almost any sizes of data.
+
+--
+
+Edit and running codes from Excel, STATA, Python, C++, ...
+
+--
+
+Scrape data from local files, websites, databases, pdf...
+
+--
+
+Create webpages
+
+--
+
+Write academic articles, books, or dissertations in html, pdf, or docx
+
+--
+
+Create presentation slides
+
+--
+
+Sending emails
+
+--
+
+......
+
+---
+
+## Why R?
+
+### Timeliness
+
+&lt;img src="RworkshopI_files/figure-html/coronavirus-1.png" height="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+background-image: url("images/hillShade.png")
+background-position: center
+background-size: contain
+
+### Beautiful
+
+
+
+???
+
+https://www.rayshader.com/
+
+---
+
+background-image: url("images/distributionHill.png")
+background-position: center
+background-size: contain
+
+
+
+
+---
+
+background-image: url("images/scatterHill.png")
+background-position: center
+background-size: contain
+
+
+
+
+---
+
+### Practical
+
+
+&lt;template id="28e8cf2c-8fe0-4c4d-ab69-3674b6464177"&gt;&lt;style&gt;
+.tabwid table{
+  border-collapse:collapse;
+  line-height:1;
+  margin-left:auto;
+  margin-right:auto;
+  border-width: 0;
+  display: table;
+  margin-top: 1.275em;
+  margin-bottom: 1.275em;
+  border-spacing: 0;
+  border-color: transparent;
+}
+.tabwid_left table{
+  margin-left:0;
+}
+.tabwid_right table{
+  margin-right:0;
+}
+.tabwid td {
+    padding: 0;
+}
+.tabwid a {
+  text-decoration: none;
+}
+.tabwid thead {
+    background-color: transparent;
+}
+.tabwid tfoot {
+    background-color: transparent;
+}
+.tabwid table tr {
+background-color: transparent;
+}
+&lt;/style&gt;&lt;div class="tabwid"&gt;&lt;style&gt;.cl-67619094{border-collapse:collapse;}.cl-67551558{font-family:'Arial';font-size:20pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-67556292{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-6755893e{width:628.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-6755893f{width:101.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558940{width:101.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558941{width:628.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558942{width:628.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558943{width:101.2pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558944{width:628.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558945{width:101.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558946{width:628.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-67558947{width:101.2pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}&lt;/style&gt;&lt;table class='cl-67619094'&gt;&lt;thead&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-67558947"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Company&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-67558946"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Application&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-6755893f"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Twitter&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-6755893e"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Monitor user experience&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-67558940"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Ford&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-67558941"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Analyse social media to support design decisions for their cars&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-67558940"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;New York Times&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-67558941"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Infographics, data journalism&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-67558943"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Microsoft&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-67558942"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Released Microsoft R Open, an enhanced R distribution and Microsoft&lt;br&gt; R server after acquiring Revolution Analytics in 2015&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style="overflow-wrap:break-word;"&gt;&lt;td class="cl-67558945"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Google&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;td class="cl-67558944"&gt;&lt;p class="cl-67556292"&gt;&lt;span class="cl-67551558"&gt;Created the R style guide for the R user community inside Google&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;&lt;/template&gt;
+&lt;div class="flextable-shadow-host" id="8fa5c4fb-5116-4d85-9664-b97df5c5fe47"&gt;&lt;/div&gt;
+&lt;script&gt;
+var dest = document.getElementById("8fa5c4fb-5116-4d85-9664-b97df5c5fe47");
+var template = document.getElementById("28e8cf2c-8fe0-4c4d-ab69-3674b6464177");
+var caption = template.content.querySelector("caption");
+if(caption) {
+  caption.style.cssText = "display:block;text-align:center;";
+  var newcapt = document.createElement("p");
+  newcapt.appendChild(caption)
+  dest.parentNode.insertBefore(newcapt, dest.previousSibling);
+}
+var fantome = dest.attachShadow({mode: 'open'});
+var templateContent = template.content;
+fantome.appendChild(templateContent);
+&lt;/script&gt;
+
+---
+
+### Evolutive
+
+18061+ packages for cutting-edges
+    
+---
+
+background-image: url("images/programCompare.jpg")
+background-position: center
+background-size: contain
+
+???
+
+R in SPSS eyes: Heathkit EC-1, an old computer, 
+
+---
+
+.pull-left[
+### R
+
+#### Advantages
+
+* Fresh
+* Flexible
+
+#### Inconvenience
+
+* Linear-algebraic calculation
+* Programming
+
+]
+
+.pull-right[
+### STATA
+
+#### Advantages
+
+* Stable
+* Reliable
+
+#### Inconvenience
+
+* Use what you get
+* Fair visualization
+* EXPENSIVE: SE
+    + Annual:	$235 student/**year**
+
+]
+
+
+---
+
+.pull-left[
+### R
+
+#### Advantages
+
++ Academic works
++ Data analysis
++ Visualization
+
+#### Inconvenience
+
++ RAM vs. Large-size data
+
+]
+
+.pull-right[
+### Python
+
+#### Advantages
+
+* Machine learning
+* Automation in products (Java, C++?)
+
+#### Inconvenience
+
++ GUI
++ Visualization
+
+]
+
+---
+
+class: center, middle
+
+## Which Is Right for You
+
+Are you a .red[programmer] already?
++ Yes: Python
+
+--
+
+What do your .red[colleagues] use?
++ STATA, SPSS, SAS: R
+
+--
+
+How important are .red[plots] for you?
++ Ones that can impress people: R
+
+--
+
+What .red[problems] do you often solve?
++ Research: R; Production: Python
+
+---
+
+## So, if you choose to stay...
+
+.center[&lt;img src="images/LearningCurve.png" height = 500 /&gt;]
+.center[.small[[Source: NYU Data Service](https://sites.google.com/a/nyu.edu/statistical-software-guide/summary)]]
+
+---
+
+You'll definitely get *wonderful* moments~
+
+.center[&lt;img src="images/pc2weeks.gif" height = 400, width = 750 /&gt;]
+
+--
+
+Oh, don't take this wrong, you will still get such moments when learning Python, Java, or Stata...
+
+---
+
+class: inverse, bottom
+
+# Shall We Begin?
+
+.center[&lt;img src="images/begin.gif" height = 300 /&gt;]
+
+---
+
+## Software Preparation
+
+.pull-left[
+### Core program
+
+.center[[&lt;img src="images/Rlogo.png" height = 200 /&gt;](https://www.r-project.org/)]
+
+]
+
+--
+
+.pull-right[
+### Graphic User Interfaces (GUI)
+
+.center[[&lt;img src="images/rstudio.jpg" height = 250 /&gt;](https://www.rstudio.com/)]
+
+]
+
+---
+
+## Packages
+
+.pull-left[&lt;img src="images/apps.jpeg" height = 400 /&gt;]
+
+.pull-right[
+
++ Installing
+
+
+```r
+install.packages("drhur")
+devtools::install_github("sammo3182/drhur")
+remotes::install_github("sammo3182/drhur")
+```
+
++ Calling
+
+
+```r
+library(drhur)
+require(drhur)
+
+drhur::drhur("playing")
+```
+
+]
+
+---
+
+class: center, middle
+
+# Thank you!
+
+&lt;i class="fa fa-envelope fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+&lt;i class="fa fa-globe fa-lg"&gt;&lt;/i&gt;&amp;nbsp; https://sammo3182.github.io/
+
+&lt;i class="fab fa-github fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [sammo3182](https://github.com/sammo3182)
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
