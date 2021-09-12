@@ -1,8 +1,8 @@
 ---
 title: "Descriptive Statistics"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -18,121 +18,331 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
-## What's a Variable?
+library(pacman)
+p_load(icons, xaringanExtra)
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
+use_fit_screen()
+
+# Functions preload
+set.seed(313)
+```
+
+## Overview
+
++ Nature of data: population vs. sample &rarr; randomization   
+
++ Describing data:  variable &rarr; measurement
+
+---
+
+class: inverse, bottom
+
+# Nature of Data
+
+???
+
+When you call the thing in your hand is a dataset, what does that mean?
+
+---
+
+## Etymology of Data
+
+~~The quantities, characters, or symbols on which operations are performed by a computer, being stored and transmitted in the form of electrical signals and recorded on magnetic, optical, or mechanical recording media.~~
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+
+Things known or assumed as facts, making the basis of reasoning or calculation.
+
+.tr[
+---[Oxford Language](https://languages.oup.com/google-dictionary-en/)
+]
+]
+
+--
+
+Origin:
+
+.center[<img src = "images/desc_etymData.png" height = 150>]
+
+---
+
+## Data of Who
+
+.pull-left[
+
+### Population
+
+1. Population is specific
+1. Collection
+1. Abstract
+]
+
+???
+
+1. Population is not everything but a finite or infinite collection of items **under consideration**.
+1. It's all its kinds;
+1. Not only human being, but any observation units
+
+--
+
+.pull-right[
+
+### Sample
+
+1. Relative 
+1. Many ways to get
+    + Data generation process (*DGP*!!)
+1. Concrete
+]
+
+???
+
+1. Relative to population
+1. Important concept to evaluate validity
+    + The data collection process (over time);
+    + A specific statistical model in a simulation
+1. You know who are in the sample
+
+--
+
+.center[
+### But why? 
+1. Limited resources
+1. Scarcity (only one sample can be used)
+1. Destructive testing
+1. More accurate
+]
+
+???
+
+1. No money
+1. Confucius institute
+1. Finding some parts' characteristics
+1. Text data
+
+---
+
+## Population .large[&#8799;] Sample
+
+.center[
+RANDOM Sampling 
+
+<img src = "images/desc_onePunchMan.gif" height = 300>
+]
+
+Why amazing?
+
+Confounder-free (?) + Representativeness (?)
+
+???
+
+Choose by chance regardless of anything else
+
+埼玉
+
+Not necessarily confounder free or representative, depending on the size
+
+---
+
+## How To
+.center[
+## Simple Randomization
+
+<img src = "images/desc_random.gif" height = 200>
+]
+
+???
+
+In a simple random sampling, there's a chance that you drawing all the rich out.
+
+e.g., 
+
+1. Checking the food in Tsinghua: All dishes from Qingfen 3rd floor; 
+1. Checking stealing takeout: All thieves 
+
+--
+
+.pull-left[
+## Block Randomization
+
+1. Blocks (equally representative)
+1. Randomly drawing blocks
+1. Everyone of the block in
+]
+
+???
+
+e.g., 
+
+Study Tsinghua students
+
+1. Dorm/Classroom
+1. Drawing classrooms
+
+
+--
+
+.pull-right[
+## Stratified Randomization
+
+1. Variable for stratify
+1. Randomly yet representative drawing from each stratum
+
+]
+
+???
+
+Study Tsinghua students
+
+1. Male/female
+1. Liberal-arts/humanity/science/engineering
+
+---
+
+class: inverse, bottom
+
+# Describing Data
+
+???
+
+How can you describe the data in your hand
+
+---
+
+## Variable from a View of Data
+
+.pull-left[
+
+*Specially*,
+
+A variable = a dimension = a column
+
+*Empirically*,
+
+A variable = a vector
+= a piece of data
+
+*Relationally*,
+
+An observation &sub; {var1, var2, var3,...}
+
+]
+.pull-right[<img src = "images/desc_multidimension.jpg" height = 500 width = 600>]
+
+---
+
+class: center
+
+## Etymology of Variable
+
+<img src = "images/desc_etymVariable.png" height = 400>
 
 * Constant vs. variables
-* Dependent ~
-* Independent/explanatory ~
+* Dependent/outcome/response ~
+* Independent/explanatory/treatment ~
 
 ---
 
-class: middle, center
+class: middle, center, large
 
-Q. When can a variable be constant?
+ Q: What research may ask a variable to be .red[constant]?
 
 ???
 
 Testing if X is a necessary condition for Y
 
+e.g., 
+
+Is hard work necessary for successes?
+
+1. A works 12h, B works 12h, A success, B doesn't
+
+Is good governance produced by democracy?
+
+1. Democracy with Trump
+1. Democracy with Clinton
+
 ---
 
-### Level of measurement:
+## Types of Variable
 
 + Nominal/categorical
 + Ordinal
-+ Interval 
+
+--
+
++ Interval: Meaningful distance
     + Discrete/continuous
     + Zero is a terminal
-+ Ratio
-    + Meaningful zero
+    + Meaningful addition/subtraction
++ Ratio: Interval with meaningful zero
     + Zero means absence
+    + Meaningful multiplication/division
 
 ???
 
-feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有, so an interval;
 -100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
 
-在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
+Ratio: the ratio of two points on the scale conveys the same meaning regardless of where one is on the scale
+e.g.1, Public budget, safty:health = 4:1 then no matter how much in total, it will 4:1
+e.g.2, event history
+
 
 ---
 
-## Population vs. Sample
+## Features of Variable
 
-My dear randomization `r emo::ji("kissing_heart")`
-
-+ Why: 
-    1. Limited resources
-    1. scarcity (only one sample can be used)
-    1. destructive testing
-    1. could be more accurate
-+ How:
-    1. Survey
-    1. Big data
-        
-
----
-
-class: center, middle
-
-Q. Can regional GDP be randomly sampled?
-
-???
-
-1816, Peloponnese War
-
----
-
-## Randomization might not be possible
-
-* Experiments
-
---
-
-* Ethical issues
-
----
-
-class: middle, center
-
-Q. Are individual exchangeable?
-
----
-
-## Data Generating Process (DGP)
-
-The data collection process (over time);
-
---
-
-A specific statistical model in a simulation
-
----
-
-## Diagnosing a Dataset
+Level of measurement
 
 + Raw data
 + Frequency distribution: 
   n<sub>i</sub>, n<sub>.</sub> = &sum;n<sub>i</sub>, n<sub>..</sub> = &sum;n<sub>ij</sub>
+
+--
+
 + Histogram
-+ Cross-tabulation
-+ Time series plots, scattor plots
++ Time series plots, scatter plots
+
+--
+
 + Percentiles
++ Moments
+
+???
+
+Information lost increasingly more
 
 ---
-## Measuring the Average
 
-+ .red[Mode]: most frequent occuring number, not good of central tendency, bimodal (two modes)
+## Describing a Variable with a Number
 
++ .red[Mode]: most frequent occurring number, not good of central tendency, bimodal (two modes)
+
+--
 
 + .red[Median]: at 50%
     + Odd: middle value
     + Even: mean of two mid values
     + Sensitive for outliers
     
-    
+--
+
 + .red[Mean]: $\bar{X}\rightarrow\mu$
     + Group: $\bar{X} = 1/n\sum xf$, x is the cell midpoint and f is the frequency of $X_i$.
     + Symmetric distribution, median and mean are identical
@@ -171,13 +381,15 @@ utils::browseURL(gif_file)
 
 ---
 
-## Measuring the Dispersion
+## Describing the Dispersion of a Variable
 
-+ Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
+Range: Max - min; [min, max]
+
+Q: What's the range of a constant, e.g., 2, 2, 2, 2
 
 --
 
-.center[<img src="images/dispersion.png" height = 400 />]
+.center[<img src="images/desc_dispersion.png" height = 400 />]
 
 ---
 
@@ -199,9 +411,23 @@ s^2 =& \sum(X - \bar X)^2p(x) \\
 =& \frac{\sum(X - \bar{X})^2}{n - 1}.
 \end{align}
 
+???
+
+&sigma;: sigma
+
 ---
 
-+ Why n-1? Degree of freedom
+## Why n-1? 
+
+### Intuitively
+
+Only when there are .red[more than one] item, the variance can exist, therefore the d.f. is $n - 1$.
+
+--
+
+### Mathematically
+
+Degree of freedom (d.f.)<sup>\*</sup>
 
 $$\left[\begin{array} {ccc}
 		X_1\\
@@ -218,6 +444,12 @@ $$\left[\begin{array} {ccc}
 		\end{array}\right]
 		$$
 
+--
+
+.footnote[
+\* For a crosstable: $(r - 1)(c - 1)$
+]
+
 ???
 
 The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is ${\bar {X}}$. It therefore has 1 degree of freedom.
@@ -225,29 +457,27 @@ The first vector on the right-hand side is constrained to be a multiple of the v
 The second vector is constrained by the relation ${\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}$. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
 
 In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
- 
-Intuitively, only when there are more than one item, the variance can exist, therefore the d.f. is $n - 1$.
-
----
-
-d.f. for a crosstable: $(r - 1)(c - 1)$
 
 ---
 
 &sigma;<sup>2</sup> is often written in another format:
 
+Given &mu; = &sum;Xp(x), &sum;p(x) = 1,<sup>\*</sup>
+
 \begin{aligned}
 \sigma^2 =& \sum(X - \mu)^2p(x),\\
 =& \sum(X^2 -2X\mu + \mu^2)p(x),\\
 =& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
-=& \sum X^2p(x) - \mu^2,
+=& \sum X^2p(x) - \mu^2.
 \end{aligned}
  
-given &mu; = &sum;Xp(x), &sum;p(x) = 1.
- 
----
+--
 
-Standard deviation
+.footnote[NB: Pay attention to the red[punctuation marks].]
+ 
+--
+
+### Standard deviation (SD)
 
 + Population: $\sigma = \sqrt{\pi(1 - \pi)}$
 + Group: $\sqrt{f/n\sum(X - \bar{X})^2}$
@@ -255,21 +485,45 @@ Standard deviation
 
 ---
 
-# Wrap Up
+## Wrap Up
 
-.left-column[
-+ Variable
-+ Level of Measurements
-    + Nominal<Ordinal<Continuous
-+ Population/sample
-    + Random sampling
+.pull-left[
+### Nature of data
+
+Population/sample &rarr; randomization  
+
++ Population &rarr; sample
     + DGP
++ Randomization
+  + Simple ~
+  + Block ~
+  + Stratefied ~
 ]
-    
---
 
-.right-column[
-+ Describing a sample
-    + Average
-    + Dispersion
+.pull-right[
+
+### Describing data
+
+Variable &rarr; measurement
+
++ Variable
++ Types: Level of Measurements
+    + Nominal < Ordinal < Continuous (Interval/ratio)
++ Describing a Variable
+    + Average (mode, median, mean)
+        + Degree of freedom
+    + Dispersion (range, IQR, MAD/MSD) &rarr; Variance
+        + Standard deviation
 ]
+
+---
+
+class: center, middle, large
+
+[Let's do some math!](../mathCamp/mathcamp.html)
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "02_.*.html"), 
+                       timeout = 500, 
+                       box_model = "padding")
+```

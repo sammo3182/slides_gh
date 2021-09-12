@@ -4,8 +4,20 @@
     <title>Descriptive Statistics</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="02_descriptiveStats_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="02_descriptiveStats_files/header-attrs-2.10/header-attrs.js"></script>
     <link href="02_descriptiveStats_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="02_descriptiveStats_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="02_descriptiveStats_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="02_descriptiveStats_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="02_descriptiveStats_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="02_descriptiveStats_files/panelset-0.2.4/panelset.js"></script>
+    <script src="02_descriptiveStats_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="02_descriptiveStats_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="02_descriptiveStats_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="02_descriptiveStats_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="02_descriptiveStats_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="02_descriptiveStats_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="02_descriptiveStats_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -14,126 +26,315 @@
 class: center, middle, inverse, title-slide
 
 # Descriptive Statistics
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
 
 
-## What's a Variable?
+
+## Overview
+
++ Nature of data: population vs. sample &amp;rarr; randomization   
+
++ Describing data:  variable &amp;rarr; measurement
+
+---
+
+class: inverse, bottom
+
+# Nature of Data
+
+???
+
+When you call the thing in your hand is a dataset, what does that mean?
+
+---
+
+## Etymology of Data
+
+~~The quantities, characters, or symbols on which operations are performed by a computer, being stored and transmitted in the form of electrical signals and recorded on magnetic, optical, or mechanical recording media.~~
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+
+Things known or assumed as facts, making the basis of reasoning or calculation.
+
+.tr[
+---[Oxford Language](https://languages.oup.com/google-dictionary-en/)
+]
+]
+
+--
+
+Origin:
+
+.center[&lt;img src = "images/desc_etymData.png" height = 150&gt;]
+
+---
+
+## Data of Who
+
+.pull-left[
+
+### Population
+
+1. Population is specific
+1. Collection
+1. Abstract
+]
+
+???
+
+1. Population is not everything but a finite or infinite collection of items **under consideration**.
+1. It's all its kinds;
+1. Not only human being, but any observation units
+
+--
+
+.pull-right[
+
+### Sample
+
+1. Relative 
+1. Many ways to get
+    + Data generation process (*DGP*!!)
+1. Concrete
+]
+
+???
+
+1. Relative to population
+1. Important concept to evaluate validity
+    + The data collection process (over time);
+    + A specific statistical model in a simulation
+1. You know who are in the sample
+
+--
+
+.center[
+### But why? 
+1. Limited resources
+1. Scarcity (only one sample can be used)
+1. Destructive testing
+1. More accurate
+]
+
+???
+
+1. No money
+1. Confucius institute
+1. Finding some parts' characteristics
+1. Text data
+
+---
+
+## Population .large[&amp;#8799;] Sample
+
+.center[
+RANDOM Sampling 
+
+&lt;img src = "images/desc_onePunchMan.gif" height = 300&gt;
+]
+
+Why amazing?
+
+Confounder-free (?) + Representativeness (?)
+
+???
+
+Choose by chance regardless of anything else
+
+埼玉
+
+Not necessarily confounder free or representative, depending on the size
+
+---
+
+## How To
+.center[
+## Simple Randomization
+
+&lt;img src = "images/desc_random.gif" height = 200&gt;
+]
+
+???
+
+In a simple random sampling, there's a chance that you drawing all the rich out.
+
+e.g., 
+
+1. Checking the food in Tsinghua: All dishes from Qingfen 3rd floor; 
+1. Checking stealing takeout: All thieves 
+
+--
+
+.pull-left[
+## Block Randomization
+
+1. Blocks (equally representative)
+1. Randomly drawing blocks
+1. Everyone of the block in
+]
+
+???
+
+e.g., 
+
+Study Tsinghua students
+
+1. Dorm/Classroom
+1. Drawing classrooms
+
+
+--
+
+.pull-right[
+## Stratified Randomization
+
+1. Variable for stratify
+1. Randomly yet representative drawing from each stratum
+
+]
+
+???
+
+Study Tsinghua students
+
+1. Male/female
+1. Liberal-arts/humanity/science/engineering
+
+---
+
+class: inverse, bottom
+
+# Describing Data
+
+???
+
+How can you describe the data in your hand
+
+---
+
+## Variable from a View of Data
+
+.pull-left[
+
+*Specially*,
+
+A variable = a dimension = a column
+
+*Empirically*,
+
+A variable = a vector
+= a piece of data
+
+*Relationally*,
+
+An observation &amp;sub; {var1, var2, var3,...}
+
+]
+.pull-right[&lt;img src = "images/desc_multidimension.jpg" height = 500 width = 600&gt;]
+
+---
+
+class: center
+
+## Etymology of Variable
+
+&lt;img src = "images/desc_etymVariable.png" height = 400&gt;
 
 * Constant vs. variables
-* Dependent ~
-* Independent/explanatory ~
+* Dependent/outcome/response ~
+* Independent/explanatory/treatment ~
 
 ---
 
-class: middle, center
+class: middle, center, large
 
-Q. When can a variable be constant?
+ Q: What research may ask a variable to be .red[constant]?
 
 ???
 
 Testing if X is a necessary condition for Y
 
+e.g., 
+
+Is hard work necessary for successes?
+
+1. A works 12h, B works 12h, A success, B doesn't
+
+Is good governance produced by democracy?
+
+1. Democracy with Trump
+1. Democracy with Clinton
+
 ---
 
-### Level of measurement:
+## Types of Variable
 
 + Nominal/categorical
 + Ordinal
-+ Interval 
+
+--
+
++ Interval: Meaningful distance
     + Discrete/continuous
     + Zero is a terminal
-+ Ratio
-    + Meaningful zero
+    + Meaningful addition/subtraction
++ Ratio: Interval with meaningful zero
     + Zero means absence
+    + Meaningful multiplication/division
 
 ???
 
-feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有, so an interval;
 -100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
 
-在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
+Ratio: the ratio of two points on the scale conveys the same meaning regardless of where one is on the scale
+e.g.1, Public budget, safty:health = 4:1 then no matter how much in total, it will 4:1
+e.g.2, event history
+
 
 ---
 
-## Population vs. Sample
+## Features of Variable
 
-My dear randomization 😘
-
-+ Why: 
-    1. Limited resources
-    1. scarcity (only one sample can be used)
-    1. destructive testing
-    1. could be more accurate
-+ How:
-    1. Survey
-    1. Big data
-        
-
----
-
-class: center, middle
-
-Q. Can regional GDP be randomly sampled?
-
-???
-
-1816, Peloponnese War
-
----
-
-## Randomization might not be possible
-
-* Experiments
-
---
-
-* Ethical issues
-
----
-
-class: middle, center
-
-Q. Are individual exchangeable?
-
----
-
-## Data Generating Process (DGP)
-
-The data collection process (over time);
-
---
-
-A specific statistical model in a simulation
-
----
-
-## Diagnosing a Dataset
+Level of measurement
 
 + Raw data
 + Frequency distribution: 
   n&lt;sub&gt;i&lt;/sub&gt;, n&lt;sub&gt;.&lt;/sub&gt; = &amp;sum;n&lt;sub&gt;i&lt;/sub&gt;, n&lt;sub&gt;..&lt;/sub&gt; = &amp;sum;n&lt;sub&gt;ij&lt;/sub&gt;
+
+--
+
 + Histogram
-+ Cross-tabulation
-+ Time series plots, scattor plots
++ Time series plots, scatter plots
+
+--
+
 + Percentiles
++ Moments
+
+???
+
+Information lost increasingly more
 
 ---
-## Measuring the Average
 
-+ .red[Mode]: most frequent occuring number, not good of central tendency, bimodal (two modes)
+## Describing a Variable with a Number
 
++ .red[Mode]: most frequent occurring number, not good of central tendency, bimodal (two modes)
+
+--
 
 + .red[Median]: at 50%
     + Odd: middle value
     + Even: mean of two mid values
     + Sensitive for outliers
     
-    
+--
+
 + .red[Mean]: `\(\bar{X}\rightarrow\mu\)`
     + Group: `\(\bar{X} = 1/n\sum xf\)`, x is the cell midpoint and f is the frequency of `\(X_i\)`.
     + Symmetric distribution, median and mean are identical
@@ -148,13 +349,15 @@ class: middle, center
 
 ---
 
-## Measuring the Dispersion
+## Describing the Dispersion of a Variable
 
-+ Range: [min, max]; Q: What's the range of a constant, e.g., 2, 2, 2, 2
+Range: Max - min; [min, max]
+
+Q: What's the range of a constant, e.g., 2, 2, 2, 2
 
 --
 
-.center[&lt;img src="images/dispersion.png" height = 400 /&gt;]
+.center[&lt;img src="images/desc_dispersion.png" height = 400 /&gt;]
 
 ---
 
@@ -176,9 +379,23 @@ s^2 =&amp; \sum(X - \bar X)^2p(x) \\
 =&amp; \frac{\sum(X - \bar{X})^2}{n - 1}.
 \end{align}`
 
+???
+
+&amp;sigma;: sigma
+
 ---
 
-+ Why n-1? Degree of freedom
+## Why n-1? 
+
+### Intuitively
+
+Only when there are .red[more than one] item, the variance can exist, therefore the d.f. is `\(n - 1\)`.
+
+--
+
+### Mathematically
+
+Degree of freedom (d.f.)&lt;sup&gt;\*&lt;/sup&gt;
 
 `$$\left[\begin{array} {ccc}
 		X_1\\
@@ -195,6 +412,12 @@ s^2 =&amp; \sum(X - \bar X)^2p(x) \\
 		\end{array}\right]
 		$$`
 
+--
+
+.footnote[
+\* For a crosstable: `\((r - 1)(c - 1)\)`
+]
+
 ???
 
 The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is `\({\bar {X}}\)`. It therefore has 1 degree of freedom.
@@ -202,29 +425,27 @@ The first vector on the right-hand side is constrained to be a multiple of the v
 The second vector is constrained by the relation `\({\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}\)`. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
 
 In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
- 
-Intuitively, only when there are more than one item, the variance can exist, therefore the d.f. is `\(n - 1\)`.
-
----
-
-d.f. for a crosstable: `\((r - 1)(c - 1)\)`
 
 ---
 
 &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; is often written in another format:
 
+Given &amp;mu; = &amp;sum;Xp(x), &amp;sum;p(x) = 1,&lt;sup&gt;\*&lt;/sup&gt;
+
 `\begin{aligned}
 \sigma^2 =&amp; \sum(X - \mu)^2p(x),\\
 =&amp; \sum(X^2 -2X\mu + \mu^2)p(x),\\
 =&amp; \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
-=&amp; \sum X^2p(x) - \mu^2,
+=&amp; \sum X^2p(x) - \mu^2.
 \end{aligned}`
  
-given &amp;mu; = &amp;sum;Xp(x), &amp;sum;p(x) = 1.
- 
----
+--
 
-Standard deviation
+.footnote[NB: Pay attention to the red[punctuation marks].]
+ 
+--
+
+### Standard deviation (SD)
 
 + Population: `\(\sigma = \sqrt{\pi(1 - \pi)}\)`
 + Group: `\(\sqrt{f/n\sum(X - \bar{X})^2}\)`
@@ -232,24 +453,44 @@ Standard deviation
 
 ---
 
-# Wrap Up
+## Wrap Up
 
-.left-column[
-+ Variable
-+ Level of Measurements
-    + Nominal&lt;Ordinal&lt;Continuous
-+ Population/sample
-    + Random sampling
+.pull-left[
+### Nature of data
+
+Population/sample &amp;rarr; randomization  
+
++ Population &amp;rarr; sample
     + DGP
++ Randomization
+  + Simple ~
+  + Block ~
+  + Stratefied ~
 ]
-    
---
 
-.right-column[
-+ Describing a sample
-    + Average
-    + Dispersion
+.pull-right[
+
+### Describing data
+
+Variable &amp;rarr; measurement
+
++ Variable
++ Types: Level of Measurements
+    + Nominal &lt; Ordinal &lt; Continuous (Interval/ratio)
++ Describing a Variable
+    + Average (mode, median, mean)
+        + Degree of freedom
+    + Dispersion (range, IQR, MAD/MSD) &amp;rarr; Variance
+        + Standard deviation
 ]
+
+---
+
+class: center, middle, large
+
+[Let's do some math!](../mathCamp/mathcamp.html)
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -257,7 +498,8 @@ Standard deviation
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

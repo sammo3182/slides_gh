@@ -1,7 +1,8 @@
 ---
-title: "Large N & Leeuwenhoek"
-subtitle: "Analysis of Political Data (70700173)"
+title: "Analysis of Political Data"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
+institution: "Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
@@ -17,162 +18,163 @@ output:
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-class: inverse, center, middle
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
+library(pacman)
+p_load(icons, xaringanExtra)
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
+use_fit_screen()
+
+# Functions preload
+set.seed(313)
+```
+
+class: inverse, bottom
 
 # Course Introduction
 
-* Introducing what we'll do in next four months;
-* Reviewing a little bit of math;
-* Starting describing the data.
-
 ---
 
-## Who Do I Deserve Your Listening
+class: center, middle
 
-* Assistant professor at THU
+## Why Do I Deserve Your Listening
 
----
-
-* Ph.D. of Political Science at University of Iowa
-    + Political linguistics, identity, inequality, 
-    + Methods for experiment, network analysis, spatial analysis, text analysis, etc.
+.normal[Associate professor at THU]    
+**Liberal-arts** all along
 
 --
 
-* Hardcore fan of R
-    + Teaching
-    + Package developing
+.normal[Political Scientist]    
+Political psychology, political linguistics, inequality & urban politics 
+
+--
+
+.normal[Methodologist]    
+Methods of experiment, network analysis, spatial analysis, text analysis, etc.
+
+--
+
+.normal[Hardcore R fan]
++ Teaching
++ Package developing
 
 ---
 
-## What's This Course About?
+## What Will You Learn
 
+1. Descriptive statistics
+1. Hypothesis testing
+1. Ordinary least squares 
+
+.center[
+How to have a good ".red[date]" with data
+
+<img src = "images/intro_goodDate.gif" height = 300>
+]
+
+---
+
+## Large N & Leeuwenhoek
+
+.center[
+
+\begin{aligned}
+\sigma^2 =& \sum(X - \mu)^2p(x),\\
+=& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+=& \sum X^2p(x) - \mu^2,
+\end{aligned}
+
+]
+
++ Meaning of equations
++ Tricks in the concepts, terms, and process
+
+
+E.g., 
+
+What does randomization actually do?
+
+Do you need to worry about multicollinearity?
+
+How do you explain the interactive term in a conditional-effect model?
+
+
+
+---
+
+## Structure
+
+.pull-left[
 ### Lecture: 2/3
 
 * Statistics (Week 1--3);
 * Econometrics (Week 4--16).
 
---
-
 ### R Lab: 1/3
 
-* Gateway "Jedi" training
+* Gateway training (first 8 weeks)
 * .red[Student-oriented] Learning 
 
----
-
-## Goals
-
-1. Comprehending the bases;
-
---
-
-1. Understand the tricks;
-
---
-
-1. No need for "Intro to Method" any longer.
-
----
-
-## Syllabus
-
-* "Holy script" for this course
-* Updated according to the course progress
-
----
-
-# Preparation
-
-.left-column[
-## Material
-
-* A laptop;
-* R & Rstudio
-
-* No book is needed!
+.center[<img src = "images/intro_drhur.png" height = 200>]
 ]
 
-.right-column[
-## Mental
+--
 
-* Math;
-* Programming.
+.pull-right[
+### Assignments
 
++ Three in total
++ Typing required
++ Teamwork allowed
 ]
 
 ---
 
-## Where to Find the Materials
+## Final Work: A Replication
 
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+The .red[only] way to understand and evaluate an empirical analysis filly is to know the exact process by which the data were generated and the analysis produced.
 
-.center[Both slides and references are in http://learn.tsinghua.edu.cn.]
-
----
-
-class: inverse, bottom
-
-# Let's Start
-
-.center[<img src="images/goThrough.gif" height = 300 />]
-
----
-
-class: center, middle
-
-# Hey, why DAMN English?!
-
-???
-
-1. One of the goals is to being competitive;
-1. More sources in English;
-1. Software in English
-1. Zhuangbility: heteroscedasiticity, endogeneity, multicollinearity...
-
----
-
-## Replication
-
-Final task for this work. 
+.tr[
+---King, Gary. 1995. “Replication, Replication.” *PS: Political Science & Politics*.
+]
+]
 
 --
 
-King, Gary. 1995. “Replication, Replication.” *PS: Political Science & Politics* 28(03): 444–52.
-
-"The only way to understand and evaluate an empirical analysis filly is to know the exact process by which the data were generated and the analysis produced."
-
----
-
-## Why Replication
-
-It's responsibility;
+.center[It's responsibility;]
 
 --
 
-It's a training;
+.center[It's a training;]
 
 --
 
-It can be a contribution;
+.center[It can be a contribution;]
 
 --
 
-It'll be 40% of your grade~
-
----
-
-class: center, middle
-
-# Reproduction vs. Replication
+.center[It'll be 40% of your grade~]
 
 ---
 
 ## Steps
 
-.left-column[
+.pull-left[
 
 * A ready dataset
 
@@ -182,12 +184,11 @@ class: center, middle
     + M & M
     + Decision rules
     + Findings
-    
 ]
 
 --
 
-.right-column[
+.pull-right[
 
 * Evaluation
     + Replicable?
@@ -202,6 +203,9 @@ class: center, middle
     
 ]
 
+--
+
+.center[.normal[Reproduction vs. Replication?]]
 
 ---
 
@@ -209,23 +213,106 @@ class: center, middle
 
 ### Week 4:
 
-Finding the reproduced article & data/codes
+Finding an article & data/codes and .red[confirmed] by the instructor or TA
 
-### Week 9
+### Week 9:
 
 Descriptions, evaluation, and highlights
 
-### Week 15
+### Week 15:
 
-Complete report
+Complete the report
+
+---
+
+class: center
+
+## Achievements
+
+.pull-left[
+
+<img src="images/intro_expert.gif" height = 250 class="rounded-corners" >
+]
+
+???
+Experts of OLS
+
+--
+
+.pull-right[
+
+<img src="images/intro_busters.png" height = 250 class="rounded-corners" >
+]
+
+???
+Trick Busters
+
+--
+
+<img src="images/intro_scientists.jpg" height = 280 class="rounded-corners" >
+
+???
+Liberal-Arts Scientists
+
+---
+
+## Responses from Previous Students
+
+.pull-left[
+<img src="images/intro_eval2.png" height = 100 >
+
+<img src="images/intro_eval3.png" height = 200 >
+
+]
+
+.pull-right[
+<img src="images/intro_eval1.jpg" height = 500 >
+]
+
+---
+
+class: middle, center, normal
+
+## Who Don't Need to Take This Course
+
+1. Taking econometrics already;
+1. Having no interests of large-n analysis;
+1. Having no interests in social science;
+1. Not want to come and talk;
+1. Lack of self-responsibility;
+1. Not having an .red[open] mind.
+
+
+--
+
+### Key to get an A: Empirical Evidence
+
+Come to talk, Mingzhai 114 or somewhere else!
+
+---
+
+class: center, middle
+
+.huge[Hey,    
+why DAMN English?!]
+
+???
+
+1. One of the goals is to being competitive;
+1. More sources in English;
+1. Software in English
+1. Zhuangbility: heteroscedasiticity, endogeneity, multicollinearity...
+
 
 ---
 
 class: inverse, bottom
 
-.center[<img src="images/pichachu_ready.gif" height = 400 />]
+[.center[<img src="images/goThrough.gif" height = 300 />]](02_descriptiveStats.html)
 
-# Are You Ready ~~
+# Let's Start
+
+
 
 ---
 
@@ -241,5 +328,12 @@ We are .red[feeling] math here, if you want to understand it...
 
 --
 
-.left-column[<img src="images/tongji_gaoshu.jpg" height = 400 />]
-.right-column[<img src="images/tongji_xiandai.jfif" height = 400 />]
+.pull-left[<img src="images/tongji_gaoshu.jpg" height = 400 />]
+.pull-right[<img src="images/tongji_xiandai.jfif" height = 400 />]
+
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "01_.*.html"), 
+                       timeout = 500, 
+                       box_model = "padding")
+```

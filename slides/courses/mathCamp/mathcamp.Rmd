@@ -1,83 +1,118 @@
 ---
-title: "Dr. Hu's Math Camp"
-subtitle: "From Functions to Calculus"
+title: "From Functions to Matrices"
+subtitle: "Math Camp"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
+      - default
       - zh-CN_custom.css
-      - styles.css
-    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?config=TeX-MML-AM_HTMLorMML"
+      - style_ui.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
 library(pacman)
-p_load(dotwhisker, ggplot2, interplot, # Visualization
-       ordinal, # Applied
-       # dependency
-       readxl, haven, descr, stringr, arm, car, 
-       broom, tidyverse) # data wrangling
+p_load(icons, xaringanExtra)
 
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
+use_fit_screen()
+
+
+
+# Functions preload
 set.seed(313)
 ```
 
-class: bottom, inverse
+## Overview
 
-# Anxious about Math?
+1. Mindset of learning math
+1. Calculus
+1. Linear Algebra
 
 ---
 
-<video width="700" height="500" controls>
-    <source src="image/anciousMath.mp4" type="video/mp4">
+class: bottom, inverse
+
+# Mindset
+
+---
+
+class: center, middle
+
+<video width="1000" height="600" controls>
+    <source src="images/math_anciousMath.mp4" type="video/mp4">
 </video>
 
 ---
 
-## Back to the Basics
+class: bottom, inverse
 
-### What's a Function?
-
-* Definition: "A relation that assigns one element of the range to each element of the domain (Moore & Siegel 2013, 45)"
-    + $Y = f(X).$
-    + X: domain
-    + Y: codomain
+# Calculus
 
 ---
 
-## Vivid Interpretation
+## High-School Math
 
-.left-column[
-* Domain: <br><br><div class="centered"><img src="image/domain.jpg" height = 300 /></div>
+### Function in Math
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+A relation that .red[assigns] one element of the range to each element of the domain.
+
+.tr[
+---Moore & Siegel 2013, p.45.
+]
 ]
 
-.right-column[
-* Codomain: <br><br><div class="centered"><img src="image/codomain.jpg" height = 300 /></div>
++ $Y = f(X).$
++ X: domain
++ Y: codomain
+
+---
+
+## Function in Life 👻
+
+.pull-left[
+Domain: <img src="images/math_domain.jpg" height = 200 />
+]
+
+.pull-right[
+Codomain: <img src="images/math_codomain.jpg" height = 200 />
 ]
 
 ???
 
 Optimus prime
 
----
+--
 
-## So, the Function Is...
-
-.center[<img src="image/function.gif" height = 300 />]
+.center[Function: <img src="images/math_function.gif" height = 250 />]
 
 ---
 
 ## Math Jargon
 
-* Implicit function: y = f(X).
+* **Implicit ~**: y = f(X).
     + y: A function of x.
     + x: Argument.
     + f: Mapping
@@ -86,40 +121,52 @@ Optimus prime
 
 --
 
-* Explicit function: y = 1 - x<sup>2</sup>.
+.pull-left[
+* **Explicit ~**: y = 1 - x<sup>2</sup>.
+* **Function Composition**: g(f(x)), "g composed with f."
+]
 
 --
 
-* Composition: g(f(x)), "g composed with f."
+.pull-right[<img src="images/math_funProperty.png" height = 300 />]
 
 ---
 
-<div class="centered"><img src="image/funProperty.png" height = 600 /></div>
+Functions with two arguments
+
+.center[<img src="images/math_funMulX.png" height = 450 />]
 
 ---
 
-## Properties (Continued)
-
-* Identity function: f(x) = x.
-* Inverse function: 
+.pull-left[
+* **Identity ~**: f(x) = x.
+* **Inverse ~**: 
 
 \begin{align}
 f(x) =& 2x + 3;\\
 f^{-1}(x) =& \frac{x - 3}{2}.
 \end{align}
 
+Properties:
 
-* f(f<sup>-1</sup>(x)) = x.
-    
-* f<sup>-1</sup>(f(x)) = x.
+.center[
+f(f<sup>-1</sup>(x)) = x.   
+f<sup>-1</sup>(f(x)) = x.
+]
+]
 
----
+--
 
-## Monotonic Functions
+.pull-right[
+**Monotonic Functions**
 
 * Increasing vs. Decreasing
 * Strictly increasing/decreasing
 * Weakly increasing/decreasing
+
+<img src="images/math_monotonic.jpg" height = 400 />
+
+]
 
 ???
 
@@ -130,30 +177,26 @@ f^{-1}(x) =& \frac{x - 3}{2}.
     + Not decreasing
     + Not increasing
 
----
-
-## Functions with More than One Argument
-
-.center[<img src="image/funMulX.png" height = 450 />]
 
 ---
 
 ## Linear function
 
-.center[y = f(x) = ax + bx<sup>0</sup>.]
+.center[y = f(x) = ax + bx<sup>0</sup>.
 
-* a: slope
-* b: intercept.
-
+a: slope; b: intercept.
+]
 --
 
 ### Properties:
 
-Additivity (superposition): 
-+ f(x<sub>1</sub> + x<sub>2</sub>) = f(x<sub>1</sub>) + f(x<sub>2</sub>).
+Additivity (superposition): f(x<sub>1</sub> + x<sub>2</sub>) = f(x<sub>1</sub>) + f(x<sub>2</sub>).
 
-Scaling (homogeneity): 
-+ f(ax) = af(x).
+Scaling (homogeneity): f(ax) = af(x).
+
+???
+
+There are three nonlinear models as shown following
 
 ---
 
@@ -161,26 +204,30 @@ Scaling (homogeneity):
 
 .center[b<sup>n</sup> = x.]
 
-* Exponential function is to solve for x.
-    + e.g., y = x<sup>2</sup>.
-    
-    
-### Property: x is called the base.
-+ Multiplication: m and n are constant.
+x is called the base.    
+
++ *Quadratic* (parabola): y = &beta;<sub>0</sub> + &beta;<sub>1</sub>x + &beta;<sub>2</sub>x<sup>0</sup>;
++ *Polynomial*: $y = \sum_0^n \beta_n x^n$.
+
+--
+
+### Property: 
+
+.pull-left[
++ Multiplication: 
     + x<sup>m</sup> * x<sup>n</sup> = x<sup>m + n</sup>;
     + x<sup>m</sup> * z<sup>m</sup> = (xz)<sup>m</sup>;
     + (x<sup>m</sup>)<sup>n</sup> = x<sup>mn</sup>.
     + x<sup>0</sup> = 1.
-        
----
-        
+ ]
+ 
+.pull-right[
 * Division
     + $\frac{x^m}{x^n} = x^{m - n};$ 
     + $\frac{x^m}{z^m} = (\frac{x}{z})^m.$
     
-* Some terminology
-    + Quadratic (parabola): y = &beta;<sub>0</sub> + &beta;<sub>1</sub>x + &beta;<sub>2</sub>x<sup>0</sup>;
-    + Polynomial: $y = \sum_0^n \beta_n x^n$.
+.footnote[\* m and n are constant]
+]
 
 ---
 
@@ -204,7 +251,7 @@ Scaling (homogeneity):
     + The inverse of exponential functions, such as $y = e^x; y = 10^x$.
     + e.g., $y = ln(x); y = log(x).$
     
----
+--
 
 ### Properties
 + $ln(1) = 0; log_a(a) = 1$
@@ -212,6 +259,60 @@ Scaling (homogeneity):
 + $ln(\frac{x_1}{x_2}) = ln(x_1) - ln(x_2);$
     + $ln(x_1\pm x_2)\neq ln(x_1)\pm ln(x_2).$
 + $ln(x^b) = bln(x).$
+
+---
+
+## Differential/Derivative
+
+.center[<img src="images/math_derivative.png" height = 100 />]
+
+--
+
+Geometrically,
+
+.center[<img src="images/math_tangent.gif" height = 300 />]
+
+---
+    
+### Rules
+
+.pull-left[
+* $(C)' = 0$.
+* $(x^{\mu})' = \mu x^{\mu - 1}$.
+* $(a^x)' = a^xln\ a$.
+* $(log_ax)' = \frac{1}{xln\ a}$.
+* Let u, v are derivable, 
+    + $(u\pm v)' = u' \pm v'$.
+    + $(Cu)' = Cu, C\ is\ constant.$
+    + $(uv)' = u'v + uv'$.
+    + $(\frac{u}{v})' = \frac{u'v - uv'}{v^2},\ where v\neq 0.$
+] 
+
+--
+
+.pull-right[
+* Chain rule: $g(f(x))' = g'(f(x))f'(x)$
+    + To solve $g(f(x))'$, let $u = f(x)$.
+    + $g(f(x))' = g(u)'u' = g(u)'f(x)'$
+]
+
+---
+
+## Integral
+
+.center[<img src="images/math_integral.gif" height = 500 />]
+
+--
+
+Mathematically,
+
+If $\exists \int f(x)dx$, and F'(x) = f(x) for $\forall x\in[a, b]$
+
+$\int^b_af(x)dx = F(x)|^b_a = F(b) - F(a)$
+
+???
+
+微求点，积求面
 
 ---
 
@@ -244,7 +345,7 @@ class: inverse, bottom
 
 ### Scalar vs. Vector
   
-.center[<img src="image/scalar-vector.png" height = 400 />]
+.center[<img src="images/math_scalar-vector.png" height = 450 />]
 
 ???
 
@@ -256,8 +357,7 @@ vector is speed and direction.
 
 ### Matrix
 
-.center[<img src="image/matrix.gif" height = 400 />]
-
+.center[<img src="images/math_matrix.gif" height = 500 />]
 
 ---
 
@@ -266,94 +366,104 @@ vector is speed and direction.
 ### Length:
 
 $$||\boldsymbol{x}|| = \sqrt{\sum x_i^2}.$$
+ Example: If $\boldsymbol{x} = (2, 4, 4, 1)$, its length $||\boldsymbol{x}|| = \sqrt{2^2 + 4^2 + 4^2 + 1^2} = \sqrt{37}$. 
 
 --
 
-Example: If $\boldsymbol{x} = (2, 4, 4, 1)$, its length $||\boldsymbol{x}|| = \sqrt{2^2 + 4^2 + 4^2 + 1^2} = \sqrt{37}$. 
-
---
-
-* Vector normalization: $\frac{\boldsymbol{x}}{||\boldsymbol{x}||}.$
+Vector .red[normalization]: $\frac{\boldsymbol{x}}{||\boldsymbol{x}||}.$
     
 ---
 
 ### Addition
 
-$$\boldsymbol{a} \pm \boldsymbol{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$$
+$\boldsymbol{a} \pm \boldsymbol{b} = (a_1 \pm b_1, a_2 \pm b_2, ..., a_n \pm b_n).$
 
-.center[<img src="image/passing.gif" height = 300 />]
+.pull-left[<img src="images/math_passing.gif" height = 400 />]
 
 --
 
-Example: $(1,2) + (5,8) = (1 + 5, 2 + 8) = (6, 10).$
+.pull-right[Example: $(1,2) + (5,8) = (1 + 5, 2 + 8) = (6, 10).$]
 
 ---
 
 ### Multiplication
 
-* Scalar Multiplication: $c\boldsymbol{x} = (cx_1, cx_2,..., cx_n).$
+* Scalar ~: $c\boldsymbol{x} = (cx_1, cx_2,..., cx_n).$
 
-.center[<img src="image/vectorTimes.gif" height="200"/>]
+.center[<img src="images/math_vectorTimes.gif" height="200"/>]
 
----
-
-* Vector Multiplication 
-    + Dot product: $\boldsymbol{a\cdot b} = \sum a_ib_i = |\boldsymbol{a}||\boldsymbol{b}|cos\theta.$
+--
+* Vector ~ (Dot product): $\boldsymbol{a\cdot b} = \sum a_ib_i = |\boldsymbol{a}||\boldsymbol{b}|cos\theta.$
 
 ---
 
 ## Matrix in Types
 
-### Square matrix
+.pull-left[
+*Square matrix*
 
 $$A_{2\times2} = \left(\begin{array}{cc} 
                   1 & 2\\
                   3 & 4
                   \end{array}\right)$$
+]
 
-### Zero matrix
+--
+
+.pull-right[
+*Zero matrix*
 
 $$\left(\begin{array}{ccc} 
                   0 & 0 & 0\\
                   0 & 0 & 0
                   \end{array}\right)$$
+]
 
----
+--
 
-### Diagonal matrix 
+.pull-left[
+*Diagonal matrix *
 
 $$\left(\begin{array}{ccc} 
           1 & 0 & 0\\
           0 & 2 & 0\\
           0 & 0 & 3
           \end{array}\right)$$
+]
 
-### Identity matrix
+--
+
+.pull-right[
+*Identity matrix*
 
 $$I = \left(\begin{array}{cc} 
                       1 & 0 & 0\\
                       0 & 1 & 0\\
                       0 & 0 & 1
                       \end{array}\right)$$
+]
 
 ---
 
-### Permutation matrix
+.pull-left[
+*Permutation matrix*
 
 $$\left(\begin{array}{cc} 
                       0 & 1 & 0\\
                       1 & 0 & 0\\
                       0 & 0 & 1
                       \end{array}\right)$$
+]
 
-
-### Upper/lower matrix
+.pull-right[
+*Upper/lower matrix*
 
 $$\left(\begin{array}{cc} 
                       1 & 4 & 5\\
                       0 & 2 & 6\\
                       0 & 0 & 3
                       \end{array}\right)$$
+]
 
 ---
 
@@ -361,14 +471,14 @@ $$\left(\begin{array}{cc}
 
 Row to column, $A^t$.
 
-.center[<img src="image/Atranspose.gif" height="400"/>]
+.center[<img src="images/math_transpose.gif" height="500"/>]
 
 
 ---
 
 ## Matrix Addition
-$A \pm B = a_{ij} \pm b_{ij}$
 
+$$A \pm B = a_{ij} \pm b_{ij}$$
 Example
 
 $$A = \left(\begin{array}{cc} 
@@ -390,45 +500,43 @@ $$A + B = \left(\begin{array}{cc}
 
 ## Matrix Multiplication
 
-### Scalar Multiplication: 
+Scalar Multiplication: 
 
 .center[c**A** = ca<sub>ij</sub>.]
 
 --
 
-### Matrix Multiplication
+Matrix Multiplication
 
-$C_{n\times p} = A_{n\times m}B_{m\times p} = \sum_{k = i}^{m}a_{ik}b_{kj}.$
+$$C_{n\times p} = A_{n\times m}B_{m\times p} = \sum_{k = i}^{m}a_{ik}b_{kj}.$$
 
 --
 
-$AB \neq BA$!
+NB : $AB \neq BA$!
 
 ---
 
-.center[<img src="image/matrixTimesII.gif" height = 300 />]
+.center[<img src="images/math_matrixTimesII.gif" height = 300 />]
 
---
-
-.center[<img src="image/matrixTimes.gif" height = 300 />]
+.center[<img src="images/math_matrixTimes.gif" height = 300 />]
   
 ---
 
-### Hadamard (circle) Product: 
+.pull-left[
+Hadamard (circle) Product: 
 
 $\boldsymbol{A_{ij}\circ B_{ij}} = C_{ij}$
 
-.center[<img src="image/hadamard.svg" height="100"/>]
+<img src="images/math_hadamard.svg" height="300"/>
+]
 
----
-
-### Kronecker Product: 
+.pull-right[
+Kronecker Product: 
 
 $A_{m\times n}\otimes B_{p\times q} = C_{mp\times nq}.$
 
-
-.center[<img src="image/Kronecker.png" height = 300 />]
-
+.center[<img src="images/math_Kronecker.png" height = 300 />]
+]
 ---
 
 ## Inverse
@@ -446,33 +554,38 @@ $A\cdot A^{-1} = I.$
 
 ## Determinant
 
-.center[<img src="image/determinant.gif" height = 300 />]
+.center[
+<img src="images/math_determinant.gif" height = 300 />   
+]
+Convert the matrix into scalar; Matrices with non-zero determinant are **non-singular matrices**, which means invertible.
 
-* Used to convert the matrix into scalar.
+--
 
----
-
+.pull-left[
 * $2\times 2$ matrix (butterfly method)
-    + ![](image/det22.gif)
+<img src="images/math_det22.gif" height = 100 />
+    ]
+    
+.pull-right[
 * Laplace expansion: using minors.
-    + ![](image/det33.gif)
-* Matrices with non-zero determinant are **non-singular matrices**, which means invertible.
+<img src="images/math_det33.gif" height = 80 />
+    ]
 
 ---
 
 ## Eigenvector
 
-$\mathbf{A} \mathbf{v} = \lambda \mathbf{v}$
+$$\mathbf{A} \mathbf{v} = \lambda \mathbf{v}$$
 
-$v$: eigenvector; $\lambda$: eigenvalue
+v: eigenvector; &lambda;: eigenvalue
 
-<img src="image/pca.gif" height = 350 />
+<img src="images/math_pca.gif" height = 350 />
 
 ---
 
 ## Norm
 
-.center[<img src="image/norm.gif" height = 300 />]
+.center[<img src="images/math_norm.gif" height = 300 />]
 
 --
 
@@ -515,71 +628,16 @@ The Frobenius norm, sometimes also called the Euclidean norm, is matrix norm of 
 
 ## Solving System of Equations
 
-.center[<img src="image/solving.gif" height = 250 />]
+.center[<img src="images/solving.gif" height = 400 />]
 
 ---
 
-class: inverse, bottom
+class: inverse, center, middle
 
-# Calculus
+.center[<img src="images/math_thatsit.gif" height = 500 />]
 
----
-
-## Differential/Derivative
-
-* Formal
-
-![](image/derivative.png)
-
---
-
-* Geometric
-
-.center[<img src="image/tangent.gif" height = 200 />]
-
----
-    
-### Rules
-
-* $(C)' = 0$.
-* $(x^{\mu})' = \mu x^{\mu - 1}$.
-* $(a^x)' = a^xln\ a$.
-* $(log_ax)' = \frac{1}{xln\ a}$.
-* Let u, v are derivable, 
-    + $(u\pm v)' = u' \pm v'$.
-    + $(Cu)' = Cu, C\ is\ constant.$
-    + $(uv)' = u'v + uv'$.
-    + $(\frac{u}{v})' = \frac{u'v - uv'}{v^2},\ where v\neq 0.$
-  
----
-
-* Chain rule: $g(f(x))' = g'(f(x))f'(x)$
-    + To solve $g(f(x))'$, let $u = f(x)$.
-    + $g(f(x))' = g(u)'u' = g(u)'f(x)'$
-
----
-
-## Integral
-
-![](image/integral.gif)
-
----
-
-### Fundamental theorem of calculus
-
-If $\exists \int f(x)dx$, and F'(x) = f(x) for $\forall x\in[a, b]$
-
-$\int^b_af(x)dx = F(x)|^b_a = F(b) - F(a)$
-
-???
-
-微求点，积求面
-
-
----
-
-class: inverse
-
-.center[<img src="image/thatsit.gif" height = 600 />]
-
-
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "mathcamp.html"), 
+                       timeout = 500, 
+                       box_model = "padding")
+```
