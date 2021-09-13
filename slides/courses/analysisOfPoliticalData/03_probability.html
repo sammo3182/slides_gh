@@ -4,9 +4,21 @@
     <title>Probability Theory</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="03_probability_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="03_probability_files/header-attrs-2.10/header-attrs.js"></script>
     <link href="03_probability_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <script src="03_probability_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <link href="03_probability_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="03_probability_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="03_probability_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="03_probability_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
+    <link href="03_probability_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="03_probability_files/panelset-0.2.4/panelset.js"></script>
+    <script src="03_probability_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="03_probability_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="03_probability_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="03_probability_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="03_probability_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="03_probability_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script src="03_probability_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
     <script src="03_probability_files/viz-1.8.2/viz.js"></script>
     <link href="03_probability_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
     <script src="03_probability_files/grViz-binding-1.0.6.1/grViz.js"></script>
@@ -18,85 +30,98 @@
 class: center, middle, inverse, title-slide
 
 # Probability Theory
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
 
+
+
+class: normal
+
 ## Overview
 
++ Event probability &amp;rarr;    
+Calculating probabilities &amp;rarr;    
+Presenting probabilities
 
-* What's probability?
-* Calculating probabilities
-* Presenting probabilities
-* Distribution
++ Beyond even probability: Distribution
 
 ---
 
 class: inverse, bottom
 
-# Probability
+# Event Probability
 
 ---
 
-## Probability: A Belief
+## Event Probability
 
-* Determinist event: Pr = 0/1
+.center[To what extent an event may happen?]
+
+.pull-left[
+Determinist: Pr = 0/1
+
+&lt;img src="images/prob_tangSeng.jpg" height = 300 /&gt;
+]
 
 --
 
-* Probabilist event: Pr &amp;in; [0, 1]
+.pull-right[
+Probabilist event: Pr &amp;in; [0, 1]
 
---
-
-.left-column[&lt;img src="images/tangSeng.jpg" height = 300 /&gt;]
-
-.right-column[&lt;img src="images/multiverse_rickMordy.jpg" height = 300 /&gt;]
+&lt;img src="images/prob_multiverse_rickMordy.jpg" height = 300 /&gt;
+]
 
 ---
 
-## What Dose the "Pr" Mean
+## Understanding Probability
 
---
+.pull-left[
+**Classic ("objective") view**
 
-### Classic ("objective") view:
+"Coin has two sides, balance" &amp;rArr; Pr(head) = 0.5.
+]
 
-"Coin has two sides, balance" &amp;rarr; Pr(head) = 0.5.
-
---
-
-### Relative frequency view 
+.pull-right[
+**Relative frequency view**
 
 You are observing a random sample.
 
 `$${\displaystyle \lim_{n\to \infty}f(x)/n}$$`
+]
 
-(The larger the better
-
---
-
-### Subjective view
+.center[
+**Evolutionary view**
 
 Bayesian, based on beliefs (prior), game theory
+]
 
 ---
 
-## How Do We Know the Probability: 
+class: inverse, bottom
+
+# Calculating Probability
+
+---
+
+## How Do We Know an Event's Probability
 
 1. Sample Point Method
-    + Sample space
-    + Sampling replacement
 1. Event Composition Method
-    + Permutation
-    + Combination
+1. Bayesian Method
+
+???
+
+Two ways to know the probability, but first to know what's sample space is.
+
 
 ---
 
-Sample Space
+## Sample Space
 
-Space of all possible outcomes
+.center[Space of all possible outcomes]
 
 --
 
@@ -106,16 +131,11 @@ Rules:
 1. All of the probability constitute the probability distribution
 1. For all event in the space, `\(P(E) + P(\tilde E) = 1\)`
 
-???
-
-Two ways to know the probability, but first to know what's sample space is.
-
-
 ---
 
 ## Sample Point Method
 
-Get the probability of an event,
+Get the probability of an event
 
 --
 
@@ -129,33 +149,42 @@ Get the probability of an event,
 
 ## Sampling Replacements
 
-W/o means once picked, it won't be sampled again. 
+W/o replacement means once picked, it won't be sampled again. 
 
 --
 
-Infinite population (or extremely large sample):
+.pull-left[
+### Infinite population
+Or extremely large sample
 
-Little difference between sampling with and without replacement). 
+.red[Little] difference between sampling with and without replacement). 
+]
 
----
+.pull-right[
+### Finite population
 
-When the population is finite, the variability of the sample is actually less than expected &amp;rarr;
+The variability of the sample is actually .red[less] than expected &amp;rarr;
 
-Finite population correction: Account for this greater efficiency in the sampling process. 
+**Finite population correction**
 
 $$ FPC = \sqrt{\frac{N - n}{N - 1}}$$
+]
 
----
+
+--
 
 e.g., Through a dice for five times: 
 
-w. replacement: `\(6^5\)`
+W. replacement: `\(6^5\)`; w.o. replacement: `\(P(6, 5) = \frac{6!}{(6 - 5)!}.\)` 
 
-w.o. replacement: `\(P(6, 5) = \frac{6!}{(6 - 5)!}.\)` (n! factorial)
+???
+n! factorial
 
---
+---
 
-Q. Is survey sampling a w. or w.o. sampling? 
+class: large, center, middle
+
+ Q: Is survey sampling a w. or w.o. sampling? 
 
 ???
 
@@ -163,16 +192,21 @@ w.o.
 
 ---
 
+## Sample Point Method
+
+Get the probability of an event,
+
 ## Event Composition Method (ECM)
 
-Determine the probabilities by the application of .red[multiplicative and additive] rules.
+Get the probabilities by the application of .red[multiplicative and additive] rules.
 
 --
+
 E&lt;sub&gt;1&lt;/sub&gt;: m outcomes, E&lt;sub&gt;2&lt;/sub&gt;: n outcomes, therefore there are `\(m\times n\)` possible outcome for E&lt;sub&gt;1&lt;/sub&gt;E&lt;sub&gt;2&lt;/sub&gt;. 
 
 --
 
-e.g., A car dealer has 6 models, 8 colors, and 3 financial plans. How many package? 
+e.g., A car dealer has 6 models, 8 colors, and 3 financial plans. How many package can one choose? 
 
 --
 
@@ -182,9 +216,13 @@ e.g., A car dealer has 6 models, 8 colors, and 3 financial plans. How many packa
 
 ## Tools for ECM: Permutation and Combination
 
-Ordered: `\(P(n, r) = \frac{n!}{(n - r)!}.\)`
+Permutation: Ordered
 
-Order doesn't matter: `\({n \choose r} = \frac{n!}{r!(n - r)!}.\)`
+`$$P(n, r) = \frac{n!}{(n - r)!}.$$`
+
+Combination: Order doesn't matter
+
+`$${n \choose r} = \frac{n!}{r!(n - r)!}.$$`
 
 ---
 
@@ -200,11 +238,96 @@ Event G and H
 * Conditional: `\(P(H|G) = \frac{P(G\cap H)}{P(G)}\)`
 * Independent: P(H|G) = P(H); P(G&amp;cap;H) = P(G)P(H)
 
+---
+
+## Baysian Method
+
+.center[&lt;img src="images/prob_Bayes.gif" height = 200&gt; Thomas Bayes (1702--1761) ]
+
+Bayes' Theorem
+
+$$
+`\begin{aligned}
+P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B)\\
+             P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
+                   =&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}`
+$$
+
+???
+
+1. Conjugate prior: posterior distribution = prior distribution
+1. Cromwell's rule: if a region of the parameter space has 0 prior probability, then it also has 0 posterior probability. 
+ 
+---
+
+background-image: url("images/prob_bayesComponents.png")
+background-position: center
+background-size: contain
+ 
+---
+
+## Example
+
+.center[&lt;img src="images/prob_ar.gif" height = 300&gt; ]
+
+A new season of Antiques Roadshow verifies antiques for buyers based on machine-learning techniques.
+Based on experience of previous seasons, 30% of the products were knockoff in the platform. 
+When people bring a product to verify, AR can tell 90% knockoff knockoff, and 80% authentic products authentic. 
+Then, what's the probability that a product is knockoff, if AR said so?
+
 
 ---
 
-## Beyond the Chance: Alternative Ways
+A new season of Antiques Roadshow verifies antiques for buyers based on machine-learning techniques.
+Based on experience of previous seasons, .red[**30%**] of the products were knockoff in the platform. 
+When people bring a product to verify, AR can tell .red[**90%**] knockoff knockoff, and .red[**80%**] authentic products authentic. 
+Then, what's the probability that a product is knockoff, if AR said so?
 
+.pull-left[
+`$$\begin{align}
+&amp; P(K|VK) \\
+=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
+=&amp; \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
+\end{align}$$`
+]
+
+.pull-right[
+<div id="htmlwidget-81be87b5bb10ef8a090e" style="width:504px;height:432px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-81be87b5bb10ef8a090e">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+]
+
+---
+
+## Another Example
+
+&lt;video width="1000" height="500" controls&gt;
+    &lt;source src="images/prob_bayesianApplication.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+
+---
+
+## Bayesian Diss Frequentist
+
+1. *Repeated sample*: When the population data are collected, the repeat-sample makes no sense.
+1. *Future event*: It is impossible to have repeat samples for future
+
+## Frequentist Diss Bayesian
+
+.center[&lt;img src="images/prob_freqBayesian.png" height = 400&gt;]
+
+---
+
+class: inverse, bottom
+
+# Presenting Probability
+
+---
+
+## Four Common Ways to Presenting Probability
+
+1. Percentage
 1. Relative risk
 1. Odds Ratio
 1. Bayesian method
@@ -214,6 +337,8 @@ Event G and H
 ## Relative Risk
 
 * `\(\hat{\pi}_{1|1}/\hat{\pi}_{1|2} = \frac{n_{11}/n_{\bullet 1}}{n_{12}/n_{\bullet 2}}\)`
+
+--
 
 e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
 
@@ -232,14 +357,15 @@ That is, when people drink, they are 7.9 more times to die in a fatal accident t
 
 ## Odds Ratio
 
+.pull-left[
 `$$\begin{align}
 O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
  =&amp; \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
  =&amp; n_{11}n_{22}/n_{21}n_{12}
 \end{align}$$`
+]
 
----
-
+.pull-right[
 e.g., A hospital investigated whether drinking has a relation with fatal illness. Here's the counts:
 
 | Drinking 	| Fatal 	| Nonfatal 	|
@@ -249,6 +375,7 @@ e.g., A hospital investigated whether drinking has a relation with fatal illness
 
 `\(O_{fatal} = \frac{1601/510}{162527/412368}\)` = 7.965
 
+]
 
 ???
 
@@ -256,111 +383,18 @@ The fatal risk of wearing a belt is 8 times larger than not
 
 --
 
-Bonus:  Log odds
-
-???
-
-Log odds, Logit, mapping the range (0,1) to (-&amp;infin;, +&amp;infin;) using log of odds, a.k.a., "logistic unit"
-
+Log odds: mapping the range (0,1) to (-&amp;infin;, +&amp;infin;) using log of odds, a.k.a., "logistic unit" (logit)
 
 If independent, then log odds = 0.
 
-
 ---
 
-RR vs. OR
+## RR vs. OR
 
 .center[&lt;img src="images/rrOr.png" height = 300 /&gt;]
 
 * For rare cases, both ok.
 * For common cases, RR is better.
-
----
-
-## Evolutionary View of Probability: Bayes' Theorem
-
-$$
-`\begin{aligned}
-P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B)\\
-             P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
-                   =&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
-\end{aligned}`
-$$
-
-???
-
-1. Conjugate prior: posterior distribution = prior distribution
-1. Cromwell's rule: if a region of the parameter space has 0 prior probability, then it also has 0 posterior probability. 
- 
----
-
-class: small
-
-e.g.1: Let's assume Idle Fish provides a verification function for buyers based on machine-learning techniques, and .red[30%] of the products were knockoff in the platform. When people bring a product to verify, the system can tell .red[90%] knockoff  knockoff, and .navy[80%] authentic products authentic. Then, what's the probability that a product is knockoff if the verification system said so?
-
---
-
-.right-column[
-`$$\begin{align}
-&amp; P(K|VK) \\
-=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
-=&amp; \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
-\end{align}$$`
-]
-
---
-
-.left-column[
-
-```{=html}
-&lt;div id="htmlwidget-ffd56ecc05e08cd3dc1f" style="width:504px;height:504px;" class="grViz html-widget"&gt;&lt;/div&gt;
-&lt;script type="application/json" data-for="htmlwidget-ffd56ecc05e08cd3dc1f"&gt;{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -&gt; MF[label=\"K: .3\"]\n  N -&gt; MS[label=\"A: .7\"]\n  MF -&gt; RFF[label=\"K: .9\"]\n  MF -&gt; RFS[label=\"A: .1\"]\n  MS -&gt; RSF[label=\"K: .2\"]\n  MS -&gt; RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}&lt;/script&gt;
-```
-]
-
----
-
-## Why Baysian Estimation?
-
-&lt;video width="700" height="500" controls&gt;
-    &lt;source src="images/bayesianApplication.mp4" type="video/mp4"&gt;
-&lt;/video&gt;
-
-
----
-
-## Bayesian vs. Frequentist
-
-1. Repeated sample and sample distribution: When the population data are collected, the repeat-sample makes no sense.
-1. Future event: It is impossible to have repeat samples for future
-
-
----
-
-## Special: Correction
-
-### Bayes' Theorem
-
-$$
-`\begin{aligned}
-P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
-     =&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
-\end{aligned}`
-$$
-
-### Level of measurement:
-
-+ Interval 
-    + Zero is a terminal
-+ Ratio
-    + Zero means absence
-
-???
-
-feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
--100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
-
-在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
 
 ---
 
@@ -521,7 +555,8 @@ Pr(MY) = .navy[11/28 &amp;times; 17/28] &amp;ne; 5/28
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
