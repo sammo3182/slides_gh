@@ -12,7 +12,7 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    # mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
@@ -92,7 +92,7 @@ Probabilist event: Pr &in; [0, 1]
 
 You are observing a random sample.
 
-$${\displaystyle \lim_{n\to \infty}f(x)/n}$$
+${\displaystyle \lim_{n\to \infty}f(x)/n}$
 ]
 
 .center[
@@ -156,6 +156,15 @@ W/o replacement means once picked, it won't be sampled again.
 
 --
 
+e.g., Through a dice for five times: 
+
+W. replacement: $6^5$; w.o. replacement: $P(6, 5) = \frac{6!}{(6 - 5)!}.$ 
+
+???
+n! factorial
+
+--
+
 .pull-left[
 ### Infinite population
 Or extremely large sample
@@ -170,18 +179,8 @@ The variability of the sample is actually .red[less] than expected &rarr;
 
 **Finite population correction**
 
-$$ FPC = \sqrt{\frac{N - n}{N - 1}}$$
+$FPC = \sqrt{\frac{N - n}{N - 1}}$
 ]
-
-
---
-
-e.g., Through a dice for five times: 
-
-W. replacement: $6^5$; w.o. replacement: $P(6, 5) = \frac{6!}{(6 - 5)!}.$ 
-
-???
-n! factorial
 
 ---
 
@@ -249,13 +248,12 @@ Event G and H
 
 Bayes' Theorem
 
-$$
-\begin{aligned}
-P(A|B)P(B) =& P(B|A)P(A) = P(A\cap B)\\
-             P(A|B)=& \frac{P(B|A)P(A)}{P(B)}\\
-                   =& \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
-\end{aligned}
-$$
+$$\begin{aligned}
+P(A|B)P(B) =& P(B|A)P(A) = P(A\cap B);\\
+P(A|B)=& \frac{P(B|A)P(A)}{P(B)},\\
+=& \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}$$
+
 
 ???
 
@@ -290,10 +288,12 @@ Then, what's the probability that a product is knockoff, if AR said so?
 .pull-left[
 $$\begin{align}
 & P(K|VK) \\
-=& \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
+=& \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)}, \\
 =& \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
 \end{align}$$
 ]
+
+--
 
 .pull-right[
 ```{r diagramCar, echo = FALSE, fig.height=6}
@@ -346,7 +346,9 @@ digraph usedCar {
 ## Bayesian Diss Frequentist
 
 1. *Repeated sample*: When the population data are collected, the repeat-sample makes no sense.
-1. *Future event*: It is impossible to have repeat samples for future
+1. *Future event*: It is impossible to have repeat samples for future.
+
+--
 
 ## Frequentist Diss Bayesian
 
@@ -393,11 +395,13 @@ That is, when people drink, they are 7.9 more times to die in a fatal accident t
 ## Odds Ratio
 
 .pull-left[
+
 $$\begin{align}
-O_{12} =& \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
- =& \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
- =& n_{11}n_{22}/n_{21}n_{12}
+O_{12} =& \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}}, \\
+ =& \frac{n_{11}/n_{12}}{n_{21}/n_{22}}, \\
+ =& n_{11}n_{22}/n_{21}n_{12}.
 \end{align}$$
+
 ]
 
 .pull-right[
@@ -433,7 +437,13 @@ If independent, then log odds = 0.
 
 ---
 
-## Puting Probability Together: Distribution
+class: inverse, bottom
+
+# Probability &rarr; Distribution
+
+---
+
+## Puting Probability Together
 
 (Probability) distribution: 
 
@@ -457,21 +467,24 @@ Both work.
 
 ---
 
-## The Jargon Family of Distribution
+## Different Angles of Distribution
 
+.pull-left[
 
-### Marginal and joint totals: 
+*Marginal and joint totals *
 
 $$\begin{align} 
 n_{i\bullet} =& \sum_j n_{ij}; n_{\bullet j} = \sum_i n_{ij}; \\
 n_{\bullet\bullet} =& \sum\sum n_{ij}.
 \end{align}$$
 
----
+]
+
+.pull-right[
 
 ### Marginal and joint distributions
 
-Marginal: 
+Marginal 
 
 $$\begin{align}
 \pi_{i\bullet} =& \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
@@ -479,7 +492,7 @@ $$\begin{align}
 \end{align}$$
 
 Joint: $\pi_{\bullet\bullet}$ = &sum;&sum; &pi;<sub>ij</sub> = 1.
-
+]
 ---
 
 e.g., Do you think Kamala Harris is a qualified VP? 
@@ -492,6 +505,10 @@ e.g., Do you think Kamala Harris is a qualified VP?
 
 What's the probability for Female who don't agree?
 
+--
+
+$Pr(FD) = 5/28.$
+
 ???
 
 Kamala Harris, Senator from California, announced VP in 20120
@@ -501,7 +518,7 @@ Kamala Harris, Senator from California, announced VP in 20120
 ### Conditional distribution
 
 $$\pi_{i|j} = \pi_{ij} / \pi_{\bullet j};$$
-$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}$$
+$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}.$$
 ---
 
 e.g., Do you think Kamala Harris is a qualified VP? 
@@ -517,17 +534,17 @@ Probability of "yes" given the respondent is a male.
 
 ???
 
-Conditional: $P(Y|M) = 5/17$
+Conditional: $P(Y|M) = 5/17.$
 
 ---
 
-## Independent Event (Again)
+## Independence
 
 $P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).$
 
 Such event's probability is: 
 
-* Population: $\pi_i = n_i/N$
+* Population: $\pi_i = n_i/N$;
 * Sample: $\hat{\pi_i} = n_i/n_{\bullet\bullet}.$
 
 ---
@@ -560,7 +577,7 @@ $\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.$
 
 ## Wrap Up
 
-.left-column[
+.pull-left[
 * What's probability?
     + Classic
     + Relative
@@ -572,7 +589,7 @@ $\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.$
 
 --
 
-.right-column[ 
+.pull-right[ 
 
 * Presenting probs
     + Chance

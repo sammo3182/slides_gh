@@ -4,7 +4,7 @@
     <title>Probability Theory</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="03_probability_files/header-attrs-2.10/header-attrs.js"></script>
+    <script src="03_probability_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="03_probability_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link href="03_probability_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
     <script src="03_probability_files/tile-view-0.2.4/tile-view.js"></script>
@@ -89,7 +89,7 @@ Probabilist event: Pr &amp;in; [0, 1]
 
 You are observing a random sample.
 
-`$${\displaystyle \lim_{n\to \infty}f(x)/n}$$`
+`\({\displaystyle \lim_{n\to \infty}f(x)/n}\)`
 ]
 
 .center[
@@ -153,6 +153,15 @@ W/o replacement means once picked, it won't be sampled again.
 
 --
 
+e.g., Through a dice for five times: 
+
+W. replacement: `\(6^5\)`; w.o. replacement: `\(P(6, 5) = \frac{6!}{(6 - 5)!}.\)` 
+
+???
+n! factorial
+
+--
+
 .pull-left[
 ### Infinite population
 Or extremely large sample
@@ -167,18 +176,8 @@ The variability of the sample is actually .red[less] than expected &amp;rarr;
 
 **Finite population correction**
 
-$$ FPC = \sqrt{\frac{N - n}{N - 1}}$$
+`\(FPC = \sqrt{\frac{N - n}{N - 1}}\)`
 ]
-
-
---
-
-e.g., Through a dice for five times: 
-
-W. replacement: `\(6^5\)`; w.o. replacement: `\(P(6, 5) = \frac{6!}{(6 - 5)!}.\)` 
-
-???
-n! factorial
 
 ---
 
@@ -246,13 +245,12 @@ Event G and H
 
 Bayes' Theorem
 
-$$
-`\begin{aligned}
-P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B)\\
-             P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)}\\
-                   =&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
-\end{aligned}`
-$$
+`$$\begin{aligned}
+P(A|B)P(B) =&amp; P(B|A)P(A) = P(A\cap B);\\
+P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)},\\
+=&amp; \frac{P(B|A)P(A)}{P(B|A)P(A) + P(B|\tilde A)P(\tilde A)}
+\end{aligned}$$`
+
 
 ???
 
@@ -287,14 +285,16 @@ Then, what's the probability that a product is knockoff, if AR said so?
 .pull-left[
 `$$\begin{align}
 &amp; P(K|VK) \\
-=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)} \\
+=&amp; \frac{P(VK|K)P(K)}{P(VK|K)P(K) + P(VK|\tilde K)P(\tilde K)}, \\
 =&amp; \frac{.9 * .3}{.9 * .3 + .2*.7} = .659.
 \end{align}$$`
 ]
 
+--
+
 .pull-right[
-<div id="htmlwidget-81be87b5bb10ef8a090e" style="width:504px;height:432px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-81be87b5bb10ef8a090e">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-bf33887ef09560d61326" style="width:504px;height:432px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bf33887ef09560d61326">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 ]
 
 ---
@@ -311,7 +311,9 @@ Then, what's the probability that a product is knockoff, if AR said so?
 ## Bayesian Diss Frequentist
 
 1. *Repeated sample*: When the population data are collected, the repeat-sample makes no sense.
-1. *Future event*: It is impossible to have repeat samples for future
+1. *Future event*: It is impossible to have repeat samples for future.
+
+--
 
 ## Frequentist Diss Bayesian
 
@@ -358,11 +360,13 @@ That is, when people drink, they are 7.9 more times to die in a fatal accident t
 ## Odds Ratio
 
 .pull-left[
+
 `$$\begin{align}
-O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}} \\
- =&amp; \frac{n_{11}/n_{12}}{n_{21}/n_{22}} \\
- =&amp; n_{11}n_{22}/n_{21}n_{12}
+O_{12} =&amp; \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}}, \\
+ =&amp; \frac{n_{11}/n_{12}}{n_{21}/n_{22}}, \\
+ =&amp; n_{11}n_{22}/n_{21}n_{12}.
 \end{align}$$`
+
 ]
 
 .pull-right[
@@ -398,7 +402,13 @@ If independent, then log odds = 0.
 
 ---
 
-## Puting Probability Together: Distribution
+class: inverse, bottom
+
+# Probability &amp;rarr; Distribution
+
+---
+
+## Puting Probability Together
 
 (Probability) distribution: 
 
@@ -422,21 +432,24 @@ Both work.
 
 ---
 
-## The Jargon Family of Distribution
+## Different Angles of Distribution
 
+.pull-left[
 
-### Marginal and joint totals: 
+*Marginal and joint totals *
 
 `$$\begin{align} 
 n_{i\bullet} =&amp; \sum_j n_{ij}; n_{\bullet j} = \sum_i n_{ij}; \\
 n_{\bullet\bullet} =&amp; \sum\sum n_{ij}.
 \end{align}$$`
 
----
+]
+
+.pull-right[
 
 ### Marginal and joint distributions
 
-Marginal: 
+Marginal 
 
 `$$\begin{align}
 \pi_{i\bullet} =&amp; \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
@@ -444,7 +457,7 @@ Marginal:
 \end{align}$$`
 
 Joint: `\(\pi_{\bullet\bullet}\)` = &amp;sum;&amp;sum; &amp;pi;&lt;sub&gt;ij&lt;/sub&gt; = 1.
-
+]
 ---
 
 e.g., Do you think Kamala Harris is a qualified VP? 
@@ -457,6 +470,10 @@ e.g., Do you think Kamala Harris is a qualified VP?
 
 What's the probability for Female who don't agree?
 
+--
+
+`\(Pr(FD) = 5/28.\)`
+
 ???
 
 Kamala Harris, Senator from California, announced VP in 20120
@@ -466,7 +483,7 @@ Kamala Harris, Senator from California, announced VP in 20120
 ### Conditional distribution
 
 `$$\pi_{i|j} = \pi_{ij} / \pi_{\bullet j};$$`
-`$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}$$`
+`$$\hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}.$$`
 ---
 
 e.g., Do you think Kamala Harris is a qualified VP? 
@@ -482,17 +499,17 @@ Probability of "yes" given the respondent is a male.
 
 ???
 
-Conditional: `\(P(Y|M) = 5/17\)`
+Conditional: `\(P(Y|M) = 5/17.\)`
 
 ---
 
-## Independent Event (Again)
+## Independence
 
 `\(P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).\)`
 
 Such event's probability is: 
 
-* Population: `\(\pi_i = n_i/N\)`
+* Population: `\(\pi_i = n_i/N\)`;
 * Sample: `\(\hat{\pi_i} = n_i/n_{\bullet\bullet}.\)`
 
 ---
@@ -525,7 +542,7 @@ Pr(MY) = .navy[11/28 &amp;times; 17/28] &amp;ne; 5/28
 
 ## Wrap Up
 
-.left-column[
+.pull-left[
 * What's probability?
     + Classic
     + Relative
@@ -537,7 +554,7 @@ Pr(MY) = .navy[11/28 &amp;times; 17/28] &amp;ne; 5/28
 
 --
 
-.right-column[ 
+.pull-right[ 
 
 * Presenting probs
     + Chance
@@ -665,7 +682,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

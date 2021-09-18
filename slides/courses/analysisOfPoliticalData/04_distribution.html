@@ -4,7 +4,7 @@
     <title>Population and Distrations</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="04_distribution_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="04_distribution_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="04_distribution_files/remark-css-0.0.1/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
@@ -14,17 +14,24 @@
 class: center, middle, inverse, title-slide
 
 # Population and Distrations
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
 
+What's distribution?
+
+--
+
+(Probability) distribution: 
+
+The mathematical .red[function] that gives the probabilities of occurrence of different possible .red[outcomes] for an .red[experiment].
+
 ## Overview
 
 1. Properties of distribution
-1. Common distributions
+1. Common kinds of distributions
 1. Expectation
 
 ---
@@ -37,15 +44,15 @@ class: inverse, bottom
 
 ## Probability Distribution
 
-* Probability Mass Function: Discrete
+* Probability Mass Function (PMF): Discrete (How to visualize it?)
 
 ???
 
-Draw a histogram
+A histogram
 
 --
 
-* Probability Density Function: Continuous
+* Probability Density Function (PDF): Continuous
     + Cumulative density function: `\(F(x) = P(X &lt; x)\)`
 
 ???
@@ -54,27 +61,19 @@ Draw a density plot
 
 --
 
-.center[&lt;img src="images/dist_pmfPdf.png" height = 300 /&gt;]
-
----
-
-class: center, middle
-
-.Large[Rethink:&lt;br&gt;What's a Distribution?]
-
-???
-
-a pile of probability
-
-what did we just call a distribution? Function
+.center[&lt;img src="images/dist_pmfPdf.png" height = 350 /&gt;]
 
 ---
 
 ## Moments of Probability Distribution
 
-A specific quantitative measure of .red[the shape of a function].
+Specific quantitative measures of .red[the shape] of a function (?).
 
----
+???
+
+A function is a distribution: a distribution is event happening trajectory, a movement
+
+--
 
 .pull-left[
 
@@ -83,6 +82,8 @@ Physics
 + 0th: Total mass
 + 1st: Center of mass
 + 2ed: Rotational inertia
+
+&lt;img src = "images/dist_rotation.gif"&gt;
 
 ]
 
@@ -95,85 +96,79 @@ Rotational inertia: 惯性矩
 .pull-right[
 Statistics
 
+.center[&lt;img src="images/dist_moments.png" height="350"/&gt;]
+
+]
+
+???
+
 + 0th: Total probability
 + 1st: Mean
 + 2ed: Variance
 + 3id: Skewness
 + 4th: Kurtosis (tailedness)
-]
-
-???
-
-&lt;img src="images/moments.png" height="300"/&gt;
 
 Kurtosis：尖锐程度
 
 ---
 
-## Properties of PMF/PDF&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## Properties of PMF/PDF
 
-+ None-negative
+.pull-left[
 
---
+&lt;img src = "../mathCamp/images/math_integral.gif" height = 250&gt;
 
-+ Total area = 1
+None-negative
 
---
+Total area = `\(\int^{+\infty}_{-\infty}f(x)dx = 1.\)`
 
-+ P(x = c) = 0
+]
 
+.pull-right[
+
+`\(P(x = c) = \int^c_cf(x)dx = 0.\)`
+
+`$$\begin{aligned}P(a\leq x \leq b) =&amp; \int^b_af(x)x,\\
+=&amp; \int^b_{-\infty}f(x)dx -\\
+ &amp;\int^a_{-\infty}f(x)dx.
+\end{aligned}$$`
+
+CDF: 
+
+`\(P(X\leq x)\)`, PDF = `\(\frac{\partial CDF}{\partial X}.\)`
+
+]
 
 ???
 
-+ None-negative
+导数是斜率，即在某一点函数变化的加速度；
+偏导数是把二元函数的一个自变量不变，另一个正常求导，就分别想象成z对x，y的函数。
 
-+ Total area = `\(\int^{+\infty}_{-\infty}f(x)dx = 1\)`
-
-+ `\(P(x = c) = \int^c_cf(x)dx = 0\)`
-
-+ `\(P(a\leq x \leq b) = \int^b_af(x)x.\)`
-    + `\(= \int^b_{-\infty}f(x)dx - \int^a_{-\infty}f(x)dx\)`
-
-+ CDF `\(P(X\leq x)\)`, PDF = `\(\frac{\partial CDF}{\partial X}\)`
+https://www.zhihu.com/question/276405042#:~:text=%E5%81%8F%E5%AF%BC%E6%95%B0%E5%B0%B1%E6%98%AF%E5%90%AB%E6%9C%89%E5%A4%9A,%E5%BC%95%E8%B5%B7%E5%87%BD%E6%95%B0%E7%9A%84%E6%80%BB%E5%8F%98%E5%8C%96%E3%80%82
 
 ---
 
 class: inverse, bottom
 
-# Common Distributions
+# Common Kinds of Distribution
 
 ---
 
-## Simple Distributions
+## Basic Distributions
 
 + Binomial (discrete)
++ Poisson (discrete)
 + Uniform (continuous)
-+ Normal (continous)
++ Normal (continuous)
 
 
 ---
 
-## Binomial&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
-
-PDF: `\(f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}\)`
-
-+ n, number of trials; 
-+ p, the success probability in each trial; 
-+ k, the number of success
-
-???
-
-`$${n \choose k} = \frac{n!}{k!(n - k)!}$$`
-
-## Bernoulli
-
-k is possible outcome
-
-`\(k\in 0, 1,\)` p is P(X = 1)
+## Bernoulli &amp;larr; Binomial
 
 
-### CDF: 
-
+Bernoulli: `\(k\in 0, 1,\)` p is P(X = 1)
+CDF: 
 `$$F = \begin{cases}
 0, if\ k&lt;0,\\
 1 - p, if\ k \in[0, 1),\\
@@ -181,35 +176,72 @@ k is possible outcome
 \end{cases}$$`
 
 
-### PMF: 
+.pull-left[
+
+PMF: 
 
 `$$f(k;p) = p^k(1 - p)^{1 - k}$$`
 
++ &amp;mu; = p
++ &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = p(1 - p)&lt;sup&gt;\*&lt;/sup&gt;
 
-&lt;img src="images/bernoulli_pmf.gif" height="400"/&gt;
+]
 
+.pull-right[
 
-+ Mean: p
-+ Variance: p(1 - p)
+&lt;img src="images/dist_bernoulli_pmf.gif" height="300"/&gt;
+
+]
+
+.footnote[&lt;sup&gt;\*&lt;/sup&gt; Population &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = &amp;pi;(1 - &amp;pi;).]
+
+???
+
+why pmf? Discrete
+
+When we talk about how to describe a variable, we talked about this &amp;pi;(1 - &amp;pi;).
 
 ---
 
-.center[&lt;img src="images/binomial_pmf.png" height="400"/&gt;]
+## Binomial distribution
 
-+ Mean: np&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
-+ Variance: np(1 - p)&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
+.pull-left[
+PDF: `\(f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}\)`
+
++ n, number of trials; 
++ p, the success probability in each trial; 
++ k, the number of success
++ `\({n \choose k} = \frac{n!}{k!(n - k)!}\)` (what's this?)
+
+&amp;mu; = np    
+&amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = np(1 - p)
+
+]
+
+???
+
+Combination: no order, every draw is independent
+
+--
+
+.pull-right[
+.center[&lt;img src="images/dist_binomial_pdf.png" height="500"/&gt;]
+]
 
 ---
 
-## Application
+## How Does the Binomal Distribution Help in Social Science Research
 
-A school hired 100 faculty members, 25 female and 75 male, in a year. Given the general hired ratio is .4 for women and .6 for men. What's the chance that the employment is fair in this year?
+A university hired 100 faculty members in a year, 25 female and 75 male. 
+Given that the general hired ratio is 4:6 for women:men, what's the chance that the employment is fair in terms of gender equality?
 
 `$$PDF = {n \choose r}\pi^r(1 - \pi)^{n - r}$$`
 
 --
 
-`$$P(25) = {100 \choose 25}0.4^{25}(1 - 0.6)^{75} = 0.0006$$`
+Let's .red[assume] the employment of any faculty member does not affect the chance the others are hired.
+
+`$$P(25) = {100 \choose 25}0.4^{25}(1 - 0.6)^{75} = 0.0006.$$`
 
 --
 
@@ -217,70 +249,127 @@ Very unlikely.
 
 ---
 
-## Uniform&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt; 
+## Poisson Distribution
 
 .pull-left[
-### CDF
+PMF:
+`\(Pr(X{=}k)= \frac{\lambda^k e^{-\lambda}}{k!},\)`
 
-.center[&lt;img src="images/uniform_cdf.png" height="300"/&gt;]
+k is the number of occurrences
+
+&amp;mu; = &amp;lambda;;    
+&amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = &amp;lambda;.
 ]
-
-???
-
-`$$F = \begin{cases}
-0, if\ x &lt; a,\\
-\frac{x - a}{b - a}, if\ x \in[a, b),\\p
-1, if\ x \geq b.
-\end{cases}$$`
 
 --
 
 .pull-right[
-### PDF
-
-&lt;img src="images/uniform_pdf.png" height="300"/&gt;
+&lt;img src = "images/dist_poisson.gif" height = 500&gt;
 ]
 
+---
 
-???
+## Uniform Distribution
+
+CDF: 
+`$$F = \begin{cases}
+0, if\ x &lt; a,\\
+\frac{x - a}{b - a}, if\ x \in[a, b),\\
+1, if\ x \geq b.
+\end{cases}$$`
+
+
+PDF:
 
 `$$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$`
----
-
-+ Mean: `\(\mu = E(x) = \frac{a + b}{2}\)`&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
-+ Variance: `\(\sigma^2 =  \frac{(b - a)^2}{12}.\)`&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
 
 ???
 
-`\begin{align}
-\mu =&amp; E(x) = \int^b_a x \frac{1}{b - a} dx \\
-=&amp; \frac{1}{b - a}\int^b_axdx \\
-=&amp; \frac{1}{b - a}\frac{1}{2}x^2|^b_a \\
-=&amp; \frac{b^2 - a^2}{a(b - a)} \\
-=&amp; \frac{a + b}{2}
-\end{align}`
+PDF和CDF关系
 
-`\begin{align}
-\sigma^2 =&amp; \sum x^2p(x) - \mu^2 \\
-=&amp; \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2 \\
-=&amp; \frac{(b - a)^2}{12}.
-\end{align}`
+`\(P(X\leq x)\)`, PDF = `\(\frac{\partial CDF}{\partial X}.\)`
 
 ---
 
-## Normal: Gaussian curve
+.pull-left[
 
-### PDF: 
+CDF: 
+.center[&lt;img src="images/dist_uniform_cdf.png" height="500"/&gt;]
+]
 
-`$$f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$$`
+.pull-right[
+PDF:
+.center[&lt;img src="images/dist_uniform_pdf.png" height="500"/&gt;]
+]
 
-When `\(\mu = 1; \sigma = 0\)`, standard normal distribution
+---
+
+## Moments of Uniform Distribution
+
+.pull-left[
++ &amp;mu;
+
+`$$\begin{align}
+\mu =&amp; \int^b_a x \frac{1}{b - a} dx, \\
+=&amp; \frac{1}{b - a}\int^b_axdx, \\
+=&amp; \frac{1}{b - a}\frac{x^2}{2}|^b_a, \\
+=&amp; \frac{b^2 - a^2}{2(b - a)}, \\
+=&amp; \frac{a + b}{2}.
+\end{align}$$`
+]
+
+.pull-right[
++ &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;
+
+`$$\begin{align}
+\sigma^2 =&amp; \sum x^2p(x) - \mu^2, \\
+=&amp; \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2, \\
+=&amp; \frac{1}{b - a}\int^b_ax^2xdx - (\frac{a + b}{2})^2,\\
+=&amp; \frac{1}{b - a}\frac{x^3}{3}|^b_a - (\frac{a + b}{2})^2,\\
+=&amp; \frac{b^3 - a^3}{3(b - a)} - (\frac{a + b}{2})^2 = \frac{(b - a)^2}{12}.
+\end{align}$$`
+]
+
+???
+
+`$$\begin{align}
+(b - a)^3 =&amp; b^3 - 3b^2a + 3a^2b - 3a^3\\
+\Rightarrow b^3 - a^3 =&amp; (b - a)^3 + (3b^2a - 3a^2b),\\
+=&amp;(b - a)[(b - a)^2 + 3ba].\\
+
+\therefore\frac{b^3 - a^3}{3(b - a)} - (\frac{a + b}{2})^2 =&amp; \frac{(b - a)[(b - a)^2 + 3ba]}{3(b - a)} - \frac{(a + b)^2}{4},\\
+=&amp; \frac{4[(b - a)^2 + 3ba] - 3(a + b)^2}{12},\\
+=&amp; \frac{4b^2 + 4ab + 4a^2 - 3b^2 - 3a^2 - 6ab}{12},\\
+=&amp; \frac{b^2 - 2ab + a^2}{12} = \frac{(b - a)^2}{12}.
+\end{align}$$`
+
+---
+
+## Normal Distribution: Gaussian curve
+
+PDF: 
+
+`\(f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}.\)`
+
+When &amp;mu; = 1; &amp;sigma;&lt;sup&gt;2&lt;/Sup&gt; = 0, standard normal distribution.
+
+???
+
+丘成桐(1949)被誉为数学皇帝，高斯(1777)被誉为数学王子, 说高斯是数学王子，意思不是高斯之上还有这个王那个王，而是把数学比作王。数学是王，高斯是王子.
 
 --
 
+.pull-left[
 .red[Z Score:]
 
 `\(Z = \frac{x - \mu}{\sigma}\)` &amp;rarr; `\(f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(z)^2}{2}}\)`
+]
+
+--
+
+.pull-right[
+.center[&lt;img src = "images/dist_zscoreNormal.gif" height = 300&gt;]
+]
 
 ???
 
@@ -288,25 +377,41 @@ Knowing Z-score, one can calculate the probability of it accordingly
 
 ---
 
-## Application
+## How to Use
 
 Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
 
 --
 
+.center[
 `\(Z_1 = \frac{125 - 100}{16} = 1.056\)`
 
 `\(Z_2 = \frac{85 - 100}{16} = -0.9375\)`
+]
 
 ---
 
-## Next Step---Conventionally
+## Z-Score &amp;rarr; Probability
 
-.center[&lt;img src="images/dist_zScore.gif" height="600"/&gt;]
+.left-column[
+### Old days
+]
+
+.right-column[
+.center[&lt;img src="images/dist_zScore.gif" height="500"/&gt;]
+]
 
 ---
 
-## When You Have R...
+## Z-Score &amp;rarr; Probability
+
+.left-column[
+### Old days
+### Cool kids
+]
+
+.right-column[
+Using R:
 
 `pnorm(&lt;Z-score&gt;)`
 
@@ -314,9 +419,11 @@ P(X &amp;ge; 125) = `1 - pnorm(1.056)` = 0.1454841
 
 P(X &lt; 85) = `pnorm(-0.9375)` = 0.1742507
 
-???
+]
 
-Hint: p-value: `\(P(z\leq x)\)`.
+--
+
+.red[Hint]: p-value is `\(P(z\leq x)\)`.
 
 ---
 
@@ -328,14 +435,16 @@ class: inverse, bottom
 
 ## Calculating Expectations
 
-(Work for all the distributions
+"What would you guess if asking you the chance of heads to toss a coin?"
 
 --
 
-1. Mean: E(X) = &amp;sum; xp(x)
-2. Variance: E(x - &amp;mu;)&lt;sup&gt;2&lt;/sup&gt; = &amp;sum; (x - &amp;mu;)&lt;sup&gt;2&lt;/sup&gt;p(x)
+1. &amp;mu; = E(X) = &amp;sum; xp(x)
+2. &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = E(x - &amp;mu;)&lt;sup&gt;2&lt;/sup&gt; = &amp;sum; (x - &amp;mu;)&lt;sup&gt;2&lt;/sup&gt;p(x)
 
-### Rule of expectation:
+--
+
+*Rule of expectation*
 
 1. E(aX + bY + c) = aE(X) + bE(Y) + c;
 2. var(aX + bY) = a&lt;sup&gt;2&lt;/sup&gt;var(x) + b&lt;sup&gt;2&lt;/sup&gt;var(y) + 2ab&amp;bull;cov(x, y)
@@ -344,28 +453,25 @@ class: inverse, bottom
 
 ### Application
 
-X is the reward generator of a paid module of a video game, the seed of which is based on tossing a fair dice.
+X is the reward generator of a paid module of a video game, the seed of which is based on tossing a fair dice (😑).
 When the dice is tossed, the reward is produced following this function: g(X) = 2 + 3X.
 
 What's the expectation of rewards "ke-jin" players can get by purchasing this module?
 
-`$$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6}$$`
+`$$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6} = 3.5.$$`
 
-$$ = 3.5$$
+Then `$$E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5.$$`
 
-`\(E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5\)`
-    
-    
 ---
 
-## Wrap Up&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
+## Wrap Up
 
 .pull-left[
 ### Describing a Distribution
 
 + PDF/PMF
-    + Five moments
 + CDF
++ Moments
 
 ### Common Distributions
 
@@ -383,9 +489,34 @@ $$ = 3.5$$
 
 ]
 
-???
+---
 
-+ Poisson&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;sup&gt;
+## Bonus
+
+.pull-left[
+Jacob Bernoulli&amp;Gerolamo Cardano
+.center[
+&lt;img src = "images/dist_Jakob_Bernoulli.jpg" height = 200 width = 160 class="rounded-corners"&gt;
+&lt;img src = "images/dist_Cardano.jpg" height = 200  width = 160 class="rounded-corners"&gt;
+]
+]
+
+.pull-right[
+.center[
+Siméon Poisson   
+&lt;img src = "images/dist_Poisson.jpg" height = 200  width = 160 class="rounded-corners"&gt;
+]
+]
+
+.center[
+Clarl F. Gauss   
+&lt;img src = "images/dist_Gauss.jpg" height = 200 width = 300 class="rounded-corners"&gt;
+]
+
+???
+Bernoulli is discovered by Jacob, who also invented mathematical constant e.
+
+Cardano defined uniform in the 16th century, "意大利文艺复兴时期百科全书式的学者， 数学家、物理学家、占星家、哲学家和赌徒，古典概率论创始人"
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -393,7 +524,8 @@ $$ = 3.5$$
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
