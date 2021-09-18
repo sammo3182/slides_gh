@@ -13,10 +13,10 @@ library(pacman)
 p_load(tidyverse, lubridate)
 
 # Opening Date ####
-start <- ymd("2020-09-14")
+start <- ymd("2021-09-13")
 
 # Final Week ####
-end <- start + dweeks(14) # 10/5 does not have a break due to the COVID-19
+end <- start + dweeks(14) 
 
 schedule <-
   data.frame(day = seq(from = start, to = end, by = "days")) %>%
@@ -24,6 +24,8 @@ schedule <-
          weekDay = wday(day, week_start = 1)) %>% # get the relative week number
   filter(weekDay == 1) %>% # only keep Monday
   mutate(weekNum = 1:15) # 1:15 for one week less due to COVID-19
+
+schedule$day[schedule$day == "2021-09-20"] <- "2021-09-18"
 
 schedule <- tibble::tribble(
   ~ topic,
@@ -38,14 +40,11 @@ schedule <- tibble::tribble(
   "Population and Sampling Distribution",
   "整体和样本分布",
   "Playing with Data I",
-  # "No Class",
-  # "国庆假期",
-  # "(SKIP)",
-  "Hypothesis Testing",
-  "假设检验",
-  "Playing with Data II",
   "Confidence Intervals and Sample Comparison",
   "置信区间与样本比较",
+  "Playing with Data II",
+  "Hypothesis Testing",
+  "假设检验",
   "Data Munging I",
   "Association Analysis",
   "关联性分析",
@@ -77,7 +76,6 @@ schedule <- tibble::tribble(
   "Latent Variable Analysis Basic",
   "潜在变量分析基础",
   "Multiple Imputations"
-  
 ) %>% 
   bind_cols(schedule) %>% 
   select(-weekDay)
@@ -103,24 +101,24 @@ Learn how to describe, analyze, and diagnose large-N data with Dr. Hu!
 
 * <a href="/slides_gh/slides/courses/analysisOfPoliticalData/05_hypothesis.html">`r schedule$caption[4]`</a>
 
-* `r schedule$caption[5]`
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/06_ciSample.html">`r schedule$caption[5]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/06_ciSample.html">`r schedule$caption[6]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/07_association.html">`r schedule$caption[6]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/07_association.html">`r schedule$caption[7]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/08_simpleOLS.html">`r schedule$caption[7]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/08_simpleOLS.html">`r schedule$caption[8]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/09_assumptions.html">`r schedule$caption[8]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/09_assumptions.html">`r schedule$caption[9]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/10_multipleRegression.html">`r schedule$caption[9]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/10_multipleRegression.html">`r schedule$caption[10]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">`r schedule$caption[10]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">`r schedule$caption[11]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/12_multiHeter.html">`r schedule$caption[11]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/12_multiHeter.html">`r schedule$caption[12]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">`r schedule$caption[12]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">`r schedule$caption[13]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">`r schedule$caption[13]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">`r schedule$caption[14]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">`r schedule$caption[14]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">`r schedule$caption[15]`</a>
+* <a href="/slides_gh/slides/courses/governmentalBigData/03_latentVariableI.html">`r schedule$caption[15]`</a>
