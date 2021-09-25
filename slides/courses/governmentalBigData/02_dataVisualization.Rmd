@@ -1,7 +1,8 @@
 ---
 title: "数据可视化理论与实践"
-subtitle: "Learning Visualization with Dr. Hu"
-author: "胡悦<br>清华大学政治学系"
+subtitle: "Learning DGP for Big-Data Research with Dr. Hu"
+author: "胡悦"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -10,96 +11,114 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-
-htmltools::tagList(rmarkdown::html_dependency_font_awesome())
-
-xaringanExtra::use_xaringan_extra(c("tile_view", # O
-                                    "broadcast", 
-                                    "panelset",
-                                    "tachyons"))
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  knitr, 
+  knitr, icons, xaringanExtra,
   RColorBrewer, dotwhisker, interplot, modelsummary, # dependency
   stringr, haven, purrr, broom, tidyr, tidyverse
 ) # data wrangling # data wrangling
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
 
 # Functions preload
 set.seed(313)
 ```
 
-class: inverse, center, middle
-
-<video width="700" controls>
-  <source src="images/vis_queensGambit.mp4" type="video/mp4">
-</video>
-
-.normal[Before Everything: 可视化能帮你做什么？]
-
----
-
 ## Overview
 
-1. 表 vs. 图
-    + 何时用表，何时用图
-1. 可视化：无效 vs. 有效
-    + 一维数据
-    + 二维数据
-    + 多维数据
-1. 可视化基本原则
-    + 势 vs. 意
-    + 可视化编码
-    + 色彩选择
-1. 可视化操作实例
+.pull-left[
+.center[
+可视化：无效 vs. 有效
 
++ 一维数据
++ 二维数据
++ 多维数据
+]    
+]
+
+--
+
+.pull-right[
+.center[可视化基本原则
+
++ 势 vs. 意
++ 可视化编码
++ 色彩选择
+]
+]    
+
+--
+
+.center[
+可视化操作实例
++ `ggplot2`应用实例
++ 描述、统计、网络、地图
+]
+
+
+???
+
+苏毓崧老师的可视化教学：统计可视化，信息可视化界限分明；希望学生融合两者
+
+我的教学：信息可视化应融入到统计可视化中去
 
 ---
 
 class: small
 
-## 可视化不总是首选
+## 可视化在“视”什么？
 
-Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.
+APSR，AJPS和PA 2006年五刊，发现如下结果<sup>\*</sup>
 
-检验APSR，AJPS和PA 2006年五刊，发现如下结果
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_graphTable.png" height = 300 />]
 
-.center[<img src="images/vis_graphTable.png" height = 300 />]
+.center[如何可视化上表？]
 
---
-
-&zwj; Bonus: 如何可视化上表？
+.footnote[\* Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.]
 
 ???
+
+上面这个表想表达什么
+
  mathematical: formal modeling
 
 ---
 
 class: bottom
 
-background-image: url("images/vis_tableGraph.png")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_tableGraph.png")
 background-position: center
 background-size: contain
 
+???
 
-.navy[We'll come back to this.]
+有人说很丑，但为什么画图专家喜欢这个？我门之后会回来讲
 
 ---
 
-## 图 vs. 表
+## 表不“香”么？
 
 .pull-left[
 
@@ -122,31 +141,52 @@ background-size: contain
 
 ]
 
+???
+
+表格焦点不统一，趋势不明显
+
 
 ---
 
-## 为何可视化流行
+## A Picture Is Worth a Thousand Words
 
 .small[
-Even before he became president, Mr Trump had **a history of controversial comments** about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz - the list goes on - he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivialising them."
+Even before he became president, Mr Trump had **a history of controversial comments** about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz---the list goes on---he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them."
 ]
 
+--
 
-.center[<img src="images/vis_trumpNastyWoman.gif" width = 600 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_trumpNastyWoman.gif" width = 700 />]
 
 ???
 
-People care about things big, colorful, and moving.
-
+1. People care about things big, colorful, and moving.
+1. 便于比较
+1. 比表格占据较小的版面
+1. 记忆深刻
 
 Watch Donald Trump Call Hillary Clinton a 'Nasty Woman' --Ritu Prasad BBC
 https://time.com/4537960/donald-trump-hillary-clinton-nasty-woman-debate/
 
 ---
 
+## 可视化历史<sup>\*<sup>
+
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_history.png" width = 1000 />]
+
+.footnote[\* Friendly, Michael, and Howard Wainer. 2021. *A History of Data Visualization and Graphic Communication*. Harvard University Press.]
+
+???
+
+
+
+---
+
 class: inverse, bottom
 
-# "听得准，才能读得对"
+# 统计可视化研判
+
+"听得准，才能读得对"
 
 ???
 
@@ -154,90 +194,66 @@ class: inverse, bottom
 
 ---
 
-## 从头开始
+## 如何可视化？
 
-.pull-left[
-
-<img src="images/vis_tryIt.jpg" height = 300 />
-
-]
-
-.pull-right[
-
+.center[
 | 政党 	| 得票率 	|
 |------	|--------	|
 | A    	| 38     	|
 | B    	| 34     	|
 | C    	| 24     	|
 | D    	| 4      	|
-
 ]
 
 ---
 
-class: small
+class: center, middle
 
-## 饼状图
+## 饼状图?
 
 .pull-left[
-
-| 政党 	| 得票率 	|
-|------	|--------	|
-| A    	| 38     	|
-| B    	| 34     	|
-| C    	| 24     	|
-| D    	| 4      	|
-
-]
-
-.pull-right[
 
 .panelset[
 
 .panel[.panel-name[I]
-<img src="images/vis_pie1.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie1.png" height = 300 />
 ]
 
 .panel[.panel-name[II]
-<img src="images/vis_pie2.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie2.png" height = 300 />
 ]
 
 .panel[.panel-name[III]
-<img src="images/vis_pie3.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie3.png" height = 300 />
 ]
 
 .panel[.panel-name[IV]
-<img src="images/vis_pie4.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie4.png" height = 300 />
 ]
 
 .panel[.panel-name[V]
-<img src="images/vis_pie5.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie5.png" height = 300 />
 ]
 
 .panel[.panel-name[VI]
-<img src="images/vis_pie6.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_pie6.png" height = 300 />
 ]
 
 ]
 
 ]
 
----
+???
 
-## Why Is Pie Chart a Big No-No?
+哪一块最大？橘红色？实际是绿色; 人类对于面积是尤为不敏感的。
 
-* 用于呈现数字就能呈现的东西
-* 容易误导读者（人类对面积不敏感）
-* 浪费油墨（Why should we care?）
+标出数字呢……如果标出数据，那还要图干什么
 
-被部分从业人士誉为垃圾图形（[junk chart](http://junkcharts.com)）之“冠”
+3D圆饼图哪一个最大？更模糊，而且多了一个没有任何意义的维度
 
----
+--
 
-## 一维数据可视化：柱状图
-
-
-.pull-left[
+.pull-right[
 
 | 政党 	| 得票率 	|
 |------	|--------	|
@@ -246,6 +262,70 @@ class: small
 | C    	| 24     	|
 | D    	| 4      	|
 
+]
+
+---
+
+## "Evil" Pie Chart
+
+* 用于呈现数字就能呈现的东西
+* 容易误导读者（人类对面积不敏感）
+* 使用多种图形组成要素重复呈现同一种信息
+
+垃圾图形（[junk chart](http://junkcharts.com)）之“冠”
+
+???
+
+在数据可视化的过程中，图形组成要素（颜色、符号、纹理、方向等）等很容易用完，因此要省着用
+
+--
+
+.center[
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/25/vis_wordCloud.jpg" height = 350 />
+]
+
+???
+
+词云相邻的词就会同时出现吗？比例多少
+
+---
+
+class: center, middle
+
+## 统计可视化核心原则
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[.large[极简]]
+]
+
+Reference:
+.small[
+Tufte, Edward R. 2001[1983]. .red[The Visual Display of Quantitative Information]. 2nd edition. Cheshire, Conn: Graphics Press.   
+Cleveland, William S. 1994. The Elements of Graphing Data. 2nd Edition. Murray Hill, N.J: Hobart Press.    
+Wilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer-Verlag.
+]
+
+???
+
+Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视化圣经，手绘时代的产物，有点细节吹毛求疵，比如柱状图不能用tick呀之类的
+
+---
+
+## 一维数据可视化
+
+
+.pull-left[
+
+.center[
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+
+Beyond pie chart? How?
+]
 ]
 
 .pull-right[
@@ -253,26 +333,34 @@ class: small
 .panelset[
 
 .panel[.panel-name[Bar I]
-<img src="images/vis_barPlot1.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_barPlot1.png" height = 300 />
 ]
 
 .panel[.panel-name[II]
-<img src="images/vis_barPlot2.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_barPlot2.png" height = 300 />
 ]
 
 .panel[.panel-name[III]
-<img src="images/vis_barPlot3.png" height = 300 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_barPlot3.png" height = 300 />
 ]
 
 ]
 
 ]
+
+???
+
+1. bar plot, 可以看出对比，但问题在哪里？（颜色没什么意义，宽度没意义，对不准）
+1. 空bar
+1. 点最简了，但信息量仍然比较小，可以加入更多信息
 
 ---
 
-## 一维数可视化据：玫瑰图
+## 一维数可视化据
 
 .pull-left[
+
+如果非要饼状图
 
 ```{r nightinggale}
 mydata <- data.frame( Day=c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"),
@@ -309,31 +397,37 @@ Nightingale Rose diagram, created by the famous Florence Nightingale
 
 Good for time series,save space than bars
 
+问题在于大小和突出代表同样信息
+
+---
+
+## 一维数据可视化+
+
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_graphTable.png" height = 200 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_tableGraph.png" height = 300 />]
+
+???
+
+通过多图并列来增加表达维度，并且方便比较，share scales
 
 
 ---
 
-## 一维数据可视化：“升”维
-
-.center[<img src="images/vis_graphTable.png" height = 200 />
-<img src="images/vis_tableGraph.png" height = 300 />]
-
-
----
-
-background-image: url("images/vis_radiaPlot.png")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_radiaPlot.png")
 background-position: center
 background-size: contain
 
 ???
 
-本质还是一维图，没有讨论两位之间关系
+更极致的方式，本质还是一维图
+
+看似是中心边缘理论，但画面之外研究表明，并非如此。
 
 ---
 
 ## 如何可视化以下数据
 
-墨西哥各政党在大选中得票比例趋势
+和之前的数据有什么不同？想表达什么？
 
 | Party 	| PRI  	| PAN  	| PRD  	| Others 	|
 |-------	|------	|------	|------	|--------	|
@@ -343,9 +437,15 @@ background-size: contain
 | 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
 | 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
 
-如何可视化这个数据？
+.center[墨西哥各政党在大选中得票比例趋势]
+
+--
+
+怎么可视化？
 
 ???
+
+二维数据，pri1997年遭遇拐点，pan增加
 
 PRI: Institutional Revolutionary Party
 PAN: National Action Party
@@ -355,33 +455,39 @@ PRD: Democratic Revolutionary Party
 
 ## 当然堆积图
 
-<img src="images/vis_areaPlot.png" height = 500 />
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_areaPlot.png" height = 500 />]
+
+
+???
+
+颜色问题：没有表达任何信息
 
 
 ---
 
 ## 当然堆积图……吧？
 
-.center[<img src="images/vis_areaPlot.png" height = 300 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_areaPlot.png" height = 300 />]
 
 --
 
-1. 比折线图费更多墨。
++ 多种图像信息表达同类信息
 
 --
 
-1. 各个时间序列间的比较容易误导读者，而且焦点容易被面积所模糊。
++ 在各时间点上, 看不出比例关系，被面积模糊
 
 
 ???
 
-如果非要用，应将变化较不明显的序列至于最底端。
+PAN + PRD是不是超过PRI很难判断
 
 
 ---
 
-## （Again）如何可视化以下数据
+## 如何可视化以下数据
 
+.pull-left[
 | Party 	| PRI  	| PAN  	| PRD  	| Others 	|
 |-------	|------	|------	|------	|--------	|
 | 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
@@ -389,22 +495,27 @@ PRD: Democratic Revolutionary Party
 | 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
 | 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
 | 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+]
 
----
-
-## 二维数据可视化：折现图
+--
 
 .panelset[
 
-.panel[.panel-name[Line (Digital)]
-.center[<img src="images/vis_linePlot.png" height = 400 />]
+.panel[.panel-name[Line Basic]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_linePlot.png" height = 350 />]
 ]
 
-.panel[.panel-name[Line (Printed)]
-.center[<img src="images/vis_linePlot2.png" height = 400 />]
+.panel[.panel-name[Line Advanced]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_linePlot2.png" height = 350 />]
 ]
 
 ]
+
+???
+
+Basic 版本legend比较多余，对打印不那么友好，当然对相加结果还是不是那么清楚
+
+表达的是1997年墨西哥实现民主转型，不是一党执政
 
 ---
 
@@ -412,27 +523,35 @@ PRD: Democratic Revolutionary Party
 
 .panelset[
 
-.panel[.panel-name[Basic Point]
-.center[<img src="images/vis_scatterPlot.png" height = 400 />]
+.panel[.panel-name[Point I]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_scatterPlot.png" height = 400 />]
 ]
 
-.panel[.panel-name[Named Point]
-.center[<img src="images/vis_scatterPlot2.png" height = 400 />]
+.panel[.panel-name[Point II]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_scatterPlot2.png" height = 400 />]
 ]
 
-.panel[.panel-name[Point "3D"]
-.center[<img src="images/vis_facet.png" height = 400 />]
+.panel[.panel-name[Point III]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_facet.png" height = 400 />]
 ]
 
 ]
 
 ???
 
-数字升维可以分屏，也可以增加变化
+中产家庭收入越高，在劳动力市场投入越多
+
+I. Stata 底色，是一个标志色，没数据意义，只是个brand； 点重叠——可以用空心圆
+
+II. 让点变得有意义（在stata里不是那么容易做到，maybe）
+
+III. 让图变得更有意义，地区变化是重要变量
 
 ---
 
-## “高维”点状图
+## 如何可视化以下数据
+
+和之前的数据有什么不同？想表达什么？（补习班有效吗？）
 
 | 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
 |------	|----------	|------------	|----------	|
@@ -445,101 +564,130 @@ PRD: Democratic Revolutionary Party
 | G    	| 470      	| 19         	| 25       	|
 | H    	| 752      	| 10         	| 123      	|
 
+--
+
+怎么可视化？
+
 
 ---
 
 ## 气泡图
 
+.pull-left[
 .panelset[
 
-.panel[.panel-name[Basic Bubble]
-.center[<img src="images/vis_bubblePlot.png" height = 400 />]
+.panel[.panel-name[Bubble I]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_bubblePlot.png" height = 350 />]
 ]
 
-.panel[.panel-name[Tagged Bubble]
-.center[<img src="images/vis_bubblePlot2.png" height = 400 />]
+.panel[.panel-name[Bubble II]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_bubblePlot2.png" height = 350 />]
 ]
 
-
 ]
-
+]
 
 ???
+
+比表好，面积不好、颜色没意义
 
 Bubble chart 图一对大小相近bubbles无法区分
 
 
----
+--
 
-## 气泡图优劣
+.pull-right[
 
 ### Pro
 
 * 散点图变异
 * 通过气泡大小呈现第三维度数据
 
---
+
 
 ### Con
 
 * 气泡大小当接近时可能造成辨识困难，信息无法完全精确地传达
+]
 
 ---
 
 class: inverse, bottom
 
-# 可视化基本原则
-
----
-
-## 心理准备
-
-.center[<img src="images/vis_boring.gif" height = 400 />]
+# 统计可视化 vs./+ 信息可视化
 
 ---
 
 ## 可视化的作用
 
+.pull-left[
 * 记录信息
 * 分析推理
 * 证实假设
 * 交流思想
+]
 
----
+--
 
-## 回归本质：可视化是什么？
-
-.center[<img src="images/vis_socialEngineer.jpg" height = 400 />]
+.pull-right[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_socialEngineer.jpg" height = 400 />]
 
 ???
 
-可视化谁为主？主体意识
+可视化就是让人关注到你想让他们关注的信息
 
 ---
 
-## 见势：统计可视化
+.pull-left[
+统计可视化
 
-.center[<img src="images/vis_sexism_chart.jpg" height = 500 />]
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_sexism_chart.jpg" height = 400 />
+]
 
----
+.pull-right[
+信息可视化
 
-background-image: url("images/vis_sexism_image.jpg")
-background-position: center
-background-size: contain
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_sexism_image.jpg" height = 400 />
 
-## 见意：传播可视化
+]
 
----
-
-## Professional vs. Attractive
-
-.pull-left[<img src="images/vis_africanGDP_chart.jpg" height = 400 />]
-.pull-right[<img src="images/vis_africanGDP_image.jpg" height = 300 />]
+.center[哪个给你的印象更深?]
 
 ---
 
-## 吸睛之法：可视化编码
+.pull-left[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_africanGDP_image.jpg" height = 400 />]
+.pull-right[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_africanGDP_chart.jpg" height = 400 />]
 
+???
+
+怎么让右边变得更好？比如把人口放进去、把更多相关变量放进去
+
+---
+
+## 所以，就信息可视化呗？
+
+.pull-left[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_femaleHi_image.png" height = 400 width = 400 />]
+
+.pull-right[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_femaleHi_chart.png" height = 450 width = 400 />]
+
+???
+
+左图夸装了数据本意，indian太小了
+
+https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-chart-but-only-slightly.html
+
+---
+
+class: inverse, center, middle
+
+## 善用可视化编码
+
+<video width="1000" controls>
+  <source src="images/vis_queensGambit.mp4" type="video/mp4">
+</video>
+
+---
+
+## （复习）数据类型
 
 * 数值（continuous）
     + 10厘米，17厘米，23厘米
@@ -553,59 +701,55 @@ background-size: contain
 
 ## 编码要素
 
-标记：点、线、面
+**标记**：点、线、面
 
-<img src="images/vis_sign.png" height = 50 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_sign.png" height = 50 />
 
 --
 
-通道：位置、大小、形状、方向、色调、饱和度、亮度……
+**通道**：位置、大小、形状、方向、色调、饱和度、亮度……
 
-<img src="images/vis_pipe.png" height = 100 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/25/vis_pipe.png" height = 100 />
 
 ---
 
 ## 通道
 
 .pull-left[
-<img src="images/vis_category.png" height = 200 />
-<img src="images/vis_group.png" height = 200 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_category.png" height = 250 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_group.png" height = 250 />
 ]
 
 .pull-right[
-<img src="images/vis_order.png" height = 400 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_order.png" height = 500 />
 ]
 
 ---
 
 ## 通道选择
 
-.center[<img src="images/vis_measurement.png" height = 400 />]
-
-???
-
-是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么
-
----
-
-## 通道选择
-
+.pull-left[
 ### 类型（Type）
 
 + 是什么/在哪里（what/where）
 + 何种程度（how much）
-    
---
-    
-### 有效性（Effectiveness）
-+ 通道表现力符合属性的重要性
-    
+]    
+
 --
 
+.pull-right[    
+### 有效性（Effectiveness）
++ 通道表现力符合属性的重要性
+]    
+
+--
+
+.center[
 ### 表现力（Expressiveness）
 
 + 表达且仅表达数据的完整属性
 + 判断标准（.red[ADSP]）：精确性、可辨性、可分离性、视觉突出
+]
 
 ???
 
@@ -615,7 +759,7 @@ Accuracy, Discriminibility, Separability, Pop-out
 
 ### 精确性（Accuracy）
 
-.center[<img src="images/vis_stevensPowerLaw.png" height = 500 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_stevensPowerLaw.png" height = 500 />]
 
 ???
 
@@ -631,37 +775,17 @@ $\displaystyle \psi (I)=kI^{a}$, k proportionality constant that depends on the 
 
 ---
 
-## 精确性上的Social Engineering
-
-.pull-left[
-
-<img src="images/vis_lattice1.png" height = 400 />
-
-网格处于背景,会不凸显
-
-]
-
-.pull-right[
-
-<img src="images/vis_lattice2.png" height = 400 />
-
-网格处于前景,遮挡地图
-
-]
-
----
-
 ### 可辨性（Discriminability） 
 
-.center[<img src="images/vis_commuNet.png" height = 500 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_commuNet.png" height = 500 />]
 
 ???
 
-通过粗细动态表现范围
+通过粗细动态表现范围，精确性略显不足
 
 ---
 
-background-image: url("images/vis_contract.png")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_contract.png")
 background-position: center
 background-size: contain
 
@@ -670,37 +794,76 @@ background-size: contain
 
 ### 可分离性（Separability）
 
-.center[<img src="images/vis_separability.png" height = 200 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_separability.png" height = 400 />]
+
+???
+
+都可以，但位置区别最好
 
 ---
-
+.pull-left[
 ### 视觉突出（Pop-out）
-
-.center[<img src="images/vis_popOut3.png" height = 500 />]
-
+]
+.pull-right[
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_popOut3.png" height = 600 width = 400 />]
+]
 ---
+
+## 视觉编码实践
 
 .panelset[
 
 .panel[.panel-name[Finding Os?]
-.center[<img src="images/vis_Os.png" height = 400 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_Os.png" height = 400 />]
 ]
 
 .panel[.panel-name[Method I]
-.center[<img src="images/vis_Os2.png" height = 400 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_Os3.png" height = 400 />]
 ]
 
 .panel[.panel-name[Method II]
-.center[<img src="images/vis_Os3.png" height = 400 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_Os2.png" height = 400 />]
 ]
 
 ]
+
+---
+
+## ADSP平衡
+
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_measurement.png" height = 500 />]
+
+???
+
+是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么
 
 ---
 
 ## 核心原则：焦点引导
 
-.center[<img src="images/vis_picWorthWords.jpg" height = 500 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/25/vis_picWorthWords.jpg" height = 550 />]
+
+---
+
+## 精确性上的Social Engineering
+
+.pull-left[
+
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_lattice1.png" height = 500 />
+
+]
+
+.pull-right[
+
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_lattice2.png" height = 500 />
+
+]
+
+???
+
+在研究过程中，一国之内，行政区域划分没有那么重要，除非policy，否则行政区划并不代表什么，有时候临近区域特点相近，建议用浅灰色，经纬线甚至可以不要
+
+右边更是不需要网格
 
 ---
 
@@ -711,9 +874,14 @@ background-size: contain
 * 避免.red[过多]类别
 * 对数据的每个维度指定.red[一种]或一个阶层的颜色
 
+???
+
+转换任务目标: 使用其他可分组变量
+
+
 ---
 
-background-image: url("images/vis_network_democracy.png")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_network_democracy.png")
 background-position: center
 background-size: contain
 
@@ -723,53 +891,72 @@ background-size: contain
 
 * 灰度值可被认为是有序的 
 
-<img src="images/vis_grey1.png" height = 50 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_grey1.png" height = 50 />
 
 * 可用于编码数值型数据
 
-<img src="images/vis_grey2.png" height = 50 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_grey2.png" height = 50 />
 
 * 色调通常认为是无序的，可用于编码不同维度的值
 
-<img src="images/vis_rainbow.png" height = 50 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_rainbow.png" height = 50 />
+
+???
+
+50度灰
 
 ---
 
-## 色彩意义：一种主观感受
+## 色彩：一种主观感受
 
-.center[<img src="images/vis_colorMeaning.png" height = 300 />]
+.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_colorMeaning.png" height = 500 />]
+
+???
+
+文化不同麦当劳红，中国红，股票红
 
 ---
 
 ## 色彩设计基本原则
 
++ 注意控制同时对比（Simultaneous contrast）
 + 避免.red[过多]颜色交错导致的杂乱无章
-+ 注意.blue[饱和度]
++ 注意.red[饱和度]
 
 ???
 
+同时对比不能过多
+
 控制低饱和度色彩中的色彩视觉突出
 
+--
+
+.pull-left[.center[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_redGreen_w.jpg" height = 400 />]]
 
 --
 
-.pull-left[<img src="images/vis_redGreen_w.jpg" height = 300 />]
+.pull-right[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_redGreen_r.png" height = 400 />]
 
---
+???
 
-.pull-right[<img src="images/vis_redGreen_r.png" height = 300 />]
+上海美术电影制片厂于1961年到1964年制作的一部彩色动画长片
+
++ 1962年获捷克斯洛伐克第十三届卡罗维发利电影节短片特别奖。
++ 1963年获第二届中国电影“百花奖”最佳美术片奖。
++ 1978年英国伦敦国际电影节本年度杰出电影。
++ 1980年5月第二次全国少年儿童文艺创作评奖委员会一等奖。
++ 1982年8月厄瓜多尔第四届国际儿童电影节三等奖。
++ 1983年获葡萄牙第十二届菲格腊达福兹国际电影节评委奖
 
 ---
 
-* 使用中性背景色
-    + 控制对全局色彩的影响
-    + 最小化“同时对比” （simultaneous contrast）
++ 使用中性背景色
 
 --
 
-.pull-left[<img src="images/vis_background_apple.jpg" height = 240 />]
+.pull-left[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_background_apple.jpg" height = 400 />]
 
-.pull-right[<img src="images/vis_background_huawei.jpeg" height = 240 />]
+.pull-right[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/25/vis_background_huawei.jpg" height = 400 />]
 
 
 ???
@@ -777,37 +964,6 @@ background-size: contain
 如果纯色为绿色，则灰色色块看起来带有红味,产生颜色偏差
 
 ---
-
-## 对于新手而言
-
-色彩其实没.orange[那么]重要
-
---
-
-如果非要较真，辅助软件来选择合适的色阶：
-
-http://colorbrewer2.org/ 
-
-http://paletton.com/
-
-.navy[请在颜色选择过程中体现人文关怀。]
-
-???
-
-色盲症患者: 红绿色盲是最常见的色盲，其次是蓝黄色盲以及全色盲。北欧族裔的红绿色盲患者约占男性的8%和女性的0.5% (Northern European ancestry , National Eye Institute, 2015)
-
-喜欢打印的人群
-
----
-
-class: inverse, bottom
-
-# 可视化操作实例
-## 以`ggplot`为例
-
----
-
-class: small
 
 ## 调色板：`RColorBrewer` Package
 
@@ -829,12 +985,60 @@ class: small
 
 ## Name of Palette
 
-.left-column[<img src="images/vis_color_sequential.png" height = 500 />]
+.pull-left[<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_color_sequential.png" height = 500 width = 600 />]
 
-.right-column[
-<img src="images/vis_color_diverging.png" height = 250 />
-<img src="images/vis_color_qualitative.png" height = 200 />
+.pull-right[
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_color_diverging.png" height = 250 width = 600 />
+<img src="http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_color_qualitative.png" height = 200 width = 600 />
 ]
+
+---
+
+## 对于新手
+
+大部分作图软件默认配色已经非常好
+
+--
+
+如果非要较真，辅助软件来选择合适的色阶：
+
+http://colorbrewer2.org/ 
+
+http://paletton.com/
+
+.center[.blue[请在颜色选择过程中体现你的人文关怀。]]
+
+???
+
+色盲症患者: 红绿色盲是最常见的色盲，其次是蓝黄色盲以及全色盲。北欧族裔的红绿色盲患者约占男性的8%和女性的0.5% (Northern European ancestry , National Eye Institute, 2015)
+
+喜欢打印的人群
+
+---
+
+class: inverse, bottom
+
+# 可视化操作实例
+## 以`ggplot`为例
+
+---
+
+class: center, middle
+
+## 可视化工具
+
+Tableau (Echarts)   
+Google Refine
+
+Processing    
+D3 (JS)   
+.center[.Huge[.red[R]]]
+
+???
+
+Echarts：百度的Tableau高仿版本
+
+上为软件，下为编程语言
 
 ---
 
@@ -861,8 +1065,8 @@ mydata2 <-
 
 ```
 
-```{r plot-1D, echo=TRUE, fig.align='center', fig.height=5}
-ggplot(data=mydata,aes(Cut,Price))+ 
+```{r plot-1D, echo=TRUE, fig.align='center', fig.height=6}
+ggplot(data=mydata,aes(x = Cut, y = Price))+ 
   geom_bar(stat = "identity", width = 0.8,
            colour="black",size=0.25,fill="#2ca25f",alpha=1)
 ```
@@ -882,7 +1086,8 @@ ggplot(data = mydata2,
     width = 0.7,
     size = 0.25
   ) +
-  scale_fill_manual(values = c("#ef8a62", "#67a9cf")) +
+  drhutools::scale_fill_gb() +
+  theme_minimal()+
   ylim(0, 10) +
   theme(
     axis.title = element_text(size = 15, face = "plain", color = "black"),
@@ -895,10 +1100,11 @@ ggplot(data = mydata2,
 ]
 
 .pull-right[
-```{r plot-1DII, fig.width=5}
+```{r plot-1DII, fig.width=6}
 ggplot(data=mydata2,aes(Catergory,value,fill=variable))+
   geom_bar(stat="identity", color="black", position=position_dodge(),width=0.7,size=0.25)+
-  scale_fill_manual(values= c("#ef8a62", "#67a9cf"))+
+  drhutools::scale_fill_gb()+
+  theme_minimal()+
   ylim(0, 10)+
   theme(
     axis.title=element_text(size=15,face="plain",color="black"),
@@ -946,13 +1152,13 @@ mydata<-rbind(label_data,AddRow)
 myAngle<- 360- 360 * (label_data$id-1) /nrow(label_data)  
 ```
 
-.left-column[
+.pull-left[
 ```{r data-radar-show}
 kable(mydata, format = "html")
 ```
 ]
 
-.right-column[
+.pull-right[
 ```{r plot-radar-code, fig.width=5}
 ggplot() + 
   geom_polygon(data=mydata,aes(x=id, y=value),color = "black", fill=brewer.pal(7,"Set1")[1],alpha=0.1)+
@@ -981,15 +1187,13 @@ ggplot() +
 
 ---
 
-class: small
-
 ## 二维图
 
 ```{r data-2D, include = FALSE}
 mydata<-read.csv("data/Scatter_Data.csv",stringsAsFactors=FALSE) 
 ```
 
-.left-column[
+.pull-left[
 ```{r plot-2D-code, eval=FALSE, echo=TRUE}
 ggplot(data = mydata, aes(x, y)) +
   `geom_point`(
@@ -1021,14 +1225,15 @@ ggplot(data = mydata, aes(x, y)) +
 
 ]
 
-.right-column[
-```{r plot-2D, fig.width=5}
+.pull-right[
+```{r plot-2D, fig.width=6}
 ggplot(data = mydata, aes(x,y)) +
   geom_point(fill="black",colour="black",size=3,shape=21) +
   #geom_smooth(method="lm",se=TRUE,formula=y ~ splines::bs(x, 5),colour="red")+ #(h)
   #geom_smooth(method = 'gam',formula=y ~s(x))+   #(g)
   geom_smooth(method = 'loess',span=0.4,se=TRUE,colour="#00A5FF",fill="#00A5FF",alpha=0.2)+ #(f)
-  scale_y_continuous(breaks = seq(0, 125, 25))+
+  scale_y_continuous(breaks = seq(0, 125, 25)) +
+  theme_minimal()+
   theme(
     text=element_text(size=15,color="black"),
     plot.title=element_text(size=15,family="myfont",hjust=.5,color="black"),
@@ -1039,34 +1244,31 @@ ggplot(data = mydata, aes(x,y)) +
 
 ---
 
-class: small
-
 ## 统计图
 
-.left-column[
+.pull-left[
 ```{r ols-table}
-m1 <- lm(mpg ~ wt + cyl + disp, data = mtcars)
-msummary(m1, stars = TRUE)
+m1 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+m2 <- lm(mpg ~ wt + cyl, data = mtcars)
+msummary(list(m1,m2), stars = FALSE)
 ```
 ]
 
-.right-column[
-```{r ols-dw, echo=TRUE, fig.width=5}
+.pull-right[
+```{r ols-dw, echo=TRUE, fig.height = 7}
 library(dotwhisker)
-dwplot(m1)
+dwplot(list(m1, m2))
 ```
 ]
 
 ---
-
-class: small
 
 ## 网络图 (Complete Network)
 
 ```{r network, eval=FALSE, echo=TRUE}
 library(network) # for data
 data(emon)
-`library(ggnetwork)`
+library(ggnetwork) #<<
 
 ggplot(emon[[1]], aes(
   x = x,
@@ -1095,7 +1297,7 @@ ggplot(emon[[1]], aes(x = x, y = y, xend = xend, yend = yend)) +
 ## 网络图 (Sankey/Alluvial)
 
 ```{r sankey, eval=FALSE, echo=TRUE}
-`library(ggalluvial)`
+library(ggalluvial)
 data(vaccinations)
 levels(vaccinations$response) <- rev(levels(vaccinations$response))
 
@@ -1131,31 +1333,7 @@ ggplot(vaccinations,
 
 ---
 
-## 地图
-
-你需要三个ArcGIS文件：
-
-`bou2_4p.shp`: 多边形要素图形文件
-
-`bou2_4p.dbf`: 要素属性信息
-
-`bou2_4p.shx`: 多边形要素索引文件
-
-
----
-
-```{r map, results=FALSE, echo = TRUE, fig.height=6, fig.align="center"}
-china_map1 <- rgdal::readOGR("data/bou2_4p.shp")
-
-ggplot(china_map1, aes(x = long, y = lat, group = group)) +
-	geom_polygon(fill = 'beige') + 
-  geom_path(color = "grey40")
-```
-
-
----
-
-background-image: url("images/vis_patrioBase9709.gif")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_patrioBase9709.gif")
 background-position: center
 background-size: contain
 
@@ -1205,7 +1383,7 @@ Wilkinson, Leland. 2005. *The Grammar of Graphics*. 2nd ed. New York: Springer-V
 ---
 
 
-background-image: url("images/vis_powerWisely.jpg")
+background-image: url("http://mingzhai114.asuscomm.com:32765/images/2021/09/24/vis_powerWisely.jpg")
 background-position: center
 background-size: contain
 
