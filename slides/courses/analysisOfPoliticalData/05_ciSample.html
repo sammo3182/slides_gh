@@ -26,11 +26,10 @@ class: center, middle, inverse, title-slide
 
 ## Overview
 
-1. Sample properties
-1. Sample comparison with CI
-    + With "nothing happens"
-    + With another sample
-1. Hypothesis testing with CI
+1. Confidence Intervals
+1. Distribution Comparison
+1. Hypothesis Testing
+
 
 ---
 
@@ -52,10 +51,14 @@ class: inverse, bottom
     + How to? Randomization, weight
 ]
 
+--
+
 .right-column[
 + **Efficiency**: smaller variance of .magenta[unbiased estimators]
     + How to increase efficiency? Hint: `\(SE = \frac{\sigma}{\sqrt{n}}\)`
 ]
+
+--
 
 .right-column[
 &lt;img src = "images/ci_fsmrof.png" height = 60&gt; For a normal distribution with &amp;sigma;&lt;sup&gt;2&lt;/sup&gt; = 1, the median = &amp;pi;/2n &amp;approx; 1.57/n &gt; 1/n (mean), so for a standard normal, mean is *1.57 times more* effiicent than median.
@@ -153,8 +156,12 @@ Then what estimator should we use:
 1. The mean height of the sample;
 1. The height of the student we draw first.
 
+--
+
 Of course, the mean！   
 You "leave it here, leave it here"?
+
+--
 
 .red[BUT,]    
 Both estimator are **unbiased** (😱!!!)   
@@ -180,6 +187,8 @@ The additional information of an increasing sample size is simply not accounted 
 ---
 
 ## Does Consistency Imply Unbiasedness?
+
+--
 
 .center[
 &lt;img src = "images/ci_knowNothing.gif" height = 500&gt;
@@ -215,6 +224,8 @@ as `\(n\rightarrow \infty\)`, the estimator approaches the correct value, so it 
 
 ]
 
+--
+
 .pull-right[
 *Bayesian CI*
 
@@ -237,15 +248,18 @@ SE(X&amp;#772;) = `\(\frac{s}{\sqrt{n}}\)`, how far could the sample mean .red[d
 
 Z-score: `\(Z = \frac{X - \mu}{\sigma}\)`.
 
-.center[Q: How to get smaller CI?]
+--
 
-.center[Q: Why using Z-score?]
+.center[Q: How to get smaller CI?]
 
 ???
 
 1. Large N
 1. Large &amp;alpha;
 
+--
+
+.center[Q: Why using Z-score?]
 
 ---
 
@@ -256,6 +270,8 @@ Z-score: `\(Z = \frac{X - \mu}{\sigma}\)`.
 The ruler: Standard Normal distribution (Z-score)
 ]
 
+--
+
 + Is the sample different from the ruler? 
 + Is sample A different from sample B, given the scale of the ruler?
 
@@ -264,6 +280,8 @@ The ruler: Standard Normal distribution (Z-score)
 ## When N Is Not That Large
 
 .center[&lt;img src = "images/ci_largeNumber.gif" height = 200&gt;]
+
+--
 
 Solution: A fatter-tailed distribution
 
@@ -279,13 +297,16 @@ William Gosset published in English in 1908, used the pseudonym "student." Fishe
 
 ---
 
-## Degree of Freedom for t
+## Degree of Freedom
 
-T critical points are relative to the d.f.
+Student's T critical points are relative to the d.f.
 
 + For CI: n - 1
 + For regression: n - k - 1
 
+---
+
+## CI Formulas
 
 .pull-left[
 + For mean
@@ -294,6 +315,8 @@ T critical points are relative to the d.f.
         + N &amp;geq; 100ish, then `\(\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}\)`;
         + N &lt; 100ish, then `\(\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}.\)`
  ]       
+
+--
 
 .pull-right[
 + For proportion
@@ -307,9 +330,13 @@ T critical points are relative to the d.f.
 
 For nine cars, the mean mileage per gallon is 29.5 and standard deviation is 3. Is 31 for the mileage is a reasonable guess?
 
+--
+
  Solution: Let's calculate the 95% CI of the guess.
 
-d.f. = 9 - 1 = 8, therefore t(&amp;alpha; &lt; .975) = 2.3060041 (`qt(.975, df = 8)` in r).
+--
+
+d.f. = 9 - 1 = 8, therefore t(&amp;alpha; &lt; .975) = 2.306 (`qt(.975, df = 8)` in r).
 
 Then, CI = `\(29.5 \pm t_{\frac{0.975}{2}}(\frac{3}{\sqrt{9}})\)`, i.e, [27.5, 31.8].
 
@@ -328,8 +355,10 @@ In terms of this, an estimation of 31 sounds fine.
 
 .center[&lt;img src = "images/ci_independentSample.gif" &gt;]
 
-Observations are selected .red[without regard to] who is in the other condition, a.k.a., independent and identical distributed (IID).
+Observations are selected .red[without regard to] who is in the other condition, a.k.a., **independent and identical distributed** (IID).
 ]
+
+--
 
 .pull-right[
 *Matched sampling*
@@ -356,9 +385,12 @@ Observations are .red[matched to] someone in the other condition.
 
 In a class, there are two groups, the scores of members in group one are 64, 66, 89, 77, the scores of members in group two are 56, 71, and 53, are the mean scores statisically different between the two groups?
 
+--
+
+ Solution:
+
 `\begin{align}
-\bar X_1 =&amp; 296/4 = 74; \\
-\bar X_2 =&amp; 60; \\
+\bar X_1 =&amp; 296/4 = 74; \bar X_2 = 60; \\
 S_p^2 =&amp; \frac{398 + 186}{(4 - 1) + (3 - 1)} = 116.5;\\
 \mu_1 - \mu_2 =&amp; (74 - 60) \pm 2.57 (\sqrt{116.5}\sqrt{1/4 + 1/3}) = 14 \pm 21.
 \end{align}`
@@ -399,6 +431,8 @@ Four students first conducted an examination and went through a review section. 
 | E1      	| 57  	| 57   	| 73    	| 65   	|
 | E2      	| 64  	| 66   	| 89    	| 71   	|
 
+--
+
 `\begin{align}
 D =&amp; X_1 - X_2 \Rightarrow \bar D = \sum D / n = (7 + 9 + 16 + 12) / 4 = 11\\
 S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 11 \pm 3.18\times \frac{39}{4} = 11 \pm 6
@@ -414,6 +448,8 @@ The CI is above 0, that is, students did get better.
 ## Practice
 
 Gallop drew a pair of 1500 samples from the American population. In the sample of 1980, there are 52% Democrats, and 46% in the 1985 sample. Were the Democrats the same for two years, given the 95% CI?
+
+ Solution: Let &amp;alpha; = 0.05,
 
 `\begin{align}
 \Pi_1 - \Pi_2 &amp;= (0.46 - 0.52) \pm 1.96\sqrt{\frac{0.46 * 0.54}{1500} + \frac{0.52 * 0.48}{1500}} \\
@@ -436,6 +472,8 @@ Two ways:
 1. Using confidence intervals
 1. Using critical t/z scores &amp; p-value.
 
+--
+
 *Procedure*:
 
 1. H&lt;sub&gt;0&lt;/sub&gt;: Specifying values for one or more population parameters in a random distribution (&amp;mu;, &amp;pi; rather than X&amp;#772;, P);
@@ -454,8 +492,12 @@ Given a virus can influence 10% of the population. Now there's a sample of the o
 
 `\(H_0: \pi \leq 10; H_1: \pi &gt; 10.\)` 
 
+--
+
 Method 1:     
 `\(\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,\)` that is [0.11, 0.17] &gt; 0.1. `\(H_0.\)` reject.
+
+--
 
 Method 2:     
 `\(Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.\)` Given the level of `\(\alpha = 0.05\)`, therefore reject the `\(H_0.\)`
@@ -466,6 +508,8 @@ Method 2:
 ## What's &amp;alpha;?
 
 .pull-left[&lt;img src="images/ci_errorType.png" height = 500 /&gt;]
+
+--
 
 .pull-right[
 | Decision 	| Reject                   	|  .red[Fall to] Reject                  	|
@@ -493,6 +537,8 @@ Avoiding Type I is more emergent.
 ![](05_ciSample_files/figure-html/ci-1.png)&lt;!-- --&gt;
 ]
 
+--
+
 .pull-right[.Huge[.red[Arbitrary!!!]]]
 
 ---
@@ -500,11 +546,11 @@ Avoiding Type I is more emergent.
 ## Wrap Up
 
 .pull-left[
-*Sample properties*
+*Confident Intervals*
 
-Unbiasedness, efficiency, convergence, consistency
+Sample properties: Unbiasedness, efficiency, convergence, consistency
 
-*Comparision*
+*Distribution Comparison*
 
 1. With the ruler
     + `\(\mu = \bar X \pm Z_{\alpha/2}SE\)`
