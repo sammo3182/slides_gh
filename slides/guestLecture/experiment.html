@@ -1,35 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="" xml:lang="">
   <head>
-    <title>实验室内的政治学研究</title>
-    <meta charset="utf-8">
-    <meta name="author" content="胡悦 清华大学政治学系" />
-    <meta name="date" content="2018-12-04" />
-    <link href="libs/remark-css/rladies.css" rel="stylesheet" />
+    <title>实验室里的政治学</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦" />
+    <meta name="date" content="2021-10-08" />
+    <script src="experiment_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="experiment_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="experiment_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="experiment_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="experiment_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="experiment_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="experiment_files/panelset-0.2.6/panelset.js"></script>
+    <script src="experiment_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="experiment_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="experiment_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="experiment_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="experiment_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="experiment_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="styles.css" type="text/css" />
-    <link rel="stylesheet" href="font-awesome-4.7.0\css\font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# 实验室内的政治学研究
-## 以语言政治学实验为例
-### 胡悦<br>清华大学政治学系
-### 2018-12-04
+# 实验室里的政治学
+## 政治实验设计原则与案例讨论
+### 胡悦
+### 2021-10-08
 
 ---
 
 
 
 
-class:large
 
-## 天下大势
+## 社会科学发展最重要的发展领域
 
 
-.left-column[
+.pull-left[
 ### 因果推断逻辑
 
 * 因果效果
@@ -38,7 +48,7 @@ class:large
 
 --
 
-.right-column[
+.pull-right[
 ### 因果推断方法
 
 * 计量经济学
@@ -47,23 +57,22 @@ class:large
 
 ---
 
-.center[&lt;img src="image/causality.png" height = 300 /&gt;]
+class: inverse, bottom
 
-## 为什么做因果推断
+.center[&lt;img src="images/lab_causality.png" height = 300 /&gt;]
+
+# 为什么做因果推断
 
 ---
 
-class: large
 
-## 什么是是因果效应
+## 因果效应的界定
 
 Neyman-Rubin causality theory (RCM):
 
 * 实验对象（Subject, 被试） `\(i\)`
 * 干预因素（Treatment, 0/1） `\(T\)` 
 * 引发效果（Effect） `\(Y_i\)`
-
---
 
 * `\(T\)` 对 `\(i\)` 的因果效应为 `\(\delta\)`：
 
@@ -82,58 +91,42 @@ Neyman-Rubin causality theory (RCM):
 
 class: large, center, middle
 
-## 对于 `\(i\)` , 我们能同时看到 `\(Y_{0i}\)` 和 `\(Y_{1i}\)` 吗？
+我们能同时看到 `\(Y_{0i}\)` 和 `\(Y_{1i}\)` 吗？
+
+.center[&lt;img src = "../courses/analysisOfPoliticalData/images/prob_multiverse_rickMordy.gif" height = 300&gt;]
 
 --
 
-## 如果不能，我们怎么计算 `\(\delta\)`
+如果不能，我们怎么计算 `\(\delta\)`?
 
 ---
 
-background-image: url(image/spiderMultiverse.png)
-background-position: 50% 50%
-background-size: 100%
+class: inverse, bottom
 
-# Counterfactual Logic
+## Counterfactual Logic
+# 反事实逻辑
 
 ---
 
-class: large
+class: center
 
 ## 反事实逻辑
 
---
+`\(T_i \in [0, 1].\)`    
+个体的 `\(Y_{0i}\)` 和 `\(Y_{1i}\)`     
+`\(\delta_i\)` 不可见 `\(\leadsto\)` 群体估计    
 
-* `\(T_i \in [0, 1].\)`
+&amp;dArr;
 
---
+Average treatment effect (ATE): `\(ATE = \hat\delta =  \mathbb{E}(\delta_i).\)`
+  
+Average treatment effect on the treated (ATT): `\(ATT = \mathbb{E}(\delta_i | T_i = 1).\)`
 
-* 个体的 `\(Y_{0i}\)` 和 `\(Y_{1i}\)`。
+Average conditional treatment effect (ATE):
 
---
-
-* `\(\delta_i\)` 不可见 `\(\leadsto\)` 群体估计
-
----
-
-class: large
-
-## 说来容易做来难……
-
-先了解几个概念：
-
-* Average treatment effect (ATE)
-    + `\(ATE = \hat\delta =  \mathbb{E}(\delta_i).\)`
-    
-* Average treatment effect on the treated (ATT)
-    + `\(ATT = \mathbb{E}(\delta_i | T_i = 1).\)`
-
---
-
-* Average conditional treatment effect
-    + `\(ATE(W) = \mathbb{E}(\delta_i|W_i).\)`
-        + `\(\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.\)`
-    + `\(ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)\)`
+`\(ATE(W) = \mathbb{E}(\delta_i|W_i).\)`      
+`\(\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.\)`     
+`\(ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)\)`
 
 ???
 
@@ -223,14 +216,22 @@ class: large
 
 ## 实验室实验的基本原则
 
+1. 目标人群 + 干预因素 `\(\leadsto\)` 干预模式
+
+--
+
+1. 剔除（可见干扰 + 不可见干扰）
+
+--
+
+1. 控制组（后测 - 前侧）vs. 实验组（后测 - 前侧）
+    + 统计推断
+    + 存在、大小、方向
+
+???
+
 1. 研究者必须首先明确实验的目标人群以及核心干预因素，然后据此决定被试的来源和对其进行的干预模式。 
-
---
-
 1. 研究设计必须充分考虑对可观察的干扰变量的控制，并通过随机分配控制组和实验组等方法对不可见干扰变量和难以控制的可见干扰变量进行进一步的剔除。 
-
---
-
 1. 研究者需要对控制组和实验组在接受干预因素影响前后的态度和行为表现进行比对，并根据统计原则进行跨组比较，据此判断干预因素与行为态度之间的因果关系是否存在。
 
 ---
@@ -839,27 +840,104 @@ class: inverse, center, middle, large
 &lt;i class="fa fa-globe fa-lg"&gt;&lt;/i&gt;&amp;nbsp; https://sammo3182.github.io/
 
 &lt;i class="fa fa-github fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [sammo3182](https://github.com/sammo3182)
+
+
     </textarea>
-<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
+"highlightSpans": true,
 "countIncrementalSlides": false,
-"slideNumberFormat": "<div class=\"progress-bar-container\">   <div class=\"progress-bar\" style=\"width: calc(%current% / %total% * 100%);\">   </div> </div>`"
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
-})();</script>
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
-(function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -873,14 +951,15 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);

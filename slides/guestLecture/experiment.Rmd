@@ -1,34 +1,53 @@
 ---
-title: "实验室内的政治学研究"
-subtitle: "以语言政治学实验为例"
-author: "胡悦<br>清华大学政治学系"
-date: "2018-12-04"
+title: "实验室里的政治学"
+subtitle: "政治实验设计原则与案例讨论"
+author: "胡悦"
+date: "2021-10-08"
 output:
   xaringan::moon_reader:
-    css: [rladies, zh-CN_custom.css, styles.css, "font-awesome-4.7.0/css/font-awesome.css"]
-    lib_dir: libs
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
-      slideNumberFormat: |
-        <div class="progress-bar-container">
-          <div class="progress-bar" style="width: calc(%current% / %total% * 100%);">
-          </div>
-        </div>`
+      ratio: 16:9
 ---
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, icons, xaringanExtra
+) # data wrangling # data wrangling
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
+
+# Functions preload
+set.seed(313)
 ```
 
-class:large
 
-## 天下大势
+## 社会科学发展最重要的发展领域
 
 
-.left-column[
+.pull-left[
 ### 因果推断逻辑
 
 * 因果效果
@@ -37,7 +56,7 @@ class:large
 
 --
 
-.right-column[
+.pull-right[
 ### 因果推断方法
 
 * 计量经济学
@@ -46,23 +65,22 @@ class:large
 
 ---
 
-.center[<img src="image/causality.png" height = 300 />]
+class: inverse, bottom
 
-## 为什么做因果推断
+.center[<img src="images/lab_causality.png" height = 300 />]
+
+# 为什么做因果推断
 
 ---
 
-class: large
 
-## 什么是因果效应
+## 因果效应的界定
 
 Neyman-Rubin causality theory (RCM):
 
 * 实验对象（Subject, 被试） $i$
 * 干预因素（Treatment, 0/1） $T$ 
 * 引发效果（Effect） $Y_i$
-
---
 
 * $T$ 对 $i$ 的因果效应为 $\delta$：
 
@@ -81,58 +99,42 @@ $$Y_i = T_iY_{i1} + (1 - T)Y_{i0}.$$
 
 class: large, center, middle
 
-## 我们能同时看到 $Y_{0i}$ 和 $Y_{1i}$ 吗？
+我们能同时看到 $Y_{0i}$ 和 $Y_{1i}$ 吗？
+
+.center[<img src = "../courses/analysisOfPoliticalData/images/prob_multiverse_rickMordy.gif" height = 300>]
 
 --
 
-## 如果不能，我们怎么计算 $\delta$
+如果不能，我们怎么计算 $\delta$?
 
 ---
 
-background-image: url(image/spiderMultiverse.png)
-background-position: 50% 50%
-background-size: 100%
+class: inverse, bottom
 
-# Counterfactual Logic
+## Counterfactual Logic
+# 反事实逻辑
 
 ---
 
-class: large
+class: center
 
 ## 反事实逻辑
 
---
+$T_i \in [0, 1].$    
+个体的 $Y_{0i}$ 和 $Y_{1i}$     
+$\delta_i$ 不可见 $\leadsto$ 群体估计    
 
-* $T_i \in [0, 1].$
+&dArr;
 
---
+.red[Average] treatment effect (ATE): $ATE = \hat\delta =  \mathbb{E}(\delta_i).$
+  
+.red[Average] treatment effect on the treated (ATT): $ATT = \mathbb{E}(\delta_i | T_i = 1).$
 
-* 个体的 $Y_{0i}$ 和 $Y_{1i}$。
+.red[Average] conditional treatment effect (ATE):
 
---
-
-* $\delta_i$ 不可见 $\leadsto$ 群体估计
-
----
-
-class: large
-
-## 说来容易做来难……
-
-先了解几个概念：
-
-* Average treatment effect (ATE)
-    + $ATE = \hat\delta =  \mathbb{E}(\delta_i).$
-    
-* Average treatment effect on the treated (ATT)
-    + $ATT = \mathbb{E}(\delta_i | T_i = 1).$
-
---
-
-* Average conditional treatment effect
-    + $ATE(W) = \mathbb{E}(\delta_i|W_i).$
-        + $\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.$
-    + $ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)$
+$ATE(W) = \mathbb{E}(\delta_i|W_i).$      
+$\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.$     
+$ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)$
 
 ???
 
