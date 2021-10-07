@@ -7,17 +7,17 @@
     <meta name="date" content="2021-10-08" />
     <script src="experiment_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="experiment_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="experiment_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="experiment_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="experiment_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="experiment_files/tile-view-0.2.4/tile-view.js"></script>
     <link href="experiment_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="experiment_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="experiment_files/panelset-0.2.6/panelset.js"></script>
+    <link href="experiment_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="experiment_files/panelset-0.2.4/panelset.js"></script>
     <script src="experiment_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="experiment_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="experiment_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="experiment_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
-    <script src="experiment_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
-    <link href="experiment_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="experiment_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="experiment_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="experiment_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -51,8 +51,8 @@ class: center, middle, inverse, title-slide
 .pull-right[
 ### 因果推断方法
 
-* 计量经济学
 * 实验
+* 计量经济学
 ]
 
 ---
@@ -89,11 +89,11 @@ Neyman-Rubin causality theory (RCM):
 
 ---
 
-class: large, center, middle
+class: center, middle
 
-我们能同时看到 `\(Y_{0i}\)` 和 `\(Y_{1i}\)` 吗？
+`\(\delta_i = Y_{0i} - Y_{1i}\)`, 我们能同时看到 `\(Y_{0i}\)` 和 `\(Y_{1i}\)` 吗？
 
-.center[&lt;img src = "../courses/analysisOfPoliticalData/images/prob_multiverse_rickMordy.gif" height = 300&gt;]
+.center[&lt;img src = "../courses/analysisOfPoliticalData/images/prob_multiverse_rickMordy.gif" height = 450&gt;]
 
 --
 
@@ -103,8 +103,8 @@ class: large, center, middle
 
 class: inverse, bottom
 
-## Counterfactual Logic
-# 反事实逻辑
+## Counterfactual Logic &amp; Principles of the Experimental Method
+# 反事实逻辑与实验逻辑
 
 ---
 
@@ -118,11 +118,11 @@ class: center
 
 &amp;dArr;
 
-Average treatment effect (ATE): `\(ATE = \hat\delta =  \mathbb{E}(\delta_i).\)`
+.red[Average] treatment effect (ATE): `\(ATE = \hat\delta =  \mathbb{E}(\delta_i).\)`
   
-Average treatment effect on the treated (ATT): `\(ATT = \mathbb{E}(\delta_i | T_i = 1).\)`
+.red[Average] treatment effect on the treated (ATT): `\(ATT = \mathbb{E}(\delta_i | T_i = 1).\)`
 
-Average conditional treatment effect (ATE):
+.red[Average] conditional treatment effect (ATE):
 
 `\(ATE(W) = \mathbb{E}(\delta_i|W_i).\)`      
 `\(\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.\)`     
@@ -136,85 +136,57 @@ ATT estimates the causal effect of treatment on a randomly drawn untreated indiv
 
 ---
 
-class: large, middle
+class: middle
 
 ## Stable Unit Treatment Value Assumption (SUTVA)
 
-1. `\(T_i\)` only affects `\(Y_i\)`.
+`\(T_i\)` .red[only] affects `\(Y_i\)`.
 
 --
 
-1. In estimating ATE or ATT, the treatment is homogeneous across individuals.
+In estimating ATE or ATT, the treatment is .red[homogeneous] across individuals.
 
 --
 
-1. `\(T_i\)` is invariant with respect to the mechanism by which the treatment is provided.
+`\(T_i\)` is .red[invariant] with respect to the mechanism by which the treatment is provided.
 
 --
 
-1. All possible states of the world are observed.
+All possible states of the world are .red[observed].
 
 --
 
-1. The only causality question of interest is a historical one for the dataset analyzed.
+The only causality question of interest is a .red[historical] one for the dataset analyzed.
 
 --
 
-1. The only causality question of interest is one in which treatment is received before a choice is made; there are no simultaneous relations between treatment and choice.
+The only causality question of interest is one in which treatment is received .red[before] a choice is made; there are no simultaneous relations between treatment and choice.
 
 ---
 
-class: large
-
-## “让我们一起来做因果推断吧！”
-
---
-
-.center[&lt;img src="image/no.gif" height = 200 /&gt;]
-
---
-
-### RCM之优势
+## RCM之优势
 
 1. 因果律 `\(\leadsto\)` 单一因素的因果效果
 1. 定义了因果关系
 1. 使因果关系可见、可测
 
+???
 
----
-
-class: large
-
-## 实验逻辑的操作化
-
-&lt;img src="image/lab.png" width = 32% /&gt;
-&lt;img src="image/field.jpg" width = 32% /&gt;
-&lt;img src="image/survey.jpg" width = 32% /&gt;
-
+Neyman-Rubin causality theory 
 
 --
 
-* 田野实验
-* 调查实验
-* 实验室实验
+&amp;rArr; 操作化
+
+.center[
+&lt;img src="images/lab_lab.png" width = 33% /&gt;
+&lt;img src="images/lab_field.jpg" width = 33% /&gt;
+&lt;img src="images/lab_survey.jpg" width = 32% /&gt;
+]
 
 ---
 
-class: large
-
-## 实验室 vs. 田野 vs. 调查
-
-* 时间、空间、被试？
-
---
-
-* 信息的运用！
-
----
-
-class: large
-
-## 实验室实验的基本原则
+### 实验的基础原则是实验室实验制定的
 
 1. 目标人群 + 干预因素 `\(\leadsto\)` 干预模式
 
@@ -236,25 +208,31 @@ class: large
 
 ---
 
-class: large
+class: center
 
-## 实验室实验与实验政治学
+## 实验室 vs. 田野 vs. 调查
 
-* 三大分水岭
-    
-* 三大派别
-    
-* 三大领域
+.large[区别在哪里？]
+
+--
+
+* 时间、空间、被试？
+
+--
+
+* 信息的运用！
 
 
 ---
 
-## 对实验室实验的评价
+class: bottom, inverse
 
-&lt;br&gt;&lt;br&gt;&lt;br&gt;
+# 实验室实验：谬误与澄清
 
+---
 
---
+## 对实验室实验的常见评价
+
 
 .Large[“虽然内在效度高，]
 
@@ -262,11 +240,9 @@ class: large
 
 ---
 
-class: large
+## 实验效度
 
-## 效度
-
-.center[&lt;img src="image/validity.gif" height = 300 /&gt;]
+.center[&lt;img src="images/lab_validity.gif" height = 300 /&gt;]
 
 --
 
@@ -274,9 +250,9 @@ class: large
 
 ---
 
-class: large
+## 实验效度的正确分类
 
-## 政治科学研究方法的效度
+
 
 * 内部效度: 目标人群
     + 建构性
@@ -284,7 +260,6 @@ class: large
     + 统计性
     
 --
-
 
 * 外部效度: 超越目标人群
 
@@ -299,7 +274,7 @@ class: large
 
 ## 实验室实验的效度
 
-.left-column[
+.pull_left[
 
 * 一个事故
     + 可重复危机
@@ -312,13 +287,11 @@ class: large
 
 --
 
-.right-column[
+.pull-right[
 
 * 几种批评
     + “学生被试”
     + “与真实不服”
-
-{{content}}
 
 ]
 
@@ -329,13 +302,7 @@ class: large
     + 外部：跨维度
     + 生态：真实材料、真实环境
 
-{{content}}
 
----
-
-## 怎么用
-
-.center[&lt;img src="image/anExample.gif" height = 400 /&gt;]
 
 ---
 
@@ -402,9 +369,9 @@ class:large
 --
 
 * Deep engagement&lt;br&gt;&lt;div&gt;
-&lt;img src="image/face2face.jpg" height = 250, width = "32%" /&gt;
-&lt;img src="image/hotline.jpg" height = 250, width = "32%" /&gt;
-&lt;img src="image/online.jpg" height = 250, width = "32%" /&gt;
+&lt;img src="images/face2face.jpg" height = 250, width = "32%" /&gt;
+&lt;img src="images/hotline.jpg" height = 250, width = "32%" /&gt;
+&lt;img src="images/online.jpg" height = 250, width = "32%" /&gt;
 &lt;/div&gt;
 
 ---
@@ -415,8 +382,8 @@ name: fragile
 ## Fragile Processed-Trust
 
 &lt;div&gt;
-&lt;img src="image/duichi.jpg" height = 350, width = "49%" /&gt;
-&lt;img src="image/sentiment.png" height = 350, width = "49%" /&gt;
+&lt;img src="images/duichi.jpg" height = 350, width = "49%" /&gt;
+&lt;img src="images/sentiment.png" height = 350, width = "49%" /&gt;
 &lt;/div&gt;
 
 --
