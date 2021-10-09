@@ -1,8 +1,9 @@
 ---
 title: "Hypothesis Testing"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,17 +12,16 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -29,29 +29,43 @@ library(pacman)
 p_load(
   flextable,
   knitr, # dependency
-  descr, stringr, broom, tidyverse
-) # data wrangling # data wrangling
+  descr, stringr, broom, tidyverse,
+  icons, xaringanExtra
+) 
+
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
 
 # Functions preload
-set.seed(114)
+set.seed(313)
+
+theme_set(theme_minimal())
 ```
 
+
+## Overview
+
++ What to hypothesize?
++ How to conduct hypothesis test
+
+---
 
 class: inverse, bottom
 
 # Hypothesizing
 
-???
-
-What's a distribution? The shape of a function of probability
-
 ---
 
-.center[Hey, what's a .navy[distribution]?]
-
---
-
-## Revisit Probability after Knowing Distribution
+## Recalling Probability and Variable
 
 
 Probability (of an Event): The .red[chance of occurrence] of X<sub>i</sub> given the PDF of X
@@ -60,22 +74,22 @@ Probability (of an Event): The .red[chance of occurrence] of X<sub>i</sub> given
 
 --
 
-.center[Hey, what's a .navy[variable]?]
+.center[Hey, what's a variable?]
 
 ---
 
-## New Jargons
+## New Concept
 
 .center[RANDOM VARIABLE]
 
-A variable that can take some array of values with the .navy[probability that it takes any particular value] defined according to .red[some random/stochastic process].
+A variable that can take some array of values with the .red[probability] that it takes any particular value defined according to some .red[stochastic] process.
 
 
 --
 
 .center[LIKELIHOOD]
 
-How probable a given set of .red[observations] is for certain values of the .navy[parameters of a distribution].
+How probable a given set of .red[observations] is for certain values of the parameters of a distribution.
 
 ???
 
@@ -83,196 +97,13 @@ Remember the question about fair employment?
 
 ---
 
-## Hypothesis Test:
+## Probability vs. Likelihood
 
-Ideal/random distribution `r emo::ji("handshake")` Real world.
+.pull-left[
 
---
+*Probability*: The integral, the area, the results
 
-+ Null (Pure random):     
-&Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon;
-+ Theoretical (Your thought):   
-&Lscr;(theory): Y = &beta;<sub>0</sub> + .red[&beta;<sub>1</sub>X] + &epsilon;
-+ Testing:    
- &Lscr;(null) vs. &Lscr;(theory)
-
----
-
-## Hypothesis Test in Practice
-
-1. An observed sample;
-1. Making the IID assumption;
-1. Set the testing level;
-1. Compare the X&#772; with &mu.
-
----
-
-## More Jargons
-
-1. IID sample
-1. Reliable sample
-
-
-.center[Hey, you, random sampling? ]
-
----
-
-## IID Sample
-
-Observations are .red[i]dentically and .red[i]ndependently .red[d]istributed.
-
-+ Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$.
-+ Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$
-
----
-
-## Reliable(Unbiased) Sample<sup><img src="images/fsmrof.png" height="20"/></sup>
-
-X&#772; &rarr; &mu;, but how? 
-
---
-
-### Central limit theorem (CLT)
-
-For a random sample of n, X&#772; fluctuate around &mu; with an uncertainty;
-n &rarr; + &infin;, Pr(X&#772;) ~ &Nscr;
-
-### Law of large numbers (LLN)
-
-When n gets larger, X&#772; is more concentrated around &mu;.
-
-???
-
-Why X is unbiased for a normal distribution
-
-\begin{align}
-\bar X =& \frac{\sum X}{n}\\
-E(\bar X) =& \frac{1}{n}[E(X_1) + E(X_2) + \dots + E(X_n)]\\
-  =& \frac{1}{n}[\mu + \mu + \dots + \mu] = \mu
-\end{align}
-
-Unbiased variance (standard error): 
-
-\begin{align}
-s(\bar X)^2 =& \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}\\
-  =& \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
-\therefore\ SE =& \frac{\sigma}{\sqrt{n}}.
-\end{align}
-
----
-
-## Where the Hell Is X&#772;?
-
-When n gets larger and larger...
-
-&zwj;CLT: X&#772; will distribute normally;    
-&zwj;LLN: X&#772; will approach to &mu;
-
-.center[Contradictory?]
-
---
-
-<img src="images/largeNumber.gif" height = 200 />
-
-???
-CLT shows the the shape, LLN shows the location of the center.
-
-
-Hint: A rule of thumb, N > 30, large sample; for time series, N > 80
-
----
-
-## Standard Error
-
-SE(X&#772;) = $\frac{s}{\sqrt{n}}$
-
-How far could the sample mean .red[disperse] from the .navy[population mean].
-
----
-
-E.g. Given the population mean as 69 and standard deviation as 3.2, how would the mean of a random sample of four observations fluctuate? 
-
-\begin{align}
-E(\bar X) =& \mu = 69\\
-\therefore SE(\bar X) =& \frac{3.2}{\sqrt 4} = 1.6.
-\end{align}
-
----
-
-E.g. Given $\mu$ = 72 and $\sigma$ = 9, and a random sample of 10. Calculate the probabilities: 
-
-1. P(X > 80); 
-1. P(X&#772; > 80)
-
-$Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z > .89) =$ `r 1 - pnorm(.89)`;
-
---
-
-$Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z > 2.81) =$ `r 1 - pnorm(2.81)`
-
----
-
-## Comparison with the Mean
-
-### Frequency
-
-$Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}$
-
-### Proportion
-
-In a sample of N, the sample proportion P fluctuates around the population proportion &pi; with SE $\sqrt{\frac{\pi(1 - \pi)}{n}}$.<sup><img src="images/fsmrof.png" height="20"/><sup>
-
-$Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}$
-
-???
-
-$\sigma^2 = E(X^2) - \mu^2 = \pi - \pi^2 = \pi(1 - \pi)$
-Therefore, $\sigma = \sqrt{\pi(1 - \pi)}.$
-
-The confidence interval: $\pi = P \pm Z\sqrt{\frac{P(1 - P)}{n}}, Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}.$
-
----
-
-E.g., Given the Republican are 60% of the population, while the Democrats are 40. What's the probability that the Republican are the minority in a random sample of 100 people from the population?
-
-Minority means $P(\pi < 0.5)$. Then, $Z = \frac{5 - 6}{\sqrt{\frac{6(1 - 6)}{100}}} = -2$, therefore, $P(Z < -2) =$ `r pnorm(-2)`
-
----
-
-class: small
-
-## Small Population Sampling
-
-Remember sampling w.o. replacement? 
-
-Without replacement, SE of X&#772; is reduced by $\sqrt{\frac{N - n}{N - 1}}$ (finite population correction, FPC). 
-
-&rArr; More uncertainty
-
-*Sampling 1*:  n = 1. Then $SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}$, no changes; 
-
-*Sampling all*: n = N, SE = 0. 
-
-*Large sample of a large population*: n = 1000, N = 100,000,000, the reductive factor is $\sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999$, little changes.
-
-*Large sample of a small population*: n = 100, N = 108, the reductive factor is $\sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075$, some changes.
-
----
-
-## Bonus: Likelihood<sup><img src="images/fsmrof.png" height="20"/><sup>
-
-.center[Probability vs. Likelihood]
-
----
-
-
-## Probability
-
-The integral, the area, the results
-
-```{r probability, echo=FALSE, fig.height=5}
-library(ggplot2)
-
+```{r probability}
 ggplot(data.frame(x = 0:10, 
                   pr = dbinom(x = 0:10, size = 10, prob = 0.5)), 
        aes(x = x, y = pr)) +
@@ -281,19 +112,19 @@ ggplot(data.frame(x = 0:10,
   xlab("Number of successes")
   
 ```
+]
 
----
+.pull-right[
+*Likelihood*: The parameter, the product, the hypothesis
 
-## Likelihood
-
-The parameter, the product, the hypothesis
-
-```{r likelihood,  echo=FALSE, fig.height=7}
+```{r likelihood}
 ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
   stat_function(fun = function(x) dbinom(8, 10, x)) +
   ylab("Likelihood") + 
   xlab(expression(paste("Binomial ", rho)))
 ```
+
+]
 
 ---
 
@@ -318,27 +149,237 @@ https://khakieconomics.github.io/2018/07/14/What-is-a-likelihood-anyway.html
 * Goal: Model (parameter) selection
     + What's the most appropriate estimation?
         + Maximizing the probability that &Lscr;(&theta;|O) = P(O|&theta;)
-    + Point estimation: unbiasdness
-    + Interval estimation: range of plausible values
-    + Goodness of fit: explained variances
-    + Diagnostic estimation: what if the assumptions are violated
+    + Point estimation: Unbiasdness
+    + Interval estimation: Range of plausible values
+    + Goodness of fit: Explained variances
+    + Diagnostic estimation: What if the assumptions are violated
     
 ---
 
-background-image: url("images/mle_illustration.png")
+background-image: url("images/hyp_illustration.png")
 background-position: center
 background-size: contain
 
 ---
 
-class:small
-
 E.g., Given binomial distribution $L(\pi) = {n \choose s}\pi^s(1 - \pi)^{n - s}$, what &pi; reaches the maximum likelihood?
 
-$log[L(\pi)] = log{n\choose s} + s\cdot log(\pi) + (n - s)\cdot log(1 - \pi).$
+$$log[L(\pi)] = log{n\choose s} + s\cdot log(\pi) + (n - s)\cdot log(1 - \pi).$$
+
+--
 
 To get the peak value, we use the derivative:
 
 $$\frac{dlog[L(\pi)]}{d\pi} = \frac{s}{\pi} - \frac{n - s}{1 - \pi}.$$
 
-To minimize this, let it equal 0, then $\pi = \frac{s}{n}$
+--
+
+To minimize this, let it equal 0
+
+\begin{align}
+\frac{s}{\pi} - \frac{n - s}{1 - \pi} = 0 \Rightarrow \frac{s}{\pi} &= \frac{n - s}{1 - \pi},\\
+s(1 - \pi) &= \pi(n - s),\\
+s - s\pi &= n\pi - s\pi,\\
+\pi &= \frac{s}{n}.
+\end{align}
+
+---
+
+class: inverse, bottom
+
+# Hypothesis Test
+
+---
+
+## What Does Hypothesis Tests Do
+
+.center[Ideal/random distribution 🤝 Real world]
+
+--
+
+.center[
++ Null (Pure random):     
+&Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon;
+
++ Theoretical (Your thought):   
+&Lscr;(theory): Y = &beta;<sub>0</sub> + .red[&beta;<sub>1</sub>X] + &epsilon;
+
++ Testing:    
+ &Lscr;(null) vs. &Lscr;(theory)
+]
+
+--
+
+.center[
+### Procedure
+
+1. An observed sample;
+1. Making the IID assumption;
+1. Set the testing level;
+1. Compare the X&#772; with &mu.
+]
+
+---
+
+## IID Sample (Revisit)
+
+Observations are .red[i]dentically and .red[i]ndependently .red[d]istributed.
+
++ Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$.
++ Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$
+
+--
+
+## Reliable(Unbiased) Sample
+
+.center[X&#772; &rarr; &mu; (Why?)]
+
+Unbiased point estimate:
+
+\begin{align}
+Given \bar X = \frac{\sum X}{n}, E(\bar X) =& \frac{1}{n}[E(X_1) + E(X_2) + \dots + E(X_n)],\\
+  =& \frac{1}{n}[\mu + \mu + \dots + \mu] = \mu.
+\end{align}
+
+---
+
+Unbiased variance (standard error): 
+
+\begin{align}
+s(\bar X)^2 =& \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}\\
+  =& \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
+\therefore\ SE =& \frac{\sigma}{\sqrt{n}}.
+\end{align}
+
+---
+
+## Two Principles of Statistical Inferences
+
+.pull-left[
+### Central limit theorem (CLT)
+
+For a random sample of n, X&#772; fluctuate around &mu; with an uncertainty;
+n &rarr; + &infin;, Pr(X&#772;) ~ &Nscr;
+]
+
+--
+
+.pull-right[
+### Law of large numbers (LLN)
+
+When n gets larger, X&#772; is more concentrated around &mu;.
+]
+
+--
+
+.center[
+
+When n gets larger...
+
+&zwj;CLT: X&#772; will distribute normally;    
+&zwj;LLN: X&#772; will approach to &mu;
+
+]
+
+--
+
+.center[Contradictory?]
+
+---
+
+class: center, middle
+
+<img src="images/ci_largeNumber.gif" height = 400 />
+
+???
+CLT shows the the shape, LLN shows the location of the center.
+
+Hint: A rule of thumb, N > 30, large sample; for time series, N > 80
+
+---
+
+## Standard Error
+
+How far could the sample mean disperse from the .red[population mean].
+
+SE(X&#772;) = $\frac{s}{\sqrt{n}}$
+
+--
+
+E.g. Given the population mean as 69 and standard deviation as 3.2, how would the mean of a random sample of four observations fluctuate? 
+
+\begin{align}
+E(\bar X) =& \mu = 69\\
+\therefore SE(\bar X) =& \frac{3.2}{\sqrt 4} = 1.6.
+\end{align}
+
+---
+
+E.g. Given $\mu$ = 72 and $\sigma$ = 9, and a random sample of 10. Calculate the probabilities: 
+
+1. P(X > 80); 
+1. P(X&#772; > 80)
+
+$Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z > .89) =$ `r 1 - pnorm(.89)`;
+
+--
+
+$Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z > 2.81) =$ `r 1 - pnorm(2.81)`
+
+---
+
+## SE and Z-Score: Different Situations
+
+*Full data*
+
+$$Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}$$
+
+--
+
+*Proportion*
+
+In a sample of N, the sample proportion P fluctuates around the population proportion &pi; with SE, $\sqrt{\frac{\pi(1 - \pi)}{n}}$. (Why?)
+
+> Proof: 
+> $\sigma^2 = E(X^2) - \mu^2 = \pi - \pi^2 = \pi(1 - \pi)$.
+&there4; $\sigma = \sqrt{\pi(1 - \pi)}, SE = \sigma/\sqrt{n} = \sqrt{\frac{\pi(1 - \pi)}{n}}.$
+
+Then, $Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}$, the confidence interval: $\pi = P \pm Z\sqrt{\frac{P(1 - P)}{n}}.$
+
+---
+
+E.g., Given the Republican are 60% of the population, while the Democrats are 40. What's the probability that the Republican are the minority in a random sample of 100 people from the population?
+
+Minority means $P(\pi < 0.5)$. Then, $Z = \frac{5 - 6}{\sqrt{\frac{6(1 - 6)}{100}}} = -2$, therefore, $P(Z < -2) =$ `r pnorm(-2)`
+
+---
+
+## Small Population Sampling
+
+Remember sampling w.o. replacement? 
+
+Without replacement, SE of X&#772; is reduced by $\sqrt{\frac{N - n}{N - 1}}$ (finite population correction, FPC). &rArr; More uncertainty. 
+
+--
+
+E.g., *Sampling 1*:  n = 1. Then $SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}$, no changes; 
+
+*Sampling all*: n = N, SE = 0. 
+
+*Large sample of a large population*: n = 1000, N = 100,000,000, the reductive factor is $\sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999$, little changes.
+
+*Large sample of a small population*: n = 100, N = 108, the reductive factor is $\sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075$, some changes.
+
+---
+
+## Wrap Up
+
++ Hypothesizing
+    + Random variable
+    + Probability vs. Likelihood
+    + MLE
++ Hypothesis test
+    + IID
+    + Reliable
+    + Central limit theory + Law of large number
+    + SE

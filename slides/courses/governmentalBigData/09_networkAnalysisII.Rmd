@@ -1,8 +1,8 @@
 ---
 title: "社会网络方法论: 分析网络"
-subtitle: "Understanding Social Network with Dr. Hu: Analyzing the Network"
+subtitle: "Learning Social Network Analysi with Dr. Hu"
 author: "胡悦"
-institute: "清华大学政治学系"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,27 +11,33 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
-
-htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  sna, 
-  network, 
-  tidyverse
+  knitr, icons, xaringanExtra,sna, network, tidyverse
 ) # data wrangling # data wrangling
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
 
 # Functions preload
 set.seed(313)
@@ -41,7 +47,7 @@ set.seed(313)
 
 .pull-left[
 .gray[
-### 认识网络
+.normal[认识网络]
 
 + 网络分析方法论
 + 网络要素
@@ -77,20 +83,22 @@ class: inverse, bottom
 
 1. None: A &nbsp; B
 1. Arc: A &rarr; B; B &larr; C
-1. .red[Reciprocal: A &harr; B]
+1. Reciprocal(互惠): A &harr; B
 
----
+.left-column[
+### 互惠分析
+]
 
-## 互惠（Reciprocity）分析
+.right-column[
+Dyads 视角
 
-### Dyads 视角
+$$R = \frac{\#Reciprocated\ Pairs}{\# Connected\ Pairs}$$
 
-$R = \frac{\#Reciprocated\ Pairs}{\# Connected\ Pairs}$
+Arc 视角
 
-### Arc 视角
+$$R = \frac{\#Reciprocated\ Arcs}{\# Total\ Arcs}$$
 
-$R = \frac{\#Reciprocated\ Arcs}{\# Total\ Arcs}$
-
+]
 
 ???
 
@@ -100,10 +108,20 @@ Both are using the described the same phenomenon
 
 ---
 
+## Dyads种类
+
+1. None: A &nbsp; B
+1. Arc: A &rarr; B; B &larr; C
+1. Reciprocal(互惠): A &harr; B
+
+.left-column[
+### 互惠分析
 ### Simmelian tie
+]
 
+.right-column[
 .center[<img src="images/sna_taoyuan.jpeg" height = 300 />]
-
+]
 
 ???
 
@@ -111,11 +129,9 @@ Dyads more stable when embedded in triads, Simmelian tie 同时与第三方有�
 
 ---
 
-## Triad 种类
+## Triadic Analysis
 
-A、B、C三方，存在几种建立关系的方式?
-
-(2<sup>2</sup>)<sup>3</sup> = 64
+A、B、C三方，存在几种建立关系的方式? (2<sup>2</sup>)<sup>3</sup> = 64
 
 ???
 
@@ -123,19 +139,20 @@ A 指向B/不指向B * 指向C/不指向C：2*2 = 2^2
 
 3 nodes, (2^2)^3
 
----
+--
 
-background-image: url("images/sna_triads.gif")
-background-position: center
-background-size: contain
+.center[<img src = "images/sna_triads.gif" height = 500>]
 
 ---
 
-background-image: url("images/sna_triadsTrans.png")
-background-position: center
-background-size: contain
+.left-column[
+### Transitive Triads
+]
 
-## Transitive Triads
+.right-column[
+.center[<img src = "images/sna_triadsTrans.png" height = 500>]
+]
+
 
 ???
 
@@ -143,11 +160,17 @@ A&rarr;B&rarr;C + A&rarr;C
 
 ---
 
-background-image: url("images/sna_triadsVac.png")
-background-position: center
-background-size: contain
 
-## Vacuous Triads
+.left-column[
+### Transitive Triads
+### Vacuous Triads
+]
+
+.right-column[
+.center[<img src = "images/sna_triadsVac.png" height = 500>]
+
+]
+
 
 ???
 
@@ -159,9 +182,11 @@ Prell, Christina, and John Skvoretz. 2008. “Looking at Social Capital Through 
 
 ---
 
-## 应用: 网络结构均衡（Structural Balance）
+## Triad Analysis应用实例
 
-.center[<img src="images/sna_structuralBalance.jpg" height = 500 />]
+.center[
+网络结构均衡（Structural Balance）
+<img src="images/sna_structuralBalance.jpg" height = 500 />]
 
 ???
 
@@ -190,7 +215,9 @@ background-image: url("images/sna_smallWorld.bmp")
 background-position: center
 background-size: contain
 
-## 社群： 小世界网络
+## Beyond k-iad: 社群（Community）
+
+小世界网络
 
 .pull-right[
 .small[
@@ -216,23 +243,27 @@ High-risk actors over 4 years
 
 ## 辨别社群
 
-### 自下而上法
+.pull-left[
+Bottom Up: 
 
 Cliques &rarr; n-cliques &rarr; n-clans
+]
 
---
+.pull-right[
+Top down: 
 
-### 自上而下法
+k-cores &rarr; factions &rarr; modularity
 
-k-cors &rarr; factions &rarr; modularity
+]
 
 ---
 
-## K-Core Collapse
+## K-Core
 
 The k-core of a network graph G is the maximal subgraph H &sube; G, such that
 
 .center[<img src="images/sna_kcore.png" height = 300 />]
+
 
 ???
 
@@ -252,29 +283,25 @@ https://www.youtube.com/watch?v=rHVrgbc_3JA
 
 --
 
-.center[<img src="images/sna_faction.png" height = 300 />]
+.pull-left[<img src="images/sna_faction.png" height = 300 />]
 
 ???
 
 组内紧密连结，无跨组连结。
 
----
-
-## 寻找Factions算法
-
-### 目的
-
-Arranging actors to resemble the ideal as closely as possible.
-
 --
 
-### 步骤
+.pull-right[
+实现：Arranging actors to resemble the ideal as closely as possible.
+
+步骤： 
 
 1. Partition
 1. Evaluation
 1. Moving
 1. Evaluation, again
 1. Repeat
+]
 
 ???
 
@@ -296,15 +323,13 @@ heuristic method, 但难以进行并行运算
 
 --
 
-潜在解法: Hierarchical clustering
+Hierarchical Clustering
 
----
-
-## Hierarchical Clustering
-
+.center[
 Agglomerative method
 
-.center[<img src="images/sna_agglomerative.bmp" height = 300 />]
+<img src="images/sna_agglomerative.bmp" height = 300 />
+]
 
 ???
 
@@ -317,7 +342,7 @@ Agglomerative 基于 a wide variety of similarity measures，从empty graph （�
 
 形成凝聚力的两点原则：
 
-连结性
+1. 连结性
 
 .center[<img src="images/sna_cohesive.png" height = 300 />]
 
@@ -327,7 +352,7 @@ Agglomerative 基于 a wide variety of similarity measures，从empty graph （�
 
 ---
 
-可达性
+2\. 可达性
 
 .center[<img src="images/sna_cohesiveII.png" height = 300 />]
 
@@ -342,24 +367,21 @@ Agglomerative 基于 a wide variety of similarity measures，从empty graph （�
 .center[<img src="images/sna_minimalCohesion.png" height = 300 />]
 
 .pull-left[
-.small[
+
 + 集权
 + 信息集中
 + 不平等
 + 个体行为影响大
 + 碎片化结构
-]
 
 ]
 
 .pull-right[
-.small[
 + 分权
 + 信息透明
 + 平等
 + 个体行为难以撼动结构
 + 均衡结构
-]
 ]
 
 
@@ -369,19 +391,11 @@ Minimal cohesion: without that node, the network will break apart
 
 ---
 
-## 回到社群
+## 寻找社群另一种方法
 
-寻找社群方法：
+Agglomerative method：可能丢失弱连结vertices
 
-Agglomerative method
-
-???
-
-可能丢失弱连结vertices
-
---
-
-Divisive method
+Divisive method (top down)
 
 .center[<img src="images/sna_divisive.bmp" height = 300 />]
 
@@ -402,15 +416,15 @@ A善于发现强连结community， D不会地区除peripheral vertices
 
 ---
 
-## 社群到社会
+## Modularity: 社群到社会
 
 &zwj;Modularity: 比起.navy[辨别]出社群，更关注一个社会是否由若干个社群.red[组成]。
 
-.center[<img src="images/sna_moduality.png" height = 400 />]
+.center[<img src="images/sna_moduality.png" height = 450 />]
 
 ---
 
-## 应用：语言与身份认同
+## Modularity应用：语言与身份认同
 
 Tamburrini et al 2015
 
@@ -439,7 +453,7 @@ class: inverse, bottom
 
 ## 分析方向
 
-.center[<img src="images/sna_covid19difussion.gif" height = 350 />]
+.center[<img src="images/sna_covid19difussion.gif" height = 400 />]
 
 1. （法律、政策、习惯.etc）采用的时间
 1. 谁是“始作俑者” vis-a-vis “第一个吃螃蟹的人”
@@ -468,7 +482,9 @@ Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., & Christakis, N. A. (2018). E
 
 ---
 
-## 暴露网络：谁是易感人群
+## 暴露网络
+
+谁是易感人群
 
 .center[<img src="images/sna_diffusionQ.png" height = 400 />]
 
@@ -478,19 +494,23 @@ Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., & Christakis, N. A. (2018). E
 
 ---
 
-## 传动网络：传播（传递）路径究竟是怎样的
+## 传动网络
+
+传播（传递）路径究竟是怎样的
 
 .center[<img src="images/sna_diffusionQ.png" height = 400 />]
 
 ---
 
-## 应用
+## 扩散应用
 
+.pull-left[
 Valente 1996
 
 .center[<img src="images/sna_exposure.png" height = 300 />]
 
 Threshold model in the view of network
+]
 
 ???
 
@@ -502,16 +522,17 @@ Threshold: Early adopter, early majority, late majority, laggards.
 
 个体网络与全网角度理解threshold
 
+--
 
----
-
-## “始作俑者”
+.pull-right[
+**“始作俑者”**?
 
 Brokers?
 
 Centrality?
 
 Node attributes?
+]
 
 ---
 
@@ -541,20 +562,22 @@ Node attributes?
 
 Desmarais, Harden, Boehmke (2015)
 
+.pull-left[
 捕捉传播路径：
 
 + i州比j州早采用一个政策的次数
 + 同一政策i和j采用的时间差
 + i采用在多大程度上能预测j的采用
+]
 
 ???
 
 Desmarais, Bruce A., Jeffrey J. Harden, and Frederick J. Boehmke. 2015. “Persistent Policy Pathways: Inferring Diffusion Networks in the American States.” *American Political Science Review* 109(2): 392–406.
 
 
----
+--
 
-.center[<img src="images/sna_diffusionFlorida.png" height = 400 />]
+.pull-right[<img src="images/sna_diffusionFlorida.png" height = 400 />]
 
 ???
 
@@ -566,7 +589,7 @@ Desmarais, Bruce A., Jeffrey J. Harden, and Frederick J. Boehmke. 2015. “Persi
 
 ## 机制判断
 
-e.g., 影响还是仅仅是相似？（Aral et al 2009）
+影响还是仅仅是相似？（Aral et al 2009）
 
 ???
 
@@ -588,7 +611,7 @@ Aral, Sinan, Lev Muchnik, and Arun Sundararajan. 2009. “Distinguishing Influen
 
 根据节点的网络性质：在控制了nodes的各种行为和个体特点后，比较那些有很多adopted friends 和没有那么多adopted friends之人
 
----
+--
 
 e.g. "云集响应"还是"人以群分" （Lazer et al. 2010）
 
@@ -624,13 +647,11 @@ class: inverse, bottom
 
 ---
 
-## Again, 方法论的跃迁
-
---
+## (复习)方法论的跃迁
 
 .pull-left[
 
-### 传统计量经济学
+**传统计量经济学**
 
 1. 确定H<sub>0</sub>
 1. 描述H<sub>0</sub>下样本分布特征
@@ -648,7 +669,7 @@ class: inverse, bottom
 
 .pull-right[
 
-### 网络分析
+**网络分析**
 
 1. 如何随机建立网络
 1. H<sub>0</sub>是什么
@@ -706,27 +727,31 @@ Generating 1000 random graphs of size 20; assumes digraph. tprob, probility of a
 
 ## Conditional Uniform Graph Test
 
+.pull-left[
 ```{r cugNetReal}
 library(network);data(emon)
 g <- emon$Cheyenne
 g
 ```
+]
 
 ???
 
 Drabek et al. (1981) provide seven case studies of emergent multi-organizational networks (EMONs) in the context of search and rescue (SAR) activities. Networks of interaction frequency are reported, along with several organizational attributes.
 
----
+--
 
+.pull-right[
 ```{r cugTestDens, fig.align='center'}
 ## Density 
 cug.test(g, gden, mode="digraph", cmode="size", reps=1000) %>% 
   plot.cug.test()
 ```
+]
 
 ---
 
-```{r cugTests, eval = FALSE}
+```{r cugTests, echo = TRUE, eval=FALSE}
 ###Reciprocity
 cug.test(g, grecip, mode="digraph", cmode="size", reps=1000)
 
@@ -744,28 +769,24 @@ cug.test(g, gtrans, mode="digraph", cmode="edges", reps=1000)
 
 ## Quadratic Assignment Procedure
 
-1. .navy[创建随机网络分布]
-1. .red[控制网络结构]
-
-???
-
-与CUG之异同见颜色
-
-网络结构: centrality 等
-
-
---
+.pull-left[
+1. 创建随机网络分布 (= CUG)
+1. 控制网络结构 (&ne; CUG)
 
 通过permutation test实现
+]
 
 ???
+
+网络结构: centrality 等
 
 non-parametric，从sample中抽出两组，对比stats，看是否一样。
 与t-test等的对比重要不同在于不是跟normal比
 
----
+--
 
-## 网络Permutation Test
+.pull-right[
+**网络Permutation Test**
 
 1. 计算原始网络的correlation coefficient<sup>1</sup>;
 1. Permute一些vertices；
@@ -773,7 +794,7 @@ non-parametric，从sample中抽出两组，对比stats，看是否一样。
 1. 一顿狂Permute + 狂比
 1. 看看correlation的分布
 1. 确定特定值和原始网络相同的概率
-
+]
 .footnote[<sup>1</sup> Pearson's r correlation or Euclidean distance]
 
 ???
@@ -789,7 +810,6 @@ non-parametric，从sample中抽出两组，对比stats，看是否一样。
 
 .center[E[Y<sub>ij</sub>] = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1ij</sub> + &beta;<sub>2</sub>X<sub>2ij</sub> + ... + &beta;<sub>k</sub>X<sub>kij</sub>]
 
----
 
 QAP can help
 
@@ -800,6 +820,8 @@ friends<-read.csv("data/friends.csv", row.names="ID")
 advice<-read.csv("data/advice.csv", row.names="ID")
 
 qap_reg <- netlogit(advice, list(friends, reports), nullhyp="qap", reps=10)
+
+summary(qap_reg)
 ```
 
 ???
@@ -809,12 +831,6 @@ There are also `netlm` etc.
 Not 10, often over 1000
 
 nullhyp choices: qap quick, qapspp robust
-
----
-
-```{r result-netReg, echo=FALSE}
-summary(qap_reg)
-```
 
 ---
 
@@ -850,12 +866,14 @@ Latent space models 也可以控制structure，但目的在于去除而不是car
 
 ---
 
-## ERGM能解决的一些问题
+## ERGM能解决问题举例
 
-### Interdependence
+.pull-left[
+*Interdependence*
 
 1. 面对共同的敌人，是否减小彼此敌意？
 1. 合作者选择过程终得Popularity effects
+]
 
 ???
 
@@ -863,26 +881,28 @@ Latent space models 也可以控制structure，但目的在于去除而不是car
 
 --
 
-### Dyadic Covariate
+.pull-right[
+*Dyadic Covariate*
 
 1. 国家是否与相同政体国家更可能结盟
 1. 同个党派议员是否比不同党派议员合作更多
+]
 
 ???
-
 partisanship vs. issues
 
 --
 
-### Structural
+.center[
+*Structural*
 
 1. Cosponsorship是否存在互惠
 1. 教室中指定同桌，是否改变不同人群关系
-
+]
 
 ---
 
-## ERGM成长史
+## ERGM要素与组合
 
 Simple Random Graph Model
 
@@ -900,7 +920,7 @@ $$P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}$$
 
 .red[Bernoulli Assumption]
 
-+ Tie 是独立的（略~）
++ Tie 是独立的（呵呵~）
 + IID ties &rarr; 
     + Log-probability of a graph is proportional to a weighted sum of edge-count
 
@@ -910,9 +930,7 @@ $$P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}$$
 
 ---
 
-class: small
-
-### P<sup>1</sup> Model
+## P<sup>1</sup> Model
 
 $$P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy_{i+} + \sum_j\beta_iy_{+j}})}{\kappa(\theta)}$$
 
@@ -940,7 +958,7 @@ $$P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy
 
 ---
 
-### P<sup>*</sup> Model
+## P<sup>*</sup> Model
 
 $$P(X = x) = \frac{exp(\sum_i\theta_i\color{red}{z_i(x)})}{\kappa(\theta)}$$
 
@@ -979,9 +997,9 @@ Things one can test in P*, path closure: 多重triangle
 
 ---
 
-## 你所面对的网络世界
+## 如果你想了解更多
 
-```{r eval = FALSE}
+```{r echo = TRUE}
 library(ergm)
 ?ergm.terms
 search.ergmTerms(keyword = "triangle")
@@ -993,7 +1011,7 @@ GOOGLE上没有全的表
 
 ---
 
-## ERGM登场
+## ERGM完全式
 
 \begin{align}
 P(N, \boldsymbol{\theta}) =& \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}\\
@@ -1015,13 +1033,9 @@ N* 是特定network statistics 的数目
 
 ---
 
-## 解释ERGM
+## ERGM结果解释
 
-### Network level
-
-.center[.red[exp(&theta;)]]
-
-Relative likelihood of observing N<sup>i+</sup> to observing N<sup>i-</sup>
+Network level：.red[exp(&theta;)]，relative likelihood of observing N<sup>i+</sup> to observing N<sup>i-</sup>
 
 ???
 
@@ -1034,11 +1048,9 @@ odd-like stuff: 那么 &theta; = 0代表什么？
 
 --
 
-### Edge level
+Edge level：P(N<sub>ij</sub> = 1|N<sub>-ij</sub>, &theta;) = logit<sup>-1</sup>&sum;<sub>r=1</sub>&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij)</sup>(N)
 
-P(N<sub>ij</sub> = 1|N<sub>-ij</sub>, &theta) = logit<sup>-1</sup>&sum;<sub>r=1</sub>&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij)</sup>(N)
-
-.center[.red[exp(&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij))]]
+.center[.red[exp(&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij)</sup>)]]
 
 ???
 
@@ -1050,9 +1062,7 @@ $logit^{-1} = frac{1}{1 + e^{-1}}$
 
 --
 
-### Nodal level
-
-Block-wise conditional distributions
+Nodal level: Block-wise conditional distributions
 
 ???
 
@@ -1062,9 +1072,9 @@ Blocks are split according to an attribute, complicated
 
 ## ERGM Diagnoses
 
-Degeneracy
-
 Convergence
+
+Degeneracy
 
 ???
 
@@ -1076,7 +1086,7 @@ COnvergence is for Markov Chain
 
 --
 
-Suuuuuuuuuuuuuuuuper Important!
+SUPER Important!
 
 
 但我们只有两堂课……
@@ -1102,7 +1112,9 @@ Theory really matters!! 来解释要加什么network statistics
 
 1. Sensitivity
 
----
+--
+
+*进化版*
 
 + GERGM
 + TERGM
@@ -1137,3 +1149,7 @@ F ERGM: Frailty ERGM "individual-level random effects" for the propensity for a 
 ### Network Effect (全网分析)
 
 + ERGM
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "09_networkAnalysisII.html"), timeout = 400)
+```

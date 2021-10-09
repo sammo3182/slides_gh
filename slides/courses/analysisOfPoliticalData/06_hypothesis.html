@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Hypothesis Testing</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <script src="06_hypothesis_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="06_hypothesis_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="06_hypothesis_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="06_hypothesis_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="06_hypothesis_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="06_hypothesis_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
+    <link href="06_hypothesis_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="06_hypothesis_files/panelset-0.2.4/panelset.js"></script>
+    <script src="06_hypothesis_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="06_hypothesis_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="06_hypothesis_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="06_hypothesis_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="06_hypothesis_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="06_hypothesis_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Hypothesis Testing
+## Large N &amp; Leeuwenhoek (70700173)
+### Yue Hu
+
+---
+
+
+
+
+
+## Overview
+
++ What to hypothesize?
++ How to conduct hypothesis test
+
+---
+
+class: inverse, bottom
+
+# Hypothesizing
+
+---
+
+## Recalling Probability and Variable
+
+
+Probability (of an Event): The .red[chance of occurrence] of X&lt;sub&gt;i&lt;/sub&gt; given the PDF of X
+
+&amp;zwj;How: Z-score &amp;rarr; probability (p-values)
+
+--
+
+.center[Hey, what's a variable?]
+
+---
+
+## New Concept
+
+.center[RANDOM VARIABLE]
+
+A variable that can take some array of values with the .red[probability] that it takes any particular value defined according to some .red[stochastic] process.
+
+
+--
+
+.center[LIKELIHOOD]
+
+How probable a given set of .red[observations] is for certain values of the parameters of a distribution.
+
+???
+
+Remember the question about fair employment?
+
+---
+
+## Probability vs. Likelihood
+
+.pull-left[
+
+*Probability*: The integral, the area, the results
+
+![](06_hypothesis_files/figure-html/probability-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+*Likelihood*: The parameter, the product, the hypothesis
+
+![](06_hypothesis_files/figure-html/likelihood-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+Formally, let O be the set of observed outcomes and &amp;theta; be the set of parameters that describe the stochastic process. 
+
+Probability function: P(O|&amp;theta;)
+
+Likelihood function: &amp;Lscr;(&amp;theta;|O) = `\(\prod_{i=1}^n y_i\)`&lt;sup&gt;\*&lt;/sup&gt;
+
+.footnote[Hint: &amp;Lscr; can above 1.]
+
+???
+
+https://acarril.github.io/posts/probability-likelihood
+https://www.youtube.com/watch?v=pYxNSUDSFH4
+https://khakieconomics.github.io/2018/07/14/What-is-a-likelihood-anyway.html
+
+---
+
+## Maximum Likelihood Estimation:
+
+* Goal: Model (parameter) selection
+    + What's the most appropriate estimation?
+        + Maximizing the probability that &amp;Lscr;(&amp;theta;|O) = P(O|&amp;theta;)
+    + Point estimation: Unbiasdness
+    + Interval estimation: Range of plausible values
+    + Goodness of fit: Explained variances
+    + Diagnostic estimation: What if the assumptions are violated
+    
+---
+
+background-image: url("images/hyp_illustration.png")
+background-position: center
+background-size: contain
+
+---
+
+E.g., Given binomial distribution `\(L(\pi) = {n \choose s}\pi^s(1 - \pi)^{n - s}\)`, what &amp;pi; reaches the maximum likelihood?
+
+`$$log[L(\pi)] = log{n\choose s} + s\cdot log(\pi) + (n - s)\cdot log(1 - \pi).$$`
+
+--
+
+To get the peak value, we use the derivative:
+
+`$$\frac{dlog[L(\pi)]}{d\pi} = \frac{s}{\pi} - \frac{n - s}{1 - \pi}.$$`
+
+--
+
+To minimize this, let it equal 0
+
+`\begin{align}
+\frac{s}{\pi} - \frac{n - s}{1 - \pi} = 0 \Rightarrow \frac{s}{\pi} &amp;= \frac{n - s}{1 - \pi},\\
+s(1 - \pi) &amp;= \pi(n - s),\\
+s - s\pi &amp;= n\pi - s\pi,\\
+\pi &amp;= \frac{s}{n}.
+\end{align}`
+
+---
+
+class: inverse, bottom
+
+# Hypothesis Test
+
+---
+
+## What Does Hypothesis Tests Do
+
+.center[Ideal/random distribution 🤝 Real world]
+
+--
+
+.center[
++ Null (Pure random):     
+&amp;Lscr;(null): Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;epsilon;
+
++ Theoretical (Your thought):   
+&amp;Lscr;(theory): Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + .red[&amp;beta;&lt;sub&gt;1&lt;/sub&gt;X] + &amp;epsilon;
+
++ Testing:    
+ &amp;Lscr;(null) vs. &amp;Lscr;(theory)
+]
+
+--
+
+.center[
+### Procedure
+
+1. An observed sample;
+1. Making the IID assumption;
+1. Set the testing level;
+1. Compare the X&amp;#772; with &amp;mu.
+]
+
+---
+
+## IID Sample (Revisit)
+
+Observations are .red[i]dentically and .red[i]ndependently .red[d]istributed.
+
++ Identical: X and Y are from the same distribution, `\({\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}\)`.
++ Independent: `\({\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}\)`
+
+--
+
+## Reliable(Unbiased) Sample
+
+.center[X&amp;#772; &amp;rarr; &amp;mu; (Why?)]
+
+Unbiased point estimate:
+
+`\begin{align}
+Given \bar X = \frac{\sum X}{n}, E(\bar X) =&amp; \frac{1}{n}[E(X_1) + E(X_2) + \dots + E(X_n)],\\
+  =&amp; \frac{1}{n}[\mu + \mu + \dots + \mu] = \mu.
+\end{align}`
+
+---
+
+Unbiased variance (standard error): 
+
+`\begin{align}
+s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}\\
+  =&amp; \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
+\therefore\ SE =&amp; \frac{\sigma}{\sqrt{n}}.
+\end{align}`
+
+---
+
+## Two Principles of Statistical Inferences
+
+.pull-left[
+### Central limit theorem (CLT)
+
+For a random sample of n, X&amp;#772; fluctuate around &amp;mu; with an uncertainty;
+n &amp;rarr; + &amp;infin;, Pr(X&amp;#772;) ~ &amp;Nscr;
+]
+
+--
+
+.pull-right[
+### Law of large numbers (LLN)
+
+When n gets larger, X&amp;#772; is more concentrated around &amp;mu;.
+]
+
+--
+
+.center[
+
+When n gets larger...
+
+&amp;zwj;CLT: X&amp;#772; will distribute normally;    
+&amp;zwj;LLN: X&amp;#772; will approach to &amp;mu;
+
+]
+
+--
+
+.center[Contradictory?]
+
+---
+
+class: center, middle
+
+&lt;img src="images/ci_largeNumber.gif" height = 400 /&gt;
+
+???
+CLT shows the the shape, LLN shows the location of the center.
+
+Hint: A rule of thumb, N &gt; 30, large sample; for time series, N &gt; 80
+
+---
+
+## Standard Error
+
+How far could the sample mean disperse from the .red[population mean].
+
+SE(X&amp;#772;) = `\(\frac{s}{\sqrt{n}}\)`
+
+--
+
+E.g. Given the population mean as 69 and standard deviation as 3.2, how would the mean of a random sample of four observations fluctuate? 
+
+`\begin{align}
+E(\bar X) =&amp; \mu = 69\\
+\therefore SE(\bar X) =&amp; \frac{3.2}{\sqrt 4} = 1.6.
+\end{align}`
+
+---
+
+E.g. Given `\(\mu\)` = 72 and `\(\sigma\)` = 9, and a random sample of 10. Calculate the probabilities: 
+
+1. P(X &gt; 80); 
+1. P(X&amp;#772; &gt; 80)
+
+`\(Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z &gt; .89) =\)` 0.1867329;
+
+--
+
+`\(Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z &gt; 2.81) =\)` 0.0024771
+
+---
+
+## SE and Z-Score: Different Situations
+
+*Full data*
+
+`$$Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}$$`
+
+--
+
+*Proportion*
+
+In a sample of N, the sample proportion P fluctuates around the population proportion &amp;pi; with SE, `\(\sqrt{\frac{\pi(1 - \pi)}{n}}\)`. (Why?)
+
+&gt; Proof: 
+&gt; `\(\sigma^2 = E(X^2) - \mu^2 = \pi - \pi^2 = \pi(1 - \pi)\)`.
+&amp;there4; `\(\sigma = \sqrt{\pi(1 - \pi)}, SE = \sigma/\sqrt{n} = \sqrt{\frac{\pi(1 - \pi)}{n}}.\)`
+
+Then, `\(Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}\)`, the confidence interval: `\(\pi = P \pm Z\sqrt{\frac{P(1 - P)}{n}}.\)`
+
+---
+
+E.g., Given the Republican are 60% of the population, while the Democrats are 40. What's the probability that the Republican are the minority in a random sample of 100 people from the population?
+
+Minority means `\(P(\pi &lt; 0.5)\)`. Then, `\(Z = \frac{5 - 6}{\sqrt{\frac{6(1 - 6)}{100}}} = -2\)`, therefore, `\(P(Z &lt; -2) =\)` 0.0227501
+
+---
+
+## Small Population Sampling
+
+Remember sampling w.o. replacement? 
+
+Without replacement, SE of X&amp;#772; is reduced by `\(\sqrt{\frac{N - n}{N - 1}}\)` (finite population correction, FPC). &amp;rArr; More uncertainty. 
+
+--
+
+E.g., *Sampling 1*:  n = 1. Then `\(SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}\)`, no changes; 
+
+*Sampling all*: n = N, SE = 0. 
+
+*Large sample of a large population*: n = 1000, N = 100,000,000, the reductive factor is `\(\sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999\)`, little changes.
+
+*Large sample of a small population*: n = 100, N = 108, the reductive factor is `\(\sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075\)`, some changes.
+
+---
+
+## Wrap Up
+
++ Hypothesizing
+    + Random variable
+    + Probability vs. Likelihood
+    + MLE
++ Hypothesis test
+    + IID
+    + Reliable
+    + Central limit theory + Law of large number
+    + SE
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
