@@ -5,33 +5,53 @@ author:
 - Shuai Jin, University of Massachusetts, Boston
 - Yue Hu, Tsinghua University
 - Tianguang Meng, Tsinghua University
-# date: "`r Sys.Date()`"
+date: "2021-10-14"
 output:
   xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
     css: 
       - default
-      - zh-CN_custom.css 
-      - styles.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    chakra: libs/remark-latest.min.js
+      - zh-CN_custom.css
+      - style_ui.css
     nature:
       highlightStyle: github
       highlightLines: true
+      highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, tidyverse, icon)
+
+p_load(
+  knitr, icons, xaringanExtra, tidyverse
+) # data wrangling # data wrangling
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
+
+# Functions preload
+set.seed(313)
 ```
 
-
-## Object
+## Objective
 
 Inequality &mdash;?&rarr; Political Trust
 
-+ Inequality .navy[bad], but .red[how]?
-+ Macro &rarr; micro, but how?
++ Inequality bad, but .red[how]?
++ Macro &rarr; micro, but .red[how]?
 
 ---
 
@@ -53,89 +73,44 @@ Happiness.navy[&darr;]
 
 
 Life expectancy.navy[&darr;]Infant mortality.red[&uarr;]   
+
 Mental illness.red[&uarr;]Drug abuse.red[&uarr;]    
+
 Obesity.red[&uarr;]Child well-being.navy[&darr;]    
+
 Education performance.navy[&darr;]   
+
 Teenage births.red[&uarr;] Homicides.red[&uarr;]    
-Imprisonment rates.red[&uarr;]   
-......
+
+Imprisonment rates.red[&uarr;]......
 
 --
 
-.magenta[*Bad, bad inequality*]
+.red[*Bad, bad inequality*, but mechanisms?]
 
 ---
 
-## Inequality and Politics
+## Why Should We Care: Inequality, Perception, and Common Prosperity
 
-### Individual
+**Theoretically** 
 
-Inequality.red[&uarr;]    
-&dArr;    
-Democratic support.navy[&darr;]
++ System &rarr; individual
 
 --
 
-### Institutional
+**Empirically**
 
-Democratic engagement.navy[&darr;]    
-Representation.navy[&darr;]   
-Responsiveness.navy[&darr;]
++ Experience of inequality governance from the Chinese case
 
+--
 
----
+**Practical**
 
-## Inequality and Politics
-
-
-### Individual
-
-Inequality.red[&uarr;] &lArr; Government performance    
-&dArr;    
-Democratic support.navy[&darr;] &lArr; Public evaluation
-
-### Institutional
-
-Democratic engagement.navy[&darr;]    
-Representation.navy[&darr;]   
-Responsiveness.navy[&darr;]
-
-
----
-
-## Inequality and Politics
-
-### Individual
-
-Government performance.large[&#8668;].red[Retrospective?]    
-&dArr;    
-Public evaluation
-
-### Institutional
-
-Democratic engagement.navy[&darr;].large[&#8668;].red[Other regimes?]   
-Representation.navy[&darr;]   
-Responsiveness.navy[&darr;]
-
++ Potential Paths towards Common Prosperity
+    + Social welfare
+    + Perceptive satisfaction
+    
 ???
-
-+ whether citizens perceive inequality correctly
-+ consider it a priority or respond to inequality at all
-
-a reason of the above is the democracy---political trust is regarded as democratic supports, but inequality is also severe in others
-
-
----
-
-## Goal
-
-1. Political trust in general
-    + Case of China
-
-???
-
-1. Prominent authoritarian state
-1. One of the most unequal countries in the world in terms of income and wealth distribution
 
 十九大报告提出，中国特色社会主义进入新时代，我国社会主要矛盾已经转化为人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾
 
@@ -143,43 +118,48 @@ a reason of the above is the democracy---political trust is regarded as democrat
 谢宇 等 2012： economic inequality as a byproduct of economic development
 
 周英男、金帅 2018 The China Quarterly，Lei, Ya-Wen 2020 Socius 在省级发现了负相关系
-吴晓刚 李 jun 2017 心理压力
+吴晓刚 李jun 2017 心理压力
 
 Luo, Weixiang, and Yu Xie. 2020 actual life loss
 
---
++ Social welfare: 公共福利能否缓解不平等带来的影响
++ Perceptive satisfaction：是什么影响满意程度
 
-1. Research of mechanisms
-    + Social conflict
-    + Governance inequality
-    + Judicial injustice
-    + Corruption
-    
-???
-
-Conflict theory: Inequality reduces social capital, generates distrust and social conflicts, then make governance difficult.
-Relative power theory: Inequality reduce social conflicts, John Galbraith 1983, third face of power, but also lower trust
-
-Governance inequality: unequal distribution of resources in society leads to unequal influences in politics, biased governance
-
-judicial justice: the last resort for citizens 
-
-Corruption
-
-Uslaner (2011) illustrated that economic inequality leads to high levels of corruption and low levels of service delivery, which then reduces trust in government
-    
 ---
 
-## Hypotheses
+## How Inequality Affects Perceptions: Two Competitive Models
 
-Inequality (.red[&uarr;]) &rArr;
+.pull-left[
+<img src="images/theory_OEM.png" height = 500>
 
-1. Social conflict (.red[&uarr;] vs. .navy[&darr;]) 
-1. Governance equality (.navy[&darr;])
-1. Judicial justice (.navy[&darr;])
-1. Corruption (.red[&uarr;])
+]
 
-&rArr; Political trust (.navy[&darr;])
+--
+
+.pull-right[
+<img src="images/theory_MEM.png" height = 500>
+]
+
+
+---
+
+## Three Influencing Paths
+
+.center[
+Path 1: *Governance inequality*   
+Economic Inequality &rarr; Class Discrimination  &rarr; Lower Trust
+
+Path 2: *Government Non-responsiveness*   
+Economic Inequality &rarr; Low responsiveness on average &rarr; Lower Trust
+
+Path 3: *Judicial Injustice**    
+Economic Inequality &rarr; Imbalance sources and odds in judicial affairs &rarr; Lower Trust
+
+Path 4: *Anti-Corruption Inadequacy*    
+Economic Inequality &rarr; Dissatisfaction of anti-corruption &rarr; Lower Trust
+]
+
+
 
 ---
 
@@ -187,13 +167,18 @@ Inequality (.red[&uarr;]) &rArr;
 
 .pull-left[
 
-### Data
+Data:
 
-1% National Population Sampling Survey 2015
+*Chinese Household Finance Survey* (CHFS) 2013
 
-+ 1.37 million
++ 28,141 households from 29 provinces 
++ Representative income data for Gini coefficient
 
-China Urban Governance Survey 2015
+*China Urban Governance Survey* (CUGS) 2015
+
++ 3,513 from 50 prefectures 
++ Later than CHFS
++ Political perceptions
 
 ]
 
@@ -201,11 +186,12 @@ China Urban Governance Survey 2015
 
 .pull-right[
 
-### Method
+Method:
 
-Causal mediation analysis
+*Causal mediation analysis*
 
-Multi-mediator estimation
++ Multi-mediator estimation
++ Trust of central and local governments
 
 ]
 
@@ -213,66 +199,30 @@ Multi-mediator estimation
 
 Imai 2014, mediation analysis for causal mechanism and non binary treatment
 
----
-
-## Measurement
-
-### DVs
-
-Social conflicts (3 * 2), governance inequality (2), judicial injustice (1), corruption (1)
-
-???
-
-参与游行/示威/群体性事件, 在网上批评政府官员或政策, 在网上讨论游行/示威/群体性事件
-
-political efficacy + 在我国，人人都得到了政府的公平对待
-
-我国法院/检察院维护了司法公正
-
-反腐工作的满意程度
-
---
-
-### IV
-
-SES Gini at prefectural level
-
-???
-
-level of education, occupational prestige, value of cars owned, type of social security, and type of health care
-
-the most spatially concrete and temporarily updated measurement of socioeconomic inequality of China in the Xi era
-
---
-
-### Controls
-
-Individual and prefectural
 
 ---
 
-## Results
+## Results: Does Inequality Alter the Paths
 
-<img src="images/inequality2efficacyPlots-1.png" height = 500 />
+<img src="images/inequality2efficacyPlots-1.png" height = 400 />
 
 ---
 
-<img src="images/mediationCenter-1.png" height = 700 />
+## Results: Does Paths Influence Trust
+
+.center[<img src="images/mediation.png" height = 500 />]
 
 ---
 
 ## Conclusion
 
-1. Over 90%
+1. Over 90% of the effects from inequality to trust: No need to know inequality
 1. Mechanisms
-    + Social Conflicts &asymp; Governance Inequality < Judicial Inequality < Corruption
+    + Governance inequality < ... < Anti-Corruption
 1. Central vs. Local
-    + Corruption
-    + Governance inequality (Reversed hierarchical trust?)
+    + Judicial justice
+    + Responsiveness
 
-???
-
-Corruption affects the local more
 
 ---
 
@@ -280,36 +230,12 @@ class: center, middle
 
 # Thank you!
 
-`r icon::fa("envelope", size = "lg")`&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+`r feather_icons("mail")`&nbsp;[yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
-`r icon::fa("globe", size = "lg")`&nbsp; https://sammo3182.github.io/
+`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/
 
-`r icon::fa("github", size = "lg")`&nbsp; [sammo3182](https://github.com/sammo3182)
+`r feather_icons("github")`&nbsp; [sammo3182](https://github.com/sammo3182)
 
----
-
-## SES Indicators
-
-.scroll-output[
-
-```{r ses, echo=FALSE}
-options(knitr.kable.NA = '') # hide "NA" in the table 
-
-tibble::tribble(
- ~Coding,          ~Education,                                                  ~`Job Prestige`,                ~`Car Value`,                                                        ~`Social Security`,                                              ~`Health Care`,
-      1L,         "No school",                                                      "Farmers",                  "No car",                                                           "No coverage",                                             "No coverage",
-      2L,    "Primary school",                        "Manufacturing, transportation workers",       "Under 100,000 RMB",                          "Social Pension Insurance for Rural Residents",                 "New Rural Cooperative Medical Insurance",
-      3L,     "Middle school",                                              "Service workers",   "100,000 - 200,000 RMB",              "Social Pension Insurance for Non-working Urban Residents", "Basic Medical Insurance for Non-working Urban Residents",
-      4L,       "High school",                                                       "Clerks",   "200,000 - 300,000 RMB",                      "Social Pension Insurance for Urban Working Group",         "Basic Medical Insurance for Urban Working Group",
-      5L, "Vocational school",                                                "Professionals",   "300,000 - 500,000 RMB", "Pension Insurance for Employees in Government and Public Institutions",                       "Publicly Funded Free Medical Care",
-      6L,    "Junior college", "Government officials, principals in public or private sector", "500,000 - 1,000,000 RMB",                                                                      NA,                                                        NA,
-      7L,           "College",                                                             NA,   "Above one million RMB",                                                                      NA,                                                        NA,
-      8L,   "Graduate school",                                                             NA,                        NA,                                                                      NA,                                                        NA
- ) %>% kable(format = "html")
-
-```
-
-]
 
 ---
 
