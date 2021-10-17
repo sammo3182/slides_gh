@@ -111,9 +111,13 @@ Remember Variance?
 
 .center[&sigma;<sup>2</sup><sub>X</sub> = &sum;(X - &mu;<sub>X</sub>)<sup>2</sup>p(x) = &sum;(X - &mu;<sub>X</sub>).red[(X - &mu;<sub>X</sub>)]p(x)].
 
+--
+
 Then covariance is:
 
 .center[&sigma;<sub>X, Y</sub> = &sum;(X - &mu;<sub>X</sub>).red[(Y - &mu;<sub>Y</sub>)]p(x, y)].
+
+--
 
 In other words, covariance is literally .red[co]-variance.
 
@@ -126,10 +130,13 @@ For a population
 
 $$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}.$$
 
+--
 
 For a sample
 
 $$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$$
+
+--
 
 Multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$, a.k.a., partial correlation.
 
@@ -144,6 +151,8 @@ class: middle
 2\. Linear Relationship
 ]
 
+--
+
 ## Properties 
 
 1. &rho;&in; [-1, 1], 0 independent.
@@ -157,9 +166,9 @@ class: middle
 
 class: bottom, inverse
 
-## When the Assumption Does Note Hold
+## When the Assumption Does Not Hold
 
-# Non-parametric Tests
+# Non-Parametric Tests
 
 ---
 
@@ -172,7 +181,7 @@ class: bottom, inverse
 Alternative: &tau; & &rho;
 ]
 
-
+--
 
 ## Terminology: Census of Ranking Pairs
 
@@ -218,6 +227,8 @@ $$\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},$$
 .footnote[
 \* In fact, still based on population parameters, so one can do significant test by $z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$.
 ]
+
+--
 
 .right-column[
 
@@ -288,7 +299,6 @@ c&={\text{Number of columns}}.
 
 ---
 
-
 ## Alternative: Spearman &rho;
 
 * "Non-parametric" version of Pearson R
@@ -298,7 +308,7 @@ $$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname 
 
 $rg$: The rank of the variable
 
-
+--
 
 When all n ranks are distinct integers (no tie):
 
@@ -310,20 +320,29 @@ https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation
 
 ---
 
+class: center, middle
+
 ## r vs. &rho; vs. &tau;
 
-1. r vs. &tau; & &rho;
-    + r: Linear relationship;
-    + &tau; & &rho;: Monotonic relationship.
+r vs. &tau; & &rho;:
 
-1. &rho; & &tau; 
-    + Non-parametric;
-    + Useful when continuity is *violated*;
-    + Working for ordinal. 
-    
-1. &rho; vs. &tau;: 
-    + &tau; is more robust than &rho;;
-    + &rho; has less cost than &tau;.
++ r: Linear relationship;
++ &tau; & &rho;: Monotonic relationship.
+
+--
+
+&rho; & &tau;:
+
++ Non-parametric;
++ Useful when continuity is *violated*;
++ Working for ordinal. 
+
+--
+
+&rho; vs. &tau;: 
+
++ &tau; is more robust than &rho;;
++ &rho; has less cost than &tau;.
 
 ---
 
@@ -357,8 +376,6 @@ E.g., The partisan distribution of American fathers and sons. How do we know if 
 
 class: small
 
-E.g., The partisan distribution of American fathers and sons. How do we know if father's partisanship affect their sons? 
-
 | Father/Son 	| D  	| R  	| I  	| Total 	|
 |------------	|----	|----	|----	|-------	|
 | D          	| 45 	| 5  	| 10 	| 60    	|
@@ -374,13 +391,17 @@ $H_0:$ Sons' party ID has no relation with their fathers' party ID; formally, $\
 
 &alpha; = 0.05.
 
+--
+
 Then, let's calculate the expectations, e.g., E(D<sub>f</sub>, D<sub>s</sub>) = 50/100 &times; 60/100 &times; 100 = 30. (What's this?)
 
 $$\chi^2 = \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\approx 56.07$$. 
 
 d.f.: (r - 1)(c - 1) = (3 - 1)(3 - 1) = 4.
 
-Then, $\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`< $\chi^2_{observed}$. H<sub>0</sub> is rejected.
+--
+
+$\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`< $\chi^2_{observed}$. H<sub>0</sub> is rejected.
 
 ---
 
@@ -403,7 +424,7 @@ Solution: &Phi; and Cramer's V
 
 ---
 
-## Association for Matched Sample
+## Association for Matched Samples: Ranking
 
 | Observation | Test 1        | Test 2        | &Delta;                       |
 |-------------|---------------|---------------|-------------------------------|
@@ -413,9 +434,13 @@ Solution: &Phi; and Cramer's V
 
 Goal: whether test 1 and test 2 yield identical results.
 
+--
+
 + \+: X<sub>i</sub> > Y<sub>i</sub>;
 + \-: X<sub>i</sub> < Y<sub>i</sub>;
 + =: X<sub>i</sub> = Y<sub>i</sub>;
+
+--
 
 *Expectation*: if test 1 and 2 are identically distributed, the probability of &Delta; to be + or - should follow the binomial distribution. That is, *H<sub>0</sub>: Pr(+) = Pr(-) = 0.5*.
 
@@ -450,7 +475,6 @@ Pr(n_-\geq 7) =& Pr(n_- = 7) + Pr(n_- = 8)\\
 =& 0.03125 + 0.0039 = 0.03516 < 0.05.
 \end{align}
 ]
-
 ]
 
 ---
@@ -467,6 +491,8 @@ Pr(n_-\geq 7) =& Pr(n_- = 7) + Pr(n_- = 8)\\
     + $Pr(-) = \sum^{n_+}_{j = 0}Pr(n_- + j)$;
 1. Compare the Pr(+/-) with &alpha.
 ]
+
+--
 
 .pull-right[
 Hint:
@@ -490,6 +516,9 @@ Although claiming non-parametirc, many of them calculate the significance accord
 ## Normal Approximation of Sign Test
 
 (Often used when n > 10, why? Well...)
+
+--
+
 .pull-left[
 Using normal distribution to estimate sign tests:
 
@@ -501,6 +530,10 @@ x + 0.5, if x < \frac{n}{2}\\
 x- 0.5, if x < \frac{n}{2}
 \end{cases}
 ]
+
+.footnote[\* &pm;0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.]
+
+--
 
 .pull-right[
 e.g., n = 8, then $Pr(n_-\geq 7)$ ?
@@ -514,8 +547,6 @@ Then, Pr(Z &geq; 1.77) &approx; 0.038 < 0.05.
 
 ]
 
-.footnote[\* &pm;0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.]
-
 ---
 
 ## Advanced Version of Sign Test
@@ -523,6 +554,8 @@ Then, Pr(Z &geq; 1.77) &approx; 0.038 < 0.05.
 Problems of sign test? 
 
 &rArr; Wilcoxon signed-rank test
+
+--
 
 1. Calculate the d and .red[|d|];
 1. Sort these quantities, and record their rankings as R<sub>i</sub> so that 0 < |d<sub>R1</sub>| < |d<sub>R2</sub>| <...< |d<sub>Rn</sub>|.
@@ -551,6 +584,8 @@ Sign test ony identify the sign but not the magnitude, insufficiently using the 
 | 8           | 65     | 74     | −9      | 8    |
 ]
 
+--
+
 .pull-right[
 ```{r signedRank_tb}
 tb_sr <- tibble::tribble(
@@ -571,6 +606,8 @@ wilcox.test(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE)
 ```
 
 ]
+
+--
 
 + When tie happens, using Monte Carlo conditional p-value (`coin::wilcox_test`) to conduct outcomes .
 + When n > 25, a normal approximation can be also conducted.
@@ -628,6 +665,8 @@ Runs test means to test whether an item comes from population 1 and population 2
 | A     | 9  | 22 | 65 | 34 | 17 | 4  | 31 | 28 |
 | B     | 58 | 53 | 26 | 11 | 52 | 51 | 8  |    |
 
+--
+
 .center[&dArr;]
 
 | 4 | 8 | 9 | 11 | 17 | 22 | 26 | 28 | 31 | 34 | 51 | 52 | 53 | 58 | 64 |
@@ -638,7 +677,7 @@ Runs test means to test whether an item comes from population 1 and population 2
 
 ---
 
-## Example 
+## Example
 
 ```{r runs, echo=TRUE}
 vec_runs1 <- rep(c(0,1), times = 5)
@@ -680,6 +719,8 @@ Analysis of variance: A systematic way of variable comparison in the context of 
 * Equivalent to t-test
 ]
 
+--
+
 .pull-right[
 When there are more than one treatment group, ANOVA is more useful to reduce the risk of Type I.
 
@@ -707,6 +748,8 @@ When there are more than one treatment group, ANOVA is more useful to reduce the
 + SST: Variance between the samples;
 + SSE: Variance within the samples.
 
+--
+
 | Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
 |-----------	|-----------------------------------------------	|-------	|----------------------------------	|
 | Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
@@ -714,6 +757,7 @@ When there are more than one treatment group, ANOVA is more useful to reduce the
 | Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-K} = MST/MSE$ 	|
 
 $$F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\ of\ Unexplained\ Variance}$$
+
 ---
 
 ## Example
@@ -758,6 +802,7 @@ $H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
 \end{align}
 ]
 
+--
 
 | Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
 |-----------	|-----------------------------------------------	|-------	|----------------------------------	|
@@ -819,9 +864,12 @@ $H_1: \mu_{PS} \neq \mu_{SO} \neq \mu_{PY}.$
 
 &alpha; = 0.05.
 
+--
+
 $\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83$;
 $\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.$
-$\bar{\bar{X}} = 33.72$
+
+$\bar{\bar{X}} = 33.72.$
 
 ---
 
@@ -834,14 +882,18 @@ For factor A (major), $SS_A = 6\times [(30.8 - 33.72)^2 + (33.5 - 33.72)^2 + (36
 
 $MSA = SS_A/(a - 1) = 109.48/(3 - 1)$
 
+--
+
 For factor B (GPA), $SS_B = 3\times [(45.67 - 33.72)^2 + \dots + (25 - 33.72)^2] = 854.94$
 
 $MSB = 854.94 / (6 - 1)$
 
+--
+
 $SST = \sum^a\sum^b(X_{ij} - \bar{\bar{X}})^2 = 1015.61$
 $SSE = SST - SS_A - SS_B = 52.2$
 
-Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}$ is 10.4 > critical F `r qf(.975, 2, 10)`, reject $H_0$.
+Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}$ is 10.4 > critical F `r round(qf(.975, 2, 10), digits = 4)`, reject $H_0$.
 
 ---
 
@@ -852,6 +904,8 @@ Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(
 1. Independence of cases (Type I &darr;)
 1. No large outliers (Type II &darr;)
 1. Large sample (Type I & II &darr;)
+
+--
 
 When any one of them is not held,
 
@@ -894,6 +948,8 @@ group_by(PlantGrowth, group) %>%
   knitr::kable()
 ```
 
+--
+
 ```{r kw-test, echo=TRUE}
 kruskal.test(weight ~ group, data = PlantGrowth)
 ```
@@ -903,6 +959,8 @@ kruskal.test(weight ~ group, data = PlantGrowth)
 ## Two-Way Variance-Rank: Friedman Test
 
 An extension of the sign test, and also a special case of Durbin test. 
+
+--
 
 E.g., Person's recovery score after taking four types of drugs. The type 1 is the placebo. 
 
@@ -915,6 +973,8 @@ df_drug <- data.frame(person = rep(1:5, each=4),
 
 glimpse(df_drug)
 ```
+
+--
 
 ```{r friedman-test, echo=TRUE}
 friedman.test(y = df_drug$score,
