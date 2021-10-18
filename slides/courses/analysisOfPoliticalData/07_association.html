@@ -496,7 +496,8 @@ binom.test(7,8, p = .5, alternative = "greater", conf.level = 0.95)
 ## 	Exact binomial test
 ## 
 ## data:  7 and 8
-## number of successes = 7, number of trials = 8, p-value = 0.03516
+## number of successes = 7, number of trials = 8,
+## p-value = 0.03516
 ## alternative hypothesis: true probability of success is greater than 0.5
 ## 95 percent confidence interval:
 ##  0.5293206 1.0000000
@@ -556,6 +557,11 @@ Problems of sign test?
 
 &amp;rArr; Wilcoxon signed-rank test
 
+???
+
+Sign test ony identify the sign but not the magnitude, insufficiently using the data.
+
+
 --
 
 1. Calculate the d and .red[|d|];
@@ -564,11 +570,7 @@ Problems of sign test?
     + `\(T^{+}=\sum _{d_{i}&gt;0}R_{i},\)`
     + `\(T^{-}=\sum _{d_{i}&lt;0}R_{i}.\)`
 
-1. Compare the Pr(T) with &amp;alpha.
-
-???
-
-Sign test ony identify the sign but not the magnitude, insufficiently using the data.
+1. Compare the Pr(T) with &amp;alpha;.
 
 ---
 
@@ -596,13 +598,15 @@ wilcox.test(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE)
 ```
 
 ```
-## Warning in wilcox.test.default(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE): cannot
-## compute exact p-value with ties
+## Warning in wilcox.test.default(tb_sr$Test_1,
+## tb_sr$Test_2, paired = TRUE): cannot compute exact
+## p-value with ties
 ```
 
 ```
 ## 
-## 	Wilcoxon signed rank test with continuity correction
+## 	Wilcoxon signed rank test with continuity
+## 	correction
 ## 
 ## data:  tb_sr$Test_1 and tb_sr$Test_2
 ## V = 1.5, p-value = 0.02471
@@ -653,6 +657,8 @@ Procedure:
 1. Sorting the quantities
 1. Giving those from S1 as 0 and those from S2 1 within their ranking order.
 1. Testing whether the 0/1 occure stocastically.
+
+When n&lt;sub&gt;1&lt;/sub&gt; &amp;geq; 20, n&lt;sub&gt;2&lt;/sub&gt; &amp;geq; 20, one can use normal approximation
 
 ]
 
@@ -728,7 +734,8 @@ runs.test(vec_runs1)
 ## 	Runs Test
 ## 
 ## data:  vec_runs1
-## statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n = 10, p-value = 0.00729
+## statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n
+## = 10, p-value = 0.00729
 ## alternative hypothesis: nonrandomness
 ```
 
@@ -741,7 +748,8 @@ runs.test(vec_runs2)
 ## 	Runs Test
 ## 
 ## data:  vec_runs2
-## statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n = 10, p-value = 0.00729
+## statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n
+## = 10, p-value = 0.00729
 ## alternative hypothesis: nonrandomness
 ```
 
@@ -754,7 +762,8 @@ runs.test(vec_runs3)
 ## 	Runs Test
 ## 
 ## data:  vec_runs3
-## statistic = -1.3416, runs = 4, n1 = 5, n2 = 5, n = 10, p-value = 0.1797
+## statistic = -1.3416, runs = 4, n1 = 5, n2 = 5, n
+## = 10, p-value = 0.1797
 ## alternative hypothesis: nonrandomness
 ```
 
@@ -1012,7 +1021,8 @@ kruskal.test(weight ~ group, data = PlantGrowth)
 ## 	Kruskal-Wallis rank sum test
 ## 
 ## data:  weight by group
-## Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842
+## Kruskal-Wallis chi-squared = 7.9882, df = 2,
+## p-value = 0.01842
 ```
 
 ---
@@ -1029,9 +1039,9 @@ E.g., Person's recovery score after taking four types of drugs. The type 1 is th
 ```
 ## Rows: 20
 ## Columns: 3
-## $ person &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5
-## $ drug   &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4
-## $ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20, 18, 30, 38, 34, 20, 44, 26, 28,~
+## $ person &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, ~
+## $ drug   &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, ~
+## $ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20,~
 ```
 
 --
@@ -1048,7 +1058,8 @@ friedman.test(y = df_drug$score,
 ## 	Friedman rank sum test
 ## 
 ## data:  df_drug$score, df_drug$drug and df_drug$person
-## Friedman chi-squared = 13.56, df = 3, p-value = 0.00357
+## Friedman chi-squared = 13.56, df = 3, p-value =
+## 0.00357
 ```
 
 &amp;rArr; Different type of drugs lead to different type of outcomes.
