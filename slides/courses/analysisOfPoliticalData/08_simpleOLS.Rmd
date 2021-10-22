@@ -1,8 +1,9 @@
 ---
 title: "Simple OLS and Properties of Estimators"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,12 +12,12 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 ```{r setup, include = FALSE}
@@ -26,61 +27,31 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  knitr, # dependency
-  descr, stringr, broom, tidyverse
-) # data wrangling # data wrangling
+  tidyverse, icons, xaringanExtra
+) 
+
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
 
 # Functions preload
 set.seed(313)
+
+theme_set(theme_minimal())
 ```
-
-class: small
-
-## The Path
-
-&zwj;Genre: Hypothesis testing
-+ Uncertainty: Confidence intervals
-+ Statistical significance
-
---
-
-.pull-left[
-
-### Path We've Passed
-
-One variable
-+ Probability theory
-+ Distribution
-
-&darr;    
-
-Variable  comparison
-+ Difference of means (.navy[t score])
-+ Cov & cor (.navy[r/&tau;/&rho;, &chi;<sup>2</sup>/&Phi;/V])
-+ ANOVA (.navy[F score])
-
-&rArr;
-]
-
---
-
-.pull-right[
-
-### Path Foward
-
-+ Single variable (.red[OLS])
-+ Multivariate (.red[Multiple OLS])
-+ Nonlinear effect (.red[Med/Mod])
-+ Generalized linear (.red[MLE])
-
-]
-
----
 
 class: inverse, bottom
 
-## Understanding OLS
-# A Methodological View
+A Methodologist View
+# Understanding OLS
 
 ---
 
@@ -95,49 +66,92 @@ class: inverse, bottom
     + Coefficients
     + Variances/SEs
 
+
 ---
 
-## Road to OLS
+## The Path
 
-### Expectation:
+Genre: Hypothesis testing
++ Uncertainty: Confidence intervals
++ Statistical significance
 
+.pull-left[
+*Path We've Passed*
+
+One variable
++ Probability theory
++ Distribution
+
+Variable comparison
++ Difference of means (t score)
++ Cov & cor (r/&tau;/&rho;, &chi;<sup>2</sup>/&Phi;/V)
++ ANOVA (F)
+]
+
+
+.pull-right[
+*Path Foward*
+
++ Single explanatory variable (.red[OLS])
++ Multiple explanatory variable (.red[Multiple OLS])
++ Nonlinear effect (.red[Med/Mod])
++ Generalized linear (.red[MLE])
+]
+
+
+---
+
+## Review: Expectation and Variance
+
+.pull-left[
 \begin{align}
 E(X)_{discrete} =& \sum^n_{i = 1} X_if(X_i)\\
-E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX.
+E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX.\\
+\sigma^2 =& E[X - E(X)]^2 
 \end{align}
+]
 
-### Variance:
-
+.pull-right[
 \begin{align}
-\sigma^2 = E[X - E(X)]^2 =& E[(X - \mu)^2]\\
+\sigma^2 =& E[X - E(X)]^2\\
+=& E[(X - \mu)^2]\\
               =& E(X^2 - 2X\mu + \mu^2)\\
               =& E(X^2) - 2\mu E(X) + \mu^2\\
               =& E(X^2) - \mu^2
 \end{align}
-
-???
-
-Expectation is the mean.
+]
 
 ---
 
-## Rule of Variance
+class: small
+
+## Review: Rule of Variance
 
 1. var(aX + b) = a<sup>2</sup>var(X);
-1. var(aX<sub>1</sub> + bX<sub>2</sub> + c) = a<sup>2</sup>var(X<sub>1</sub>) + b<sup>2</sup>var(X<sub>2</sub>) + 2ab&middot;cov(X<sub>1</sub>, X<sub>2</sub>).
-1. When X<sub>1</sub> is i.i.d., 
-var(a<sub>1</sub>X<sub>1</sub> + a<sub>2</sub>X<sub>2</sub> + ... + a<sub>n</sub>X<sub>n</sub>) = var(&sum;a<sub>i</sub>X<sub>i</sub>) = &sum;a<sub>i</sub>^2var(X<sub>i</sub>)
-1. $var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$
-1. cov(X, Y) = E(XY) - E(X)E(Y)
-    + When X = Y, cov(X, X) = E(X<sup>2</sup>) - [E(X)]<sup>2</sup> = var(X)
 
-
-???
 \begin{align}
 var(aX + b) =& E[(aX + b) - E(aX + b)]^2\\
             =& E[aX + b - aE(X) - b]^2\\
             =& E[aX - aE(X)]^2 = a^2E[X - E(X)]^2 = a^2var(X)
 \end{align}
+
+--
+
+1. var(aX<sub>1</sub> + bX<sub>2</sub> + c) = a<sup>2</sup>var(X<sub>1</sub>) + b<sup>2</sup>var(X<sub>2</sub>) + 2ab&middot;cov(X<sub>1</sub>, X<sub>2</sub>).
+
+--
+
+1. When X<sub>1</sub> is i.i.d., 
+var(a<sub>1</sub>X<sub>1</sub> + a<sub>2</sub>X<sub>2</sub> + ... + a<sub>n</sub>X<sub>n</sub>) = var(&sum;a<sub>i</sub>X<sub>i</sub>) = &sum;a<sub>i</sub>^2var(X<sub>i</sub>)
+
+--
+
+1. $var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$
+
+--
+
+1. cov(X, Y) = E(XY) - E(X)E(Y)
+    + When X = Y, cov(X, X) = E(X<sup>2</sup>) - [E(X)]<sup>2</sup> = var(X)
 
 \begin{align}
 cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
@@ -146,10 +160,9 @@ cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
           =& E(XY) - E(X)E(Y)
 \end{align}
 
-
 ---
 
-## Property of Estimator $\hat \theta$
+## Review: Property of Estimator $\hat \theta$
 
 * Unbiased: On average, the estimator gives the right answer, formally, $E(\hat\sigma) = \sigma.$
 
@@ -157,7 +170,7 @@ cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
 
 * Consistent: As the sample size increases, the variance decreases.
 
-```{r consistency, fig.height=4, fig.width=10}
+```{r consistency, fig.height=5, fig.width=10, fig.align='center'}
 ggplot(data.frame(x = c(0, 40)), aes(x = x)) +
   stat_function(fun = function(x) dgamma(x, shape = 9, scale = .5), aes(color = "small")) +
   stat_function(fun = function(x) dgamma(x, shape = 9, scale = 1), aes(color = "mediam")) +
@@ -178,7 +191,7 @@ Consistency: n1 < n2 < n3
 
 * Efficiency: Smallest variance among unbiased estimators
 
-```{r efficiency, fig.height=4, fig.width=10}
+```{r efficiency, fig.height=4, fig.width=10, fig.align='center'}
 ggplot(data.frame(x = c(-7, 7)), aes(x = x)) +
   stat_function(fun = function(x) dnorm(x, mean = 0, sd = 0.5), aes(color = "0.5")) +
   stat_function(fun = function(x) dnorm(x, mean = 0, sd = 1), aes(color = "1")) +
@@ -188,22 +201,33 @@ ggplot(data.frame(x = c(-7, 7)), aes(x = x)) +
   labs(color = "SD")
 ```
 
-* RMES: Root mean square error, $\sqrt{bias^2 + var}$
-    + Trade off a little bias against variance.
+--
+
+Sometimes, one may want to trade off a little bias against variance.
+
++ RMES: Root mean square error, $\sqrt{bias^2 + var}$
+
 
 ---
 
-## Ordinary Least Squares
+## Ordinary Least Squares (OLS)
 
-One type of simulation of the reality among many others
+One type of .red[simulation] of the reality among many others, unnecessarily the best one.
 
---
 
-### General guide of usage
+.center[General Guide of Usage]
 
-Always getting attention to the .navy[detailed] data.
-
+.bg-black.golden.ba.shadow-5.ph4.mt3[
 Don't let the data drive you, you .red[drive the data] with appropriate methods.
+]
+
+.center[
+.large[&dArr;]
+
+Always getting attention to the .red[detailed] data.
+]
+
+
 
 ---
 
@@ -215,25 +239,23 @@ How does some outcome variable Y change .navy[when] some explanatory variable X 
 
 E.g., are the political ideology of different partisan voters different? 
 
-&mu;<sub>D</sub> = &mu;<sub>R</sub>
+.center[H<sub>0</sub>: &mu;<sub>D</sub> = &mu;<sub>R</sub>]
 
-$\text{diff} = \frac{\bar X_R - \bar X_D}{SE}.$
+$$\text{diff} = \frac{\bar X_R - \bar X_D}{SE}.$$
 
 ???
 
-<img src="images/illustrateSimpleOLS.png" height = 200 />
+<img src="images/srf_illustrateSimpleOLS.png" height = 200 />
 
 ---
 
-## Linearity: A Strong, Strong Assumption
+## Linearity
 
-Y changes linearly with X.
+A crucial yet strong assumption
 
-In terms of the population regression function, formally,
-
+Y changes .red[linearly] with X. In terms of the population regression function, formally,
 .center[Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>]
 
----
 
 &zwj;Q: Which one shows a linear relationship between X and Y?
 
@@ -254,13 +276,20 @@ The last one isn't linear until redefining.
 
 ---
 
-## Uncertainty: Can't Be More Important
+## Uncertainty
+
+.center[
+The Signal of Being Scientific    
+u<sub>i</sub>: Things we don't know (or human errors).
+]
+
 
 
 \begin{align}
-E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + u_i|X_i)\\
-           =& E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i)\\
-           =& \beta_0 + \beta_1X_i + E(u_i|X_i)
+Y_i =& \beta_0 + \beta_1X_1 + u_i.\\
+E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
+           =& E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i),\\
+           =& \beta_0 + \beta_1X_i + E(u_i|X_i).
 \end{align}
 
 ???
@@ -269,37 +298,42 @@ $\beta_1X_i$ consistent
 
 E(u_i|X_i) assumed 0
 
----
+--
 
-## Sample Regression Function (SRF)
-
-\begin{align}
-Y_i =& \hat\beta_0 + \hat\beta_1X_i + \hat u_i\\
-    =& \hat Y_i + \hat u_i
-\end{align}
+### .center[Sample Regression Function (SRF)]
 
 \begin{align}
-Y_i =& E(Y_i|X_i) + u_i\\
-\Leftrightarrow u_i =& Y_i - E(Y_i|X_i)
+Y_i =& \hat\beta_0 + \hat\beta_1X_i + \hat u_i,\\
+    =& \hat Y_i + \hat u_i.\\
+Y_i =& E(Y_i|X_i) + u_i,\\
+\Leftrightarrow u_i =& Y_i - E(Y_i|X_i).
 \end{align}
 
-u<sub>i</sub>: Things we don't know (or human errors).
+
 
 ---
 
 ## Estimating Goal
 
-> Getting the .red[mean] right is a good thing. ---Frederick J. Boehmke
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+Getting the mean right is a good thing.
+
+.tr[
+---Frederick J. Boehmke
+]
+]
 
 .center[
+$u_i = Y_i - E(Y_i|X_i).$
+
 $\sum|\hat u_i| = 0$    
 &dArr;    
 $\hat u^2 = 0$  
 &dArr;    
-$\sum(Y_i - \hat Y_i)^2 = 0$    
-(or $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$)  
+$\sum(Y_i - \hat Y_i)^2 = 0,$    
+(or $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0.$)  
 &dArr;    
-$\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$
+$\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0.$ How ?
 ]
 
 ???
@@ -310,10 +344,12 @@ Minimizing expected ui
 
 class: center, middle
 
-$$\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$$
-.large[How to Minimizing?]
+## Minimizing u<sub>i</sub>
 
-.center[<img src="images/gaoNeng.gif" height="100"/>]
+ &hArr; &beta;<sub>0</sub> and &beta;<sub>1</sub> that make $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$
+
+
+.center[<img src="images/srf_gaoNeng.gif" height="300"/>]
 
 
 ???
@@ -326,12 +362,11 @@ $$\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$$
 
 class: small
 
-## &beta;<sub>1</sub><sup><img src="images/fsmrof.png" height="20"/></sup>
+## &beta;<sub>1</sub>
 
 
 \begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} =& -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i)\\
-=& 0\\
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} =& -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
 \Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =& 0\\
 \sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2\\
 \sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =& 0\\
@@ -342,30 +377,35 @@ class: small
 
 --
 
-\begin{align}
-Given \sum(X_i - \bar X)(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y)\\
-\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X)\\
-\sum (X_i - \bar X)(Y_i - \bar Y) =& \hat\beta_1\sum (X_i - \bar X)(X_i - \bar X)\\
-\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}.
-\end{align}
-
-???
-
+.pull-left[
 \begin{align}
 \sum X_i(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
                        =& \sum X_i(Y_i - \bar Y) - \bar X(\sum Y_i - \sum\bar Y)\\
                        =& \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
                        =& (\sum X_i - \bar X)(Y_i - \bar Y) \blacksquare
 \end{align}
+]
+
+???
 
  "Quod Erat Demonstrandum" which loosely translated means "that which was to be demonstrated".
 
+--
+
+.pull-right[
+\begin{align}
+Given \sum(X_i - \bar X)(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y)\\
+\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X)\\
+\sum (X_i - \bar X)(Y_i - \bar Y) =& \hat\beta_1\sum (X_i - \bar X)(X_i - \bar X)\\
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}.
+\end{align}
+]
 
 ---
 
 class: small
 
-## &beta;<sub>0</sub><sup><img src="images/fsmrof.png" height="20"/></sup>
+## &beta;<sub>0</sub>
 
 \begin{align}
 \frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
@@ -376,22 +416,25 @@ class: small
                         =& \bar Y - \hat\beta_1\bar X
 \end{align}
 
-???
+--
 
-$\hat\beta_0, \hat\beta_1$: Co-efficients;
+ Hint: $\hat\beta_0, \hat\beta_1$ are called .red[co]-efficients;
+
+.center["Normal equations"]
 
 \begin{align}
 \sum Y_i =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
 \sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
 \end{align}
 
-"Normal equations."
+???
+
+&beta;<sub>0</sub> is efficient (minimizng the u) depending on &beta;<sub>1</sub>
 
 ---
 
-class: small
 
-## Coefficient and Covariance
+## Coefficient
 
 \begin{align}
 \hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
@@ -411,216 +454,157 @@ $$\beta_1 = r_{X, Y}\frac{s_Y}{s_X} = r_{X,Y}.$$
 
 ---
 
-class: small
-
-## The Path (Revisit)
-
-.pull-left[
-
-### Path We've Passed
-
-.gray[
-One variable
-+ Probability theory
-+ Distribution
-
-&darr;    
-
-Variable comparison
-+ Difference of means (t score)
-]
-
-+ .magenta[Cov & cor] (.navy[r].gray[/&tau;/&rho;, &chi;<sup>2</sup>/&Phi;/V])
-
-.gray[
-+ ANOVA (F score)
-]
-
-&rArr;
-]
-
-.pull-right[
-
-### Path Foward
-
-+ .magenta[Single variable] (.red[OLS])
-.gray[
-+ Multivariate (Multiple OLS)
-+ Nonlinear effect (Med/Mod)
-+ Generalized linear (MLE)
-]
-]
-
----
-
-## Linearity (Revisit)<sup><img src="images/fsmrof.png" height="20"/></sup>
-
-Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$     
-then $\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i$. 
-
-
-+ A .red[linear] combination of errors
-+ Min/max(X) influences the estimation a lot.
-
-???
+## Linearity (Revisit)
 
 Remember $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
-
+.pull-left[
 \begin{align}
-\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
-            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)Y_i\\
-            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + u_i)\\
-            =& \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)u_i]\\
-            =& \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2},\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)Y_i,\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + u_i),\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)u_i],\\
+            =& \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}.
 \end{align}
+]
+
+--
+
+.pull-right[
+Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i$. 
+
++ A .red[linear] combination of errors
++ Min/max(X) influences a lot.
+]
 
 
 ---
 
-## Feature of Regression Coefficients
+## Characteristics of Regression Coefficients
 
 1. Calculated using .red[observed] data
 1. Unique point estimates
 1. SRF passes through $(\bar X, \bar Y)$
 1. $\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})$, $\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}$
-1. $\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0\\$<sup><img src="images/fsmrof.png" height="20"/></sup>
-1. $\sum X_i\hat u_i = cov(X_i, u_i) = 0$
-
-???
-
-&zwj;Proof:
-
-\#4: 
-
-\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} = -2\sum(Y_i - \hat{\beta_0} - \hat{\beta_1}X_i) =& 0\\
-\sum (Y_i-\hat Y_i) =& 0\\
-\sum{\hat u_i} =& 0\\
-\Rightarrow \frac{\sum{\hat u_i}}{n} = \bar{\hat u_i} =& 0 \blacksquare
-\end{align}
-
-\#5: 
-
-\begin{align}
-\sum X_i\hat u_i =& \sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})\\
-                 =& \sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})\\
-                 =& \sum [X_i (\hat u_i - \bar{\hat u_i}) - \bar X(\hat u_i - \bar{\hat u_i})]\\
-                 =& \sum X_i (\hat u_i - \bar{\hat u_i}) - \sum\bar X(\hat u_i - \bar{\hat u_i})\\
-                 =& \sum [X_i\hat u_i - X_i\bar{\hat u_i}] - \sum\bar X(\hat u_i - \bar{\hat u_i})\\
-                 =& \sum X_i\hat u_i - \sum\bar X\hat u_i + \sum\bar{\hat u_i} \\
-                 =& \sum X_i\hat u_i - n\bar X\sum\hat u_i + \sum\bar{\hat u_i}
-\end{align}
-
-\#6: 
-
-$\sum X_i\hat u_i =  \sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})\Rightarrow \frac{ \sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})}{n-1} = cov(X_i, u_i) = 0$
+1. $\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0$
+1. $\sum X_i\hat u_i = 0$
 
 ---
 
-## Uncertainty of OLS Estimators
+.pull-left[
+##  $\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0$
 
-.pull-left[<img src="images/tonyHorton.jpg" height = 500 />]
-
-.pull-right[
 \begin{align}
-\sigma^2 =& var(u_i|X)\\
-         =& var(Y_i - \hat\beta_0 - \hat\beta_1X_i|X)\\
-         =& \frac{\sum(\hat u_i^2)}{n - 2}\\
-         =& \hat\sigma^2
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& 0\\ -2\sum[Y_i - (\hat{\beta_0} + \hat{\beta_1}X_i)] =& 0\\
+\sum (Y_i-\hat Y_i) =& 0\\
+\sum{\hat u_i} =& 0\\
+\Rightarrow \frac{\sum{\hat u_i}}{n} = \bar{\hat u_i} =& 0 \blacksquare
 \end{align}
 ]
 
 --
 
-Why n-2?
+.pull-right[
+## $\sum X_i\hat u_i = 0$
+
+\begin{align}
+cov(X_i, u_i) =& 0,\\
+\frac{\sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})}{n-1} =& 0,\\
+\frac{\sum X_i\hat u_i}{n-1} =& 0. \blacksquare
+\end{align}
+]
+
+---
+
+## Uncertainty of OLS Estimators: &beta;<sub>1</sub>
+
+.pull-left[
+\begin{align}
+\sigma^2 =& var(u_i|X),\\
+         =& var(Y_i - \hat\beta_0 - \hat\beta_1X_i|X),\\
+         =& \frac{\sum(\hat u_i^2)}{n - 2},\\
+         =& \hat\sigma^2.
+\end{align}
+]
+
 
 ???
 
 n - 2: $\hat\beta_0, \hat\beta_1$
 
----
-class: small
+--
 
+.pull-right[
+.small[
 \begin{align}
 var(\hat \beta_1|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
                   =& var(\beta_1\sum k_iX_i + \sum k_iu_i|X)\\
-                  =& var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{is constant}\\
+                  =& var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
                   =& \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
                   =& \sum k_i^2 var(u_i|X)\\
                   =& \sum[\frac{X_i - \bar X}{\sum (X_i - \bar X)^2}]^2\sigma^2\\
                   =& \frac{\sum(X_i - \bar X)^2}{[\sum (X_i - \bar X)^2]^2}\sigma^2 = \frac{\sigma^2}{\sum (X_i - \bar X)^2}
 \end{align}
+]
+]
 
 --
 
 If u<sub>i</sub> is not independent, then cov(k, u) > 0, and this estimator is underestimated.
 
-(A.k.a, the assumption is .large[.red[IMPORTANT]])
+(That is, the assumption is .large[.red[IMPORTANT]])
 
 ---
 
 class: small
 
-\begin{align}
-var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X)\\
-                   =& var[\frac{\sum(\beta_0 + \beta_1X_i + u_i)}{n} - \hat\beta_1\bar X|X]\\
-                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X), \beta_0 + \beta_1X_i\text{constant and indp}\\
-                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X)\\
-                  =& \frac{var(\sum u_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X)\\
-                  =& \frac{n\sigma^2}{n^2} + \frac{\bar X^2\sigma^2}{\sum (X_i - \bar X)^2}\\
-                  =& \sigma^2[\frac{1}{n} + \frac{\bar X^2}{\sum (X_i - \bar X)^2}]\\
-                  =& \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]\\
-                  =& \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
-\end{align}
-
----
-
-## Wrap Up
-
-+ OLS: A simulation
-+ Regression: Get the mean right
-+ Linearity: Related as a line
-
-+ Population Regression function: 
-
-.center[Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>]
-
-+ Sample Regression Function
-
-$$Y_i = \hat\beta_0 + \hat\beta_1X_i + \hat u_i$$
-
----
+## Uncertainty of OLS Estimators: &beta;<sub>0</sub>
 
 \begin{align}
-\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
-=& r_{X, Y}\frac{s_Y}{s_X}\\
-\hat\beta_0 =& \bar Y - \hat\beta_1\bar X\\
-var(\hat \beta_1|X) =& \frac{\sigma^2}{\sum (X_i - \bar X)^2}\\
-var(\hat \beta_0|X) =& \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
+var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X),\\
+                   =& var[\frac{\sum(\beta_0 + \beta_1X_i + u_i)}{n} - \hat\beta_1\bar X|X],\\
+                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X), \beta_0 + \beta_1X_i\text{constant and independent},\\
+                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X),\\
+                  =& \frac{var(\sum u_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X),\\
+                  =& \frac{n\sigma^2}{n^2} + \frac{\bar X^2\sigma^2}{\sum (X_i - \bar X)^2},\\
+                  =& \sigma^2[\frac{1}{n} + \frac{\bar X^2}{\sum (X_i - \bar X)^2}],\\
+                  =& \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}],\\
+                  =& \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}.
 \end{align}
 
 ---
 
 ## Bonus: Theory
 
-General .navy[statement] to describe .red[causality] and relevant .red[phenomena].
+General statement to describe .red[causality] and relevant phenomena.
 
-+ Logical .magenta[consistency]
-+ Empirical .magenta[falsifiable]
+.center[<img src = "images/srf_conspiracy.jpg" height = 300>]
+
+???
+
+内华达51区（《美恐》S10 双面，怪诞小镇制片Alex Hirsch 新动画Inside job; 
+
+--
+
+.center[
+Scientific Theory
+
++ Logical consistency
++ Empirical .red[falsifiable]
+]
+
 
 ---
 
-## Good theory
+class: center, middle
 
-1. Large explanatory power
-    + Importance
-    + Range
-    + Applicability
-1. Parsimony
-1. Satisfying elaboration
-1. Clearly framed (formal?)
-1. Explaining important phenomena
-1. Prescriptive richness (+policy suggestion)
+## Good Scientific Theory
+
+--
+
+Large explanatory power
++ Importance
++ Range
++ Applicability
 
 ???
 
@@ -628,13 +612,35 @@ General .navy[statement] to describe .red[causality] and relevant .red[phenomena
 + Range: generality
 + Applicability: How often affecting in the reality
 
+--
+
+Parsimony
+
+--
+
+Satisfying elaboration
+
+--
+
+Clearly framed (formal?)
+
+--
+
+Explaining important phenomena
+
+--
+
+Prescriptive richness (+policy suggestion?)
+
 ---
+
+class: center
 
 ## Conspiracy
 
-.center[<img src="images/covid5G.jpg" height = 380 />]
+<img src="images/srf_covid5G.jpg" height = 380 />
 
-What makes a .red[conspiracy] different from a .navy[theory]? 
+What makes a conspiracy theory NOT a good scientific theory?
 
 ???
 
@@ -644,14 +650,14 @@ Rothschild family
 
 class: small
 
-## How to Test a Theory (Causal Inference)
+## How to Test a Theory
 
-1. Hoop tests: Predictions of high certitude and no uniqueness provide decisive negative test
-1. Smoking-gun tests: Predictions of high uniqueness and no certitude provide decisive positive tests:
-1. Double-decisive tests: Predictions of high uniqueness and high certitude
-1. Straw-in-the-wind tests: Predictions of low uniqueness and low certitude<sup>1</sup>
+| .small[Necessity\\Sufficiency]<sup>&midast;</sup> | Yes             | No                |
+|-----------------------|-----------------|-------------------|
+| Yes                   | Double-Decisive | Smoking Gun       |
+| No                    | Hoop            | Straw-in-the-Wind |
 
-.footnote[[1] Evera, Stephen Van. 1997. Guide to Methods for Students of Political Science. Ithaca: Cornell University Press.]
+.footnote[\* Evera, Stephen Van. 1997. Guide to Methods for Students of Political Science. Ithaca: Cornell University Press.]
 
 ???
 
@@ -659,3 +665,37 @@ class: small
 1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
 1. Double-decisive test: hoop + smoking-gun, like a camera record
 1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
+
+---
+
+## Wrap Up
+
+.pull-left[
++ OLS: A simulation
++ Regression: Get the mean right
++ Linearity: Related as a line
+
++ Population Regression function: 
+
+Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>
+
++ Sample Regression Function
+
+$Y_i = \hat\beta_0 + \hat\beta_1X_i + \hat u_i$
+]
+
+--
+
+.pull-right[
+\begin{align}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
+=& r_{X, Y}\frac{s_Y}{s_X}\\
+\hat\beta_0 =& \bar Y - \hat\beta_1\bar X\\
+var(\hat \beta_1|X) =& \frac{\sigma^2}{\sum (X_i - \bar X)^2}\\
+var(\hat \beta_0|X) =& \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
+\end{align}
+]
+
+--
+
+Good theory: Large explanatory power, parsimony, satisfying elaboration, clearly framed, explaining important phenomena, prescriptive richness.
