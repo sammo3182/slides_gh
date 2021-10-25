@@ -57,7 +57,7 @@ A Methodologist View
 
 ## Overview
 
-1. Road to OLS (Old stuff)
+1. Road to OLS
 1. OLS Principles
     + Goal
     + Model
@@ -75,6 +75,8 @@ Genre: Hypothesis testing
 + Uncertainty: Confidence intervals
 + Statistical significance
 
+--
+
 .pull-left[
 *Path We've Passed*
 
@@ -88,6 +90,7 @@ Variable comparison
 + ANOVA (F)
 ]
 
+--
 
 .pull-right[
 *Path Foward*
@@ -111,6 +114,8 @@ E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX.\\
 \end{align}
 ]
 
+--
+
 .pull-right[
 \begin{align}
 \sigma^2 =& E[X - E(X)]^2\\
@@ -127,7 +132,7 @@ class: small
 
 ## Review: Rule of Variance
 
-1. var(aX + b) = a<sup>2</sup>var(X);
+var(aX + b) = a<sup>2</sup>var(X);
 
 \begin{align}
 var(aX + b) =& E[(aX + b) - E(aX + b)]^2\\
@@ -137,20 +142,20 @@ var(aX + b) =& E[(aX + b) - E(aX + b)]^2\\
 
 --
 
-1. var(aX<sub>1</sub> + bX<sub>2</sub> + c) = a<sup>2</sup>var(X<sub>1</sub>) + b<sup>2</sup>var(X<sub>2</sub>) + 2ab&middot;cov(X<sub>1</sub>, X<sub>2</sub>).
+var(aX<sub>1</sub> + bX<sub>2</sub> + c) = a<sup>2</sup>var(X<sub>1</sub>) + b<sup>2</sup>var(X<sub>2</sub>) + 2ab&middot;cov(X<sub>1</sub>, X<sub>2</sub>).
 
 --
 
-1. When X<sub>1</sub> is i.i.d., 
+When X<sub>1</sub> is i.i.d., 
 var(a<sub>1</sub>X<sub>1</sub> + a<sub>2</sub>X<sub>2</sub> + ... + a<sub>n</sub>X<sub>n</sub>) = var(&sum;a<sub>i</sub>X<sub>i</sub>) = &sum;a<sub>i</sub>^2var(X<sub>i</sub>)
 
 --
 
-1. $var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$
+$var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$
 
 --
 
-1. cov(X, Y) = E(XY) - E(X)E(Y)
+cov(X, Y) = E(XY) - E(X)E(Y)
     + When X = Y, cov(X, X) = E(X<sup>2</sup>) - [E(X)]<sup>2</sup> = var(X)
 
 \begin{align}
@@ -162,7 +167,7 @@ cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
 
 ---
 
-## Review: Property of Estimator $\hat \theta$
+## Property of Estimator $\hat \theta$
 
 * Unbiased: On average, the estimator gives the right answer, formally, $E(\hat\sigma) = \sigma.$
 
@@ -214,12 +219,15 @@ Sometimes, one may want to trade off a little bias against variance.
 
 One type of .red[simulation] of the reality among many others, unnecessarily the best one.
 
+--
 
 .center[General Guide of Usage]
 
 .bg-black.golden.ba.shadow-5.ph4.mt3[
 Don't let the data drive you, you .red[drive the data] with appropriate methods.
 ]
+
+--
 
 .center[
 .large[&dArr;]
@@ -231,7 +239,7 @@ Always getting attention to the .red[detailed] data.
 
 ---
 
-## Regression in Social Science
+## OLS in a Substantive View
 
 How does some outcome variable Y change .navy[when] some explanatory variable X changes? 
 
@@ -249,13 +257,14 @@ $$\text{diff} = \frac{\bar X_R - \bar X_D}{SE}.$$
 
 ---
 
-## Linearity
+## OLS Component: Linear Estimator
 
 A crucial yet strong assumption
 
 Y changes .red[linearly] with X. In terms of the population regression function, formally,
 .center[Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>]
 
+--
 
 &zwj;Q: Which one shows a linear relationship between X and Y?
 
@@ -276,7 +285,7 @@ The last one isn't linear until redefining.
 
 ---
 
-## Uncertainty
+## OLS Component: Uncertainty
 
 .center[
 The Signal of Being Scientific    
@@ -316,7 +325,7 @@ Y_i =& E(Y_i|X_i) + u_i,\\
 ## Estimating Goal
 
 .bg-black.golden.ba.shadow-5.ph4.mt3[
-Getting the mean right is a good thing.
+Getting the .red[mean] right is a good thing.
 
 .tr[
 ---Frederick J. Boehmke
@@ -344,7 +353,7 @@ Minimizing expected ui
 
 class: center, middle
 
-## Minimizing u<sub>i</sub>
+## Minimizing Expected u<sub>i</sub>
 
  &hArr; &beta;<sub>0</sub> and &beta;<sub>1</sub> that make $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$
 
@@ -388,7 +397,7 @@ class: small
 
 ???
 
- "Quod Erat Demonstrandum" which loosely translated means "that which was to be demonstrated".
+ "Quod Erat Demonstrandum" (QED) which loosely translated means "that which was to be demonstrated".
 
 --
 
@@ -454,7 +463,7 @@ $$\beta_1 = r_{X, Y}\frac{s_Y}{s_X} = r_{X,Y}.$$
 
 ---
 
-## Linearity (Revisit)
+## Linear Coefficient (Revisit)
 
 Remember $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
 .pull-left[
@@ -479,7 +488,7 @@ Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \beta_
 
 ---
 
-## Characteristics of Regression Coefficients
+## Characteristics of OLS Coefficients
 
 1. Calculated using .red[observed] data
 1. Unique point estimates
@@ -515,7 +524,7 @@ cov(X_i, u_i) =& 0,\\
 
 ---
 
-## Uncertainty of OLS Estimators: &beta;<sub>1</sub>
+## Uncertainty of OLS Estimators (Revisit): &beta;<sub>1</sub>
 
 .pull-left[
 \begin{align}
@@ -557,7 +566,7 @@ If u<sub>i</sub> is not independent, then cov(k, u) > 0, and this estimator is u
 
 class: small
 
-## Uncertainty of OLS Estimators: &beta;<sub>0</sub>
+## Uncertainty of OLS Estimators (Revisit): &beta;<sub>0</sub>
 
 \begin{align}
 var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X),\\
@@ -570,10 +579,34 @@ var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X),\\
                   =& \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}],\\
                   =& \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}.
 \end{align}
+---
+
+## Wrap Up
+
+.pull-left[
++ OLS: A simulation
++ OLS Regression: Get the mean right
+    + Linear estimators
+    + Uncertainty
+
++ SRF: Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>
+]
+
+--
+
+.pull-right[
+\begin{align}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
+=& r_{X, Y}\frac{s_Y}{s_X}\\
+\hat\beta_0 =& \bar Y - \hat\beta_1\bar X\\
+var(\hat \beta_1|X) =& \frac{\sigma^2}{\sum (X_i - \bar X)^2}\\
+var(\hat \beta_0|X) =& \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
+\end{align}
+]
 
 ---
 
-## Bonus: Theory
+## Bonus: Evaluating Theory
 
 General statement to describe .red[causality] and relevant phenomena.
 
@@ -665,37 +698,3 @@ class: small
 1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.
 1. Double-decisive test: hoop + smoking-gun, like a camera record
 1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl.
-
----
-
-## Wrap Up
-
-.pull-left[
-+ OLS: A simulation
-+ Regression: Get the mean right
-+ Linearity: Related as a line
-
-+ Population Regression function: 
-
-Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + u<sub>i</sub>
-
-+ Sample Regression Function
-
-$Y_i = \hat\beta_0 + \hat\beta_1X_i + \hat u_i$
-]
-
---
-
-.pull-right[
-\begin{align}
-\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
-=& r_{X, Y}\frac{s_Y}{s_X}\\
-\hat\beta_0 =& \bar Y - \hat\beta_1\bar X\\
-var(\hat \beta_1|X) =& \frac{\sigma^2}{\sum (X_i - \bar X)^2}\\
-var(\hat \beta_0|X) =& \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}
-\end{align}
-]
-
---
-
-Good theory: Large explanatory power, parsimony, satisfying elaboration, clearly framed, explaining important phenomena, prescriptive richness.
