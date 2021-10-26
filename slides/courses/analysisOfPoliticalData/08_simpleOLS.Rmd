@@ -147,7 +147,7 @@ var(aX<sub>1</sub> + bX<sub>2</sub> + c) = a<sup>2</sup>var(X<sub>1</sub>) + b<s
 --
 
 When X<sub>1</sub> is i.i.d., 
-var(a<sub>1</sub>X<sub>1</sub> + a<sub>2</sub>X<sub>2</sub> + ... + a<sub>n</sub>X<sub>n</sub>) = var(&sum;a<sub>i</sub>X<sub>i</sub>) = &sum;a<sub>i</sub>^2var(X<sub>i</sub>)
+var(a<sub>1</sub>X<sub>1</sub> + a<sub>2</sub>X<sub>2</sub> + ... + a<sub>n</sub>X<sub>n</sub>) = var(&sum;a<sub>i</sub>X<sub>i</sub>) = &sum;a<sub>i</sub><sup>2</sup>var(X<sub>i</sub>)
 
 --
 
@@ -156,7 +156,8 @@ $var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \f
 --
 
 cov(X, Y) = E(XY) - E(X)E(Y)
-    + When X = Y, cov(X, X) = E(X<sup>2</sup>) - [E(X)]<sup>2</sup> = var(X)
+
++ When X = Y, cov(X, X) = E(X<sup>2</sup>) - [E(X)]<sup>2</sup> = var(X)
 
 \begin{align}
 cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
@@ -175,24 +176,7 @@ cov(X, Y) =& E[X - E(X)][Y - E(Y)]\\
 
 * Consistent: As the sample size increases, the variance decreases.
 
-```{r consistency, fig.height=5, fig.width=10, fig.align='center'}
-ggplot(data.frame(x = c(0, 40)), aes(x = x)) +
-  stat_function(fun = function(x) dgamma(x, shape = 9, scale = .5), aes(color = "small")) +
-  stat_function(fun = function(x) dgamma(x, shape = 9, scale = 1), aes(color = "mediam")) +
-  stat_function(fun = function(x) dgamma(x, shape = 9, scale = 2), aes(color = "large")) +
-  ylab("Probability Density") + 
-  xlab("X") +
-  labs(color = "Distribution")
-```
-
-???
-
-finite sample property    
-large sample property
-
-Consistency: n1 < n2 < n3
-
----
+--
 
 * Efficiency: Smallest variance among unbiased estimators
 
@@ -208,10 +192,11 @@ ggplot(data.frame(x = c(-7, 7)), aes(x = x)) +
 
 --
 
-Sometimes, one may want to trade off a little bias against variance.
-
 + RMES: Root mean square error, $\sqrt{bias^2 + var}$
 
+???
+
+Sometimes, one may want to trade off a little bias against variance.
 
 ---
 
@@ -242,7 +227,6 @@ Always getting attention to the .red[detailed] data.
 ## OLS in a Substantive View
 
 How does some outcome variable Y change .navy[when] some explanatory variable X changes? 
-
 --
 
 E.g., are the political ideology of different partisan voters different? 
@@ -373,7 +357,6 @@ class: small
 
 ## &beta;<sub>1</sub>
 
-
 \begin{align}
 \frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} =& -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
 \Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =& 0\\
@@ -388,10 +371,10 @@ class: small
 
 .pull-left[
 \begin{align}
-\sum X_i(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
+\sum X_i(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
                        =& \sum X_i(Y_i - \bar Y) - \bar X(\sum Y_i - \sum\bar Y)\\
-                       =& \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
-                       =& (\sum X_i - \bar X)(Y_i - \bar Y) \blacksquare
+                       =& \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
+                       =& \sum (X_i - \bar X)(Y_i - \bar Y) \blacksquare
 \end{align}
 ]
 
@@ -622,7 +605,7 @@ General statement to describe .red[causality] and relevant phenomena.
 Scientific Theory
 
 + Logical consistency
-+ Empirical .red[falsifiable]
++ Empirical .red[falsifiability]
 ]
 
 

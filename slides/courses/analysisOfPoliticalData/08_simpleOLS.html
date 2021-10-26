@@ -133,7 +133,7 @@ var(aX&lt;sub&gt;1&lt;/sub&gt; + bX&lt;sub&gt;2&lt;/sub&gt; + c) = a&lt;sup&gt;2
 --
 
 When X&lt;sub&gt;1&lt;/sub&gt; is i.i.d., 
-var(a&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + a&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2&lt;/sub&gt; + ... + a&lt;sub&gt;n&lt;/sub&gt;X&lt;sub&gt;n&lt;/sub&gt;) = var(&amp;sum;a&lt;sub&gt;i&lt;/sub&gt;X&lt;sub&gt;i&lt;/sub&gt;) = &amp;sum;a&lt;sub&gt;i&lt;/sub&gt;^2var(X&lt;sub&gt;i&lt;/sub&gt;)
+var(a&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + a&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2&lt;/sub&gt; + ... + a&lt;sub&gt;n&lt;/sub&gt;X&lt;sub&gt;n&lt;/sub&gt;) = var(&amp;sum;a&lt;sub&gt;i&lt;/sub&gt;X&lt;sub&gt;i&lt;/sub&gt;) = &amp;sum;a&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;var(X&lt;sub&gt;i&lt;/sub&gt;)
 
 --
 
@@ -142,7 +142,8 @@ var(a&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + a&lt;sub&gt;2&lt;/sub&g
 --
 
 cov(X, Y) = E(XY) - E(X)E(Y)
-    + When X = Y, cov(X, X) = E(X&lt;sup&gt;2&lt;/sup&gt;) - [E(X)]&lt;sup&gt;2&lt;/sup&gt; = var(X)
+
++ When X = Y, cov(X, X) = E(X&lt;sup&gt;2&lt;/sup&gt;) - [E(X)]&lt;sup&gt;2&lt;/sup&gt; = var(X)
 
 `\begin{align}
 cov(X, Y) =&amp; E[X - E(X)][Y - E(Y)]\\
@@ -161,16 +162,7 @@ cov(X, Y) =&amp; E[X - E(X)][Y - E(Y)]\\
 
 * Consistent: As the sample size increases, the variance decreases.
 
-&lt;img src="08_simpleOLS_files/figure-html/consistency-1.png" style="display: block; margin: auto;" /&gt;
-
-???
-
-finite sample property    
-large sample property
-
-Consistency: n1 &lt; n2 &lt; n3
-
----
+--
 
 * Efficiency: Smallest variance among unbiased estimators
 
@@ -178,10 +170,11 @@ Consistency: n1 &lt; n2 &lt; n3
 
 --
 
-Sometimes, one may want to trade off a little bias against variance.
-
 + RMES: Root mean square error, `\(\sqrt{bias^2 + var}\)`
 
+???
+
+Sometimes, one may want to trade off a little bias against variance.
 
 ---
 
@@ -212,7 +205,6 @@ Always getting attention to the .red[detailed] data.
 ## OLS in a Substantive View
 
 How does some outcome variable Y change .navy[when] some explanatory variable X changes? 
-
 --
 
 E.g., are the political ideology of different partisan voters different? 
@@ -343,7 +335,6 @@ class: small
 
 ## &amp;beta;&lt;sub&gt;1&lt;/sub&gt;
 
-
 `\begin{align}
 \frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} =&amp; -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
 \Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =&amp; 0\\
@@ -358,10 +349,10 @@ class: small
 
 .pull-left[
 `\begin{align}
-\sum X_i(Y_i - \bar Y) =&amp; \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
+\sum X_i(Y_i - \bar Y) =&amp; \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
                        =&amp; \sum X_i(Y_i - \bar Y) - \bar X(\sum Y_i - \sum\bar Y)\\
-                       =&amp; \sum X_i(Y_i - \bar Y) - \bar X(n\bar Y - n\bar Y)\\
-                       =&amp; (\sum X_i - \bar X)(Y_i - \bar Y) \blacksquare
+                       =&amp; \sum X_i(Y_i - \bar Y) - \bar X\sum (Y_i - \bar Y)\\
+                       =&amp; \sum (X_i - \bar X)(Y_i - \bar Y) \blacksquare
 \end{align}`
 ]
 
@@ -592,7 +583,7 @@ General statement to describe .red[causality] and relevant phenomena.
 Scientific Theory
 
 + Logical consistency
-+ Empirical .red[falsifiable]
++ Empirical .red[falsifiability]
 ]
 
 
