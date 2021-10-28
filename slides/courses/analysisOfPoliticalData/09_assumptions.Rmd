@@ -1,8 +1,9 @@
 ---
 title: "Gauss-Markov Theorem"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,14 +12,13 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
-
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -27,22 +27,33 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  knitr, # dependency
-  descr, stringr, broom, tidyverse
-) # data wrangling # data wrangling
+  tidyverse, icons, xaringanExtra
+) 
+
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
 
 # Functions preload
-set.seed(114)
+set.seed(313)
+
+theme_set(theme_minimal())
 ```
-
-
 
 ## Overview
 
 .center[Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + u<sub>i</sub>]
 
 1. Gauss-Markov Theorem
-1. Path to BLUE
+1. BLUE
 1. Parameter Distributions
 1. OLS vis-&aacute;-vis ANOVA
 
@@ -56,16 +67,16 @@ class: inverse, bottom
 
 ## Classic Linear Regression Model (CLRM)
 
-1. .navy[Linearity] in the parameter;
-1. .navy[Nonstochastic] X ("given X," a.k.a., "X is fixed");
-1. X has .navy[positive noninfinite] variance (var(X));
-1. Correct .navy[specification;]
+1. Linearity in the parameter;
+1. Nonstochastic X ("given X," a.k.a., "X is fixed");
+1. X has positive noninfinite variance (var(X));
+1. Correct specification;
 1. .red[Identification] (N > K; K = 2 for a simple OLS);
 1. .red[Mean zero errors] (E(u<sub>i</sub>|X<sub>i</sub>) = 0);
 1. .red[Exogeneity]: No covariance between X<sub>i</sub> and u<sub>i</sub> (E(X<sub>i</sub>u<sub>i</sub>) = cov(x<sub>i</sub>, u<sub>i</sub>) =0);
 1. .red[No autocorrelation] (E(u<sub>i</sub>, u<sub>j</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(u<sub>i</sub>, u<sub>j</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
-1. .gray[Homoskedasticity] (constant variance of u<sub>i</sub>, var(u<sub>i</sub>|X) = &sigma;<sup>2</sup>);
-1. No .gray[perfect collinearity] (when there are more than one X, &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>)
+1. Homoskedasticity (constant variance of u<sub>i</sub>, var(u<sub>i</sub>|X) = &sigma;<sup>2</sup>);
+1. No perfect collinearity (when there are more than one X, &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum;<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>)
 
 
 ???
@@ -76,30 +87,31 @@ homoskedasticity: residual randomly distributed in the same variance across the 
 
 ---
 
-## What CLRM Assumptions Give USp
+## When CLRM Assumptions Hold
 
-$\hat\beta_0 + \hat\beta_1$ are unbiased, consistent, and efficient among the class of linear estimations.
+.center[<img src = "images/clrm_comfortable.gif">]
 
---
-
-A.k.a., "Gauss–Markov Theorem":
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[**Gauss–Markov Theorem**]
 
 In a linear regression model in which the errors are uncorrelated, have equal variances and expectation value of zero, the .red[best linear unbiased estimator (BLUE)] of the coefficients is given by the ordinary least squares (OLS) estimator, provided it exists.
+]
 
 ---
 
-.center[<img src="images/blue.gif" height = 500 />]
+.center[<img src="images/clrm_blue.gif" height = 600 />]
 
 ---
 
 ## Path to BLUE
 
-1. Unbiased;
-1. Consistent.
+Computationally,
+
+.center[<img src="images/clrm_ols.gif" height="400"/>]
 
 --
 
-.center[<img src="images/gaoNeng.gif" height="200"/>]
+Statistically, unbiased + consistent.
 
 ---
 
@@ -112,18 +124,16 @@ $E(\hat\beta_1|X) = \beta_1$
 Proof:
 
 \begin{align}
-E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X]\\
-                 =& \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X)\\
-                 =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + u) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X)\\
-                 =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)]\\
-                 =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0\\
-                 =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1\blacksquare
+E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X],\\
+                 =& \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X),\\
+                 =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + u) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X),\\
+                 =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)],\\
+                 =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0,\\
+                 =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1.\blacksquare
 \end{align}
 
 
 ---
-
-class: small
 
 ## Consistency
 
@@ -139,27 +149,29 @@ class: small
 
 For a classic normal linear regression model:
 
+.pull-left[
 \begin{align}
 u_i\sim& \text{i.i.d.} N(0, \sigma^2)\\
 \hat\beta_1\sim& N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
 \hat\beta_0\sim& N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
 \end{align}
+]
 
 --
 
+.pull-right[
 Let's standardize the variances: 
-
----
 
 \begin{align}
 \frac{\hat\beta_1 - \beta_1}{\sqrt{\frac{\hat\sigma^2}{\sum (X_i - \bar X)^2}}}\sim& N(0, 1^2)\\
 \frac{\hat\beta_0 - \beta_0}{\sqrt{\frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2}}}\sim& N(0, 1^2)\\
 \frac{\hat\sigma^2}{\frac{\sigma^2}{n - 2}}\sim& \chi^2_{n - 2}
 \end{align}
+]
 
 ---
 
-```{r chisq, fig.width=10, fig.height=6}
+```{r chisq, fig.width=10, fig.height=7, fig.align='center'}
 ggplot(data.frame(x = c(0, 10)), aes(x = x)) +
   stat_function(fun = function(x) dchisq(x, df = 2), aes(colour = "2")) +
   stat_function(fun = function(x) dchisq(x, df = 4), aes(colour = "4")) +
@@ -169,47 +181,7 @@ ggplot(data.frame(x = c(0, 10)), aes(x = x)) +
   labs(color = "d.f.")
 ```
 
-&chi;<sup>2</sup>: adding up n squared normals, using to test the variance.
-
----
-
-## Back to the Path
-
-.pull-left[
-
-### Path via Association
-
-.gray[
-One variable
-+ Probability theory
-+ Distribution    
-&darr;    
-
-Variable comparison
-+ Difference of means (t score)
-]
-
-+ .magenta[Cov & cor] (.navy[r], &chi;<sup>2</sup>)
-
-.red[
-+ ANOVA (F score)
-]
-
-&rArr;
-]
-
-.pull-right[
-
-### Path Towards OLS
-
-+ .red[Single variable] (.red[OLS])
-
-.gray[
-+ Multivariate (Multiple OLS)
-+ Nonlinear effect (Med/Mod)
-+ Generalized linear (MLE)
-]
-]
+.center[&chi;<sup>2</sup>: adding up n squared normals, using to test the variance.]
 
 ---
 
@@ -219,9 +191,9 @@ class: inverse, bottom
 
 ---
 
-class: small
+.panelset[
 
-## Revisiting ANOVA
+.panel[.panel-name[ANOVA Original]
 
 | Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
 |-----------	|-----------------------------------------------	|-------	|----------------------------------	|
@@ -231,9 +203,9 @@ class: small
 
 $$F_{\alpha, K-1, N-1} = MST/MSE$$
 
----
+]
 
-## ANOVA in Terms of Regression<sup><img src="images/fsmrof.png" height="20"/></sup>
+.panel[.panel-name[ANOVA CLRM]
 
 |      	| $\sum(Y_i - \bar Y)^2$               	| $= \hat\beta_1^2(X_i - \bar X)^2$          	| $+ \sum\hat u_i^2$             	|
 |------	|--------------------------------------	|--------------------------------------------	|--------------------------------	|
@@ -245,7 +217,10 @@ $\frac{MSS_{SSE}}{MSS_{SSR}} = \frac{\hat\beta_1^2(X_i - \bar X)^2\sim\chi^2}{\s
 
 $F_{1, n - 2}\sim\frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}=\frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = (\frac{\bar X - \mu}{\hat\sigma_X})^2$
 
-As known, $\frac{\bar X - \mu}{\hat\sigma_X}\sim t$, therefore, F provides identical information as t. (Ta-da~)
+As known, $\frac{\bar X - \mu}{\hat\sigma_X}\sim t$, therefore, F provides identical information as t.
+]
+
+]
 
 ???
 
@@ -253,7 +228,8 @@ n-1: Used out 1 to calculate $\bar Y$;
 1: The only thing varies is $\hat\beta_1$;
 n-2: Used out to calculate $\hat\beta_0, \hat\beta_1$.
 
-F is the ratio of $\chi^2$s. 
+
+Meaningless content:
 
 \begin{align}
 E[\hat\beta_1^2\sum(X_i - \bar X)|X] =& E\{[\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}]\sum(X_i - \bar X)^2\}\\
@@ -266,7 +242,6 @@ E[\hat\beta_1^2\sum(X_i - \bar X)|X] =& E\{[\frac{\sum(X_i - \bar X)(Y_i - \bar 
 =& \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}\\
 =& \frac{E\{[\beta_1\sum(X_i - \bar X)^2 + \sum(X_i - \bar X)u_i)]^2|X\}}{\sum(X_i - \bar X)^2}
 \end{align}
-
 
 \begin{align}
 =& \frac{1}{\sum(X_i - \bar X)^2}\{E\{[\beta_1\sum(X_i - \bar X)^2]^2|X\} + E\{[\sum(X_i - \bar X)u_i)]^2|X\}\}\\
@@ -285,27 +260,13 @@ Ignore $\beta_0$ for now
 Then $F_{1, n - 2}\sim\frac{\hat\beta_1^2(X_i - \bar X)^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2 + \sigma^2}{\sigma^2} = \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2} + 1$
 
 
-\beta_1\sum(X_i - \bar X)^2]^2, constant
-
----
-
-## Wrap Up
-
-1. Gauss-Markov Theorem: "Ten Commandments"
-1. Path to BLUE
-    + Unbiaseness
-    + Consistency
-1. Parameter Distributions
-    + Normal for &beta;s
-    + &chi;<sup>2</sup> for &sigma;<sup>2</sup>
-1. OLS vis-&aacute;-vis ANOVA
-    + F and t are consistent
+$[\beta_1\sum(X_i - \bar X)]^2$, constant
 
 ---
 
 class: inverse, bottom
 
-# Bonus: OLS in Linear Algebra
+# <img src = "images/ci_fsmrof.png" height = 60> OLS in Linear Algebra
 
 ---
 
@@ -336,10 +297,12 @@ Y_n\end{array}\right)=&
 \epsilon_n\end{array}\right)
 \end{align}
 
+.center[
 * **Y**: Response vector;
 * **X**: Design matrix;
 * **&beta;**: Parameter vector;
 * **&epsilon;**: Error vector;
+]
 
 ???
 
@@ -357,23 +320,24 @@ In other words, $\epsilon\sim N(\boldsymbol{0}, \sigma^2\boldsymbol{I})$.
 
 ---
 
-## Estimators <img src="images/fsmrof.png" height="20"/></sup>
+## Estimators
 
 Goal: Finding the &beta; minimizing the squared residuals
 
-$$\sum\epsilon^2 = \epsilon'\epsilon = (\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\beta)$$
+$$\sum\epsilon^2 = \boldsymbol{\epsilon'\epsilon} = (\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\beta)$$
 
 Then, seek for the value of &beta; that lets the derivative of the above equation respected of &beta; to be 0.
 
 \begin{align}
 \hat\beta =& (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}.\\
-var(\beta) =& \sigma^2(X'X)^{-1}, \text{where}\ \sigma^2 = \frac{\epsilon'\epsilon}{n - k}.
+var(\beta) =& \sigma^2\boldsymbol{X'X})^{-1}, \text{where}\ \sigma^2 = \frac{\boldsymbol{\epsilon'\epsilon}}{n - k}.
 \end{align}
 
 ???
 
 ' means transpose (exchanging the rows and columns)
 
+---
 
 ## Differential Rules for Linear Algebra
 
@@ -395,38 +359,55 @@ According to the above rules,
 \end{align}
 
 
-### Proof $\hat\beta = \beta$
+---
 
+class: small
+
+## $\hat\beta = \beta$
+.pull-left[
 \begin{align}
-\boldsymbol{\epsilon\epsilon'}=& \frac{d(\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)}{d\hat\beta} = 0\\
-0 =& -2\boldsymbol{X'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)}\\
-\boldsymbol{X'Y} =& \boldsymbol{X'X}\hat\beta\\
+\boldsymbol{\epsilon\epsilon'}=& \frac{d(\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)}{d\hat\beta} = 0,\\
+0 =& -2\boldsymbol{X'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)},\\
+\boldsymbol{X'Y} =& \boldsymbol{X'X}\hat\beta,\\
 \hat\beta =& (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}.\\
 \text{Within this}, \boldsymbol{X'X} =& \left(\begin{array}{cc}
 n & \sum X_i\\
 \sum X_i & \sum X_i^2
-\end{array}\right)\\
+\end{array}\right),\\
 \Rightarrow (\boldsymbol{X'X})^{-1} =& \frac{\left(\begin{array}{cc}
 \sum X_i^2 & -\sum X_i\\
 -\sum X_i & n
-\end{array}\right)}{nS_X}\\
+\end{array}\right)}{nS_X},\\
 \boldsymbol{X'Y} =& \left(\begin{array}{c}
 \sum Y_i\\
 -\sum X_iY_i
-\end{array}\right)\\
-\text{then, } E(\hat\beta) = [\boldsymbol{(X'X)^{-1}X'}](\boldsymbol{X}\beta + \epsilon) =& [\boldsymbol{(X'X)^{-1}X'X}\beta] + [\boldsymbol{(X'X)^{-1}X'\epsilon}]\\
+\end{array}\right).\\
+\end{align}
+]
+
+.pull-right[
+\begin{align}
+\text{then, } E(\hat\beta) =& [\boldsymbol{(X'X)^{-1}X'}](\boldsymbol{X}\beta + \epsilon),\\ 
+=& [\boldsymbol{(X'X)^{-1}X'X}\beta] + [\boldsymbol{(X'X)^{-1}X'\epsilon}],\\
           =& \beta.\\
 var(\beta) =& \sigma^2(X'X)^{-1}, \text{where}\ \sigma^2 = \frac{\epsilon'\epsilon}{n - k}.\blacksquare
 \end{align}
 
-
-
-**X**<sup>-1</sup>: Inverse matrix
-**X**': Transposition
+**X**<sup>-1</sup>: Inverse matrix;
+**X**': Transposition.
+]
 
 ---
 
-class: small
+## $\boldsymbol{X'\epsilon} = 0$
+
+\begin{align}
+\boldsymbol{X'Y} =& \boldsymbol{X'X}\hat\beta,\\
+\boldsymbol{X'(X\hat\beta + \epsilon)} =& \boldsymbol{X'X}\hat\beta,\\
+\boldsymbol{X'\epsilon} =& 0.\blacksquare
+\end{align}
+
+---
 
 ## Residual
 
@@ -434,23 +415,30 @@ For the predicted Y, $$\hat{\boldsymbol{Y}} = \boldsymbol{X}\beta = \boldsymbol{
 
 $H = [X(X'X)^{-1}X']$ is called the hat matrix.
 
-Then, $\epsilon = \boldsymbol{Y} - \hat{\boldsymbol{Y}} = \boldsymbol{Y} - \boldsymbol{HY} = \boldsymbol{(I - H)Y}.$
+Then, $$\epsilon = \boldsymbol{Y} - \hat{\boldsymbol{Y}} = \boldsymbol{Y} - \boldsymbol{HY} = \boldsymbol{(I - H)Y}.$$
 
-
-???
+--
 
 Two properties of **H**:
 
 1. Symmetric: $\boldsymbol{H = H'};\boldsymbol{(I - H) = (I - H)'}$
 2. Idempotent: $\boldsymbol{H^2 = H; (I - H)(I - H) = (I - H)}$
 
-
+???
 Idempotent: 幂等
 
-Proof $\boldsymbol{X'\epsilon} = 0$
 
-\begin{align}
-\boldsymbol{X'Y} =& \boldsymbol{X'X}\hat\beta\\
-\boldsymbol{X'(X\hat\beta + \epsilon)} =& \boldsymbol{X'X}\hat\beta\\
-\boldsymbol{X'\epsilon} =& 0\blacksquare
-\end{align}
+---
+
+## Wrap Up
+
+1. Gauss-Markov Theorem: "Ten Commandments"
+1. Path to BLUE
+    + Unbiaseness
+    + Consistency
+1. Parameter Distributions
+    + Normal for &beta;s
+    + &chi;<sup>2</sup> for &sigma;<sup>2</sup>
+1. OLS vis-&aacute;-vis ANOVA
+    + F and t are consistent
+1. OLS in Linear Algebra: Language of statisticians
