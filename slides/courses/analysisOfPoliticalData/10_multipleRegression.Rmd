@@ -1,8 +1,9 @@
 ---
 title: "Multiple Regression"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,58 +12,80 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
-
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  flextable,
-  knitr, # dependency
-  descr, stringr, broom, tidyverse
-) # data wrangling # data wrangling
+  tidyverse, flexable, icons, xaringanExtra
+) 
+
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
 
 # Functions preload
-set.seed(114)
+set.seed(313)
+
+theme_set(theme_minimal())
 ```
+
+## Overview
+
++ Multiple regressions and their coefficients
++ R<sup>2</sup>
++ Post-estimation inferences
+
+---
 
 class: inverse, bottom
 
-# Regression with More than Two Xs
+# Regression with Two (or More) Xs
 
 ---
+
+class: center, middle
 
 ## Terminology
 
-Multivariate regression
-
-Multivariate analysis
+Multivariate regression/analysis
 
 Multiple regression 
 
+--
+
+### Expression
+
+Population Regression Function (PRF): $$Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$$
+According to CLRM: $E[u_i|\boldsymbol{X}] = 0.$
+
+Sample Regression Function (SRF): $$Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i$$
+
 ---
 
-## Multiple Regression
-
-* Population Regression Function (PRF): $Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i$
-    + According to CLRM: $E[u_i|\boldsymbol{X}] = 0.$
-
-* Sample Regression Function (SRF): $Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat u_i$
-
----
+class: small
 
 ## Goal
 
+.left-column[
 $min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat u_i^2\Rightarrow$
 
 \begin{align}
@@ -70,12 +93,12 @@ $min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat u_i^2\Rightarrow$
 \frac{\partial \sum \hat u_i^2}{\partial\hat\beta_1}\to& 0\\
 \frac{\partial \sum \hat u_i^2}{\partial\hat\beta_2}\to& 0
 \end{align}
+]
 
----
+--
 
-class: small
-
-## When Achieved
+.right-column[
+When Achieved:
 
 \begin{align}
 \hat\beta_0 =& \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
@@ -85,37 +108,48 @@ class: small
 
 where $\hat r_{1i}$ are the errors from the regression of $X_{1i}$ on $X_{2i}$ (i.e., $X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$), the proportion that $X_2$cannot explain.
 
---
 
 $\hat\sigma^2 = \frac{\sum\hat u_i^2}{n - 3}$
+]
 
 ---
 
-## Interpretation
+## What does &beta;<sub>1</sub> mean?
 
-What does &beta;<sub>1</sub> mean?
-
-Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y .navy[on average], .red[holding everything else constant].
+Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y .red[on average], .red[holding everything else constant].
 
 --
 
 * Change the same amount?
 
+???
+
+On average
+
 --
 
 * Constant how?
 
+???
+
+hold on mean or median
+
 ---
+
+class: small
 
 ## Multiple Coefficient of Determination
 
+.left-column[
 a.k.a. R<sup>2</sup>
 
 
 $$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$
+]
 
-???
+--
 
+.right-column[
 From the SRF, 
 
 \begin{align}
@@ -130,14 +164,8 @@ SST =& SSR + SSE\\
                       =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
 \end{align}
 
-p.s., 
-
-SST: Sum of Squares Total
-
-SSR: Sum of Squares Regression
-
-SSE: Sum of Squares Error
-
+p.s., SST: Sum of Squares Total, SSR: Sum of Squares Regression, SSE: Sum of Squares Error.
+]
 ---
 
 background-image: url("images/bad4ya.jpg")
@@ -148,10 +176,15 @@ background-size: contain
 
 ## Why Is R<sup>2</sup> Bad?
 
-### Very low for a correct model 
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Can be very low for a correct model]
+]
+
+--
 
 \begin{align}
-R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
+R^2 =& \frac{SSR}{SST} \\
+    =& \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
     =& \frac{\sum[(Y_i - u_i) - \bar Y]^2}{SST}
 \end{align}
 
@@ -159,7 +192,7 @@ When the residual (&sigma;, estimated by u<sub>i</sub> in sample estimations) is
 
 ---
 
-```{r rsmall, fig.width=10}
+```{r rsmall, fig.width=15, fig.height=9, fig.align='center'}
 r2 <- function(sig){
   x <- seq(1,10,length.out = 1000)        # our predictor
   y <- 2 + 1.2*x + rnorm(1000,0,sd = sig) # our response; a function of x plus some random noise
@@ -173,14 +206,23 @@ ggplot(data = df_r, aes(x = sigma, y = rout)) +
   geom_point() + 
   ylab(expression(R^2)) + 
   xlab(expression(sigma)) +
-  ggtitle("The R squared is calculated based on the CORRECT model\n with only the residual varying.")
+  ggtitle("The R squared is calculated based on the CORRECT model\n with only the residual varying.") + 
+  theme(
+  plot.title = element_text(size = 28),
+  axis.text=element_text(size=20),
+  axis.title=element_text(size=20,face="bold")
+)
 ```
 
 ---
 
-### Very high for a misspecified model
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Can be very high for a misspecified model]
+]
 
-```{r rlarge, fig.width=10}
+--
+
+```{r rlarge, fig.width=15, fig.height=7, fig.align='center'}
 df_rLarge <- tibble(x = rexp(50,rate=0.005), # from an exponential distribution
                     y = (x-1)^2 * runif(50, min=0.8, max=1.2))# non-linear data generation
 
@@ -190,21 +232,29 @@ ggplot(data = df_rLarge, aes(x, y)) +
   geom_point() +
   labs(title = expression("True model:"~ Y == (X - 1)^2),
        subtitle = expression("Estimated model:"~ Y == beta[0] + beta[1]*X + sigma ),
-       caption = bquote(R^2 == ~ .(rout) ))
+       caption = bquote(R^2 == ~ .(rout) )) + 
+  theme(
+  plot.title = element_text(size = 28),
+  plot.subtitle = element_text(size = 20),
+  plot.caption = element_text(size = 20),
+  axis.text=element_text(size=20),
+  axis.title=element_text(size=20,face="bold"))
 ```
 
 ---
 
-### Very high for a redundant model
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Can be very high for a redundant model]
+]
 
-"Trash-can" model:
+--
 
 \begin{align}
 R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i - \bar Y)^2}{SST}\\
     =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}
 \end{align}
 
-Therefore, the more Xs are added, the larger SSE (and thus R<sup>2</sup>) is.
+Therefore, the more Xs are added, the larger SSR (and thus R<sup>2</sup>) is, a.k.a., the "trash-can" model.
 
 ???
 
@@ -212,7 +262,7 @@ $\hat Y_i  - \bar Y = 0$
 
 ---
 
-## How About Adjusted R<sup>2</sup>?
+## Adjusted R<sup>2</sup>?
 
 $$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 
@@ -222,9 +272,11 @@ $$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 
 ### Issue adjusted
 
-More-Xs booming
+X booming
 
 ]
+
+--
 
 .pull-right[
 
@@ -239,9 +291,9 @@ More-Xs booming
 
 ---
 
-## Think...
+class: center, middle
 
-.center[When can R<sup>2</sup> be useful?]
+.Large[When can R<sup>2</sup> be useful?]
 
 ???
 
@@ -277,22 +329,33 @@ class: inverse, bottom
 
 Let X<sub>0</sub> be the values at which we want to predict, the the expected value of Y is:
 
+.pull-left[
 \begin{align}
 E(\hat Y_0|X_0) =& E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
 var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
                    &+ 2cov(\hat\beta_0, \hat\beta_1)X_0\\
                   =& \sigma^2[\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}
+]
 
----
+--
 
+.pull-right[
 
 ```{r predicted, fig.width=10}
 ggplot(mtcars, aes(x=mpg, y=wt)) +
   geom_smooth(method=lm, se=TRUE) +
   ylab(bquote(hat(Y[0]))) + 
-  xlab(bquote(hat(X[0]))) 
+  xlab(bquote(hat(X[0]))) + 
+  theme(
+  plot.title = element_text(size = 28),
+  axis.text=element_text(size=20),
+  axis.title=element_text(size=20,face="bold")
+)
 ```
+
+Why wider at the two terminals?
+]
 
 ???
 
@@ -311,13 +374,11 @@ var(\hat Y_0|X_0) =& \sigma^2[1 + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i
 
 There is an error term to account for.
 
-In other words, single prediction is .magenta[more uncertain] than the average prediction.
+In other words, single prediction is .red[more uncertain] than the average prediction.
 
 ---
 
-class: small
-
-## Hypothesis Testing
+## (Review) Hypothesis Testing
 
 1. For some parameter &theta;, typically, 
     + H<sub>0</sub>: &theta;<sub>0</sub> &equiv; &theta; = 0;
@@ -393,15 +454,11 @@ $$(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.$$
 
 ---
 
-class: small
-
 ## Hypothesis Test for the Restricted Model
 
 Let's set &alpha; = 0.05.
 
 --
-
-e.g., Hypothesis:
 
 \begin{align}
 H_0:& \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2;\\
@@ -436,21 +493,31 @@ Hint: When testing general linear restrictions, that is, comparing the pair of n
 
 ---
 
-class: small
+## Wrap Up
 
-## Bonus: Common Latin Terms
++ Coefficients and interpretations
++ R<sup>2</sup> sucks
++ Post-estimation inferences
+    + Predicted value
+    + Hypothesis testing
 
-* *a fortiori*: Not even saying.
-* *ad hoc*: To this, immediate purpose.
-* *ibid.*: "ibidem", in the same place.
-* .magenta[*ceteris paribus*]: with other conditions remaining the same.
-* *c.f.*: "confer", compare
-* .magenta[*e.g.*]: "exempli gratia," for the sake of example.
-* *etc.*: "et cetera," and the rest.
-* *i.e.*: "id est," that is.
-* .magenta[*n.b./NB*]: "nota bene", note well.
-* *per se*: By/of/for/in itself.
-* .magenta[*QED*]: "quod erat demonstrandum", that which was to have been shown.
+---
+
+class: center, middle
+
+## <img src = "images/ci_fsmrof.png" height = 60> Latin Terms
+
+*a fortiori*: Not even saying.    
+*ad hoc*: To this, immediate purpose.   
+*ibid.*: "ibidem", in the same place.   
+.red[*ceteris paribus*]: with other conditions remaining the same.    
+*c.f.*: "confer", compare   
+.red[*e.g.*]: "exempli gratia," for the sake of example.    
+*etc.*: "et cetera," and the rest.    
+*i.e.*: "id est," that is.    
+.red[*n.b./NB*]: "nota bene", note well.    
+*per se*: By/of/for/in itself.    
+.red[*QED*]: "quod erat demonstrandum", that which was to have been shown.    
 
 
 * Bonus: Good.
