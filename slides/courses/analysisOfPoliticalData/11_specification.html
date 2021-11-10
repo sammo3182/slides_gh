@@ -4,8 +4,20 @@
     <title>Model Specification</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="11_specification_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="11_specification_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="11_specification_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="11_specification_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="11_specification_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="11_specification_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="11_specification_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="11_specification_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="11_specification_files/panelset-0.2.6/panelset.js"></script>
+    <script src="11_specification_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="11_specification_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="11_specification_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="11_specification_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="11_specification_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="11_specification_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -14,12 +26,10 @@
 class: center, middle, inverse, title-slide
 
 # Model Specification
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
-
 
 
 
@@ -27,19 +37,23 @@ class: center, middle, inverse, title-slide
 
 "How can you set things wrong?"
 
-### Measuring wrong variables
+.center[
+### Measuring .red[variables] wrong
 
-1. Proxy variable
-1. Measurement error
+Proxy variable    
+Measurement error
+]
+.pull-left[
+### Specifying a wrong .red[model]
 
-### Specifying a wrong model
+Functional form   
+Omitted variable
+]
+.pull-right[
+### Interpreting the .red[result] wrong
 
-1. Functional form 
-1. Omitted variable
-
-### Interpreting the result wrong
-
-1. Nonlinear &amp; substantive significance
+Nonlinear &amp; substantive significance
+]
 
 ---
 
@@ -51,7 +65,7 @@ class: inverse, bottom
 
 class: small
 
-## Proxy Variable
+## Proxy Variable: One Type of Measurement Error
 
 True model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt;  + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;X&lt;sub&gt;2&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&lt;sub&gt;3&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; + u.
 
@@ -81,8 +95,6 @@ To produce unbiased estimates:
 
 .center[cov(u, X&lt;sub&gt;3&lt;/sub&gt;) = cov(v, X&lt;sub&gt;1&lt;/sub&gt;) = cov(v, X&lt;sub&gt;2&lt;/sub&gt;) = 0.]
 
-If so, .center[&lt;img src="images/dropMic.gif" height = 100 /&gt;]
-
 ---
 
 ## Measurement Error
@@ -99,34 +111,29 @@ Y^* =&amp; \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
 Y =&amp; \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
 \end{align}`
 
+.center[
 ### Consequence
 
 + &amp;beta; Unbiased 
 + var(&amp;beta;) &amp;uarr;
+]
 
 ---
 
 class: small
 
-### X = X&lt;sup&gt;*&lt;/sup&gt; + e&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## X = X&lt;sup&gt;*&lt;/sup&gt; + e
 
 If E(eX) = 0, then Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;(X&lt;sub&gt;1&lt;/sub&gt; - e) + u = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + (u - &amp;beta;&lt;sub&gt;1&lt;/sub&gt;e).
 
 --
 
 If E(eX) &amp;ne; 0, then
-
-`\begin{align}
-\hat\beta_1 =&amp; \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
-                               =&amp; \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
-                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
-                               =&amp; \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
-\end{align}`
-
-???
+.pull-left[
 `\begin{align}
 cov(e, X_1) =&amp; E(eX_1) - E(e)E(X_1) = E(eX_1)\\
-          =&amp; E[e(X_1^* + e)] = E(eX_1^*) + E(e^2) = \sigma_e^2\neq0\\
+          =&amp; E[e(X_1^* + e)] = E(eX_1^*) + E(e^2) \\
+          =&amp; \sigma_e^2\neq0\\
 cov(u - \beta_1e, X_1) =&amp; cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1)\\
                        =&amp; -\beta_1\sigma_e^2.\\
 \Rightarrow\ plim(\hat\beta_1) =&amp; \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)} \\
@@ -134,30 +141,31 @@ cov(u - \beta_1e, X_1) =&amp; cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1)\\
                                = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e} \\
                                =&amp; \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
 \end{align}`
+]
 
-
+???
 plim: probability limit operation, convergence in probability
 
 --
 
-Unbiased .navy[only] when var(X&lt;sub&gt;1&lt;/sub&gt;) = var(X&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;\*&lt;/sup&gt; + e), i.e., &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;X&lt;sub&gt;1&lt;/sub&gt;&lt;/sub&gt; = &amp;sigma;X&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;\*2&lt;/sup&gt;+ &amp;sigma;&lt;sub&gt;e&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;
+.pull-right[
+Unbiased .red[only] when var(X&lt;sub&gt;1&lt;/sub&gt;) = var(X&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;\*&lt;/sup&gt; + e),    
+i.e., &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;X&lt;sub&gt;1&lt;/sub&gt;&lt;/sub&gt; = &amp;sigma;X&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;\*2&lt;/sup&gt;+ &amp;sigma;&lt;sub&gt;e&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;
 
 Otherwise, `\(|\hat\beta_1| &lt; \beta_1\)`, a.k.a., .red[attenuation] bias. 
 
-+ &amp;beta;: underestimated;
-+ Affecting the estimations of others in unknown ways 😱.
-
++ &amp;beta;&lt;sub&gt;1&lt;/sub&gt;: underestimated;
++ Affecting the estimations of others in unknown ways .
+]
 ---
 
-class: small
-
-## Type of Measurement
+## Measurement Type Issue
 
 * Nominal: 
     + e.g., A race variable: white, black, native
         + H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;black&lt;/sub&gt; = 0, testing the difference between black and white
         + H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;black&lt;/sub&gt; = &amp;beta;&lt;sub&gt;native&lt;/sub&gt; = 0, testing if the race has any effect.
-    + Can't do regression unless being .navy[broken up into indicator] variables.
+    + Can't do regression unless being broken up into indicator variables.
 --
 
 * Indicator: Binary usually
@@ -177,7 +185,15 @@ class: inverse, bottom
 
 ---
 
-## Functional Form
+## Problem Types
+
+1. Functional form
+1. .gray[Omitted variable]
+1. .gray[Nonlinear effect]
+
+---
+
+## Functional Form Issue
 
 When there are two ways to specify the model:
 
@@ -190,13 +206,11 @@ Which specification is .red[correct]?
 
 ---
 
-Test Y = f&lt;sub&gt;1&lt;/sub&gt;(X) + f&lt;sub&gt;2&lt;/sub&gt;(X) + u?
+Test &amp;beta;&lt;sub&gt;1&lt;/sub&gt; in Y = f&lt;sub&gt;1&lt;/sub&gt;(X) + f&lt;sub&gt;2&lt;/sub&gt;(X) + u?
 
 --
 
-### Concern
-
-Hey, buddy, how many models are correct?
+Probably not. How many models are correct?
 
 ???
 
@@ -208,11 +222,11 @@ Let's assume f&lt;sub&gt;1&lt;/sub&gt; is the true model:
 
 `$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$`
 
+&amp;rho;&lt;sub&gt;12&lt;/sub&gt;: Correlations between X&lt;sub&gt;1&lt;/sub&gt; and X&lt;sub&gt;2&lt;/sub&gt;, such as between X and X&lt;sup&gt;2&lt;/sup&gt;
+
 When &amp;rho;&lt;sub&gt;12&lt;/sub&gt; &amp;uarr;......
 
 ???
-
-&amp;rho;&lt;sub&gt;12&lt;/sub&gt;: correlations between x1 and x2, such as between x and x……2
 
 Variance is inflated when &amp;rho;&lt;sub&gt;12&lt;/sub&gt; &amp;uarr;
 
@@ -229,15 +243,19 @@ Statistics: Davidson-Mackinnon test
 1. Run `\(Y = f_2(X) + u\)` and calculate the expected value `\(\hat Y = E[Y|f_2(X)]\)`
 1. Run `\(Y = f_1(X) + \theta\hat Y + u\)`, and test if &amp;theta; = 0.
 
---
+---
 
-.center[&lt;img src="images/dropMic.gif" height = 150 /&gt;]
+## Problem Types
+
+1. .gray[Functional form]
+1. Omitted variable
+1. .gray[Nonlinear effect]
 
 ---
 
 class: small
 
-## Omitted Variable&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## Omitted Variable
 
 `\begin{align}
 True: Y_i =&amp; \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
@@ -246,118 +264,96 @@ Specified: Y_i =&amp; \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i
 
 How does `\(\tilde\beta_1\)` compare to `\(\beta_1\)`?
 
---
-
-`\begin{align}
-\tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
-E(\tilde\beta_1|X_1) =&amp; \hat\beta_1 + \hat\beta_2\delta_1
-\end{align}`
-
-where `\(\hat\delta_1\)` is the regression coefficient of `\(X_2\)` on `\(X_1\)` ( `\(X_1 = \delta_0 + \delta_1X_2 + r\)`).
-
-
-`\(\tilde\beta_1\)`: .red[Biased], unless X&lt;sub&gt;2&lt;/sub&gt; is an irrelevant variable.
-
-Even if &amp;delta;&lt;sub&gt;1&lt;/sub&gt; = 0, `\(X_1 = \delta_0 + r\)`, the model may increase the risk of [Type I error](https://www.statisticssolutions.com/wp-content/uploads/2017/12/rachnovblog.jpg).
-
-???
-
 `\begin{align}
 Y_i =&amp; \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i\\
 Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u)\\
 (Y_i -\bar Y)(X_1 - \bar X_1) =&amp; \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1)\\ 
             &amp;+ (u_i - \bar u)(X_1 - \bar X_1)\\
-\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =&amp; \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\ 
-           &amp;+ \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\
-\text{That is, } \tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},
-\end{align}`
-
-`\begin{align}
-E(\tilde\beta_1|X_1) =&amp; E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1]\\
+\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =&amp; \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}\\
+\text{That is, } \tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
+\Rightarrow E(\tilde\beta_1|X_1) =&amp; E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1]\\
                      =&amp; \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1)\\
                      =&amp; \hat\beta_1 + \hat\beta_2\delta_1
 \end{align}`
 
 ---
 
-background-image: url("images/errorType.png")
-background-position: center
-background-size: contain
+`\(\hat\delta_1\)` is the regression coefficient of `\(X_2\)` on `\(X_1\)` ( `\(X_1 = \delta_0 + \delta_1X_2 + r\)`).
+
+
+`\(\tilde\beta_1\)`: .red[Biased], unless X&lt;sub&gt;2&lt;/sub&gt; is an irrelevant variable.
+
+Even if &amp;delta;&lt;sub&gt;1&lt;/sub&gt; = 0, `\(X_1 = \delta_0 + r\)`, the model may increase the risk of Type I error
+
+???
+
+False positive
 
 ---
 
 class: small
 
-## How About the Residual&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+How About the Residual?
 
 `$$Y_i = \beta_0 + \beta_1X_{1} + \epsilon,$$`
 
 `$$\epsilon = \beta_2X_{2} + u_i.$$`
 
 
-+ `\(E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0\)`
-    + Against the assumption.
+`\(E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0\)`
++ Against the assumption.
+  
+
+`\(var(\epsilon|X_1) = var(\beta_2X_{2} + u_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2\)`
++ All values are fixed, that is, still homoscedasitic.  
+
+`\(E(X_1\epsilon) = \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],\)` 
++ When cov(X&lt;sub&gt;1&lt;/sub&gt;, X&lt;sub&gt;2&lt;/sub&gt;)&amp;ne;0 &amp;rArr; Increase the difficulty to isolate X from u.
     
---
-
-+ `\(E(X_1\epsilon) = \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],\)` when cov(X&lt;sub&gt;1&lt;/sub&gt;, X&lt;sub&gt;2&lt;/sub&gt;)&amp;ne;0
-    + Increase the difficulty to isolate X from u.
-    
---
-
-+ `\(E(\epsilon_i\epsilon_j|X_i) = \beta_2^2cov(X_{2i}, X_{2j})\)`
-    + Only when `\(\beta_2^2cov(X_{2i}, X_{2j}) = 0\)` (which is often not) there's no autocorrelation.
-
-
-???
-
-`\(var(\epsilon|X_1)\)`?
-
+`\(E(\epsilon_i\epsilon_j|X_i)\neq 0\)`
 
 `\begin{align}
-var(\epsilon|X_1) =&amp; var(\beta_2X_{2} + u_i|X_1)\\ 
-=&amp; \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2
-\end{align}`
-
-All values are fixed, that is, still homoscedasitic.
-
-* `\(E(\epsilon_i\epsilon_j|X_i)\)` ?
-
-`\begin{align}
-&amp; E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) \\
-=&amp; E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)] - \beta_2^2\mu^2_{X_2}\\
-=&amp; E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j) \\
- &amp;- \beta_2^2\mu^2_{X_2}\\
-=&amp; \beta_2^2E(X_{2i}X_{2j}) - \beta_2^2\mu^2_{X_2}\\
-=&amp; \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2} \\
+E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =&amp; E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)] - \beta_2^2\mu^2_{X_2},\\
+=&amp; E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j) - \beta_2^2\mu^2_{X_2},\\
+=&amp; \beta_2^2E(X_{2i}X_{2j}) - \beta_2^2\mu^2_{X_2},\\
+=&amp; \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2},\\
 =&amp; \beta_2^2cov(X_{2i}, X_{2j}).
 \end{align}`
 
-* `\(E(X_1\epsilon)\)`?
+---
 
 `\begin{align}
-E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)] \\
-=&amp; E(X_1\beta_2X_2) + E(X_1u)\\
-=&amp; \beta_2E(X_1X_2)\\
-=&amp; \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}]\\
-When&amp;\ cov(X_1,X_2)\neq 0.
+E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)], \\
+=&amp; E(X_1\beta_2X_2) + E(X_1u),\\
+=&amp; \beta_2E(X_1X_2),\\
+=&amp; \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],\\
+When\ cov(X_1,X_2)\neq&amp; 0, E(X_1\epsilon) \neq 0.
 \end{align}`
+
++ When cov(X&lt;sub&gt;1&lt;/sub&gt;, X&lt;sub&gt;2&lt;/sub&gt;) &amp;ne; 0, E(X&lt;sub&gt;1&lt;/sub&gt;&amp;epsilon) &amp;ne; 0.
+
+---
+
+## Problem Types
+
+1. .gray[Functional form]
+1. .gray[Omitted variable]
+1. Nonlinear effect
 
 ---
 
 ## Nonlinear effect
 
-e.g., Y increases with X ( `\(\frac{\partial Y}{\partial X} &gt; 0\)` ) at a decreasing rate ( `\(\frac{\partial^2 Y}{\partial^2 X} &lt; 0\)` )
-
----
-
-![](11_specification_files/figure-html/nonlinear-1.png)![](11_specification_files/figure-html/nonlinear-2.png)
-
----
-
-Unbiased efficient estimates, but how to explain it? 
+.pull-left[
+&lt;img src="11_specification_files/figure-html/nonlinear-1.png" style="display: block; margin: auto;" /&gt;&lt;img src="11_specification_files/figure-html/nonlinear-2.png" style="display: block; margin: auto;" /&gt;
+]
 
 --
+
+.pull-right[
+Unbiased efficient .red[linear] estimates, but how to explain it? 
+]
+---
 
 ## Marginal Effect
 
@@ -368,45 +364,58 @@ Discrete:
 Continuous: 
 
 `$$\lim_{\Delta x\to0} \frac{ f(x + \Delta x) - f(x)}{\Delta x}$$`
+--
 
-
-.navy[Hint]: The marignal effect of an OLS is its &amp;beta;s
+Every value of X after X&lt;sub&gt;2&lt;/sub&gt; has a marginal effect.
+Which one is the X's effect?
 
 ---
 
-### Averagte Marginal Effect (AME)
+## Three Types of Marginal Effects
+
+.pull-left[
+
+*Averagte Marginal Effect (AME)*
 
 1. Calculate the marginal effect of each variable x for .red[each observation].
 1. Calculate the average.
 
+
+*Marginal Effect at the Mean (MEM)*
+
+Calculate the marginal effect of each variable x for .red[each's mean value].
+
+]
+
 --
 
-### Marginal Effect at the Mean (MEM)
+.pull-right[
+*Marginal Effect at Representative Values (MER)*
 
-1. Calculate the marginal effect of each variable x for .red[each's mean value].
+Calculate the marginal effect of each variable x for .red[value(s) of interest].
 
---
-
-### Marginal Effect at Representative Values (MER)
-
-1. Calculate the marginal effect of each variable x for .red[value(s) of interest].
+.center[&lt;img src = "images/spe_interaction2.jpg" height = 350&gt;]
+]
 
 ---
 
-class: small
-
 ## Marginal Effect of A Nonlinear Transformation
 
-`$$Y = \beta_0 + \beta_1X + \beta_2X^2 + u$$`
+`$$Y = \beta_0 + \beta_1X + \beta_2X^2 + u.$$`
 
 Margins: `\(\frac{\partial Y}{\partial X} = \beta_1 + 2\beta_2X\)`
-
+.pull-left[
 * H&lt;sub&gt;0&lt;/sub&gt;: &amp;beta;&lt;sub&gt;1&lt;/sub&gt; + 2&amp;beta;&lt;sub&gt;2&lt;/sub&gt;X = 0;
 * H&lt;sub&gt;1&lt;/sub&gt;: &amp;beta;&lt;sub&gt;1&lt;/sub&gt; + 2&amp;beta;&lt;sub&gt;2&lt;/sub&gt;X &gt; 0
+]
 
+.pull-right[
 That is, if the increasing speed is positive.
 
 Level set: &amp;alpha; = 0.05
+]
+
+--
 
 Statistics: `\(\frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim t_{n - 3}\)`
 
@@ -419,13 +428,17 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)} \\
 
 ## Attention!!
 
-One can't simply say if the null hypothesis is rejected, because it may .red[not be a coherent conclusion] in the entire domain of X, due to the .navy[nonlinearity]. 
+One can't simply say if the null hypothesis is rejected, because it may .red[not be a coherent conclusion] in the entire domain of X, due to the nonlinearity. 
 
 A better way to describe: "In the range from a to b, the hypothesis can be rejected."
 
+--
+
+.center[
 Or
 
-Just plot it.
+Just plot it. (do this, cool kids!)
+]
 
 ---
 
@@ -437,37 +450,39 @@ Just plot it.
 
 --
 
-![](11_specification_files/figure-html/substantive-1.png)&lt;!-- --&gt;
+&lt;img src="11_specification_files/figure-html/substantive-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Wrap Up
 
-### Measuring wrong variables
+.pull-left[
+*Measuring variables wrong*
 
-1. Proxy variable
-    + Unbiased when cov(u, X&lt;sub&gt;3&lt;/sub&gt;) = cov(v, X&lt;sub&gt;1&lt;/sub&gt;) = cov(v, X&lt;sub&gt;2&lt;/sub&gt;) = 0.
+1. Proxy variable: Unbiased when cov(u, X&lt;sub&gt;3&lt;/sub&gt;) = cov(v, X&lt;sub&gt;1&lt;/sub&gt;) = cov(v, X&lt;sub&gt;2&lt;/sub&gt;) = 0.
     
 1. Measurement error
-    + In Y
-        + &amp;beta; Unbiased, var(&amp;beta;) &amp;uarr;
-    + In X
-        + Attenuation bias (&amp;darr;)
+    + In Y: &amp;beta; Unbiased, var(&amp;beta;) &amp;uarr;
+    + In X: Attenuation bias (&amp;beta; &amp;darr;)
 
-1. Type of measurements (normal/binary)
+1. Measurement type issue (normal/binary)
 
----
+]
 
-### Specifying a wrong model
+--
+
+.pull-right[
+*Specifying a wrong model*
 
 1. Functional form 
     + Davidson-Mackinnon test
 1. Omitted variable: .red[Biased]
 
-## Interpreting issues
+*Interpreting issues*
 
 1. Nonlinear &amp;rArr; marginal effect
 1. Substantive significance
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -475,7 +490,8 @@ Just plot it.
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -584,7 +600,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
