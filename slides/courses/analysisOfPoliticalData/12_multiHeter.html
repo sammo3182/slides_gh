@@ -4,8 +4,20 @@
     <title>Multicollinearity &amp; Heteroskedasticity</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="12_multiHeter_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="12_multiHeter_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="12_multiHeter_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="12_multiHeter_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="12_multiHeter_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="12_multiHeter_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="12_multiHeter_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="12_multiHeter_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="12_multiHeter_files/panelset-0.2.6/panelset.js"></script>
+    <script src="12_multiHeter_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="12_multiHeter_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="12_multiHeter_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="12_multiHeter_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="12_multiHeter_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="12_multiHeter_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -14,35 +26,106 @@
 class: center, middle, inverse, title-slide
 
 # Multicollinearity &amp; Heteroskedasticity
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
 
 class: middle, center
 
-Your favorite is coming......
+
+
+
+*Where Have We Arrived*
+
+### Occurance
+Basis of data: Probability theory (descriptive stats, probablity, distribution)
+Basis of scientific approach: Uncertainty (confidence intervals, hypothesis testing)
+
+&amp;dArr;
+
+### Relationship
+Associations (parametric and non-parametric) and simple OLS
+
+&amp;dArr;
+
+### Mechanism
+Analysis of multi-dimensions 
+
+---
+
+## Why Multiple Regression
+
+In other words, why *controls*? 
 
 --
 
-.large[.red[Quiz Time!]]
+&lt;img src = "images/mh_drStrange1.gif" height = 350 width = 480 &gt;
 
-You'll love it~
+--
+
+&lt;img src = "images/mh_drStrange2.gif" height = 350 width = 480 &gt;
+
+???
+
+We wanna understand things realistically and predict them.
+
+Things happens all together, while we care what's the most important
+
+--
+
+Except for controls, what else should we do?
 
 ---
 
+## Using the Power Correctly
+
+1. Linearity in the parameter; &amp;larr; .green[.large[&amp;#9083;]] Lecture 11
+1. .gray[Nonstochastic X ("given X," a.k.a., "X is fixed");  &amp;larr; For Granted]
+1. .gray[X has positive noninfinite variance (var(X)); &amp;larr; For Granted]
+1. Correct specification;  &amp;larr; .green[.normal[&amp;check;]] Lecture 11
+1. .gray[Identification (N &gt; K; K = 2 for a simple OLS);  &amp;larr; DGS]
+1. Mean zero errors (E(u&lt;sub&gt;i&lt;/sub&gt;|X&lt;sub&gt;i&lt;/sub&gt;) = 0); &amp;larr; .green[.large[&amp;#9083;]] Lecture 11 (Omited variables, etc.)
+1. No covariance between X&lt;sub&gt;i&lt;/sub&gt; and u&lt;sub&gt;i&lt;/sub&gt;;
+1. No autocorrelation;
+1. Homoskedasticity;
+1. No perfect collinearity
+
+.center[Any question about we've learned so far?]
+
+---
+
+.center[.red[Quiz Time! Quiz Time!]]
+
+Tell me whether the following Up-zhu did things correctly:
+
 .center[
-&lt;video width="500" height="500" controls&gt;
-&lt;source src="images/quiz.mp4" type="video/webm"&gt;
+&lt;video width="1000" height="450" controls&gt;
+&lt;source src="https://outin-03f65b0c44ec11ec96dc00163e024c6a.oss-cn-shanghai.aliyuncs.com/sv/32a38aa2-17d4035e0d1/32a38aa2-17d4035e0d1.mp4?Expires=1637463567&amp;OSSAccessKeyId=LTAIVVfYx6D0HeL2&amp;Signature=rM%2F0LbJBGeeA4TgP9aus40s5wFM%3D" type="video/mp4"&gt;
 &lt;/video&gt;
 ]
 
-Pro and con?
 
 ---
 
+.pull-left[
+.small[
+1. Linearity in the parameter; &amp;larr; .green[.large[&amp;#9083;]] Lecture 11 &amp; .red[14 (moderation)]
+1. .gray[Nonstochastic X ("given X," a.k.a., "X is fixed");  &amp;larr; For Granted]
+1. .gray[X has positive noninfinite variance (var(X)); &amp;larr; For Granted]
+1. Correct specification;  &amp;larr; .green[.normal[&amp;check;]] Lecture 11
+1. .gray[Identification (N &gt; K; K = 2 for a simple OLS);  &amp;larr; DGS]
+1. Mean zero errors (E(u&lt;sub&gt;i&lt;/sub&gt;|X&lt;sub&gt;i&lt;/sub&gt;) = 0); &amp;larr; .green[.large[&amp;#9083;]] Lecture 11 (Omited variables, etc.) &amp; .red[14 (Missing)]
+1. No covariance between X&lt;sub&gt;i&lt;/sub&gt; and u&lt;sub&gt;i&lt;/sub&gt;; &amp;larr; .red[Lecture 13]
+1. No autocorrelation; &amp;larr; .red[Lecture 13]
+1. Homoskedasticity; &amp;larr; .red[**Lecture 12**]
+1. No perfect collinearity &amp;larr; .red[**Lecture 12**]
+]
+]
+
+
+.pull-right[
 ## Overview
 
 1. Collinearity
@@ -53,10 +136,7 @@ Pro and con?
     + Violation
     + Diagnosis
     + Solution
-        + Sandwich Method
-        + Fixed Effect
-        + Multilevel Model
-
+]
 ---
 
 class: inverse, bottom
@@ -64,8 +144,6 @@ class: inverse, bottom
 # Collinearity
 
 ---
-
-class: small
 
 ## Perfect Collinearity
 
@@ -84,11 +162,11 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
 \Rightarrow Y_i =&amp; \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
 \end{align}`
 
-PRF (&amp;beta;) is non-identifiable. 
+PRF (&amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;2&lt;/sub&gt;) is non-identifiable. 
 
 --
 
-Problematic, but the .red[only] problematic.
+Problematic, but .red[only] when "perfect"
 
 ???
 
@@ -96,13 +174,9 @@ PRF: population regression function
 
 ---
 
-class: small
+## Multicollinearity
 
-### Multicollinearity
-
-**X**&lt;sub&gt;2&lt;/sub&gt; is not a transformation of X&lt;sub&gt;1&lt;/sub&gt;.
-
-In this case, the estimators (**&amp;beta;**) remain .red[unbiased], yet
+**X**&lt;sub&gt;2&lt;/sub&gt; is not a transformation of X&lt;sub&gt;1&lt;/sub&gt;.In this case, the estimators (**&amp;beta;**) remain .red[unbiased], yet
 
 `\begin{align}
 var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
@@ -110,13 +184,13 @@ var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - 
 \end{align}`
 
 
-As &amp;beta;&lt;sub&gt;12&lt;/sub&gt; increases, the variance also increases.
+As &amp;beta;&lt;sub&gt;12&lt;/sub&gt; increases, the variance also increases (What does that mean?).
 
 ---
 
 ## Diagnosis
 
-**Variance Inflation Factors (VIF, [1, +&amp;infin;])**: A measure of how much the variance of the estimated coefficient &amp;beta;&lt;sub&gt;k&lt;/sub&gt; is "inflated" by the correlation among the predictor variables.
+**Variance Inflation Factors** (VIF, [1, +&amp;infin;]): A measure of how much the variance of the estimated coefficient &amp;beta;&lt;sub&gt;k&lt;/sub&gt; is "inflated" by the correlation among the predictor variables.
 
 `$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$`
 
@@ -135,11 +209,14 @@ Perfect then unidentified; but if your core X is insignificant.
 
 ---
 
-## Solution(7......)
+## Solution
 
-1. .red[No need for specific solution.]
 1. Removed the highly correlated variables.
 1. Remeasure the correlated variables (e.g., EFA, CFA, IRT)
+
+--
+
+.center[When do you need to do the above?]
 
 ---
 
@@ -149,11 +226,13 @@ class: inverse, bottom
 
 ---
 
-##  (Read after Me) Heteroscedasticity
+##  Heteroscedasticity
 
 Homo/heteroscedasticity &amp;asymp;     Homo/heterogeneity (of variance)
 
 ???
+
+The word “heteroscedasticity” comes from the Greek, and quite literally means data with a different (hetero) dispersion (skedasis).
 
 Regression: Heteroscedasticity
 
@@ -161,15 +240,13 @@ ANOVA: Heterogeneity (of variance)
 
 --
 
-### Assumption
-
-Homoskedasticity (var(u&lt;sub&gt;i&lt;/sub&gt;|X) = &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;)
+The CLR Assumption says: var(u&lt;sub&gt;i&lt;/sub&gt;|X) = &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;
 
 --
 
 ### Violation
 
-`\(var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.\)`
+`$$var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$$`
 
 ---
 
@@ -187,27 +264,31 @@ background-size: contain
 
 class: small
 
-## Consequence&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
-
-.red[Unbiased], expected consistent, but, again, inefficient
-
-???
+## Consequence
+.pull-left[
+.red[Unbiased], expected consistent, but inefficient
 
 `\begin{align}
-var(\hat\beta|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
-                 =&amp; var(\frac{\sum(X_i - \bar X)Y_i}{\sum(X_i - \bar X)^2}|X)\\
-                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}var(Y_i|X)\\
-                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2
+var(\hat\beta|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X),\\
+                 =&amp; var(\frac{\sum(X_i - \bar X)Y_i}{\sum(X_i - \bar X)^2}|X),\\
+                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}var(Y_i|X),\\
+                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.
 \end{align}`
+]
 
+--
+
+.pull-right[
 `\begin{align}
-H_0: \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =&amp; \frac{\sigma^2}{\sum(X_i - \bar X)^2}\\
+H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
+\Leftrightarrow\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =&amp; \frac{\sigma^2}{\sum(X_i - \bar X)^2},\\
 \sum(X_i - \bar X)^2\frac{\sigma_i^2}{\sigma^2} =&amp; \sum(X_i - \bar X)^2
 \end{align}`
 
 Only when `\(\frac{\sigma_i^2}{\sigma^2} = 1\)`, the estimate is efficient.
+]
 
---
+---
 
 ### Diagnosis
 
@@ -221,12 +302,11 @@ Park test, Goldfeld-Quandt test, Breusck-Pagan(-Godfreg) test, White test
 1. Then test `\(H_0: \sigma_L^2 = \sigma_H^2\)`
     + Statistics: `\(\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}\)`
 
-
 Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.
 
-???
+---
 
-### Park test
+**Park test**
 
 Ocular-inspection test: Use the scalar points of `\(\hat u_i^2\)` against `\(X_i\)`, or `\(\hat u_i^2\)` against `\(Y_i\)`
 
@@ -236,11 +316,16 @@ Regress `\(ln(\hat u_i^2)\)` on some `\(X_{ki}\)`:
 
 Do the t-test of coefficient in `\(ln(X_i)\)`: `\(H_0: \hat\delta_1 = 0.\)`
 
+???
 
-&lt;img src="images/parkTest.png" height = 200 /&gt;
+Ocular: 望远镜
 
+&lt;img src="images/mh_parkTest.png" height = 200 /&gt;
 
-### Breusck-Pagan(-Godfreg) test
+---
+
+.pull-left[
+**Breusck-Pagan(-Godfreg) test**
 
 Assuming `\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)`
 
@@ -250,47 +335,46 @@ Regress `\(\hat u_i^2\)` on `\(X_1, X_2, \cdots, X_{k - 1}\)`,
 `\(H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0\)`
 
 
-H_1: At least one of the &amp;sigma;&amp;ne;0, `\(\sim(\sigma_i = 0)\)`
+`\(H_1\)`: At least one of the &amp;sigma;&amp;ne;0
 
 
 Statistics `\(F_{k - 1, n - k}\)`
+]
 
-### White Test
+--
+
+.pull-right[
+**White Test**
 
 1. Regress Y on X to get `\(\hat u_i^2\)`
 1. Regress `\(\hat u_i^2\)` on `\(\sum X_i + \sum X_i^2 + \sum X_iX_j\)` or `\(\hat Y_i\)`.
 1. Test this model against a model with no variables (F test).
+]
 
 ---
 
-class: small
-
 ## Solution
-
-When do you need a solution? 
-
---
 
 White covariance matrix, weighted least square, FGLS......
 
-???
-
-When your variable of interest isn't sig or you are interested in the heteroscedasticity
-
-### White covariance matrix     
+**White covariance matrix**     
 (a.k.a., Heteroscedasitic-consistent covariance matrix).
 
-`\(E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}\)`
+`$$E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}$$`
 
 Since E(u&lt;sub&gt;i&lt;/sub&gt;|X) = 0 by assumption, we can estimate `\(u_i\)` with `\(\hat u_i^2\)` and estimate `\(var(\hat\beta_1|X)\)` with `\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.\)`
 
+--
+
 The estimates turn out to be .red[biased], but converge asymptotically in n to the true distribution. (What does this imply?) 
 
+--
 
 Means it's fine when N is large enough.
 
+---
 
-### Weighted least square
+**Weighted least square**
 
 Reduce the substantive effect of the change in X by `\(\frac{1}{\sigma_i}\)`, in order to squeeze the value towards the middle:
 
@@ -304,16 +388,12 @@ Given &amp;sigma;&lt;sub&gt;i&lt;/sub&gt; is known,
 
 The last equation is homoscedastistic.
 
+---
 
-However, in most cases, we don't know &amp;sigma;&lt;sub&gt;i&lt;/sub&gt;. 
+However, in most cases, we don't know &amp;sigma;&lt;sub&gt;i&lt;/sub&gt;. So, usually we assume var(u&lt;sub&gt;i&lt;/sub&gt;)&amp;sim; X&lt;sub&gt;1i&lt;/sub&gt;, i.e., var(u&lt;sub&gt;i&lt;/sub&gt;) = &amp;sigma;&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; = &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;X&lt;sub&gt;i&lt;/sub&gt; = h&lt;sub&gt;i&lt;/sub&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;.
 
-
-So, usually we assume var(u&lt;sub&gt;i&lt;/sub&gt;)&amp;sim; X&lt;sub&gt;1i&lt;/sub&gt;, i.e., var(u&lt;sub&gt;i&lt;/sub&gt;) = &amp;sigma;&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; = &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;X&lt;sub&gt;i&lt;/sub&gt; = h&lt;sub&gt;i&lt;/sub&gt;&amp;sigma;&lt;sup&gt;2&lt;/sup&gt;.
-
-
-Goal: var(u&lt;sup&gt;\*&lt;/sup&gt;&lt;sub&gt;i&lt;/sub&gt;) = var(u&lt;sup&gt;\*&lt;/sup&gt;&lt;sub&gt;j&lt;/sub&gt;), &amp;forall; i,j. 
-
-Then,
+.pull-left[
+Given the goal var(u&lt;sup&gt;\*&lt;/sup&gt;&lt;sub&gt;i&lt;/sub&gt;) = var(u&lt;sup&gt;\*&lt;/sup&gt;&lt;sub&gt;j&lt;/sub&gt;), &amp;forall; i,j. 
 
 `\begin{align}
 u^*_i =&amp; \frac{u_i}{\sqrt{h_i}}\\
@@ -323,12 +403,15 @@ var(\frac{u_i}{\sqrt{h_i}}) =&amp; \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i
             X_{1i}^* =&amp; \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
 \end{align}`
 
+]
 
+.pull-right[
 In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.
+]
 
---
+---
 
-### Feasible Generalized Linear Squares (FGLS)
+**Feasible Generalized Linear Squares** (FGLS)
 
 `\begin{align}
 \boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{u}; \\
@@ -360,15 +443,13 @@ var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\
 
 --
 
-&amp;zwnj;Hint: This method does not get SE, and also .red[biased] for small N.
+.center[NB: This method does not get SE, and also .red[biased] for small N.]
 
 ---
 
-class: small
-
 ## "Sandwich" Matrix
 
-The above method is a type of "sandwich" estimator.
+FGLS is a type of "sandwich" estimator.
 
 In a more general view, let `\(\boldsymbol{Q} = \boldsymbol{X'X}\)` and 
 
@@ -392,7 +473,8 @@ Instead, let `\(\boldsymbol{G} = \boldsymbol{X'GX}\)`, then `\(var(\boldsymbol{\
 
 ## Heterogeneity in TSCS Data
 
-TSCS: Time-series cross-sectional data, a.k.a., "pooled data", "panel data"(wrong!)
+TSCS: Time-series cross-sectional data.   
+Sometimes, they are called "pooled data", "panel data"(wrong!)
 
 Dealing with heterogeneity in TSCS data:
 
@@ -402,35 +484,27 @@ Dealing with heterogeneity in TSCS data:
 
 ---
 
-class: small
-
 ## Robust Standard Error
 
-### Sandwich SE
+**Sandwich SE**
 
-In the FGLS version, the "meat" can be identified only when T &gt; N, and before this the autocorrelation has to be eliminated.
-
-???
-
-Autocorrelation: `\(cov(u_i, u_j|X_i, X_j) = 0, \forall i, j\)`
+In the FGLS version, the "meat" can be identified only when T &gt; N, and before this the autocorrelation ($cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$) has to be eliminated.
 
 --
 
-### Panel-corrected SE
+**Panel-corrected SE**
 
-An alternative version of the sandwich SE. 
-
-&amp;Omega; is clustered by time periods: `\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)`
+An alternative version of the sandwich SE. &amp;Omega; is clustered by time periods: `\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)`
 
 --
 
-### Cluster SE
+**Cluster SE**
 
-Adjust SE to account for correlations within clusters
+Adjust SE to account for correlations within clusters.
 
-???
+---
 
-### Within-between model
+**Within-between model**
 
 1. Run separate models in each group
 1. Run an aggregate regression: 
@@ -446,11 +520,9 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it},
 
 ---
 
-class: small
-
 ## Fixed Effect
 
-### Least Square with Dummy Variables (LSDV)
+**Least Square with Dummy Variables** (LSDV)
 
 Type I: 
 
@@ -464,23 +536,23 @@ Type II:
 
 ---
 
-Concerns of LSDV
+## Issues of LSDV
 
-1. Adding a lot of variables (risk of using out of the d.f.)
-1. Additional high multicollinearity
-1. Losing time invariant variables
-1. Inefficient estimates of FE on binary and dependent variables
+1. Adding a lot of variables (risk of using out of the d.f.);
+1. Additional high multicollinearity;
+1. Losing time invariant variables;
+1. Inefficient estimates of FE on binary and dependent variables.
 
 ???
 
 For the last two concerns, considering using duration models.
 
----
+--
 
-Alternatives
+Alternatives solutions:
 
 1. Demeaning
-1. Fixed effect Vector Decomposition (FEVD)
+1. Fixed effect vector decomposition (FEVD)
 
 Con : 
 
@@ -489,11 +561,11 @@ Con :
 
 ---
 
-## Methodologists' Solution: Modeling It
+## Ultimate Solution
 
-a.k.a., *Pan-Ta*
+Modeling it, a.k.a., *Pan-Ta*~
 
-Heteroscedasticity can be theoretically meaningful,, esp., when researchers focus on how the variance changes. 
+Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes. 
 
 e.g., Assuming var(u&lt;sub&gt;i&lt;/sub&gt;) = &amp;sigma;&lt;sup&gt;2&lt;/sup&gt;e&lt;sup&gt;&amp;gamma;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;2i&lt;/sub&gt;&lt;/sup&gt;. 
 
@@ -505,7 +577,7 @@ If &amp;gamma;&lt;sub&gt;1&lt;/sub&gt; = 0, then the model is homoscedastistic; 
 
 a.k.a., hierarchical modeling
 
-### (Two-Level) Random Intercept
+Basic kind: (Two-Level) Random Intercept
 
 `\begin{align}
 Y_{ij} = \beta_{0j}&amp; + \beta_{1j}X_{ij} + \epsilon_{ij}, \epsilon_{ij}\sim N(0, \sigma^2)\\
@@ -524,8 +596,9 @@ Represent the similarity between individual and group level. 0 means no group ef
 
 ---
 
-### Random Slop
+Advanced kind: Random Slop
 
+.pull-left[
 `\begin{align}
 Y_{ij} = &amp;\beta_{0j} + \beta_{1j}X_{ij} + \epsilon_{ij}\\
        &amp;\beta_{0j} = \gamma_{00} + \gamma_{01}Z_j + u_{0j}\\
@@ -538,6 +611,7 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
 \tau_0\tau_1 &amp; \tau_1^2
 \end{array}\right)\right]
 \end{align}`
+]
 
 ???
 
@@ -545,9 +619,9 @@ BVN: Bivariate Normal
 
 The two variables in a bivariate normal are both are normally distributed, and they have a normal distribution when both are added together. Visually, the bivariate normal distribution is a three-dimensional bell curve.
 
----
+--
 
-Covariate Matrix: 
+.pull-right[
 
 `\begin{align}
 \left(\begin{array}{cc}
@@ -557,9 +631,15 @@ Covariate Matrix:
 \end{align}`
 
 1. Identity: &amp;tau;&lt;sub&gt;0&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; = &amp;tau;&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; = 1;
-1. .navy[Exchangeable: &amp;tau;&lt;sub&gt;0&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;= &amp;tau;&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;;]
+1. .red[Exchangeable: &amp;tau;&lt;sub&gt;0&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;= &amp;tau;&lt;sub&gt;1&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;;]
 1. Independent: &amp;tau;&lt;sub&gt;0&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;&amp;tau;&lt;sub&gt;&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt; = 0;
 1. Unstructured: no specific relationships is assumed for the &amp;tau;s.
+]
+
+???
+
+Covariate Matrix: 
+
 
 ---
 
@@ -567,15 +647,15 @@ Covariate Matrix:
 
 1. Collinearity
     + Violation: Identification
-    + Diagnosis: VIF or...just see the results
+    + Diagnosis: VIF
     + Solution: Hmm...
 1. Heteroscedasticity
     + Violation: Homoscedasticity
     + Diagnosis: Park test, Goldfeld-Quandt test, Breusck-Pagan(-Godfreg) test, White test
     + Solution
-        + Sandwich Method
-        + Fixed Effect(!)
-        + Multilevel Model(!!)
+        + Sandwich SE
+        + Fixed Effect
+        + Multilevel Model
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
@@ -584,7 +664,8 @@ Covariate Matrix:
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -693,7 +774,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
