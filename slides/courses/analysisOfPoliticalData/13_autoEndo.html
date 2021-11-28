@@ -4,20 +4,20 @@
     <title>Endogeneity and Autocorrelation</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="13_autoEndo_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="13_autoEndo_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="13_autoEndo_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="13_autoEndo_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="13_autoEndo_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-    <link href="13_autoEndo_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="13_autoEndo_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/tile-view-0.2.6/tile-view.js"></script>
     <link href="13_autoEndo_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="13_autoEndo_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/panelset-0.2.4/panelset.js"></script>
+    <script src="13_autoEndo_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="13_autoEndo_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/panelset-0.2.6/panelset.js"></script>
     <script src="13_autoEndo_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="13_autoEndo_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="13_autoEndo_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="13_autoEndo_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="13_autoEndo_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="13_autoEndo_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -26,12 +26,10 @@
 class: center, middle, inverse, title-slide
 
 # Endogeneity and Autocorrelation
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
-
 
 
 
@@ -54,15 +52,17 @@ class: inverse, bottom
 
 ---
 
+class: center
+
 ## What's the Problem
 
-Grades ~ Language Skill
-
+Grades ~ Language Skill   
 Which influence which?
 
 --
 
-Formally, given Y&lt;sub&gt;i&lt;/sub&gt; = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;i&lt;/sub&gt; + u&lt;sub&gt;i&lt;/sub&gt;,
+Formally, given Y&lt;sub&gt;i&lt;/sub&gt; = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;i&lt;/sub&gt; + u&lt;sub&gt;i&lt;/sub&gt;, exogeneity means cov(X&lt;sub&gt;i&lt;/sub&gt;, u&lt;sub&gt;i&lt;/sub&gt;) = 0.
+
 
 Endogeneity occurs when cov(X&lt;sub&gt;i&lt;/sub&gt;, u&lt;sub&gt;i&lt;/sub&gt;) .red[&amp;ne; 0].
 
@@ -78,9 +78,38 @@ X =&amp; \beta'_0 + \beta'_1Y + v
 
 ---
 
-## Diagnosis for Endogeneity
+## Causes
 
-Special case: Variable omission (revisit)
+A.k.a., why can't correlation be causation?
+
+.center[&lt;img src = "images/ea_correlation.png"&gt;]
+
+--
+
+.pull-left[
+
+*Selections on the Observables* (SOO)
+
+.center[&lt;img src = "images/ea_selectionBias.png"&gt;]
+]
+
+???
+
+If Z is observed, by adjusting Z, the diagram fulfills the backdoor criterion.
+
+--
+
+.pull-right[
+Unobservable Confounders
+
+.center[&lt;img src = "images/ea_unobservable.png"&gt;]
+]
+
+---
+
+## Diagnosis
+
+For the observables: 
 
 Hausman Procedure (using t distribution):
 
@@ -90,27 +119,139 @@ To test if this leads to endogeneity, we regress: `\(X_1 = \gamma X_2 + v\)`, an
 
 .center[H&lt;sub&gt;0&lt;/sub&gt;: cov(u', v) = 0.]
 
+--
+
+How about those unobservables?
+
+???
+
+Residuals is probably the most direct indicator
+
 ---
 
-## Dealing with Endogeneity
+## Dealing with Endogeneity: SOO
 
-### Instrumental Variables (IV)
+A classic example: Yule-Simpson Paradox
 
-We need a variable Z&lt;sub&gt;i&lt;/sub&gt; that .magenta[simultaneously]: 
+.center[&lt;img src = "images/ea_yuleSimpson.webp" height = 500&gt;]
+
+???
+
++ Edward H. Simpson 1951
++ Karl Pearson et al.1899
++ Udny Yule, in 1903
++ Also called as Simpson's reversal, Yule–Simpson effect, amalgamation paradox, or reversal paradox
+
+整体 treatment &gt; control
+男女都是treatment &lt; control
+
+---
+
+background-image: url("images/ea_yuleSimpson.gif")
+background-position: center
+background-size: contain
+
+---
+
+Matching, weighting, even better controls would be helpful.
+
+--
+
+.center[What if the selection outcomes are only partially observable?]
+
+E.g., Wage  ~ **X**, but only **X**&lt;sub&gt;employed&lt;/sub&gt; is observable.
+
+???
+
+Suppose that a researcher wants to estimate the determinants of wage offers, but has access to wage observations for only those who work. Since people who work are selected non-randomly from the population, estimating the determinants of wages from the subpopulation who work may introduce bias.
+
+--
+
+If the omission has a .red[fixed, known limit] determining what observations get in to the sample &amp;rarr; a .navy[Tobit] model.
+
+--
+
+If not &amp;rarr; a .navy[Heckman] model (two/N-stage model)
+
+.pull-left[
+Stage I: **E** ~ **Z**&amp;gamma; + **u**&lt;sub&gt;e&lt;/sub&gt;;
+]
+
+???
+
+E is probability to be hired; W is the explanatory variables
+
+--
+
+.pull-right[
+Stage II:     
+**Wage**|(E, **X**),  ~ **X**&lt;sub&gt;employed&lt;/sub&gt; + **u**&lt;sub&gt;w&lt;/sub&gt;
+
+E[W|X,E]=X&amp;beta; +&amp;rho;&amp;sigma;&lt;sub&gt;**u**&lt;sub&gt;w&lt;/sub&gt;&lt;/sub&gt;&amp;lambda; (Z&amp;gamma;),
+
+1. &amp;lambda;: Inverse Mills Ratio from stage I;
+1. &amp;rho; = corr(**u**&lt;sub&gt;e&lt;/sub&gt;, **u**&lt;sub&gt;w&lt;/sub&gt;)&lt;sup&gt;\*&lt;/sup&gt;;
+1. &amp;sigma;&lt;sub&gt;**u**&lt;sub&gt;w&lt;/sub&gt;&lt;/sub&gt;: Standard deviation of **u**&lt;sub&gt;w&lt;/sub&gt;.
+]
+
+.footnote[.red[ASSUMPTION]: The errors are jointly normal.]
+
+???
+
+Mills ratio: Complementary cumulative distribution function OVER probability density function:
+
+`\begin{align}
+m(x) :=&amp; \frac{\bar{F}(x)}{f(x)},\\
+\bar{F}(x) := \Pr[X&gt;x] = \int_x^{+\infty} f(u)\, du
+\end{align}`
+
+---
+
+## Dealing with Endogeneity: Unobservables
+
+Famous or "notorious" instrumental variables (IV)
+
+.center[&lt;img src = "images/ea_instrumental.png"&gt;]
+
+--
+
+Statistically, we need a variable Z&lt;sub&gt;i&lt;/sub&gt; that .red[simultaneously] satisfies: 
 
 1. cov(X&lt;sub&gt;i&lt;/sub&gt;, Z&lt;sub&gt;i&lt;/sub&gt;) &amp;ne; 0
 1. cov(u&lt;sub&gt;i&lt;/sub&gt;, Z&lt;sub&gt;i&lt;/sub&gt;) = 0
 
 ---
 
-## An Example of Instrumental Variable Method&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## An Example
+
+The effect of education on earnings
+
+OV: Income  
+EV: Likelihood of going to school
+
+.center[(What's the problem?)]
+
+???
+
+Individual ability
+
+--
+
+IV candidates: 
+
+1. Proximity to college (Card 1995)
+1. Month of birth (Angrist and Krueger 1991)
+
+---
+
+## Another Example
 
 How does economic growth affect within-country conflicts? 
 
-DV : Incidence of civil war
-IV : Economic growth per capita
+OV: Incidence of civil war   
+EV: Economic growth per capita
 
-How's there an endogeneity issue?
+.center[(What's the problem?)]
 
 ???
 
@@ -118,13 +259,10 @@ Endogeneity: religious fractionalization, mountainous terrain, and population
 
 --
 
-IV candidate:
-
-Rainfall growth (% change in rainfall from the previous year) .small[(Miguel, Satyanath, and Sergenti 2004)]
+IV : Rainfall growth (% change in rainfall from the previous year) 
 
 ???
-
-Journal of Political Economy
+Miguel, Satyanath, and Sergenti 2004, Journal of Political Economy
 
 --
 
@@ -134,60 +272,53 @@ Concerns?
 
 Agriculture only? 
 
-Drought in one country could make another country's projects more scare and therefore valuable.
-
-
-## Another Example I of Instrumental Variable Method
-
-The effect of education on earnings
-
-DV : Income  
-IV : Likelihood of going to school
-
-Endogeneity : Ability
-
-IV candidates: 
-
-1. Proximity to college (Card 1995)
-1. Month of birth (Angrist and Krueger 1991)
-
+Is rainfall random? Drought in one country could make another country's projects more scare and therefore valuable.
 
 ---
+
+class: center, middle
 
 ## How to Find a Proper IV
 
-1. Seeking something seemingly irrelevant
+Seeking something seemingly irrelevant
 
 --
 
-1. Seeking back to the time
+Seeking back to the time
 
 --
 
-1. Making some assumptions 
+Making some assumptions 
 
 --
 
-1. Ok, ok, I have to concede, it is a .orange[myth]...
+Ok, ok, IV is a .red[myth], unless by design...
 
 ---
 
-## Let's Assume You've Find One &lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## Assuming You Found One
 
+.pull-left[
 Two Stage Least Squares (2SLS)
+
+A pretty rough way to think about it: 
 
 1. Regress **X** on **Z** to get `\(\boldsymbol{\hat X}\)`;
 1. Regress **Y** on `\(\boldsymbol{\hat X}\)`.
 
-???
+Solvable on one condition:    
+{{content}}
+]
 
-## Solving Underidentification with IVs
+--
 
-### Just-identified model
+Being identifiable, `$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$`
+{{content}}
 
-`$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$`
+--
 
-### Over-identified model
+.pull-right[
+*Over-identified model*
 
 .small[
 `\begin{align}
@@ -196,8 +327,10 @@ Two Stage Least Squares (2SLS)
 \end{align}`
 ]
 
-where `\(\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'\)` (a.k.a., the projection matrix), and `\(\boldsymbol{\hat X} = \boldsymbol{P_ZX}\)`
+where `$$\boldsymbol{P_z} = Z(Z'Z)^{-1}Z'$$` (a.k.a., the projection matrix), and `$$\boldsymbol{\hat X} = \boldsymbol{P_ZX}$$`
+]
 
+???
 
 Recommend over-identified model more
 
@@ -207,8 +340,6 @@ because the additional instruments can be used to increase the precision of the 
 
 
 ---
-
-class: small
 
 ## Effect
 
@@ -220,87 +351,49 @@ cov(Y_i, Z_i) =&amp; cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
        var(\hat\beta_1) =&amp; \frac{\sigma^2}{n\sigma_X^2\rho_{XZ}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
 \end{align}`
 
-Trade-off: Unbiased estimates from IV, yet a bigger variance (&amp;rho;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;XX&lt;/sub&gt; = 1 &gt; &amp;rho;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;XZ&lt;/sub&gt;)
-
-???
-
-## Weak Instruments
-
-cov(Y, Z) is small but not equal 0.
-
-`$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$`
-
-When cov(X, Z) is salient, no big problem. But when it's small, the estimate will be biased---in which case, OLS might be even better.
-
-
-### Check for the Problem
-
-Stock and Watson (2007, 735)
+Trade-off: .navy[Unbiased estimates] from IV, yet a .red[bigger variance] (&amp;rho;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;XX&lt;/sub&gt; = 1 &gt; &amp;rho;&lt;sup&gt;2&lt;/sup&gt;&lt;sub&gt;XZ&lt;/sub&gt;)
 
 ---
 
-## A Broader View of Endogeneity Solutions&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## Weak Instruments
 
-Common causes of endogeneity
+.center[&lt;img src = "images/ea_instrumental.png"&gt;]
 
-1. Omitted variable
-    + Model misspecification
-    + Selection bias (Heckman)
-1. Measurement error
-1. Simultaneity (2SLS, 3SLS)
+
+Statistically, we need a variable Z&lt;sub&gt;i&lt;/sub&gt; that simultaneously satisfies cov(X&lt;sub&gt;i&lt;/sub&gt;, Z&lt;sub&gt;i&lt;/sub&gt;) &amp;ne; 0, and cov(u&lt;sub&gt;i&lt;/sub&gt;, Z&lt;sub&gt;i&lt;/sub&gt;) = 0. 
+
+--
+
+However, when
+cov(Y, Z) is small but not equal 0, "weak" instrument.
+
+`$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$`
+
++ When cov(X, Z) is salient, not fatal. w
++ When it's small, the estimate will be biased---in which case, OLS might be even better.
 
 ???
 
-Study woman wage given education. The selection point is the data is only the women who were in the labor force.
-
-https://stats.stackexchange.com/questions/172508/two-stage-models-difference-between-heckman-models-to-deal-with-sample-selecti
-
-
-### Additional Regressors
-
-Let Ys being endogenous, and Xs being exogenous.
-
-One may use multiple exogenous variables to instrument the endogenous variable.
-
-
-For example, 
-
-`\begin{align}
-Y_1 =&amp; \beta_0 + \beta_1Y_2 + \beta_2X_1 + u\\
-Y_2 =&amp; \gamma_0 + \gamma_1X_1 + \gamma_2X_2 + \gamma_3X_3 + v\\
-\end{align}`
-
-Assuming 
-
-`\begin{align}
-cov(Z, v) =&amp; 0\\
-cov(Z, u) =&amp; 0\\
-\gamma_2\neq&amp; 0 | \gamma_3\neq 0
-\end{align}`
-
-In other words, Y&lt;sub&gt;2&lt;/sub&gt; won't perfectlly collinear with Z&lt;sub&gt;1&lt;/sub&gt;. 
-
-
-Estimate
-
-`\begin{align}
-\hat Y_2 =&amp; \hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v\\
-Y_1 =&amp; \beta_0 + \beta_1\hat Y_2 + \beta_2X_1 + u\\
-\Rightarrow\ Y_1 =&amp; \beta_0 + \beta_1(\hat\gamma_0 + \hat\gamma_1X_1 + \hat\gamma_2X_2 + \hat\gamma_3X_3 + v) + \beta_2X_1 + u\\
-                 =&amp; (\beta_0 + \beta_1\hat\gamma_0) + (\beta_2 + \beta_1\hat\gamma_1)X_1 + \beta_1\hat\gamma_2X_2 + \beta_1\hat\gamma_3X_3 + (\beta_1v + u)
-\end{align}`
-
-This will produce an unbiased result but not exactly &amp;beta;&lt;sub&gt;1&lt;/sub&gt;.
+Check for the Problem: Stock and Watson (2007, 735)
 
 ---
 
 class: inverse, bottom
 
-# (Temporary) Autocorrelation
+# Autocorrelation
 
 ---
 
-class: small
+## Typology of Autocorrelation
+
+.center[E(u&lt;sub&gt;1&lt;/sub&gt;, u&lt;sub&gt;2&lt;/sub&gt;) = 0]
+
+1. Spatial autocorrelation
+    + Heteroscedasticity (Multilevel)
+    + Spillover (Spatial models)
+1. Temporal autocorrelation
+
+---
 
 ## Time Series
 
@@ -308,61 +401,76 @@ How does time make effects?
 
 --
 
-### One-period shock
-
+.pull-left[
+One-period shock
 `\begin{align}
 Y_t =&amp; \beta_0 + \beta_1(Z_t + 1) + \beta_2Z_{t-1} + \cdots + u\\
 Y_{t + 1} =&amp; \beta_0 + \beta_1Z_{t + 1} + \beta_2(Z_t + 1) + \beta_3Z_{t-1} + \cdots + u\\
 Y_{t + 2} =&amp; \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \beta_3(Z_t + 1) + \cdots + u
 \end{align}`
+]
+
+.pull-right[
+.right[&lt;img src = "images/ea_oneShot.gif" width = 250&gt;]
+]
 
 --
-
-### Permanent Shift
+.pull-left[
+Permanent Shift
 
 `\begin{align}
 Y_t =&amp; \beta_0 + \beta_1(Z_{t + 1}) + \cdots + u\\
 Y_{t + 1} =&amp; \beta_0 + \beta_1(Z_{t + 1} + 1) + \beta_1(Z_t + 1) + \cdots + u
 \end{align}`
+]
+
+.pull-right[
+.right[&lt;img src = "images/ea_loki.jpg" width = 250&gt;]
+]
 
 ---
 
 ## Time Dependency: When Time Per Se Is the Effect
 
-Violated assumption?
 
---
+`$$E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j.$$`
 
-`\(E(u_i, u_j|X_i, X_j) = cov(u_i, u_j|X_i, X_j) = 0, \forall i, j\)`
+When two variables both have, e.g., positive trend, then they appear correlated, although they are actually not.
 
-When two variables both have, e.g., positive trend, then they appear correlated although they are actually not.
+`$$E(u_{t_1}, u_{t_2}|X_{t_1}, X_{t_2}) \neq 0.$$`
 
 ---
 
-class: small
-
 ## Dealing with Time Dependency
 
-Fixed Effect
+.panelset[
+.panel[.panel-name[Fixed Effect]
+`$$Y_t\sim X_t + Time_t$$`
+]
 
-De-trend: `\(Y_t\sim Z_t\)`
+.panel[.panel-name[De-trend]
+`$$Y_t\sim X_t$$`
 
 `\begin{align}
 \text{Run } Y_t =&amp; \beta_0 + \beta_1Time + u_t;\\
-            Z_t =&amp; \gamma_0 + \gamma_1Time + v_t;\\
+            X_t =&amp; \gamma_0 + \gamma_1Time + v_t;\\
 \text{Run } Y'_t =&amp; Y_t - (\hat\beta_0 + \hat\beta_1Time);\\
-            Z'_t =&amp; Z_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
-\Rightarrow\ Y'_t =&amp; \delta Z'_t + e_t.
+            X'_t =&amp; X_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
+\Rightarrow\ Y'_t =&amp; \delta X'_t + e_t.
 \end{align}`
 
---
+]
 
+.panel[.panel-name[Spline]
 Spline 
 
-.center[&lt;img src="images/spline.gif" height = 200 /&gt;]
+.center[&lt;img src="images/spline.gif" height = 400 /&gt;]
+]
 
-Smooth function: t, t&lt;sup&gt;2&lt;/sup&gt;, t&lt;sup&gt;2&lt;/sup&gt;
-
+.panel[.panel-name[Smooth]
+Smooth function: t + t&lt;sup&gt;2&lt;/sup&gt; + t&lt;sup&gt;3&lt;/sup&gt;
+]
+]
 
 ???
 
@@ -372,13 +480,15 @@ Smooth function: t, t&lt;sup&gt;2&lt;/sup&gt;, t&lt;sup&gt;2&lt;/sup&gt;
 
 ## When Time is More than Time
 
-Affecting the relations between DV and IVs and among IVs
+Affecting the relations between OV and EVs and among IVs
 
-Time series analysis
+--
 
-+ Random work
-+ Unit root
-+ Stationary
+.center[
+*Time series analysis*
+
+&lt;img src = "images/ea_hugePit.jfif" height = 400&gt; 
+]
 
 ---
 
@@ -403,37 +513,35 @@ a.k.a. one .red[Unit Root].
 
 ---
 
-class: small
-
-## Stationary&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+## Stationary
 
 For every collection of time periods (X&lt;sub&gt;t&lt;sub&gt;1&lt;/sub&gt;&lt;/sub&gt;, X&lt;sub&gt;t&lt;sub&gt;2&lt;/sub&gt;&lt;/sub&gt;, X&lt;sub&gt;t&lt;sub&gt;3&lt;/sub&gt;&lt;/sub&gt;,... where t&lt;sub&gt;1&lt;/sub&gt; &lt; t&lt;sub&gt;2&lt;/sub&gt; &lt; t&lt;sub&gt;3&lt;/sub&gt;...), their distributions are the same as X&lt;sub&gt;t&lt;sub&gt;1&lt;/sub&gt;&lt;/sub&gt; + h, X&lt;sub&gt;t&lt;sub&gt;2&lt;/sub&gt;&lt;/sub&gt; + h, X&lt;sub&gt;t&lt;sub&gt;3&lt;/sub&gt;&lt;/sub&gt; + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
 
 --
 
 .pull-left[
-&lt;img src="images/baguazhang.gif" height = 300 /&gt;
+&lt;img src="images/ea_baguazhang.gif" height = 300 /&gt;
 ]
 
 --
 
 .pull-right[
-&lt;img src="images/zuiquan.gif" height = 300 /&gt;
+&lt;img src="images/ea_zuiquan.gif" height = 300 /&gt;
 ]
 
 
-???
+---
 
-### Covariance Stationary
+## Covariance Stationary
 
 Given: 
 
-1. t(X&lt;sub&gt;t&lt;/sub&gt;) is constant
-1. var(X&lt;sub&gt;t&lt;/sub&gt;) is constant
-1. cov(X&lt;sub&gt;t&lt;/sub&gt;,X&lt;sub&gt;t + n&lt;/sub&gt;)does not rely on t (i.e., cov(X&lt;sub&gt;t,&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;) = cov(X&lt;sub&gt;t + 1&lt;/sub&gt;,X&lt;sub&gt;t + 2&lt;/sub&gt;))
+1. t(X&lt;sub&gt;t&lt;/sub&gt;) is constant;
+1. var(X&lt;sub&gt;t&lt;/sub&gt;) is constant;
+1. cov(X&lt;sub&gt;t&lt;/sub&gt;,X&lt;sub&gt;t + n&lt;/sub&gt;)does not rely on t, i.e., cov(X&lt;sub&gt;t,&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;) = cov(X&lt;sub&gt;t + 1&lt;/sub&gt;,X&lt;sub&gt;t + 2&lt;/sub&gt;).
 
 
-Then, a moving average process that is covariance stationary is weakly dependent if cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;)&amp;rarr;0 as h&amp;rarr;&amp;infin;.
+Then, a moving average process that is covariance stationary is weakly dependent if cov(X&lt;sub&gt;t&lt;/sub&gt;,X&lt;sub&gt;t + n&lt;/sub&gt;)&amp;rarr;0 as n&amp;rarr;&amp;infin;.
 
 
 When covariance stationary plus weakly dependent (e.g., `\(Y_t = \rho Y_{t - 1} + X_t + e_t\)`), the OLS is consistent.
@@ -442,29 +550,27 @@ When covariance stationary plus weakly dependent (e.g., `\(Y_t = \rho Y_{t - 1} 
 
 ## Influence on the Coefficient
 
-Let's assume the mean of X is zero to simplify the maths (not necessary, though).
+Let's assume the mean of X is zero to simplify the maths
 
 `\begin{align}
-\hat\beta_1 =&amp; \beta_1 + \frac{\sum(X_0 - \bar X)}{\sum(X_0 - \bar X)^2}u_t\\
+\hat\beta_1 =&amp; \beta_1 + \frac{\sum(X_t - \bar X)}{\sum(X_t - \bar X)^2}u_t\\
             =&amp; \beta_1 + \frac{\sum X_t}{\sum X_t^2}u_t, u_t = \rho u_{t - 1} + e_t
 \end{align}`
 
-Only when &amp;rho; = 0 (or cov(X&lt;sub&gt;t&lt;/sub&gt;X&lt;sub&gt;t + n&lt;/sub&gt;) = 0), the estimate is identical with the OLS estimate.
+Only when &amp;rho; = 0 (or cov(X&lt;sub&gt;t&lt;/sub&gt;, X&lt;sub&gt;t + n&lt;/sub&gt;) = 0), the estimate is identical with the OLS estimate.
 
 In other cases, &amp;beta; is .red[biased].
 
 ---
 
-class: small
-
 ## Influence on the Variance
 
 `\begin{align}
-var(u_t|X) =&amp; var(\rho u_{t - 1} + e_t|X)\\
-           =&amp; var(\rho(\rho u_{t - 2} + e_{t - 1}) + e_t|X)\\
-           =&amp; var(\rho(\rho (\rho u_{t - 3} + e_{t-2}) + e_{t-1}) + e_t|X)\\
-           =&amp; var(\rho^3u_{t - 3} + \rho^2e_{t-2} + \rho e_{t - 1} + e_t |X)\\
-           =&amp; \rho^6var(u_{t - 3}) + \rho^4\sigma_{e_{t-2}} + \rho^2\sigma_{e_{t-2}} + \sigma_e^2
+var(u_t|X) =&amp; var(\rho u_{t - 1} + e_t|X),\\
+           =&amp; var(\rho(\rho u_{t - 2} + e_{t - 1}) + e_t|X),\\
+           =&amp; var(\rho(\rho (\rho u_{t - 3} + e_{t-2}) + e_{t-1}) + e_t|X),\\
+           =&amp; var(\rho^3u_{t - 3} + \rho^2e_{t-2} + \rho e_{t - 1} + e_t |X),\\
+           =&amp; \rho^6var(u_{t - 3}) + \rho^4\sigma_{e_{t-2}} + \rho^2\sigma_{e_{t-2}} + \sigma_e^2.
 \end{align}`
 
 --
@@ -472,26 +578,22 @@ var(u_t|X) =&amp; var(\rho u_{t - 1} + e_t|X)\\
 Following this manner, when t increases,
 
 `\begin{align}
-var(u_t|X) =&amp; \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots\\
-           =&amp; \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)}\\
-           =&amp; \frac{\sigma_e^2}{1 - \rho^2}
+var(u_t|X) =&amp; \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots,\\
+           =&amp; \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)} = \frac{\sigma_e^2}{1 - \rho^2}.
 \end{align}`
 
 --
 
-When &amp;rho; &gt; 0, the estimation of variance through OLS will be overestimated.
+When &amp;rho; &gt; 0, the estimation of variance through OLS will be .red[overestimated].
 
 ---
 
-class: small
+## Diagnosis: Durbin-Watson test
 
-## Testing for Autocorrelation
-
-Testing AR(1): Durbin-Watson test
+Testing AR(1)
 
 `\begin{align}
-DW =&amp; \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
-   =&amp; \frac{\sum^T_{t = 2}(\rho\hat u_{t-1} + e_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
+DW =&amp; \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}= \frac{\sum^T_{t = 2}(\rho\hat u_{t-1} + e_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
    =&amp; \frac{\sum^T_{t = 2}[(\rho - 1)\hat u_{t - 1} + e_t]^2}{\frac{\sigma_e^2}{1 - \rho^2}}\\
    =&amp; \frac{\sum^T_{t = 2}\{[(1 - \rho)^2\hat u^2_{t - 1}] + 2(\rho - 1)\hat u_{t - 1}e_t + e_t^2\}}{\frac{\sigma_e^2}{1 - \rho^2}}\\
    \approx&amp; \frac{\sum^T_{t = 2}[(1 - \rho)^2\sigma_u^2 + \sigma_e^2]}{\frac{\sigma_e^2}{1 - \rho^2}} = (1 - \rho)^2 + (1 - \rho^2) = 2(1 - \rho)
@@ -513,7 +615,7 @@ Positive AR: H&lt;sub&gt;0&lt;/sub&gt;: &amp;rho; = 0; H&lt;sub&gt;1&lt;/sub&gt;
 
 .pull-left[
 
-### Positive autocorrelation
+*Positive autocorrelation*
 
 DW &lt; d&lt;sub&gt;l&lt;/sub&gt;, reject H&lt;sub&gt;0&lt;/sub&gt;;   
 d&lt;sub&gt;l&lt;/sub&gt; &lt; DW &lt; d&lt;sub&gt;u&lt;/sub&gt;, inconclusive;   
@@ -523,7 +625,7 @@ DW &gt; d&lt;sub&gt;u&lt;/sub&gt;, fail to reject H&lt;sub&gt;0&lt;/sub&gt;
 --
 
 .pull-right[
-### Negative autocorrelation
+*Negative autocorrelation*
 
 (4 - DW) &lt; d&lt;sub&gt;l&lt;/sub&gt;, reject H&lt;sub&gt;0&lt;/sub&gt;;   
 d&lt;sub&gt;l&lt;/sub&gt; &lt; (4 - DW) &lt; d&lt;sub&gt;u&lt;/sub&gt;, inconclusive;   
@@ -555,21 +657,19 @@ Different from time series: T small, N large
 
 General model: `\(Y_{it} = \beta_0 + \beta_1X_{it} + u_{it}\)`
 
----
+--
 
-How to control for the time dependency in panel data?
-
-### Fixed effect
+**Solution 1**: Fixed effect
 
 `$$Y_{it} = \beta_0 + \beta_1X_{it} + a_i + u_{it}$$`
 
 --
 
-### Fixed differencing
+**Solution 2**: Fixed differentiating
 
 `\begin{align}
-Y_{i2} - Y_{i1} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{i2} - X_{i1})\\
-                 &amp;+ (u_{i2} - u_{i1})\\
+Y_{i2} - Y_{i1} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{i2} - X_{i1}),\\
+                 &amp;+ (u_{i2} - u_{i1}),\\
 \Delta Y_i =&amp; \beta_1\Delta X_i + \Delta u_i.
 \end{align}`
 
@@ -585,9 +685,9 @@ When autocorrelation is weak in the errors, FE might be better with smaller vari
 
 --
 
-.red[Hint]: Neither methods allows time invariant X.&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
+.red[Hint]: Neither methods allows time invariant X.
 
-???
+---
 
 ## Special Case: TSCS
 
@@ -599,15 +699,16 @@ X&lt;sub&gt;t&lt;/sub&gt;: Only varying by time.
 
 X&lt;sub&gt;i&lt;/sub&gt;: Only varying by unit.
 
+---
 
-## TSCS Dealing with Time Dependency
+## TSCS Dealing with Time
 
-### Detrend
+**Solution 1**:  Detrend
 
-1. Detrending functions, e.t., the time smooth function/spline
+1. Detrending functions, e.g., the time smooth function/spline
 1. Adding lag Y [AR(1)] (.magenta[Hint]: May cause bias).
 
-### Regime switching
+**Solution 2**: Regime switching
 
 `\begin{align}
 Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
@@ -616,32 +717,35 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
 
 Structural break at t&lt;sup&gt;*&lt;/sup&gt; in the X-Y relationship.
 
+---
 
 ### Treating time dependency as unit heterogeneity
 
-LSDV: `\(Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}\)`
+**Solution 1**: LSDV, `\(Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}\)`
 
 `\(\delta_td_{t}\)`: Fixed effect for time
 
 `\(a_i\)`: Fixed effect for unit (unit-specific mean differences)
 
+--
 
-Cons : 
+**Cons**: 
 
 1. Using up the d.f.
 1. Aggravating multicollinearity
 1. .magenta[Losing time invariant variables].
 
+---
 
-*Within-between model*
+**Solution 2**: Within-between model or random effect model
 
-*Random effect*: Modeling time as a level
+Modeling time as a level
 
 `$$Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$$`
 
 Instead of using binaries, modeling `\(a_i\sim N(0, \tau^2)\)`
 
-.magenta[ASSUMPTION]:
+.red[ASSUMPTION]:
 
 1. cov(a&lt;sub&gt;i&lt;/sub&gt;, X&lt;sub&gt;it&lt;/sub&gt;)= 0 (strong)
 1. cov(a&lt;sub&gt;i&lt;/sub&gt;, u&lt;sub&gt;it&lt;/sub&gt;)= 0
@@ -650,15 +754,23 @@ Instead of using binaries, modeling `\(a_i\sim N(0, \tau^2)\)`
 
 ## Wrap Up
 
-1. Endogeneity
-    + Issue: Biased &amp;beta;
-    + Diagnosis: Hausman Procedure
-    + Adjustment: Instrumental Variables (if you could find one)
-1. Autocorrelation
-    + Issue: Biased &amp;beta; overestimated SE
-    + Diagnosis: DW *for AR(1)*
-    + Adjustment: Time series
-        + Panel data: fixed effect/fixed differencing
+**Endogeneity**
+
++ Issue: Biased &amp;beta;
++ Diagnosis: Hausman Procedure
++ Adjustment: 
+    + Matching, weighting, Heckman model
+    + Instrumental Variable (if you could find one)
+
+--
+
+**Autocorrelation**
+
++ Issue: Biased &amp;beta; overestimated SE
++ Diagnosis: DW *for AR(1)*
++ Adjustment: Time series
+    + Panel data: Fixed effect/fixed differentiating
+    + TSCS: Fixed effect/within-between/random effect model
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -666,7 +778,8 @@ Instead of using binaries, modeling `\(a_i\sim N(0, \tau^2)\)`
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -775,7 +888,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
