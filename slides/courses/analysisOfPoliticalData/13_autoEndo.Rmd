@@ -27,7 +27,7 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  tidyverse, flexable, icons, xaringanExtra, ggeffects
+  tidyverse, flextable, icons, xaringanExtra, ggeffects
 ) 
 
 
@@ -321,13 +321,8 @@ A pretty rough way to think about it:
 1. Regress **Y** on $\boldsymbol{\hat X}$.
 
 Solvable on one condition:    
-{{content}}
-]
-
---
-
 Being identifiable, $$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$
-{{content}}
+]
 
 --
 
@@ -457,12 +452,24 @@ $$E(u_{t_1}, u_{t_2}|X_{t_1}, X_{t_2}) \neq 0.$$
 
 ## Dealing with Time Dependency
 
-.panelset[
-.panel[.panel-name[Fixed Effect]
+.left-column[
+### Fixed Effect
+]
+
+.right-column[
 $$Y_t\sim X_t + Time_t$$
 ]
 
-.panel[.panel-name[De-trend]
+---
+
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+]
+
+.right-column[
 $$Y_t\sim X_t$$
 
 \begin{align}
@@ -472,18 +479,35 @@ $$Y_t\sim X_t$$
             X'_t =& X_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
 \Rightarrow\ Y'_t =& \delta X'_t + e_t.
 \end{align}
-
 ]
 
-.panel[.panel-name[Spline]
-Spline 
+---
 
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+### Spline
+]
+
+.right-column[
 .center[<img src="images/spline.gif" height = 400 />]
 ]
 
-.panel[.panel-name[Smooth]
-Smooth function: t + t<sup>2</sup> + t<sup>3</sup>
+---
+
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+### Spline
+### Smooth
 ]
+
+.right-column[
+Smooth function: t + t<sup>2</sup> + t<sup>3</sup>
 ]
 
 ???
@@ -785,3 +809,9 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 + Adjustment: Time series
     + Panel data: Fixed effect/fixed differentiating
     + TSCS: Fixed effect/within-between/random effect model
+    
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "13_.*.html"), 
+                       timeout = 500, 
+                       box_model = "padding")
+```

@@ -6,18 +6,18 @@
     <meta name="author" content="Yue Hu" />
     <script src="13_autoEndo_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="13_autoEndo_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="13_autoEndo_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="13_autoEndo_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/tile-view-0.2.4/tile-view.js"></script>
     <link href="13_autoEndo_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
-    <link href="13_autoEndo_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/panelset-0.2.6/panelset.js"></script>
+    <script src="13_autoEndo_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
+    <link href="13_autoEndo_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/panelset-0.2.4/panelset.js"></script>
     <script src="13_autoEndo_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="13_autoEndo_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="13_autoEndo_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="13_autoEndo_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
-    <script src="13_autoEndo_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
-    <link href="13_autoEndo_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="13_autoEndo_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="13_autoEndo_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="13_autoEndo_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -307,13 +307,8 @@ A pretty rough way to think about it:
 1. Regress **Y** on `\(\boldsymbol{\hat X}\)`.
 
 Solvable on one condition:    
-{{content}}
-]
-
---
-
 Being identifiable, `$$\hat{\boldsymbol{\beta}}_{IV} = (\boldsymbol{Z'X})^{-1}\boldsymbol{Z'Y}$$`
-{{content}}
+]
 
 --
 
@@ -443,12 +438,24 @@ When two variables both have, e.g., positive trend, then they appear correlated,
 
 ## Dealing with Time Dependency
 
-.panelset[
-.panel[.panel-name[Fixed Effect]
+.left-column[
+### Fixed Effect
+]
+
+.right-column[
 `$$Y_t\sim X_t + Time_t$$`
 ]
 
-.panel[.panel-name[De-trend]
+---
+
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+]
+
+.right-column[
 `$$Y_t\sim X_t$$`
 
 `\begin{align}
@@ -458,18 +465,35 @@ When two variables both have, e.g., positive trend, then they appear correlated,
             X'_t =&amp; X_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
 \Rightarrow\ Y'_t =&amp; \delta X'_t + e_t.
 \end{align}`
-
 ]
 
-.panel[.panel-name[Spline]
-Spline 
+---
 
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+### Spline
+]
+
+.right-column[
 .center[&lt;img src="images/spline.gif" height = 400 /&gt;]
 ]
 
-.panel[.panel-name[Smooth]
-Smooth function: t + t&lt;sup&gt;2&lt;/sup&gt; + t&lt;sup&gt;3&lt;/sup&gt;
+---
+
+## Dealing with Time Dependency
+
+.left-column[
+### Fixed Effect
+### De-trend
+### Spline
+### Smooth
 ]
+
+.right-column[
+Smooth function: t + t&lt;sup&gt;2&lt;/sup&gt; + t&lt;sup&gt;3&lt;/sup&gt;
 ]
 
 ???
@@ -771,6 +795,8 @@ Instead of using binaries, modeling `\(a_i\sim N(0, \tau^2)\)`
 + Adjustment: Time series
     + Panel data: Fixed effect/fixed differentiating
     + TSCS: Fixed effect/within-between/random effect model
+    
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
