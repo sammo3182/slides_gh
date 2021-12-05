@@ -1,8 +1,9 @@
 ---
 title: "Moderation Effect"
-subtitle: "Analysis of Political Data (70700173)"
+subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
     self_contained: FALSE
@@ -11,48 +12,52 @@ output:
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
-
-
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-
-htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  flextable, gridExtra,
-  knitr, # dependency
-  descr, stringr, broom, dotwhisker, interplot, tidyverse
-) # data wrangling # data wrangling
+  tidyverse, flexable, icons, xaringanExtra, ggeffects
+) 
 
-xaringanExtra::use_xaringan_extra(c("tile_view", # O
-                                    "broadcast", 
-                                    "panelset",
-                                    "tachyons"))
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
 
 # Functions preload
 set.seed(313)
+
+theme_set(theme_minimal())
 ```
+
 
 ## Overview
 
-### Moderation in Methodology
+*Moderation in Methodology*
 
 1. Specialty
 1. Wrong ways
 1. Correct way
     
-### Moderation in Practice
+*Moderation in Practice*
 
 1. Theory
 1. Data
@@ -68,9 +73,7 @@ class: inverse, bottom
 
 ## Moderation
 
-Conditional effect: the .navy[contribution] of X on the variance of Y .red[varies] when Z has .navy[different] values.
-
-A.k.a., .red[Non]linear effect.
+Conditional effect: the .red[contribution] of X on the variance of Y varies when Z has .red[different] values, a.k.a., a nonlinear effect.
 
 --
 
@@ -82,24 +85,25 @@ Testing the conditional effect of Z on X's contribution (or the conditional effe
 
 --
 
-Nonlinear &rarr; one unit change of X does .red[not] lead to &beta; unit change in Y.
-
-
----
-
-## Hypothesis
-
-H<sub>0</sub>: If effects of X depends on Z (&beta;<sub>3</sub> = 0).
-
-H<sub>0</sub>: If X has an effect (&beta;<sub>1</sub> + &beta;<sub>3</sub>Z = 0). .magenta[(More useful)]
+Nonlinear &rarr; one unit change of X does .red[not] lead to &beta; unit change in Y.    
+.center[.large[&dArr;]]
 
 --
 
-Level set: &alpha; = 0.05
+.center[
+H<sub>0</sub>: If effects of X depends on Z (&beta;<sub>3</sub> = 0).
+
+H<sub>0</sub>: If X has an effect when Z varies (&beta;<sub>1</sub> + &beta;<sub>3</sub>Z = 0). 
+]
+
+???
+
+The second is more useful, since X is the focus/prerequesite
+
 
 ---
 
-## Special Case: Dichotomous Z
+## The Simplest Version: Dichotomous Z
 
 Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
 
@@ -117,7 +121,7 @@ Hint: This case applied to DID methodologically
 
 ---
 
-## General Case: Continuous Z
+## General Version: Continuous/Ordinal Z
 
 Effect of X: 
 
@@ -129,43 +133,46 @@ $$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4
 
 ---
 
-## How to Interpret It Wrong?
+## Interpreting It Wrong?
 
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-True Model: Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.
+.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️] **Only &beta;<sub>1</sub>**    
+A.k.a., "Controlling the moderator"
 ]
 
-### Isolatedly interpretation of &beta;<sub>1</sub>
+--
 
-Let Z increases by c: 
+Let Z increases by c, 
 
 \begin{align}
-Y =& \beta_0' + \beta_1'X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u.\\
-  =& (\beta_0' + \beta_2'c) + (\beta_1' + \beta_3'c)X + \beta_2'Z + \beta_3'XZ \\
-  &+ u
+Y =& \beta_0' + \color{red}{\beta_1'}X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u,\\
+  =& (\beta_0' + \beta_2'c) + \color{red}{(\beta_1' + \beta_3'c)}X + \beta_2'Z + \beta_3'XZ + u.
 \end{align}
 
 --
 
-The coefficient of X can change by changing Z.
+The coefficient of X .red[changes] by changing Z.
 
 ---
 
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-True Model: Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.
+.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️] **No &beta;<sub>1</sub>**    
+A.k.a., "I just care about the interaction"
 ]
 
 
-### Interpreting &beta;<sub>3</sub> w.o. X
-
-$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u', u' = \beta_1X + u$$
+$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',$$
 
 --
 
-Then 
+which means $u' = \beta_1X + u$. Then 
 
 \begin{align}
-E(u'|X) \neq& 0\\
+E(u'|X) \neq& 0,\\
 E[u'(X,Z)] \neq& 0.
 \end{align}
 
@@ -179,28 +186,29 @@ Omitted variable bias; endogeneity
 
 ---
 
-### Statistical Significance Overstated
+.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
 
-When testing the X's effect $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️☠️] **Only &beta;<sub>3</sub>**    
+A.k.a., "The significance of the interaction term"
+]
+
+When testing the X's effect, $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$
 
 The standard error:
 
 $$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
 
-It's perfectly possible for the contribution of X on Y to be statistically significant for certain values of Z, even if all of the model parameters are insignificant. 
+It's possible for the contribution of X on Y to be statistically .red[significant] for certain values of Z, even if all of the model parameters are .red[insignificant]. One cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
 
 ???
 
  Brambor, Clark and Golder 2006
 
---
-
-In other words, one cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
-
 
 ---
 
-## More Risky Points
+More Risky Points...
 
 * Point estimation may not be reliable
     + Link function (e.g., logit and probit) is involved
@@ -211,7 +219,7 @@ Berry, DeMeritt, and Esarey (2016)
 
 --
 
-* Substantive significance of the conditional effect highly relates to the distribution of the conditioning variable (viz., Z in the above example). 
+* Substantive significance of the .red[conditional effect] highly relates to the distribution of the .red[conditioning variable] (viz., Z in the above example). 
 
 ???
 
@@ -226,13 +234,12 @@ Berry, Golder, and Milton (2012)
 1. Presenting the frequency distribution of Z
     + esp., when the effect trend goes across the zero point.
 
----
+--
 
-## Marginal Effects Isn't a Panacea
+NB:  Marginal effects aren't a panacea
 
-The estimation of the regular marginal effects might cause a "multiple comparison problem"
-
-Leading to over- or under-confidence of the confidential intervals.
+The estimation of the regular marginal effects might cause a "multiple comparison problem": 
++ Leading to over- or under-confidence of the confidential intervals.
 
 --
 
@@ -244,13 +251,13 @@ Esarey and Sumner (2017)
 
 ---
 
-## Not Only Interpretation
+## Beyond Moderation Effect of Interest
 
-One may consider adding interactions as a "control" (Beiser-McGrath & Beiser-McGrath 2020)
+As a "control" (Beiser-McGrath & Beiser-McGrath 2020)
 
-Pr(Civil War) ~ &beta;<sub>0</sub> + &beta;<sub>1</sub>Inequality + &beta;<sub>2</sub>Regime Type + &beta;<sub>3</sub>Inequality &times; Regime Type + &beta;<sub>4</sub>GDP + &beta;<sub>5</sub>.golden[Inequality &times; GDP] + u.
+Pr(Civil War) ~ &beta;<sub>0</sub> + &beta;<sub>1</sub>Inequality + &beta;<sub>2</sub>Regime Type + &beta;<sub>3</sub>Inequality &times; Regime Type + &beta;<sub>4</sub>GDP + &beta;<sub>5</sub>.red[Inequality &times; GDP] + u.
 
-What happened if .golden[Inequality &times; GDP] is not in the model?
+What happened if .red[Inequality &times; GDP] is not in the model?
 
 ???
 
@@ -258,9 +265,6 @@ Omitted variable
 
 Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
 
----
-
-## Adjusting Models
 
 N <= 3,000: 
 + Lasso
@@ -270,8 +274,6 @@ N > 3,000:
 
 Unknown or cross: 
 + Kernel Regularized Least Squares (KRLS)
-
-???
 
 Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
 
@@ -286,33 +288,25 @@ class: inverse, bottom
 
 ## Meritocracy vs. Inequality
 
-Solt, Frederick, Yue Hu, Hudson Kevan, Jungmin Song, Dong Yu. 2017. “Economic Inequality and Belief in Meritocracy in the United States.” *Research & Politics* 3(4): 1–7.
-
---
-
-.center[<img src="images/zootopia.gif" height = 300 />]
-
----
-
+.pull-left[
 .center[
+<img src="images/mod_zootopia.gif" height = 300 />
+
 Low-income &rarr; Meritocracy   
 .red[&uarr;]    
 Income inequality 
 ]
-
+]
 
 --
 
-### Hypothesis
-
+.pull-right[
 Conflict theory vs. relative power theory
 
---
-
-### Implications
 
 * Poor vs. Rich
 * Social Structure: Self-reproducing vs. self-negating
+]
 
 ???
 
@@ -324,7 +318,7 @@ Self-negating: conflict theory
 
 ## Conflict Theory
 
-.center[<img src="images/hulk.gif" height = 400 />]
+.center[<img src="images/mod_hulk.gif" height = 400 />]
 
 H<sub>0</sub>: Poor people living with high inequality believe in meritocracy .red[less].
 
@@ -332,7 +326,7 @@ H<sub>0</sub>: Poor people living with high inequality believe in meritocracy .r
 
 ## Relative Power Theory
 
-.center[<img src="images/hypnosis.gif" height = 400 />]
+.center[<img src="images/mod_hypnosis.gif" height = 400 />]
 
 H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .red[more].
 
@@ -341,55 +335,57 @@ H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .r
 ## Model and Data
 
 \begin{align}
-& Reject\thinspace Meritocracy_{ij} \\
-=\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
+Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
                       &+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
 \end{align}
 
-[Pew survey](https://www.pewresearch.org/)
+Empirical: [Pew survey](https://www.pewresearch.org/)
 
-Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 
 ---
 
-## Negative Example
+.pull-left[
+## Answer from AJPS
 
-.center[<img src="images/NJL_plot.png" height = 500 />]
+.center[<img src="images/mod_NJL_plot.png" height = 500 />]
+]
 
 ???
 
 Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
 
 
+--
+
+.pull-right[
+## Query of the AJPS Answer
+
+.center[<img src="images/mod_interaction1.jpg" height = 500 />]
+]
+
+
 ---
 
-## Correct Presentation
+## When Digging in More
 
-.center[<img src="images/interaction1.jpg" height = 500 />]
-
----
-
-## More Corrections
-
-.center[<img src="images/three_measures.jpg" height = 500 />]
+.center[<img src="images/mod_three_measures.jpg" height = 500 />]
 
 ---
 
 ## Moderation with Better Data
 
-.center[<img src="images/SH_plot2.png" height = 500 />]
+.pull-left[<img src="images/mod_SH_plot2.png" height = 500 />]
 
----
+--
 
-## Alternative Way
-
-.center[<img src="images/interaction2.jpg" height = 500 />]
+.pull-right[<img src="images/spe_interaction2.jpg" height = 500 />]
 
 ---
 
 ## Wrap Up
 
-### Moderation in Methodology
+.pull-left[
+*Moderation in Methodology*
 
 1. Specialty: Nonlinear
 1. Wrong ways
@@ -397,8 +393,10 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
     + Interpretation of only the product term
 1. Correct way
     + Marginal effect
-    
-### Moderation in Practice
+ ]
+ 
+.pull-right[
+*Moderation in Practice*
 
 1. Theory
     + Conflict vs. Relative Power
@@ -406,3 +404,5 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
     + Selective vs. all available
 1. Interpretation
     + Point estimates vs. `interplot`
+]    
+    

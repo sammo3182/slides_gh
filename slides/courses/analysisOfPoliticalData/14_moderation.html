@@ -4,20 +4,20 @@
     <title>Moderation Effect</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="14_moderation_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="14_moderation_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="14_moderation_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="14_moderation_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="14_moderation_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-    <link href="14_moderation_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="14_moderation_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="14_moderation_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="14_moderation_files/tile-view-0.2.6/tile-view.js"></script>
     <link href="14_moderation_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="14_moderation_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="14_moderation_files/panelset-0.2.4/panelset.js"></script>
+    <script src="14_moderation_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="14_moderation_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="14_moderation_files/panelset-0.2.6/panelset.js"></script>
     <script src="14_moderation_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="14_moderation_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="14_moderation_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="14_moderation_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
-    <script src="14_moderation_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="14_moderation_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="14_moderation_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="14_moderation_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -26,9 +26,8 @@
 class: center, middle, inverse, title-slide
 
 # Moderation Effect
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
@@ -36,16 +35,15 @@ class: center, middle, inverse, title-slide
 
 
 
-
 ## Overview
 
-### Moderation in Methodology
+*Moderation in Methodology*
 
 1. Specialty
 1. Wrong ways
 1. Correct way
     
-### Moderation in Practice
+*Moderation in Practice*
 
 1. Theory
 1. Data
@@ -61,9 +59,7 @@ class: inverse, bottom
 
 ## Moderation
 
-Conditional effect: the .navy[contribution] of X on the variance of Y .red[varies] when Z has .navy[different] values.
-
-A.k.a., .red[Non]linear effect.
+Conditional effect: the .red[contribution] of X on the variance of Y varies when Z has .red[different] values, a.k.a., a nonlinear effect.
 
 --
 
@@ -75,24 +71,25 @@ Testing the conditional effect of Z on X's contribution (or the conditional effe
 
 --
 
-Nonlinear &amp;rarr; one unit change of X does .red[not] lead to &amp;beta; unit change in Y.
-
-
----
-
-## Hypothesis
-
-H&lt;sub&gt;0&lt;/sub&gt;: If effects of X depends on Z (&amp;beta;&lt;sub&gt;3&lt;/sub&gt; = 0).
-
-H&lt;sub&gt;0&lt;/sub&gt;: If X has an effect (&amp;beta;&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Z = 0). .magenta[(More useful)]
+Nonlinear &amp;rarr; one unit change of X does .red[not] lead to &amp;beta; unit change in Y.    
+.center[.large[&amp;dArr;]]
 
 --
 
-Level set: &amp;alpha; = 0.05
+.center[
+H&lt;sub&gt;0&lt;/sub&gt;: If effects of X depends on Z (&amp;beta;&lt;sub&gt;3&lt;/sub&gt; = 0).
+
+H&lt;sub&gt;0&lt;/sub&gt;: If X has an effect when Z varies (&amp;beta;&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Z = 0). 
+]
+
+???
+
+The second is more useful, since X is the focus/prerequesite
+
 
 ---
 
-## Special Case: Dichotomous Z
+## The Simplest Version: Dichotomous Z
 
 Let X = X&lt;sup&gt;0&lt;/sup&gt; when Z = 0; X = X&lt;sup&gt;1&lt;/sup&gt; when Z = 1, then 
 
@@ -110,7 +107,7 @@ Hint: This case applied to DID methodologically
 
 ---
 
-## General Case: Continuous Z
+## General Version: Continuous/Ordinal Z
 
 Effect of X: 
 
@@ -122,43 +119,46 @@ Statistics:
 
 ---
 
-## How to Interpret It Wrong?
+## Interpreting It Wrong?
 
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-True Model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️] **Only &amp;beta;&lt;sub&gt;1&lt;/sub&gt;**    
+A.k.a., "Controlling the moderator"
 ]
 
-### Isolatedly interpretation of &amp;beta;&lt;sub&gt;1&lt;/sub&gt;
+--
 
-Let Z increases by c: 
+Let Z increases by c, 
 
 `\begin{align}
-Y =&amp; \beta_0' + \beta_1'X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u.\\
-  =&amp; (\beta_0' + \beta_2'c) + (\beta_1' + \beta_3'c)X + \beta_2'Z + \beta_3'XZ \\
-  &amp;+ u
+Y =&amp; \beta_0' + \color{red}{\beta_1'}X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u,\\
+  =&amp; (\beta_0' + \beta_2'c) + \color{red}{(\beta_1' + \beta_3'c)}X + \beta_2'Z + \beta_3'XZ + u.
 \end{align}`
 
 --
 
-The coefficient of X can change by changing Z.
+The coefficient of X .red[changes] by changing Z.
 
 ---
 
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-True Model: Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️] **No &amp;beta;&lt;sub&gt;1&lt;/sub&gt;**    
+A.k.a., "I just care about the interaction"
 ]
 
 
-### Interpreting &amp;beta;&lt;sub&gt;3&lt;/sub&gt; w.o. X
-
-`$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u', u' = \beta_1X + u$$`
+`$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',$$`
 
 --
 
-Then 
+which means `\(u' = \beta_1X + u\)`. Then 
 
 `\begin{align}
-E(u'|X) \neq&amp; 0\\
+E(u'|X) \neq&amp; 0,\\
 E[u'(X,Z)] \neq&amp; 0.
 \end{align}`
 
@@ -172,28 +172,29 @@ Omitted variable bias; endogeneity
 
 ---
 
-### Statistical Significance Overstated
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
 
-When testing the X's effect `\(\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.\)`
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️☠️] **Only &amp;beta;&lt;sub&gt;3&lt;/sub&gt;**    
+A.k.a., "The significance of the interaction term"
+]
+
+When testing the X's effect, `\(\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.\)`
 
 The standard error:
 
 `$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$`
 
-It's perfectly possible for the contribution of X on Y to be statistically significant for certain values of Z, even if all of the model parameters are insignificant. 
+It's possible for the contribution of X on Y to be statistically .red[significant] for certain values of Z, even if all of the model parameters are .red[insignificant]. One cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;3&lt;/sub&gt;].
 
 ???
 
  Brambor, Clark and Golder 2006
 
---
-
-In other words, one cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;3&lt;/sub&gt;].
-
 
 ---
 
-## More Risky Points
+More Risky Points...
 
 * Point estimation may not be reliable
     + Link function (e.g., logit and probit) is involved
@@ -204,7 +205,7 @@ Berry, DeMeritt, and Esarey (2016)
 
 --
 
-* Substantive significance of the conditional effect highly relates to the distribution of the conditioning variable (viz., Z in the above example). 
+* Substantive significance of the .red[conditional effect] highly relates to the distribution of the .red[conditioning variable] (viz., Z in the above example). 
 
 ???
 
@@ -219,13 +220,12 @@ Berry, Golder, and Milton (2012)
 1. Presenting the frequency distribution of Z
     + esp., when the effect trend goes across the zero point.
 
----
+--
 
-## Marginal Effects Isn't a Panacea
+NB:  Marginal effects aren't a panacea
 
-The estimation of the regular marginal effects might cause a "multiple comparison problem"
-
-Leading to over- or under-confidence of the confidential intervals.
+The estimation of the regular marginal effects might cause a "multiple comparison problem": 
++ Leading to over- or under-confidence of the confidential intervals.
 
 --
 
@@ -237,13 +237,13 @@ Esarey and Sumner (2017)
 
 ---
 
-## Not Only Interpretation
+## Beyond Moderation Effect of Interest
 
-One may consider adding interactions as a "control" (Beiser-McGrath &amp; Beiser-McGrath 2020)
+As a "control" (Beiser-McGrath &amp; Beiser-McGrath 2020)
 
-Pr(Civil War) ~ &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;Inequality + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Regime Type + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Inequality &amp;times; Regime Type + &amp;beta;&lt;sub&gt;4&lt;/sub&gt;GDP + &amp;beta;&lt;sub&gt;5&lt;/sub&gt;.golden[Inequality &amp;times; GDP] + u.
+Pr(Civil War) ~ &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;Inequality + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Regime Type + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Inequality &amp;times; Regime Type + &amp;beta;&lt;sub&gt;4&lt;/sub&gt;GDP + &amp;beta;&lt;sub&gt;5&lt;/sub&gt;.red[Inequality &amp;times; GDP] + u.
 
-What happened if .golden[Inequality &amp;times; GDP] is not in the model?
+What happened if .red[Inequality &amp;times; GDP] is not in the model?
 
 ???
 
@@ -251,9 +251,6 @@ Omitted variable
 
 Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
 
----
-
-## Adjusting Models
 
 N &lt;= 3,000: 
 + Lasso
@@ -263,8 +260,6 @@ N &gt; 3,000:
 
 Unknown or cross: 
 + Kernel Regularized Least Squares (KRLS)
-
-???
 
 Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
 
@@ -279,33 +274,25 @@ class: inverse, bottom
 
 ## Meritocracy vs. Inequality
 
-Solt, Frederick, Yue Hu, Hudson Kevan, Jungmin Song, Dong Yu. 2017. “Economic Inequality and Belief in Meritocracy in the United States.” *Research &amp; Politics* 3(4): 1–7.
-
---
-
-.center[&lt;img src="images/zootopia.gif" height = 300 /&gt;]
-
----
-
+.pull-left[
 .center[
+&lt;img src="images/mod_zootopia.gif" height = 300 /&gt;
+
 Low-income &amp;rarr; Meritocracy   
 .red[&amp;uarr;]    
 Income inequality 
 ]
-
+]
 
 --
 
-### Hypothesis
-
+.pull-right[
 Conflict theory vs. relative power theory
 
---
-
-### Implications
 
 * Poor vs. Rich
 * Social Structure: Self-reproducing vs. self-negating
+]
 
 ???
 
@@ -317,7 +304,7 @@ Self-negating: conflict theory
 
 ## Conflict Theory
 
-.center[&lt;img src="images/hulk.gif" height = 400 /&gt;]
+.center[&lt;img src="images/mod_hulk.gif" height = 400 /&gt;]
 
 H&lt;sub&gt;0&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[less].
 
@@ -325,7 +312,7 @@ H&lt;sub&gt;0&lt;/sub&gt;: Poor people living with high inequality believe in me
 
 ## Relative Power Theory
 
-.center[&lt;img src="images/hypnosis.gif" height = 400 /&gt;]
+.center[&lt;img src="images/mod_hypnosis.gif" height = 400 /&gt;]
 
 H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[more].
 
@@ -334,55 +321,57 @@ H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in me
 ## Model and Data
 
 `\begin{align}
-&amp; Reject\thinspace Meritocracy_{ij} \\
-=\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
+Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
                       &amp;+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
 \end{align}`
 
-[Pew survey](https://www.pewresearch.org/)
+Empirical: [Pew survey](https://www.pewresearch.org/)
 
-Package: [`pewdata`](https://cran.r-project.org/web/packages/pewdata/index.html)
 
 ---
 
-## Negative Example
+.pull-left[
+## Answer from AJPS
 
-.center[&lt;img src="images/NJL_plot.png" height = 500 /&gt;]
+.center[&lt;img src="images/mod_NJL_plot.png" height = 500 /&gt;]
+]
 
 ???
 
 Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
 
 
+--
+
+.pull-right[
+## Query of the AJPS Answer
+
+.center[&lt;img src="images/mod_interaction1.jpg" height = 500 /&gt;]
+]
+
+
 ---
 
-## Correct Presentation
+## When Digging in More
 
-.center[&lt;img src="images/interaction1.jpg" height = 500 /&gt;]
-
----
-
-## More Corrections
-
-.center[&lt;img src="images/three_measures.jpg" height = 500 /&gt;]
+.center[&lt;img src="images/mod_three_measures.jpg" height = 500 /&gt;]
 
 ---
 
 ## Moderation with Better Data
 
-.center[&lt;img src="images/SH_plot2.png" height = 500 /&gt;]
+.pull-left[&lt;img src="images/mod_SH_plot2.png" height = 500 /&gt;]
 
----
+--
 
-## Alternative Way
-
-.center[&lt;img src="images/interaction2.jpg" height = 500 /&gt;]
+.pull-right[&lt;img src="images/spe_interaction2.jpg" height = 500 /&gt;]
 
 ---
 
 ## Wrap Up
 
-### Moderation in Methodology
+.pull-left[
+*Moderation in Methodology*
 
 1. Specialty: Nonlinear
 1. Wrong ways
@@ -390,8 +379,10 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
     + Interpretation of only the product term
 1. Correct way
     + Marginal effect
-    
-### Moderation in Practice
+ ]
+ 
+.pull-right[
+*Moderation in Practice*
 
 1. Theory
     + Conflict vs. Relative Power
@@ -399,6 +390,8 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
     + Selective vs. all available
 1. Interpretation
     + Point estimates vs. `interplot`
+]    
+    
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="libs/remark-latest.min.js"></script>
@@ -406,7 +399,8 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -515,7 +509,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
