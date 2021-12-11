@@ -4,13 +4,12 @@
     <title>Missing Data and Generalized Linear Model</title>
     <meta charset="utf-8" />
     <meta name="author" content="Yue Hu" />
-    <script src="15_logitMissing_files/header-attrs-2.5.3/header-attrs.js"></script>
+    <script src="15_logitMissing_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="15_logitMissing_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="15_logitMissing_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="15_logitMissing_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
     <link href="15_logitMissing_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
     <script src="15_logitMissing_files/tile-view-0.2.4/tile-view.js"></script>
     <link href="15_logitMissing_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
     <link href="15_logitMissing_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
     <script src="15_logitMissing_files/panelset-0.2.4/panelset.js"></script>
     <script src="15_logitMissing_files/js-cookie-3.0.0/js.cookie.js"></script>
@@ -18,6 +17,7 @@
     <script src="15_logitMissing_files/tiny.toast-1.0.0/toast.min.js"></script>
     <link href="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
     <script src="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link href="15_logitMissing_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -26,9 +26,8 @@
 class: center, middle, inverse, title-slide
 
 # Missing Data and Generalized Linear Model
-## Analysis of Political Data (70700173)
+## Large N &amp; Leeuwenhoek (70700173)
 ### Yue Hu
-### Political Science, Tsinghua University
 
 ---
 
@@ -39,14 +38,14 @@ class: center, middle, inverse, title-slide
 
 ### Missing Data
 
-+ What's missing
-+ Type of missing
-+ Dealing with missing
++ What's missingness
++ Where does the missingness come from
++ Dealing with missingness
 
 
 ### Generalized Linear Model
 
-+ OLS(?)
+From OLS to 
 + Link function
 + Model fitness
 
@@ -72,9 +71,9 @@ X_4 &amp; Y_4\end{array}\right);
 \boldsymbol{D^{Observed}} =
 \left(\begin{array}{cc}
 X_1 &amp; Y_1\\
-X_3 &amp; Y_2\\
-X_5 &amp; Y_3\\
-X_6 &amp; Y_4\end{array}\right);\\
+    &amp; Y_2\\
+X_3 &amp; Y_3\\
+    &amp; Y_4\end{array}\right);\\
 \boldsymbol{M} =&amp; 
 \left(\begin{array}{cc}
 0 &amp; 0\\
@@ -91,29 +90,39 @@ X_4 &amp; \end{array}\right)
 
 ---
 
-## Type of Missing
+class: center, middle
 
-### Missing completely at random (MCAR)
+## Where D&lt;sub&gt;M&lt;/sub&gt; Comes From: Type of Missing
 
-.center[P(M|D) = P(M)]
+**Missing completely at random (MCAR)**
 
-### Missing at random (MAR)
+P(M|D) = P(M)
 
-.center[P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)]
+--
 
-### Non-ignorable (NI/MNAR)
+.pull-left[
+**Missing at random (MAR)**
 
-.center[P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)]
+P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+]
 
----
+--
 
-## Consequence of Missing
+.pull-right[
+**Non-ignorable (NI/MNAR)**
+
+P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
+]
+
+--
+
+.red[Consequence of Missing]
 
 |      | Summary Stats | Regression          | SE vs. complete |
 |------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | .navy[Inefficient]     |
-| MAR  | Biased        | Unbiased/consistent | .navy[Inefficient]     |
-| NI   | Biased        | .red[Biased]              | --     |
+| MCAR | Unbiased      | Unbiased/consistent | *Inefficient*     |
+| MAR  | *Biased*        | Unbiased/consistent | *Inefficient*     |
+| NI   | *Biased*        | *Biased*              | --     |
 
 ???
 
@@ -128,7 +137,7 @@ Biasedness in NI is because of the censor with an X within the model
 
 ???
 
-Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &amp;ne; 0, so often parwise deletion
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &amp;ne; 0, so often pairwise deletion
 
 --
 
@@ -153,7 +162,7 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
 
 class: small
 
-## Multiple Imputations (MI)
+## Better Way: Multiple Imputations (MI)
 
 1. Take multiple guess given estimated distribution (Expectation-Maximization)
 
@@ -179,14 +188,16 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 
 ---
 
-### Advantages
 
-Imputations are separated from the analysis.  
-&amp;rArr; misspecification of the model does not affect MI.
+*Advantages*
+
+Imputations are .red[separated] from the analysis &amp;rArr; misspecification of the model does not affect MI.
+
 
 --
 
-### Concern
+
+*Concern*
 
 1. Not exactly replicable
 1. Rubin's formula does not always work
@@ -194,28 +205,29 @@ Imputations are separated from the analysis.
 1. Time consuming and times to impute.
     + Rule of thumb: 10 (...)
 
----
 
-class: small
+---
 
 ## When MI Isn't a Good Idea
 
-1. Model is .navy[conditional on X] + .navy[correctly specified]
-    + Listwise would not affect the analysis.
+1. Model is .red[conditional on X] + .red[correctly specified]: Listwise would not affect the analysis.
     
 --
 
-1. .navy[Large] data
-    + Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
+1. .red[Large] data: Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
+
+???
+
+5% is the rule of thumb, Jakobsen, Janus Christian, Christian Gluud, Jørn Wetterslev, and Per Winkel. 2017. “When and How Should Multiple Imputation Be Used for Handling Missing Data in Randomised Clinical Trials---A Practical Guide with Flowcharts.” BMC Medical Research Methodology 17(1): 162.
+
     
 --
 
-1. Missingness in X is .navy[not a function of Y], and there is no unobserved omitted values that affects Y.
+1. Missingness in X is .red[not a function of Y], and there is no unobserved omitted values that affects Y.
 
 --
 
-1. There is .red[NI] missingness in X
-    + EMs incorrect
+1. There is .red[NI] missingness in X: EMs incorrect
 
 --
 
@@ -235,13 +247,11 @@ e.g., SEM
 
 ---
 
-class: small
-
 ## Non-Ignorable Missing
 
 When we know what happened:
 
-### Censored
+Censored data: 
 
 Have .red[some] information about values of missing data, e.g., all data &lt;0 are
 coded as 0.
@@ -255,10 +265,10 @@ coded as 0.
 
 --
 
-## Truncated
+Truncated data:
 
 Have .red[no] information about values of missing data, e.g., the data are only
-observable when it &gt; 100.
+observable when it &lt; 100,000
 
 + `tobit`, use the right distribution---a combination of P(Y&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &lt; 0|X) and f(Y&lt;sub&gt;i&lt;/sub&gt;|X&lt;sub&gt;i&lt;/sub&gt;).
 
@@ -276,8 +286,8 @@ class: inverse, bottom
 
 ## When to Use GLR
 
-+ .red[Generalized] linear regression is not .navy[general] linear regression
-+ Using when the very first assumption of OLS is violated---Y is no longer continuous.
++ .red[Generalized] linear regression is not .red[general] linear regression
++ Using when the very first assumption of OLS is violated.
 + Basic logic: Transforming non-continuous to continuous
 
 ???
@@ -286,20 +296,20 @@ General linear regression is multivariate regression
 
 --
 
-simplest situation: binary Y
+simplest situation: Noncontinuous Y
 
 ---
 
 ## Traditional Approaches
 
-### OLS
+OLS?
 
 1. Unrealistic and nonsensitive predicted outcomes
 1. Heteroscedasticity
 
----
+--
 
-## Linear Probability Model (LPM)
+Linear Probability Model (LPM)? 
 
 `\begin{align}
 \pi_i\equiv P(Y = 1|X) =&amp; \beta_0 + \beta_1X_i\\
@@ -313,25 +323,26 @@ The specification of var addresses heteroscedasticity
 
 --
 
-.left-column[
+.pull-left[
 
-### Pro
+*Pros*
 
 Interpreted as OLS
-    + % changes in a unit of X
++ % changes in a unit of X
 
 ]
 
-.right-column[
+.pull-right[
 
-### Con
+*Cons*
 
 Not very reliable transformation
-    + Rule of thumb: 0.2~0.8
 
 ]
 
 ???
+
+Rule of thumb: 0.2~0.8
 
 1. When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432), 
 
@@ -339,7 +350,7 @@ Not very reliable transformation
 
 ---
 
-## Link Functions Method
+## Superior Method: Link Functions Method
 
 Specifically, latent variable approach
 
@@ -348,9 +359,9 @@ Specifically, latent variable approach
 
 This G() is the *link* function.
 
-When G() = &amp;Lambda;(X), logit (.orange[log]istic un.orange[it])
+When G() = &amp;Lambda;(X), logit (.red[log]istic un.red[it])
 
-When G() = &amp;Phi;(X), progit (.orange[pro]bability un.orange[it])
+When G() = &amp;Phi;(X), progit (.red[pro]bability un.red[it])
 
 ---
 
@@ -369,19 +380,14 @@ Y^* =&amp; X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
 
 ---
 
-class: small
-
 Given the PDF of a logistic distribution is `\(\Lambda(x) = \frac{e^x}{1 + e^x}\)`, 
 
 `\begin{align}
-P(Y_i = 1|X) =&amp; P(Y^* &gt; 0|X)\\
-              =&amp; P(X\beta + u\geq 0|X)\\
+P(Y_i = 1|X) =&amp; P(Y^* &gt; 0|X) = P(X\beta + u\geq 0|X)\\
               =&amp; P(u\geq 0 - X\beta|X)\\
-              =&amp; 1 - P(u\leq - X\beta|X)\\
-              =&amp; 1 - \Lambda(-X\beta)\\
+              =&amp; 1 - P(u\leq - X\beta|X) = 1 - \Lambda(-X\beta)\\
               =&amp; 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
-              =&amp; \frac{1}{1 + e^{-X\beta}}\\
-              =&amp; \frac{e^{XP}}{1 + e^{X\beta}} = \Lambda(X\beta)\\
+              =&amp; \frac{1}{1 + e^{-X\beta}} = \frac{e^{XP}}{1 + e^{X\beta}} = \Lambda(X\beta)\\
 P(Y_i = 0|X) =&amp; P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
              =&amp; \Lambda(-X\beta) = \frac{e^{-X\beta}}{1 + e^{-X\beta}} = \frac{1}{1 + e^{X\beta}}\\
              =&amp; 1 - \Lambda(X\beta)
@@ -403,11 +409,9 @@ f(x) =&amp;\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 
 ---
 
-class: small
-
 ## Logit vs. Probit
 
-* Probit is a little .magenta[more] computationally costly than logit  
+* Probit is a little *more* computationally costly than logit  
 ( `\(\frac{e^x}{1 + e^x}\)` vs. `\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`)
 
 --
@@ -426,19 +430,14 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 
 ---
 
-class: small
+## Estimation
 
-## Estimation&lt;sup&gt;&lt;img src="images/fsmrof.png" height="20"/&gt;&lt;/sup&gt;
-
-We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). So, one has to use the likelihood approach to inference.
-
-Maximum likelihood estimation:
+We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). 
+So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
 
 `$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$`
 
-Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`
-
-`\(\hat\theta\)` is the .navy[maximum likelihood estimate] of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
+Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`, the .red[maximum likelihood estimate] of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
 
 ???
 
@@ -459,16 +458,21 @@ argmax: when having the argument, the function get the max
 
 --
 
-### Property
+.pull-left[
+* If there is an analytic solution, calculate it.
+* If no, computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
+]
+
+--
+
+.pull-right[
+*Property*:
 
 1. Consistent;
 1. Asymptotically unbiased;
 1. Generally asymptotically efficient.
+]
 
-???
-
-* If there is an analytic solution, one can calculate it.
-* If there is no analytic solution, one needs certain computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
 
 ---
 
@@ -486,13 +490,13 @@ Ways to interpret GLM outcomes:
 1. Marginal effect
 1. First difference
 
-
-???
+---
 
 ## Predicted Value Plots
 
-![](15_logitMissing_files/figure-html/predVal-1.png)&lt;!-- --&gt;
+&lt;img src="15_logitMissing_files/figure-html/predVal-1.png" style="display: block; margin: auto;" /&gt;
 
+---
 
 ## Marginal Effects
 
@@ -507,19 +511,20 @@ The instantaneous change
 =&amp; \beta_1P(Y = 1|X)P(Y = 0|X)
 \end{align}`
 
+---
 
 The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&amp;beta; = 0. In other words, marginal effect depends on the value of X.
 
 In fact, it depends on the value of .magenta[all the X]. This requires the report of marginal effect including the value of the Xs.
 
 
+---
+
 ## First Difference
 
 The discrete version of marginal effect.
 
 `$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$`
-
-
 
 X&lt;sub&gt;-k&lt;/sub&gt;: 
 
@@ -535,10 +540,9 @@ X&lt;sub&gt;k&lt;/sub&gt;&lt;sup&gt;H,L&lt;/sup&gt;:
 1. Discrete: 0/1
 1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
 
+---
 
-## Don't Forget the Uncertainty
-
-How to calculate SEs for margins or FDs?
+## Uncertainty of Marginal Effects and FDs
 
 1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
 1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
@@ -548,40 +552,36 @@ How to calculate SEs for margins or FDs?
 
 ## Goodness of Fit
 
-### Psedo-R&lt;sup&gt;2&lt;/sup&gt;
+*Psedo-R&lt;sup&gt;2&lt;/sup&gt;*
 
 Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/) to estimate it, but none of them is quite straightforward.
 
----
+--
 
-### Proportional reduction in error (PRE) 
+*Proportional reduction in error (PRE)*, a.k.a., Percent correctly predicted (PCP)
 
-= Percent correctly predicted (PCP)
+Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. Let's denote
 
-Comparing estimates of P(Y = 1|X) to Y:  
-If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. 
-
-Let's denote
-
+.pull-left[
 |             | Y = 1          | Y = 0          |
 |-------------|----------------|----------------|
 | Y&amp;#770; = 1 | n&lt;sub&gt;11&lt;/sub&gt; | n&lt;sub&gt;01&lt;/sub&gt; |
 | Y&amp;#770; = 0 | n&lt;sub&gt;10&lt;/sub&gt; | n&lt;sub&gt;00&lt;/sub&gt; |
 
 `$$PCP = \frac{n_{11} + n_{00}}{\sum n}$$`
-
----
-
-Furthermore, one can consider how much better the model predict than plain guess. Define *PMC* as the percent modal category (the plain guess). That is,
-
-`$$PRE = \frac{PCP - PMC}{1 - PMC}$$`
+]
 
 --
 
-An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
+.pull-right[
+Advanced: How much better the model predict than plain guess. Define *PMC* as the percent modal category (the plain guess). That is,
 
+`$$PRE = \frac{PCP - PMC}{1 - PMC}$$`
+]
 
 ???
+
+An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
 
 ePRE: expected PRE, Herron 1999, PA
 
@@ -624,7 +624,8 @@ ePRE: expected PRE, Herron 1999, PA
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -733,7 +734,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
