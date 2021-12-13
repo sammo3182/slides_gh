@@ -6,18 +6,18 @@
     <meta name="author" content="Yue Hu" />
     <script src="15_logitMissing_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="15_logitMissing_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="15_logitMissing_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="15_logitMissing_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/tile-view-0.2.6/tile-view.js"></script>
     <link href="15_logitMissing_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
-    <link href="15_logitMissing_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/panelset-0.2.4/panelset.js"></script>
+    <script src="15_logitMissing_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="15_logitMissing_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/panelset-0.2.6/panelset.js"></script>
     <script src="15_logitMissing_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="15_logitMissing_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="15_logitMissing_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
-    <link href="15_logitMissing_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link href="15_logitMissing_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="15_logitMissing_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="15_logitMissing_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
     <link rel="stylesheet" href="style_ui.css" type="text/css" />
   </head>
@@ -39,7 +39,7 @@ class: center, middle, inverse, title-slide
 ### Missing Data
 
 + What's missingness
-+ Where does the missingness come from
++ Where does missingness come from
 + Dealing with missingness
 
 
@@ -92,7 +92,7 @@ X_4 &amp; \end{array}\right)
 
 class: center, middle
 
-## Where D&lt;sub&gt;M&lt;/sub&gt; Comes From: Type of Missing
+## Where D&lt;sub&gt;M&lt;/sub&gt; Comes From: Type of Missingness
 
 **Missing completely at random (MCAR)**
 
@@ -141,7 +141,11 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
 
 --
 
-**Fill it manually**: hot decking (using neayby approximate values, e.g., mean)
+**Fill it manually**: hot deck method 
+
+???
+
+Using neayby approximate values, e.g., mean, the right last-observed observation, The term "hot deck" dates back to the storage of data on punched cards, and indicates that the information donors come from the same dataset as the recipients. The stack of cards was "hot" because it was currently being processed.
 
 --
 
@@ -160,8 +164,6 @@ Even for MAR, droping the entire entry due to the missing would cause bias, beca
     
 ---
 
-class: small
-
 ## Better Way: Multiple Imputations (MI)
 
 1. Take multiple guess given estimated distribution (Expectation-Maximization)
@@ -177,7 +179,7 @@ class: small
 `\begin{align}
 \hat\beta =&amp; \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
 var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
-\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \hat\beta)^2 
+\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2 
 \end{align}`
 
 ???
@@ -296,7 +298,7 @@ General linear regression is multivariate regression
 
 --
 
-simplest situation: Noncontinuous Y
+Most common situation: Noncontinuous Y
 
 ---
 
@@ -432,8 +434,9 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 
 ## Estimation
 
-We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). 
-So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
+Minimize the least square? No~
+
+The maximum likelihood estimation:
 
 `$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$`
 
@@ -441,9 +444,12 @@ Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`, the .red
 
 ???
 
+We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). 
+So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
+
 m: a model
 
-&amp;theta: parameter
+&amp;theta;: parameter
 
 k: an arbitrary function, depending on the data.
 
@@ -473,6 +479,9 @@ argmax: when having the argument, the function get the max
 1. Generally asymptotically efficient.
 ]
 
+???
+
+Asymptotical: 渐进式的
 
 ---
 
@@ -496,6 +505,10 @@ Ways to interpret GLM outcomes:
 
 &lt;img src="15_logitMissing_files/figure-html/predVal-1.png" style="display: block; margin: auto;" /&gt;
 
+???
+
+Compare when beta equals different values, the larger the more s
+
 ---
 
 ## Marginal Effects
@@ -515,7 +528,7 @@ The instantaneous change
 
 The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&amp;beta; = 0. In other words, marginal effect depends on the value of X.
 
-In fact, it depends on the value of .magenta[all the X]. This requires the report of marginal effect including the value of the Xs.
+In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.
 
 
 ---
@@ -531,6 +544,7 @@ X&lt;sub&gt;-k&lt;/sub&gt;:
 1. All other independent variables (holding them constant)
 1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
 
+--
 
 X&lt;sub&gt;k&lt;/sub&gt;&lt;sup&gt;H,L&lt;/sup&gt;: 
 
