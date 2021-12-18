@@ -4,21 +4,19 @@
     <title>潜在变量分析（基础）</title>
     <meta charset="utf-8" />
     <meta name="author" content="胡悦" />
-    <script src="03_latentVariableI_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="03_latentVariableI_files/header-attrs-2.11/header-attrs.js"></script>
     <link href="03_latentVariableI_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="03_latentVariableI_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-    <link href="03_latentVariableI_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-    <link href="03_latentVariableI_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="03_latentVariableI_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="03_latentVariableI_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="03_latentVariableI_files/tile-view-0.2.6/tile-view.js"></script>
     <link href="03_latentVariableI_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="03_latentVariableI_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="03_latentVariableI_files/panelset-0.2.4/panelset.js"></script>
+    <link href="03_latentVariableI_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="03_latentVariableI_files/panelset-0.2.6/panelset.js"></script>
     <script src="03_latentVariableI_files/js-cookie-3.0.0/js.cookie.js"></script>
     <script src="03_latentVariableI_files/peerjs-1.3.1/peerjs.min.js"></script>
     <script src="03_latentVariableI_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="03_latentVariableI_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
-    <script src="03_latentVariableI_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
-    <script src="03_latentVariableI_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+    <link href="03_latentVariableI_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="03_latentVariableI_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <script src="03_latentVariableI_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
     <script src="03_latentVariableI_files/viz-1.8.2/viz.js"></script>
     <link href="03_latentVariableI_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
     <script src="03_latentVariableI_files/grViz-binding-1.0.6.1/grViz.js"></script>
@@ -32,7 +30,6 @@ class: center, middle, inverse, title-slide
 # 潜在变量分析（基础）
 ## Learning Latent Variable Analysis with Dr. Hu (Basic)
 ### 胡悦
-### 清华大学政治学系
 
 ---
 
@@ -40,23 +37,33 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
+.pull-left[
 ## 内容概要
 
-* 潜在变量分析概述
-* 什么是EFA
-    + EFA诊断
-    + EFA vs. PCA
-* 什么是CFA
-    + CFA诊断
-* SEM 入门
+潜在变量分析概述
 
----
+什么是EFA
++ EFA诊断
++ EFA vs. PCA
 
+什么是CFA
+  + CFA诊断
+  
+SEM简介
+
+]
+
+--
+
+.pull-right[
 ## 操作语言
 
 * R
     + [`psych`](https://personality-project.org/r/psych/vignettes/intro.pdf)
     + [`laavan`](https://lavaan.ugent.be/)
+]
 
 ---
 
@@ -68,7 +75,7 @@ class: inverse, bottom
 
 ## 潜在变量
 
-.left-column[
+.pull-left[
 &lt;img src="images/lv_LoveLife.jpg" height = 400 /&gt;
 ]
 
@@ -78,7 +85,28 @@ Anna Kendrick's 2020 show, showing how difficult to find "the one." This "being 
 
 --
 
-.right-column[
+.pull-right[
+&lt;img src="images/lv_jamesStimson.jpg" height = 400 /&gt;
+]
+
+---
+
+
+## 为什么要了解潜在变量？
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+"Latent variable analysis is the .red[cornerstone] of successful scientific inquiry." .tr[--- Delli Carpini and Keeter (1993)]
+]
+
+???
+
+Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Putting First Things First.” American Journal of Political Science 37 (4): 1179–1206.
+
+--
+
+.pull-left[
+
+*Latent Variable*
 
 1. 不可见(Unobservable)
 1. 多维度(Multidimensional)
@@ -92,90 +120,91 @@ Anna Kendrick's 2020 show, showing how difficult to find "the one." This "being 
 
 The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
 
----
+--
 
-## 为什么需要了解潜在变量？
-
-公共舆论、政治文化、政治心理……几乎所有社会科学学科：
+.pull-right[
+几乎涵盖所有社会科学学科
 
 * 抽象
 * 复杂
 * 综合
+]
 
---
-
-".red[Cornerstone] of successful scientific inquiry."  
----Delli Carpini and Keeter 1993
-
-???
-
-Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Putting First Things First.” American Journal of Political Science 37 (4): 1179–1206.
 
 ---
 
-## 怎么找？
+class: center
 
-例：测量个体的“社会资本”（social capital）
+## 分析方法：一个例子
+
+测量个体的“社会资本”（social capital）
 
 指标问题X（1~10）：
 
 1. 您是否信任身边人？
-1. 您在政府机关有没有亲戚
+1. 您在政府机关有没有亲戚？
 1. 您的朋友是否和您的想法经常一致？
+
+
+--
+
+.pull-left[
+累加型综合法(additive scales)
 
 `$$\tilde{X} = (X_1 + X_2 + X_3)/3.$$`
 
-累加型综合法(additive scales)
-
----
-
 Getting the mean right (?)
+]
 
 --
+
+.pull-right[
+*Concerns*:
 
 1. 平等权重(equal weight)
 1. 数据敏感(extreme value sensitivity)
 1. 忽略极化(polarity ignoring)
+]
 
 ---
 
-## "易求无价宝，难得有心郎！"
+## 易求无价宝，难得有心郎！: Advanced Methods
 
-### 因素分析模型(Factorial Models)
+.pull-left[
+**因素分析模型(Factorial Models)**
 
 1. 探索性因子分析(EFA)
 1. 验证性因子分析(CFA)
 1. 结构方程模型(SEM)
-
-### .gray[类型分析模型(Typological Models)]
-
-
-1. .grayLight[项目反应理论(IRT)]
-1. .grayLight[跨群组项目反应(MrP, GIRT, DCPO)]
+]
 
 ???
 
 鱼玄机《赠邻女》：羞日遮罗袖，愁春懒起妆。易求无价宝，难得有心郎
 
+--
+
+.pull-right[
+
+**类型分析模型(Topological Models)**
+
+1. 项目反应理论(IRT)
+1. MRP
+1. 跨群组项目反应(GIRT, DCPO)
+
+]
+
 ---
 
 class: inverse, bottom
 
-# 因素分析综述
+# 因素分析初探
 
 ---
 
-## 因素分析模型(Factorial Models)
+## 理论与操作
 
-1. 探索性因子分析(EFA)
-1. 验证性因子分析(CFA)
-1. 结构方程模型(SEM)
-
----
-
-### 理论
-
-.navy[可见]指标(indicators) .red[&amp;larr;] 潜在变量
+可见指标(indicators) .red[.large[&amp;larr;]] 潜在变量
 
 ???
 
@@ -189,7 +218,6 @@ uncover the underlying structure of a relatively large set of variables.
 .red[Minimum] factors for the variances
 
 a.k.a. 变量简化  
-(降维打击？)
 ]
 
 .pull-right[
@@ -202,14 +230,17 @@ determine the minimum number of hypothetical factors or components that account 
 
 ---
 
-## Like...How?
+## 过程问题
 
-.center[&lt;img src="images/lv_efa.png" height = 500 /&gt;]
+.pull-left[&lt;img src="images/lv_efa.png" height = 500 /&gt;]
 
-???
+.pull-right[
+*Known*: I wanna fewer variables
 
-Known: I wanna fewer variables
-Unknown: how many? how to combine?
+*Unknown*: 
++ How many? 
++ How to combine?
+]
 
 ---
 
@@ -219,6 +250,8 @@ class: inverse, bottom
 ## Exploratory Factor Analysis
 
 ---
+
+class: center
 
 ## 概念公式
 
@@ -234,9 +267,9 @@ class: inverse, bottom
 
 Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses.” Political Analysis 12(4): 338–53.
 
----
+--
 
-## 一顿操作
+## 实际操作
 
 1. 因子个数选择
 1. 因子提取
@@ -253,7 +286,26 @@ Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and 
 变量名：
 
 ```
-## race age engnat gender hand source country E1 E2 E3 E4 E5 E6 E7 E8 E9 E10 N1 N2 N3 N4 N5 N6 N7 N8 N9 N10 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 O1 O2 O3 O4 O5 O6 O7 O8 O9 O10
+## # A tibble: 19,719 x 57
+##     race   age engnat gender  hand source
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1     3    53      1      1     1      1
+##  2    13    46      1      2     1      1
+##  3     1    14      2      2     1      1
+##  4     3    19      2      2     1      1
+##  5    11    25      2      2     1      2
+##  6    13    31      1      2     1      2
+##  7     5    20      1      2     1      5
+##  8     4    23      2      1     1      2
+##  9     5    39      1      2     3      4
+## 10     3    18      1      2     1      5
+## # ... with 19,709 more rows, and 51 more
+## #   variables: country &lt;chr&gt;, E1 &lt;dbl&gt;,
+## #   E2 &lt;dbl&gt;, E3 &lt;dbl&gt;, E4 &lt;dbl&gt;,
+## #   E5 &lt;dbl&gt;, E6 &lt;dbl&gt;, E7 &lt;dbl&gt;,
+## #   E8 &lt;dbl&gt;, E9 &lt;dbl&gt;, E10 &lt;dbl&gt;,
+## #   N1 &lt;dbl&gt;, N2 &lt;dbl&gt;, N3 &lt;dbl&gt;,
+## #   N4 &lt;dbl&gt;, N5 &lt;dbl&gt;, N6 &lt;dbl&gt;, ...
 ```
 
 ???
@@ -274,6 +326,7 @@ https://quantdev.ssri.psu.edu/tutorials/intro-basic-exploratory-factor-analysis
 
 ### Horn's Parallel Analysis
 
+.pull-left[
 已知观测数据集**O**&lt;sub&gt;m&amp;times;n&lt;/sub&gt;
 
 1. 创建随机数据集**R**&lt;sub&gt;m&amp;times;n&lt;/sub&gt;;  
@@ -283,21 +336,24 @@ https://quantdev.ssri.psu.edu/tutorials/intro-basic-exploratory-factor-analysis
 
 A. 如果&amp;lambda;&lt;sub&gt;**Ok**&lt;/sub&gt; &lt; &amp;lambda;&lt;sub&gt;**R**&lt;/sub&gt;, 则 ~~k~~  
 B. Kaiser criterion
+]
 
 ???
 
 &amp;lambda;是相关矩阵特征值
 Kaiser criterion: 特征值&lt;1 不可
 
----
+--
 
+.pull-right[
 &lt;img src="03_latentVariableI_files/figure-html/parallelAnalysis-1.png" style="display: block; margin: auto;" /&gt;
+]
 
 ---
 
 ## 因子提取(Factor Extraction)
 
-+ .navy[Minimum residual (OLS)]
++ Minimum residual (OLS)
 + Principal axes
 + Alpha factoring
 + Weighted least squares
@@ -308,16 +364,14 @@ Kaiser criterion: 特征值&lt;1 不可
 
 ## Rotation
 
-.center[&lt;img src="images/lv_rotation.jpg" height = 530 /&gt;]
+.center[&lt;img src="images/lv_rotation.jpg" height = 400 /&gt;]
 
 ???
 Rotation:
 
 A pattern of loadings where each item loads strongly on only one of the factors, and much more weakly on the other factors.
 
----
-
-## 简化数据结构
+--
 
 * Orthogonal: Varimax, quartimax, bentlerT, geominT, bifactor  
 * .red[Oblique]: Oblimin, quartimin, simplimax, bentlerQ, geominQ, biquartimin
@@ -331,6 +385,7 @@ Orthogonal(正交)
 
 ---
 
+.pull-left[
 ## 因子合成
 
 
@@ -389,14 +444,20 @@ Orthogonal(正交)
 ## O9                        0.352       
 ## O10 -0.320                0.586       
 ## 
-##                  MR1   MR2   MR3   MR4   MR5
-## SS loadings    7.505 4.071 3.149 2.905 2.179
-## Proportion Var 0.150 0.081 0.063 0.058 0.044
-## Cumulative Var 0.150 0.232 0.294 0.353 0.396
+##                  MR1   MR2   MR3   MR4
+## SS loadings    7.505 4.071 3.149 2.905
+## Proportion Var 0.150 0.081 0.063 0.058
+## Cumulative Var 0.150 0.232 0.294 0.353
+##                  MR5
+## SS loadings    2.179
+## Proportion Var 0.044
+## Cumulative Var 0.396
 ```
+]
 
----
+--
 
+.pull-right[
 ## 诊断指标
 
 1. Sum of squared (SS) loading&lt;sup&gt;1&lt;/sup&gt;
@@ -404,10 +465,11 @@ Orthogonal(正交)
 1. Root means square of residuals(RMSR)
 1. Tucker-Lewis Indes (TLI)
 1. Reliability test (Crobach's &amp;alpha;)&lt;sup&gt;2&lt;/sup&gt;
-
+]
 .footnote[
 [1] 特征值  
 [2] 为每个因子分别计算
+]
 ]
 
 ???
@@ -423,68 +485,129 @@ Crobach's &amp;alpha;: 计算因子分布的variables是不是内部一致，除
 ---
 
 
+```r
+result_efa
+```
+
 ```
 ## Factor Analysis using method =  minres
 ## Call: fa(r = ., nfactors = 5, rotate = "oblimin", fm = "minres")
 ## Standardized loadings (pattern matrix) based upon correlation matrix
-##       MR1   MR2   MR3   MR4   MR5   h2   u2 com
-## E1  -0.50  0.26 -0.28 -0.12  0.21 0.46 0.54 2.7
-## E2   0.50 -0.34  0.26  0.13 -0.18 0.48 0.52 2.9
-## E3  -0.70  0.15 -0.11 -0.21  0.10 0.57 0.43 1.4
-## E4   0.57 -0.19  0.30  0.17 -0.20 0.52 0.48 2.3
-## E5  -0.65  0.31 -0.16 -0.11  0.20 0.60 0.40 1.9
-## E6   0.54 -0.25  0.19 -0.06 -0.10 0.40 0.60 1.8
-## E7  -0.62  0.28 -0.23 -0.16  0.19 0.57 0.43 2.1
-## E8   0.36 -0.21  0.33  0.10 -0.18 0.33 0.67 3.4
-## E9  -0.45  0.23 -0.31 -0.03  0.21 0.40 0.60 2.9
-## E10  0.55 -0.15  0.28  0.15 -0.16 0.45 0.55 2.0
-## N1   0.43  0.47  0.21  0.03  0.21 0.49 0.51 2.8
-## N2  -0.35 -0.28 -0.16 -0.03 -0.20 0.27 0.73 3.1
-## N3   0.34  0.44  0.30  0.08  0.15 0.43 0.57 3.1
-## N4  -0.27 -0.22 -0.07 -0.11  0.00 0.14 0.86 2.5
-## N5   0.38  0.37  0.05 -0.05  0.16 0.32 0.68 2.4
-## N6   0.46  0.53  0.14  0.00  0.23 0.57 0.43 2.5
-## N7   0.45  0.51 -0.01  0.08  0.24 0.52 0.48 2.5
-## N8   0.48  0.52  0.00  0.07  0.25 0.57 0.43 2.5
-## N9   0.49  0.41  0.02  0.09  0.34 0.54 0.46 2.9
-## N10  0.53  0.38  0.09  0.16  0.07 0.47 0.53 2.1
-## A1   0.25 -0.16 -0.24 -0.01  0.24 0.20 0.80 3.7
-## A2  -0.49  0.35  0.14 -0.07 -0.17 0.41 0.59 2.4
-## A3   0.26  0.10 -0.37  0.12  0.21 0.27 0.73 2.9
-## A4  -0.32  0.41  0.48 -0.09 -0.33 0.62 0.38 3.7
-## A5   0.37 -0.35 -0.32  0.10  0.29 0.45 0.55 4.1
-## A6  -0.15  0.36  0.41 -0.13 -0.20 0.37 0.63 3.0
-## A7   0.52 -0.34 -0.21  0.12  0.24 0.50 0.50 2.8
-## A8  -0.36  0.28  0.34 -0.06 -0.20 0.36 0.64 3.5
-## A9  -0.33  0.43  0.42 -0.04 -0.22 0.51 0.49 3.4
-## A10 -0.50  0.18  0.13 -0.04 -0.03 0.31 0.69 1.4
-## C1  -0.30 -0.24  0.33  0.16  0.33 0.39 0.61 4.3
-## C2   0.13  0.31 -0.32  0.05 -0.30 0.31 0.69 3.4
-## C3  -0.19 -0.07  0.29  0.29  0.17 0.24 0.76 3.5
-## C4   0.41  0.40 -0.28  0.01 -0.20 0.45 0.55 3.2
-## C5  -0.30 -0.22  0.38 -0.04  0.36 0.41 0.59 3.5
-## C6   0.25  0.33 -0.34  0.01 -0.30 0.37 0.63 3.8
-## C7  -0.12 -0.13  0.38  0.12  0.33 0.30 0.70 2.7
-## C8   0.37  0.21 -0.31 -0.03 -0.14 0.30 0.70 2.9
-## C9  -0.24 -0.13  0.43  0.02  0.38 0.40 0.60 2.8
-## C10 -0.25 -0.10  0.28  0.26  0.24 0.28 0.72 4.2
-## O1  -0.19  0.02 -0.09  0.56 -0.04 0.36 0.64 1.3
-## O2   0.27  0.07  0.09 -0.49  0.17 0.36 0.64 1.9
-## O3  -0.09  0.20 -0.07  0.48 -0.09 0.30 0.70 1.6
-## O4   0.19 -0.04  0.04 -0.41  0.21 0.26 0.74 2.0
-## O5  -0.35  0.04 -0.08  0.52  0.09 0.42 0.58 1.9
-## O6   0.23 -0.11  0.08 -0.42  0.11 0.27 0.73 2.0
-## O7  -0.30 -0.07  0.00  0.45  0.04 0.30 0.70 1.8
-## O8  -0.03  0.08 -0.15  0.54 -0.01 0.32 0.68 1.2
-## O9   0.01  0.17  0.18  0.35 -0.09 0.19 0.81 2.2
-## O10 -0.32  0.14 -0.12  0.59  0.00 0.48 0.52 1.8
+##       MR1   MR2   MR3   MR4   MR5   h2
+## E1  -0.50  0.26 -0.28 -0.12  0.21 0.46
+## E2   0.50 -0.34  0.26  0.13 -0.18 0.48
+## E3  -0.70  0.15 -0.11 -0.21  0.10 0.57
+## E4   0.57 -0.19  0.30  0.17 -0.20 0.52
+## E5  -0.65  0.31 -0.16 -0.11  0.20 0.60
+## E6   0.54 -0.25  0.19 -0.06 -0.10 0.40
+## E7  -0.62  0.28 -0.23 -0.16  0.19 0.57
+## E8   0.36 -0.21  0.33  0.10 -0.18 0.33
+## E9  -0.45  0.23 -0.31 -0.03  0.21 0.40
+## E10  0.55 -0.15  0.28  0.15 -0.16 0.45
+## N1   0.43  0.47  0.21  0.03  0.21 0.49
+## N2  -0.35 -0.28 -0.16 -0.03 -0.20 0.27
+## N3   0.34  0.44  0.30  0.08  0.15 0.43
+## N4  -0.27 -0.22 -0.07 -0.11  0.00 0.14
+## N5   0.38  0.37  0.05 -0.05  0.16 0.32
+## N6   0.46  0.53  0.14  0.00  0.23 0.57
+## N7   0.45  0.51 -0.01  0.08  0.24 0.52
+## N8   0.48  0.52  0.00  0.07  0.25 0.57
+## N9   0.49  0.41  0.02  0.09  0.34 0.54
+## N10  0.53  0.38  0.09  0.16  0.07 0.47
+## A1   0.25 -0.16 -0.24 -0.01  0.24 0.20
+## A2  -0.49  0.35  0.14 -0.07 -0.17 0.41
+## A3   0.26  0.10 -0.37  0.12  0.21 0.27
+## A4  -0.32  0.41  0.48 -0.09 -0.33 0.62
+## A5   0.37 -0.35 -0.32  0.10  0.29 0.45
+## A6  -0.15  0.36  0.41 -0.13 -0.20 0.37
+## A7   0.52 -0.34 -0.21  0.12  0.24 0.50
+## A8  -0.36  0.28  0.34 -0.06 -0.20 0.36
+## A9  -0.33  0.43  0.42 -0.04 -0.22 0.51
+## A10 -0.50  0.18  0.13 -0.04 -0.03 0.31
+## C1  -0.30 -0.24  0.33  0.16  0.33 0.39
+## C2   0.13  0.31 -0.32  0.05 -0.30 0.31
+## C3  -0.19 -0.07  0.29  0.29  0.17 0.24
+## C4   0.41  0.40 -0.28  0.01 -0.20 0.45
+## C5  -0.30 -0.22  0.38 -0.04  0.36 0.41
+## C6   0.25  0.33 -0.34  0.01 -0.30 0.37
+## C7  -0.12 -0.13  0.38  0.12  0.33 0.30
+## C8   0.37  0.21 -0.31 -0.03 -0.14 0.30
+## C9  -0.24 -0.13  0.43  0.02  0.38 0.40
+## C10 -0.25 -0.10  0.28  0.26  0.24 0.28
+## O1  -0.19  0.02 -0.09  0.56 -0.04 0.36
+## O2   0.27  0.07  0.09 -0.49  0.17 0.36
+## O3  -0.09  0.20 -0.07  0.48 -0.09 0.30
+## O4   0.19 -0.04  0.04 -0.41  0.21 0.26
+## O5  -0.35  0.04 -0.08  0.52  0.09 0.42
+## O6   0.23 -0.11  0.08 -0.42  0.11 0.27
+## O7  -0.30 -0.07  0.00  0.45  0.04 0.30
+## O8  -0.03  0.08 -0.15  0.54 -0.01 0.32
+## O9   0.01  0.17  0.18  0.35 -0.09 0.19
+## O10 -0.32  0.14 -0.12  0.59  0.00 0.48
+##       u2 com
+## E1  0.54 2.7
+## E2  0.52 2.9
+## E3  0.43 1.4
+## E4  0.48 2.3
+## E5  0.40 1.9
+## E6  0.60 1.8
+## E7  0.43 2.1
+## E8  0.67 3.4
+## E9  0.60 2.9
+## E10 0.55 2.0
+## N1  0.51 2.8
+## N2  0.73 3.1
+## N3  0.57 3.1
+## N4  0.86 2.5
+## N5  0.68 2.4
+## N6  0.43 2.5
+## N7  0.48 2.5
+## N8  0.43 2.5
+## N9  0.46 2.9
+## N10 0.53 2.1
+## A1  0.80 3.7
+## A2  0.59 2.4
+## A3  0.73 2.9
+## A4  0.38 3.7
+## A5  0.55 4.1
+## A6  0.63 3.0
+## A7  0.50 2.8
+## A8  0.64 3.5
+## A9  0.49 3.4
+## A10 0.69 1.4
+## C1  0.61 4.3
+## C2  0.69 3.4
+## C3  0.76 3.5
+## C4  0.55 3.2
+## C5  0.59 3.5
+## C6  0.63 3.8
+## C7  0.70 2.7
+## C8  0.70 2.9
+## C9  0.60 2.8
+## C10 0.72 4.2
+## O1  0.64 1.3
+## O2  0.64 1.9
+## O3  0.70 1.6
+## O4  0.74 2.0
+## O5  0.58 1.9
+## O6  0.73 2.0
+## O7  0.70 1.8
+## O8  0.68 1.2
+## O9  0.81 2.2
+## O10 0.52 1.8
 ## 
-##                        MR1  MR2  MR3  MR4  MR5
-## SS loadings           7.50 4.07 3.15 2.90 2.18
-## Proportion Var        0.15 0.08 0.06 0.06 0.04
-## Cumulative Var        0.15 0.23 0.29 0.35 0.40
-## Proportion Explained  0.38 0.21 0.16 0.15 0.11
-## Cumulative Proportion 0.38 0.58 0.74 0.89 1.00
+##                        MR1  MR2  MR3  MR4
+## SS loadings           7.50 4.07 3.15 2.90
+## Proportion Var        0.15 0.08 0.06 0.06
+## Cumulative Var        0.15 0.23 0.29 0.35
+## Proportion Explained  0.38 0.21 0.16 0.15
+## Cumulative Proportion 0.38 0.58 0.74 0.89
+##                        MR5
+## SS loadings           2.18
+## Proportion Var        0.04
+## Cumulative Var        0.40
+## Proportion Explained  0.11
+## Cumulative Proportion 1.00
 ## 
 ## Mean item complexity =  2.7
 ## Test of the hypothesis that 5 factors are sufficient.
@@ -503,10 +626,26 @@ Crobach's &amp;alpha;: 计算因子分布的variables是不是内部一致，除
 ## BIC =  49527.15
 ## Fit based upon off diagonal values = 0.97
 ## Measures of factor score adequacy             
-##                                                    MR1  MR2  MR3  MR4  MR5
-## Correlation of (regression) scores with factors   0.97 0.94 0.92 0.91 0.89
-## Multiple R square of scores with factors          0.93 0.89 0.84 0.82 0.79
-## Minimum correlation of possible factor scores     0.87 0.77 0.69 0.64 0.59
+##                                                    MR1
+## Correlation of (regression) scores with factors   0.97
+## Multiple R square of scores with factors          0.93
+## Minimum correlation of possible factor scores     0.87
+##                                                    MR2
+## Correlation of (regression) scores with factors   0.94
+## Multiple R square of scores with factors          0.89
+## Minimum correlation of possible factor scores     0.77
+##                                                    MR3
+## Correlation of (regression) scores with factors   0.92
+## Multiple R square of scores with factors          0.84
+## Minimum correlation of possible factor scores     0.69
+##                                                    MR4
+## Correlation of (regression) scores with factors   0.91
+## Multiple R square of scores with factors          0.82
+## Minimum correlation of possible factor scores     0.64
+##                                                    MR5
+## Correlation of (regression) scores with factors   0.89
+## Multiple R square of scores with factors          0.79
+## Minimum correlation of possible factor scores     0.59
 ```
 
 ---
@@ -579,8 +718,8 @@ class: inverse, bottom
 
 ## 探索性 vs 验证性：实现
 
-.left-column[
-### EFA: 数据指向
+.pull-left[
+**EFA: 数据指向**
 
 1. 实证观察（归纳）
 1. 未知维度
@@ -592,8 +731,8 @@ class: inverse, bottom
 
 ]
 
-.right-column[
-### CFA: 理论指向
+.pull-right[
+**CFA: 理论指向**
 
 1. 理论定义（演绎）
 1. 明确维度
@@ -613,18 +752,18 @@ class: inverse, bottom
 
 --
 
-### 例：人际信任
+E.g., 人际信任
 
 定义：.red[相信]他人不会.navy[伤害自己]或.navy[违背约定].
 
 --
 
 指标：
-.small[
+
 1. 总体而言，您是认同多数人是值得信任的，还是防人之心不可无？
 1. 您认为多数时候人们是乐于助人的还是自私自利的？
 1. 如果有机会，您认为别人是会占您便宜，还是说会恪守约定、公平行事？
-]
+
 
 ---
 
@@ -632,7 +771,7 @@ class: inverse, bottom
 
 操作原则：
 
-1. 每个维度一个指标，但维度拆分.navy[艺术&gt;技术]
+1. 每个维度一个指标，但维度拆分.red[艺术&gt;技术]
 
 --
 
@@ -640,11 +779,8 @@ class: inverse, bottom
 
 --
 
-
-```{=html}
-&lt;div id="htmlwidget-14069092456261e628c7" style="width:504px;height:360px;" class="grViz html-widget"&gt;&lt;/div&gt;
-&lt;script type="application/json" data-for="htmlwidget-14069092456261e628c7"&gt;{"x":{"diagram":"digraph {\n\ngraph[layout = dot]\n\nnode[shape = rectangle, style = filled, fillcolor = Linen]\n\ns [label = \"压力\", shape = \"ellipse\"]\nd [label = \"家人\n去世\"]\nj [label =  \"丢失\n工作\"]\ni [label = \"身患\n疾病\"]\n\n# edge definitions with the node IDs\ns -&gt; {d, j, i}\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}&lt;/script&gt;
-```
+<div id="htmlwidget-7544e367878cb8a261f0" style="width:504px;height:360px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7544e367878cb8a261f0">{"x":{"diagram":"digraph {\n\ngraph[layout = dot]\n\nnode[shape = rectangle, style = filled, fillcolor = Linen]\n\ns [label = \"Social Capital\", shape = \"ellipse\"]\nd [label = \"Interpersonal\n Trust\"]\nj [label =  \"Trusty\"]\ni [label = \"Credible\"]\n\n# edge definitions with the node IDs\ns -> {d, j, i}\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 
 
 ---
@@ -664,7 +800,9 @@ class: inverse, bottom
 
 ## 定义公式
 
-.center[.large[**X\* = &amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;&amp;xi; + &amp;delta;**]]
+.center[
+EFA: **X&lt;sup&gt;*&lt;/sup&gt; = &amp;Phi;&amp;Lambda;' + &amp;delta;**;    
+CFA: **X = &amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;&amp;xi;\* + &amp;delta;**]
 
 **X**： 指标向量  
 **&amp;xi;**：潜在变量  
@@ -685,14 +823,17 @@ class: inverse, bottom
 
 ---
 
-.center[&lt;img src="images/lv_partMultitraitpng.png" height = 300 /&gt;]
+.center[&lt;img src="images/lv_partMultitraitpng.png" height = 250 /&gt;]
 
-`$$\begin{bmatrix}x_1\\
+`$$\begin{bmatrix}
+x_1\\
 x_2\\
 x_3\\
 x_4\\
 x_5
-\end{bmatrix} = \begin{bmatrix}1 &amp; 1 &amp; 0\\
+\end{bmatrix} = 
+\begin{bmatrix}
+1 &amp; 1 &amp; 0\\
 \lambda_{21} &amp; 1 &amp; 0\\
 \lambda_{31} &amp; 1 &amp; 0\\
 \lambda_{41} &amp; 0 &amp; 1\\
@@ -711,12 +852,11 @@ x_5
 
 潜在变量矩阵
 
-**&amp;Phi;** = 
-`\begin{bmatrix}
+`$$\Phi = \begin{bmatrix}
 \phi_{11} &amp; &amp; \\
 0 &amp; \phi_{22} &amp; \\
 0 &amp; \phi_{23} &amp; \phi_{33}
-\end{bmatrix}`
+\end{bmatrix}$$`
 
 
 偏误矩阵
@@ -731,13 +871,14 @@ diag **&amp;Theta;&lt;sub&gt;&amp;sigma;&lt;/sub&gt;** = diag[var(&amp;delta;&lt
 
 ## 你最多能连多少线？：Identification
 
-`\begin{cases}
+\begin{cases}
 y = x + z\\
 x = 2y - 3z
-\end{cases}`
+\end{cases}
 
 --
 
+.pull-left[
 当**&amp;Lambda;、&amp;Phi;、&amp;Theta;**存在唯一解时，模型是identified.
 
 
@@ -745,7 +886,6 @@ x = 2y - 3z
 &amp;Phi;: 潜在变量的协方差矩阵  
 &amp;Theta; 偏误的协方差矩阵
 
---
 
 **t rule**:
 
@@ -753,13 +893,15 @@ t &lt; q(q + 1)/2
 
 t: 不可见
 q：可见
+]
 
 ???
 
 Another way to calculate df.
 
----
+--
 
+.pull-right[
 为保证identifable， 要对CFA进行限制
 
 1. Scaling
@@ -769,6 +911,7 @@ Another way to calculate df.
     + 特定因子loading设为0；
     + 偏误的协方差设为0；
     + 偏误的方差设为0；
+]
 
 ---
 
@@ -800,16 +943,16 @@ Two Stage Least Squares
 ---
 
 ## 常见问题
-### Matrix to be analyzed not positive definite
+`Error: Matrix to be analyzed not positive definite`
 
 + Typo in data file or covariance matrix
 + Pairwise deletion of missing data
 + Perfect collinearity
 + Outliers/influential cases
 
----
+--
 
-### Improper solutions
+`Error: Improper solutions`
 
 + Typo in program
 + Population value near the borderline combined with sampling fluctuation
@@ -820,7 +963,7 @@ Two Stage Least Squares
 
 ---
 
-### Nonconvergence
+`Error: Nonconvergence`
 
 + Typo in program, data file, or covariance matrix
 + Underidentified model
@@ -833,11 +976,11 @@ Two Stage Least Squares
 
 ---
 
-## 结果诊断
+## 效果诊断
 
-### Overall: &amp;chi;&lt;sup&gt;2&lt;/sup&gt;
+*Overall: &amp;chi;&lt;sup&gt;2&lt;/sup&gt;*
 
-结果显著则说明整体模型可能有问题。
+结果.red[显著]则说明整体模型可能.red[有问题]。
 
 --
 
@@ -848,9 +991,9 @@ Two Stage Least Squares
 1. Because models are almost always incorrect, any otherwise reasonably fitting model can be rejected when sample size is sufficient
 1. Also a poor fitting model could be accepted if there is insufficient power to detect misspecification.
 
----
+--
 
-### Incremental Fit Indices
+*Incremental Fit Indices*
 
 将模型与基线模型比较
 
@@ -860,9 +1003,9 @@ Two Stage Least Squares
 
 --
 
-#### Tucker-Lewis Index (TLI, &amp;rho;&lt;sub&gt;2&lt;/sub&gt;, Non-Normed Fit Index)
+1. Tucker-Lewis Index (TLI, &amp;rho;&lt;sub&gt;2&lt;/sub&gt;, Non-Normed Fit Index)
 
-#### Comparative Fit Index (CFI)
+1. Comparative Fit Index (CFI)
 
 + 1 理想情况
 + &lt;.95 不可接受
@@ -873,10 +1016,10 @@ CFI可以&gt;1, 这种情况视为1
 
 ---
 
-### Absolute Fit Indices
+*Absolute Fit Indices*
 
-#### Root Mean Square Error of Approximation (RMSEA)
-#### Standardized Root Mean Square Residual (SRMR)
+1. Root Mean Square Error of Approximation (RMSEA)
+1. Standardized Root Mean Square Residual (SRMR)
 
 + 0 理想情况
 + &amp;le; 0.05 不错
@@ -898,15 +1041,15 @@ CFI可以&gt;1, 这种情况视为1
 &lt;img src="03_latentVariableI_files/figure-html/diagram-cfa-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
----
+--
 
 
 ```
-## lavaan 0.6-7 ended normally after 35 iterations
+## lavaan 0.6-9 ended normally after 35 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         21
+##   Number of model parameters                        21
 ##                                                       
 ##   Number of observations                           301
 ##                                                       
@@ -954,42 +1097,74 @@ CFI可以&gt;1, 这种情况视为1
 ##   Information saturated (h1) model          Structured
 ## 
 ## Latent Variables:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   visual =~                                           
-##     x1                1.000                           
-##     x2                0.554    0.100    5.554    0.000
-##     x3                0.729    0.109    6.685    0.000
-##   textual =~                                          
-##     x4                1.000                           
-##     x5                1.113    0.065   17.014    0.000
-##     x6                0.926    0.055   16.703    0.000
-##   speed =~                                            
-##     x7                1.000                           
-##     x8                1.180    0.165    7.152    0.000
-##     x9                1.082    0.151    7.155    0.000
+##                    Estimate  Std.Err
+##   visual =~                         
+##     x1                1.000         
+##     x2                0.554    0.100
+##     x3                0.729    0.109
+##   textual =~                        
+##     x4                1.000         
+##     x5                1.113    0.065
+##     x6                0.926    0.055
+##   speed =~                          
+##     x7                1.000         
+##     x8                1.180    0.165
+##     x9                1.082    0.151
+##   z-value  P(&gt;|z|)
+##                   
+##                   
+##     5.554    0.000
+##     6.685    0.000
+##                   
+##                   
+##    17.014    0.000
+##    16.703    0.000
+##                   
+##                   
+##     7.152    0.000
+##     7.155    0.000
 ## 
 ## Covariances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   visual ~~                                           
-##     textual           0.408    0.074    5.552    0.000
-##     speed             0.262    0.056    4.660    0.000
-##   textual ~~                                          
-##     speed             0.173    0.049    3.518    0.000
+##                    Estimate  Std.Err
+##   visual ~~                         
+##     textual           0.408    0.074
+##     speed             0.262    0.056
+##   textual ~~                        
+##     speed             0.173    0.049
+##   z-value  P(&gt;|z|)
+##                   
+##     5.552    0.000
+##     4.660    0.000
+##                   
+##     3.518    0.000
 ## 
 ## Variances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .x1                0.549    0.114    4.833    0.000
-##    .x2                1.134    0.102   11.146    0.000
-##    .x3                0.844    0.091    9.317    0.000
-##    .x4                0.371    0.048    7.779    0.000
-##    .x5                0.446    0.058    7.642    0.000
-##    .x6                0.356    0.043    8.277    0.000
-##    .x7                0.799    0.081    9.823    0.000
-##    .x8                0.488    0.074    6.573    0.000
-##    .x9                0.566    0.071    8.003    0.000
-##     visual            0.809    0.145    5.564    0.000
-##     textual           0.979    0.112    8.737    0.000
-##     speed             0.384    0.086    4.451    0.000
+##                    Estimate  Std.Err
+##    .x1                0.549    0.114
+##    .x2                1.134    0.102
+##    .x3                0.844    0.091
+##    .x4                0.371    0.048
+##    .x5                0.446    0.058
+##    .x6                0.356    0.043
+##    .x7                0.799    0.081
+##    .x8                0.488    0.074
+##    .x9                0.566    0.071
+##     visual            0.809    0.145
+##     textual           0.979    0.112
+##     speed             0.384    0.086
+##   z-value  P(&gt;|z|)
+##     4.833    0.000
+##    11.146    0.000
+##     9.317    0.000
+##     7.779    0.000
+##     7.642    0.000
+##     8.277    0.000
+##     9.823    0.000
+##     6.573    0.000
+##     8.003    0.000
+##     5.564    0.000
+##     8.737    0.000
+##     4.451    0.000
 ```
 
 ---
@@ -1028,30 +1203,29 @@ Latent growth curve models
 
 ---
 
+.pull-left[
 ## CFA之上
 
 与CFA相比，SEM：
 
 + 观察变量： X, .red[Y]
 
---
 
 + 模型建构：
     1. Latent variable model
     1. Measurement model (CFA)
     1. Relations among the errors 
     
---
 
 + 依然要求identification
+]
 
----
+--
 
+.pull-right[
 ## 估计
 
 MLE
-
---
 
 ## 诊断
 
@@ -1062,24 +1236,24 @@ MLE
 + Absolute:
     + RMSEA: &lt; 0.06
     + BIC: 越小越好
-    
+ ]
+ 
+ 
 ---
 
-实例：Bollen 1989
-
-政治民主（1960，1965）与工业化
+实例：Bollen 1989, 政治民主（1960，1965）与工业化
 
 &lt;img src="03_latentVariableI_files/figure-html/diagram-sem-1.png" style="display: block; margin: auto;" /&gt;
 
----
+--
 
 
 ```
-## lavaan 0.6-7 ended normally after 68 iterations
+## lavaan 0.6-9 ended normally after 68 iterations
 ## 
 ##   Estimator                                         ML
 ##   Optimization method                           NLMINB
-##   Number of free parameters                         31
+##   Number of model parameters                        31
 ##                                                       
 ##   Number of observations                            75
 ##                                                       
@@ -1127,60 +1301,108 @@ MLE
 ##   Information saturated (h1) model          Structured
 ## 
 ## Latent Variables:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   ind60 =~                                            
-##     x1                1.000                           
-##     x2                2.180    0.139   15.742    0.000
-##     x3                1.819    0.152   11.967    0.000
-##   dem60 =~                                            
-##     y1                1.000                           
-##     y2                1.257    0.182    6.889    0.000
-##     y3                1.058    0.151    6.987    0.000
-##     y4                1.265    0.145    8.722    0.000
-##   dem65 =~                                            
-##     y5                1.000                           
-##     y6                1.186    0.169    7.024    0.000
-##     y7                1.280    0.160    8.002    0.000
-##     y8                1.266    0.158    8.007    0.000
+##                    Estimate  Std.Err
+##   ind60 =~                          
+##     x1                1.000         
+##     x2                2.180    0.139
+##     x3                1.819    0.152
+##   dem60 =~                          
+##     y1                1.000         
+##     y2                1.257    0.182
+##     y3                1.058    0.151
+##     y4                1.265    0.145
+##   dem65 =~                          
+##     y5                1.000         
+##     y6                1.186    0.169
+##     y7                1.280    0.160
+##     y8                1.266    0.158
+##   z-value  P(&gt;|z|)
+##                   
+##                   
+##    15.742    0.000
+##    11.967    0.000
+##                   
+##                   
+##     6.889    0.000
+##     6.987    0.000
+##     8.722    0.000
+##                   
+##                   
+##     7.024    0.000
+##     8.002    0.000
+##     8.007    0.000
 ## 
 ## Regressions:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##   dem60 ~                                             
-##     ind60             1.483    0.399    3.715    0.000
-##   dem65 ~                                             
-##     ind60             0.572    0.221    2.586    0.010
-##     dem60             0.837    0.098    8.514    0.000
+##                    Estimate  Std.Err
+##   dem60 ~                           
+##     ind60             1.483    0.399
+##   dem65 ~                           
+##     ind60             0.572    0.221
+##     dem60             0.837    0.098
+##   z-value  P(&gt;|z|)
+##                   
+##     3.715    0.000
+##                   
+##     2.586    0.010
+##     8.514    0.000
 ## 
 ## Covariances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##  .y1 ~~                                               
-##    .y5                0.624    0.358    1.741    0.082
-##  .y2 ~~                                               
-##    .y4                1.313    0.702    1.871    0.061
-##    .y6                2.153    0.734    2.934    0.003
-##  .y3 ~~                                               
-##    .y7                0.795    0.608    1.308    0.191
-##  .y4 ~~                                               
-##    .y8                0.348    0.442    0.787    0.431
-##  .y6 ~~                                               
-##    .y8                1.356    0.568    2.386    0.017
+##                    Estimate  Std.Err
+##  .y1 ~~                             
+##    .y5                0.624    0.358
+##  .y2 ~~                             
+##    .y4                1.313    0.702
+##    .y6                2.153    0.734
+##  .y3 ~~                             
+##    .y7                0.795    0.608
+##  .y4 ~~                             
+##    .y8                0.348    0.442
+##  .y6 ~~                             
+##    .y8                1.356    0.568
+##   z-value  P(&gt;|z|)
+##                   
+##     1.741    0.082
+##                   
+##     1.871    0.061
+##     2.934    0.003
+##                   
+##     1.308    0.191
+##                   
+##     0.787    0.431
+##                   
+##     2.386    0.017
 ## 
 ## Variances:
-##                    Estimate  Std.Err  z-value  P(&gt;|z|)
-##    .x1                0.082    0.019    4.184    0.000
-##    .x2                0.120    0.070    1.718    0.086
-##    .x3                0.467    0.090    5.177    0.000
-##    .y1                1.891    0.444    4.256    0.000
-##    .y2                7.373    1.374    5.366    0.000
-##    .y3                5.067    0.952    5.324    0.000
-##    .y4                3.148    0.739    4.261    0.000
-##    .y5                2.351    0.480    4.895    0.000
-##    .y6                4.954    0.914    5.419    0.000
-##    .y7                3.431    0.713    4.814    0.000
-##    .y8                3.254    0.695    4.685    0.000
-##     ind60             0.448    0.087    5.173    0.000
-##    .dem60             3.956    0.921    4.295    0.000
-##    .dem65             0.172    0.215    0.803    0.422
+##                    Estimate  Std.Err
+##    .x1                0.082    0.019
+##    .x2                0.120    0.070
+##    .x3                0.467    0.090
+##    .y1                1.891    0.444
+##    .y2                7.373    1.374
+##    .y3                5.067    0.952
+##    .y4                3.148    0.739
+##    .y5                2.351    0.480
+##    .y6                4.954    0.914
+##    .y7                3.431    0.713
+##    .y8                3.254    0.695
+##     ind60             0.448    0.087
+##    .dem60             3.956    0.921
+##    .dem65             0.172    0.215
+##   z-value  P(&gt;|z|)
+##     4.184    0.000
+##     1.718    0.086
+##     5.177    0.000
+##     4.256    0.000
+##     5.366    0.000
+##     5.324    0.000
+##     4.261    0.000
+##     4.895    0.000
+##     5.419    0.000
+##     4.814    0.000
+##     4.685    0.000
+##     5.173    0.000
+##     4.295    0.000
+##     0.803    0.422
 ```
 
 ---
@@ -1194,14 +1416,14 @@ MLE
 
 --
 
-.red[SEM 不能证明因果关系！！]
+.center[.red[单单应用SEM 不能证明因果关系！！]]
 
 ---
 
 ## 总结一下
 
 * 潜在变量分析概述
-    + .navy[因素分析]
+    + **因素分析**
     + 类型分析
 * 什么是EFA
     + 探索性因子分析：通过loading找到潜在变量
@@ -1213,7 +1435,6 @@ MLE
 * SEM 入门
     + Latent + measurement models
     + 不能证明因果关系！
-class: inverse, center, middle
 
 
 ---
@@ -1234,7 +1455,8 @@ class: inverse, middle, center
 "highlightStyle": "github",
 "highlightLines": true,
 "highlightSpans": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -1343,7 +1565,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
