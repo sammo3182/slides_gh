@@ -1,27 +1,28 @@
 ---
-title: "Crown of Causal Inference: Experimental Analysis"
-subtitle: "Understanding Policies: Perspectives and Case (10700193)"
+title: "Experimental Methods"
+subtitle: "Public Policy Analysis: Perspectives and Methods (30700953)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    self_contained: FALSE
+    self_contained: false
     chakra: libs/remark-latest.min.js
     css: 
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
-
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -35,352 +36,747 @@ xaringanExtra::use_xaringan_extra(c("tile_view", # O
                                     "panelset",
                                     "tachyons"))
 
-xaringanExtra::use_fit_screen() # Alt + F
-
 # Functions preload
 set.seed(313)
 ```
 
-background-image: url("images/cha_challenge.gif")
-background-position: center
-background-size: contain
+## Overview 
+
+1. What  .red[can] social-scientific experiments do?
+1. What's a .red[good] experiment?
+1. .red[How] to design a political experiment?
 
 ---
 
 class: inverse, bottom
 
-# Experiment
+## What can experiments do?
+# Causal Inference
 
 ---
 
-## Overview
+.center[<img src="../../guestLecture/images/lab_causality.png" height = 300 />]
 
-.right-column[<img src="images/lab_experiment.jpg" height = 300 />]
+--
 
-.left-column[
+## A Direction of Social Science' Future
 
-### About experiment
+.pull-left[
+### Perspectives
 
-+ What
-+ Why
-+ How
+- Causal effect
+- Causal mechanism
+]
+
+???
+
+Three paradigms to study causality: Rubin's model, iv, sem
+
+Discussed with Per Johansson
+
+--
+
+.pull-right[
+### Approaches
+
+- Experiment
+- Quasi-experiment
 ]
 
 ---
 
-## Facts You May not Know
+## Causal Effect and Counterfactual Logic
 
-1. Not every research .red[in the lab] is .blue[an experiment].
-
-???
-
-what you did in chemistry in middle school.
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Neyman-Rubin Causality Model (RCM)]
+]
 
 --
 
-1. Not every .red[experiment] has to be conducted .blue[in the lab].
+.center[<img src = "images/exp_whatIf.gif" height = 400>]
 
 ???
 
-field, survey
+Captian carter
+
+---
+
+class: middle, center
+
+## "Empiricalize" Counter-Facts
+
+Unable to observe individual conter-facts simultaneously   
+&dArr;
 
 --
 
-1. Not every method called "experiment" is an experiment.
+Group comparison    
+&dArr;
+
+--
+
+.red[Average] treatment effect (ATE)
+.center[.small[See also ATT, ACTE]]
+
+
+???
+  
+.red[Average] treatment effect on the treated (ATT): $ATT = \mathbb{E}(\delta_i | T_i = 1).$
+
+.red[Average] conditional treatment effect (ACTE):
+
+$ATE(W) = \mathbb{E}(\delta_i|W_i); \boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.$     
+$ACTE(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)$
+
+ATE estimates the causal effect of treatment on a randomly drawn individual in the population
+ATT estimates the causal effect of treatment on a randomly drawn untreated individual.
+
+
+--
+
+### Stable Unit Treatment Value Assumption (SUTVA)
+
+SUTVA is .red[THE assumption]；No SUVA &rArr; no causal inference
 
 ???
 
-natural experiment
+Sut-va
 
---
-
-1. Not every research question can be tested by an experiment.
-
-
----
-
-## Why Bother?
-
-.center[<img src="images/lab_correlationCausation.jpg" height = 500 />]
++ $T_i$ .red[only] affects $Y_i$.
++ In estimating ATE or ATT, the treatment is .red[homogeneous] across individuals.
++ $T_i$ is .red[invariant] with respect to the mechanism by which the treatment is provided.
++ All possible states of the world are .red[observed].
++ The only causality question of interest is a .red[historical] one for the dataset analyzed.
++ The only causality question of interest is one in which treatment is received .red[before] a choice is made; there are no simultaneous relations between treatment and choice.
 
 ---
 
-## Counterfactual Logic
+## Advantages of RCM
 
-.center[<img src="images/lab_counterfactual.jpg" height = 500 />]
+1. Causality $\leadsto$ causal effects of single variables
+1. Defining causality
+1. Making causality observable and detectable
 
 ???
 
-Philip Dick "The Man in the High Castle" (also the author of *Do Androids Dream of Electric Sheep*, Blade Runner)
-
-Fogel, Robert William. 1970. *Railroads and American Economic Growth: Essays in Econometric History*. Johns Hopkins Press.
-如果没有铁路，美国的国民生产总值至多减少3%。铁路在美国的经济发展中并不像某些学者所说的那样起着至关重要的作用。
-
-Fogel, Robert William, and Stanley L. Engerman. 1995. *Time on the Cross: The Economics of American Negro Slavery*. W. W. Norton & Company.
-
-南方奴隶制农业比北方家庭农场的生产效率高出 35%。
-
-典型的黑奴并非传统观念认为的那样懒散、无能和低效，平均意义上，黑奴比自由的白人农业工人更加勤奋和高效。
-
-南方奴隶制拥有灵活而高效的激励机制，诸如奖金，休假，年终奖，对「劳动能手」的奖励，对完不成劳动定额的拖后腿者的惩罚，还有班组制和劳动分工，流水线作业等等。
-
-南方奴隶主对奴隶的剥削率比人们通常认为的要低得多。黑奴的平均收入和生活水平高于自由农业工人，营养水平甚至高于美国人在 1964 年的平均水平。
-
-关于奴隶的繁衍、性虐待与滥交摧毁了黑人家庭的观点只是一个传说.像自由人一样，大多数奴隶都拥有独门独户的住宅，几户人家共享一套房屋的情况并不常见。有些种植园甚至有一些专为未婚男女黑奴提供的宿舍，但这些都属例外，奴隶独门独户的房屋才是主流。
-
-南方奴隶制之所以被终结，不是因为它的体系不能有效率地运作，而是由于在道德上不被接受，所以人们要求从政治上消除这种不道德的体制。
-
----
-
-## When Sticking with the Observed
-
-No .red[perfect] counterfactual cases
-
-We have to see causation .red[from correlations]，but...
+Neyman-Rubin causality theory 
 
 --
 
-.center[<img src="images/lab_confounder.jpg" height = 300 />]
-
----
-
-## Solution: Watching from an Aggregated Level
-
-.center[<img src="images/lab_controlTreatment.png" height = 400 />]
+This is what experiments .normal[can] do.
 
 --
 
-How to divide the groups?
+.pull-right[
+
+.center[
+&rArr; How to use it properly?
+]]
 
 ---
 
-## Randomization, Ta-Da~
+class: bottom, inverse
 
-.center[<img src="images/lab_breakConfounder.png" height = 450 />]
-
----
-
-## Result of Randomization
-
-A .red[balanced] data
-
-.center[<img src="images/lab_balance.png" height = 450 />]
+## What's a .red[good] experiment?
+# Evaluation of Experimental Design
 
 ---
 
-## When Can You Use Experiments
+## Components
 
-1. Independence
-1. Exclusion restriction
-1. Stable Unit Treatment Value Assumption (SUTVA)
-1. Montonicity
-1. Nonzero causal effects of assignment on treatment
-
----
-
-## Independence
-
-### Definition
-
-Subject will have the same effect regardless which group they are in.
-
---
-
-### Violation
-
-* Nonrandom assignment
-* Non-double-blind design
-
----
-
-## Exclusion restriction
-
-### Definition
-
-Only treatment can make effects.
-
---
-
-### Violation
-
-* Subjects change their behaviors
-* Third party effects
+1. Subjects + Stimulus $\leadsto$ Intervention
 
 ???
 
-## SUTVA
-
-### Definition
-
-The effect of stimulus on one subject is affected by other subjects.
-
-
-
-### Violation (e.g., Herd Effect)
-
-.center[<img src="images/herdBehavior.jpg" height = 300 />]
-
-
-
-Stable Unit Treatment Value Assumption
-
-
-
-## Montonicity and nonzero causal effects
-
-### Definition
-
-* The probability being treated is at least as great in the treatment as in the control.
-* The treatment assignment has an effect on the probability that at least some subjects are treated.
-
-
-
-### Violation
-
-* Operation errors
-* Third-party effects
-
----
-
-## Classical experiment
-
-```{r experimentTable}
-library(knitr)
-library(kableExtra)
-
-text_tb <- data.frame(
-  Test = c("Pre", "Post"),
-  Stim. = rep("Treatment", 2),
-  NonStim. = rep("Control", 2)
-)
-
-kable(text_tb, "html", align = "lcc")%>%
-  kable_styling(full_width = TRUE, font_size = 25) %>%
-    add_header_above(c(" " = 1, "Assignment" = 2)) %>%
-      column_spec(c(2,3), width = "6em")
-```
-
----
-
-## Validity
-
-> The approximate truth of the inference or knowledge claim.  
----Morton & Williams (2010, 254)
-
-+ Internal (".red[within]")
-+ External(".red[beyond]")
-+ Ecological (".red[around]")
-
-???
-
-Morton, Rebecca B., and Kenneth C. Williams. 2010. *Experimental Political Science and the Study of Causality: From Nature to the Lab*. Cambridge; New York: Cambridge University Press.
-
-
-## Internal Validity
-
-The approximate truth of the inference or knowledge claim .red[within] a target population studies.
-
-+ Construct validity
-+ Causal validity
-+ Statistical validity
-
-## External vs. Ecological Validities
-
-* External validity: The approximate truth of the inference or knowledge claim .red[beyond] a target population studies.
-
-* Ecological validity: Whether the methods, materials, and settings of the research are similar to a given target .red[environment].
-
----
-
-## Problem of...Validity?
-
-**Question**: How does the imagination of detectives change overtime?  
-**Design**: "Natural experiment" of Holmes  
-**Subjects**: 200 students in Beijing
-
-.center[<img src="images/sherlock.jpg" height = 350 />]
-
-???
-
-Robert Downey Jr: Sherlock Holmes (2009, 2011)
-Benedict Cumberbatch: Sherlock (2010)
-
----
-
-## Problem of...Validity?
-
-**Question**: Do people treat others differently due to their accent?  
-**Design**: Matched-guise experiment  
-**Subjects**: 400 Sichuannese in Shanghai
-
-<video width="700" height="300" controls>
-    <source src="images/accent.mp4" type="video/mp4">
-</video>
-
-
----
-
-## What's the Effect?
-
-Rubin's causal model:
-
-.center[<img src="images/rubin.jpg" height = 300 />]
+1. 研究者必须首先明确实验的目标人群以及核心干预因素，然后据此决定被试的来源和对其进行的干预模式。 
 
 --
 
-+ Averaged treatment effect (ATE): $E(\tau_i) = E(Y_{i1}) - E(Y_{i0})$
+1. Reducing observed and unobserved confounders
 
+???
 
----
-
-## Field Experiment
-
-* Subject: sample from the target population
-* Pro: Ecological validity
-* Con: Internal and external validity
+1. 研究设计必须充分考虑对可观察的干扰变量的控制，并通过随机分配控制组和实验组等方法对不可见干扰变量和难以控制的可见干扰变量进行进一步的剔除。 
 
 --
 
-.center[<img src="images/BanerjeeDuflo.jpg" height = 300 />]
+1. Control vs. treatments
+    + Existence, magnitude, direction
+    + Pre - post
 
 ???
 
-Random experiments in schools in urban India in 2007, hiring young women, test score increase .28 sd.
+1. 研究者需要对控制组和实验组在接受干预因素影响前后的态度和行为表现进行比对，并根据统计原则进行跨组比较，据此判断干预因素与行为态度之间的因果关系是否存在。
 
-**Banerjee, Abhijit** V., Shawn Cole, **Esther Duflo**, and Leigh Linden. 2007. “Remedying Education: Evidence from Two Randomized Experiments in India.” The Quarterly Journal of Economics 122(3): 1235–64.
+---
+
+class: center, middle
+
+## Three Common Strategies of Experimental Design
+
+.center[
+<img src="../../guestLecture/images/lab_lab.png" width = 33% />
+<img src="../../guestLecture/images/lab_field.jpg" width = 33% />
+<img src="../../guestLecture/images/lab_survey.jpg" width = 32% />
+]
 
 
 ---
 
-## Natural Experiment
+## Goodness of Experimental Design
 
-* Stimulation: It just happened.
-* Pro: Ecological and external validity
-* Con: Internal validity
+.center[Validity<sup>*</sup>]
 
----
-
-<video width="700" height="600" controls>
-    <source src="images/naturalExperiment.mp4" type="video/mp4">
-</video>
+.footnote[C.f. validity in survey research]
 
 ???
 
-Rural north carolina, mental health of children, 1996, casino opened, profit distributed to some family. Turns out to be effect for improving mental health
+Do the respondents' answer you want to know
+
+--
+
+.center[<img src="../../guestLecture/images/lab_validity.gif" height = 400 />]
+
+---
+
+.center[
+
+The approximation between the inference and truth
+
+Inference &harr;
+
+- Subjects
+- People beyond the subjects
+- Real world
+]
+
+---
+
+## Dimensions of Validity
+
+.pull-left[
+Internal ~: &harr; subjects
+
+- Constructive
+- Causal
+- Statistical
+]
+    
+???
+
+* 内部效度: 目标人群
+    + 建构性：是否能合理且有针对性地评鉴目标理论
+    + 因果性：Identification
+    + 统计性: 核心因、果因素间具有显著且稳定的统计关系
+
+--
+
+.pull-right[
+External ~: &harr; People beyond the subjects
+
+(Subjects, Population&rbrack;
+
+]
+
+???
+
+* 外部效度: 超越目标人群 (Hint:目标人群可不一定就是总体人群)
+
+--
+
+.pull-left[
+Ecological ~: &harr; Real world
+
+.red[Not about the actual pattern] of the real word, but the actual environment.
+]
+
+???
+
+* 生态效度: 与目标人群在非实验环境中行为决策的一致性
+    + *并不关注实证推断与真实规律的联系*，而考察的是研究环境与实际环境的相似程度
+
+--
+
+.center[.red[Dimensions, not types!]]
+
+
+
+???
+
+两个大小不同的正方型 vs. 一个正方形，一个三角形
+
+效度是个整体概念，不能孤立看待!
+
+---
+
+## Misunderstandings of Validity
+
+.left-column[
+
+### "Experiments are valid"
+]
+
+.right-column[
+
+### Crisis of Replication
+
++ Top three in Psychology（40%/100, Open Science Collaboration 2015）
++ Top thirteen in Economics（50%/67, Chang & Li 2015）
++ Top three in Poli Sci（Solt, Hu, et al. 2016 & 2017; Tai, Hu, Solt 2021; Xu 2021）
+
+]
+
+???
+
+Xu Yiqing 对65篇政治学论文的复刻
+
+---
+
+## Research Opportunity I
+
+Experiment Replication
+
+.pull-left[
+**Pros**
+
+- Original research project
+- Less challenge for junior scholars
+- Publication opportunity (Chinese)
+- Research experience and certificate
+
+]
+
+--
+
+.pull-right[
+**Cons**
+
+- An 8-month project
+- Some basic skills of quantitative analysis
+- Public administration
+]
+
+
+--
+
+.center[
+**Eligibility** (Suggestion)
+
+- 1 RA
+- Graduates/Senior undergrads
+- No immediate deadlines
+
+]
+
+.center[Interest? Email (yuehu@tsinghua.edu.cn) or wechat me]
+
+---
+
+## Research Opportunity II
+
+Theory and practice of validity 
+
+
+.pull-left[
+**Pros**
+
+- Student friendly
+- Publication opportunity (Chinese)
+- Research experience and acknowledgement
+- DCPO project
+
+]
+
+--
+
+.pull-right[
+**Cons**
+
+- A 3-month project
+- English and Chinese literature
+]
+
+
+--
+
+.center[
+**Eligibility** (Suggestion)
+
+- 1 RA
+- Undergrads with interest in social science
+- No immediate deadlines
+
+]
+
+.center[Interest? Email (yuehu@tsinghua.edu.cn) or wechat me]
 
 
 ---
+
+## Misunderstandings of Validity
+
+.left-column[
+
+### "Experiments are valid"
+### "Randomization provides validity"
+]
+
+.right-column[
+
+In a model with .red[ten] variables, let &alpha; = 0.05, the probability of randomization failure:
+
+.center[
+1-(1-0.05)<sup>10</sup> &approx; `r round(1 - (1 - 0.05)^10, digits = 4)`
+
+Data imbalance &rArr; low causal & statistical validity!
+]
+
+]
+
+???
+
+Morgan, Kari Lock, and Donald B. Rubin. 2012. “Rerandomization to Improve Covariate Balance in Experiments.” *The Annals of Statistics* 40(2): 1263–82.
+
+
+---
+
+## Misunderstandings of Validity
+
+.left-column[
+### "Experiments are valid"
+### "Randomization provides validity"
+### "External" validity
+]
+
+.right-column[
+
+1. **Subject bias**
+
+> "Subjects are always students. It has zero meaning to use results on them to estimate the population"
+
+The key judgement should be who's the population for research:
+
+- If students, it's generally ok
+- If a broader strategy, this is an .red[internal] instead of external problem
+
+
+]
+
+--
+
+.footnote[
+.blue[Trivia]: Empirical research found that there are not that much difference between students and social members at least on certain issues.
+]
+
+???
+
+EGAS M, RIEDL A：《The Economics of Altruistic Punishment and the Maintenance of Cooperation》：载《Proceedings of the Royal Society of London B: Biological Sciences》2008年第1637期第871–878页。
+
+KAM C D, WILKING J R, ZECHMEISTER E J：《Beyond the ’Narrow Data Base’: Another Convenience Sample for Experimental Research》：载《Political Behavior》2007年第4期第415–440页
+
+---
+
+## Misunderstandings of Validity
+
+.left-column[
+
+### "Experiments are valid"
+### "Randomization provides validity"
+### "External" validity
+
+]
+
+.right-column[
+
+1. **Subject bias**
+1. **Experimental effects/experimenter effects**
+
+> In most cases, the subjects know when the experiments start and end, which may affect their choice and judgements, and thus make different decisions from what they do in real life.
+
+- *Ecological* rather than "external" validity
+- It may becomes an advantage, e.g., Bassi (2011)
+
+]
+
+???
+
+e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，被试者的选民身份就没有参照现实或进行随机分配，而是根据形式模型的条件进行了人为划分，从而实现了对不同特征群体内选民行为规律的全面考察。
+
+---
+
+class: inverse, bottom
+
+## .red[How] to design a political experiment?
+# Designing "High-High" Experiments
+
+???
+
+High internal and high external validity
+
+---
+
+## Improving Internal Validity
+
+- Replicating experiments
+
+--
+
+- Randomization + covariates
+
+--
+
+- Removing confounders
+    - Observable: EEG, fMRI
+    - Unobservable: Compensation, time and environment setting, IAT, eye-tracking
+
+--
+
+- Improving constructive validity: Formal theory approach (FTA)
+
+???
+
+functional 脑部核磁共振(fMRI)，脑电图(EEG)， implicit association test (IAT) 
+
+---
+
+## Improving External Validity
+
+- Reducing subject bias
+    - Examining on diverse subjects
+    - Delicate research strategy, e.g., the least-likely case design
+
+--
+
+- Reducing experimental effect
+    - Deception
+    - Stimuli from the real life
+    - Mimic real environment
+    - Compensation
+
+---
+
+class: center
+
+## Rethink of the Three Common Strategies
+
+.center[
+<img src="../../guestLecture/images/lab_lab.png" width = 33% />
+<img src="../../guestLecture/images/lab_field.jpg" width = 33% />
+<img src="../../guestLecture/images/lab_survey.jpg" width = 32% />
+]
+
+What are the fundamental differences?
+
+
+Time, space, subjects...?
+
+--
+
+.red[Focus] of the validity dimension
+
+.red[Application] of the information
+
+
+---
+
+## Sensitive Question Technique
+
+Commen strategies:
+
+.center[
+
+Endorsement experiment    
+.small[(Exploiting evaluation bias)]
+
+List experiment   
+.small[(Aggregation)]
+
+Randomized response   
+.small[Adding random noise]
+]
+
+???
+
+Endorsement: In the control group, respondents are asked to evaluate some relatively uncontroversial issue or object (e.g., rate a policy on a Likert scale). In the treatment group, that issue or object is associated with the sensitive item before being evaluated (e.g., the same policy is said to be endorsed by a controversial political group).
+
+Randomized response: Using a coin to determine whether to answer the question or a given answer
+
+Rosenfeld et al. 2014: The endorsement experiment and the randomized response yield least bias, but the estimates based on the endorsement experiment (with a single item) are noisier than other indirect questioning methods.
+
+---
+
+## Application
+
+Core Topic: Who watch state-media broadcast and why?
+
++ Objective: State media (Xinwen Lianbo)
+
++ Problem: sociopolitical desirability &rarr; sensitive questions
+
+.footnote[
+Hu, Yue, and Zijie Shao. 2022. “What Drives Chinese Internet Users to Watch State-Media Broadcasts? An Audience Analysis.” *Journal of Chinese Political Science* 27(1): 19–40.
+]
+
+--
+
++ Solution: List experiment + A general sense of political desirability
+    
+???
+
+A: 王刚、张强、刘爽、赵芳
+B: 王刚、张强、刘爽、赵芳、买买提·阿卜力孜
+
+对于官媒总体禁忌，对所有相关问题的影响
+
+---
+
+## Experiment Setting
+
+1. Random assignment
+1. Answer the question:
+
+> Which of the following statements you agree with? Please answer the total number instead of exactly which one:
+
+---
+
+.pull-left[
+*Control*
+
+A. The radio audience is very small in nowadays society.
+
+B. I doubt about the audience rate of the Spring Gala. There shouldn't be that many people still watching it.
+
+C. The real name registration on Weibo does not affect me much.
+
+D. All the newspapers published in the mainland China are consistent with *People's Daily*
+]
+
+--
+
+.pull-right[
+*Treatment*
+
+
+A. The radio audience is very small in nowadays society.
+
+B. I doubt about the audience rate of the Spring Gala. There shouldn't be that many people still watching it.
+
+C. The real name registration on Weibo does not affect me much.
+
+D. All the newspapers published in the mainland China are consistent with *People's Daily*
+
+E. The reports in Xinwen Lianbo is credible.
+]
+
+---
+
+.center[<img src = "images/exp_list.png">]
+
+Further question: How to apply this result to correct survey answers?
+
+Several ways......
+
+---
+
+## Mapping Experimental Method in Social Science
+In terms of the goal...
+
+.pull-left[
+*Description*
+- Descriptive statistics
+- Big data
+]    
+
+--
+
+.pull-right[
+*Prediction*
+- Formal modeling
+- Data science
+]
+
+--
+
+.center[
+*Explanation*
+- Association analysis
+- **Experimental methods**
+]
+
+---
+
+In terms of the approach...
+
+.pull-left[
+*Naturalist*
+
+- **Experimental methods**
+
+- Quasi-experimental methods
+    - Large N
+    - Bayesian
+    - Big data
+]
+
+--
+
+.pull-right[
+*Interpretivist*
+- Single case/case study
+- Case comparison/small N
+
+- Interviews
+- Process tracing
+- Critical joint
+- QCA
+]
+
+---
+
+background-image: url("images/exp_mindmap.png")
+background-position: center
+background-size: contain
 
 ## Take-Home Points
 
-+ What: Randomization + aggregation
-+ Why: Counterfactual
-+ How:
-    1. Valid design (internal, external, ecological)
-    1. Randomly assign groups
-    1. Stimulating
-    1. ATE
-    
+
+---
+
+## Procedure
+
+.pull-left[
+### Presenting (10min)
+
+The presenters talk.
+
+### Challenging (10min)
+
+Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 250 />
+
+]
+
+.pull-right[
+
+*Process*
+
+1. Presenters query.
+    - A question about the paper
+1. Challengers respond.
+1. Challengers query.
+    - A question about the presentation
+1. Presenters respond.
+]
+
+---
+
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
+
+
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "09_.*.html"), timeout = 300)
 ```
