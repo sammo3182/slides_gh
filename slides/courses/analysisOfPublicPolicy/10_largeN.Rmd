@@ -1,185 +1,373 @@
 ---
 title: "Method: Large-N Approach"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+subtitle: "Public Policy Analysis: Perspectives and Methods (30700953)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    self_contained: FALSE
+    self_contained: false
     chakra: libs/remark-latest.min.js
     css: 
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-```{r setup, include = FALSE}
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+
+p_load(
+  here, dplyr
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
 ```
-
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
-background-position: center
-background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
-
----
 
 ## Overview
 
 
-.left-column[
-+ Why
-    + Large N?
-]
+- What's large-N
+- Why large-N
+- How large-N
 
-.right-column[
-+ How
-    + Univariate
-    + Bivariate
-    + Multivariate
-]
-
-.center[<img src="images/econometrics.jpg" height = 300 />]
+.center[<img src="images/lar_econometrics.jpg" height = 300 />]
 
 ---
 
 class: inverse, bottom
 
-# Large-N Analysis
+# What's Large-N
 
 ---
 
-## Why Large N?
+## Large-N: A Terminology
 
-1. Experiment is not practical
-    + Esp. in policy analysis
-1. Large amount of observed data
-1. Well-developed econometric methods
+In lieu of "quantitative"...
 
----
+???
 
-## How Large Is Large?
+What's a 定量研究?
 
-Let's toss a fair coin:
-
-Head or Tail?
-
-.center[<img src="images/toss.gif" height = 350 />]
-
----
-
-How about 1 million times? How many heads?
+Did you really 定量？
 
 --
 
-```{r, tut=FALSE, cache=TRUE}
-library(emdbook)
-library(plotly)
-library(here)
+ N: Number of .red[observations]---not subjects, not trails
+ 
+ Large: Well...... 
 
-m <- list(
-  l = 50,
-  r = 50,
-  b = 10,
-  t = 10,
-  pad = 4
-)
+> We don't know......   
+> It depends......  
+> The larger, the better!
 
-accumulate_by <- function(dat, var) {
-  var <- lazyeval::f_eval(var, dat)
-  lvls <- plotly:::getLevels(var)
-  dats <- map(seq_along(lvls), function(x) {
-    cbind(dat[var %in% lvls[seq(1, x)],], frame = lvls[[x]])
-  })
-  dplyr::bind_rows(dats)
-}
+--
 
-d <- do.call(rbind, map(lseq(10, 10000, 300), function(x) {
-  d <- data.frame(x = rnorm(x),
-                  frame = x / 300,
-                  N = x)
-  return(d)
-}))
+.pull-right[
+&dArr; 
 
-dd <- aggregate(data = d, x ~ frame + N, FUN = mean) %>%
-  accumulate_by( ~ N)
+1. Why large-N?
+1. How large is large?
+]
+---
 
-p <-
-  dd %>% plot_ly(
-    x =  ~ log10(N),
-    y =  ~ x,
-    frame =  ~ frame,
-    type = "scatter",
-    mode = "lines",
-    line = list(simplyfy = F, color = "orangered"),
-    width = 550,
-    height = 350
-  ) %>%
-  animation_opts(frame = 10,
-                 transition = 0,
-                 redraw = FALSE) %>%
-  config(displayModeBar = F) %>%
-  layout(
-    xaxis = list(title = "Sample Size (log10)",
-                 zeroline = F),
-    yaxis = list(
-      range = c(-0.7, 0.7),
-      title = "Mean",
-      zeroline = F
-    ),
-    autosize = F,
-    margin = m
-  ) %>%
-  animation_slider(hide = T) %>%
-  animation_button(
-    x = 1,
-    xanchor = "right",
-    y = 0,
-    yanchor = "bottom"
-  )
+class: inverse, bottom
 
-p
+# Why Large-N
+
+---
+
+## When Large-N?
+
+Experiment is not an option!
+
+- Practical reasons
+- Ethical reasons
+- Research goal
+
+???
+
+Research goal: Have a requirement of representativeness
+
+--
+
+&therefore; Analysis based on .red[observed data]
+
+--
+
+ *Goal*:
+
+.center[.red[**Quasi**]-experiment<sup>*</sup>]
+
+.footnote[\* *Collins Thesaurus*: Quasi- =  pseudo-, apparent, seeming, semi-, so-called, would-be]
+
+--
+
+- **.red[Large] number of observations**
+- .red[Sufficient] variance in the observations
+- .red[Strong] assumption
+
+--
+
+.pull-right[Why large number? Why?]
+
+---
+
+## How Large Is Large
+
+.pull-left[
+Toss a fair coin:
+
+Head or Tail?
+
+<img src="images/large_toss.gif" height = 350 />]
+
+--
+
+How about 1000 times?
+
+.pull-right[
+```{r toss, cache=TRUE}
+p_load(ggplot2,
+       gganimate,
+       gifski,
+       png,
+       installr)
+
+flips <- sample(c(0, 1), 1000, replace = TRUE) %>%  
+  matrix(ncol = 1) %>% 
+  as.data.frame()
+Trial <- seq(1, 1000, 1) %>% as.data.frame()
+
+flipsim <- cbind(flips, Trial)
+
+colnames(flipsim) <- c("Heads", "Trial")
+
+flipsim[, "Cum_Heads"] <- cumsum(flipsim$Heads)
+flipsim <- flipsim %>% 
+  mutate(Pct_Heads = Cum_Heads / Trial)
+
+
+flipsim %>%
+  ggplot(aes(y = Pct_Heads, x = Trial)) + 
+  ggtitle("Percentage of Heads") +
+  geom_line() +
+  geom_segment(aes(xend = 1000, yend = Pct_Heads),
+               linetype = 2,
+               color = "red") + geom_point(size = 2) +
+  transition_reveal(Trial) +
+  ylim(0, 1) + coord_cartesian(clip = "off") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+```
+]
+
+???
+
+https://rpubs.com/pgrosse/545948
+
+---
+
+*Why large-N?*
+
+Answer 1: To unearth the probability!
+
+--
+
+A.k.a., 
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Law of Large Numbers (LLN)]
+]
+
+$${\displaystyle \lim _{n\to \infty }\sum _{i=1}^{n}{\frac {X_{i}}{n}}={\overline {X}}}$$
+
+As the number<sup>*</sup> of experiments (sample) .red[increases], the ratio of outcomes will .blue[converge to] the theoretical (population) average.
+
+--
+
+.footnote[\* Rule of thumb: > 100......Not enough, actually(略略略~]
+
+---
+
+class: inverse, bottom
+
+# How to Conduct Large Analysis
+## Why large-N hasn't been fully answered yet
+
+---
+
+class: bottom, center
+
+## Large-N Approaches
+
+
+**Univariate analysis**
+
+- Average
+- Deviation
+- Other moments
+
+--
+
+**Bivariate analysis**
+
+- Cross-tabulating
+- Covariate
+- Difference in means
+
+--
+
+.gray[
+**Multivariate analysis**
+
+- Correlation analysis
+- Spatial analysis
+- Time series
+- Causal inference
+]
+
+---
+
+## Data Whisper
+
+.pull-left[
+Surveying seven dorm rooms asking the members did they watch the show.
+The right table is the records:
+]
+
+.pull-right[
+```{r data}
+showWatching <- tibble(Student_ID = paste0("202099", sample(1000:9000, size = 7)), Episodes = c(1, 1, 1, 2, 3, 3, 4))
+
+kable(showWatching, "html", align = "cl")%>%
+  kable_styling(full_width = TRUE, font_size = 25)
+```
+]
+
+???
+
+Let's say we'll test a school policy of Internet access management. 
+To do so, researchers surveyed a dorm room, asking the members how many shows they watched in the past week.
+
+---
+
+## Univariate Analysis
+
++ Given the list: (1, 1, 1, 2, 3, 3, 4)
+
+--
+
++ Mean: $\frac{1 + 1 + 1 + 2 + 3 + 3 + 4}{7} = \frac{15}{7} \approx 2.143.$
+
+--
+
++ Median: 1, 1, 1, .magenta[2], 3, 3, 4
+
+--
+
++ Mode: three .magenta[1]s, one 2, two 3s, and one 4.
+
+---
+
+## Relations among These Ways
+
+Let's expand the data to 1000 dorms.
+
+```{r compareMean, fig.align="center", fig.height=6}
+set.seed(114)
+
+df_var <- data.frame(x = sample(1:10, size = 1000, replace = TRUE))
+
+ggplot(data = df_var, aes(x)) +
+  geom_bar() +
+  ylab("") + xlab("") +
+  scale_x_discrete(limit = 1:10) +
+  geom_vline(xintercept = as.numeric(c(mean(df_var$x), 
+                            names(sort(-table(df_var$x)))[1],
+                            median(df_var$x))), color = 1:3) +
+  annotate("text", x = as.numeric(names(sort(-table(df_var$x)))[1]) - 0.7, y = 100, label = "Mode") + 
+  annotate("text", x = mean(df_var$x) + 0.5, y = 110, label = "Mean") +
+  annotate("text", x = median(df_var$x) - 0.5, y = 110, label = "Median")
 ```
 
 ---
 
-```{r draws, fig.show="animate", animation.hook = 'gifski', fig.width=10, fig.height=8, results = 'hide', cache=TRUE}
+## Mean, Median, or Mode?
+
+.pull-left[
+```{r distribution, fig.align='center'}
+df_var <- tibble(
+  x = rnorm(10000, mean = 0, sd = 1),
+  y = c(rbeta(
+    9900, shape1 = 5, shape2 = 2
+  ), rep(1.5, 100)),
+  z = rnorm(10000, mean = 10, sd = 1),
+  w = rbinom(10000, 1, .5)
+) %>%
+  mutate(z = w * x + (1 - w) * z) %>%
+  dplyr::select(x, y, z) %>%
+  gather(var, value)
+
+ggplot(df_var, aes(value)) +
+  geom_histogram() +
+  facet_wrap(~ var, scales = "free") +
+  xlab("") + ylab("")
+```
+]
+
+--
+
+.pull-right[
+.huge[
+Is    
+mean    
+enough?
+]
+]
+
+.footnote[Hint: Relating to the question of "why large-N"]
+
+---
+
+background-image: url("images/large_game.gif")
+background-position: center
+background-size: contain
+
+???
+
+1. Students standing in a line
+1. Toss the coins six times
+    - Head: left
+    - Tail: right
+1. Going down to the bottom line
+1. Take a picture
+
+<video width="700" height="500" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xR3lVRGoxaEpFODFDVkN0P2U9Vzh1bkMx.mp4" type="video/mp4">
+</video>
+
+
+---
+
+.pull-left[
+```{r draws, fig.show="animate", animation.hook = 'gifski', fig.width=8, fig.height=10, results = 'hide', fig.align='center', cache=TRUE}
 library(ggplot2)
 
 lims <- data.frame(min = c(0, 0, 0, 0), 
@@ -226,133 +414,49 @@ plot1 <- function(x) {
 
 map(1:8, function(x) plot1())
 ```
-
----
-
-## Law of Large Numbers
-
-As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
-
-* Rule of thumb: $> 100 ~ 200$
-
----
-
-## Large-N Approaches
-
-* Univariate analysis
-* Bivariate analysis
-* Multivariate analysis
-
----
-
-## Univariate analysis
-
-.left-column[
-Surveying a dorm room, asking the members how many shows they watched in the past week.
-The right table is the records:
 ]
 
-.right-column[
-```{r data}
-showWatching <- tibble(Student_ID = paste0("201999", sample(1000:9000, size = 7)), Episodes = c(1, 1, 1, 2, 3, 3, 4))
+--
 
-kable(showWatching, "html", align = "cl")%>%
-  kable_styling(full_width = TRUE, font_size = 25)
-```
+.pull-right[
+
+*Why large-N?*
+
+.gray[Answer 1: To unearth the probability! (N > 100)]    
+Answer 2: To estimate the distribution! 
+
+
+A.k.a., 
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Central Limit Theorem (CLT)]
 ]
 
-???
+When .red[**independent**(!!!)] random variables are summed up, their properly normalized sum tends toward a .blue[normal distribution], even if the original variables themselves are not normally distributed.
+]
 
-Let's say we'll test a school policy of Internet access management. 
-To do so, researchers surveyed a dorm room, asking the members how many shows they watched in the past week.
-
----
-
-## How to Describe This Variable
-
-+ Given the list: (1, 1, 1, 2, 3, 3, 4)
-
---
-
-+ Mean: $\frac{1 + 1 + 1 + 2 + 3 + 3 + 4}{7} = \frac{15}{7} \approx 2.143.$
-
---
-
-+ Median: 1, 1, 1, .magenta[2], 3, 3, 4
-
---
-
-+ Mode: three .magenta[1]s, one 2, two 3s, and one 4.
 
 ---
 
-## Relations among These Ways
+class: middle, large
 
-Let's Expand the data to 1000 students.
+## What Can A Large-N Sample Do?
 
-```{r compareMean, fig.align="center", fig.height=6}
-set.seed(114)
+Show
 
-df_var <- data.frame(x = sample(1:10, size = 1000, replace = TRUE))
-
-ggplot(data = df_var, aes(x)) +
-  geom_bar() +
-  ylab("") + xlab("") +
-  scale_x_discrete(limit = 1:10) +
-  geom_vline(xintercept = as.numeric(c(mean(df_var$x), 
-                            names(sort(-table(df_var$x)))[1],
-                            median(df_var$x))), color = 1:3) +
-  annotate("text", x = as.numeric(names(sort(-table(df_var$x)))[1]) - 0.7, y = 100, label = "Mode") + 
-  annotate("text", x = mean(df_var$x) + 0.5, y = 110, label = "Mean") +
-  annotate("text", x = median(df_var$x) - 0.5, y = 110, label = "Median")
-```
+- The average/general status of the sample
+- How individual observations deviate from the average
 
 ---
 
-## Mean, Median, or Mode?
+Beyond single variables......
 
-```{r distribution, fig.align='center'}
-df_var <- data.frame(x = rnorm(10000, mean = 0, sd = 1),
-                     y = c(rbeta(9900, shape1 = 5, shape2 = 2), rep(1.5, 100)),
-                     z = rnorm(10000, mean = 10, sd = 1),
-                     w = rbinom(10000, 1, .5)) %>%
-                       mutate(z = w * x + (1 - w) * z) %>%
-                         select(x, y, z) %>%
-                           gather(var, value)
-
-ggplot(df_var, aes(value)) +
-  geom_histogram() +
-  facet_wrap(~ var, scales = "free") +
-  xlab("") + ylab("")
-```
-
----
-
-class: small
-
-## Descriptive Statistics
-
-```{r descriptive}
-library(summarytools)
-
-print(dfSummary(
-  select(tobacco, gender, BMI, disease),
-  valid.col = FALSE,
-  na.col = FALSE,
-  silent = TRUE,
-  plain.ascii = FALSE,
-  headings = FALSE,
-  graph.magnif = 0.75
-),
-method = 'render',
-footnote = NA)
-```
-
----
 
 ## Binary Analysis
 
-Relations between variables
+Relations between variables:
+
+.center[Are men more likely to smoke?]
 
 ```{r crosstable}
 print(
@@ -367,7 +471,9 @@ print(
 
 ## Scatter plot
 
-```{r scatter}
+.center[Are old people more likely to be heavy smokers?]
+
+```{r scatter, fig.align='center'}
 ggplot(tobacco, aes(age, cigs.per.day)) +
   geom_point() +
   ylab("Cigrate per day") +
@@ -376,11 +482,15 @@ ggplot(tobacco, aes(age, cigs.per.day)) +
 
 ---
 
-## Bring the Experimental Logic Back
+## Controls
 
-What does experiments do? 
+What do controls do?
 
-.center[<img src="images/controlTreatment.png" height = 400 />]
+--
+
+Bring the Experimental Logic Back
+
+.center[<img src="images/lar_controlTreatment.png" height = 400 />]
 
 ???
 
@@ -388,148 +498,70 @@ How to assign the groups?
 
 ---
 
-## Why Randomization?
+## Randomization = A Control
 
-.center[<img src="images/balance-1.png" height = 500 />]
+.center[<img src="images/lar_balance.png" height = 500 />]
 
 ---
 
 ## What If You Cannot Randomize?
 
---
+<img src="images/lar_buyerSeller.jpg" height = 300, width = 320 />
+<img src="images/lar_matching.png" height = 300, width = 320 />
+<img src="images/lar_fitOLS.png" height = 300, width = 320 />
 
-<img src="images/buyerSeller.jpg" height = 300, width = 320 />
-<img src="images/matching.png" height = 300, width = 320 />
 
 ---
 
-## In Practice
+## Controls May Not Work
 
-.left-column[<img src="images/fitOLS.gif" height = 400, width = 320 />]
-
---
-
-.right-column[<img src="images/fitOLS_3d.png" height = 400, width = 320 />]
+<iframe height="80%" width = "100%" src="//player.bilibili.com/player.html?aid=255446340&bvid=BV1CY41177uN&cid=568958340&page=1&t=323" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
 
 ---
 
-## An Illustration
-
-Tang, Wenfang, Yue Hu, and Shuai Jin. 2016. “Affirmative Inaction: Language Education and Labor Mobility among China’s Muslim Minorities.” *Chinese Sociological Review* 48(4): 346–66.
-
----
-
-## Why Is There An Inequality in Labor Mobility?
-
-Puzzle: .magenta[Same] education level, but .magenta[different] labor mobility
-
-<img src="images/han.jpeg" height = 300, width = 320 />
-<img src="images/uyghur.jpg" height = 300, width = 320 />
-
----
-
-## Theory
-
-Affirmative inaction language policy reduces Uyghurs' labor mobility.
-
-.center[<img src="images/uyghurStudent.jpg" height = 350 />]
-
----
-
-## Hypothesis
-
-
-H<sub>1</sub>: Education is .magenta[fairly equal] between the Han and the Uyghur groups.
-
---
-
-H<sub>2</sub>: The linguistically distinctive Uyghurs are far less proficient in Mandarin than the Han majority.
-
---
-
-H<sub>3</sub>: Hans enjoy a higher degree of socioeconomic status than the Uyghurs.
-
---
-
-H<sub>4</sub> Language proficiency plays a favorable role in improving the socioeconomic conditions for the Uyghurs.
-
----
-
-## Examination
-
-.center[<img src="images/eduMan.png" height = 300 />]
-
---
-
-.small[
-H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. .magenta[&check;]  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.  
-H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.  
-H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
-]
-
----
-
-.center[<img src="images/eduMan2.png" height = 400 />]
-
---
-
-.small[
-H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient. .magenta[&check;]  
-H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.  
-H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
-]
-
----
-
-.center[<img src="images/jobEth.png" height = 400 />]
-
---
-
-.small[
-H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient. &check;  
-H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs. .magenta[&check;]  
-H<sub>4</sub>: Language proficiency favors Uyghurs in promoting.
-]
-
----
-
-.center[<img src="images/sem.png" height = 400 />]
-
---
-
-.small[
-H<sub>1</sub>: Education is fairly equal between the Han and the Uyghur. &check;  
-H<sub>2</sub>: The Putonghua of Uyghurs are far less proficient.&check;  
-H<sub>3</sub>: Hans enjoy a higher socioeconomic level than the Uyghurs.&check;  
-H<sub>4</sub>: Language proficiency favors Uyghurs in promoting. .magenta[&check;]
-]
-
----
+background-image: url("images/lar_mindmap.png")
+background-position: center
+background-size: contain
 
 ## Take-Home Points
 
-.left-column[
-### Do large-N analyses
 
-1. Identify puzzle
-1. Elaborate theory
-1. Imply hypotheses
-1. Design examination
-1. Analyze data
-1. Report findings
+---
+
+## Procedure
+
+.pull-left[
+### Presenting (10min)
+
+The presenters talk.
+
+### Challenging (10min)
+
+Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 250 />
+
 ]
 
---
+.pull-right[
 
-.right-column[
+*Process*
 
-### Bonus
-
-<img src="images/table.png" height = 400 />
+1. Presenters query.
+    - A question about the paper
+1. Challengers respond.
+1. Challengers query.
+    - A question about the presentation
+1. Presenters respond.
 ]
+
+---
+
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
+
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "10_.*.html"), timeout = 300)
