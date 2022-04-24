@@ -1,117 +1,103 @@
 ---
-title: "Method: 'Big-Data' Analysis"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Method: Big-Data Analysis"
+subtitle: "Public Policy Analysis: Perspectives and Methods (30700953)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
 # date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    self_contained: FALSE
+    self_contained: false
     chakra: libs/remark-latest.min.js
     css: 
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-```{r setup, include = FALSE}
+
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+
+p_load(
+  here, dplyr
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
 ```
-
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
-background-position: center
-background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
-
----
 
 ## Overview
 
-* What's "big" data?
-* Why (not) big data?
-* What can big data do?
-* Common big-data approaches
-* Limitation of big-data analysis
+- What's "big" data?
+- Big-data approaches
+- Big-data problems
 
 ---
 
 class: inverse, bottom
 
-# "Big-Data" Analysis
+# What's Big Data
 
 ---
 
-## What's Big Data?
+## Defining Big Data?
 
 > Data sets characterized by huge amounts<sup>1</sup> of frequently updated<sup>2</sup> data in various formats<sup>3</sup>, such as numeric, textual, or images/videos.<sup>4</sup>  
 
 --
 
+.center[
 [1] Volume  
 [2] Velocity  
 [3] Variety
+]
 
-[4] Two more "v"s: veracity and value
+--
+
+.center[
+[4] Two more "v"s: 
+
+.red[Veracity]: Integrity
+
+.red[Value]: Usefulness
+]
+
 
 ???
 
 veracity: accuracy, integrity (how do you know?)  
 value: how much value for each unit of data?
 
----
-
-## Big Data for Policy Analysis
-
-Volume : Probably more than Excel and SPSS can handle;  
-
 --
 
-Velocity : More relate to commercial, but also the information background setting of policy implementation;  
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[
+Bottom Line
 
---
-
-Variety : statistical techniques + social-science ideas
+The ".red[Non]-data" data
+]
+]
 
 ---
 
 ## Policy Analysis with Big Data
 
-### Sources
+.pull-left[
+*Sources*
 
 1. Data from e-government, civil service hotlines, government-citizen interactions
 1. Official data from bureaus and departments
@@ -120,10 +106,12 @@ Variety : statistical techniques + social-science ideas
 1. Official document archives
 1. Judicial documents  
 ......
+]
 
----
+--
 
-### Goals
+.pull-right[
+*Goals*
 
 1. Initiation of the agenda
 1. Profile of policy makers
@@ -132,151 +120,137 @@ Variety : statistical techniques + social-science ideas
 1. Policy evaluation
 1. Prediction of policy outcomes  
 ......
+]
 
 ---
 
-### Methods
+class: inverse, bottom
 
-1. Description
-1. Relationship analysis
-1. Pattern (mechine) learning
-1. Text analysis
-1. Audio/video analysis  
-......
+# Big-Data Approaches
 
 ---
 
-## Example: Description
+class: middle, center
 
-.left-column[<img src="images/wuhanFlight.png" height = 500 />]
-.right-column[<img src="images/wuhanFlight2.jpg" height = 400 />]
+## Levels of Big Data Analysis
+
+Description     
+(Data science, the majority of big-data analysis)
+
+&dArr;
+
+Relationship analysis     
+(Social science)
+
+&dArr;
+
+Pattern learning    
+(Social science with other methods)
+
+&dArr;
+
+Causal inference
+(Rare but growing)
+
+
 
 ---
 
-background-image: url("images/baiduWuhan3.png")
-background-position: center
-background-size: contain
+## Description
+
+Global Covid-19
+
+<iframe src="https://ourworldindata.org/explorers/coronavirus-data-explorer?tab=map&facet=none&Metric=Confirmed+deaths&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=USA~ITA~CAN~DEU~GBR~FRA~JPN&hideControls=true" loading="lazy" style="width: 100%; height: 500px; border: 0px none;"></iframe>
 
 ---
 
-## Example: Relationship Analysis
+Democratic Mood (Tai, Hu, & Solt 2022)
 
-Petition -?&rarr; *Dibao*
+<iframe src="https://ctai.shinyapps.io/dmsweb/" loading="lazy" style="width: 100%; height: 550px; border: 0px none;"></iframe>
 
-.center[<img src="images/JiangMengZhao2019.png" height = 400 />]
+---
+
+## Relationship Analysis
+
+.center[<img src = "images/big_pd7.png" height = 550>]
 
 ???
 
-Jiang, Junyan, Tianguang Meng, and Qing Zhang. 2019. “From Internet to Social Safety Net: The Policy Consequences of Online Participation in China.” *Governance* 32(3): 531–646.
-
-1. 900,000 petitions
-    + A substantial share of the LLMB (Local Leader Message Board) petitions concern personal problems that are most likely to be experienced by lower-class citizen.
-    + A sizable share of the petitions are originated from rural and suburban areas
-
-
-(pocketbook: individual economic sources)
-
-
-2. 4,400 government reports at both the city and provincial levels between 2000 and 2014
-    + cities that receive a larger number of online petitions in a year tend to devote significantly higher proportions of government reports in the following year to a topic on social welfare
-    + policy effect appears to be mainly driven by petitions filed by rural residents concerning issues related to their pocketbook conditions.
+1997
 
 ---
 
-## Example: Pattern (Mechine) Learning
+## Pattern Learning
 
-.center[<img src="images/ideologyPrediction.png" />]
+.pull-left[<img src = "images/big_pd7.png">]
 
-???
+.pull-right[<img src = "images/big_pd0.png">]
 
-Iyyer, Mohit, Peter Enns, Jordan Boyd-Graber, and Philip Resnik. 2014. “Political Ideology Detection Using Recursive Neural Networks.” In , 1113–1122.
-
-Ideological Books Corpus (IBC) developed by Gross et al. (2013). This is a collection of books and magazine articles written between 2008 and 2012 by authors with well-known political leanings.
-
-A subset of 55,932 sentences.
 
 ---
 
-class: bottom
-
-background-image: url("images/pd0.png")
+background-image: url("images/big_pdregression.png")
 background-position: center
 background-size: contain
 
-## Example: Text analysis
+
 
 ---
 
-background-image: url("images/pd7.png")
-background-position: center
-background-size: contain
+## Causal Inference
 
----
+Causal effect of the Confucius Institute Closure
 
-background-image: url("images/pdregression.png")
-background-position: center
-background-size: contain
-
----
-
-## Example: Audio/video analysis  
-
-.center[<img src="images/vocalPitch.png" height = 450 />]
-
-???
-
-Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
-
-female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
-
----
-
-## The Fourth(Second) Paradigm
-
-.right-column[<img src="images/fourthParadigm.jpg" />]
+.pull-left[<img src = "../../conference/2021-SPSA/images/map_closed.gif">]
 
 --
 
-.left-column[
-P1: Theory-driven  
-vs.  
-P2: Data-driven
-]
+.pull-right[<img src = "../../conference/2021-SPSA/images/gdelt.gif">]
 
-???
+---
 
-Hey, Tony (MS), Stewart Tansley (FB), and Kristin Tolle(MS), eds. 2009. *The Fourth Paradigm: Data-Intensive Scientific Discovery*. 1 edition. Redmond, Washington: Microsoft Research.
+.center[Shutting-down vs. Ice-cream]
 
-empirical evidence, scientific theory, and computational science
+.pull-left[<img src = "../../conference/2021-SPSA/images/closeEffect.jpg" height = 465>]
+
+--
+
+.pull-right[<img src = "../../conference/2021-SPSA/images/iceCreamEffect.gif">]
+
+---
+
+background-image: url("../../conference/2021-SPSA/images/closeEffect.png")
+background-position: center
+background-size: contain
+
+
+---
+
+class: inverse, bottom
+
+# Problems of Big Data
 
 ---
 
 ## Issues about Big-Data Based Analysis
 
-1. How "big" is big?
-1. Anything new?
-1. Where are they from?
-1. How do we understand?
-1. Is it morally correct?
+1. Analytic value
+1. Ethics
+1. Data representativeness
+1. Pedagogical myth
 
 ---
 
-## How Big is Big
+## Analytic value: Anything new?
 
-.center[<img src="images/largeNum.png" height = 450 />]
-
----
-
-## Anything new?
-
-[<img src="images/alreadyKnow1.png" height = 200 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
-.center[[<img src="images/alreadyKnow2.png" height = 200 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)]
+[<img src="images/alreadyKnow1.png" height = 250 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
+.center[[<img src="images/alreadyKnow2.png" height = 250 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)]
 
 ---
 
-## Where are they from?
+## Ethics: Where Are the Data from?
 
-[.center[<img src="images/illegalCollection.png" height = 450 />]](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
+[.center[<img src="images/illegalCollection.png" height = 550 />]](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
 
 ???
 
@@ -284,27 +258,8 @@ FTC, New York Attorney General allege YouTube channels collected kids’ persona
 
 ---
 
-## How do we understand?
+## Ethics: What Are the Data Used for?
 
-Sampling bias,  
-Provenance conflicts,  
-Increased fluctuations,  
-Error rates...
-
---
-
-.center[<img src="images/dataDontTalk.png" />]
-
-???
-
-Challenging reading of W3
-
-Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Chicago Booth Review. http://review.chicagobooth.edu/economics/2019/article/purely-evidence-based-policy-doesn-t-exist (March 27, 2019).
-
-
----
-
-## Is It Morally Correct?
 
 .center[<img src="images/zuckerberg.jpg" height = 400 />]
 
@@ -316,33 +271,102 @@ Cambridge Analytica助选
 
 ---
 
-## Practice
-
-.center[**What can you do? And any limitations?**]
-
-* The lockdown policy: 2020-01-23 to 2020-04-07 Weibo sample
-    + G1,3
-* The hukou relaxing policy: Official documents about Hukou
-    + G2,4
-
-???
-
-Medium-sized cities, and small cities, 2019 Urbanization Plan published by the National Development and Reform Commission (NDRC) 
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xRzNZWGJWQ096bWFHMDNxP2U9Q2xlWlNk.mp4" type="video/mp4">
+</video>
 
 ---
 
+## Data Representativeness
+
+> To systematically characterize their views, we obtained a random sample of 9,911 social media posts from 2010 to 2015 ...... From these data, we .red[drew a sample] of 128 posts written by people ...... --- King, Pan, & Roberts 2017 *APSR*
+
+> This analysis is limited to .red[the random sample] of tweets for which we collected hand labels, ......  ---Cirone & Hobbs 2022 *PSRM*
+
+--
+
+Not saying....
+
+Sampling bias, provenance conflicts, increased fluctuations,  error rates...
+
+.center[<img src="images/dataDontTalk.png" />]
+
+???
+
+provenance conflicts: source issue
+
+Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Chicago Booth Review. http://review.chicagobooth.edu/economics/2019/article/purely-evidence-based-policy-doesn-t-exist (March 27, 2019).
+
+---
+
+## Pedagogical Myth
+
+Typical conversation:
+
+> A: I wanna use big-data method for my project. What should I do?  
+> B: Go learn Python!!
+
+.pull-left[
+<img src = "images/big_dataScience.png" height = 380>
+]
+
+.pull-right[
+.large[Let alone a    
+data-based    
+social scientist!]
+]
+
+
+---
+
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xR3Q2bmFMb0dWX2hJSWRPP2U9elZGZXMz.mp4" type="video/mp4">
+</video>
+
+---
+---
+
+background-image: url("images/big_mindmap.png")
+background-position: center
+background-size: contain
+
 ## Take-Home Points
 
-+ Paradigm changes.
-+ Large potential of policy analysis w. BD
-    + Numbers, documents, and audio/videos
-    + Origin, process, consequences
-+ What BD can do
-    + Description
-    + Relation analysis
-    + Pattern identification
-    + Text analysis
-+ Big thoughts about BD
+---
+
+## Procedure
+
+.pull-left[
+### Presenting (10min)
+
+The presenters talk.
+
+### Challenging (10min)
+
+Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 250 />
+
+]
+
+.pull-right[
+
+*Process*
+
+1. Presenters query.
+    - A question about the paper
+1. Challengers respond.
+1. Challengers query.
+    - A question about the presentation
+1. Presenters respond.
+]
+
+---
+
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "11_.*.html"), timeout = 300)
