@@ -1,17 +1,17 @@
 ---
 title: "Interpretivism: Small-N Approach"
-subtitle: "Understanding Policies: Perspectives and Case (10700193)"
+subtitle: "Public Policy Analysis: Perspectives and Methods (30700953)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    self_contained: FALSE
+    self_contained: false
     chakra: libs/remark-latest.min.js
     css: 
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
@@ -23,15 +23,11 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
-
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  emo, knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       modelsummary,
-       broom, tidyverse
+  here, dplyr
 ) # data wrangling # data wrangling
 
 xaringanExtra::use_xaringan_extra(c("tile_view", # O
@@ -39,47 +35,59 @@ xaringanExtra::use_xaringan_extra(c("tile_view", # O
                                     "panelset",
                                     "tachyons"))
 
-xaringanExtra::use_fit_screen() # Alt + F
-
 # Functions preload
 set.seed(313)
 ```
 
-background-image: url("images/cha_challenge.gif")
-background-position: center
-background-size: contain
-
----
-
 ## Overview
 
-1. What's a small-N analysis?
-1. What can it do?
-1. How can you tell a small-N based research is good?
-1. How different it is from LNA?
-
+- Common paths of small-N analysis (SNA)
+- Paradigm shift from LNA
+- Conducting good SNA
 
 ---
 
-## Why Small?
+class: inverse, bottom
 
-.pull-left[
-N that can't do large N? 
+# Common Paths of SNA
 
-]
+---
 
-**WRONG!**
+## A Review About N
+
+.center[How large the N is large?]
 
 --
 
-.pull-right[
-
-<img src="images/small_badAss.jpg" />
-
+.center[
+\> 100 (LLN)    
+\> 1000 (CLT)
 ]
+
+???
+
+Law of Large Numbers
+
+Central limited therom
+
+--
+
+.center[Small N &#x225D; \[1~100\]]
+
+--
+
+.center[How about N = 0?] 
+
+--
+
+.center[
+Formal modeling   
+Political theory/philosophy
+]
+
 ---
 
-## What Can SNA Do?
+## Common Paths to Conduct SNA
 
 1. Value judging
 1. Story telling
@@ -89,15 +97,19 @@ N that can't do large N?
 
 ---
 
-### Value Judging
+## Value Judging
 
-.left-column[
+.pull-left[
 + Identifying "communities of meaning"
+
 + Studying the framing and interactions among the communities
 ]
 
-.right-column[
-<img src="images/essenceOfDecision.jpg" />
+--
+
+.pull-right[
+<img src="images/small_essenceOfDecision.jpg" width = "48%" />
+<img src="images/small_clashCivilization.jpg" width = "48%" />
 ]
 
 ???
@@ -106,34 +118,32 @@ Graham Tillett Allison Jr. , American political scientist and professor at the J
 
 ---
 
-### Story Telling
+## Story Telling (Narrative Analysis)
 
 Telling stories about a certain group or policy based on archives and interviews.
 
 
-.center[<img src="images/semiQueer.jpg" height = 150 />]
-
+.pull-left[.center[<img src="images/small_yanfei.jpg" height = 300 />]]
+.pull-right[[《悬浮时代——异乡人的都市生存》](https://posts.careerengine.us/p/61ea44f44ab3963c8b7df873)
+.small[
+> 我想以“附近”（the nearby）作为研究框架，去深度描绘这些在我们日常附近中出现的打工者，他们是帮我们找房子的中介、为我们做家政的阿姨、给我们送外卖的外卖员、帮我们装窗户和做家具的建筑工人、在菜市场卖菜的菜贩、以及小区里值班的门卫保安等等。
+这些人……我想通过这本书来记录这些陌生人的状态，以及每天生活在城市里，他们和我们之间会有什么样的交集，这样一种交集也是跟“真实的附近”产生亲密的关系，看到真实附近里具象的人是紧密联系在一起。真正的陌生人不会是完全和我们没有任何交集的。
+]
+]
 ???
 
 Balay, Anne. 2018. Semi Queer: Inside the World of Gay, Trans, and Black Truck Drivers. UNC Press Books.
 
 Winner of the Lambda Literary Emerging Writers Award. PhD students at University of Michigan’s American Culture.
 
---
-
-### Narrative Analysis
-
-Going beyond telling a story  
-Using story to .magenta[make an argument]  
-Putting an argument in the .magenta[thick context]
 
 ---
 
-### Dramaturgical Analysis
+## Dramaturgical Analysis
 
 How do policy and policy makers "act"?
 
-.left-column[
+.pull-left[
 + "Actors"
 + "Content"
 + "Theme"
@@ -142,13 +152,23 @@ How do policy and policy makers "act"?
 
 --
 
-.right-column[
-<img src="images/theoVanGogh.jpg" />
+.pull-right[
+<img src="images/small_luckyDog.jpg" />
 ]
 
 ???
 
-Dutch film actor Theo van Gogh was assassinated by a Dutch-Moroccan Muslim wo ojbected to the director's movie Submission that critcized the treatment of women in Islam.
+《耳朵大有福》（英文譯名：Lucky Dog）是一部2008年由中國和韓國合作拍攝的華語劇情片，是電影導演張猛的故事片處女作，也是其「東北三部曲」中的首部[1]，由范偉主演，講述了一位東北鐵路工人退休之後第一天的生活。影片在第11屆上海國際電影節上獲得了亞洲新人獎評委會特別獎。
+
+在中國東北某小城鐵路局機務段修了四十多年火車的王抗美（范偉）迎來了退休的日子。這份「鐵飯碗」雖然不能為他帶來太豐厚的收入，卻一直讓他過著比上不足、比下有餘的生活，更是這位體制內職工在社交圈子中高人一等的資本。沉浸在「光荣退休」的喜悅中，老王最初對隨之而來的收入削減不以為意；然而，退休後的第一天，他就開始切身感受到生活的種種重負：抱病醫院的老伴（程淑波）仍無好轉跡象，每天的飲食起居都是不菲的開支；家境優渥的女婿（田雨）被女兒（賈瑟）撞破偷情，夫妻關係岌岌可危；試圖打零工補貼家用的老王先後探訪擦鞋女工、人力車夫、二人轉戲院老闆，卻接連鎩羽而歸，有一次更是誤入傳銷窩點而遭警察查扣。好強的老王終於被迫低下頭顱，攜禮物向鐵路局工會幹事（張珂）求助，然而又被告知他的氣管病不屬於工傷賠償範疇。這位以「抗美援朝」命名、並一直以曾在鐵路局宣傳隊領唱過《長征組歌》為豪的老工人，卻在舉國紀念長征勝利七十週年之際發現自己的生活已然舉步維艱。心灰意冷的老王要怎樣才能留住自己殘存的榮耀與尊嚴？
+
+---
+
+<iframe height="90%" width = "100%" src="//player.bilibili.com/player.html?aid=938325294&bvid=BV1nT4y1a7kX&cid=578731952&page=1&t=975" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+???
+
+Stop at 17:16
 
 ---
 
@@ -169,43 +189,295 @@ Strüver, Georg. 2017. “China’s Partnership Diplomacy: International Alignme
 
 ---
 
-## Speciality of SNA Researchers (vs. LNA Researchers)
+class: inverse, bottom
 
-+ Role
-+ Data collection
-+ Analysis
+# Paradigm Shift: Interpretivist Approach
 
 ---
 
-### Role
+## Naturalism &rarr; Interpretivism
 
-1. Researchers are human
-    + Experiences
-    + Cognitive differences
-    
+Philosophic roots: 
+
+- From phenomenology to post-structuralism
+
+???
+Phenomenology: Edmund Husserl, reject the concept of objective research.
+They believe that analyzing daily human behavior can provide one with a greater understanding of nature.
+
+--
+
+- From Discourse theory to Pragmatism
+
+???
+
+Discourse theory: Habermas, Foucault /fu:'kəu/
+-  In our daily activities the way we speak and write is shaped by the structures of power in our society, and that because our society is defined by struggle and conflict our discourses reflect and create conflicts. 
+
+Pragmatism: William James, Dewey
+Considers words and thought as tools and instruments for prediction, problem solving, and action, and rejects the idea that the function of thought is to describe, represent, or mirror reality.
+
+--
+
+Public policy: .red[Not composed of a technical science]
+
+- Story telling
+- Local knowledge
+- Democratic dialogue
+- Argumentation
+
+---
+
+## Interpretivist Public Policy 
+
+Methodologically,
+
+.center[Quants vs. qualies]
+
+--
+
+Beyond methodology,
+
+.center[
+Reason: Globalization and .complexity
+
+Goal: Unearthing major issues not methodology
+]
+
+--
+
+Consequences: .red[*Deliberative*] policy analysis
+
+.center[
+1. Policies center on as .red[story telling]
+1. Policies are .red[contestable]
+1. Policymaking should be self-consciously .red[normative] 
+1. Importance of .red[contextual] culture
+1. Democratic .red[dialog] in policy making
+1. .red[Performative] dimension of policy formation
+]
+
+---
+class: center, middle
+
+## Storytelling: Policy Narrative
+
+Policies account for a field of .red[human beliefs and actions]
+
+&uarr;
+
+Not individual ideas but meaning holism
+
+&uarr;
+
+One belief, action, and practices is contingent upon    
+other beliefs, actions, and practices
+
+---
+
+.center[<img src = "images/small_scarfPlayer.jfif" height = 300>]
+
+--
+
+A sign of social disintegration and loss of identity (democracy)?     
+A reasonable and healthy symbol of civic pluralism?     
+A strong feminist current?
+
+--
+
+
+> Women who wear the headscarf attach different meanings to it and respond to different motives (Bouchard-Taylor commission 2007)
+
+???
+
+The Bouchard-Taylor commission (named for its two co-chairmen), officially the Quebec Consultation Commission on Accommodation Practices Related to Cultural Differences, was created on 8 February 2007 by Quebec premier Jean Charest. Its mandate was to examine questions related to reasonable accommodation allowed because of cultural or religious differences in Quebec.
+
+The commission was chaired by philosopher Charles Taylor and historian and sociologist Gérard Bouchard.
+
+---
+
+class: center
+
+## Contestability
+
+> Social realities and policies are debatable.
+
+&uarr;
+
+Expressive of some other rival set of meanings
+
+???
+
+让法治成为城市核心竞争力重要标志
+——习近平法治思想引领上海全面依法治市再出发纪实
+
+http://sh.people.com.cn/n2/2021/1116/c134768-35007058.html
+
+2020年11月，《上海市公共卫生应急管理条例》正式施行，上海成为全世界首个将进入公共场所要戴口罩写入地方立法的城市。当时，乘坐地铁、公交等公共交通工具全程佩戴口罩已成为全体上海市民的共识，但立法者还是郑重地将其写入了法规……在习近平法治思想的引领下，上海全面依法治市稳步迈上新台阶。法治，正成为上海城市核心竞争力的重要标志……上海将依法保障人民权益作为全面依法治市工作的根本出发点。
+
+---
+
+## Ethical Engagement
+
+> Legalizing abortions lowers crime rates across cultural groups and time periods because crime is tightly correlated with unwanted children, and unwanted children with criminality and other social ills.
+
+Donohue, John J., III, and Steven D. Levitt. 2001. “The Impact of Legalized Abortion on Crime.” *The Quarterly Journal of Economics* 116(2): 379–420.
+
+.center[<img src = "images/small_poorNeighbor.jpg">]
+
+???
+
+What's the problem
+
+---
+
+class: center
+
+Naturalist assumption: Human affairs are in principle manipulable.
+
+--
+
+"The poor are more likely to commit crimes"
+
+&darr;
+
+"The poor is the source of crimes"
+
+&darr;
+
+"Less poor kids, less source of crime"
+
+
+--
+
+<img src = "images/small_thePoor.jfif" height = 250>
+
+???
+
+北京市安委会回应“驱赶低端人口”：是在排查隐患
+
+https://baijiahao.baidu.com/s?id=1585068230951214767&wfr=spider&for=pc
+
+---
+
+<img src = "images/small_commonWealth.jpg" height = 600 >
+<img src = "images/small_followParty.gif" height = 300 >
+
+---
+
+## Cultural Context
+
+> Naturalists often make claims to .red[necessary causal bonds] that link two formal variables together as they migrate through highly heterogeneous cultural and historical contexts.
+
+--
+
+.pull-left[<img src = "images/small_hustle.jpg" >]
+
+???
+
+FBI 钓鱼执法抓市长
+
+市长为了地方经济和黑手党合作建赌场
+
+--
+
+.pull-right[
+Awareness of the matrices of beliefs
+
+Avoiding the naive ethnocentrism/enthusiasm
+]
+
+---
+
+## Dialog
+
+> Naturalist assumption: policy elites have access to a specialized science of society that allows them to strongly predict outcomes.
+
+.pull-left[<img src = "images/small_overConfident.jpg" >]
+
+.pull-right[<img src = "images/small_facilitator.jpg" >]
+
+???
+
+Being Facilitator: reduce conflicts and generate cooperative behavior in the face of differences
+
+---
+class: small
+
+## Performativity
+
+Fischer, Frank, and John F. Forester, eds. 2013. *The Argumentative Turn in Policy Analysis and Planning*. Duke University Press.
+
+
+> [Policy] analyses not only depicts but also constructs the issues at hand... policy-making is a constant discursive struggle over the criteria of social classification, the boundaries of problem categories, the .red[intersubjective interpretation] of common experiences, the conceptual framing of problems, and the definition of ideas.
+
+--
+
+.pull-left[<img src = "images/small_brokenWindows.jpg" height = 360>]
+
+???
+
+They saw serious crime as the final result of a lengthier chain of events, theorizing that crime emanated from disorder and that if disorder were eliminated, then serious crimes would not occur.
+
+--
+
+.pull-right[<img src = "images/small_brokenWindow.webp" >]
+
+???
+
+Mayor Rudolph Giuliani in New York City were convinced that the aggressive order-maintenance practices of the New York City Police Department were responsible for the dramatic decrease in crime rates within the city during the 1990s. Police Commissioner William Bratton began translating the theory into practice as the chief of New York City’s transit police from 1990 to 1992. Squads of plainclothes officers were assigned to catch turnstile jumpers, and, as arrests for misdemeanours increased, subway crimes of all kinds decreased dramatically. 
+
+When Bratton resigned in 1996, felonies were down almost 40 percent in New York, and the homicide rate had been halved.
+
+---
+
+class: middle, center, large
+
+## So What: Foci of SNA
+
+Role    
+
+Data collection   
+
+Analysis    
+
+---
+
+## Role
+
+.pull-left[<img src = "images/small_tsuScientists.png" height = 300>]
+.pull-right[<img src = "images/small_storyTeller.jpg" height = 300 >]
+
+.pull-left[
+Researchers are .red[human]
++ Experiences
++ Cognitive differences
+ ]
+ 
 ???
 
 Cognitive differences: men and women; allowing tourists entering the campus
-
 --
 
-1. Researchers have value
-
---
-
-1. Researchers participate
-    + Observer vs. Insider
-    + Undercover vs. Activist
+.pull-right[
+Researchers .red[participate]
++ Observer vs. Insider
++ Undercover vs. Activist
+]
 
 ???
 
 Researchers generalize/create culture, etc.
 
+--
+
+.center[Researchers have .red[value]]
+
 ---
 
-### Data Collection
+## Data Collection
 
-Observing .magenta[with intention to understand];
+Observing with intention to .red[understand];
 
 ???
 
@@ -215,16 +487,17 @@ Using American view of occupancy (and thus housing policy enforcement) is discri
 
 --
 
-Interviewing with respondents as .magenta[conversational partner];  
+Interviewing with respondents as .red[conversational partner];  
 
 ???
+
 2. Schaffer, Frederic Charles. 2000. Democracy in Translation: Understanding Politics in an Unfamiliar Culture. Cornell University Press.
 
 Interview of people in Senegal about democracy and American democracy
 
 --
 
-Reading the documents as they were writing .magenta[meaningfully].
+Reading the documents as they were writing .red[meaningfully].
 
 ???
 
@@ -234,9 +507,14 @@ By examining the written record of spoken language, she was able to analyze the 
 
 ---
 
-### Analysis
+## Analysis
 
-"No need to transform words into numbers"
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[
+No need to transform words into numbers
+]
+]
+
 
 + Numbers are not the results but the sources
 
@@ -250,11 +528,10 @@ Narrative reports often read like novels.
 
 --
 
-+ Where did the number or whatever data come from?
++ Focusing on:  
 
---
-
-+ Where to find the data, what are data, how to know what are saying in the data?...
+1. Where did the number or whatever data come from
+1. Where to find the data, what are data, how to know what are saying in the data?...
 
 ???
 
@@ -262,38 +539,37 @@ Analysis and collection are intertwined.
 
 ---
 
+## What SNA Is A Good SNA
+
+---
+
 ## Evaluating SNA
 
-.left-column[
+.pull-left[
 
 ~~Be objective~~
 
-Reality is universal;
+Reality is universal;   
 Policy is not constructed.
-
-In large N, implications are clear at least.
-
 ]
 
 --
 
-.right-column[
+.pull-right[
 
-~~Be voiceless~~
-
-<img src="images/Beauvoir.jpg" height = 350 />
+~~Be voiceless~~ <img src="images/small_Beauvoir.jpg" height = 200 /> 
 
 ]
 
 ???
 
-Simone de Beauvoir, The Second Sex, gender is constructed.
+Simone de Beauvoir (西蒙尼·德·博瓦尔), The Second Sex, gender is constructed.
 
 One is not born a woman, but becomes one.
 
----
+--
 
-.left-column[
+.pull-left[
 
 ~~Be experimental~~
 
@@ -303,34 +579,28 @@ The SNA assumes impacts and multicausality are data and useful.
 
 --
 
-.right-column[
-~~Be replicated~~
-
-<img src="images/twins.gif" height = 300 />
+.pull-right[
+~~Be replicated~~<img src="images/small_twins.jpg" height = 230 />
 
 ]
 
+???
+
+Despicable Me 3
+
 ---
+
+.center[
 
 ~~Be generalized~~
 
-.center[<img src="images/yangQihan.jpg" height = 500 />]
-
----
-
-## A Different Paradigm
-
-Philosophically, epistemologically, and ideologically
-
-+ Perfect validity is impossible
-+ The society is constructed
-+ Data do not talk, researchers do
-
+<img src="images/small_yangQihan.jpg" height = 500 />]
 
 ???
 
-researchers interpret data
-researchers generalize conclusions
+杨奇函：清华大学经管学院
+
+许吉如：清华大学法学院
 
 ---
 
@@ -343,9 +613,9 @@ researchers generalize conclusions
 
 ---
 
-### Credibility
+## Credibility
 
-.center[<img src="images/zhiLuWeiMa.png" height = 400 />]
+.center[<img src="images/small_zhiLuWeiMa.png" height = 400 />]
 
 ???
 
@@ -355,7 +625,7 @@ Based on enough description
 
 ---
 
-### Transferability
+## Transferability
 
 > 当年的SARS也属于冠状病毒，公众容易将二者相类比。当年在应对SARS的过程中，我们是有过教训的。这就提醒我们，千万不可产生轻敌心态和麻痹思想，更不能犯下和当年一样的错误。  
 ---"尽快掐灭疫情传播的'火种'"《人民日报客户端》（2020-01-22）
@@ -370,9 +640,9 @@ a result of detailed, illustrative description, and the responsibility shifts fr
 
 https://wap.peopleapp.com/article/5060699/4954813
 
----
+--
 
-### Dependability
+## Dependability
 
 Legit process of inquiry
 
@@ -382,11 +652,9 @@ Legit process of inquiry
 
 ---
 
-### Confirmability
+## Confirmability
 
-Findings clearly linked to analysis, data, and the research site.
-
-.center[<img src="images/rumor.jpg" height = 400 />]
+.center[<img src="images/small_rumor.jpg" height = 400 />]
 
 ???
 
@@ -394,51 +662,81 @@ There's an alternative set of criteria which is more philosophical,
 
 Morrow, Susan L. 2005. “Quality and Trustworthiness in Qualitative Research in Counseling Psychology.” Journal of Counseling Psychology 52(2): 250–60.
 
----
+--
 
-## SNA vs. LNA
-
-| LNA           | SNA           |
-|---------------|---------------|
-| Objective     | Understanding |
-| Voiceless     | Voice         |
-| Experimental  | Comparison    |
-| Replicable    | Depth         |
-| Generalizable | Context       |
-
-Always care about the framing and understanding an issue from different angles.
-
-???
-
-+ Understanding: the researchers' background, view, approach, and value; 钟南山更可信
-+ Voice: Study by Bourgois and Schonberg (2009) of homeless men and women who were addicted to drugs is compelling because it showed they care.
-+ Comparison: reflexivity: Well-crafted studies provide the reader an opportunity to reflect on his or own situations in regard to similarities and differences.
-+ Depth: richesness for understanding and context differences
-+ Context: not only if policy works, but what cases not and why
+Findings clearly linked to analysis, data, and the research site.
 
 ---
+
+
+## Why Is SNA Not that Popular (for Now)
+
+.center[Goal:   
+**Subjective over "objective"**]
+
+--
+
+.center[Sources:    
+**Deep over structural**]
+
+--
+
+.center[Design:   
+**Creative over systemic**]
+
+--
+
+.center[Analysis:   
+**Arts over skills**]
+
+--
+
+.center[Implications:   
+**Complex/real over clear/causal**]
+
+---
+
+background-image: url("images/small_mindmap.png")
+background-position: center
+background-size: contain
 
 ## Take-Home Points
 
-SNA is a different world
+---
 
-.left-column[
-### Different goals
-+ Credibility
-+ Transferability
-+ Dependability
-+ Confirmability
-    ]
-    
-.right-column[
-### Different criteria
-+ Understanding
-+ Voice
-+ Comparison
-+ Depth
-+ Context
+## Procedure
+
+.pull-left[
+### Presenting (10min)
+
+The presenters talk.
+
+### Challenging (10min)
+
+Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 250 />
+
 ]
 
+.pull-right[
+
+*Process*
+
+1. Presenters query.
+    - A question about the paper
+1. Challengers respond.
+1. Challengers query.
+    - A question about the presentation
+1. Presenters respond.
+]
+
+---
+
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "12_.*.html"), timeout = 300)
