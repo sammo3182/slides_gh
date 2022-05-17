@@ -1,0 +1,463 @@
+---
+title: "Breaking Through the Linguistic Barrier"
+subtitle: "The Role of Language Policy in Migration Decisions"
+author: "Yue HU"
+institution: "Tsinghua University"
+date: "2022-05-18"
+output:
+  xaringan::moon_reader:
+    self_contained: false
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+class: center, middle
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  here, dplyr, icons
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+## Overview
+
+- Migration in China: Research Puzzles
+- An Explanation: Language Barrier
+- What Can Government Do
+
+???
+
+量化公共规格测深度研讨工作坊 第7期 （人民大学 首都发展与战略研究院）
+
+
+---
+
+class: inverse, bottom
+
+# Migration in China: Facts and Puzzles
+
+---
+
+class: middle
+
+.pull-left[
+Migrants of China: > 385,000,000 (2021)
+
+No doubt migrating for .red[jobs and better opportunities]    
+.small[(Massey et al., 1993, Zhang & Song 2003, Ha, Yi & Zhang 2009, Fitzgerald, Leblang & Teets 2014)]
+
+But is that all? 
+]
+
+???
+
+Zhang, Kevin Honglin, and Shunfeng Song. 2003. “Rural–Urban Migration and Urbanization in China: Evidence from Time-Series and Cross-Section Analyses.” China Economic Review 14(4): 386–400.
+
+Ha, Wei, Junjian Yi, and Junsen Zhang. 2009. “Internal Migration and Income Inequality in China: Evidence from Village Panel Data.” Munich Personal RePEc Archive 27: 1–38.
+
+Massey, D. S. et al. 1993. “Theories of International Migration: A Review and Appraisal.” Population and development review: 431–66.
+
+Fitzgerald, Jennifer, David Leblang, and Jessica C. Teets. 2014. “Defying the Law of Gravity: The Political Economy of International Migration.” World Politics 66(3): 406–45.
+
+
+--
+
+.pull-right[<img src="images/gdpVsMigration.jpg" height = 600 width = 1000 /> ]
+
+???
+
+http://wap.stats.gov.cn/fb/202202/t20220228_1827966.html#:~:text=%E5%85%A8%E5%B9%B4%E5%87%BA%E7%94%9F%E4%BA%BA%E5%8F%A31062,%E6%B5%81%E5%8A%A8%E4%BA%BA%E5%8F%A33.85%E4%BA%BF%E4%BA%BA%E3%80%82
+
+Not perfectly fitting, right?
+
+全国各省人口净流入数据：浙江、广东、新疆、重庆成宠儿
+
+> 对比经济增速与净流入比例，可以发现：经济增长快不一定代表人口净流入，但经济增速差的省份基本上人口都上净流出。其中河北、北京比较独特（或许是因为雄安新区功能转移因素）
+
+https://www.163.com/dy/article/FBT930NO053265JA.html
+
+If so, what does the migrant policies for 
+
+---
+
+## Puzzle
+
+Similar economic development, unequal attraction
+
+.center[<img src="images/cityIn.jpg" height = 400 width = 800 />]
+
+???
+
+first-tier cities (bei,shang, guang different)
+
+Neo-first-tier cities (Hangzhou, nanjing different)
+
+--
+
+.center[.normal[*RQ1: Why here not there?*]]
+
+
+---
+
+## Alternative Factors
+
+.center[Why do people tend to move here rather than there?]
+
+--
+
+Institutional
+
+- Hukou .small[(Pizzi & Hu 2022)]
+    
+--
+
+Sociological/cultural
+- Language .small[(Only internationally, Pieke 2004; Boyd & Cao 2009; Adserà & Pytliková 2015)]
+  
+
+???
+
+Adserà, Alícia, and Mariola Pytliková. 2015. “The Role of Language in Shaping International Migration.” The Economic Journal 125(586): F49–81.
+
+Boyd, Monica, and Xingshan Cao. 2009. “Immigrant Language Proficiency, Earnings, and Language Policies.” Canadian Studies in Population 36(1–2): 63.
+
+Pieke, Frank N. 2004. Transnational Chinese: Fujianese Migrants in Europe. Stanford University Press.
+
+
+--
+
+.center[
+.normal[
+&dArr;
+
+*RQ2: The role of Language*
+]
+]
+
+---
+
+class: inverse, bottom
+
+# Language Barrier
+
+---
+
+## Potential Explanations
+
+Language as ....
+
+
+.pull-left[
+.center[<img src = "../courses/teachingDemo/image/speakChinese.gif">]
+]
+
+???
+
+a tool of communication
+
+low proficiency in the vernacular, more difficulty
+
+--
+
+.pull-right[
+.center[<img src = "../courses/teachingDemo/image/ce.jpg" height = 320>]
+]
+
+???
+
+an identity maker
+
+Chen, Zhao, Ming Lu, and Le Xu. 2014. “Returns to Dialect: Identity Exposure Through Language in the Chinese Labor Market.” China Economic Review 30: 27–43.
+
+
+For instance, in a study of Shanghai, one of the most cosmopolitan cities in the country, Chen et al 2014 show that migrants who can use Shanghainese, the local dialect, usually get higher paying and public-facing jobs than those who cannot. 
+
+Given the high rate of Putonghua comprehension in the city, the issue of Shanghainese is about identity rather than communication.
+
+---
+
+## Hypothesis and Examination
+
+H<sub>1</sub>: When migrants determent where to migrate or whether to remain where they are, they prefer the place with a .red[weaker] language barrier
+
+--
+
+- Data: 
+    - China Labor Force Dynamics Survey (CLDS 2016)
+        - Nationally representative, > 2000 migrants
+    - Living Environment Satisfaction Survey of Chinese Residents (LESS 2018)
+        - Online quota, 50:50 migrants:nonmigrants
+        
+???
+
+The survey was issued through Qualtrics, a professional data company, during October and September of 2018.
+
+---
+
+## Language Choice
+
+<img src = "images/language-distribution-1.png">
+
+???
+
+Native that is different from the vernacular
+
+Working time: residents vernacular, migrants putonghua
+Off-work: vernacular dominated
+
+Putonghua replaces vernacular? 
+Liang, Language Attitudes and Identities in Multilingual China; Wu and Yang, “Language Options and Changes of Home-returning Migrant Population: Quantitative Analysis Based on Communication Space”.
+
+Probably not
+
+---
+
+## Migrant's Will
+
+.center[Outcome variable]
+
+> Do you want to remain in the current location? (1--5, CLDS 2016)
+
+--
+
+.center[Explanatory variable]
+
+- Language closeness
+    - Language-tree (Language Atlas of China 2015)
+    - Dialect points < clusters < subgroups < groups < super groups     
+    (Available in the [`regioncode`](https://CRAN.R-project.org/package=regioncode ) package)
+    
+--
+
+- Vernacular proficiency
+    - Self report
+    
+---
+
+## Alternative Demands
+
+.pull-left[
+Economic factors:
+
+- Satisfaction with income
+- Satisfaction with occupation
+]
+
+--
+
+.pull-right[
+Family factors:
+
+- Family burden: Parents + children / siblings
+- Children: Num of kids
+]
+
+--
+
+.pull-left[
+Geographic factor:
+
+- Hukou &harr; destination
+]
+
+--
+
+.pull-right[
+Demographic factors:
+
+- Age, gender, education level, urban/rural difference, and marital status
+]
+???
+Someone may be easier to learn vernacular, and effort to learn
+
+---
+
+background-image: url("images/visualization-barrier-1.png")
+background-position: center
+background-size: contain
+
+class: right 
+
+## Results
+
+???
+
+Closeness is natural advantage
+Vernacular proficiency is effort and in general
+
+Both indicate the language barrier
+
+Language is far more unique than a proxy of education or geo distance and one of the most influential factor
+
+
+---
+
+## Staying &ne; Going
+
+Situational experiment in LESS 2018:
+
+> Assuming you have a plan to leave from the city your hukou was registered, there are two available options: City A and B. The two cities are very similar. Both are in .blue[economically developed areas] and located at .blue[similar distances] to your hukou city. You don’t have any social relations to either of them. The difference is that you are expected to .blue[earn twice] as much in City A as in City B, while the .blue[average living cost] in A is also about 1. 5 times of the cost in B. Given these conditions, where do you prefer to move, A or B?
+
+--
+
+Treatment:
+
+> The vernacular in City B is .red[**quite similar**] to your mother tongue. You can make smooth communication there with no problem, while the vernacular of City A is very different from yours.
+
+---
+
+background-image: url("images/experiment-barrier-1.png")
+background-position: center
+background-size: contain
+
+class: right 
+
+
+## Result
+
+
+???
+
+More likely B is significantly increase, not affected by migrant experience, gender, or education
+
+---
+
+class: bottom, inverse
+
+# What Can Govenrment Do
+
+---
+
+## Can Language Policy Reducing Language Barriers
+
+How?
+
+Language policy/planning: Setting up the national communal language (NCL) and its relationship with other linguistic types.
+
+--
+
+Some facts of NCL in China
+
+- Standard Putonghua didn't exist until the 1950s
+- Putonghua coverage: [80.72% in 2021](http://www.moe.gov.cn/jyb_xwfb/xw_zt/moe_357/jyzt_2020n/2020_zt23/baodao/202009/t20200915_488008.html) 
+
+--
+
+- NCL brings higher income and better job (Dovì, Gao, Fu)
+- NCL brings ethnic equality (Tang, Hu & Jin 2017)
+- Vernaculars still matter (Wang and Fan, Gong, Chow & Ahstrom, Wang et al.)
+
+???
+
+教育部统计
+
+---
+
+## Hypothesis and Examinations
+
+H<sub>2.1</sub> (Harmonizing): Proficiency in the NCL (e.g, Putonghua) .red[reduces] the influence of vernacular language abilities on migration decision making.
+
+--
+
+- H<sub>2.1a</sub> Migrants with higher Putonghua proficiency are .red[more likely] to migrate to place with larger language distance than those with lower proficiency
+- H<sub>2.1b</sub> For migrants with higher Putonghua proficiency, proficiency in the vernacular has .red[less influence] over migration destinations than for those with lower Putonghua proficiency.
+
+--
+
+H<sub>2.2</sub> (Bypassing): When migrants are equipped with communicative NCL proficiency, they are more likely to stay in a migration destination .red[despite the concern of language barriers].
+
+---
+
+## Empirical Test
+
+- (Culturally) Harmonizing effect
+    - Interaction model: Whether higher Putonghua proficiency reducing the influence of vernacular (H<sub>2.1b</sub>)
+
+--
+    
+- (Communicatively) Bypassing effect
+    - Quadratic model (H<sub>2.1a</sub>, H<sub>2.2</sub>)
+
+---
+
+background-image: url("images/visualization-crash-1.png")
+background-position: center
+background-size: contain
+
+
+## Result: Haromonizing
+
+???
+
+No haromonizing effect
+
+---
+
+background-image: url("images/visualization-capability-1.png")
+background-position: center
+background-size: contain
+
+class: bottom, right
+
+## Result: Bypassing
+
+???
+
+Vernacular does not disappear, 
+quadratic term
+
+---
+
+## Taking-Home Points
+
+*Findings*:
+
+- The diversity of vernaculars in potential destinations still create .red[a barrier] for contemporary Chinese migrants.
+
+- There is no a national communal language reduces the language barrier to cultural assimilation.
+    - Merely a way to bypass vernacular language differences
+
+--
+
+*Implications*
+
+- The public function of language policy beyond education
+- Resilience of vernaculars: identity construction in modernization and urbanization
+
+???
+
+Language policy with a single NCL has been applied for 60 years.
+
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+`r feather_icons("mail")`&nbsp;[yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/
+
+`r feather_icons("github")`&nbsp; [sammo3182](https://github.com/sammo3182)
