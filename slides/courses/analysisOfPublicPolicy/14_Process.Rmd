@@ -1,124 +1,118 @@
 ---
-title: "Method: Small-N Analysis in Practice"
-subtitle: "Analysis of Public Policy: Perspectives and Methods (30700953)"
+title: "Method: Toolkits for the Interpretivist Approach"
+subtitle: "Public Policy Analysis: Perspectives and Methods (30700953)"
 author: "Yue HU"
-institute: "Political Science, Tsinghua University"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
 output:
   xaringan::moon_reader:
-    self_contained: FALSE
+    self_contained: false
     chakra: libs/remark-latest.min.js
     css: 
       - default
       - zh-CN_custom.css
       - style_ui.css
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       highlightStyle: github
       highlightLines: true
       highlightSpans: true
       countIncrementalSlides: false
+      ratio: 16:9
 ---
 
-
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
-p_load(knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       summarytools,
-       broom, tidyverse) # data wrangling
+
+p_load(
+  here, dplyr, kableExtra
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
 ```
-
-class: bottom, inverse
-
-background-image: url("images/court.jpg")
-background-position: center
-background-size: contain
-
-# Challenging Time
-
----
-
-## Procedure
-
-1. Drawing a respondent from the audience
-1. The statesperson talks.
-1. The statesperson queries.
-1. The respondent challenges.
-1. Preparation (30 sec)
-1. The respondent answers.
-1. The statesperson answers.
-
-```{r stopwatch, echo = FALSE}
-library(countdown)
-
-countdown(minutes = 0,
-          seconds = 30,
-          play_sound = TRUE)
-```
-
----
-
-class: inverse, bottom
-
-# Small-N Methods: Process-Tracing and Beyond
-
----
 
 ## Overview
 
-### Process tracing
-+ What's that?
-+ Steps
-+ Evidence
-
-### SNA toolkit:
-
-+ .gray[Case study]
-+ .gray[Process tracing]
++ Process tracing
 + Interview
-+ Focus group
+    + Focus group
 + Content analysis
 
 ---
 
-background-image: url("images/csi.jpg")
+background-image: url("images/process_crimeBoard.webp")
 background-position: bottom
 background-size: 90%
 
 ## Process Tracing
 
-What: "CSI"
+> A research method for tracing causal mechanisms using .red[detailed, within-case] empirical analysis of how a causal mechanism operated in real-world cases. (Beach & Pedersen 2019)
 
---
+???
 
-Goal : Theory testing
+Crime board
 
-Hypothesis: Explanation rivalry
 
 ---
 
-background-image: url("images/processTracing.jpg")
-background-position: center
-background-size: contain
+## Operating a Process Tracing
+
+Goal : Theory testing
+
+Hypothesis: Examining explanation rivalries
+
+--
+
+Operation:
+
+<img src = "images/process_tracing.png" >
+
 
 ---
 
 ## Example: English Recognition in Singapore
 
-Why did English become a recognized official language in the Singaporean language policy?
+Theoretical question:
+- Language recognition
 
+Empirical puzzle:
+- English is an official language of Singapore, but only **21% of the population** spoke this language when the country was independent.
 
-Esp. given there were only 21% of the population spoke this language when the country was independent.
+.pull-left[.center[<img src = "../teachingDemo/image/singaporeLang2.jpg" height = 200>]]
+
+--
+
+.pull-right[
+Research Question:
+- Why did English become an official language of Singapore?
+]
+
 
 ---
 
-### Step 1: Identify Hypotheses
+## Step 1: Identify Hypotheses
 
+.pull-left[
 H<sub>0</sub>: State (institutional) capacity  
+
+<img src = "images/process_singapore.jpg">
+]
+
+--
+
+.pull-right[
 H<sub>1</sub>: Prioritization of the education ministry
 
+.center[<img src = "images/process_goh.jpg" height = 400>]
+]
 ???
 
 Goh Keng Swee (吴庆瑞): 财政部长、内政及国防部长、副总理, 奠定了新加坡教育的精英主义政策, 取得伦敦政经学院经济学博士学位。
@@ -131,7 +125,7 @@ background-image: url("images/timelineEnglish.jpg")
 background-position: center
 background-size: contain
 
-### Step 2: Establish Time Line
+## Step 2: Establish Time Line
 
 
 ???
@@ -141,7 +135,7 @@ background-size: contain
 
 ---
 
-### Step 3: Construct Causal Graph
+## Step 3: Construct Causal Graph
 
 .center[<img src="images/causalEnglish.jpg" height = 500 />]
 
@@ -152,8 +146,8 @@ Used to identify relevant moments and actors that could affect the results.
 
 ---
 
-### Step 4: Identify Alternative Choice or Event
-### Step 5: Identify Counterfactual Outcomes
+## Step 4: Identify Alternative Choice or Event
+## Step 5: Identify Counterfactual Outcomes
 
 Counterfactual 1: Weak State &rarr; language of the dominant population language.
 
@@ -164,44 +158,20 @@ Counterfactual 2: Leed did not assign Goh as the MOE &rarr; the status quo.
 A reason that choices might make differences  
 If there's no comparative cases, then conterfactual outcomes.
 
----
-
-## Terminology
-
-*Necessary* & *sufficient* conditions/statments
-
-When A is a .magenta[sufficient] condition of B, then once A happens, B must happen.  
-When A is a .magenta[necessary] condition of B, then there must be A for B to happen.
 
 ---
 
-## Practice
+class: center, middle
 
-+ Being 2, 4, 6, or 8 is _ for being an even number.
-+ Being 2, 4, 6, or 8 is _ for being an even number <10.
+## Step 6: Find Evidence for Primary Hypothesis<sup>&midast;</sup> 
 
---
-
-+ Being highly intelligent is _ for being a student of Tsinghua.
-+ Showing up to class is _ for getting an A.
-+ Being mortal is _ for being human.
-+ Being a rational animal is _ for being human.
-
---
-
-*Let's back to process tracing*
-
----
-
-### Step 6: Find Evidence for Primary Hypothesis
-
-| .small[Necessity\\Sufficiency]<sup>&midast;</sup> | Yes             | No                |
+| .small[Necessity\\Sufficiency]| Yes             | No                |
 |-----------------------|-----------------|-------------------|
 | Yes                   | Double-Decisive | Smoking Gun       |
-| No                    | Hoop            | Straw-in-the-Wind |
+| No                    | Hoop (No alibi)            | Straw-in-the-Wind |
 
 .footnote[
-[&midast;] Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.
+&midast; Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.
 ]
 
 ???
@@ -213,7 +183,43 @@ When A is a .magenta[necessary] condition of B, then there must be A for B to ha
 
 ---
 
-background-image: url("images/evidenceEnglish.png")
+## What Type of Evidence This IS? 
+
+<iframe height="80%" width = "100%" src="//player.bilibili.com/player.html?aid=340625924&bvid=BV1z94y1d7Jk&cid=576028946&page=1&t=1475" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+???
+
+对谁提供了什么证据
+
+
+白手套，蝙蝠侠父亲是罪犯, smoking-gun
+
+---
+
+## What Type of Evidence This IS? 
+
+<iframe height="80%" width = "100%" src="//player.bilibili.com/player.html?aid=340961043&bvid=BV14R4y1K7Kq&cid=581750449&page=1&t=273" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+???
+
+Hoop
+
+
+---
+
+## What Type of Evidence This IS? 
+
+<iframe height="80%" width = "100%" src="//player.bilibili.com/player.html?aid=884604227&bvid=BV1bK4y1a7pn&cid=235177797&page=1&t=273" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+
+???
+
+Straw in the wind, 知乎有贴说女子与L某一路挽着回屋，中间没有强迫行为
+
+<img src = "images/process_liuqiangdong.jfif" height = 400>
+
+---
+
+background-image: url("images/process_evidenceEnglish.png")
 background-position: center
 background-size: contain
 
@@ -223,20 +229,25 @@ The primary hypothesis failed the hoop test: when recognition happened, the stat
 
 ---
 
+background-image: url("images/process_map.png")
+background-position: center
+background-size: contain
+
+---
+
 ## Interview
 
 .center[<img src="images/interview.jpg" height = 300 />]
 
-### Procedure
 
-Strategic communication (guiding and listening)
+.center[.normal[A .red[strategic] communication (guiding and listening)]]
 
 ---
 
 ### How a Interview Processes
 
 <video width="700" height="500" controls>
-    <source src="images/interview.mp4" type="video/mp4">
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSEdDS2ItLV9xMk5CYndpP2U9aEg3V011.mp4" type="video/mp4">
 </video>
 
 ???
@@ -247,8 +258,8 @@ Benedict Cumberbatch as Dominic Cummings, main political strategist for Vote Lea
 
 ---
 
-.left-column[
-### Outcome: 
+.pull-left[
+### Outcomes: 
 + Open answers
 + Messy details
 + Contradictory points
@@ -256,8 +267,8 @@ Benedict Cumberbatch as Dominic Cummings, main political strategist for Vote Lea
 
 --
 
-.right-co[
-### Technique
+.pull-right[
+### Set-up
 + Safe environment
 + More listening, less talking
 + Design the interview strategy + pilots
@@ -265,31 +276,51 @@ Benedict Cumberbatch as Dominic Cummings, main political strategist for Vote Lea
 
 --
 
+.center[
 ### Be Prepared...
 
-.center[<img src="images/dontLike.gif" height = 200 />]
+<img src="images/dontLike.gif" height = 200 />
+]
 
 ---
 
-class: small
 
 ## Focus Group
 
 Procedure:
 
-1. Size: 5--15
+1. Size: 5--15 interviewees
 1. Subjects read or watch something.
 1. Researcher ask the questions.
 1. Subjects express the feelings and opinions.
 
-.center[<img src="images/focusGroup.png" height = 350 />]
+--
+
+.pull-left[
+### Pros:
+
+1. Real-life environment
+1. Flexibility
+1. Low cost
+]
+
+--
+
+.pull-right[
+### Cons:
+
+1. Non-privacy-protection
+1. Who lead the talk?
+1. No SUTVA
+1. Selection interviewees
+]
 
 ---
 
 ## How Focus Group Works
 
 <video width="700" height="500" controls>
-    <source src="images/focusGroup.mp4" type="video/mp4">
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSEpWNnJNTlYtTEtmMXFjP2U9aDZFWWRJ.mp4" type="video/mp4">
 </video>
 
 
@@ -299,28 +330,10 @@ Brexit: The Uncivil War
 
 Rory Kinnear as Craig Oliver, the former Director of Politics and Communications for British prime minister David Cameron
 
----
-
-
-### Pros:
-
-1. Real-life environment
-1. Flexibility
-1. Low cost
-
-
---
-
-### Cons:
-
-1. Non-privacy-protection
-1. Who lead the talk?
-1. No SUTVA
-1. Selection interviewees
 
 ---
 
-## Content analysis
+## Content/Discourse Analysis
 
 .center[<img src="images/closeReading.jpg" height = 480 />]
 
@@ -340,7 +353,7 @@ Rory Kinnear as Craig Oliver, the former Director of Politics and Communications
     + Stratification
     + Clustering
 
----
+--
 
 ## Step 2: Coding
 
@@ -356,10 +369,10 @@ Rory Kinnear as Craig Oliver, the former Director of Politics and Communications
 
 ---
 
-.left-column[<img src="images/topictrend.png" height = 500 />]
+.pull-left[<img src="images/topictrend.png" height = 500 />]
 
 
-.right-column[
+.pull-right[
 
 ## Step 3 Analysis
 
@@ -369,99 +382,40 @@ Not much different from other interpretive methods
 1. Transparency
 1. Transferability
 
-]
-
----
-
+.pull-left[
 ### Pros
 
 * Economic
 * Allowing correction
 * Overtime survey
 * Third party
+]
 
---
-
+.pull-right[
 ### Cons
 
 * Limited content
 * Limited scale
 * Subjective consistency
+]
+
+]
 
 ---
 
-## Techniques in Small-N Analysis
-
-### Coding
-
-<img src="images/openCoding.jpg" width =320 height = 200 />
-<img src="images/axialCoding.jpg" width = 320 height = 200 />
-.center[<img src="images/selectiveCoding.gif" height = 220 />]
-
-???
-
-1. Open
-2. Axial
-3. Selective
-
----
-
-### Lab Notes
-
-Keep everything in record!!
-
-* Code notes
-* Theoretical notes
-* Operational notes
-
----
+background-image: url("images/process_mindmap.png")
+background-position: center
+background-size: contain
 
 ## Take-Home Points
 
-### Process tracing
-
-.left-column[
-
-+ Six steps
-    1. Hypotheses
-    1. Time line
-    1. Causal graph
-    1. Alternative choice
-    1. Counterfacutal outcomes
-    1. Evidence
-    
-]
-
-???
-
-1. Identify hypotheses
-1. Establish time line
-1. Construct causal graph
-1. Identify alternative choice or event
-1. Identify counterfacutal outcomes
-1. Find evidence for primary hypothesis
-    
---
-
-.right-column[
-
-+ Evidence types
-    1. Straw-in-the-wind
-    1. Hoop
-    1. Smoking gun
-    1. Double-decisive
-        
-    ]
-
 ---
 
-### SNA toolkit
 
-+ Case study
-+ Process-tracing
-+ Interview
-+ Focus group
-+ Content analysis
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
+
 
 ```{r pdfPrinting, eval = FALSE, include = FALSE}
 pagedown::chrome_print(list.files(pattern = "14_.*.html"), timeout = 300)
