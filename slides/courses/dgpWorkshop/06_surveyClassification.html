@@ -316,6 +316,16 @@
       margin-right: 0; 
     }
   </style>
+  <link href="06_surveyClassification_files/libs/tachyons-4.12.0/tachyons.min.css" rel="stylesheet">
+  <script src="06_surveyClassification_files/libs/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+  <script src="06_surveyClassification_files/libs/js-cookie-3.0.0/js.cookie.js"></script>
+  <script src="06_surveyClassification_files/libs/peerjs-1.3.1/peerjs.min.js"></script>
+  <script src="06_surveyClassification_files/libs/tiny.toast-1.0.0/toast.min.js"></script>
+  <link href="06_surveyClassification_files/libs/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet">
+  <script src="06_surveyClassification_files/libs/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+  <script src="06_surveyClassification_files/libs/freezeframe-5.0.2/freezeframe.min.js"></script>
+  <script src="06_surveyClassification_files/libs/xaringanExtra-freezeframe-0.0.1/freezeframe-init.js"></script>
+  <script id="xaringanExtra-freezeframe-options" type="application/json">{"selector":"img[src$=\"gif\"]","trigger":"click","overlay":false,"responsive":true,"warnings":true}</script>
 </head>
 <body>
   <div class="reveal">
@@ -328,6 +338,14 @@
   <p class="institute">Tsinghua University</p>
 </section>
 
+<section class="slide level2">
+
+<div class="cell">
+<div class="cell-output-display">
+
+</div>
+</div>
+</section>
 <section>
 <section id="goal" class="title-slide slide level1 center">
 <h1>Goal</h1>
@@ -377,41 +395,30 @@
 </section>
 <section id="codebook-downloading" class="slide level2">
 <h2>Codebook Downloading</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">GESIS</a></li><li><a href="#tabset-1-2">ICPSR</a></li><li><a href="#tabset-1-3">ROPER</a></li><li><a href="#tabset-1-4">UKDS</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
+<div class="r-stack">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/class_gesis.png" style="width:70.0%"></p>
+<p><img data-src="images/class_gesis.png" class="fragment" style="width:70.0%"></p>
 <p></p><figcaption aria-hidden="true">gesis</figcaption><p></p>
 </figure>
 </div>
-</div>
-<div id="tabset-1-2">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/class_icpsr.png" style="width:70.0%"></p>
+<p><img data-src="images/class_icpsr.png" class="fragment" style="width:70.0%"></p>
 <p></p><figcaption aria-hidden="true">icpsr</figcaption><p></p>
 </figure>
 </div>
-</div>
-<div id="tabset-1-3">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/class_roper.png" style="width:70.0%"></p>
+<p><img data-src="images/class_roper.png" class="fragment" style="width:70.0%"></p>
 <p></p><figcaption aria-hidden="true">roper</figcaption><p></p>
 </figure>
 </div>
-</div>
-<div id="tabset-1-4">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/class_ukds.png" style="width:70.0%"></p>
+<p><img data-src="images/class_ukds.png" class="fragment" style="width:70.0%"></p>
 <p></p><figcaption aria-hidden="true">ukds</figcaption><p></p>
 </figure>
-</div>
-</div>
 </div>
 </div>
 </section>
@@ -742,6 +749,48 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
