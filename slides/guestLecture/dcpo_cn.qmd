@@ -1,6 +1,6 @@
 ---
-title: "项目反应理论与政治态度跨时空比较"
-subtitle: "政治科学前沿系列讲座"
+title: "政治态度跨时空比较"
+subtitle: "南京大学政治科学前沿讲座"
 date: "2022-08-07"
 author:
   - 胡悦
@@ -65,12 +65,12 @@ set.seed(313)
 
 ---
 
-社会科学家通常关注**复杂、抽象**的概念和问题，然而……
+社会科学家通常关注**复杂、抽象**的概念和问题
 
 . . .
 
 ::: {style="text-align: center; margin-top: 1em"}
-[共同话题]{.large}
+[核心关注]{.large}
 
 (民主、回应、剥夺感、性别平等、收入平等......)
 :::
@@ -80,7 +80,7 @@ set.seed(313)
 ::: {style="text-align: center; margin-top: 1em"}
 [+]{.Large}
 
-[丰富且积累的数据]{.large}
+[丰富且累积的数据]{.large}
 
 (WVS, Global barometers, ?GSS, Pew...)
 :::
@@ -176,10 +176,18 @@ across countries, overtime.
 ![](images/dcpo_demo_leaving.gif){ height="600" width="790" }
 :::
 
+:::{.notes}
+United Kindom, lawmakers leave. 
+:::
+
 . . .
 
 ::: {.pull-right}
 ![](images/dcpo_demo_enter.gif){ height="600" width="790" }
+:::
+
+:::{.notes}
+Swarming Capital defending democracy.  
 :::
 
 # [解决方法]{.golden} {background="#43464B"}
@@ -205,7 +213,7 @@ Different questions + Different people &rArr; [Incomparable]{.red} data
 **因素分析模型**   
 (Factorial Models)
 
-:::{.fragment .fade-in-then-semi-out}
+:::{.fragment .nonincremental .fade-in-then-semi-out}
 1. 探索性因子分析(EFA)
 1. 验证性因子分析(CFA)
 1. 结构方程模型(SEM)
@@ -220,7 +228,7 @@ Different questions + Different people &rArr; [Incomparable]{.red} data
 (Topological Models)
 
 1. 项目反应理论
-1. MRP
+1. [MRP]{.grayLight}
 1. 跨群组项目反应
 :::
 
@@ -252,7 +260,7 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 :::
 
 :::{.fragment}
-- Concerns:
+- 缺陷:
     1. 平等权重(equal weight)
     1. 数据敏感(extreme value sensitivity)
     1. 忽略极化(polarity ignoring)
@@ -275,6 +283,12 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 ::::{.columns}
 :::{.column width="25%" .fragment}
 Rasch Model (1PL)     
+:::
+
+:::{.notes}
+Rasch /resh/  
+
+1-parameter logistic
 :::
 
 :::{.column width="50%" .fragment}
@@ -313,11 +327,10 @@ Rasch Model (1PL)
 ::::
 
 :::{.notes}
-Rasch /resh/  
-
 Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示为z scores， 低于0 表示比较简单
-+ 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
-+ 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
+
+- 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
+- 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
 :::
 
 ## 操作案例 (Bock & Lieberman 1970) 
@@ -355,9 +368,11 @@ coef(m_lsat, simplify = TRUE) %>%
 
 ---
 
-:::{style="text-align: center; margin-top: 10em"}
-[请务必检验IRT结果!]{.huge .red}
+:::{.r-fit-text style="text-align: center; margin-top: 2em"}
+[请务必诊断IRT结果拟合性!]{.red}
+:::
 
+:::aside
 (Item Characteristic Curves,  Test Charactersitic Curve, G<sup>2</sup>/M<sup>2</sup>/M<sup>2*</sup>, RMSEA, TLI...)
 :::
 
@@ -378,17 +393,13 @@ coef(m_lsat, simplify = TRUE) %>%
 :::{.pull-right}
 ![](images/dcpo_chooseC.jpg){.absolute .fragment height="400" }
 
-:::{.notes}
-如果有人全凭猜咋办？——大量低&theta;人群
-:::
-
-
 ![](images/dcpo_dontCare.jpg){.absolute .fragment height="400" right="10" bottom="10" }
 
-:::{.notes}
-如果有人不care
 :::
 
+:::{.notes}
+- 如果有人全凭猜咋办？——大量低&theta;人群
+- 如果有人不care
 :::
 
 ## 突破 {auto-animate="true"}
@@ -423,6 +434,8 @@ Rule of thumb above 1 meaning a good question in terms of examination
 . . .
 
 ```{r twoPL-out}
+#| echo: false
+
 mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE) %>% 
   coef(simplify = TRUE) %>% 
   kable()
@@ -489,10 +502,6 @@ mirt(df_lsat, model = 1, itemtype = "4PL", verbose = FALSE)
 - 一维聚合 &rarr; 多维聚合
     - Multidimentional IRT (MIRT, [Phil Chalmers 2015]{.small})
 
-:::{.notes}
-Chalmers, R. Philip. 2015. “Extended Mixed-Effects Item Response Models With the MH-RM Algorithm.” Journal of Educational Measurement 52(2): 200–222.
-:::
-
 - 二元 &rarr; 定序
     1. (Modified) Graded Response Model
         + 用于scoring rubrics，比如 Likert
@@ -505,7 +514,9 @@ Chalmers, R. Philip. 2015. “Extended Mixed-Effects Item Response Models With t
     - Multilevel Mixture IRT with Item Bias Effects [(Stegmueller 2011)]{.small}
 
 :::{.notes}
-Stegmueller, Daniel. 2011. “Apples and Oranges? The Problem of Equivalence in Comparative Research.” Political Analysis 19(4): 471–87.
+Chalmers, R. Philip. 2015. “Extended Mixed-Effects Item Response Models With the MH-RM Algorithm.” *Journal of Educational Measurement* 52(2): 200–222.
+
+Stegmueller, Daniel. 2011. “Apples and Oranges? The Problem of Equivalence in Comparative Research.” *Political Analysis* 19(4): 471–87.
 :::
 
 # [最新进展]{.golden} {background="#43464B"}
@@ -513,7 +524,7 @@ Stegmueller, Daniel. 2011. “Apples and Oranges? The Problem of Equivalence in 
 ## 超越个体
 
 :::{.fragment}
-Individual fallacy
+问题：Individual fallacy
 
 - 总体水平并非简单的个体的和(政治文化、民主、不平等……)
 - Ecological fallacy 的反面
@@ -528,6 +539,11 @@ Individual fallacy
 
 :::{.fragment}
 IRT + MrP &rArr; Dynamic Group-level IRT (Dynamic Group-level IRT, [Caughey & Warshaw 2015]{.small})
+
+:::{.notes}
+Caughey, Devin, and Christopher Warshaw. 2015. “Dynamic Estimation of Latent Opinion Using a Hierarchical Group-Level IRT Model.” *Political Analysis* 23(2): 197–211.
+:::
+
 
 :::{.pull-left}
 1. 在群组层面估测IRT；
@@ -583,12 +599,14 @@ Claasseen 2019 < [DCPO]{.red} < DGIRT
 ![](images/dcpo_irtCompare.png){height="800" fig-align="center"}
 
 :::{.notes}
+&sigma;: 跨国群组
+
 Bounded: 使用logit归为0-1
 :::
 
 ## 效果比较
 
-![](images/dcpo_irtFitCompare.png){width="1000" fig-align="center"}
+![](images/dcpo_irtFitCompare.png){width="1000" fig-align="center" style="margin-top: 2em"}
 
 
 ## DCPO操作流程
@@ -600,17 +618,19 @@ Bounded: 使用logit归为0-1
 
 ## 应用举例
 
-[Woo, Byung-Deuk, Lindsey Allemang, and Frederick Solt. 2022. “Public Gender Egalitarianism: A Dataset of Dynamic Comparative Public Opinion Toward Egalitarian Gender Roles in the Public Sphere.” *British Journal of Political Science*: Forthcoming.]{.small}
+:::aside
+Woo, Byung-Deuk, Lindsey Allemang, and Frederick Solt. 2022. “Public Gender Egalitarianism: A Dataset of Dynamic Comparative Public Opinion Toward Egalitarian Gender Roles in the Public Sphere.” *British Journal of Political Science*: Forthcoming.
+:::
 
-- 平权意识的双跨越式比较
+- 平权意识的跨越时空比较
     - 124个不同国家，48年（1972--2020）
     - 273,792个数据点
 
 :::{.fragment}
-![](images/dcpo_eg_data.png){width="1000" fig-align="center"}
+![](images/dcpo_eg_data.png){width="1000" height="450" fig-align="center"}
 :::
 
-## 结果：Public Gender Egalitarianism
+## Public Gender Egalitarianism
 
 ![](images/dcpo_eg_pge.png){width="1000" fig-align="center"}
 
@@ -627,7 +647,7 @@ Bounded: 使用logit归为0-1
 
 ## 盲点I：数据产出的不可确定性
 
-:::{.fragment style="text-align: center"}
+:::{.fragment style="text-align: center; margin-top: 3em"}
 IRT产出: 点估计 + [(贝叶斯)置信区间]{.red}
 :::
 
@@ -643,9 +663,12 @@ IRT产出: 点估计 + [(贝叶斯)置信区间]{.red}
 分析结果：点估计和置信区间均[**有偏**]{.red}
 :::
 
+:::aside
+Tai, Yuehong ‘Cassandra,’ Yue Hu, and Frederick Solt. 2022. “Democracy, Public Support, and Measurement Uncertainty.” *American Political Science Review*: First View.
+:::
 
-:::{.fragment style="margin-top: 1em"}
-### 一个教训
+
+## 忽视不可确定性的后果
 
 :::{style="text-align: center"}
 顶刊上的“假”结果：民众支持与民主化
@@ -654,9 +677,8 @@ IRT产出: 点估计 + [(贝叶斯)置信区间]{.red}
 - Claassen 2020 (*APSR*): When democratic institutions are undermined, people's support and constitute “an obstacle to democratic backsliding”
 :::
 
-:::
 
-## 纳入不可确定性
+[纳入不可确定性 &rArr;]{.fragment}
 
 :::{.r-stack}
 ![](images/dcpo_apsr.png){.fragment height="550" width="1000"}
@@ -664,17 +686,6 @@ IRT产出: 点估计 + [(贝叶斯)置信区间]{.red}
 ![](images/dcpo_ajps.png){.fragment height="550" width="1200"}
 :::
 
-::::{.columns .fragment}
-:::{.column width="60%"}
-Tai, Yuehong ‘Cassandra,’ Yue Hu, and Frederick Solt. 2022. “Democracy, Public Support, and Measurement Uncertainty.” *American Political Science Review*: First View.
-:::
-
-:::{.column width="40%"}
-![](images/dcpo_tai.png){height="200" fig-align="center"}
-![](images/dcpo_hu.png){height="200" width="180" fig-align="left"}
-![](images/dcpo_fsolt.jpeg){height="200" fig-align="right"}
-:::
-::::
 
 ## 盲点II：数据收集中的人为因素
 
