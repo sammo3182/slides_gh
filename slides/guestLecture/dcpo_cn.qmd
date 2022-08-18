@@ -1,6 +1,6 @@
 ---
-title: "政治态度跨时空比较"
-subtitle: "南京大学政治科学前沿讲座"
+title: "跨时空舆论意涵提取与比较"
+subtitle: "全国社会媒体处理大会前沿技术讲习班（CIPS ATT33）"
 date: "2022-08-07"
 author:
   - 胡悦
@@ -65,7 +65,7 @@ set.seed(313)
 
 ---
 
-社会科学家通常关注**复杂、抽象**的概念和问题
+社会科学概念通常**复杂而抽象**
 
 . . .
 
@@ -82,7 +82,7 @@ set.seed(313)
 
 [丰富且累积的数据]{.large}
 
-(WVS, Global barometers, ?GSS, Pew...)
+(WVS, Global barometers, ?GSS, Pew, commercial pools...)
 :::
 
 . . .
@@ -92,15 +92,14 @@ set.seed(313)
 
 [[清晰的规律？]{.red}]{.large}
 
-（更莫说因果效应）
 :::
 
 
-## 具体例子
-
-E.g.: 民众对民主支持的关系与制度民主化的关系
+## E.g.，民主支持 &#8621; 制度民主化
 
 . . .
+
+<br>
 
 *民意 &rarr; 制度*：
 
@@ -119,6 +118,8 @@ Fails, Matthew D. and Heather Nicole Pierce. 2010. “Changing Mass Attitudes an
 :::
 
 . . . 
+
+<br>
 
 *制度 &rarr; 民意*：
 
@@ -143,7 +144,7 @@ thermostatic effect.
 ## 问题原因
 
 ::: {style="text-align: center; margin-top: 1em"}
-问题的差异性
+I. 问题的差异性
 
 ![](images/dcpo_sparsingData.png){ height="700" }
 :::
@@ -169,7 +170,7 @@ across countries, overtime.
 ---
 
 ::: {style="text-align: center; margin-top: 1em"}
-答题者的差异性
+II. 答题者的差异性
 :::
 
 ::: {.pull-left}
@@ -190,7 +191,7 @@ United Kindom, lawmakers leave.
 Swarming Capital defending democracy.  
 :::
 
-# [解决方法]{.golden} {background="#43464B"}
+# [问题 &rarr; 解法]{.golden} {background="#43464B"}
 
 ---
 
@@ -235,7 +236,7 @@ Different questions + Different people &rArr; [Incomparable]{.red} data
 ::::
 
 
-## 平均？
+## 平均行不行？
 
 :::{.pull-left .nonincremental}
 
@@ -271,7 +272,7 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 
 ## 项目反应理论 (Item Response Theory, IRT)
 
-1. 天生为**二元**指标设计（已派生适应定序变量和连续变量）；
+1. 天生为**非线性**指标设计（最适配二元变量，已派生适应定序变量和连续变量）；
 1. 易与Bayesian inference结合，解决潜在变量**scale不确定**问题；
 1. 在Bayesian框架下更好解决**缺失值和“Don't Know”**问题；
 1. 易与跨群组估计结合，实现指标[**跨组可比**]{.red}
@@ -333,12 +334,26 @@ Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示
 - 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
 :::
 
-## 操作案例 (Bock & Lieberman 1970) 
+## 操作实现
 
-Law School Admissions Test, sec 7 (5个yes/no问题)
+::: {.panel-tabset}
+
+## 环境
+
+```{r install}
+if (!require(mirt)) install.packages("mirt")
+library(mirt)
+```
+
+<br>
+
+数据：Law School Admissions Test, sec 7 (Bock & Lieberman 1970)
+
+- 5个yes/no问题
+
+## 数据
 
 ```{r data-verbal}
-library(mirt)
 df_lsat <- expand.table(LSAT7)
 df_lsat[31:40, ] %>% kable(format = "html")
 ```
@@ -349,22 +364,46 @@ Darrell Bock, R., and Marcus Lieberman. 1970. “Fitting a Response Model for n 
 [`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
 :::
 
-## Difficulty 参数 {auto-animate="true"}
+:::
+
+## 产出 {auto-animate="true"}
 
 ```{r difficulty-fit}
 # Fit the model
 m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
 ```
 
-## Difficulty 参数 {auto-animate="true"}
+## 产出 {auto-animate="true"}
 ```{r difficulty-out}
 # Fit the model
 m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
 
-# Output
+# Parameters
 coef(m_lsat, simplify = TRUE) %>% 
   kable(format = "html")
 ```
+
+:::{style="text-align: center; margin-top: 2em"}
+
+Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(&theta;<sub>i</sub> - [&sigma;<sub>q</sub>]{.red})
+
+:::
+
+## 产出 {auto-animate="true"}
+```{r difficulty-score}
+# Fit the model
+m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+
+# Parameters
+result_para <- coef(m_lsat, simplify = TRUE) %>% 
+  kable(format = "html")
+
+# Output
+fscores(m_lsat, full.scores.SE = TRUE)[1:5,] %>% 
+  kable(format = "html")
+```
+
+
 
 ---
 
@@ -373,129 +412,240 @@ coef(m_lsat, simplify = TRUE) %>%
 :::
 
 :::aside
-(Item Characteristic Curves,  Test Charactersitic Curve, G<sup>2</sup>/M<sup>2</sup>/M<sup>2*</sup>, RMSEA, TLI...)
+(
+- 总体G<sup>2</sup>/M<sup>2</sup>/M<sup>2*</sup>, RMSEA, TLI, ...
+- 个体：Item Characteristic Curves,  Test Charactersitic Curve,...
+)
 :::
 
-## 局限
 
-. . .
+## 局限与突破
 
-:::{.pull-left}
+:::: {.columns .fragment}
+
+::: {.column .fragment width="40%"}
+
 ![](images/dcpo_measurementError.jpg){fig-align="center"}
+
 :::
+
+::: {.column .fragment width="60%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = logist^{-1}(\color{red}{\kappa_q}\theta_i - \sigma_q).$$
+
+- Discrimination: 一个问题多大程度上能区分做题者
+
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{red}{\beta_q}}}{\color{red}{\alpha_q}}].$$
+
+- Dispersion: Measurement error 大小
+
+:::
+
+::::
 
 :::{.notes}
 人们对同一个题理解不同，回答出affirmative答案可能性也不同。
-:::
 
-. . .
-
-:::{.pull-right}
-![](images/dcpo_chooseC.jpg){.absolute .fragment height="400" }
-
-![](images/dcpo_dontCare.jpg){.absolute .fragment height="400" right="10" bottom="10" }
-
-:::
-
-:::{.notes}
-- 如果有人全凭猜咋办？——大量低&theta;人群
-- 如果有人不care
-:::
-
-## 突破 {auto-animate="true"}
-
-```{r onePL}
-#| eval: false
-
-# Rasch
-mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
-```
-
-## 突破 {auto-animate="true"}
-
-```{r twoPL}
-#| eval: false
-#| code-line-numbers: "5"
-
-# Rasch
-mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
-
-# 2PL
-mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
-```
-
-Discrimination: 一个问题多大程度上能区分做题者    
-（或）Dispersion: Measurement error 大小
-
-:::{.notes}
 Rule of thumb above 1 meaning a good question in terms of examination
 :::
 
-. . .
+
+## 局限与突破 {auto-animate="true"}
+
+```{r onePL}
+#| eval: false
+#| code-line-numbers: "3"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+```
+
+## 局限与突破 {auto-animate="true"}
+
+```{r twoPL}
+#| eval: false
+#| code-line-numbers: "7"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+```
+
+:::{.fragment}
 
 ```{r twoPL-out}
 #| echo: false
 
-mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE) %>% 
+
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL") %>% 
   coef(simplify = TRUE) %>% 
-  kable()
+  kable
 ```
+
+:::
 
 :::{.notes}
 a1: Discrimination
 :::
 
+## 局限与突破
 
-## 突破 {auto-animate="true"}
+:::: {.columns .fragment}
+
+::: {.column .fragment width="40%"}
+
+![](images/dcpo_chooseC.jpg){fig-align="center"}
+
+:::
+
+::: {.column .fragment width="60%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$
+
+$$Pr(y_{iq} = 1) = \color{red}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+:::
+
+::::
+
+:::{.notes}
+- 如果有人全凭猜咋办？——大量低&theta;人群
+- 鉴于3PL已经需要1000-ish观测点……
+:::
+
+## 局限与突破 {auto-animate="true"}
+
+```{r twoPL2}
+#| eval: false
+#| code-line-numbers: "7"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+```
+
+
+
+## 局限与突破 {auto-animate="true"}
 
 ```{r threePL}
 #| eval: false
-#| code-line-numbers: "8"
+#| code-line-numbers: "11"
 
 # Rasch
-mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
 
 # 2PL
-mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
 
 # 3PL
-mirt(df_lsat, model = 1, itemtype = "3PL", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
 ```
 
-Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(&theta;<sub>i</sub> - &sigma;<sub>q</sub>)
+:::{.fragment}
 
-全凭猜 &rarr; 大量低&theta;人群
-    
+```{r threePL-out}
+#| echo: false
 
-:::{.notes}
-极大增加演算成本&rarr;通常需要1000以上观测点
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL") %>% 
+  coef(simplify = TRUE) %>% 
+  kable
+```
+
 :::
 
-## 突破 {auto-animate="true"}
+
+## 局限与突破
+
+:::: {.columns .fragment}
+
+::: {.column .fragment width="35%"}
+
+![](images/dcpo_dontCare.jpg){fig-align="center"}
+
+:::
+
+::: {.column .fragment width="65%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = c_i + (1 - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+$$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+:::
+
+::::
+
+:::{.notes}
+- 修正carelessness
+:::
+
+## 局限与突破 {auto-animate="true"}
+
+```{r threePL2}
+#| eval: false
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+# 3PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
+```
+
+
+## 局限与突破 {auto-animate="true"}
 
 ```{r fourPL}
 #| eval: false
 #| code-line-numbers: "11"
 
-# Rasch
-mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
-
 # 2PL
-mirt(df_lsat, model = 1, itemtype = "2PL", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
 
 # 3PL
-mirt(df_lsat, model = 1, itemtype = "3PL", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
 
 # 4PL
-mirt(df_lsat, model = 1, itemtype = "4PL", verbose = FALSE)
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "4PL")
 ```
 
-修正carelessness
+:::{.fragment}
 
-:::{.notes}
-鉴于3PL已经需要1000-ish观测点……
+```{r fourPL-out}
+#| echo: false
+
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "4PL") %>% 
+  coef(simplify = TRUE) %>% 
+  kable
+```
+
 :::
-
 
 ## 发展
 
