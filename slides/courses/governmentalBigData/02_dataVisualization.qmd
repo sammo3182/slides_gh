@@ -1,0 +1,1064 @@
+---
+title: "数据可视化理论与实践"
+subtitle: "Political Research with Big Data (80700673)"
+
+author: "胡悦"
+institute: "清华大学" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  knitr,
+  RColorBrewer,
+  dotwhisker,
+  interplot,
+  modelsummary,
+  # dependency
+  stringr,
+  haven,
+  purrr,
+  broom,
+  
+  tidyr,
+  tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(313)
+```
+
+## 概要
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+### 理解可视化
+
++ 基本功能
++ 信息 vs. 统计
++ 统计可视化
+:::
+
+:::{.column width="50%" .fragment}
+### 可视化工具
+
++ 可视化编码
++ 可视化通道
+:::
+::::
+
+:::{.fragment style="text-align:center"}
+### 可视化操作实例
++ `ggplot2`应用实例
+:::
+
+# 理解可视化
+
+## 可视化的基本功能
+
+:::{.r-stack}
+
+- 记录信息
+- 分析推理
+- 证实假设
+- 交流思想
+
+![](images/vis_socialEngineer.jfif){.fragment height=800}
+:::
+
+## 信息可视化 vs. 统计可视化
+
+:::{.r-hstack}
+![](images/vis_sexism_chart.jpg){.fragment height=800}
+
+![](images/vis_sexism_image.jpg){.fragment height=800}
+:::
+
+:::{.notes}
+哪个印象更深？
+:::
+
+:::{.r-hstack}
+![](images/vis_africanGDP_image.jpg){.fragment height=800}
+
+![](images/vis_africanGDP_chart.jpg){.fragment height=800}
+:::
+
+:::{.notes}
+怎么让右边变得更好？比如把人口放进去、把更多相关变量放进去
+:::
+
+## 信息可视化？
+
+:::{.r-hstack}
+![](images/vis_femaleHi_image.png){.fragment height=800}
+
+![](images/vis_femaleHi_chart.png){.fragment height=800}
+:::
+
+:::{.notes}
+左图夸装了数据本意，indian太小了
+
+https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-chart-but-only-slightly.html
+:::
+
+
+
+# 统计可视化: 概念
+
+## 统计可视化历史
+
+[Friendly, Michael, and Howard Wainer. 2021. *A History of Data Visualization and Graphic Communication*. Harvard University Press.](https://datavis.ca/milestones/index.php)
+
+![](images/vis_history.png){height=700}
+
+:::{.notes}
+- not long story
+- keeping developing
+:::
+
+## 可视化在“视”什么？
+
+APSR，AJPS和PA 2006年五刊，发现如下结果:^[Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.]
+
+![](images/vis_graphTable.png)
+
+---
+
+![](images/vis_tableGraph.png){height=900}
+
+:::{.notes}
+有人说很丑，但为什么画图专家喜欢这个？我们之后会回来讲
+:::
+
+## 表不香么？
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="50%" .fragment}
+**表**
+
+* 容易制作
+* 发表常见
+* 有助后续
+:::
+
+:::{.column width="50%" .fragment}
+**图**
+
+* 制作费事（yysy...）
+* “不精确”
+* 形式不统一
+:::
+::::
+
+## A Picture Is Worth a Thousand Words
+
+:::{.r-stack}
+> Even before he became president, Mr Trump had *a history of controversial comments* about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz---the list goes on---he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them."
+
+![](images/vis_trumpNastyWoman.gif){.fragment height="850"}
+:::
+
+:::{.notes}
+1. People care about things big, colorful, and moving.
+1. 便于比较
+1. 比表格占据较小的版面
+1. 记忆深刻
+
+Watch Donald Trump Call Hillary Clinton a 'Nasty Woman' --Ritu Prasad BBC
+https://time.com/4537960/donald-trump-hillary-clinton-nasty-woman-debate/
+
+:::
+
+
+## 鉴赏
+
+什么可视化才是[好]{.red}的可视化？
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="20%" .fragment}
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+:::
+
+:::{.column width="80%" .fragment}
+::: {.panel-tabset}
+## I
+
+![](images/vis_pie1.png){height=600}
+
+## II
+
+![](images/vis_pie2.png){height=600}
+
+## III
+
+![](images/vis_pie3.png){height=600}
+
+## IV
+
+![](images/vis_pie4.png){height=600}
+
+## V
+
+![](images/vis_pie5.png){height=600}
+
+## VI
+
+![](images/vis_pie6.png){height=600}
+
+:::
+:::
+::::
+
+:::{.notes}
+哪一块最大？橘红色？实际是绿色; 人类对于面积是尤为不敏感的。
+
+标出数字呢……如果标出数据，那还要图干什么
+
+3D圆饼图哪一个最大？更模糊，而且多了一个没有任何意义的维度
+:::
+
+## “邪恶”的饼状图 ("Evil" Pie Chart)
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+
+* 用于呈现数字就能呈现的东西
+* 容易误导读者（人类对面积不敏感）
+* 使用多种图形组成要素重复呈现同一种信息
+
+:::
+
+:::{.column width="50%" .fragment}
+
+垃圾图形（[junk chart](http://junkcharts.com)）之“冠”
+
+“图不如表”
+
+:::
+::::
+
+:::{.fragment style="text-align:center"}
+![](images/vis_wordCloud.jpg){height=500}
+:::
+
+:::{.notes}
+词云相邻的词就会同时出现吗？比例多少
+:::
+
+#  统计可视化: 原则
+
+## 统计可视化核心原则
+
+- Tufte, Edward R. 2001[1983]. [The Visual Display of Quantitative Information]{.red}. 2nd edition. Cheshire, Conn: Graphics Press.   
+
+See also: 
+
+- Cleveland, William S. 1994. The Elements of Graphing Data. 2nd Edition. Murray Hill, N.J: Hobart Press.    
+- Wilkinson, Leland. 2005. The Grammar of Graphics. 2nd ed. New York: Springer-Verlag.
+
+:::{.notes}
+Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视化圣经，手绘时代的产物，有点细节吹毛求疵，比如柱状图不能用tick呀之类的
+:::
+
+:::{.fragment style="text-align:center"}
+[极简]{.golden .Huge}
+:::
+
+## 一维
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="20%"}
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
+:::
+
+:::{.column width="80%" .fragment}
+::: {.panel-tabset}
+## I
+
+![](images/vis_barPlot1.png){height=600}
+
+## II
+
+![](images/vis_barPlot2.png){height=600}
+
+## III
+
+![](images/vis_barPlot3.png){height=600}
+
+## IV
+
+![](images/vis_tableGraph.png){height=600}
+
+:::
+:::
+::::
+
+:::{.notes}
+1. bar plot, 可以看出对比，但问题在哪里？（颜色没什么意义，宽度没意义，对不准）
+1. 空bar
+1. 点最简了，但信息量仍然比较小，可以加入更多信息
+1. 通过多图并列来增加表达维度，并且方便比较，share scales
+    - 看似是中心边缘理论，但画面之外研究表明，并非如此。
+:::
+
+## 如果饼是要求
+
+```{r nightinggale}
+#| fig-align: center
+#| fig-height: 8
+
+
+mydata <-
+  data.frame(
+    Day = c(
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ),
+    Browse = c(50, 60, 70, 20, 90, 110, 30)
+  )
+
+ggplot(mydata) +
+  geom_bar(
+    aes(x = Day, y = Browse),
+    width = 1,
+    stat = "identity",
+    colour = "black",
+    fill = "#F8766D"
+  ) +
+  geom_text(aes(x = Day, y = Browse - 8, label = Browse), color = "white") +
+  coord_polar(theta = "x", start = 0) +
+  ylim(c(0, 120)) +
+  xlab("") + ylab("") +
+  theme_light() +
+  theme(
+    panel.background = element_blank(),
+    panel.grid.major = element_line(colour = "grey80", size = .25),
+    axis.text.y = element_text(size = 12, colour = "black"),
+    axis.line.y = element_line(size = 0.25),
+    axis.text.x = element_text(size = 13, colour = "black")
+  )
+```
+
+:::{.notes}
+Nightingale Rose diagram, created by the famous Florence Nightingale
+
+Good for time series,save space than bars
+
+问题在于大小和突出代表同样信息
+:::
+
+
+## 二维：趋势数据
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="40%"}
+
+| Party 	| PRI  	| PAN  	| PRD  	| Others 	|
+|-------	|------	|------	|------	|--------	|
+| 1991  	| 64   	| 17.8 	| 8.2  	| 10     	|
+| 1994  	| 60   	| 23.8 	| 14.2 	| 2      	|
+| 1997  	| 47.8 	| 24.2 	| 25   	| 3      	|
+| 2000  	| 42.2 	| 41.2 	| 10   	| 6.6    	|
+| 2003  	| 44.8 	| 30.2 	| 19.4 	| 5.6    	|
+
+Table: 墨西哥各政党在大选中得票比例趋势
+
+:::{.fragment .fade-in-then-out}
+和之前的数据有什么不同？想表达什么？
+:::
+:::
+
+:::{.notes}
+- 颜色问题：没有表达任何信息
+- 多种图像信息表达同类信息
+- 在各时间点上, 看不出比例关系，被面积模糊
+    - PAN + PRD是不是超过PRI很难判断
+:::
+
+:::{.column width="60%" .fragment}
+**堆积图**
+
+![](images/vis_areaPlot.png){height=600}
+:::
+::::
+
+:::{.notes}
++ 多种图像信息表达同类信息
++ 在各时间点上, 看不出比例关系，被面积模糊
+:::
+
+## How about these
+
+::: {.r-hstack}
+![](images/vis_linePlot.png){.fragment height=800}
+
+![](images/vis_linePlot2.png){.fragment height=800}
+:::
+
+:::{.notes}
+Basic 版本legend比较多余，对打印不那么友好，当然对相加结果还是不是那么清楚
+
+表达的是1997年墨西哥实现民主转型，不是一党执政
+:::
+
+## 二维：关系数据
+
+::: {.r-hstack}
+![](images/vis_scatterPlot.png){.fragment height=800}
+
+![](images/vis_scatterPlot2.png){.fragment height=800}
+
+![](images/vis_facet.png){.fragment height=800}
+:::
+
+:::{.notes}
+中产家庭收入越高，在劳动力市场投入越多
+
+1. Stata 底色，是一个标志色，没数据意义，只是个brand； 点重叠——可以用空心圆
+1. 让点变得有意义（在stata里不是那么容易做到，maybe）
+1. 让图变得更有意义，地区变化是重要变量
+:::
+
+
+## 二维+
+
+| 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
+|------	|----------	|------------	|----------	|
+| A    	| 712      	| 18         	| 100      	|
+| B    	| 1105     	| 4          	| 57       	|
+| C    	| 690      	| 7          	| 80       	|
+| D    	| 687      	| 27         	| 191      	|
+| E    	| 725      	| 2          	| 5        	|
+| F    	| 1200     	| 25         	| 10       	|
+| G    	| 470      	| 19         	| 25       	|
+| H    	| 752      	| 10         	| 123      	|
+Table: 补习班有效吗？
+
+:::{.fragment .fade-in-then-out}
+和之前的数据有什么不同？想表达什么？怎么可视化？
+:::
+
+## 二维 for 多维
+
+:::{.r-hstack}
+![](images/vis_bubblePlot.png){.fragment height=600}
+
+![](images/vis_bubblePlot2.png){.fragment height=600}
+:::
+
+:::{.notes}
+比表好，面积不好、颜色没意义
+
+Bubble chart 图一对大小相近bubbles无法区分
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+**Pro**
+
+* 散点图变异
+* 通过气泡大小呈现第三维度数据
+:::
+
+:::{.column width="50%" .fragment}
+**Con**
+
+* 气泡大小当接近时可能造成辨识困难，信息无法完全精确地传达
+:::
+::::
+
+# 可视化工具
+
+## 可视化编码
+
+::::{.columns style="text-align:center"}
+:::{.column width="30%"}
+* 数值（numeric）
+    + 10厘米，17厘米，23厘米
+* 定序（ordinal）
+    + 小，中，大
+    + 周日，周一，周二……
+* 定类（nominal）
+    + 苹果，桔子，香蕉……
+:::
+
+:::{.column width="70%" .fragment}
+
+- **标记**：点、线、面    
+    ![](images/vis_sign.png)
+    
+- **通道**：位置、大小、形状、方向、色调、饱和度、亮度……    
+    ![](images/vis_pipe.png)
+:::
+::::
+
+## 通道
+
+::::{.columns style="text-align:center}
+:::{.column width="50%" .fragment}
+![](images/vis_category.png){.fragment height=400 width=500}
+![](images/vis_group.png){.fragment height=400 width=500}
+:::
+
+:::{.column width="50%" .fragment}
+![](images/vis_order.png){.fragment height=800}
+:::
+::::
+
+
+## 通道选择
+
+:::{.fragment style="text-align:center"}
+**类型（Type）**
+
++ 是什么/在哪里（what/where）
++ 何种程度（how much）
+:::
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="50%" .fragment}
+**有效性（Effectiveness）**
+
++ 通道表现力符合属性的重要性
+:::
+
+:::{.column width="50%" .fragment}
+**表现力（Expressiveness）**
+
++ 表达且仅表达数据的完整属性
++ *判断标准*：精确性、可辨性、可分离性、视觉突出
+:::
+::::
+
+
+## 有效性
+
+:::{.r-stack}
+![](images/vis_Os.png){.fragment height=800}
+
+![](images/vis_Os3.png){.fragment height=800}
+
+![](images/vis_Os2.png){.fragment height=800}
+:::
+
+## 表现力：精确性（Accuracy）
+
+$$\displaystyle \psi (I)=kI^{a},$$ 
+
+`k`: proportionality constant that depends on the units used
+
+![](images/vis_stevensPowerLaw.png){fig-align="center"}
+
+
+:::{.notes}
+刺激增加：
+
+* 关注度敏感度降：点亮度、声音响度
+* 关注度敏感度不变：线长度
+* 关注度敏感度加：电流
+
+psychophysicist Stanley Smith Stevens (1957, 1961)
+
+:::
+
+## 表现力：可辨性（Discriminability） 
+
+:::{.r-stack}
+
+![](images/vis_commuNet.png){.fragment height=800}
+
+![](images/vis_contract.png){.fragment height=800}
+:::
+
+:::{.notes}
+通过粗细动态表现范围，精确性略显不足
+:::
+
+## 表现力：可分离性（Separability）
+
+![](images/vis_separability.png){fig-align="center" height=400}
+
+:::{.notes}
+都可以，但位置区别最好
+:::
+
+
+
+## 视觉突出（Pop-out）
+
+:::{.r-hstack}
+![](images/vis_popOut3.png){.fragment height=800}
+
+![](images/vis_measurement.png){.fragment height=800}
+:::
+
+:::{.notes}
+是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么
+:::
+
+## 奥卡姆剃刀原则
+
+![](images/vis_lattice2.png){height=800}
+![](images/vis_lattice1.png){height=800}
+
+:::{.notes}
+奥卡姆剃刀
+
+左边更是不需要网格
+
+在研究过程中，一国之内，行政区域划分没有那么重要，除非policy，否则行政区划并不代表什么，有时候临近区域特点相近，建议用浅灰色，经纬线甚至可以不要
+:::
+
+## 应用
+
+::::{.columns style="text-align:center"}
+:::{.column width="30%" .fragment}
+* 分组会对[大部分]{.red}任务有效
+* 如果不能进行分组，则需要[转换]{.red}任务目标
+* 避免[过多]{.red}类别
+* 对数据的每个维度指定[一种]{.red}或一个阶层的颜色
+:::
+
+:::{.column width="70%" .fragment}
+![](images/vis_network_democracy.png){height=800}
+:::
+::::
+
+## 色彩：技术层次
+
+一些基础知识：
+
+::::{.columns style="text-align:center"}
+:::{.column width="30%" .fragment}
+- 灰度有序 &rarr; 数值型
+    - ![](images/vis_grey1.png)
+    - ![](images/vis_grey2.png)
+- 色调无序 &rarr; 类别型
+    - ![](images/vis_rainbow.png)
+:::
+
+:::{.column width="30%" .fragment}
+**色彩设计基本原则**
+
++ 注意控制同时对比（Simultaneous contrast）
++ 避免[过多]{.red}颜色交错导致的杂乱无章
++ 注意[饱和度]{.red}
+:::
+
+:::{.notes}
+如果纯色为绿色，则灰色色块看起来带有红味,产生颜色偏差
+:::
+
+:::{.column width="30%"}
+:::{.r-stack}
+![](images/vis_redGreen_w.jpg){.fragment height=600}
+
+![](images/vis_redGreen_r.png){.fragment height=600}
+:::
+:::
+::::
+
+:::{.notes}
+
+上海美术电影制片厂于1961年到1964年制作的一部彩色动画长片
+
++ 1962年获捷克斯洛伐克第十三届卡罗维发利电影节短片特别奖。
++ 1963年获第二届中国电影“百花奖”最佳美术片奖。
++ 1978年英国伦敦国际电影节本年度杰出电影。
++ 1980年5月第二次全国少年儿童文艺创作评奖委员会一等奖。
++ 1982年8月厄瓜多尔第四届国际儿童电影节三等奖。
++ 1983年获葡萄牙第十二届菲格腊达福兹国际电影节评委奖
+:::
+
+## 色彩选择
+
+- 大部分作图软件默认配色已经非常好
+- 请在颜色选择过程中体现你的人文关怀
+    - Color blind
+    - Hard-copy person
+- 如果非要较真，辅助软件来选择合适的色阶
+    - [colorbrewer2.org](https://colorbrewer2.org/) 
+    - [paletton.com](https://paletton.com/)
+
+:::{.notes}
+色盲症患者: 红绿色盲是最常见的色盲，其次是蓝黄色盲以及全色盲。北欧族裔的红绿色盲患者约占男性的8%和女性的0.5% (Northern European ancestry , National Eye Institute, 2015)
+
+喜欢打印的人群
+:::
+
+## 调色板
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%"}
+![](images/vis_color_sequential.png){height=800}
+:::
+
+:::{.column width="50%"}
+![](images/vis_color_diverging.png){height=400}
+![](images/vis_color_qualitative.png){height=400}
+:::
+::::
+
+
+## 背景选择
+
+:::{.r-hstack}
+![](images/vis_background_apple.jpg){height=800}
+
+![](images/vis_background_huawei.jpeg){height=800}
+:::
+
+
+## 色彩：策略层次
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSHNBZ1d6TElsVnplSFhLP2U9UHNaYzN6.mp4" height="850" >}}
+
+# 可视化操作
+
+## 可视化平台
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+Tableau (Echarts)   
+Google Refine
+:::
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+Processing    
+D3 (JS)   
+[R]{.blue .large}
+:::
+
+## 一维图
+
+```{r data-1D, include=FALSE}
+mydata <-
+  data.frame(
+    Cut = c("Fair", "Good", "Very Good", "Premium", "Ideal"),
+    Price = c(4300, 3800, 3950, 4700, 3500)
+  )
+mydata2 <- arrange(mydata, desc(Price))
+mydata$Cut <- factor(mydata$Cut, levels = mydata2$Cut)
+
+
+mydata2 <-
+  read.csv(
+    "data/MultiColumn_Data.csv",
+    sep = ",",
+    na.strings = "NA",
+    stringsAsFactors = FALSE
+  ) %>%
+  pivot_longer(-Catergory, names_to = "variable")
+
+```
+
+```{r plot-1D}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = mydata, aes(x = Cut, y = Price)) +
+  geom_bar(
+    stat = "identity",
+    width = 0.8,
+    colour = "black",
+    size = 0.25,
+    fill = "#2ca25f",
+    alpha = 1
+  )
+```
+
+---
+
+```{r plot1D}
+#| echo: true
+#| fig-align: center
+#| code-line-numbers: "|3|11"
+
+ggplot(data = mydata2,
+       aes(Catergory, value,
+           fill = variable)) +
+  geom_bar(
+    stat = "identity",
+    color = "black",
+    position = position_dodge(),
+    width = 0.7,
+    size = 0.25
+  ) +
+  drhutools::scale_fill_gb() +
+  theme_minimal() +
+  ylim(0, 10) +
+  theme(
+    axis.title = element_text(size = 15, face = "plain", color = "black"),
+    axis.text = element_text(size = 12, face = "plain", color = "black"),
+    legend.title = element_text(size = 14, face = "plain", color = "black"),
+    legend.background  = element_blank(),
+    legend.position = c(0.88, 0.88)
+  )
+```
+
+---
+
+```{r data-radar, include=FALSE}
+coord_radar <- function (theta = "x",
+                         start = 0,
+                         direction = 1)
+{
+  theta <- match.arg(theta, c("x", "y"))
+  r <- if (theta == "x")
+    "y"
+  else
+    "x"
+  ggproto(
+    "CoordRadar",
+    CoordPolar,
+    theta = theta,
+    r = r,
+    start = start,
+    direction = sign(direction),
+    is_linear = function(coord)
+      TRUE
+  )
+}
+
+
+label_data<-data.frame(car=c("Math" , "English" , "Biology" , "Music" , "R-Coding" ),
+                    id=c(1:5) ,
+                    value=c(12 , 2 ,14 ,20, 18))
+
+AddRow<-c(NA,nrow(label_data)+1,label_data[1,ncol(label_data)])
+mydata<-rbind(label_data,AddRow)
+
+myAngle<- 360- 360 * (label_data$id-1) /nrow(label_data)  
+```
+
+::::{.columns}
+:::{.column width="50%"}
+```{r data-radar-show}
+kable(mydata, format = "html")
+```
+:::
+
+:::{.column width="50%"}
+```{r plot-radar-code, fig.width=5}
+#| echo: true
+#| fig-align: center
+#| code-line-numbers: "|17"
+
+
+ggplot() +
+  geom_polygon(
+    data = mydata,
+    aes(x = id, y = value),
+    color = "black",
+    fill = brewer.pal(7, "Set1")[1],
+    alpha = 0.1
+  ) +
+  geom_point(
+    data = mydata,
+    aes(x = id, y = value),
+    size = 5,
+    shape = 21,
+    color = 'black',
+    fill = brewer.pal(7, "Set1")[1]
+  ) +
+  coord_radar() + 
+  scale_x_continuous(breaks = label_data$id, labels = label_data$car) +
+  ylim(0, 22) +
+  theme_light() +
+  theme(axis.text.x = element_text(
+    size = 11,
+    colour = "black"
+  ))
+```
+:::
+::::
+
+
+
+## 二维图
+
+```{r data-2D, include = FALSE}
+mydata<-read.csv("data/Scatter_Data.csv",stringsAsFactors=FALSE) 
+```
+
+```{r plot-2D-code}
+#| echo: true
+#| fig-align: center
+#| code-line-numbers: "|2|8"
+
+
+ggplot(data = mydata, aes(x, y)) +
+  geom_point(
+    fill = "black",
+    colour = "black",
+    size = 3,
+    shape = 21
+  ) +
+  geom_smooth(
+    method = 'loess',
+    span = 0.4,
+    se = TRUE,
+    colour = "#00A5FF",
+    fill = "#00A5FF",
+    alpha = 0.2
+  ) + 
+  scale_y_continuous(breaks = seq(0, 125, 25)) +
+  theme(
+    text = element_text(size = 15, color = "black"),
+    plot.title = element_text(
+      size = 15,
+      family = "myfont",
+      hjust = .5,
+      color = "black"
+    ),
+    legend.position = "none"
+  )
+```
+
+## 制图软件包
+
+**回归系数**
+
+::::{.columns}
+:::{.column width="50%"}
+```{r ols-table}
+m1 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
+m2 <- lm(mpg ~ wt + cyl, data = mtcars)
+msummary(list(m1,m2), stars = TRUE)
+```
+:::
+
+:::{.column width="50%"}
+```{r ols-dw}
+#| echo: true
+#| fig-align: center
+
+library(dotwhisker)
+dwplot(list(m1, m2))
+```
+:::
+::::
+
+## 网络图
+
+```{r network-plot}
+#| echo: true
+#| fig-align: center
+
+
+library(network) # for data
+data(emon)
+library(ggnetwork)
+
+ggplot(emon[[1]], aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_edges(arrow = arrow(length = unit(6, "pt"), type = "closed")) +
+  geom_nodes(color = "tomato", size = 4)
+```
+
+## 桑积图
+
+```{r sankey-plot}
+#| echo: true
+#| fig-align: center
+
+library(ggalluvial)
+data(vaccinations)
+levels(vaccinations$response) <- rev(levels(vaccinations$response))
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject,
+           y = freq,
+           fill = response, label = response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
+  geom_text(stat = "stratum", size = 3) +
+  theme(legend.position = "none") +
+  ggtitle("vaccination survey responses at three points in time")
+```
+
+## 动画
+
+![](images/vis_patrioBase9709.gif){height=800 fig-align="center"}
+
+## Bonus: 表
+
+```{r descriptive}
+library(modelsummary)
+datasummary_skim(mtcars)
+```
+
+## Take-Home Points
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+### 理解可视化
+
++ 基本功能
++ 信息 vs. 统计
++ 统计可视化
+    - 概念
+    - 鉴赏
+    - 原则
+:::
+
+:::{.column width="50%" .fragment}
+### 可视化工具
+
++ 可视化编码
+    - 标记
+    - 通道
+        - 有效性
+        - 表现力
+    - 色彩
+:::
+::::
+
+:::{.fragment style="text-align:center"}
+### 可视化操作
++ `ggplot2`应用实例
+    - 一维
+    - 二维
+    - 软件辅助
+:::
