@@ -30,6 +30,14 @@ format:
       data-background-position: top 10% right 5%
 ---
 
+```{css, echo=FALSE}
+.long_chunk {
+height: 800px;
+/*width: 100px;*/
+}
+```
+
+
 ```{r setup}
 #| include = FALSE
 
@@ -537,7 +545,7 @@ Bubble chart 图一对大小相近bubbles无法区分
 
 ## 通道
 
-::::{.columns style="text-align:center}
+::::{.columns style="text-align:center"}
 :::{.column width="50%" .fragment}
 ![](images/vis_category.png){.fragment height=400 width=500}
 ![](images/vis_group.png){.fragment height=400 width=500}
@@ -797,6 +805,7 @@ mydata2 <-
 ```{r plot-1D}
 #| echo: true
 #| fig-align: center
+#| output-location: fragment
 
 ggplot(data = mydata, aes(x = Cut, y = Price)) +
   geom_bar(
@@ -809,12 +818,17 @@ ggplot(data = mydata, aes(x = Cut, y = Price)) +
   )
 ```
 
----
+## 进阶柱状图
 
 ```{r plot1D}
 #| echo: true
 #| fig-align: center
 #| code-line-numbers: "|3|11"
+#| output-location: column-fragment
+#| class-source: long_chunk
+#| classes: long_chunk
+#| fig-width: 10
+#| fig-height: 8
 
 ggplot(data = mydata2,
        aes(Catergory, value,
@@ -874,13 +888,15 @@ myAngle<- 360- 360 * (label_data$id-1) /nrow(label_data)
 ```
 
 ::::{.columns}
-:::{.column width="50%"}
+:::{.column width="30%"}
 ```{r data-radar-show}
-kable(mydata, format = "html")
+mydata %>% 
+  filter(car != "NA") %>% 
+  kable(format = "html")
 ```
 :::
 
-:::{.column width="50%"}
+:::{.column width="70%"}
 ```{r plot-radar-code, fig.width=5}
 #| echo: true
 #| fig-align: center
@@ -927,7 +943,11 @@ mydata<-read.csv("data/Scatter_Data.csv",stringsAsFactors=FALSE)
 #| echo: true
 #| fig-align: center
 #| code-line-numbers: "|2|8"
-
+#| output-location: column-fragment
+#| class-source: long_chunk
+#| classes: long_chunk
+#| fig-width: 10
+#| fig-height: 8
 
 ggplot(data = mydata, aes(x, y)) +
   geom_point(
@@ -966,7 +986,8 @@ ggplot(data = mydata, aes(x, y)) +
 ```{r ols-table}
 m1 <- lm(mpg ~ wt + cyl + gear, data = mtcars)
 m2 <- lm(mpg ~ wt + cyl, data = mtcars)
-msummary(list(m1,m2), stars = TRUE)
+modelsummary(list(m1,m2), stars = TRUE) %>%
+  kableExtra::kable_styling(font_size = 25)
 ```
 :::
 
@@ -974,9 +995,12 @@ msummary(list(m1,m2), stars = TRUE)
 ```{r ols-dw}
 #| echo: true
 #| fig-align: center
+#| fig-width: 10
+#| fig-height: 8
 
 library(dotwhisker)
-dwplot(list(m1, m2))
+dwplot(list(m1, m2)) + 
+  theme(text = element_text(size = 25))   
 ```
 :::
 ::::
