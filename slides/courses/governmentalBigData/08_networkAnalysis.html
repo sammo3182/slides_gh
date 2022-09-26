@@ -1,1199 +1,1820 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
-  <head>
-    <title>社会网络方法论: 认识网络</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="胡悦" />
-    <script src="08_networkAnalysis_files/header-attrs-2.11/header-attrs.js"></script>
-    <link href="08_networkAnalysis_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="08_networkAnalysis_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
-    <script src="08_networkAnalysis_files/tile-view-0.2.4/tile-view.js"></script>
-    <link href="08_networkAnalysis_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <link href="08_networkAnalysis_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
-    <script src="08_networkAnalysis_files/panelset-0.2.4/panelset.js"></script>
-    <script src="08_networkAnalysis_files/js-cookie-3.0.0/js.cookie.js"></script>
-    <script src="08_networkAnalysis_files/peerjs-1.3.1/peerjs.min.js"></script>
-    <script src="08_networkAnalysis_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="08_networkAnalysis_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
-    <script src="08_networkAnalysis_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
-    <link href="08_networkAnalysis_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="style_ui.css" type="text/css" />
-  </head>
-  <body>
-    <textarea id="source">
-class: center, middle, inverse, title-slide
-
-# 社会网络方法论: 认识网络
-## Learning Network Analysis Fundations with Dr. Hu
-### 胡悦
-
----
-
-
-
-
-## 概要
-
-.pull-left[
-*认识网络* (本节课)
-
-+ 网络分析方法论
-+ 网络要素
-+ 自我中心网络
-]
-
-.pull-right[
-*理解网络* (下节课)
-
-+ 邻居分析
-+ 扩散分析
-+ 全网分析
-]
-
----
-
-class: inverse, bottom
-
-# 网络分析·方法论
-
----
-
-## 先说点别的：方法论 vs. 方法
-
-.center[
-你学过什么方法论？    
-你学过什么方法？    
-]
-
---
-
-.pull-left[
-
-### 方法
-.center[
-.red[假定]    
-数据    
-过程    
-检验    
-]
-]
-
-.pull-right[
-
-### 方法论
-.center[
-.red[视角]    
-理论    
-现实    
-方法    
-]
-]
-
-???
-
-视角：从什么角度看世界，individual, culture, structure
-理论：rational choice, marixism
-现实：行为、互动
-
----
-
-class: Large, center, middle
-
-"定性" vs. "定量"
-
---
-
-Please don't let me start...
-
-
----
-
-## Btw, 技术层面
-
-R, Python, C, Java...
-
-Stata, SPSS, Excel...
-
---
-
-.pull-left[.center[&lt;img src="images/sna_ucinet.png" height = 200 /&gt;]]
-
---
-
-.pull-right[&lt;img src="images/sna_prell.jpg" height = 400 /&gt;]
-
----
-
-## 方法论的迁越：社会网络
-
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-For the last thirty years, empirical social research has been
-dominated by the sample survey. But as usually practiced,..., the
-survey is a sociological meat grinder, tearing the individual from his
-social context and guaranteeing that .red[nobody in the study interacts]
-with anyone else in it.
-
-.tr[
-— Allen Barton (1968)
-]
-]
-
-???
-
-Barton, Allen H. 1968. "Survey Research and Macro-Methodology." American Behavioral Scientist 12(2): 1–9.
-
-
----
-
-## 社会网络方法论：“写轮眼”
-
-.center[&lt;img src="images/sna_xaringan.jfif" height = 200 /&gt;]
-
---
-
-.center[.red[I]nterdependence &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;.red[R]elationships &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;.red[S]tructure]
-
-???
-
-行为体间的相互依赖关系
-
-关系的丈量
-
-结构的重要性
-
----
-
-## 网络方法之助益
-
-.pull-left[
-
-### 建构理论
-
-理解社会关系：
-
-+ 相似性(Similarity)
-+ 关联性(Social relations)
-+ 互动性(Interactions)
-+ 流动性(Flows)
-
-]
-
-???
-
-Parkinson, Sarah Elizabeth. 2013. “Organizing Rebellion: Rethinking High-Risk Mobilization and Social Networks in War.” American Political Science Review 107(3): 418–32.
-
-
---
-
-.pull-right[
-### 探索现实
-
-分析关系体量：
-
-+ 距离(Distance)
-+ 通道(Degree)
-+ 聚类(Moduarity)
-+ 预测(Relation prediction)
-
-]
-
-???
-
-Mucha, Peter J. et al. 2010. “Community Structure in Time-Dependent, Multiscale, and Multiplex Networks.” Science 328(5980): 876–78.
-
----
-
-## 网络分析之变量
-
-.pull-left[
-
-*X*
-
-+ 关系 &amp;rarr; 行为
-+ 位置 &amp;rarr; 推广
-+ 距离 &amp;rarr; 效率
-
-]
-
-???
-
-+ Friendship &amp;rarr; Behavior
-+ Centrality &amp;rarr; Promotion
-+ Distance &amp;rarr; Efficiency in problem solving
-
---
-
-.pull-right[
-
-*Y*
-
-+ 同质性 &amp;rarr; 关联的紧密程度
-+ 特质性 &amp;rarr; 谁是核心
-+ 组织结构 &amp;rarr; 系统密度
-
-]
-
-???
-
-+ Homophily &amp;rarr; Strength of connection
-+ Personality &amp;rarr; Who becomes central
-+ Organization structure &amp;rarr; Density
-
----
-
-class: inverse, bottom
-
-# 网络要素
-
----
-
-background-image: url("images/sna_networkIllustration.jpg")
-background-position: center
-background-size: contain
-
-## 这幅图由哪些要素组成？
-
----
-
-.center[&lt;img src="images/sna_networkIllustration.jpg" height = 500 /&gt;
-
-.red[Node]/Actor/Vertex   
-.red[Edge]/Relation/Link/Tie
-]
-
----
-
- Subgraphs: .red[Dyads, triads, k-ads, isolate/island]
-
-.center[&lt;img src="images/sna_networkIllustration.jpg" height = 500 /&gt;]
-
----
-
-background-image: url("images/sna_eulerCircuits.bmp")
-background-position: center
-background-size: contain
-
-Walks/Paths
-
-???
-
-柯尼斯堡七桥问题（Seven Bridges of Königsberg）是图论中的著名问题。这个问题是基于一个现实生活中的事例：当时东普鲁士柯尼斯堡（今日俄罗斯加里宁格勒）市区跨普列戈利亚河两岸，河中心有两个小岛。小岛与河的两岸有七条桥连接。在所有桥都只能走一遍的前提下，如何才能把这个地方所有的桥都走遍？
-
-每一座桥视为一条线，桥所连接的地区视为点。这样若从某点出发后最后再回到这点，则这一点的线数必须是偶数，这样的点称为偶顶点。相对的，连有奇数条线的点称为奇顶点。欧拉论述了，由于柯尼斯堡七桥问题中存在4个奇顶点，它无法实现符合题意的遍历。
-
-
----
-
-## 网络分型学
-
-+ “全网”数据 (Complete network)
-    + 二模网络(Two-mode/bipartite)
-
---
-
-+ 样本网数据 ("Sample" network)
-    + 自我核心网络(Ego-net)
-    + 滚雪球网络(Respondent-drive sampled data) 
-    + Somewhere in between (略略略😝~)
-
-稍后详述.....
-
---
-
-+ 随机网络 (Random graph)
-    + 代表性？
-    + The large, the better?
-
-???
-
-给定节点、连接数或特定网络性质构成的网络
-
----
-
-background-image: url("images/sna_network_complete.png")
-background-position: center
-background-size: contain
-
----
-
-background-image: url("images/sna_network_liars.png")
-background-position: center
-background-size: contain
-
----
-
-background-image: url("images/sna_network_bipartiteI.png")
-background-position: center
-background-size: contain
-
----
-
-background-image: url("images/sna_network_bipartiteII.png")
-background-position: center
-background-size: contain
-
----
-
-## 如何对网络进行抽样？
-
-.pull-left[
-&lt;img src="images/sna_illustrated_net.bmp" height = 500 /&gt;
-]
-
-.pull-right[
-&lt;center&gt;随机抽样？&lt;/center&gt;
-]
-
-???
-
-随机抽样是什么方法论视角？
-
----
-
-## 如何对网络进行抽样？
-
-.pull-left[
-&lt;img src="images/sna_illustrated_net.bmp" height = 500 /&gt;
-]
-
-.pull-right[
-.center[自我中心网络抽样]
-
-&lt;img src="images/sna_illustrated_netEgo.bmp" height = 400 /&gt;
-]
-
-???
-
-Sampled ego-network
-
----
-
-## 如何对网络进行抽样？
-
-.pull-left[
-&lt;img src="images/sna_illustrated_net.bmp" height = 500 /&gt;
-]
-
-.pull-right[
-.center[痕迹网络样本]
-
-&lt;img src="images/sna_illustrated_netTrace.bmp" height = 400 /&gt;
-]
-
-???
-
-Sampled trace network
-
----
-
-## 如何对网络进行抽样？
-
-.pull-left[
-&lt;img src="images/sna_illustrated_netCircled.bmp" height = 500 /&gt;
-]
-
-.pull-right[
-.center[边际网络样本]
-
-&lt;img src="images/sna_illustrated_netBoundary.bmp" height = 400 /&gt;
-]
-
-???
-
-Sampled boundary network
-
----
-
-## 如何对网络进行抽样？（最终章）
-
-滚雪球样本
-
-.center[
-&lt;img src="images/sna_snowballSampling.png" height = 500 /&gt;
-]
-
-???
-
-Sampled trace network
-
----
-
-## 记录社会网络：网络 = 关系
-
-+ 有向（directed）vs. 无向（Undirected）
-
---
-
-+ 有无（binary）vs. 多少（valued）？
-
---
-
-+ 单线（single）vs. 多线（multiplex）？
-
---
-
-+ DGP是否会产生影响？
-
-???
-
-multiplex：In a multiplex network, each type of interaction between the nodes is described by a single layer network and the different layers of networks describe the different modes of interaction.
-
-DGP：Were responses constrained in some way?
-
-+ List up to 5
-+ Roster-based
-+ Who do you discuss 'important questions' with?
-
---
-
-+ .red[Missing Data]
-
-???
-
-Boundary, omission of nodes/ties, measurement error (human recall, actual/perceived relationship)
-
-Observed is reliable? (莆田系，笑果文化前台后台)
-
----
-
-## 记录社会网络：数据样态
-
-+ Adjacency matrix
-+ Incidence matrix
-+ Edge list
-
---
-
-+ Nodal attribute data
-+ Edge weights
-
----
-
-## Adjacency Matrix
-
-.center[
-&lt;img src="images/sna_adjacency.png" height = 500 /&gt;
-]
-
----
-
-## Incidence Matrix
-
-.center[
-&lt;img src="images/sna_incidence.png" height = 500 /&gt;
-]
-
----
-
-## Incidence to Adjacency
-
-.center[
-&lt;img src="images/sna_incidence2adj.png" height = 500 /&gt;
-]
-
----
-
-## Incidence to Adjacency
-
-.center[
-&lt;img src="images/sna_incidence2adj2.png" height = 500 /&gt;
-]
-
----
-
-## Adjacency to Edge List
-
-.center[
-&lt;img src="images/sna_edgeList.png" height = 500 /&gt;
-]
-
----
-
-class: inverse, bottom
-
-# 自我中心网络
-
----
-
-## 数据生成（DGP）
-
-* 全网抽样
-* Name generators
-
----
-
-## 数据类型
-
-+ Ego-alter connections
-    + 方向、强度
-    + 关联频率
---
-
-+ Alter-alter connections
-    + 他他关联否？
-    + 强度、频率？
---
-
-+ Alter characteristics
-
----
-
-## 数据描述&lt;sup&gt;*&lt;/sup&gt;
-
-.pull-left[
-### 规模
-
-+ 量级（Size）
-+ 密度（Density）
-
-### 相似性
-
-+ 同质性（Homophily）
-]
-
-.pull-right[
-### (未)连结性
-
-+ 结构洞（Structural Holes）
-+ 掮客（Brokerage）
-
-### 聚合性
-
-+ 向心性（Centrality）
-+ 小团体（Subgroups）
-]
-
-.footnote[\* 适用于所有网络类型]
-
----
-
-## 数据描述
-
-.left-column[
-### 量级
-]
-
-.right-column[
-
-.center[&lt;img src="images/sna_coauthor.png" height = 300 /&gt;
-
-Size = Count(Alters).
-
-n&lt;sub&gt;HY&lt;/sub&gt; = 6.
-]
-
-]
-
-???
-
-
-
----
-
-## 数据描述
-
-.left-column[
-### 量级
-### 密度
-
-]
-
-.right-column[
-.center[&lt;img src="images/sna_coauthor.png" height = 300 /&gt;
-
-密度公式： `\(d_i = \frac{L_{-i}}{n(n-1)/2}\)`
-
-L&lt;sub&gt;-i&lt;/sub&gt;: 与Alters的连结数;
-n&lt;sub&gt;i&lt;/sub&gt;: 量级（#Alters）
-
-d&lt;sub&gt;YH&lt;/sub&gt; = 6/[6(6 - 1)/2] = 0.4.
-
-]
-]
-
----
-
-## 密度之应用 I
-
-Security Egonets (Maoz 2010)
-
-+ 数据源：新独立国家独立五年内和已独立国家发生MID五年内的国际环境。
-
-???
-
-Maoz, Zeev. 2010. Networks of Nations: The Evolution, Structure, and Impact of International Networks, 1816–2001. Cambridge University Press.
-
-MID: Militarized interstate disputes
-
---
-
-+ 测量： Strategic Reference Group (SRG)，.red[以国家为Ego]，测量与其产生敌对关系、冲突的国家及国家联盟
-
---
-
-+ 观点：国家的SRG越大，其越有可能在外交政策中施用争端性政策工具（如介入MID或战争）
-
-
----
-
-## 密度之应用 II
-
-Weak Ties (Roch et al. 2000)
-
-+ 研究问题: SNA对纳税人税收政策态度影响
-
-+ 机制： 动机和能力 &amp;rarr; weak ties （同事、熟人等）
-    + &amp;rarr; 比从strong ties获取更多对税务的知识
-    + &amp;rarr; 与strong ties 一起决定对照章纳税的态度
-
-
-???
-
-Roch, Christine H., John T. Scholz, and Kathleen M. McGraw. 2000. “Social Networks and Citizen Response to Legal Change.” American Journal of Political Science 44(4): 777–91.
-
----
-
-## 行为体间异同: 同/异质性
-
-.center[&lt;img src="images/sna_homophily.bmp" height = 500 /&gt;]
-
-???
-
-Moody, James. 2001. “Race, School Integration, and Friendship Segregation in America.” American Journal of Sociology 107(3): 679–716.
-
-美国共公学校在中等多样化学校友谊种族隔离最严重，最多样的反而不严重
-
----
-
-## 同质性
-
-.pull-left[
-.center[&lt;img src="images/sna_homophilyII.bmp" height = 500 /&gt;]
-]
-
-???
-
-各年按年龄分布的社会距离
-
-性别同质性降低，但在race 和age上依然稳固，教育和宗教同质性上升
-
-Smith, Jeffrey A., Miller McPherson, and Lynn Smith-Lovin. 2014. “Social Distance in the United States: Sex, Race, Religion, Age, and Education Homophily among Confidants, 1985 to 2004.” American Sociological Review 79(3): 432–56.
-
---
-
-.pull-right[
-为何关注同质性?
-
-.red[Similarity breeds connection.]
-
-什么创造了同质性？
-
-+ 人口学因素
-+ 状态
-+ 价值
-+ 行为
-]
-
-
----
-
-## 衡量同质性
-
-.pull-left[&lt;img src="images/sna_coauthorHomophily.png" height = 350 /&gt;]
-
-.pull-right[
-|        | Same  | Different |
-|--------|-------|-----------|
-| Tie    | (a) 5 | (b) 6     |
-| No tie | (c) 4 | (d) 6     |
-
-*Homophily*: 
-
-Yule's Q = (ad - bc)/(ad + bc)
-
-EI = (b - a)/(b + a)
-
-*Heterogeneity*:
-
-Blau's H: H = 1 - &amp;sum;p&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;2&lt;/sup&gt;, .small[p: i所属类连结比例]   
-Index of Qualitative Variation (IQV): H/(1-1/r), .small[r: 总共类别]
-]
-
-???
-
-Same: n(n - 1)/2: Black 4 \* 3 /2  = 6; yellow 3 \* 2 /2 = 3, 6 + 3 = 9, 5 of them connected, no tie = 9 - 5 = 4
-
-Different: 3 yellow * 4 black = 12, 有 tie 6, 无 12 - 6
-
-
----
-
-## 应用
-
-某甲有九亲、四友、十二同僚，其网络异质性几何？
-
---
-
-Alters = 9 + 4 + 12 = 25
-
---
-
-p&lt;sub&gt;亲&lt;/sub&gt; = 9/25;    
-p&lt;sub&gt;友&lt;/sub&gt; = 4/25;    
-p&lt;sub&gt;僚&lt;/sub&gt; = 12/25;
-
---
-
-H = 1 - [(4/25)&lt;sup&gt;2&lt;/sup&gt; + (12/25)&lt;sup&gt;2&lt;/sup&gt; + (9/25)&lt;sup&gt;2&lt;/sup&gt;] = 0.6144
-
---
-
-IQV = 0.6144/(1 - 1/3) = 0.9216
-
---
-
-1. 同质.red[就是]关联吗？关联能代表同质吗？
-1. 同质性关联的时间维度 （Wellman, Wong, Tindall, and Nazer(1996)）
-
-???
-
-Wellman, Barry, Renita Yuk-lin Wong, David Tindall, and Nancy Nazer. 1997. “A Decade of Network Change: Turnover, Persistence and Stability in Personal Communities.” Social Networks 19(1): 27–50.
-
-研究个体流动性，只有27%的亲密关系（提供社会支持、常打电话、亲属）得以持续
-
-你还和几个大学朋友联系，高中呢，初中呢，小学呢？
-
----
-
-## 连结性
-
-.red[不]连结之重要性
-
-.left-column[
-### 结构洞 (Structural Holes)
-]
-
-.right-column[
-
-.panelset[
-
-.panel[.panel-name[Structural Holes]
-.center[&lt;img src="images/sna_structuralHole.jpg" height = 400 /&gt;]
-]
-
-.panel[.panel-name[Views of Structural Holes]
-1. Ego的冗余性:     
-Effective Size&lt;sub&gt;binary&lt;/sub&gt; = Ties&lt;sub&gt;Ego&lt;/sub&gt; - Ties&lt;sub&gt;Alters&lt;/sub&gt;
-1. Alters对于Ego的限制:     
-Constraint&lt;sub&gt;ij&lt;/sub&gt; = (p&lt;sub&gt;ij&lt;/sub&gt; + &amp;sum;&lt;sub&gt;q&lt;/sub&gt;p&lt;sub&gt;iq&lt;/sub&gt;p&lt;sub&gt;jq&lt;/sub&gt;)&lt;sup&gt;2&lt;/sup&gt;, q &amp;ne; i,j
-1. 不考虑Ego情况下Alters的连接情况, betweenness:    
-`\(C_B(i) = \sum_{i\neq j\neq k}(\frac{\sigma_{kij}}{\sigma{kj}})\)`
-]
-
-]
-
-]
-
-???
-
-Burt, Ronald S. 2009. Structural Holes: The Social Structure of Competition. Harvard University Press.
-
-A is a structural hole
-
-
-
-p&lt;sub&gt;ij&lt;/sub&gt;: proportional strength of i's relationship with j
-
-&lt;img src="images/sna_constraint.png" height = 100 /&gt;
-
-
-
-&amp;sigma;&lt;kij&gt;: #shortest paths between k and j blocked by i,     
-&amp;sigma;&lt;kj&gt;: #shortest paths between k and j. 
-
----
-
-
-## 连结性
-
-.left-column[
-### 结构洞 (Structural Holes)
-### 掮客 (Brokerage)
-]
-
-.right-column[
-.center[&lt;img src="images/sna_broker.jpg" height =350 /&gt;
-Coordinator, consultant, representative, gatekeeper, liaison]
-
-]
-
----
-
-## 聚合性
-
-+ 向心性：总体聚合性
-+ 小团体：局部聚合性
-
----
-
-## Centrality
-
-
-.pull-left[
-“C位出道”意味着什么   
-
-&lt;img src="images/sna_qiHun.gif" height = 200 /&gt;
-]
-
-.pull-right[
-+ *Klein et al. 2004*: "Who are people turning to" &amp;rarr; in-degree centrality
-+ *Fowler 2006*: "Relative importance" &amp;rarr; closeness, betweenness
-+ *Rossman et al. 2010*: "Reputation" &amp;rarr; alpha centrality
-+ *Box-Steffensmeier et al. 2013*: "Well-connected and powerful" &amp;rarr; eigenvector centrality
-]
-
-
-
-???
-
-团队研究，Academy of Management Journal
-
-Klein, Katherine J., Beng-Chong Lim, Jessica L. Saltz, and David M. Mayer. 2004. “How Do They Get There? An Examination of the Antecedents of Centrality in Team Networks.” Academy of Management Journal 47(6): 952–63.
-
-
-Congress合作， PA
-
-Fowler, James H. 2006. “Connecting the Congress: A Study of Cosponsorship Networks.” Political Analysis 14(4): 456–87.
-
-
-学术网络 American Sociological Review
-
-Rossman, Gabriel, Nicole Esparza, and Phillip Bonacich. 2010. “I’d Like to Thank the Academy, Team Spillovers, and Network Centrality.” American Sociological Review 75(1): 31–51.
-
-
-APSR 司法判决
-
-Box Steffensmeier, Janet, Dino P. Christensen, and Matthew P. Hitt. 2013. “Quality Over Quantity: Amici Influence and Judicial Decision Making.” American Political Science Review 107(3): 446–60.
-
----
-
-class: bottom, center, small
-
-## Measurement of Centrality&lt;sup&gt;1&lt;/sup&gt;
-
-???
-
-\*可用于directed network; ^可用于weighted network
-
---
-
-Degree*^
-
---
-
-K-step reach*^
-
---
-
-Eigenvector*^
-
---
-
-Alpha/Katz*^
-
---
-
-Power*^
-
---
-
-Beta*^
-
---
-
-PageRank*^
-
---
-
-Hubs and Authorities*^
-
---
-
-Closeness*^
-
---
-
-Betweenness*
-
---
-
-Flow Betweenness*
-
---
-
-Random Walk Betweenness*
-
---
-
-......
-
-
----
-
-## Commonly Used Centrality
-
-.left-column[
-### Degree
-]
-
-.right-column[
-C&lt;sub&gt;D&lt;/sub&gt;(i) = &amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;n&lt;sub&gt;ji&lt;/sub&gt;, j &amp;ne; i
-]
-
-???
-
-Focus on local network, #alters an ego connect
-
-Measuring activity, 与别人连接度
-
----
-
-## Commonly Used Centrality
-
-.left-column[
-### Degree
-### Eigenvector
-]
-
-.right-column[
-Eigenvector: AX = &amp;lambda;X, det(A - &amp;lambda;I) = 0
-
-C&lt;sub&gt;E&lt;/sub&gt;(i) = k&lt;sup&gt;-1&lt;/sup&gt;&amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;A&lt;sub&gt;ji&lt;/sub&gt;C&lt;sub&gt;E&lt;/sub&gt;(j)
-
-.center[&lt;img src = "images/sna_dECentrality.bmp"&gt;]
-]
-
-
-???
-
-degree 改进版，关注近邻
-
----
-
-## Commonly Used Centrality
-
-.left-column[
-### Degree
-### Eigenvector
-### Betweenness
-]
-
-.right-column[
-C&lt;sub&gt;B&lt;/sub&gt;(i) = &amp;sum;&lt;sub&gt;j,k&lt;/sub&gt;&amp;delta;&lt;sub&gt;jik&lt;/sub&gt;/&amp;delta;&lt;sub&gt;jk&lt;/sub&gt;, i&amp;ne;j&amp;ne;k.
-
-.center[&lt;img src="images/sna_betweenness.bmp" height = 400 /&gt;]
-]
-
-
-???
-
-measuring potential control
-
----
-
-## Commonly Used Centrality
-
-.left-column[
-### Degree
-### Eigenvector
-### Betweenness
-### Closeness
-]
-
-.right-column[
-C&lt;sub&gt;C&lt;/sub&gt;(i) = &amp;sum;&lt;sup&gt;n&lt;/sup&gt;&lt;sub&gt;j = 1&lt;/sub&gt;d&lt;sub&gt;ij&lt;/sub&gt;, j &amp;ne; i
-
-.center[&lt;img src="images/sna_closeness.png" height = 400 /&gt;]
-]
-
-???
-
-与每个结点的关系，measuring independence
-
-d: distance connection i to j
-
----
-
-## Which Is the Genuine Centrality?
-
-.center[&lt;img src="images/sna_centralities.png" height = 500 /&gt;]
-
-???
-
-All are correct
-
-1. degree: activity
-1. eigenvector: advanced degree, accounting for neighbors
-1. betweenness: potential control
-1. closeness: independence
-
----
-
-## Wrap Up
-
-.pull-left[
-+ 网络分析方法论跃迁性
-    + 理论：关系学
-    + 现实：链接方向、烈度
-    + 方法：超越计量
-+ 网络要素
-    + 宏观
-        + 全网
-        + 样本网络
-    + 微观
-        + 节点
-        + 连结
-        + 方向
-]
-
-.pull-right[
-+ Ego-net
-    + 生成
-        + Ego
-        + Path
-        + Boundary
-        + Snowball
-    + 描述
-        + Size
-        + Density
-        + Similarity
-        + Centrality
-]
-
-
-    </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="libs/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"highlightSpans": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
-});
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})(document);
-
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
+<html lang="en"><head>
+<script src="08_networkAnalysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="08_networkAnalysis_files/libs/quarto-html/tabby.min.js"></script>
+<script src="08_networkAnalysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="08_networkAnalysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="08_networkAnalysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="08_networkAnalysis_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="08_networkAnalysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.0.37">
+
+  <meta name="author" content="胡悦">
+  <title>社会网络方法论: 认识网络</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="08_networkAnalysis_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="08_networkAnalysis_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="08_networkAnalysis_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link rel="stylesheet" href="style_basic.css">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="08_networkAnalysis_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
   }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
-})();
-(function() {
-  "use strict"
-  // Replace <script> tags in slides area to make them executable
-  var scripts = document.querySelectorAll(
-    '.remark-slides-area .remark-slide-container script'
-  );
-  if (!scripts.length) return;
-  for (var i = 0; i < scripts.length; i++) {
-    var s = document.createElement('script');
-    var code = document.createTextNode(scripts[i].textContent);
-    s.appendChild(code);
-    var scriptAttrs = scripts[i].attributes;
-    for (var j = 0; j < scriptAttrs.length; j++) {
-      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
-    }
-    scripts[i].parentElement.replaceChild(s, scripts[i]);
-  }
-})();
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
 
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
   }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
 
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="center">
+  <h1 class="title">社会网络方法论: 认识网络</h1>
+  <p class="subtitle">Political Research with Big Data (80700673)</p>
+  <p class="author">胡悦</p>
+  <p class="institute">清华大学</p>
+</section>
+
+<section id="概要" class="slide level2">
+<h2>概要</h2>
+<div class="cell">
+<style type="text/css">
+.long_chunk {
+height: 800px;
+/*width: 100px;*/
+}
+</style>
+</div>
+<div class="columns" style="text-align:center; margin-top: 3em">
+<div class="column fragment" style="width:50%;">
+<p><em>理解网络</em> (本节课)</p>
+<ul>
+<li class="fragment">网络方法论</li>
+<li class="fragment">网络要素</li>
+<li class="fragment">自我中心网络</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><em>分析网络</em> (下节课)</p>
+<ul>
+<li class="fragment">邻居分析</li>
+<li class="fragment">扩散分析</li>
+<li class="fragment">全网分析</li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<section id="社会网络方法论" class="title-slide slide level1 center">
+<h1>社会网络·方法论</h1>
+
+</section>
+<section id="先说点别的方法论-vs.-方法" class="slide level2">
+<h2>先说点别的：方法论 vs.&nbsp;方法</h2>
+<div class="fragment" style="text-align:center">
+<p>你学过什么方法论？<br>
+你学过什么方法？</p>
+</div>
+<div class="columns" style="text-align:center; margin-top: 3em">
+<div class="column fragment" style="width:50%;">
+<p>假定<br>
+数据<br>
+<span class="red">过程</span><br>
+检验</p>
+</div><div class="column fragment" style="width:50%;">
+<p><span class="red">视角</span><br>
+理论<br>
+现实<br>
+方法</p>
+</div>
+</div>
+<aside class="notes">
+<p>视角：从什么角度看世界，individual, culture, structure 理论：rational choice, marixism 现实：行为、互动</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment" style="text-align:center; margin-top: 3em">
+<p>“定性” vs.&nbsp;“定量”</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Please don’t let me start…</p>
+</div>
+</section>
+<section id="before-everything" class="slide level2">
+<h2>Before everything</h2>
+<div style="text-align:center">
+<p>Although the method you’ll learned is a little complicated, <span class="blue">you’ll get there</span>.</p>
+</div>
+<div class="fragment" style="text-align:center">
+<div class="fragment highlight-red">
+<p>But probably not today…</p>
+</div>
+</div>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:50%;">
+<p><em>Kick-in software</em></p>
+<p><img data-src="images/sna_ucinet.png" height="400"></p>
+</div><div class="column fragment" style="width:50%;">
+<p><em>Good starting book</em></p>
+<p><img data-src="images/sna_prell.jpg" height="500"></p>
+</div>
+</div>
+</section>
+<section id="方法论的迁越" class="slide level2">
+<h2>方法论的迁越</h2>
+<div class="large" style="margin-top: 1em">
+<p>For the last thirty years, empirical social research has been dominated by the sample survey. But as usually practiced,…, the survey is a sociological meat grinder, tearing the individual from his social context and guaranteeing that <span class="red">nobody in the study interacts</span> with anyone else in it. — Allen Barton (1968)</p>
+</div>
+<aside class="notes">
+<p>Barton, Allen H. 1968. “Survey Research and Macro-Methodology.” American Behavioral Scientist 12(2): 1–9.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment large" style="margin-top: 1em">
+<p><span class="red">I</span>nterdependence → <span class="red">R</span>elationships → <span class="red">S</span>tructure</p>
+</div>
+<aside class="notes">
+<p>行为体间的相互依赖关系</p>
+<p>关系的丈量</p>
+<p>结构的重要性</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="跃迁带来的改变认知" class="slide level2">
+<h2>跃迁带来的改变：认知</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:50%;">
+<!-- -->
+<h3 id="建构理论">建构理论</h3>
+<p>理解社会关系：</p>
+<ul>
+<li class="fragment">相似性(Similarity)</li>
+<li class="fragment">关联性(Social relations)</li>
+<li class="fragment">互动性(Interactions)</li>
+<li class="fragment">流动性(Flows)</li>
+</ul>
+</div><aside class="notes">
+<p>Parkinson, Sarah Elizabeth. 2013. “Organizing Rebellion: Rethinking High-Risk Mobilization and Social Networks in War.” American Political Science Review 107(3): 418–32.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside><div class="column fragment" style="width:50%;">
+<!-- -->
+<h3 id="探索现实">探索现实</h3>
+<p>分析关系体量：</p>
+<ul>
+<li class="fragment">距离(Distance)</li>
+<li class="fragment">通道(Degree)</li>
+<li class="fragment">聚类(Moduarity)</li>
+<li class="fragment">预测(Relation prediction)</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>Mucha, Peter J. et al.&nbsp;2010. “Community Structure in Time-Dependent, Multiscale, and Multiplex Networks.” Science 328(5980): 876–78.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="跃迁带来的改变操作" class="slide level2">
+<h2>跃迁带来的改变：操作</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:50%;">
+<p><em>X</em></p>
+<ul>
+<li class="fragment">关系 → 行为</li>
+<li class="fragment">位置 → 推广</li>
+<li class="fragment">距离 → 效率</li>
+</ul>
+</div><aside class="notes">
+<ul>
+<li>Friendship → Behavior</li>
+<li>Centrality → Promotion</li>
+<li>Distance → Efficiency in problem solving</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside><div class="column fragment" style="width:50%;">
+<p><em>Y</em></p>
+<ul>
+<li class="fragment">同质性 → 关联的紧密程度</li>
+<li class="fragment">特质性 → 谁是核心</li>
+<li class="fragment">组织结构 → 系统密度</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>Homophily → Strength of connection</li>
+<li>Personality → Who becomes central</li>
+<li>Organization structure → Density</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section></section>
+<section>
+<section id="网络要素" class="title-slide slide level1 center">
+<h1>网络要素</h1>
+
+</section>
+<section id="网络组成要素" class="slide level2">
+<h2>网络组成要素</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_networkIllustration.jpg" height="600"></p>
+</figure>
+</div>
+<div class="fragment fade-in-then-out">
+<p><span class="red">Node</span>/Actor/Vertex<br>
+<span class="red">Edge</span>/Relation/Link/Tie</p>
+</div>
+<div class="fragment">
+<p>Subgraphs: <span class="red" data-fig-align="center">Dyads, triads, k-ads, isolate/island</span></p>
+</div>
+</section>
+<section id="walkspaths" class="slide level2">
+<h2>Walks/Paths</h2>
+<p><img data-src="images/sna_eulerCircuits.bmp" height="700"></p>
+<div class="fragment" style="text-align:center">
+<p>Seven Bridges of Königsberg</p>
+</div>
+<aside class="notes">
+<p>柯尼斯堡七桥问题（Seven Bridges of Königsberg）是图论中的著名问题。这个问题是基于一个现实生活中的事例：当时东普鲁士柯尼斯堡（今日俄罗斯加里宁格勒）市区跨普列戈利亚河两岸，河中心有两个小岛。小岛与河的两岸有七条桥连接。在所有桥都只能走一遍的前提下，如何才能把这个地方所有的桥都走遍？</p>
+<p>每一座桥视为一条线，桥所连接的地区视为点。这样若从某点出发后最后再回到这点，则这一点的线数必须是偶数，这样的点称为偶顶点。相对的，连有奇数条线的点称为奇顶点。欧拉论述了，由于柯尼斯堡七桥问题中存在4个奇顶点，它无法实现符合题意的遍历。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="网络分型" class="slide level2">
+<h2>网络分型</h2>
+<ul>
+<li class="fragment">“全网”数据 (Complete network)
+<ul>
+<li class="fragment">二模网络(Two-mode/bipartite)</li>
+</ul></li>
+<li class="fragment">样本网数据 (“Sample” network)
+<ul>
+<li class="fragment">自我核心网络(Ego-net)</li>
+<li class="fragment">滚雪球网络(Respondent-drive sampled data)</li>
+<li class="fragment">Somewhere in between</li>
+</ul></li>
+<li class="fragment">随机网络 (Random graph)
+<ul>
+<li class="fragment">代表性？</li>
+<li class="fragment">The large, the better?</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>给定节点、连接数或特定网络性质构成的网络</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="全网数据" class="slide level2">
+<h2>全网数据</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_network_complete.png" height="800"></p>
+</figure>
+</div>
+</section>
+<section id="样本网数据" class="slide level2">
+<h2>样本网数据</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_network_liars.png" height="800"></p>
+</figure>
+</div>
+</section>
+<section id="随机网络" class="slide level2">
+<h2>随机网络</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_network_bipartiteI.png" height="800"></p>
+</figure>
+</div>
+</section>
+<section id="随机网络-1" class="slide level2">
+<h2>随机网络</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_network_bipartiteII.png" height="800"></p>
+</figure>
+</div>
+</section>
+<section id="抽样网络" class="slide level2">
+<h2>抽样网络</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">方案I</a></li><li><a href="#tabset-1-2">方案II</a></li><li><a href="#tabset-1-3">方案III</a></li><li><a href="#tabset-1-4">方案IV</a></li><li><a href="#tabset-1-5">方案V</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<p><strong>随机抽样</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_illustrated_net.bmp" height="650"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>随机抽样是什么方法论视角？</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-1-2">
+<p><strong>自我中心网络样本</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_illustrated_netEgo.bmp" height="650"></p>
+</figure>
+</div>
+</div>
+<div id="tabset-1-3">
+<p><strong>痕迹网络样本</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_illustrated_netTrace.bmp" height="650"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Sampled trace network</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-1-4">
+<p><strong>边际网络样本</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_illustrated_netBoundary.bmp" height="650"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Sampled boundary network</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-1-5">
+<p><strong>滚雪球样本</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_snowballSampling.png" height="650"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Sampled trace network</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</div>
+</section>
+<section id="记录网络" class="slide level2">
+<h2>记录网络</h2>
+<ul>
+<li class="fragment">有向（directed）vs.&nbsp;无向（Undirected）</li>
+<li class="fragment">有无（binary）vs.&nbsp;多少（valued）</li>
+<li class="fragment">单线（single）vs.&nbsp;多线（multiplex）</li>
+<li class="fragment">DGP是否会产生影响？</li>
+</ul>
+<aside class="notes">
+<p>multiplex：In a multiplex network, each type of interaction between the nodes is described by a single layer network and the different layers of networks describe the different modes of interaction.</p>
+<p>DGP：Were responses constrained in some way?</p>
+<ul>
+<li>List up to 5</li>
+<li>Roster-based</li>
+<li>Who do you discuss ‘important questions’ with?</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<ul>
+<li class="fragment"><span class="red">Missing Data</span></li>
+</ul>
+<aside class="notes">
+<p>Boundary, omission of nodes/ties, measurement error (human recall, actual/perceived relationship)</p>
+<p>Observed is reliable? (莆田系，笑果文化前台后台)</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p><em>属性</em></p>
+<ul>
+<li class="fragment">Nodal attribute data</li>
+<li class="fragment">Edge weights</li>
+</ul>
+</div>
+</section>
+<section id="网络数据" class="slide level2">
+<h2>网络数据</h2>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Adjacency Matrix</a></li><li><a href="#tabset-2-2">Incidence Matrix</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_adjacency.png" height="650"></p>
+</figure>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_incidence.png" height="650"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="incidence-to-adjacency" class="slide level2">
+<h2>Incidence to Adjacency</h2>
+<div class="r-hstack">
+<p><img data-src="images/sna_incidence2adj.png" class="fragment" height="800"></p>
+<p><img data-src="images/sna_incidence2adj2.png" class="fragment" height="800"></p>
+</div>
+</section>
+<section id="adjacency-to-edge-list" class="slide level2">
+<h2>Adjacency to Edge List</h2>
+<p><img data-src="images/sna_edgeList.png" height="800"></p>
+</section></section>
+<section>
+<section id="自我中心网络" class="title-slide slide level1 center">
+<h1>自我中心网络</h1>
+
+</section>
+<section id="数据生成" class="slide level2">
+<h2>数据生成</h2>
+<div class="fragment large" style="text-align:center; margin-top: 3em">
+<ul>
+<li class="fragment">全网抽样</li>
+<li class="fragment">Name generators</li>
+</ul>
+</div>
+</section>
+<section id="数据类型" class="slide level2">
+<h2>数据类型</h2>
+<div class="fragment" style="text-align:center; margin-top: 2em">
+<ul>
+<li class="fragment">Ego-alter connections
+<ul>
+<li class="fragment">方向、强度</li>
+<li class="fragment">关联频率</li>
+</ul></li>
+<li class="fragment">Alter-alter connections
+<ul>
+<li class="fragment">他他关联否？</li>
+<li class="fragment">强度、频率？</li>
+</ul></li>
+<li class="fragment">Alter characteristics</li>
+</ul>
+</div>
+</section>
+<section id="网络描述" class="slide level2">
+<h2>网络描述</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:50%;">
+<!-- -->
+<h3 id="规模">规模</h3>
+<ul>
+<li class="fragment">量级（Size）</li>
+<li class="fragment">密度（Density）</li>
+</ul>
+<h3 id="相似性">相似性</h3>
+<ul>
+<li class="fragment">同质性（Homophily）</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<!-- -->
+<h3 id="未连结性">(未)连结性</h3>
+<ul>
+<li class="fragment">结构洞（Structural Holes）</li>
+<li class="fragment">掮客（Brokerage）</li>
+</ul>
+<h3 id="聚合性">聚合性</h3>
+<ul>
+<li class="fragment">向心性（Centrality）</li>
+<li class="fragment">小团体（Subgroups）</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="量级" class="slide level2">
+<h2>量级</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column" style="width:70%;">
+<p><img data-src="images/sna_coauthor.png" height="700"></p>
+</div><div class="column fragment" style="width:30%;">
+<p>Size = Count(Alters).</p>
+<p>n<sub>HY</sub> = 6.</p>
+</div>
+</div>
+</section>
+<section id="密度" class="slide level2">
+<h2>密度</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column" style="width:70%;">
+<p><img data-src="images/sna_coauthor.png" height="700"></p>
+</div><div class="column fragment" style="width:30%;">
+<p>密度公式： <span class="math inline">\(d_i = \frac{L_{-i}}{n(n-1)/2}\)</span></p>
+<p>L<sub>-i</sub>: 与Alters的连结数; n<sub>i</sub>: 量级（#Alters）</p>
+<p>d<sub>YH</sub> = 6/[6(6 - 1)/2] = 0.4.</p>
+</div>
+</div>
+</section>
+<section id="应用" class="slide level2">
+<h2>应用</h2>
+<p>Security Egonets (Maoz 2010)</p>
+<ul>
+<li class="fragment">数据源：新独立国家独立五年内和已独立国家发生MID五年内的国际环境。</li>
+</ul>
+<aside class="notes">
+<p>Maoz, Zeev. 2010. Networks of Nations: The Evolution, Structure, and Impact of International Networks, 1816–2001. Cambridge University Press.</p>
+<p>MID: Militarized interstate disputes</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<ul>
+<li class="fragment">测量： Strategic Reference Group (SRG)，<span class="red">以国家为Ego</span>，测量与其产生敌对关系、冲突的国家及国家联盟</li>
+<li class="fragment">观点：国家的SRG越大，其越有可能在外交政策中施用争端性政策工具（如介入MID或战争）</li>
+</ul>
+<div class="fragment">
+<p>Weak Ties (Roch et al.&nbsp;2000)</p>
+</div>
+<ul>
+<li class="fragment">研究问题: SNA对纳税人税收政策态度影响</li>
+<li class="fragment">机制：
+<ul>
+<li class="fragment">动机和能力 → weak ties （同事、熟人等） → 比从strong ties获取更多对税务的知识 → 与strong ties 一起决定对照章纳税的态度</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>Roch, Christine H., John T. Scholz, and Kathleen M. McGraw. 2000. “Social Networks and Citizen Response to Legal Change.” American Journal of Political Science 44(4): 777–91.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="行为体间异同-同异质性" class="slide level2">
+<h2>行为体间异同: 同/异质性</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_homophily.bmp" height="800"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Moody, James. 2001. “Race, School Integration, and Friendship Segregation in America.” American Journal of Sociology 107(3): 679–716.</p>
+<p>美国共公学校在中等多样化学校友谊种族隔离最严重，最多样的反而不严重</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="同质性" class="slide level2">
+<h2>同质性</h2>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p><img data-src="images/sna_homophilyII.bmp" height="800"></p>
+</div><aside class="notes">
+<p>各年按年龄分布的社会距离</p>
+<p>性别同质性降低，但在race 和age上依然稳固，教育和宗教同质性上升</p>
+<p>Smith, Jeffrey A., Miller McPherson, and Lynn Smith-Lovin. 2014. “Social Distance in the United States: Sex, Race, Religion, Age, and Education Homophily among Confidants, 1985 to 2004.” American Sociological Review 79(3): 432–56.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside><div class="column fragment" style="width:30%;">
+<div class="fragment">
+<p>为何关注同质性?</p>
+</div>
+<div class="fragment">
+<p><span class="red">Similarity breeds connection.</span></p>
+</div>
+<div class="fragment">
+<p>什么创造了同质性？</p>
+<ul>
+<li class="fragment">人口学因素</li>
+<li class="fragment">状态</li>
+<li class="fragment">价值</li>
+<li class="fragment">行为</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="衡量同质性" class="slide level2">
+<h2>衡量同质性</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><img data-src="images/sna_coauthorHomophily.png" height="700"></p>
+</div><div class="column fragment" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Same</th>
+<th>Different</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tie</td>
+<td>(a) 5</td>
+<td>(b) 6</td>
+</tr>
+<tr class="even">
+<td>No tie</td>
+<td>(c) 4</td>
+<td>(d) 6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Homophily</strong>:</p>
+<p>Yule’s Q = (ad - bc)/(ad + bc)</p>
+<p>EI = (b - a)/(b + a)</p>
+<p><strong>Heterogeneity</strong>:</p>
+<p>Blau’s H: H = 1 - ∑p<sub>i</sub><sup>2</sup>, <span class="small">p: i所属类连结比例</span><br>
+Index of Qualitative Variation (IQV): H/(1-1/r), <span class="small">r: 总共类别</span></p>
+</div>
+</div>
+<aside class="notes">
+<p>Same: n(n - 1)/2: Black 4 * 3 /2 = 6; yellow 3 * 2 /2 = 3, 6 + 3 = 9, 5 of them connected, no tie = 9 - 5 = 4</p>
+<p>Different: 3 yellow * 4 black = 12, 有 tie 6, 无 12 - 6</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="应用-1" class="slide level2">
+<h2>应用</h2>
+<p>某甲有九亲、四友、十二同僚，其路何野？</p>
+<div class="fragment">
+<p>Alters = 9 + 4 + 12 = 25</p>
+</div>
+<div class="fragment">
+<p>p<sub>亲</sub> = 9/25;<br>
+p<sub>友</sub> = 4/25;<br>
+p<sub>僚</sub> = 12/25;</p>
+</div>
+<div class="fragment">
+<p>H = 1 - [(4/25)<sup>2</sup> + (12/25)<sup>2</sup> + (9/25)<sup>2</sup>] = 0.6144</p>
+</div>
+<div class="fragment">
+<p>IQV = 0.6144/(1 - 1/3) = 0.9216</p>
+</div>
+<div class="fragment r-fit-text">
+<blockquote>
+<p>思考:</p>
+</blockquote>
+<ol type="1">
+<li class="fragment">同质<span class="red">就是</span>关联吗？关联能代表同质吗？</li>
+<li class="fragment">同质性关联的时间维度 （Wellman, Wong, Tindall, and Nazer(1996)）</li>
+</ol>
+</div>
+<aside class="notes">
+<p>Wellman, Barry, Renita Yuk-lin Wong, David Tindall, and Nancy Nazer. 1997. “A Decade of Network Change: Turnover, Persistence and Stability in Personal Communities.” Social Networks 19(1): 27–50.</p>
+<p>研究个体流动性，只有27%的亲密关系（提供社会支持、常打电话、亲属）得以持续</p>
+<p>你还和几个大学朋友联系，高中呢，初中呢，小学呢？</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="网络描述-1" class="slide level2">
+<h2>网络描述</h2>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column" style="width:50%;">
+<h3 id="规模-1">规模</h3>
+<ul>
+<li class="fragment">量级（Size）<span class="red">✓</span></li>
+<li class="fragment">密度（Density）<span class="red">✓</span></li>
+</ul>
+<h3 id="相似性-1">相似性</h3>
+<ul>
+<li class="fragment">同质性（Homophily）<span class="red">✓</span></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<h3 id="未连结性-1">(未)连结性</h3>
+<ul>
+<li class="fragment">结构洞（Structural Holes）</li>
+<li class="fragment">掮客（Brokerage）</li>
+</ul>
+<h3 id="聚合性-1">聚合性</h3>
+<ul>
+<li class="fragment">向心性（Centrality）</li>
+<li class="fragment">小团体（Subgroups）</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="结构洞-structural-holes" class="slide level2">
+<h2>结构洞 (Structural Holes)</h2>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">概念</a></li><li><a href="#tabset-3-2">应用</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_structuralHole.jpg" height="700"></p>
+</figure>
+</div>
+</div>
+<div id="tabset-3-2">
+<ol type="1">
+<li class="fragment">Ego的冗余性: Effective Size<sub>binary</sub> = Ties<sub>Ego</sub> - Ties<sub>Alters</sub></li>
+<li class="fragment">Alters对于Ego的限制: Constraint<sub>ij</sub> = (p<sub>ij</sub> + ∑<sub>q</sub>p<sub>iq</sub>p<sub>jq</sub>)<sup>2</sup>, q ≠ i,j</li>
+<li class="fragment">不考虑Ego情况下Alters的连接情况, betweenness:</li>
+</ol>
+<p><span class="math display">\[C_B(i) = \sum_{i\neq j\neq k}(\frac{\sigma_{kij}}{\sigma{kj}})\]</span></p>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Burt, Ronald S. 2009. Structural Holes: The Social Structure of Competition. Harvard University Press.</p>
+<p>A is a structural hole</p>
+<p>p<sub>ij</sub>: proportional strength of i’s relationship with j</p>
+<p><img data-src="images/sna_constraint.png"></p>
+<p>σ<kij>: #shortest paths between k and j blocked by i,<br>
+σ<kj>: #shortest paths between k and j.</kj></kij></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="掮客-brokerage" class="slide level2">
+<h2>掮客 (Brokerage)</h2>
+<p>Coordinator, consultant, representative, gatekeeper, liaison</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_broker.jpg" height="200"></p>
+</figure>
+</div>
+<div class="columns" style="text-align:center">
+<div class="column fragment" style="width:40%;">
+<p><img data-src="images/sna_poliIncorporation.jpg" height="500"></p>
+</div><div class="column fragment" style="width:60%;">
+<p>Chinese Migrants in Central-Eastern Europe</p>
+<p>↓</p>
+<p>Bonding/bridging social network</p>
+<p>↓</p>
+<p>Political incorporation</p>
+<div class="fragment highlight-blue">
+<p>Survey-based non-random-network analysis</p>
+</div>
+</div>
+</div>
+</section>
+<section id="聚合性-2" class="slide level2">
+<h2>聚合性</h2>
+<ul>
+<li class="fragment">小团体：局部聚合性</li>
+<li class="fragment">向心性：总体聚合性</li>
+</ul>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:30%;">
+<p><img data-src="images/sna_qiHun.gif" height="400"></p>
+</div><aside class="notes">
+<p>围棋历史长河中，吴清源是第三个第一手落在天元的人，前面两个都是惨败，而吴清源其实也败给了当时的对手木谷实</p>
+<p>1933年是本因坊秀哉虚岁六十，19岁的吴清源一路过关斩将，从日本围棋选手权战中脱颖而出，获得了挑战秀哉名人的资格： 三三、星、天元</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside><div class="column fragment" style="width:70%;">
+<ul>
+<li class="fragment"><em>Klein et al.&nbsp;2004</em>: “Who are people turning to” → in-degree centrality</li>
+<li class="fragment"><em>Fowler 2006</em>: “Relative importance” → closeness, betweenness</li>
+<li class="fragment"><em>Rossman et al.&nbsp;2010</em>: “Reputation” → alpha centrality</li>
+<li class="fragment"><em>Box-Steffensmeier et al.&nbsp;2013</em>: “Well-connected and powerful” → eigenvector centrality</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>团队研究，Academy of Management Journal</p>
+<p>Klein, Katherine J., Beng-Chong Lim, Jessica L. Saltz, and David M. Mayer. 2004. “How Do They Get There? An Examination of the Antecedents of Centrality in Team Networks.” Academy of Management Journal 47(6): 952–63.</p>
+<p>Congress合作， PA</p>
+<p>Fowler, James H. 2006. “Connecting the Congress: A Study of Cosponsorship Networks.” Political Analysis 14(4): 456–87.</p>
+<p>学术网络 American Sociological Review</p>
+<p>Rossman, Gabriel, Nicole Esparza, and Phillip Bonacich. 2010. “I’d Like to Thank the Academy, Team Spillovers, and Network Centrality.” American Sociological Review 75(1): 31–51.</p>
+<p>APSR 司法判决</p>
+<p>Box Steffensmeier, Janet, Dino P. Christensen, and Matthew P. Hitt. 2013. “Quality Over Quantity: Amici Influence and Judicial Decision Making.” American Political Science Review 107(3): 446–60.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="中心性测量" class="slide level2">
+<h2>中心性测量<sup>1</sup></h2>
+<div class="fragment" style="text-align:center">
+<p>Degree*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>K-step reach*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Eigenvector*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Alpha/Katz*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Power*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Beta*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>PageRank*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Hubs and Authorities*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Closeness*^</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Betweenness*</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Flow Betweenness*</p>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Random Walk Betweenness*</p>
+<p>……</p>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1" role="doc-endnote"><p>*可用于directed network; ^可用于weighted network</p></li></ol></aside></section>
+<section id="常见测量与应用" class="slide level2">
+<h2>常见测量与应用</h2>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">Degree</a></li><li><a href="#tabset-4-2">Eigenvector</a></li><li><a href="#tabset-4-3">Betweenness</a></li><li><a href="#tabset-4-4">Closeness</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<p>C<sub>D</sub>(i) = ∑<sup>n</sup><sub>j = 1</sub>n<sub>ji</sub>, j ≠ i</p>
+<div class="fragment" style="margin-top: 2em">
+<p>关注点：local network, ego connect</p>
+</div>
+<div class="fragment" style="margin-top: 2em">
+<p>目标：Activity，与别人的连接度</p>
+</div>
+</div>
+<div id="tabset-4-2">
+<p>Eigenvector: AX = λX, det(A - λI) = 0</p>
+<p>C<sub>E</sub>(i) = k<sup>-1</sup>∑<sup>n</sup><sub>j = 1</sub>A<sub>ji</sub>C<sub>E</sub>(j)</p>
+<div class="fragment" style="margin-top: 1em">
+<p>关注点：近邻关系 （可以看作degree centrality 改进版)</p>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_dECentrality.bmp" height="450"></p>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-4-3">
+<p>C<sub>B</sub>(i) = ∑<sub>j,k</sub>δ<sub>jik</sub>/δ<sub>jk</sub>, i≠j≠k.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_betweenness.bmp" height="500"></p>
+</figure>
+</div>
+<div class="fragment" style="margin-top: 1em">
+<p>目标：Potential controls</p>
+</div>
+</div>
+<div id="tabset-4-4">
+<p>C<sub>C</sub>(i) = ∑<sup>n</sup><sub>j = 1</sub>d<sub>ij</sub>, j ≠ i<sup>1</sup></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_closeness.png" height="500"></p>
+</figure>
+</div>
+<div class="fragment" style="margin-top: 1em">
+<p>目标：Independence, 与<span class="red">每个</span>结点的关系</p>
+</div>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2" role="doc-endnote"><p>d: distance connection i to j.</p></li></ol></aside></section>
+<section id="如何挑选" class="slide level2">
+<h2>如何挑选</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_centralities.png" height="800"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>All are correct</p>
+<ol type="1">
+<li>degree: activity</li>
+<li>eigenvector: advanced degree, accounting for neighbors</li>
+<li>betweenness: potential control</li>
+<li>closeness: independence</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="take-home-points" class="slide level2">
+<h2>Take-Home Points</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<h3 id="社会网络方法论-1">社会网络方法论</h3>
+<ul>
+<li class="fragment">意义：革命性</li>
+<li class="fragment">理论：关系学</li>
+<li class="fragment">现实：关联方向、烈度</li>
+<li class="fragment">方法：超越计量</li>
+</ul>
+</div><div class="column" style="width:30%;">
+<h3 id="网络要素-1">网络要素</h3>
+<ul>
+<li class="fragment">宏观
+<ul>
+<li class="fragment">全网</li>
+<li class="fragment">样本网络</li>
+</ul></li>
+<li class="fragment">微观
+<ul>
+<li class="fragment">节点</li>
+<li class="fragment">连结</li>
+<li class="fragment">方向</li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<h3 id="ego-net">Ego-net</h3>
+<ul>
+<li class="fragment">生成
+<ul>
+<li class="fragment">Ego</li>
+<li class="fragment">Path</li>
+<li class="fragment">Boundary</li>
+<li class="fragment">Snowball</li>
+</ul></li>
+<li class="fragment">描述
+<ul>
+<li class="fragment">Size</li>
+<li class="fragment">Density</li>
+<li class="fragment">Similarity</li>
+<li class="fragment">Centrality</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div class="footer footer-default">
+
+</div>
+</section></section>
+
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="08_networkAnalysis_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="08_networkAnalysis_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          // dispatch for htmlwidgets
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for reveal
+        if (window.Reveal) {
+          window.Reveal.addEventListener("slidechanged", function(event) {
+            fireSlideChanged(event.previousSlide, event.currentSlide);
+          });
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
       }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
-</script>
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-(function () {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
-  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
-    script.src  = script.src.replace(/^https?:/, '');
-  document.getElementsByTagName('head')[0].appendChild(script);
-})();
-</script>
-  </body>
-</html>
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        setTimeout(function() {
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          let href = ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+        tippyHover(ref, function() {
+          var popup = window.document.createElement('div');
+          cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+          }
+        }
+    });
+    </script>
+    
+
+</body></html>
