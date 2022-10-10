@@ -6,8 +6,10 @@
 <script src="04_distribution_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="04_distribution_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="04_distribution_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="04_distribution_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.37">
+<link href="04_distribution_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="04_distribution_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="04_distribution_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.1.251">
 
   <meta name="author" content="Yue Hu">
   <title>Population and Distrations</title>
@@ -19,10 +21,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="04_distribution_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link rel="stylesheet" href="style_basic.css">
@@ -366,7 +373,7 @@
 <ul>
 <li class="fragment">Continuous</li>
 <li class="fragment">Density plot</li>
-<li class="fragment">Cumulative density function: <span class="math inline">\(F(x) = P(X \leq x)\)</span></li>
+<li class="fragment">Cumulative density function (CDF): <span class="math inline">\(F(x) = P(X \leq x)\)</span></li>
 </ul></li>
 </ul>
 </div>
@@ -424,7 +431,9 @@
 <li class="fragment">1st: Center of mass</li>
 <li class="fragment">2ed: Rotational inertia</li>
 </ul>
+<div class="fragment">
 <p><img data-src="images/dist_rotation.gif" height="400"></p>
+</div>
 </div><aside class="notes">
 <p>Rotational inertia: 惯性矩</p>
 <style type="text/css">
@@ -495,8 +504,7 @@
 <p>Bernoulli: Let <span class="math inline">\(k\in 0, 1,\)</span> p is P(X = 1)</p>
 </div>
 <div class="fragment">
-<p>CDF:</p>
-<p><span class="math display">\[
+<p>CDF: <span class="math display">\[
 F = \begin{cases}
 0, if\ k&lt;0,\\
 1 - p, if\ k \in[0, 1),\\
@@ -510,10 +518,10 @@ F = \begin{cases}
 <p><span class="math display">\[f(k;p) = p^k(1 - p)^{1 - k}\]</span></p>
 <ul>
 <li class="fragment">μ = p</li>
-<li class="fragment">σ<sup>2</sup> = p(1 - p)<sup>*</sup></li>
+<li class="fragment">σ<sup>2</sup> = p(1 - p)</li>
 </ul>
 </div><div class="column fragment" style="width:50%;">
-<p><img data-src="images/dist_bernoulli_pmf.gif" height="400"></p>
+<p><img data-src="images/dist_bernoulli_pmf.gif" height="350"></p>
 </div>
 </div>
 <aside class="notes">
@@ -548,8 +556,10 @@ F = \begin{cases}
 <li class="fragment">k, the number of success</li>
 <li class="fragment"><span class="math inline">\({n \choose k} = \frac{n!}{k!(n - k)!}\)</span> (what’s this?)</li>
 </ul>
+<div class="fragment">
 <p>μ = np<br>
 σ<sup>2</sup> = np(1 - p)</p>
+</div>
 </div><aside class="notes">
 <p>Combination: no order, every draw is independent</p>
 <style type="text/css">
@@ -615,17 +625,16 @@ F = \begin{cases}
 </div>
 <div class="columns" style="text-align:center">
 <div class="column fragment" style="width:50%;">
-<p>CDF:</p>
-<p><span class="math display">\[F = \begin{cases}
+<p>CDF: <span class="math display">\[F = \begin{cases}
 0, if\ x &lt; a,\\
 \frac{x - a}{b - a}, if\ x \in[a, b),\\
 1, if\ x \geq b.
 \end{cases}\]</span></p>
-<p><img data-src="images/dist_uniform_cdf.png" height="400"></p>
+<p><img data-src="images/dist_uniform_cdf.png" height="350"></p>
 </div><div class="column fragment" style="width:50%;">
 <p>PDF:</p>
 <p><span class="math display">\[f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}\]</span></p>
-<p><img data-src="images/dist_uniform_pdf.png" height="500"></p>
+<p><img data-src="images/dist_uniform_pdf.png" height="350"></p>
 </div>
 </div>
 </section>
@@ -724,7 +733,7 @@ F = \begin{cases}
 </div><div class="column fragment" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/dist_zscoreNormal.gif" height="500"></p>
+<p><img data-src="images/dist_zscoreNormal.gif" height="400"></p>
 </figure>
 </div>
 </div>
@@ -814,7 +823,7 @@ F = \begin{cases}
 </div>
 </section>
 <section id="inventors-of-distributions" class="slide level2">
-<h2>Inventors of Distributions<img data-src="images/ci_fsmrof.png"></h2>
+<h2><img data-src="images/ci_fsmrof.png">Inventors of Distributions</h2>
 <div class="columns" style="text-align:center">
 <div class="column fragment" style="width:50%;">
 <p>Jacob Bernoulli &amp; Gerolamo Cardano</p>
@@ -848,6 +857,10 @@ F = \begin{cases}
 <div style="text-align: center">
 <p><img data-src="images/dist_mindmap.png" height="850"></p>
 </div>
+</section>
+<section id="have-a-break" class="slide level2">
+<h2>Have a break</h2>
+<video id="video_shortcode_videojs_video1" height="850" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
 <div class="footer footer-default">
 
 </div>
@@ -1175,7 +1188,8 @@ F = \begin{cases}
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
@@ -1217,6 +1231,7 @@ F = \begin{cases}
         }
     });
     </script>
+    
     
 
 </body></html>
