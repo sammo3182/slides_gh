@@ -7,7 +7,7 @@
 <link href="09_networkAnalysisII_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="09_networkAnalysisII_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="09_networkAnalysisII_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.37">
+  <meta name="generator" content="quarto-1.1.251">
 
   <meta name="author" content="胡悦">
   <title>社会网络方法论: 分析网络</title>
@@ -19,10 +19,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
     pre > code.sourceCode { white-space: pre; position: relative; }
     pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -427,24 +432,16 @@
 </ol>
 </div>
 </section>
-<section id="dyads种类" class="slide level2">
-<h2>Dyads种类</h2>
+<section id="dyads-distribution" class="slide level2">
+<h2>Dyads Distribution</h2>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
 <ol type="1">
 <li class="fragment">None: A &nbsp; B</li>
 <li class="fragment">Arc: A → B; B ← C</li>
 <li class="fragment">Reciprocal(互惠): A ↔︎ B</li>
 </ol>
-<div class="columns" style="text-align:center">
-<div class="column fragment" style="width:50%;">
-<p><img data-src="images/sna_arc.png" height="500"></p>
-</div><div class="column fragment" style="width:50%;">
-<ul>
-<li class="fragment">Dyadic: <span class="math display">\[R = \frac{\#Reciprocated\ Pairs}{\# Connected\ Pairs}\]</span></li>
-<li class="fragment">Arc: <span class="math display">\[R = \frac{\#Reciprocated\ Arcs}{\# Total\ Arcs}\]</span></li>
-</ul>
-</div>
-</div>
-<aside class="notes">
+</div><aside class="notes">
 <p>Arc is a directed edge</p>
 <p>Both are using the described the same phenomenon</p>
 <style type="text/css">
@@ -457,7 +454,21 @@
           width: 1px!important;
           overflow: hidden!important;
           display:block!important;
-      }</style></aside>
+      }</style></aside><div class="column fragment" style="width:50%;">
+<p><img data-src="images/sna_arc.png" height="400"></p>
+</div>
+</div>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<ul>
+<li class="fragment">Dyadic: <span class="math display">\[R = \frac{\#Reciprocated\ Pairs}{\# Connected\ Pairs}\]</span></li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<ul>
+<li class="fragment">Arc: <span class="math display">\[R = \frac{\#Reciprocated\ Arcs}{\# Total\ Arcs}\]</span></li>
+</ul>
+</div>
+</div>
 </section>
 <section id="simmelian-tie" class="slide level2">
 <h2>Simmelian tie</h2>
@@ -486,8 +497,8 @@
 </div>
 </div>
 </section>
-<section id="triads-分型" class="slide level2">
-<h2>Triads 分型</h2>
+<section id="triads-distribution" class="slide level2">
+<h2>Triads Distribution</h2>
 <div class="panel-tabset">
 <ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Transitive Triads</a></li><li><a href="#tabset-1-2">Vacuous Triads</a></li></ul>
 <div class="tab-content">
@@ -506,6 +517,7 @@
 </figure>
 </div>
 <aside class="notes">
+<p>/v’ækjuəs/</p>
 <p>No feature a directed path</p>
 <p>Used to study social capital: closure (all nodes are reciprocal) and brokerage</p>
 <p>Prell, Christina, and John Skvoretz. 2008. “Looking at Social Capital Through Triad Structures.” Connections 28(2): 4–16.</p>
@@ -608,10 +620,10 @@
 </section>
 <section id="k-core" class="slide level2">
 <h2>K-Core</h2>
-<p>The k-core of a network graph G is the maximal subgraph H ⊆ G, such that</p>
+<p>The k-core of a network graph G is the maximal subgraph H ⊆ G in which all vertices have degree at least k</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_kcore.png" height="800"></p>
+<p><img data-src="images/sna_kcore.png" height="650"></p>
 </figure>
 </div>
 <aside class="notes">
@@ -701,17 +713,14 @@
 </ol>
 <div class="columns" style="text-align:center">
 <div class="column fragment" style="width:50%;">
-<p><em>Agglomerative method</em></p>
+<p><em>Agglomerative method</em><sup>1</sup></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/sna_agglomerative.bmp" height="400"></p>
 </figure>
 </div>
-<ul>
-<li class="fragment">可能丢失弱连结vertices</li>
-</ul>
 </div><aside class="notes">
-<p>Agglomerative 基于 a wide variety of similarity measures，从empty graph （没有任何ties）开始，将最similar的nodes加在一起</p>
+<p>Agglomerative (/ə’ɡlɔmərətiv/) 基于 a wide variety of similarity measures，从empty graph （没有任何ties）开始，将最similar的nodes加在一起</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -743,7 +752,7 @@
           display:block!important;
       }</style></aside>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>可能丢失弱连结vertices。</p></li></ol></aside></section>
 <section id="agglomerative-vs.-divisive" class="slide level2">
 <h2>Agglomerative vs.&nbsp;Divisive</h2>
 <div class="quarto-figure quarto-figure-center">
@@ -767,29 +776,27 @@
 </section>
 <section id="社群特征内聚性" class="slide level2">
 <h2>社群特征：内聚性</h2>
-<p>A.k.a., 凝聚力，邦翰两个层面</p>
-<div class="columns" style="text-align:center; margin-top: 2em">
-<div class="column fragment" style="width:50%;">
-<!-- -->
-<h3 id="连结性">连结性</h3>
-<p><img data-src="images/sna_cohesive.png" height="600"></p>
-</div><aside class="notes">
-<p>孤立个体不存在内聚性</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside><div class="column fragment" style="width:50%;">
-<!-- -->
-<h3 id="可达性">可达性</h3>
-<p><img data-src="images/sna_cohesiveII.png" height="600"></p>
-</div><aside class="notes">
+<p>A.k.a., 凝聚力</p>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">连结性</a></li><li><a href="#tabset-2-2">可达性</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_cohesive.png" height="500"></p>
+</figure>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_cohesiveII.png" height="500"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
 <p>由一点到其他点paths越多可达性越高</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -802,7 +809,6 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section>
 <section id="最小内聚性" class="slide level2">
 <h2>最小内聚性</h2>
@@ -856,17 +862,36 @@
 <p><img data-src="images/sna_moduality.png" height="600"></p>
 </figure>
 </div>
-<p>应用</p>
+</section>
+<section id="应用-1" class="slide level2">
+<h2>应用</h2>
 <p>Tamburrini et al 2015</p>
-<p><img data-src="images/sna_languageIdentity.png" data-fig-align="center" height="600"> :::{.notes} Tamburrini, Nadine, Marco Cinnirella, Vincent A. A. Jansen, and John Bryden. 2015. “Twitter Users Change Word Usage According to Conversation-Partner Social Identity.” Social Networks 40: 84–89.</p>
-<p>modula-rity maximisation algorithm</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/sna_languageIdentity.png" height="600"></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Tamburrini, Nadine, Marco Cinnirella, Vincent A. A. Jansen, and John Bryden. 2015. “Twitter Users Change Word Usage According to Conversation-Partner Social Identity.” Social Networks 40: 84–89.</p>
+<p>modularity maximisation algorithm</p>
 <p>word-usage frequencies (solid bars at the top of eachplot),<br>
 word-ending frequencies (slashed bars in the middle)<br>
-apostrophe usage (crossed bars at the bottom).</p>
+apostrophe (/əp’ɒstrəfi/) usage (crossed bars at the bottom).</p>
 <ol type="1">
-<li class="fragment">人们根据自己的community改变语言特征</li>
-<li class="fragment">communities越独立，语言特征越明显 :::</li>
+<li>人们根据自己的community改变语言特征</li>
+<li>communities越独立，语言特征越明显</li>
 </ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="扩散分析" class="title-slide slide level1 center">
@@ -878,7 +903,7 @@ apostrophe usage (crossed bars at the bottom).</p>
 <div class="fragment fade-in-then-semi-out">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_covid19difussion.gif" height="600"></p>
+<p><img data-src="images/sna_covid19difussion.gif" height="500"></p>
 </figure>
 </div>
 </div>
@@ -893,13 +918,13 @@ apostrophe usage (crossed bars at the bottom).</p>
 <section id="分析视角" class="slide level2">
 <h2>分析视角</h2>
 <div class="panel-tabset">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">联系网络<br>Contact network</a></li><li><a href="#tabset-2-2">暴露网络<br>Exposure network</a></li><li><a href="#tabset-2-3">传动网络<br>Transmission network</a></li></ul>
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">联系网络<br>Contact network</a></li><li><a href="#tabset-3-2">暴露网络<br>Exposure network</a></li><li><a href="#tabset-3-3">传动网络<br>Transmission network</a></li></ul>
 <div class="tab-content">
-<div id="tabset-2-1">
+<div id="tabset-3-1">
 <p>“Patient 0”效应: 谁接触了Patient 0，最终感染了谁</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_diffusionQ.png" height="600"></p>
+<p><img data-src="images/sna_diffusionQ.png" height="500"></p>
 </figure>
 </div>
 <aside class="notes">
@@ -916,11 +941,11 @@ apostrophe usage (crossed bars at the bottom).</p>
           display:block!important;
       }</style></aside>
 </div>
-<div id="tabset-2-2">
+<div id="tabset-3-2">
 <p>谁是易感人群</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_diffusionQ.png" height="600"></p>
+<p><img data-src="images/sna_diffusionQ.png" height="500"></p>
 </figure>
 </div>
 <aside class="notes">
@@ -937,11 +962,11 @@ apostrophe usage (crossed bars at the bottom).</p>
           display:block!important;
       }</style></aside>
 </div>
-<div id="tabset-2-3">
+<div id="tabset-3-3">
 <p>传播（传递）路径究竟是怎样的</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_diffusionQ.png" height="600"></p>
+<p><img data-src="images/sna_diffusionQ.png" height="500"></p>
 </figure>
 </div>
 </div>
@@ -951,7 +976,7 @@ apostrophe usage (crossed bars at the bottom).</p>
 <section id="应用路径分析" class="slide level2">
 <h2>应用：路径分析</h2>
 <div class="columns" style="text-align:center; margin-top: 2em">
-<div class="column fragment" style="width:70%;">
+<div class="column" style="width:70%;">
 <p><em>Valente 1996</em>: Threshold model in the view of network</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -1001,7 +1026,7 @@ apostrophe usage (crossed bars at the bottom).</p>
 </div>
 </div>
 </section>
-<section id="应用-1" class="slide level2">
+<section id="应用-2" class="slide level2">
 <h2>应用</h2>
 <p>Desmarais, Harden, Boehmke (2015)</p>
 <div class="columns" style="text-align:center">
@@ -1052,9 +1077,7 @@ apostrophe usage (crossed bars at the bottom).</p>
 <p>Influence vs.&nbsp;Homophily</p>
 </div>
 <div class="fragment">
-<blockquote>
 <p>Aral et al 2009: Matched sample estimation → 传统方法会高估影响机制 300-700%</p>
-</blockquote>
 </div>
 <aside class="notes">
 <p>Aral, Sinan, Lev Muchnik, and Arun Sundararajan. 2009. “Distinguishing Influence-Based Contagion from Homophily-Driven Diffusion in Dynamic Networks.” Proceedings of the National Academy of Sciences 106(51): 21544–49.</p>
@@ -1096,7 +1119,7 @@ apostrophe usage (crossed bars at the bottom).</p>
       }</style></aside>
 </section>
 <section id="network-analysis-spatial-analysis" class="slide level2">
-<h2>Network analysis  Spatial Analysis</h2>
+<h2>Network analysis 🤝 Spatial Analysis</h2>
 <p>Modeling Peer Influence</p>
 <p><span class="math display">\[\begin{align}
 \boldsymbol{Y}^{(1)} &amp;= \boldsymbol{XB},\\
@@ -1224,7 +1247,7 @@ apostrophe usage (crossed bars at the bottom).</p>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sna_networkHypothesis.png" height="500"></p>
+<p><img data-src="images/sna_networkHypothesis.png" height="400"></p>
 </figure>
 </div>
 </section>
@@ -1358,22 +1381,19 @@ apostrophe usage (crossed bars at the bottom).</p>
           display:block!important;
       }</style></aside>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn1" role="doc-endnote"><p>Pearson’s r correlation or Euclidean distance</p></li></ol></aside></section>
-<section id="多元网络分析" class="slide level2">
-<h2>多元网络分析</h2>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Pearson’s r correlation or Euclidean distance</p></li></ol></aside></section>
+<section id="多元网络分析-qap" class="slide level2">
+<h2>多元网络分析 (QAP)</h2>
 <p>OV: 网络<br>
 EV: 解释变量adjacency matrices</p>
 <p><span class="math display">\[E(Y_{ij}) = \beta_0 + \beta_1X_{1ij} + \beta_2X_{2ij} + ... + \beta_kX_{kij}.\]</span></p>
-<p>:::{.fragment} Using QAP</p>
+<div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>reports<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"data/reports.csv"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>reports<span class="ot">&lt;-</span>reports[, <span class="sc">-</span><span class="dv">1</span>]</span>
-<span id="cb7-3"><a href="#cb7-3"></a>friends<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"data/friends.csv"</span>, <span class="at">row.names=</span><span class="st">"ID"</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>advice<span class="ot">&lt;-</span><span class="fu">read.csv</span>(<span class="st">"data/advice.csv"</span>, <span class="at">row.names=</span><span class="st">"ID"</span>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a></span>
-<span id="cb7-6"><a href="#cb7-6"></a>qap_reg <span class="ot">&lt;-</span> <span class="fu">netlogit</span>(advice, <span class="fu">list</span>(friends, reports), <span class="at">nullhyp=</span><span class="st">"qap"</span>, <span class="at">reps=</span><span class="dv">10</span>)</span>
-<span id="cb7-7"><a href="#cb7-7"></a></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="fu">summary</span>(qap_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>qap_reg <span class="ot">&lt;-</span> <span class="fu">netlogit</span>(advice, <span class="fu">list</span>(friends, reports), <span class="at">nullhyp =</span> <span class="st">"qap"</span>, <span class="at">reps =</span> <span class="dv">10</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">summary</span>(qap_reg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Network Logit Model
@@ -1420,6 +1440,7 @@ Median    -3.11269  1.21546 -0.49470
 Mean      -3.24977  1.43153 -0.25278
 3rdQ      -2.76770  2.58742  0.06623
 Max       -2.49680  3.78736  1.55199</code></pre>
+</div>
 </div>
 </div>
 <aside class="notes">
@@ -1542,7 +1563,7 @@ Max       -2.49680  3.78736  1.55199</code></pre>
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside><ol class="aside-footnotes"><li id="fn2" role="doc-endnote"><p>k(&amp;theta)意在标准化, 整个结果和为1。</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>k(&amp;theta)意在标准化, 整个结果和为1。</p></li></ol></aside></section>
 <section id="p1-model" class="slide level2">
 <h2>P<sup>1</sup> Model</h2>
 <p><span class="math display">\[P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy_{i+} + \sum_j\beta_iy_{+j}})}{\kappa(\theta)}\]</span></p>
@@ -2196,7 +2217,8 @@ P(N, \boldsymbol{\theta}) =&amp; \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
