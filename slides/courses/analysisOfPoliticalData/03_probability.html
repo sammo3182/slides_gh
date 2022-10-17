@@ -11,7 +11,7 @@
 <link href="03_probability_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <link href="03_probability_files/libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
 <link href="03_probability_files/libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.0.37">
+  <meta name="generator" content="quarto-1.1.251">
 
   <meta name="author" content="Yue Hu">
   <title>Probability Theory</title>
@@ -23,10 +23,15 @@
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
-    span.underline{text-decoration: underline;}
-    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
     ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
   </style>
   <link rel="stylesheet" href="03_probability_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link rel="stylesheet" href="style_basic.css">
@@ -532,8 +537,8 @@ P(A|B)=&amp; \frac{P(B|A)P(A)}{P(B)},\\
 \end{align}\]</span></p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="htmlwidget-2bb5001154dc5a7e6178" style="width:960px;height:576px;" class="grViz html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2bb5001154dc5a7e6178">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-dbd7a87f44f6014e144d" style="width:960px;height:576px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-dbd7a87f44f6014e144d">{"x":{"diagram":"\ndigraph usedCar {\n\n  # a \"graph\" statement\n  graph [overlap = true, fontsize = 10]\n\n  # several \"node\" statements\n  node [shape = circle,\n        fixedsize = true,\n        width = 0.9] // sets as circles\n  N[label = \"Nature\"];\n  MF[label = \"Verify\"];\n  MS[label = \"Verify\"];\n  RFF[label = \"Result\"];\n  RFS[label = \"Result\"];\n  RSF[label = \"Result\"];\n  RSS[label = \"Result\"]\n\n  # several \"edge\" statements\n  N -> MF[label=\"K: .3\"]\n  N -> MS[label=\"A: .7\"]\n  MF -> RFF[label=\"K: .9\"]\n  MF -> RFS[label=\"A: .1\"]\n  MS -> RSF[label=\"K: .2\"]\n  MS -> RSS[label=\"A: .8\"]\n  \n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <style type="text/css">
@@ -763,15 +768,12 @@ n_{\bullet\bullet} =&amp; \sum\sum n_{ij}.
 </section>
 <section id="independence" class="slide level2">
 <h2>Independence</h2>
-<p><span class="math display">\[P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).\]</span></p>
-<div class="columns">
-<div class="column fragment" style="width:40%;">
-<p>Such event’s probability is:</p>
+<p><span class="math display">\[P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).\]</span> ::::{.columns} :::{.column width=“40%” .fragment} Such event’s probability is:</p>
 <ul>
 <li class="fragment">Population: <span class="math inline">\(\pi_i = n_i/N\)</span>;</li>
-<li class="fragment">Sample: <span class="math inline">\(\hat{\pi_i} = n_i/n_{\bullet\bullet}.\)</span></li>
+<li class="fragment">Sample: <span class="math inline">\(\hat{\pi_i} = n_i/n_{\bullet\bullet}.\)</span> :::</li>
 </ul>
-</div><div class="column fragment" style="width:60%;">
+<div class="column fragment" style="width:60%;">
 <p>E.g., Do you like ”Love Between Fairy and Devil”?</p>
 <table>
 <thead>
@@ -810,7 +812,7 @@ n_{\bullet\bullet} =&amp; \sum\sum n_{ij}.
 </ul></li>
 </ul>
 </div>
-</div>
+<p>::::</p>
 <aside class="notes">
 <p>11/28 × 17/28: <span class="red">Expected value for independence</span></p>
 <p><span class="math inline">\(\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.\)</span></p>
@@ -1158,7 +1160,8 @@ n_{\bullet\bullet} =&amp; \sum\sum n_{ij}.
       for (var i=0; i<noterefs.length; i++) {
         const ref = noterefs[i];
         tippyHover(ref, function() {
-          let href = ref.getAttribute('href');
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
