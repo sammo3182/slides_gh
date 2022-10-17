@@ -1,0 +1,650 @@
+---
+title: "Confidence Intervals and Distribution Comparison"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+## Overview
+
+```{r setup, include = FALSE}
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse,
+  drhutools
+) 
+
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+
+1. Sample properties
+1. Confidence interval
+1. Applications of CI
+
+
+# Sample property
+
+## Random Variable (Formally Introduced)
+
+> A random variable (stochastic variable) is a type of variable in statistics whose possible values depend on the outcomes of a certain random phenomenon. 
+
+- A [mapping or function]{.red} from possible outcomes in a sample space to a measurable space, often the real numbers.
+    - Different from variable in algebra: $Y = log((\sqrt{X})^{\frac{1}{e}}) - 15.$
+    - Different from variable in data collection: "I asked about the respondents' gender, age, and education."
+    
+:::{.notes}
+Not 1 map 1 or 1 map all, but there is a chance
+
+Not fixed but may change
+:::
+
+- Distribution for a random variable
+    - The mathematical function that gives the probabilities of occurrence of different possible outcomes for an experiment. (Given in last lecture)
+    - The description of [how likely]{.red} a random variable takes one of its possible states.
+
+## To learning about a random variable
+
+:::{style="text-align:center"}
+  Parameter &lArr; sample
+:::
+
+Sample Properties
+
+::: {.panel-tabset}
+### Finite sample
+
++ **Unbiasedness**: Produce the [right]{.red} answer on coverage, E(p) = &pi;
+
+:::{.notes}
+Unbiasedness: the expectation is the true value
+
+How to achieve unbiasedness: 
+
+1. Design: Randomization(prior), why? no confounders
+1. Post-dgp: weight(post), manually collect, 老将出马
+:::
+
++ **Efficiency**: [Smaller]{.blue} variance of [unbiased]{.red} estimators
+    + How to increase efficiency? Hint: $SE = \frac{\sigma}{\sqrt{n}}$^[![](images/ci_fsmrof.png) For a normal distribution with &sigma;<sup>2</sup> = 1, the median = &pi;/2n &approx; 1.57/n > 1/n (mean), so for a standard normal, mean is *1.57 times more* effiicent than median.]
+
+:::{.notes}
+  The median will generally be better than the mean if there are heavy tails, while the mean will be best with light tails.
+
+https://stats.stackexchange.com/questions/136671/for-what-symmetric-distributions-is-sample-mean-a-more-efficient-estimator-tha
+
+FSM: Flying Spaghetti Monster
+:::
+
+### Large sample
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
++ **Convergence**:  $p\lim_{n \to \infty}X_n = a, a\in R.$
+
+![](images/ci_convergence.gif){.fragment fig-align="center" height=300}
+
+:::
+
+:::{.notes}
+  When a sequence of random variables stabilizes to a certain probabilistic behavior as n &rarr; &infin; , the sequence is said to show stochastic convergence.
+  
+  *Two Views of Convergence*
+
+1. In *probability*: Values in the sequence eventually take a [constant value]{.red} (i.e. the limiting distribution is a point mass).
+
+1. In *distribution*: Values in the sequence continue to vary, but the variation eventually comes to follow an [unchanging distribution]{.red} (i.e. the limiting distribution is a well characterized distribution)
+:::
+
+
+::: {.column width="50%"}
++ **Consistency**: $p\lim_{n \to \infty}\hat{\theta}_n = \theta.$
+
+![](images/ci_consistency.gif){.fragment fig-align="center" height=300}
+
+:::{.notes}
+  An estimator q<sub>n</sub> is consistent if the sequence q<sub>1</sub>...q<sub>n</sub> converges in probability to the true parameter value &theta; as sample size n grows to infinity: 
+:::
+
+:::
+
+::::
+
+:::
+
+## About Consistency
+
+- [Minimal]{.red} requirement for estimators
+- May perform [badly]{.red} in small samples
+
+:::{.fragment}
+> Only if a sequence of estimators is [unbiased and converges to a value]{.red}, then it is consistent, as it must converge to the correct value.
+:::
+
+
+:::{.notes}
+### Does Unbiasedness Imply Consistency?
+
+Let's estimate the mean height of our university. 
+To do so, we randomly draw a sample from the student population and measure their height. 
+Then what estimator should we use?
+
+::: {.panel-tabset}
+### Option
+
+:::{.nonincremental}
+1. The mean height of the sample;
+1. The height of the student we draw first.
+:::
+
+:::{.notes}
+  Why the mean? 
+:::
+
+### Solution
+
+E(X&#772;) = E(X<sub>1</sub>) = &mu;;
+
+Var(X1)=&sigma;<sup>2</sup> forever.
+
+:::{.notes}
+Both estimator are **unbiased** (😱!!!)   
+
+Appendix C of Introductory Econometrics by Jeffrey Wooldridge
+
+Say we want to estimate the mean of a population. While the most used estimator is the average of the sample, another possible estimator is simply the first number drawn from the sample. This estimator is unbiased, because  E(X1)=μ  due to the random sampling of the first number. 
+
+Yet the estimator is not consistent, because as the sample size increases, the variance of the estimator does not reduce to 0. Rather it stays constant, since Var(X1)=&sigma;2 , which the population variance, again due to the random sampling. 
+The additional information of an increasing sample size is simply not accounted for in this estimator.
+:::
+
+:::
+
+
+### Does Consistency Imply Unbiasedness?
+
+An estimator of the mean: ${1 \over n}\sum x_{i}+{1 \over n}$ 
+
+Is it consistent? 
+
+:::{.notes}
+  As $n\rightarrow \infty$, the estimator approaches the correct value, so it is consistent.
+:::
+
+
+:::{.fragment}
+Is it unbiased?
+
+$$E({1 \over n}\sum x_{i}+{1 \over n}) = E({1 \over n}\sum x_{i})+E({1 \over n}) = \mu + {1 \over n}.$$
+:::
+
+:::{.notes}
+  $E({1 \over n}\sum x_{i}+{1 \over n}) = E({1 \over n}\sum x_{i})+E({1 \over n}) = \mu + {1 \over n}\neq \mu.$
+:::
+
+
+:::
+
+
+# Confidence Interval
+
+## Learning the population from the sample
+
+:::{.fragment .fade-semi-out}
+
+[Let X be a random sample from a probability distribution with parameter &theta;. 
+A [confidence interval]{.red} for the parameter &theta;, with confidence level &gamma; is an interval determined by random variables u(X) and v(X) with the property: ]{.small}
+
+$$Pr\{u(X)<\theta <v(X)\}\ =\ \gamma (= 1 - \alpha), \quad {\text{ for every }}\theta.$$
+
+:::
+
+![](images/ci_ringToss.gif){.fragment fig-align="center" height=300}
+
+
+- In a [repeatedly]{.red} sampling, the percentage of the samples that could contain &theta;
+
+
+## Toss the Ring (Two-tailed)^[Explained in the next lecture.]
+
++ Mean: $\mu = \bar X \pm Z_{\alpha/2}SE$
+    - $SE(\bar{X}) = \frac{s}{\sqrt{n}}$, how far $\bar X$ can [disperse]{.red} from &mu;.
+    - &alpha;: 1 - Confident level;
+    - Z-score: $Z = \frac{X - \mu}{\sigma}$
++ Proportion: $\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}$
+
+:::{.notes}
+s is the sample standard distribution, $SE(\bar{X}) = \sqrt{\frac{s^2}{n}}$
+:::
+
+:::{.fragment}
+> In 100 times sampling of ..., there are ... samples (... of the chance) that the CI could contain the true value.
+
+:::
+
+:::{.fragment .r-fit-text}
+How to get smaller CI?
+:::
+
+:::{.notes}
+1. Large N
+1. Large &alpha;
+:::
+
+## When N Is Not That Large
+
+![](images/ci_largeNumber.gif){fig-align="center" height=250}
+
+:::{.fragment}
+
+Solution: A fatter-tailed distribution
+
+```{r zvst}
+#| echo: false
+#| fig.align: "center"
+#| fig.height: 4
+
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm, aes(colour = "Normal"), size = 1.5) +
+  stat_function(fun = function(x) dt(x, df = 3), aes(colour = "Student's t"), size = 1.5) + 
+  ylab("Probability Density") + 
+  xlab("") +
+  labs(color = "Distribution") +
+  scale_color_gb() +
+  theme(legend.position = c(0.85, 0.8))
+```
+
+:::
+
+
+:::{.notes}
+Small N, more probability to get dispersed result
+
+First derived as a posterior distribution in 1876 by Helmert and Lüroth.
+
+ William Sealy Gosset published in English language in *Biometrika* in 1908 using the pseudonym "student." Fisher called it the "student distribution"
+ 
+One version of the origin of the pseudonym is that Gosset's employer preferred staff to use pen names when publishing scientific papers instead of their real name, so he used the name "Student" to hide his identity. Another version is that Guinness did not want their competitors to know that they were using the t-test to determine the quality of raw material.
+
+:::
+
+## CI Based on N
+
+:::: {.columns}
+
+::: {.column width="50%"}
++ For mean
+    + &sigma; known, $\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}$
+    + &sigma; unknown
+        + N &geq; 100ish, then $\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}$;
+        + N < 100ish, then $\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}.$
+:::
+
+::: {.column width="50%"}
++ For proportion
+    + &pi; known, $\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$;
+    + &pi; unknown, $\Pi = P \pm t_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$.
+:::
+
+::::
+
+
+:::{.fragment}
+
+**Degree of Freedom**: Student's T critical points are relative to the d.f.
+
++ For CI: n - 1
++ For regression: n - k - 1
+:::
+
+# CI Application
+
+## Comparing Random Variables
+
+:::{style="text-align:center"}
+
++ Is the sample special? 
++ Is sample A different from sample B?
+
+:::{.fragment .fade-in}
+:::{.fragment .grow}
+A heuristic approach: comparing the most common status
+:::
+
+:::
+
+:::
+
+:::{.notes}
+Aka the mean
+:::
+
+:::{.fragment .r-fit-text}
+Why is this possible?
+:::
+
+:::{.notes}
+The ruler: Standard Normal distribution (Z-score)
+:::
+
+## Identify Special Case: An Example {auto-animate=true}
+
+:::{style="margin-top: 4em"}
+Your friend is the accountant of "Dr.Hu's Amazing Team" (dozens of peaches and plums).
+The organizer plans to buy the team a lunch meal to appreciate their hard working in the semester.
+Your friend suggested him to make a budget of ￥31 per person, since she has interviewed nine lecturers for their expenses on the past lunch: the average was ￥29.5 with a deviation of ￥3.
+The organizer accused your friend of wasting the money.
+Was your friend PUAed?
+
+:::
+
+
+## Identify Special Case: An Example {auto-animate=true}
+
+:::{.small}
+Your friend is the accountant of "Dr.Hu's Amazing Team" (dozens of peaches and plums).
+The organizer plans to buy the team a lunch meal to appreciate their hard working in the semester.
+Your friend suggested him to make a budget of ￥31 per person, since she has interviewed nine lecturers for their expenses on the past lunch: the average was ￥29.5 with a deviation of ￥3.
+The organizer accused your friend of wasting the money.
+Was your friend PUAed?
+:::
+
+:::{.fragment}
+*Solution*: 
+
+Def. PUA = Being blamed someone for something they did not do wrong.    
+&rArr; The boss blamed your friend for a reasonable guess. &rArr; The guess is in the CI.
+:::
+
+:::{.fragment}
+1. Set &alpha; = 0.05;
+1. N = 9, small sample &rarr; t distribution, d.f. = 9 - 1 = 8;
+1. t(&alpha; < (1 - 0.05)/2) = `r round(qt(.975, df = 8), digits = 4)` (`qt(.975, df = 8)` in r).
+1. $CI = 29.5 \pm t_{\frac{0.975}{2}}(\frac{3}{\sqrt{9}})$, i.e, [27.5, 31.8].
+:::
+
+
+:::{.fragment}
+[Inference]{.blue}: If we make repeated sampling from the lunch expenses, there are 95% of the samples in which the interval between 27.5 and 31.8 contains the true mean. 
+Therefore, an estimation of 31 sounds [fine]{.red}.
+Your friend was treated unjustly.
+:::
+
+## Sample comparison
+
+:::{.fragment .fade-in-then-semi-out}
+Assuming X<sub>1</sub> and X<sub>2</sub> are independent and identical distributed (IID)
+:::
+
+* &sigma; is known, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}$.
+* &sigma; is unknown, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}$
+   + $(\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ when the population of the samples are identical, i.e., $\sigma_1 = \sigma_2$, where $S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 + \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}$, d.f.: $(n_1 - 1) + (n_2 - 1)$.
+   
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+A.k.a., Difference in Means
+:::
+
+## An example {auto-animate=true}
+
+:::{style="margin-top: 4em"}
+There are two modules in "Learning R with Dr. Hu and His Friends" workshop series: R basic and R ecology.
+R basic includes five workshops and got 100, 89, 66, 64, and 71 students registered per workshop in a semester.
+R ecology includes four workshops and got 56, 91, 57, and 80 students registered respectively in the semster.
+Were the two modules equally popular? 
+:::
+
+## An example {auto-animate=true}
+
+:::{.small}
+There are two modules in "Learning R with Dr. Hu and His Friends" workshop series: R basic and R ecology.
+R basic includes five workshops and got 100, 89, 66, 64, and 71 students registered per workshop in a semester.
+R ecology includes four workshops and got 56, 91, 57, and 80 students registered respectively in the semster.
+Were the two modules equally popular? 
+:::
+
+:::{.fragment}
+Solution:
+
+Set &alpha; = 0.05; small N &rarr; t.
+
+\begin{align}
+\bar X_1 =& (100 + 89 + 66 + 64 + 71)/5 = 78; \bar X_2 = 71 \\
+S_p^2 =& \frac{994 + 902}{(5 - 1) + (4 - 1)} = 207.8571;\\
+\mu_1 - \mu_2 =& (78 - 71) \pm `r round(qt(.975, df = 7), digits = 4)` (\sqrt{116.5}\sqrt{1/5 + 1/4}) = 7 \pm `r round(qt(.975, df = 7) * sqrt((994 + 902)/7 *(1/5 + 1/4)), digits = 4)`.
+\end{align}
+:::
+
+:::{.fragment}
+[Inference:]{.blue} If we make repeated sampling from the audience size of these lectures, there are 95% of the samples in which the interval between -18 and 33 contains the true mean. 
+*The CI covers 0*. 
+:::
+
+:::{.fragment}
+**In other words, there's no statistical difference between the means.**
+:::
+
+## IID vs. NON-IID
+
+:::: {.columns}
+
+::: {.column width="50%" .fragment .fade-in-then-semi-out}
+### IID
+
+![](images/ci_independentSample.gif){fig-align="center" height=400}
+
+Observations are selected [without regard to]{.red} who is in the other condition, a.k.a., **independent and identical distributed** (IID).
+
+:::
+
+::: {.column .fragment width="50%"}
+### Matched
+
+![](images/ci_matchedSample.jpg){fig-align="center" height=400}
+
+Observations are [matched to]{.red} someone in the other condition.
+:::
+
+::::
+
+
+
+## Difference in Difference in Means
+
+:::{.fragment}
+*Independent sample*
+
+$$\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}$$
+:::
+
+
+:::{.fragment}
+*Matched samples*
+
+$D = X_1 - X_2$, then $\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}$, where $S_D = \frac{\sum(D - \bar D)^2}{n - 1}$. 
+:::
+
+:::{.fragment}
+*Matched proportions (Aggregate data)*
+
+$D = \Pi_1 - \Pi_2$ ,then $\Delta = D \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$
+:::
+
+:::{.fragment .r-fit-text}
+How are the two methods different?
+:::
+
+:::{.notes}
+Why using a different method for matched samples? Not IID for individuals, but might for the difference
+:::
+
+## An example {auto-animate=true}
+
+:::{style="margin-top: 4em"}
+Four students took an English exam and went through a review section. Then, they took the examin again. The scores are shown as following. 
+Did they get better after the review? (&alpha; = 0.05)
+
+
+| Student 	| Ray 	| Ulysses 	| Elizabeth 	| Naomi 	|
+|---------	|-----	|------	|-------	|------	|
+| IELTS      	| 57  	| 57   	| 73    	| 65   	|
+| IELTS      	| 64  	| 66   	| 89    	| 71   	|
+
+:::
+
+## An example {auto-animate=true}
+
+:::{.small}
+Four students took an English exam and went through a review section. Then, they took the examin again. The scores are shown as following. 
+Did they get better after the review?
+
+
+| Student 	| Ray 	| Ulysses 	| Elizabeth 	| Naomi 	|
+|---------	|-----	|------	|-------	|------	|
+| IELTS      	| 57  	| 57   	| 73    	| 65   	|
+| IELTS      	| 64  	| 66   	| 89    	| 71   	|
+
+:::
+
+:::{.fragment}
+Solution: Let &alpha; = 0.05,
+\begin{align}
+D =& X_1 - X_2 \Rightarrow \bar D = \sum D / n = (7 + 9 + 16 + 12) / 4 = 11\\
+S_D^2 =& 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 11 \pm 3.18\times \frac{39}{4} = 11 \pm 6
+\end{align}
+:::
+
+
+:::{.fragment}
+[Inference]{.blue}: If we make repeated sampling from these students, there are 95% of the samples in which the interval between 5 and 17 contains the true mean of the difference.
+**The CI is above 0, that is, students did get better.**
+:::
+
+
+
+## Another Example
+
+Gallop drew a pair of 1500 samples from the American population. In the sample of 1980, there are 52% Democrats, and 46% in the 1985 sample. Were the Democrats the same for two years, given the 95% CI?
+
+:::{.fragment}
+Solution: Let &alpha; = 0.05,
+
+\begin{align}
+\Pi_1 - \Pi_2 &= (0.46 - 0.52) \pm 1.96\sqrt{\frac{0.46 * 0.54}{1500} + \frac{0.52 * 0.48}{1500}} \\
+&\approx -0.06 \pm 0.036.
+\end{align}
+:::
+
+
+:::{.fragment}
+[Inference]{.blue}:
+If we make repeated sampling from the Amercian population, there are 95% of the samples in which the interval between -0.042 and 0.03 contains the true mean.
+**The CI contains 0. Thus, the proportion of Democrats in 1980 was not different from that in 1985 statistically at the 0.05 level.**
+:::
+
+
+## BFF
+
+:::: {.columns}
+
+::: {.column width="40%"}
+*Bayesian*
+
+- [Credible]{.red} interval
+- $\theta_{prior-based\ r.v.} \in [a, b]_{fixed}$
+![](images/ci_dart.gif){fig-align="center" height=300}
+
+:::{.fragment .small}
+> There are ...% of the chance that the true value lies in the CI.
+:::
+
+:::{.notes}
+Some percentage of the [posterior]{.red} distribution lies within an particular region.
+:::
+
+:::
+
+::: {.column .nonincremental width="30%"}
+*Frequentist*
+
+- [Confidence]{.red} interval
+- $\theta_{fixed} \in [a, b]_{r.v.}$ ![](images/ci_ringToss.webp){fig-align="center" height=300}
+
+:::{.small}
+> There is 95% chance the CI could contain the true value (before any data is collected).
+:::
+
+:::
+
+::: {.column width="30%"}
+
+*Fiducial*
+
+- (Fiducial) Conf interval
+- $\theta_{r.v.} \in [a, b]_{fixed}$
+![](images/ci_swan.jpg){fig-align="center" height=300}
+
+:::{.fragment .small}
+> There is 95% chance the CI could contain the true value ~~(before any data is collected)~~.
+:::
+
+:::
+
+:::{.notes}
+Fisher used it /fɪˈduʃəl/, 邓琬璐 intro to causal inference, lec 3, https://pro.yuketang.cn/v2/web/v3/playback/734415352261764864/slide/54/0
+:::
+
+::::
+
+
+## Take-home point {auto-animate=true}
+
+::: {style="text-align: center"}
+![](images/ci_mindmap.png){height="800"}
+:::
+
+---
+
+## {auto-animate=true}
+
+::: {style="text-align: center"}
+![](images/ci_fullmap.png){height="850"}
+:::
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}

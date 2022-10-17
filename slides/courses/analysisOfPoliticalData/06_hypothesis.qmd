@@ -1,0 +1,95 @@
+
+## Hypothesis Testing with CIs 
+
+Two ways: 
+
+1. Using confidence intervals
+1. Using critical t/z scores & p-value.
+
+--
+
+*Procedure*:
+
+1. H<sub>0</sub>: Specifying values for one or more population parameters in a random distribution (&mu;, &pi; rather than X&#772;, P);
+
+2. H<sub>1</sub>: the population parameter is something other than the value in the stochastic status;
+
+3. .red[&alpha; = 1 - CI];
+
+4. One-tailed/two-tailed test: Most applications are one-tail tests, while most software gives two-tail results.
+
+---
+
+## Practice
+
+Given a virus can influence 10% of the population. Now there's a sample of the older people, n = 527, within which there are 14% infected the virus. Are the older people more likely to be victimized?
+
+$H_0: \pi \leq 10; H_1: \pi > 10.$ 
+
+--
+
+Method 1:     
+$\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,$ that is [0.11, 0.17] > 0.1. $H_0.$ reject.
+
+--
+
+Method 2:     
+$Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.$ Given the level of $\alpha = 0.05$, therefore reject the $H_0.$
+
+
+---
+
+## What's &alpha;?
+
+.pull-left[<img src="images/ci_errorType.png" height = 500 />]
+
+--
+
+.pull-right[
+| Decision 	| Reject                   	|  .red[Fall to] Reject                  	|
+|----------	|--------------------------	|--------------------------	|
+| H<sub>0</sub> TRUE  	| Type I error (Pr = &alpha;)            	| Pr = 1 - &alpha; 	|
+| H<sub>0</sub> FALSE 	| P = 1 - &beta; 	|  Type II error (Pr = &beta;)            	|
+
+]
+
+???
+
+Type I: 无中生有
+Type II: 闪
+
+
+&beta; is the power of the test.
+
+Avoiding Type I is more emergent.
+
+---
+
+## Why &alpha; = 0.975/&beta; = 0.95?
+
+.pull-left[
+```{r ci}
+
+funcShaded <- function(x) {
+  y <- dnorm(x, mean = 0, sd = 1)
+  y[x < 0 - qnorm(0.975) | x > (0 + qnorm(0.975))] <- NA
+  return(y)
+}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm,
+                n = 10000,
+                args = list(mean = 0, sd = 1)) +
+  stat_function(
+    fun = funcShaded,
+    geom = "area",
+    fill = gb_cols("gold"),
+    alpha = 0.2
+  ) +
+  ylab("") + xlab("")
+```
+]
+
+--
+
+.pull-right[.Huge[.red[Arbitrary!!!]]]
