@@ -632,8 +632,8 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="discrete-model分析工具" class="slide level2">
-<h2>Discrete Model分析工具</h2>
+<section id="discrete-model分析工具" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Discrete Model分析工具</h2>
 <div class="large" style="text-align:center; margin-top: 2em" data-auto-animate="true">
 <ul>
 <li class="fragment">logit/probit</li>
@@ -643,7 +643,9 @@
 </ul>
 </div>
 <aside class="notes">
-<p>c-log-log: complementary log-log, <span class="math inline">\(\eta(x) = \log(-\log(1-\pi_x))=\mathbf{x}\beta\)</span> scobit: skewed logit expit: exponential logit</p>
+<p>c-log-log: complementary log-log, <span class="math inline">\(\eta(x) = \log(-\log(1-\pi_x))=\mathbf{x}\beta\)</span></p>
+<p>scobit: skewed logit</p>
+<p>expit: exponential logit</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -656,8 +658,8 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="logitprobit模型" class="slide level2">
-<h2>Logit/Probit模型</h2>
+<section id="logitprobit模型" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Logit/Probit模型</h2>
 <div class="columns">
 <div class="column" data-auto-animate="true" style="width:50%;">
 <ul>
@@ -667,7 +669,7 @@
 <li>expit</li>
 </ul>
 </div><div class="column fragment" style="width:50%;">
-<p>令 <span class="math inline">\(Y^*\)</span> 为导至可见事件( <span class="math inline">\(Y_{it}\)</span> )发生的不可见变量：</p>
+<p>令 <span class="math inline">\(Y^*\)</span> 为导致可见事件( <span class="math inline">\(Y_{it}\)</span> )发生的不可见变量：</p>
 <p><span class="math display">\[Y_{it} =
   \begin{cases}
    1 &amp; \text{if } Y^*\geq 0, \\
@@ -1163,11 +1165,11 @@ S(u) =&amp; e^{-u^p}
 <section id="log-normal" class="slide level2">
 <h2>Log-normal</h2>
 <p>特点： 允许非单调hazard</p>
-<p><span class="math display">\[ln(u_i)\sim N(0, \sigma^2).\]</span></p>
+<p><span class="math display">\[ln(u_i)\sim N(\mu, \sigma^2).\]</span></p>
 
 <img data-src="05_survival_files/figure-revealjs/lnFun-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="gamma" class="slide level2">
-<h2>Gamma</h2>
+<section id="γ" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Γ</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
 <p>p: the scale parameter<br>
@@ -1188,9 +1190,9 @@ S(u) =&amp; e^{-u^p}
 </div>
 </div>
 </section>
-<section id="generalized-gamma-distribution" class="slide level2">
-<h2>Generalized Gamma Distribution</h2>
-<p><span class="math display">\[f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\beta^{p\kappa}\Gamma(\kappa)}\]</span></p>
+<section id="generalized-γ-distribution" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Generalized Γ Distribution</h2>
+<p><span class="math display">\[f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\color{red}{\beta^{p\kappa}}\Gamma(\kappa)}\]</span></p>
 <div class="fragment" style="text-align:center; margin-top: 2em">
 <p>β = 1 ⇒ Gamma;</p>
 <p>κ = 0 ⇒ log-normal;</p>
@@ -1198,6 +1200,7 @@ S(u) =&amp; e^{-u^p}
 <p>κ = p = 1 ⇒ Exponential.</p>
 </div>
 <aside class="notes">
+<p><span class="math inline">\(\beta\)</span>: 能存活的时间。</p>
 <p>Exponential，Weibull，Log-normal, Gamma 都是Generalized Gamma的特殊变形</p>
 <p>Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution</p>
 <style type="text/css">
@@ -1214,8 +1217,8 @@ S(u) =&amp; e^{-u^p}
 </section>
 <section id="纳入解释变量" class="slide level2">
 <h2>纳入解释变量</h2>
-<p><strong>DGP</strong>: <span class="math inline">\(Y_i = e^{X_i\beta}u_i\)</span>，那么可以推出 <span class="math inline">\(u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}\)</span>.</p>
-<div class="fragment" style="margin-top: 2em">
+<p>DGP: <span class="math inline">\(Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}\)</span>.</p>
+<div class="fragment" style="margin-top: 1em">
 <p>让我们定义<span class="math inline">\(\lambda\equiv e^{-X_i\beta}\)</span>, 那么，对于exponential而言</p>
 <p><span class="math display">\[\begin{align}
 u_i =&amp; Y_i\lambda_i \\
@@ -1224,19 +1227,6 @@ f(Y_i|X) =&amp; \lambda_ie^{-Y_i\lambda_i}\\
 h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
 \end{align}\]</span></p>
 </div>
-<aside class="notes">
-<p><span class="math inline">\(\beta\)</span>: 能存活的时间。</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 <div class="fragment">
 <p>同理，对于Weibull, <span class="math inline">\(h(Y_i|X) = p\lambda^pY^{p - 1}.\)</span></p>
 </div>
@@ -1260,7 +1250,7 @@ h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
 </section>
 <section id="cox-model" class="slide level2">
 <h2>Cox model</h2>
-<p>Different from the γ series: <span class="red">Semi</span>-parametric Model</p>
+<p>Different from the Γ series: <span class="red">Semi</span>-parametric Model</p>
 <p><span class="math display">\[h(y|x) = h_0(y)\lambda_i^p\]</span></p>
 <p><span class="math display">\[\begin{align}
 P(1fails@y_1|someone\ f@y_1) =&amp; \frac{h_0(y_1)\lambda_i^p}{\sum^n_{i = 1}h_0(y_1)\lambda_i^p}\\
@@ -1471,7 +1461,7 @@ L_p = \prod^K_{i = 1}[\frac{e^{X_i}\beta}{\sum_{j\in R(t_i)}e^{X_i\beta}}]^{\sig
 
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/sur_repeatedFailure.jpg" height="700"></p>
+<p><img data-src="images/sur_repeatedFailure.jpg" height="600"></p>
 </figure>
 </div>
 </section>

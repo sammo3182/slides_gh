@@ -187,7 +187,7 @@ Hazard: $$P(T = t|T\geq t, X) = \frac{f(t|X)}{S(t|X)} = \frac{P(T = t | X)}{P(T 
 Hazard: the probability that the event occurs during a specific time point, given that it hasn’t already occurred.
 :::
 
-## Discrete Model分析工具
+## Discrete Model分析工具 {auto-animate=true}
 
 :::{.large style="text-align:center; margin-top: 2em" auto-animate=true}
 - logit/probit
@@ -198,11 +198,13 @@ Hazard: the probability that the event occurs during a specific time point, give
 
 :::{.notes}
 c-log-log: complementary log-log, $\eta(x) = \log(-\log(1-\pi_x))=\mathbf{x}\beta$
+
 scobit: skewed logit
+
 expit: exponential logit
 :::
 
-## Logit/Probit模型
+## Logit/Probit模型 {auto-animate=true}
 
 ::::{.columns}
 :::{.column width="50%" .nonincremental auto-animate=true}
@@ -213,7 +215,7 @@ expit: exponential logit
 :::
 
 :::{.column width="50%" .fragment}
-令 $Y^*$ 为导至可见事件( $Y_{it}$ )发生的不可见变量：
+令 $Y^*$ 为导致可见事件( $Y_{it}$ )发生的不可见变量：
 
 $$Y_{it} =
   \begin{cases} 
@@ -463,7 +465,7 @@ ggplot(data.frame(x = c(0, 5)), aes(x = x)) +
   ) +
   ylab("Probability Density") +
   xlab("X") +
-  labs(color = expression(lambda)) +
+  labs(color = "u") +
   theme_minimal() +
   theme(text = element_text(size = 25))
 ```
@@ -524,7 +526,7 @@ ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
 
 特点： 允许非单调hazard
 
-$$ln(u_i)\sim N(0, \sigma^2).$$
+$$ln(u_i)\sim N(\mu, \sigma^2).$$
 
 ```{r lnFun}
 #| echo: false
@@ -555,7 +557,7 @@ ggplot(data.frame(x = c(0, 2.5)), aes(x = x)) +
 ```
 
 
-## Gamma
+## &Gamma; {auto-animate=true}
 
 ::::{.columns}
 :::{.column width="50%" .fragment}
@@ -599,9 +601,9 @@ ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
 ```
 :::
 
-## Generalized Gamma Distribution
+## Generalized &Gamma; Distribution {auto-animate=true}
 
-$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\beta^{p\kappa}\Gamma(\kappa)}$$
+$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\color{red}{\beta^{p\kappa}}\Gamma(\kappa)}$$
 
 :::{.fragment style="text-align:center; margin-top: 2em"}
 &beta; = 1 &rArr; Gamma;
@@ -614,16 +616,19 @@ $$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\beta^{p\kappa}\Gamma(\kappa)}$$
 :::
 
 :::{.notes}
+$\beta$: 能存活的时间。
+
 Exponential，Weibull，Log-normal, Gamma 都是Generalized Gamma的特殊变形
 
 Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution
 :::
 
+
 ## 纳入解释变量
 
-**DGP**: $Y_i = e^{X_i\beta}u_i$，那么可以推出 $u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
+DGP: $Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
 
-:::{.fragment style="margin-top: 2em"}
+:::{.fragment style="margin-top: 1em"}
 让我们定义$\lambda\equiv e^{-X_i\beta}$, 那么，对于exponential而言
 
 \begin{align}
@@ -634,9 +639,7 @@ h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
 \end{align}
 :::
 
-:::{.notes}
-$\beta$: 能存活的时间。
-:::
+
 
 :::{.fragment}
 同理，对于Weibull, $h(Y_i|X) = p\lambda^pY^{p - 1}.$
@@ -664,7 +667,7 @@ $\beta$: 能存活的时间。
 
 ## Cox model
 
-Different from the &gamma; series: [Semi]{.red}-parametric Model
+Different from the &Gamma; series: [Semi]{.red}-parametric Model
 
 
 $$h(y|x) = h_0(y)\lambda_i^p$$
@@ -912,7 +915,7 @@ Assumption: intervals between successive duration time does not help to explain 
 
 ---
 
-![](images/sur_repeatedFailure.jpg){fig-align="center" height=700}
+![](images/sur_repeatedFailure.jpg){fig-align="center" height=600}
 
 ## Competing Risk
 
