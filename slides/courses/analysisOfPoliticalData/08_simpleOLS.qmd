@@ -31,8 +31,6 @@ format:
 ---
 
 
-## Overview
-
 ```{r setup, include = FALSE}
 
 
@@ -63,6 +61,8 @@ theme_update(
 
 ```
 
+## Overview
+
 
 1. Road to OLS
 1. OLS Principles
@@ -80,7 +80,7 @@ Goal: Understanding data patterns in terms of [random variable]{.red}
 
 :::: {.columns}
 
-::: {.column .nonincremental width="50%"}
+::: {.column width="50%"}
 *Path through*
 
 Description
@@ -150,7 +150,7 @@ E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
 \end{align}
 :::
 
-::: {.column width="50%"}
+::: {.column .fragment width="50%"}
 
 \begin{align}
 cov(X, Y) =& E[X - E(X)][Y - E(Y)],\\
@@ -343,7 +343,7 @@ Given \sum(X_i - \bar X)(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y)\\
 :::
 
 
-## &beta;<sub>0</sub>
+## Coefficient: &beta;<sub>0</sub>
 
 \begin{align}
 \frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
@@ -365,7 +365,7 @@ Given \sum(X_i - \bar X)(Y_i - \bar Y) =& \sum X_i(Y_i - \bar Y)\\
 :::
 
 
-## Coefficient^[$\hat\beta_0, \hat\beta_1$ are called [co]{.red}efficients.]
+## Coefficient: &beta;<sub>1</sub>^[$\hat\beta_0, \hat\beta_1$ are called [co]{.red}efficients.]
 
 :::{.fragment}
 \begin{align}
@@ -406,13 +406,17 @@ Remember $\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
 :::
 
 ::: {.column .fragment width="50%"}
-Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i$. 
+Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \beta_1 + \sum k_iu_i$. 
 
 + A [linear]{.red} combination of errors
 + Min/max(X) influences a lot.
 :::
 
 ::::
+
+:::{.notes}
+$\sum(X_i - \bar X) = 0.$
+:::
 
 
 ## Characteristics of OLS Coefficients
@@ -481,7 +485,7 @@ n - 2: $\hat\beta_0, \hat\beta_1$
 ::: {.column width="70%"}
 \begin{align}
 var(\hat \beta_1|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
-                  =& var(\beta_1\sum k_iX_i + \sum k_iu_i|X)\\
+                  =& var(\beta_1 + \sum k_iu_i|X)\\
                   =& var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
                   =& \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
                   =& \sum k_i^2 var(u_i|X)\\

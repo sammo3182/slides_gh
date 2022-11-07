@@ -9,7 +9,7 @@
 <link href="08_simpleOLS_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="08_simpleOLS_files/libs/quarto-contrib/videojs/video.min.js"></script>
 <link href="08_simpleOLS_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.1.251">
+  <meta name="generator" content="quarto-1.2.247">
 
   <meta name="author" content="Yue Hu">
   <title>Simple OLS and Properties of Estimators</title>
@@ -328,13 +328,22 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="center">
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">Simple OLS and Properties of Estimators</h1>
   <p class="subtitle">Large N &amp; Leeuwenhoek (70700173)</p>
-  <p class="author">Yue Hu</p>
-  <p class="institute">Tsinghua University</p>
-</section>
 
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+</div>
+
+</section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
 <ol type="1">
@@ -360,20 +369,20 @@
 <p><em>Path through</em></p>
 <p>Description</p>
 <ul>
-<li>Single: Moments</li>
-<li>Relation: Correlation</li>
+<li class="fragment">Single: Moments</li>
+<li class="fragment">Relation: Correlation</li>
 </ul>
 <p>Distribution</p>
 <ul>
-<li>Probability theory</li>
-<li>PDF/CDF
+<li class="fragment">Probability theory</li>
+<li class="fragment">PDF/CDF
 <ul>
-<li>Confidence intervals/p-values</li>
+<li class="fragment">Confidence intervals/p-values</li>
 </ul></li>
 </ul>
 <p>Hypothesis testing</p>
 <ul>
-<li>Significance</li>
+<li class="fragment">Significance</li>
 </ul>
 </div><div class="column" style="text-align:center">
 <div class="fragment">
@@ -414,7 +423,7 @@ E(X)_{continuous} =&amp; \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
 =&amp; E(X^2) - 2\mu E(X) + \mu^2,\\
 =&amp; E(X^2) - \mu^2.
 \end{align}\]</span></p>
-</div><div class="column" style="width:50%;">
+</div><div class="column fragment" style="width:50%;">
 <p><span class="math display">\[\begin{align}
 cov(X, Y) =&amp; E[X - E(X)][Y - E(Y)],\\
           =&amp; E[XY - X\cdot E(Y) -\\
@@ -636,8 +645,8 @@ Given \sum(X_i - \bar X)(Y_i - \bar Y) =&amp; \sum X_i(Y_i - \bar Y)\\
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="β0" class="slide level2">
-<h2>β<sub>0</sub></h2>
+<section id="coefficient-β0" class="slide level2">
+<h2>Coefficient: β<sub>0</sub></h2>
 <p><span class="math display">\[\begin{align}
 \frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =&amp; -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
 \Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =&amp; 0\\
@@ -654,8 +663,8 @@ Given \sum(X_i - \bar X)(Y_i - \bar Y) =&amp; \sum X_i(Y_i - \bar Y)\\
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="coefficient" class="slide level2">
-<h2>Coefficient<sup>1</sup></h2>
+<section id="coefficient-β1" class="slide level2">
+<h2>Coefficient: β<sub>1</sub><sup>1</sup></h2>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
 \hat\beta_1 =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
@@ -695,13 +704,26 @@ Given \sum(X_i - \bar X)(Y_i - \bar Y) =&amp; \sum X_i(Y_i - \bar Y)\\
             =&amp; \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}.
 \end{align}\]</span></p>
 </div><div class="column fragment" style="width:50%;">
-<p>Let <span class="math inline">\(k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},\)</span> then <span class="math inline">\(\hat\beta_1 = \beta_1\sum k_iX_i + \sum k_iu_i\)</span>.</p>
+<p>Let <span class="math inline">\(k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},\)</span> then <span class="math inline">\(\hat\beta_1 = \beta_1 + \sum k_iu_i\)</span>.</p>
 <ul>
 <li class="fragment">A <span class="red">linear</span> combination of errors</li>
 <li class="fragment">Min/max(X) influences a lot.</li>
 </ul>
 </div>
 </div>
+<aside class="notes">
+<p><span class="math inline">\(\sum(X_i - \bar X) = 0.\)</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="characteristics-of-ols-coefficients" class="slide level2">
 <h2>Characteristics of OLS Coefficients</h2>
@@ -768,7 +790,7 @@ cov(X_i, u_i) =&amp; 0,\\
       }</style></aside><div class="column" style="width:70%;">
 <p><span class="math display">\[\begin{align}
 var(\hat \beta_1|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
-                  =&amp; var(\beta_1\sum k_iX_i + \sum k_iu_i|X)\\
+                  =&amp; var(\beta_1 + \sum k_iu_i|X)\\
                   =&amp; var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
                   =&amp; \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
                   =&amp; \sum k_i^2 var(u_i|X)\\
@@ -1037,12 +1059,15 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
       (function () {
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          // dispatch for htmlwidgets
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
           const event = window.document.createEvent("Event");
           event.initEvent("slideenter", true, true);
           window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
 
           // dispatch for shiny
           if (window.jQuery) {
@@ -1053,13 +1078,6 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
               window.jQuery(currentSlide).trigger("shown");
             }
           }
-        }
-
-        // hookup for reveal
-        if (window.Reveal) {
-          window.Reveal.addEventListener("slidechanged", function(event) {
-            fireSlideChanged(event.previousSlide, event.currentSlide);
-          });
         }
 
         // hookup for slidy
@@ -1111,7 +1129,24 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
         button.classList.add('code-copy-button-checked');
         var currentTitle = button.getAttribute("title");
         button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
         setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
           button.setAttribute("title", currentTitle);
           button.classList.remove('code-copy-button-checked');
         }, 1000);
@@ -1149,24 +1184,42 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
           return note.innerHTML;
         });
       }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
       var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
       for (var i=0; i<bibliorefs.length; i++) {
         const ref = bibliorefs[i];
-        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-        tippyHover(ref, function() {
-          var popup = window.document.createElement('div');
-          cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
           });
-          return popup.innerHTML;
-        });
+        }
       }
         var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
           var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -1174,7 +1227,7 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
             return filterRegex.test(href) || localhostRegex.test(href);
         }
         // Inspect non-navigation links and adorn them if external
-        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external)');
+        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
         for (var i=0; i<links.length; i++) {
           const link = links[i];
           if (!isInternal(link.href)) {
