@@ -1,0 +1,577 @@
+---
+title: "Hypothesis Testing: Concept and Operation"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+## Overview
+
+```{r setup, include = FALSE}
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse,
+  patchwork,
+  drhutools
+) 
+
+
+# Functions preload
+set.seed(114)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+- Hypothesis as a concept
+    - Substantive concept
+    - Operational concept
+- Hypothesis testing
+
+# Hypothesis as a concept
+
+## Substantive definition
+
+:::{style="text-align:center"}
+Theory (logic) &larr; real world
+:::
+
+:::: {.columns}
+
+::: {.column width="30%"}
+:::{.r-vstack}
+![](images/hpy_checkBalance_ideal.jpg){.fragment fig-align="center" height=350}
+![](images/hpy_checkBalance_real.png){.fragment fig-align="center" height=350}
+
+:::
+
+:::{.notes}
+In June 2022, the Supreme Court overruled Roe vs. Wade by 6:3
+:::
+:::
+
+::: {.column width="70%"}
+
+:::{.r-hstack}
+![](images/hpy_ChinaCollapse.jpg){.fragment height=700}
+![](images/hpy_ChinaNotCollapse.png){.fragment height=700}
+
+:::
+:::
+
+:::{.notes}
+Gordon Guthrie Chang (born July 5, 1951) is a columnist, author, and lawyer., In 2010, Chang wrote in The Christian Science Monitor that "China could fail soon" and predicted an economic crash.[8] In an article, "The Coming Collapse of China: 2012 Edition," published by the Foreign Policy magazine website, Gordon G. Chang admitted that his prediction was wrong but arguing that he was off only by one year: "Instead of 2011, the mighty communist party of China will fall in 2012. Bet on it."[9] On May 21, 2016, The National Interest published another article by Chang, "China's Coming Revolution." In it, he argued that the ruling class in China is divided and that it cannot deal with its economic problems. Chang claimed that would lead to a revolution, which would overthrow the Communist Party. Unlike for his other predictions, he did not give the exact year that those events would take place
+:::
+
+::::
+
+
+
+## Operational definition
+
+:::{style="text-align:center"}
+Theory (logic) &larr; real world (conceptual)
+:::
+
+:::{style="text-align:center"}
+&darr;
+
+Ideal world vs. real world
+:::
+
+:::{style="text-align:center"}
+&darr;
+
+Ideal world &ne; real world:  Really? 
+
+Random distribution vs. empirical distribution
+:::
+
+:::{style="text-align:center"}
+&darr;
+
+Ideal world &ne; real world:  How? 
+
+Covariate analysis
+:::
+
+## Where the coefficient come from
+
+:::{.fragment .fade-in-then-semi-out}
+*Probability*: The [chance]{.red} of occurrence of X<sub>i</sub> given the PDF of X, P(O|&theta;).
+:::
+
+:::{.fragment}
+*Likelihood* : How probable a given set of [observations]{.red} is for certain values of the parameters of a distribution, &Lscr;(&theta;|O) = $\prod_{i=1}^n y_i$
+:::
+
+:::{.notes}
+
+&Lscr; Lagrangian or Laplace transform
+
+Formally, let O be the set of observed outcomes and &theta; be the set of parameters that describe the stochastic process. 
+
+*Probability*: The integral, the area, the results.
+
+*Likelihood*: The parameter, the product, the hypothesis.
+
+&Lscr; can above 1.
+:::
+
+:::{.fragment style="margin-top: 1em"}
+```{r likelihood}
+#| fig-align: center
+
+plot_pr <- ggplot(data.frame(x = 0:10, 
+                  pr = dbinom(x = 0:10, size = 10, prob = 0.5)), 
+       aes(x = x, y = pr)) +
+  geom_bar(stat = "identity") + 
+  ylab(expression(paste("P(O|", theta, ")"))) +
+  xlab("Observation")
+
+plot_lh <- ggplot(data.frame(x = seq(0,10,0.001)), aes(x = x)) +
+  stat_function(fun = function(x) dnorm(x, mean =5, sd =1)) +
+  ylab(expression(paste("L(", theta, "|O)"))) + 
+  xlab(expression(theta))
+
+plot_pr + plot_lh
+```
+:::
+
+:::{.fragment}
+Maximum Likelihood Estimation: Maximizing the probability that &Lscr;(&theta;|O) = P(O|&theta;)
+:::
+
+:::{.notes}
+* Goal: Model (parameter) selection
+    + What's the most appropriate estimation?
+        + Maximizing the probability that &Lscr;(&theta;|O) = P(O|&theta;)
+    + Point estimation: Unbiasdness
+    + Interval estimation: Range of plausible values
+    + Goodness of fit: Explained variances
+    + Diagnostic estimation: What if the assumptions are violated
+    
+    
+E.g., Given binomial distribution $L(\pi) = {n \choose s}\pi^s(1 - \pi)^{n - s}$, what &pi; reaches the maximum likelihood?
+
+$$log[L(\pi)] = log{n\choose s} + s\cdot log(\pi) + (n - s)\cdot log(1 - \pi).$$
+
+
+To get the peak value, we use the derivative:
+
+$$\frac{dlog[L(\pi)]}{d\pi} = \frac{s}{\pi} - \frac{n - s}{1 - \pi}.$$
+
+
+To minimize this, let it equal 0
+
+\begin{align}
+\frac{s}{\pi} - \frac{n - s}{1 - \pi} = 0 \Rightarrow \frac{s}{\pi} &= \frac{n - s}{1 - \pi},\\
+s(1 - \pi) &= \pi(n - s),\\
+s - s\pi &= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
+\end{align}
+
+:::
+
+## Hypothesis Testing Statistically
+
+:::{style="text-align:center; margin-top: 1em"}
+- Null (Random distribution): &Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon;
+- Theoretical (Your thought): &Lscr;(theory): Y = &beta;<sub>0</sub> + [&beta;<sub>1</sub>X]{.red} + &epsilon;
+- Testing (Hypothesis testing): &Lscr;(null) vs. &Lscr;(theory)
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+### Statistical Pillas
+
+- Law of Large Number (LLN)
+- Central limit theorem (CLT)
+
+:::
+
+## Two Pillas
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**LLN**: For a sample with size n of a random variable X, 
+
+$${\displaystyle \lim _{n\to \infty }\sum _{i=1}^{n}{\frac {X_{i}}{n}}= \mu.} $$
+
+:::{.notes}
+
+When n gets larger, the ratio of outcomes, X&#772;, will [converge to]{.red} the theoretical (population) average &mu;
+
+Converge = concentrated around
+
+Proof: https://blog.csdn.net/a19990412/article/details/85283729
+:::
+:::
+
+::: {.column width="50%"}
+**CLT**: For a random sample of n, X&#772; fluctuate around &mu; with an uncertainty,
+
+$$When\ n \rightarrow +\infty, Pr(\bar X) \sim \mathcal{N(\mu, \sigma)}. $$
+
+:::{.notes}
+When [independent]{.red} random variables are summed up, their properly normalized sum tends toward a normal distribution, even if the original variables themselves are not normally distributed.
+
+Proof: https://zhuanlan.zhihu.com/p/93738110
+:::
+
+:::
+
+::::
+
+:::{.fragment style="text-align:center"}
+When n gets larger...
+
+&zwj;CLT: X&#772; will [distribute]{.red} normally;    
+&zwj;LLN: X&#772; will [approach]{.red} to &mu;
+:::
+
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+Contradictory?
+
+:::{.notes}
+Becoming a value or becoming a distribution?
+
+CLT shows the the shape, LLN shows the location of the center.
+:::
+
+:::
+
+
+
+# Conduct Hypothesis testing
+
+## Procedure {auto-animate=true}
+
+1. An observed sample;
+1. Making the IID assumption;
+1. Set up the null (and alternative) hypotheses
+1. Set the confidence level;
+1. Compare the X&#772; with &mu.
+
+
+## IID {auto-animate=true}
+
+:::{.nonincremental}
+
+1. [An observed sample;]{.grayLight}
+1. Making the IID assumption;
+    - Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$
+    - Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$
+1. [Set up the null (and alternative) hypotheses]{.grayLight}
+1. [Set the confidence level;]{.grayLight}
+1. [Compare the X&#772; with &mu.]{.grayLight}
+
+:::
+
+:::{.notes}
+Unbiased point estimate:
+
+\begin{align}
+Given \bar X = \frac{\sum X}{n}, E(\bar X) =& \frac{1}{n}[E(X_1) + E(X_2) + \dots + E(X_n)],\\
+  =& \frac{1}{n}[\mu + \mu + \dots + \mu] = \mu.
+\end{align}
+
+Unbiased variance (standard error): 
+
+\begin{align}
+s(\bar X)^2 =& \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}\\
+  =& \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
+\therefore\ SE =& \frac{\sigma}{\sqrt{n}}.
+\end{align}
+:::
+
+## Hypothesis Setting {auto-animate=true}
+
+:::{.nonincremental}
+
+1. [An observed sample;]{.grayLight}
+1. [Making the IID assumption;]{.grayLight}
+    - [Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$]{.grayLight}
+    - [Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$]{.grayLight}
+1. Set up the null (and alternative) hypotheses
+    - H<sub>0</sub>: Specifying values for one or more population parameters in a random distribution (&mu;, &pi; rather than X&#772;, P);
+    - H<sub>1</sub>: the population parameter is something other than the value in the stochastic status;
+1. [Set the confidence level;]{.grayLight}
+1. [Compare the X&#772; with &mu.]{.grayLight}
+
+:::
+
+## Confidence Interval {auto-animate=true}
+
+:::{.nonincremental}
+
+1. [An observed sample;]{.grayLight}
+1. [Making the IID assumption;]{.grayLight}
+    - [Identical: X and Y are from the same distribution, ${\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}$]{.grayLight}
+    - [Independent: ${\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}$]{.grayLight}
+1. [Set up the null (and alternative) hypotheses]{.grayLight}
+    - [H<sub>0</sub>: Specifying values for one or more population parameters in a random distribution (&mu;, &pi; rather than X&#772;, P);]{.grayLight}
+    - [H<sub>1</sub>: the population parameter is something other than the value in the stochastic status;]{.grayLight}
+1. Set the confidence level;
+    - 1 - &alpha;
+1. [Compare the X&#772; with &mu.]{.grayLight}
+
+:::
+
+
+## What's Alpha
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+<img src="images/hyp_errorType.png" height = 700 />
+:::
+
+::: {.column .fragment width="50%"}
+| Decision 	| H<sub>0</sub> T                   	| H<sub>0</sub> F                   	|
+|----------	|--------------------------	|--------------------------	|
+| Reject  	| Type I error (Pr = &alpha;)            	| P = 1 - &beta; 	|
+| [Fail to]{.red} Reject 	| Pr = 1 - &alpha; 	|  Type II error (Pr = &beta;)            	|
+:::
+
+::::
+
+:::{.notes}
+Type I: 无中生有
+Type II: 闪
+
+
+&beta; is the power of the test.
+
+Avoiding Type I is more emergent.
+:::
+
+---
+
+## Why 0.05
+
+It's not arbitrary, &alpha; = 0.05 &rArr; 1 - &alpha; = 0.95 (one-tailed) or 0.975 (two tailed)
+
+```{r ci}
+#| fig-align: center
+
+funcShaded <- function(x) {
+  y <- dnorm(x, mean = 0, sd = 1)
+  y[x < 0 - qnorm(0.975) | x > (0 + qnorm(0.975))] <- NA
+  return(y)
+}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dnorm,
+                n = 10000,
+                args = list(mean = 0, sd = 1)) +
+  stat_function(
+    fun = funcShaded,
+    geom = "area",
+    fill = gb_cols("gold"),
+    alpha = 0.2
+  ) +
+  ylab("") + xlab("")
+```
+
+:::{.fragment .r-fit-text}
+Well...it's [**arbitrary**]{.red} ANNNNNNNNNND [qualitative]{.red}.
+:::
+
+:::{.notes}
+Not calculate the p-value and set the significance but set the confidence level and conduct the test. This is scientific
+:::
+
+
+## Deploy Hypothesis testing {auto-animate=true}
+
+:::{.nonincremental}
+
+1. [An observed sample;]{.grayLight}
+1. [Making the IID assumption;]{.grayLight}
+1. [Set up the null (and alternative) hypotheses]{.grayLight}
+1. [Set the confidence level;]{.grayLight}
+1. Compare the X&#772; with &mu.
+    - SE
+    - Critical value / Confidence intervals
+    
+:::
+
+
+## Standard Error (Formal Introduction)
+
+$$SE(\bar X) = \frac{s}{\sqrt{n}}.$$
+
+:::{.fragment}
+
+*E.g.* Given the population mean as 69 and standard deviation as 3.2, how would the mean of a random sample of four observations fluctuate? 
+
+\begin{align}
+E(\bar X) =& \mu = 69; \sigma = 3.2, \\
+\therefore SE(\bar X) =& \frac{3.2}{\sqrt 4} = 1.6.
+\end{align}
+
+:::
+
+
+## SE and Z-Score
+
+::: {.panel-tabset}
+## Individual-level Data
+
+$$Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}.$$
+
+:::{.fragment}
+E.g. Given $\mu$ = 72 and $\sigma$ = 9, and a random sample of 10. Calculate the probabilities of P(X > 80) and P(X&#772; > 80)
+
+$Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z > .89) =$ `r round(1 - pnorm(.89), digits = 4)`;
+
+$Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z > 2.81) =$ `r round(1 - pnorm(2.81), digits = 4)`.
+
+:::
+
+## Aggregate Data
+
+
+$$Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}.$$
+
+
+:::{.notes}
+
+In a sample of N, the sample proportion P fluctuates around the population proportion &pi; with SE, $\sqrt{\frac{\pi(1 - \pi)}{n}}$. (Why?)
+
+> Proof: 
+> $\sigma^2 = E(X^2) - \mu^2 = \pi - \pi^2 = \pi(1 - \pi)$.
+&there4; $\sigma = \sqrt{\pi(1 - \pi)}, SE = \sigma/\sqrt{n} = \sqrt{\frac{\pi(1 - \pi)}{n}}.$
+
+Then, $Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}$, the confidence interval: $\pi = P \pm Z\sqrt{\frac{P(1 - P)}{n}}.$
+
+:::
+
+:::{.fragment}
+E.g., Given the Republican are 60% of the population, while the Democrats are 40%. What's the probability that the Republican are the minority in a random sample of 100 people from the population?
+
+Minority means $P(\pi < 0.5)$. 
+
+Then, $Z = \frac{0.5 - 0.6}{\sqrt{\frac{0.6(1 - 0.6)}{100}}} =$ `r round(0.1/(sqrt(0.6 * 0.4/100)), digits = 4)`, therefore, P(Z < `r round(0.1/(sqrt(0.6 * 0.4/100)), digits = 4)`) = `r round(pnorm(-0.1/(sqrt(0.6 * 0.4/100))), digits = 4)`.
+
+:::
+
+:::
+
+## ![](images/ci_fsmrof.png) Correcting Small Population
+
+Remember sampling w.o. replacement? 
+
+:::{.fragment}
+
+Without replacement, SE of X&#772; is reduced by $\sqrt{\frac{N - n}{N - 1}}$ (finite population correction, FPC) &rArr; More uncertainty. 
+
+:::
+
+:::{.fragment}
+Illustration:
+
+- n = 1 (sampling only one sample), Then $SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}$, no changes; 
+- n = N (sampling all), SE = 0. 
+- n = 1000, N = 100,000,000 (large sample of a large population), $FPC = \sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999$, little changes.
+- n = 100, N = 108 (large sample of a [small]{.red} population), $FPC = \sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075$, some changes.
+:::
+
+
+
+## Preset Alpha vs. Estimated Statistics = Significance
+
+(Review) Hypothesis testing statistically (a.k.a., what's the significance for?)
+
+:::{style="text-align:center"}
+- Null (Random distribution): &Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon;
+- Theoretical (Your thought): &Lscr;(theory): Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &epsilon;
+- Testing (Hypothesis testing): &Lscr;(null) [vs.]{.red} &Lscr;(theory)
+:::
+
+:::{.fragment}
+How [versus]{.red}?
+
+Check if the &Lscr;(null) and &Lscr;(theory) are the same   
+(Remember difference in means?)
+:::
+
+:::{.fragment}
+Two deploying ways: 
+
+- Critical (z/t) values 
+- Confidence intervals
+:::
+
+
+## Example
+
+Given a virus can influence 10% of the population. 
+Now there's a sample of senior people, n = 527, within which there are 14% infected the virus. 
+Are senior people more likely to be victimized?
+
+
+- Assuming the sample is IID sampled and $H_0: \pi \leq 10; H_1: \pi > 10.$ 
+- &alpha; = 0.05
+- Confidence-interval method:
+  - $\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,$ that is [0.11, 0.17] > 0.1. $H_0.$ rejected.
+- Critical value method
+  - $Z_{obs} = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.$ Given the level of $\alpha = 0.05, Z_{critical} = $ `r round(qnorm(0.975), digits = 4)` < $Z_{obs}$,^[(in r, `qnorm(0.975)`, 0.975, huh?)] therefore reject the $H_0.$
+
+
+## One Last Thing: One or Two Tailed Test
+
+![](images/hyp_tailed.png){fig-align="center" height=500}
+
+- One-tailed/two-tailed test: Most applications are one-tail tests, while most software gives two-tail results.
+- One-tailed test more often apply the critical value than confidence interval method.
+
+## Take-home point
+
+::: {style="text-align: center"}
+![](images/hyp_mindmap.png){height="850"}
+:::
+
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}

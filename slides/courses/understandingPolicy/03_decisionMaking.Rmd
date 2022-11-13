@@ -1,0 +1,651 @@
+---
+title: "Micro Perspective: Decision Making Theory"
+subtitle: "Understanding Policies: Perspectives and Case (10700193)"
+author: "Yue HU"
+output:
+  xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  emo
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+# Functions preload
+set.seed(313)
+```
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
+
+
+---
+
+## Procedure
+
+.pull-left[
+### Presenting
+
+The presenter talks.
+
+### Drawing the Luck Dog
+
+<img src="images/cha_randomDraw.gif" height = 350 />
+]
+
+.pull-right[
+### Challenging
+
+1. Presenter queries.
+1. Challenger responds.
+1. Challenger queries.
+1. Presenter responds.
+]
+
+---
+
+
+## Challenging
+
+You have 15 sec to prepare for the responses.
+
+```{r stopwatch_presenter, echo = FALSE}
+library(countdown)
+
+countdown(
+  minutes = 0,
+  seconds = 15,
+  warn_when = 5,
+  right = "20%",
+  bottom = "40%",
+  font_size = "3.5em",
+  play_sound = TRUE
+)
+
+countdown(
+  minutes = 0,
+  seconds = 15,
+  right = "20%",
+  bottom = "10%",
+  warn_when = 5,
+  play_sound = TRUE
+)
+```
+
+
+---
+
+class: inverse, bottom
+
+# Decision Making Theory
+
+---
+
+## Decision Making Models
+
+### Rational-Choice Based Models
+
++ Economic Rational-Choice
++ Bounded Rational-Choice
+
+--
+
+### Irrational Models
+
++ Bureaucratic Organization
++ Belief System
++ Incremental
+
+---
+
+## Classic Rational-Choice Model
+
+.center[Goal &rArr; preference &rArr; decisions]
+
+.center[Goal: Utility = .blue[Earning] - .red[Cost]]
+
+--
+
+.bg-black.golden.ba.shadow-5.ph1.mt1[
+.center[Being rational &rarr; Utility **maximizer**.]
+]
+
+--
+
+.center[.large[How beeeautiful is it 🙏]]
+
+--
+
+e.g., [Do you need to buy a VIP membership for a video provider?](https://www.bilibili.com/video/av84023998/) 
+
+
+---
+
+class: small
+
+## Should You Buy a Vip Membership?
+
+### Earning
+
+*Mediocre Shechu*: 
+
+Working 8 h/d + [22 d/m](https://zhuanlan.zhihu.com/p/59137037) + [nationally average wage](https://mp.weixin.qq.com/s?__biz=MzI3MTA0MTMyMg==&mid=2459900748&idx=1&sn=4eb6074e1483ba65681b287a21be4af4&chksm=fdac6d09cadbe41f560d73e87a91de5318b5e39ebd071c9e4232c93ad2b8c25e41fd6820e838&token=808700715&lang=zh_CN#rd)
+
+6000RMB/22d/8h &approx; `r round(6000/22/8, digits = 1)` (RMB/h)
+
+--
+
+*Mediocre Student*:
+
+.blue[教育事业费 + 公用经费] + daily cost * 12 + specific entertainments
+
+(20298.63<sup>&midast;</sup> + 8506.2 + 2000 \* 12m + 900)RMB /10m/22d/8h &approx; `r round((20298.63 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` (RMB/h)
+
+.footnote[
+[&midast;] 4 ~ 5 times for a high-tier university, which means about `r round((20298.63 * 5 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` RMD/h
+]
+
+???
+
+Student：
+https://k.sina.com.cn/article_2634151773_9d01f75d01900fkx7.html
+
+教育部《2017年全国教育经费执行情况统计公告》
+https://k.sina.com.cn/article_2634151773_9d01f75d01900fkx7.html
+
+20298.63: 2017 教育事业费  
+8506.2: 2017 公用经费
+2000: 2017 平均消费
+
+---
+
+Given a Chinese citizen watch [3 episodes per day](https://new.qq.com/rain/a/20190806A0GAH4), and there is an average 90sec ads before each episode,
+
+3e \* 90s / 3600s \* 365d = `r 3 * 90 / 3600 * 365` h, then 
+
+`r 3 * 90 / 3600 * 365` h * `r round(6000/22/8, digits = 1)` RMB/h &approx; `r round(3 * 90 / 3600 * 365 * 6000/22/8, digits = 1)` RMB;
+
+`r round(3 * 90 / 3600 * 365 * (20298.63 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` RMB for an average college student;  
+
+--
+
+`r round(3 * 90 / 3600 * 365 * (20298.63 * 5 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` for a college student at a first-tier university
+
+???
+
+中国社科院对外发布的《休闲绿皮书：2018~2019年中国休闲发展报告》
+
+
+---
+
+### Cost
+
+Goose (198), Iq (248), B (233), Mango (198)
+
+Average `r round((198 +248 + 233 + 198)/4, digits = 1)` RMB
+
+--
+
+### Decision-Making
+
+`r round((198 +248 + 233 + 198)/4, digits = 1)` RMB vs. `r round(3 * 90 / 3600 * 365 * (20298.63 + 8506.2 + 2000 * 12 + 900)/10/22/8, digits = 1)` RMB? 
+
+Should a rational person buy a VIP?
+
+???
+
+The same logic is applied to policy decisions, such as whether to promote a new welfare package, constructing a dam, and so on.
+
+---
+
+## Something Missing...
+
++ Do you actually know how much time you will spend on a show?
+
+--
+
++ Do you know exact how much you can earn in one hour?
+
+--
+
++ Do you know if there's more profitable options (such as not watching)?
+
+--
+
++ Do you know...
+
+--
+
+.pull-left[Therefore, Herbert Simon said...]
+.pull-right[<img src="images/rat_simon.png" height = 200 />]
+
+---
+
+## Bounded Rationality
+
+Goal : ~~Utility~~ Satisfying (Satisfy + Suffice)
+
+--
+
+Why?
+
++ .red[Lack] of information
++ Cognitive .red[limitation]
++ Time .red[constraint]
+
+???
+
+e.g., decision making in drug safety, inventory control(存货管理), system modeling, game strategy
+
+Cognitive Limitation: difficulty to evaluate data
+
+---
+
+## Simon's Decision Making Model
+
+### Step 1 
+
+Intelligence Phase: Problem identification
+
+.small[Collective information, formulating the situation]
+
+--
+
+### Step 2
+
+Design Phase: Developing alternatives
+
+--
+
+### Step 3
+
+Choice Phase: Choosing the option
+
+---
+
+## Irrational Models
+
+Rationality is just a conjecture of economists.<sup>&midast;</sup>
+
+.footnote[
+[&midast;] See rationalists' defense in, e.g., Bueno de Mesquita, Bruce, et al. 2003. *The Logic of Political Survival*. Cambridge, MA: The MIT Press.
+]
+
+--
+
+### Irrational models
+
+Bureaucratic organization model  
+Belief system model  
+Incremental model
+
+---
+
+## Bureaucratic Organization Model
+
+.center[<img src="images/rat_cubanMissile.webp" height = 350 />]
+
+Allison, Graham, and Philip Zelikow. 1999. *Essence of Decision: Explaining the Cuban Missile Crisis*. 2 edition. New York: Pearson.
+
+Allison, Graham, and Philip Zelikow. 1999. *Essence of Decision: Explaining the Cuban Missile Crisis*. 2 edition. New York: Pearson.
+
+???
+
+October 16–28, 1962, Soviet ballistic missile deployment in Cuba
+
+In response to the failed Bay of Pigs Invasion of 1961 and the presence of American Jupiter ballistic missiles in Italy and Turkey, Soviet leader Nikita Khrushchev agreed to Cuba's request to place nuclear missiles on the island to deter a future invasion.
+
+Air Force U-2 spy plane produced clear photographic evidence 
+
+After several days of tense negotiations, an agreement was reached. Publicly, the Soviets would dismantle their offensive weapons in Cuba and return them to the Soviet Union, subject to United Nations verification, in exchange for a US public declaration and agreement to avoid invading Cuba again. Secretly, the United States agreed that it would dismantle all US-built Jupiter MRBMs, which had been deployed in Turkey against the Soviet Union; there has been debate on whether or not Italy was included in the agreement as well.
+
+When all offensive missiles and Ilyushin Il-28 light bombers had been withdrawn from Cuba, the blockade was formally ended on November 21, 1962. The negotiations between the United States and the Soviet Union pointed out the necessity of a quick, clear, and direct communication line between Washington and Moscow. As a result, the Moscow–Washington hotline was established. A series of agreements later reduced US–Soviet tensions for several years until both parties began to build their nuclear arsenal even further.
+
+
+Bureaucrats and related agencies have their own outlook, values and assessment 
+
+Organizational structure and bureaucracy are deciding factors
+
+
+---
+
+## How Bureaucracy Makes Decisions
+
+.small[“Where you stand depends on where you sit.” (Mile's Law)]
+
+--
+
+<img src="images/rat_yesPrimeMinister.jpg" width = 300 />
+<img src="images/rat_scandel.webp" width = 300 />
+.center[<img src="images/rat_xiuChunDao.jpeg" width = 300 />]
+
+---
+
+## Belief System 
+
+.center[<img src="images/rat_clash.jpg" />]
+
+???
+
+Converse, Philip E. 1964. “The Nature of Belief Systems in Mass Publics.” In Ideology and Discontent, ed. David E. Apter. New York: Free Press, 206–61.
+
+Suez crisis（英法 vs 埃及） and Cuban missile crisis
+
+官员惧怕发展数据治理
+
+---
+
+## Incremental Model
+
+.center[<img src="images/rat_muddleThrough.jpeg" />]
+
+Lindblom, Charles E. 1959. *The Science of Muddling Through*. Place of publication not identified: publisher not identified.
+
+
+---
+
+## Muddle How
+
+.pull-left[
+
+### Simon
+
+1. Intelligence
+1. Design
+1. Choice
+
+]
+
+--
+
+.pull-right[
+
+### Lindblom
+
+
++ Identification
++ Development
++ Selection
+    + Judging
+    + Analyzing
+    + **Bargaining**
+    + Authorizing
++ Dynamic Factors
+
+]
+
+---
+
+## Space Transportation System (1960s)
+
+.pull-left[
+
++ Initiated by NASA and DoD
++ Announced by JFK
++ Delegated to NASA
++ Clear goal, mean to an end, adequate resources
+
+]
+
+.right-column[<img src="images/rat_spaceProject.png" height = 500 />]
+
+???
+
+Placed after Gagarin, Bay of Pigs
+
+---
+
+## Spatial Shuttle in a Incremental System
+
+Identification: Gagarin, Bay of Pigs
+
+--
+
+Development
+
++ NASA led the fight and construct .blue[a broad coalition] of scientists, military, aerospace companies, international partners, presidential advisers, some members of congress
+
++ The president's budget bureau .red[doubted] the benefits.
+
+---
+
+## Selection: "Everyone a shuttle designer"
+
++ No long-range plan
++ No agreement on objectives
++ .red[One step at a time]
++ Officials pursue similar goals for different reasons
++ The program turns to satisfy multiple constituencies with unresolved interests.
+
+&rArr; Leading to programs .red[with conflicting] and often .red[forgotten objectives], funded with insufficient resources.
+
+---
+
+## Muddling, Muddling
+
+> We must think of (space activities) as part of a continuing process…and not as a series of separate leaps, each requiring a .red[massive concentration] of energy...Space expenditures must take their proper place within a rigorous system of national priorities.  
+---Richard M. Nixon (March 7, 1970)
+
+---
+
+NASA "promised" in the Space Shuttle (1972)
+
++ .blue[Ferry] astronauts to a large earth orbiting space station (original goal)
++ Provide a "space truck" for .blue[commercial] payloads
++ Deliver .blue[military] reconnaissance satellites
++ Transport .blue[space station] modules
++ Provide an orbital .blue[laboratory] for science experiments
++ Repair and .blue[return] satellites
++ Transport civilians (".blue[anyone can fly]")
++ Increase .blue[reliability]
++ .blue[Cut] the cost of space flight by a “factor of ten”
++ Be .blue[reusable]
++ Fly .blue[24 to 50 times] per year
+
+---
+
+## Where the Policy Ended
+
+> The increased complexity of a Shuttle designed to be all things to all people created .red[inherently greater risks than if more realistic technical goals] had been set at the start...The greatest compromise NASA made was...with the premise of the vehicle itself.  
+--- Columbia Accident Investigation Board, (2003)
+
+---
+
+## Wait, Not End Yet
+
+Space Station Freedom (1982-1987) 
+
++ Satellite servicing and repair station 
++ Checkout point for geosynchronous satellites
++ Observation facility
++ Assembly point for deep space missions
++ Laboratory for military R & D
++ Space manufacturing faculty
++ Node for European, Japanese, and Russian modules
++ Technology development facility
++ Pallet for scientific experiments
++ Life science research laboratory
++ Materials processing research center
++ $8 billion (1984 dollars)
+
+???
+
+The project actually costed $61 billion
+
+Btw, the project was redesigned and operated to 2008
+
+---
+
+class: bottom, inverse
+
+
+# One Step Back: What Decisions to Make
+
+---
+
+## Agenda Setting 
+
+
+.center[<img src="images/rat_agenda.png" height = 480 />]
+
+???
+
+A collection of problems, understandings of causes, symbols, solutions, and other elements of public problems that come to the attention of members of the public and their governmental officials.
+
+boundaries of the system agenda represents the limit of legitimate jurisdiction of existing governmental authority---changing over time
+
+---
+
+## Nature of Agenda Setting
+
+.pull-left[
+Three faces of power: 
+
+1. Coercive
+1. Blocking
+1. Shutting-up
+]
+
+--
+
+.pull-right[<img src="images/rat_appalachian.jpg" height = 480 />]
+
+???
+
+e.g., of the third face: Appalachian coal miners. The mining company remains dominant and the miners cannot conceive of a situation. When the miners show some signs of rebelling, the dominant interests are able to ignore pressure for change. In the long run, people may stop fighting as they become and remain alienated from politics; quiescence is the result.
+
+---
+
+## How the Disadvantaged Changes Agenda
+
+
+.pull-left[
+### Going Public
+<img src="images/rat_bombshell.jpg" width = 320 /> ]
+
+--
+
+.pull-right[
+### Appealing to higher level
+
+<img src="images/rat_trumpSue.jpg" height = 450 /> ]
+
+???
+
+1. Going public with a problem by using symbols and images to induce greater media and public sympathy for their cause.
+
+《爆炸新闻》 Fox CEO Roger Ailes sexual scandal
+
+1. Groups that lose in the first stage of a political conflict appealing to higher decision-making level, such as when losing parties appeal to state and then federal institutions for an opportunity to be heard, hoping that in the process they will attract others who agree with them and their cause
+
+Seven gop-led states bid to overtern Biden's win
+
+https://www.dallasnews.com/news/politics/2020/12/10/trump-hosts-lunch-for-texas-paxton-and-other-ags-trying-to-void-10m-votes-and-overturn-bidens-election/
+
+---
+
+## Timing Matters
+
+Kingdon, John W. 2013. *Agendas, Alternatives, and Public Policies*. Pearson Education Limited.
+
+
+.center[<img src="images/rat_policyWindow.png" width = 500 /> ]
+
+---
+
+## Kingston's Policy Windows
+
+1. Problem stream: The power of the society
+
+???
+
+a.k.a., Simon's intelligence phase and Lindblom's identification phase
+
+--
+
+1. Political stream: The power of politicians
+
+???
+
+e.g., Obamacare
+
+--
+
+1. Policy stream: The power of interest groups
+
+???
+
+e.g., the Space shuttle case.
+
+---
+
+## Windows
+
+
+.pull-left[<img src="images/rat_openWindow.gif" /> ]
+
+--
+
+.pull-right[<img src="images/rat_windowOpen.gif" height = 400 /> ]
+
+???
+
+spillover
+
+Johnson's "Great Society" program
+
+1960 Lyndon Johnson (after JFK) administration’s Great Society program, which contained a package of policies that sought to attack poverty, poor health, racial discrimination, and urban decline, among other problems. This package of programs was made possible by an aggressively activist president and a large Democratic majority in the Congress
+
+
+---
+
+## Take-Home Points
+
+.pull-left[
+### Modeling Decision Making:
+
+Rational Choice Models: 
+
+1. Economic rational: Utility
+1. Bounded rational: Satisfying
+
+Irrational Models:
+
+1. Bureaucratic model  
+1. Belief system model  
+1. Incremental model
+]
+
+.pull-right[
+### Agenda Setting
+
+Coercing, blocking, and shut-up   
+Streams and policy window
+]
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "03_.*.html"), timeout = 300)
+```

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Quasi-Experiment: Large-N Analysis</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue HU" />
+    <script src="10_largeN_files/header-attrs-2.7/header-attrs.js"></script>
+    <link href="10_largeN_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="10_largeN_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="10_largeN_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="10_largeN_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="10_largeN_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="10_largeN_files/panelset-0.2.4/panelset.js"></script>
+    <script src="10_largeN_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="10_largeN_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="10_largeN_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="10_largeN_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="10_largeN_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <script src="10_largeN_files/xaringanExtra_fit-screen-0.2.4/fit-screen.js"></script>
+    <script src="10_largeN_files/kePrint-0.0.1/kePrint.js"></script>
+    <link href="10_largeN_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Quasi-Experiment: Large-N Analysis
+## Understanding Policies: Perspectives and Case (10700193)
+### Yue HU
+### Political Science, Tsinghua University
+
+---
+
+
+
+
+background-image: url("images/cha_challenge.gif")
+background-position: center
+background-size: contain
+
+---
+
+## Overview
+
+
+.pull-left[
++ What &amp; why
+    + Large-N
+    + Why large?
+    + How large?
+]
+
+.pull-right[
++ How
+    + Univariate
+    + Bivariate
+    + Multivariate
+]
+
+.center[&lt;img src="images/lar_econometrics.jpg" height = 300 /&gt;]
+
+---
+
+class: inverse, bottom
+
+# Large-N Analysis
+
+---
+
+## What's Large-N Analyses
+
++ Large N vs. Small N
++ Coherent observations (e.g. citizens, states)
++ Average ("Get the mean right is good.")
+
+---
+
+## Why Not Experiments?
+
+.pull-left[
+### Experiment is powerful!
+
++ Excluding confounders
++ Clear outcomes
++ Clear causal chain
+]
+--
+
+.pull-right[
+### However,
+
+1. .red[Not always] practical
+1. .blue[Easy] to collect observed data
+1. .blue[Well-developed] methods
+]
+---
+
+## Why .red[Large]-N Works?
+
+.pull-left[
+Come on, my highly-educated fellows!
+
+Let's play a .orange[happy-happy] kid game:
+
+]
+
+.pull-right[
+### Step 1: Toss a fair coin
+
++ Head: 1 step to the .blue[&amp;larr;]
++ Tail: 1 step to the .red[&amp;rarr;]
+
+### Step 2: Toss six times
+
+### Step 3: Going forward
+]
+
+---
+
+&lt;video width="1000" height="600" controls&gt;
+    &lt;source src="images/lar_normalDistribution_bbc.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+
+---
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
+
+.tr[
+---"Law of Large Numbers"
+]
+]
+
+???
+
+Using sample to estimate population
+
+--
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+The sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.
+
+.tr[
+---"Central Limit Theorem"
+]
+]
+
+???
+
+Why using normal distribution
+
+---
+
+## How Large Is Large?
+
+* Rule of thumb: &gt; 100 ~ 200
+
+--
+
+But really?
+
+.center[&lt;img src="images/lar_largeNumber.gif" height = 350 /&gt;]
+
+---
+
+class: inverse, bottom
+
+* Univariate analysis
+* Bivariate analysis
+* Multivariate analysis
+
+# Large-N Approaches
+
+---
+
+## Univariate analysis
+
+.pull-left[
+.center[&lt;img src="images/lar_watchingShows.gif" height = 300 /&gt;]
+]
+
+.pull-right[
+&lt;table class="table" style="font-size: 25px; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:center;"&gt; Student_ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Episodes &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021097963 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021091648 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021097782 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021093288 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021093709 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021091864 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:center;"&gt; 2021094798 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+???
+
+Let's say we'll test a school policy of Internet access management. 
+To do so, researchers surveyed a dorm room, asking the members how many shows they watched in the past week.
+
+---
+
+## How to Describe This Variable
+
++ Given the list: (1, 1, 1, 2, 3, 3, 4)
+
+--
+
++ Mean: `\(\frac{1 + 1 + 1 + 2 + 3 + 3 + 4}{7} = \frac{15}{7} \approx 2.143.\)`
+
+--
+
++ Median: 1, 1, 1, .magenta[2], 3, 3, 4
+
+--
+
++ Mode: three .magenta[1]s, one 2, two 3s, and one 4.
+
+---
+
+## Mean, Median, or Mode?
+
+&lt;img src="10_largeN_files/figure-html/distribution-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: small
+
+## Descriptive Statistics
+
+&lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Unique (#) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Missing (%) &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Mean &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SD &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Min &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Median &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Max &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt;    &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; mpg &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="1.02" y="7.44" width="9.46" height="4.22" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="10.48" y="3.22" width="9.46" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="19.93" y="6.03" width="9.46" height="5.63" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="29.39" y="10.25" width="9.46" height="1.41" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="38.85" y="8.85" width="9.46" height="2.81" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; disp &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 27 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 230.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 71.1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 196.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 472.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="-0.56" y="5.63" width="5.54" height="6.03" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="4.98" y="3.22" width="5.54" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="10.52" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="16.07" y="10.46" width="5.54" height="1.21" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="21.61" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="27.15" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="32.70" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="38.24" y="10.46" width="5.54" height="1.21" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="43.78" y="9.25" width="5.54" height="2.41" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; hp &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 146.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 68.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 52.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 335.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="1.46" y="4.06" width="7.85" height="7.60" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="9.32" y="3.22" width="7.85" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="17.17" y="6.60" width="7.85" height="5.07" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="25.02" y="7.44" width="7.85" height="4.22" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="32.87" y="10.82" width="7.85" height="0.84" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="40.73" y="10.82" width="7.85" height="0.84" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; drat &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="-3.55" y="8.85" width="10.24" height="2.81" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="6.69" y="5.33" width="10.24" height="6.33" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="16.93" y="3.22" width="10.24" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="27.17" y="7.44" width="10.24" height="4.22" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="37.42" y="10.96" width="10.24" height="0.70" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; wt &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="1.63" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="7.31" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="12.99" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="18.68" y="3.22" width="5.68" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="24.36" y="5.09" width="5.68" height="6.57" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="30.04" y="10.72" width="5.68" height="0.94" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="35.72" y="11.66" width="5.68" height="0.00" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="41.40" y="8.85" width="5.68" height="2.81" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; qsec &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14.5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 22.9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt;  &lt;svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewBox="0 0 48.00 12.00"&gt;&lt;defs&gt;&lt;style type="text/css"&gt;
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  &lt;/style&gt;&lt;/defs&gt;&lt;rect width="100%" height="100%" style="stroke: none; fill: none;"&gt;&lt;/rect&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"&gt;&lt;rect x="0.00" y="0.00" width="48.00" height="12.00"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"&gt;
+&lt;/g&gt;&lt;defs&gt;&lt;clipPath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"&gt;&lt;rect x="0.00" y="2.88" width="48.00" height="9.12"&gt;&lt;/rect&gt;&lt;/clipPath&gt;&lt;/defs&gt;&lt;g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"&gt;&lt;rect x="-0.87" y="9.97" width="5.29" height="1.69" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="4.42" y="9.13" width="5.29" height="2.53" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="9.71" y="8.28" width="5.29" height="3.38" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="15.01" y="3.22" width="5.29" height="8.44" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="20.30" y="6.60" width="5.29" height="5.07" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="25.59" y="8.28" width="5.29" height="3.38" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="30.88" y="9.97" width="5.29" height="1.69" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="36.17" y="11.66" width="5.29" height="0.00" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;rect x="41.46" y="10.82" width="5.29" height="0.84" style="stroke-width: 0.38; fill: #000000;"&gt;&lt;/rect&gt;&lt;/g&gt;&lt;/svg&gt;
+&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;"&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt;    &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; N &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; % &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; cyl &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 43.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; vs &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; FALSE &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; TRUE &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 43.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; gear &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 37.5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt;  &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.6 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Binary Analysis
+
+Relations between variables
+
+&lt;img src="10_largeN_files/figure-html/scatter-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Multivariate Analysis
+
+.pull-left[&lt;img src="images/lab_buyerSeller.jpg" height = 450 /&gt;]
+.pull-right[&lt;img src="images/lab_matching.png" height = 450 /&gt;]
+
+.center[Hnit: That's what the ".blue[control]" means.]
+
+---
+
+## In Practice
+
+.pull-left[&lt;img src="images/table.png" height = 550 /&gt;]
+
+.pull-right[
++ Coefficients
+
++ Uncertainty
+
++ Significance
+
++ Goodness of fit
+
+
+]
+
+---
+
+## Take-Home Points
+
+.pull-left[
++ When large-N: When experiments are not available
++ Why large-N: 
+    + Law of Large Number
+    + Central Limit Theorem
++ How large? 100 ~ 1000
++ Ways: 
+    + Univariate
+    + Bivariate
+    + Multivariate
+]
+
+--
+
+.pull-right[
+### Bonus: Wonder how to conduct such analysis?
+
+Ta-da~~~
+
+.large[.green["治理技术专题：政治数据分析" (70700173)] 😋]
+]
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

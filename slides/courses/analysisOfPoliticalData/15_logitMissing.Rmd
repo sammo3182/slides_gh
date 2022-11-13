@@ -1,0 +1,666 @@
+---
+title: "Missing Data and Generalized Linear Model"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+author: "Yue Hu"
+institution: "Tsinghua University"
+# date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse, flextable, icons, xaringanExtra, ggeffects
+) 
+
+
+use_xaringan_extra(c("tile_view", # O
+                     "broadcast",
+                     "panelset",
+                     "tachyons",
+                     "fit_screen"))
+use_extra_styles(
+  hover_code_line = TRUE,         #<<
+  mute_unhighlighted_code = FALSE  #<<
+)
+
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+## Overview
+
+### Missing Data
+
++ What's missingness
++ Where does missingness come from
++ Dealing with missingness
+
+
+### Generalized Linear Model
+
+From OLS to 
++ Link function
++ Model fitness
+
+---
+
+class: inverse, bottom
+
+# Missing Data
+
+---
+
+## Modeling Missing Data
+
+Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
+
+\begin{align}
+\boldsymbol{D} =& 
+\left(\begin{array}{cc}
+X_1 & Y_1\\
+X_2 & Y_2\\
+X_3 & Y_3\\
+X_4 & Y_4\end{array}\right);
+\boldsymbol{D^{Observed}} =
+\left(\begin{array}{cc}
+X_1 & Y_1\\
+    & Y_2\\
+X_3 & Y_3\\
+    & Y_4\end{array}\right);\\
+\boldsymbol{M} =& 
+\left(\begin{array}{cc}
+0 & 0\\
+1 & 0\\
+0 & 0\\
+1 & 0\end{array}\right);
+\boldsymbol{D^M} =
+\left(\begin{array}{cc}
+ & \\
+X_2 & \\
+ & \\
+X_4 & \end{array}\right)
+\end{align}
+
+---
+
+class: center, middle
+
+## Where D<sub>M</sub> Comes From: Type of Missingness
+
+**Missing completely at random (MCAR)**
+
+P(M|D) = P(M)
+
+--
+
+.pull-left[
+**Missing at random (MAR)**
+
+P(M|D) = P(M|D<sup>Observed</sup>)
+]
+
+--
+
+.pull-right[
+**Non-ignorable (NI/MNAR)**
+
+P(M|D) &ne; P(M|D<sup>Observed</sup>)
+]
+
+--
+
+.red[Consequence of Missing]
+
+|      | Summary Stats | Regression          | SE vs. complete |
+|------|---------------|---------------------|-----------------|
+| MCAR | Unbiased      | Unbiased/consistent | *Inefficient*     |
+| MAR  | *Biased*        | Unbiased/consistent | *Inefficient*     |
+| NI   | *Biased*        | *Biased*              | --     |
+
+???
+
+Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
+Biasedness in NI is because of the censor with an X within the model
+
+---
+
+## Dealing with Missing
+
+**Ignore it**: Listwise deletion
+
+???
+
+Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often pairwise deletion
+
+--
+
+**Fill it manually**: hot deck method 
+
+???
+
+Using neayby approximate values, e.g., mean, the right last-observed observation, The term "hot deck" dates back to the storage of data on punched cards, and indicates that the information donors come from the same dataset as the recipients. The stack of cards was "hot" because it was currently being processed.
+
+--
+
+**Imputation**
+
+1. Interpolation
+1. Extrapolation
+1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
+    + For multidimentional variable use joint distribution and iterative chain.
+    
+???
+
+<img src="images/interpolation.png" height = 200 />
+<img src="images/extrapolation.png" height = 200 />
+
+    
+---
+
+## Better Way: Multiple Imputations (MI)
+
+1. Take multiple guess given estimated distribution (Expectation-Maximization)
+
+--
+
+2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
+
+--
+
+3. Combine: Rubin's formula
+
+\begin{align}
+\hat\beta =& \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
+var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
+\text{where}\ W =& \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2 
+\end{align}
+
+???
+
+$\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}$ variance within each complete dataset;
+
+$\frac{m + 1}{m}W$ variance across datasets.
+
+---
+
+
+*Advantages*
+
+Imputations are .red[separated] from the analysis &rArr; misspecification of the model does not affect MI.
+
+
+--
+
+
+*Concern*
+
+1. Not exactly replicable
+1. Rubin's formula does not always work
+    + Esp. for complex models.
+1. Time consuming and times to impute.
+    + Rule of thumb: 10 (...)
+
+
+---
+
+## When MI Isn't a Good Idea
+
+1. Model is .red[conditional on X] + .red[correctly specified]: Listwise would not affect the analysis.
+    
+--
+
+1. .red[Large] data: Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
+
+???
+
+5% is the rule of thumb, Jakobsen, Janus Christian, Christian Gluud, Jørn Wetterslev, and Per Winkel. 2017. “When and How Should Multiple Imputation Be Used for Handling Missing Data in Randomised Clinical Trials---A Practical Guide with Flowcharts.” BMC Medical Research Methodology 17(1): 162.
+
+    
+--
+
+1. Missingness in X is .red[not a function of Y], and there is no unobserved omitted values that affects Y.
+
+--
+
+1. There is .red[NI] missingness in X: EMs incorrect
+
+--
+
+1. The model is .red[nonlinear] and complicated.
+
+--
+
+1. .red[Extreme distributional divergence] in missing data from multivariate normal.
+
+---
+
+**Likelihood approach**
+
+Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
+
+e.g., SEM
+
+---
+
+## Non-Ignorable Missing
+
+When we know what happened:
+
+Censored data: 
+
+Have .red[some] information about values of missing data, e.g., all data <0 are
+coded as 0.
+
++ Leading to heteroscedasticity and nonnormal error
++ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
+
+???
+
+2SLS: Two-Stage least squares
+
+--
+
+Truncated data:
+
+Have .red[no] information about values of missing data, e.g., the data are only
+observable when it < 100,000
+
++ `tobit`, use the right distribution---a combination of P(Y<sub>i</sub><sup>*</sup> < 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).
+
+???
+
+<img src="images/censorTruncated.png" height = 200 />
+
+---
+
+class: inverse, bottom
+
+# Generalized Linear Regression
+
+---
+
+## When to Use GLR
+
++ .red[Generalized] linear regression is not .red[general] linear regression
++ Using when the very first assumption of OLS is violated.
++ Basic logic: Transforming non-continuous to continuous
+
+???
+
+General linear regression is multivariate regression
+
+--
+
+Most common situation: Noncontinuous Y
+
+---
+
+## Traditional Approaches
+
+OLS?
+
+1. Unrealistic and nonsensitive predicted outcomes
+1. Heteroscedasticity
+
+--
+
+Linear Probability Model (LPM)? 
+
+\begin{align}
+\pi_i\equiv P(Y = 1|X) =& \beta_0 + \beta_1X_i\\
+var(\pi_i) =& \pi(1 - \pi) \\
+           =& (\beta_0 +  \beta_1X_i)[1 - (\beta_0 + \beta_1X_i)]
+\end{align}
+
+???
+
+The specification of var addresses heteroscedasticity
+
+--
+
+.pull-left[
+
+*Pros*
+
+Interpreted as OLS
++ % changes in a unit of X
+
+]
+
+.pull-right[
+
+*Cons*
+
+Not very reliable transformation
+
+]
+
+???
+
+Rule of thumb: 0.2~0.8
+
+1. When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432), 
+
+2. unless restrictions are placed on {\displaystyle \beta }\beta , the estimated coefficients can imply probabilities outside the unit interval {\displaystyle [0,1]}[0,1]. 
+
+---
+
+## Superior Method: Link Functions Method
+
+Specifically, latent variable approach
+
+.center[P(Y = 1|X) = G(&beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + ... + &beta;<sub>k</sub>X<sub>k</sub>)]
+
+
+This G() is the *link* function.
+
+When G() = &Lambda;(X), logit (.red[log]istic un.red[it])
+
+When G() = &Phi;(X), probit (.red[pro]bability un.red[it])
+
+---
+
+## Logit
+
+.red[ASSUMPTION]:
+
+The outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:
+
+\begin{align}
+Y_i =& \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*> 0.\end{cases}\\
+Y^* =& X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
+\end{align}
+
+---
+
+Given the PDF of a logistic distribution is $\Lambda(x) = \frac{e^x}{1 + e^x}$, 
+
+\begin{align}
+P(Y_i = 1|X) =& P(Y^* > 0|X) = P(X\beta + u\geq 0|X)\\
+              =& P(u\geq 0 - X\beta|X)\\
+              =& 1 - P(u\leq - X\beta|X) = 1 - \Lambda(-X\beta)\\
+              =& 1 - \frac{e^{-X\beta}}{1 + e^{-X\beta}}\\
+              =& \frac{1}{1 + e^{-X\beta}} = \frac{e^{XP}}{1 + e^{X\beta}} = \Lambda(X\beta)\\
+P(Y_i = 0|X) =& P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
+             =& \Lambda(-X\beta) = \frac{e^{-X\beta}}{1 + e^{-X\beta}} = \frac{1}{1 + e^{X\beta}}\\
+             =& 1 - \Lambda(X\beta)
+\end{align}
+
+---
+
+## Probit
+
+\begin{align}
+Y_i =& \begin{cases}
+0, \text{if } Y^*\leq 0,\\
+1, \text{if } Y^*> 0.\end{cases}\\
+Y^* =& X\beta + u, u\sim \Phi(0, 1)\\
+\text{Similarly, } P(Y_i = 1|X) =& 1 - \Phi(-X\beta)\\
+f(x) =&\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
+\end{align}
+
+
+---
+
+## Logit vs. Probit
+
+* Probit is a little *more* computationally costly than logit  
+( $\frac{e^x}{1 + e^x}$ vs. $\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$)
+
+--
+
+* Logit and probit coefficients are identical but on different scales (var<sub>logit</sub> = &pi;<sup>2</sup>/3, var<sub>probit</sub> = 1)
+
+Let's say the true model is a logit, but we estimate a probit model
+
+\begin{align}
+P(Y = 1|X) =& 1 - P(u \leq -X\beta_{probit}|X)\\
+           =& 1 - \Phi(\frac{-X\beta_{probit}}{\pi^2/3})\\
+           =& 1 - \Lambda(-X\beta_{logit})\\
+\Leftrightarrow\ \beta_{logit} =& \frac{\sqrt{3}}{\pi}\beta_{probit}\approx 0.55\beta_{probit}
+\end{align}
+
+
+---
+
+## Estimation
+
+Minimize the least square? No~
+
+The maximum likelihood estimation:
+
+$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$
+
+Define: $\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)$, the .red[maximum likelihood estimate] of &theta; from among all possible values of &theta;<sup>*</sup>
+
+???
+
+We cannot minimize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ). 
+So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
+
+m: a model
+
+&theta;: parameter
+
+k: an arbitrary function, depending on the data.
+
+argmax: when having the argument, the function get the max
+
+
+\begin{align}
+\mathcal{L}(\beta|Y, X) =& \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
+                        =& \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
+\Leftrightarrow\ ln(\mathcal{L}) =& \sum ln[F(X\beta)] + \sum ln[1 - F(X\beta)]
+\end{align}
+
+--
+
+.pull-left[
+* If there is an analytic solution, calculate it.
+* If no, computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
+]
+
+--
+
+.pull-right[
+*Property*:
+
+1. Consistent;
+1. Asymptotically unbiased;
+1. Generally asymptotically efficient.
+]
+
+???
+
+Asymptotical: 渐进式的
+
+---
+
+## Interpretation
+
+$$P(Y = 1|X) = \frac{e^{XP}}{1 + e^{X\beta}}$$
+
+What's the effect of every one unit change of X on P(Y = 1|X)?
+
+--
+
+Ways to interpret GLM outcomes:
+
+1. Predicted value plots
+1. Marginal effect
+1. First difference
+
+---
+
+## Predicted Value Plots
+
+```{r predVal, fig.width=10, fig.align='center'}
+library(ggplot2)
+
+ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
+  stat_function(
+    fun = function(x)
+      exp(x) / (1 + exp(x)),
+    n = 100,
+    aes(color = "1")
+  ) +
+  stat_function(
+    fun = function(x)
+      exp(3 * x) / (1 + exp(3 * x)),
+    n = 100,
+    aes(color = "3")
+  ) +
+  ylab("Predicted Values") +
+  xlab("X") +
+  labs(color = expression(beta))
+```
+
+???
+
+Compare when beta equals different values, the larger the more s
+
+---
+
+## Marginal Effects
+
+The instantaneous change
+
+\begin{align}
+&\frac{\partial P(Y = 1|X)}{\partial X} \\
+=& \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
+& -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
+=& \beta_1P(Y = 1|X)P(Y = 0|X)
+\end{align}
+
+---
+
+The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&beta; = 0. In other words, marginal effect depends on the value of X.
+
+In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.
+
+
+---
+
+## First Difference
+
+The discrete version of marginal effect.
+
+$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$
+
+X<sub>-k</sub>: 
+
+1. All other independent variables (holding them constant)
+1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
+
+--
+
+X<sub>k</sub><sup>H,L</sup>: 
+
+1. Max &rarr; Min
+1. Median/mean &plusmn; &sigma;<sub>X<sub>k</sub></sub>
+1. Two theoretical interesting values
+1. Discrete: 0/1
+1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
+
+---
+
+## Uncertainty of Marginal Effects and FDs
+
+1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
+1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
+1. Just using the variance of $X\hat\beta$.
+
+---
+
+## Goodness of Fit
+
+*Psedo-R<sup>2</sup>*
+
+Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/) to estimate it, but none of them is quite straightforward.
+
+--
+
+*Proportional reduction in error (PRE)*, a.k.a., Percent correctly predicted (PCP)
+
+Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) > 0.5, define Y&#770; = 1, otherwise, Y&#770; = 0. Let's denote
+
+.pull-left[
+|             | Y = 1          | Y = 0          |
+|-------------|----------------|----------------|
+| Y&#770; = 1 | n<sub>11</sub> | n<sub>01</sub> |
+| Y&#770; = 0 | n<sub>10</sub> | n<sub>00</sub> |
+
+$$PCP = \frac{n_{11} + n_{00}}{\sum n}$$
+]
+
+--
+
+.pull-right[
+Advanced: How much better the model predict than plain guess. Define *PMC* as the percent modal category (the plain guess). That is,
+
+$$PRE = \frac{PCP - PMC}{1 - PMC}$$
+]
+
+???
+
+An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
+
+ePRE: expected PRE, Herron 1999, PA
+
+---
+
+## Wrap Up
+
+.pull-left[
+### Missing Data
+
++ What's missing
+    + There is, but there isn't.
++ Type of missing
+    + MCAR
+    + MAR
+    + NI
++ Dealing with missing
+    + Listwise
+    + Manually impute
+    + Multiple imputations
+]
+
+.pull-right[
+### Generalized Linear Model
+
++ OLS(?)
+    + Nonsensitive outcomes
+    + Heteroscedasticity
++ Link function
+    + Logit
+    + Probit
++ Model fitness
+    + Psedo-R<sup>2</sup>
+    + PCP/PRE
+]

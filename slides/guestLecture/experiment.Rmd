@@ -1,0 +1,1093 @@
+---
+title: "实验政治学的“能·好·怎”"
+subtitle: "政治实验设计原则与操作实践"
+author: "胡悦"
+date: "2021-10-08，中国农业大学"
+output:
+  xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, htmltools.dir.version = FALSE)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, icons, xaringanExtra
+) # data wrangling # data wrangling
+
+use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+use_extra_styles(
+  hover_code_line = TRUE,
+  mute_unhighlighted_code = TRUE
+)
+
+# Functions preload
+set.seed(313)
+```
+## 概要
+
+1. 社会科学实验.red[能]解决什么问题？
+1. 什么样的社会科学实验才是个.red[好]实验？
+1. .red[怎]样用实验方法解决政治学问题？
+
+---
+
+class: inverse, bottom
+
+## 社会科学实验能解决什么问题？
+# 因果推断的核心诉求
+
+---
+
+.center[<img src="images/lab_causality.png" height = 300 />]
+
+--
+
+## 社会科学发展重要发展方向
+
+.pull-left[
+### 因果推断逻辑
+
+* 因果效果
+* 因果机制
+]
+
+--
+
+.pull-right[
+### 因果推断方法
+
+* 实验
+* 计量经济学
+]
+
+---
+
+## 因果效应界定与反事实逻辑
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[Neyman-Rubin Causality Model (RCM)]
+]
+
+
+* 实验对象（Subject, 被试） $i$
+* 干预因素（Treatment, 0/1） $T$ 
+* 引发效果（Effect） $Y_i$
+
+$T$ 对 $i$ 的因果效应为 $\delta$：
+
+$$\delta_i = Y_{0i} - Y_{1i}.$$
+--
+
+$T$ 在哪里？
+
+--
+
+$$Y_i = TY_{i1} + (1 - T)Y_{i0}.$$
+
+
+---
+
+class: center, middle
+
+$$Y_i = TY_{i1} + (1 - T)Y_{i0}.$$
+Hmm..., 1-T 是什么鬼？！😱
+
+.center[<img src = "images/prob_multiverse_rickMordy.gif" height = 400>]
+
+--
+
+怎么计算 $\delta$? 
+
+
+---
+
+class: middle, center
+
+## 反事实逻辑实证化
+
+$T_i \in [0, 1].$    
+个体的 $Y_{0i}$ 和 $Y_{1i}$     
+$\delta_i$ 不可见 $\leadsto$ 群体估计    
+
+--
+
+&dArr;
+
+.red[Average] treatment effect (ATE): $ATE = \hat\delta =  \mathbb{E}(\delta_i).$
+  
+.red[Average] treatment effect on the treated (ATT): $ATT = \mathbb{E}(\delta_i | T_i = 1).$
+
+.red[Average] conditional treatment effect (ATE):
+
+$ATE(W) = \mathbb{E}(\delta_i|W_i).$      
+$\boldsymbol Y \sim \boldsymbol W\boldsymbol\beta.$     
+$ATT(W) = \mathbb{E}(\delta_i | W_i, T_i = 1)$
+
+???
+
+ATE estimates the causal effect of treatment on a randomly drawn individual in the population
+ATT estimates the causal effect of treatment on a randomly drawn untreated individual.
+
+
+---
+
+class: middle
+
+## 实证前提：Stable Unit Treatment Value Assumption (SUTVA)
+
+SUTVA是实证观测因果效应的.red[根本假定]；无SUVA &rArr; 无效推断
+
+--
+
++ $T_i$ .red[only] affects $Y_i$.
+
+--
+
++ In estimating ATE or ATT, the treatment is .red[homogeneous] across individuals.
+
+--
+
++ $T_i$ is .red[invariant] with respect to the mechanism by which the treatment is provided.
+
+--
+
++ All possible states of the world are .red[observed].
+
+--
+
++ The only causality question of interest is a .red[historical] one for the dataset analyzed.
+
+--
+
++ The only causality question of interest is one in which treatment is received .red[before] a choice is made; there are no simultaneous relations between treatment and choice.
+
+---
+
+## 基于RCM的实验设计优势
+
+Again, 实验究竟.normal[能]帮助我们干什么？
+
+1. 因果律 $\leadsto$ 单一因素的因果效果
+1. 定义了因果关系
+1. 使因果关系可见、可测
+
+???
+
+Neyman-Rubin causality theory 
+
+--
+
+.pull-right[
+
+.center[
+&rArr; 如何建构高效度、具有解释力的社会科学实验？
+]]
+
+---
+
+class: bottom, inverse
+
+## 什么样的社会科学实验才是个.red[好]实验？
+# 社会科学实验室实验评鉴
+
+---
+
+## 实验构成的基础要素
+
+1. 目标人群 + 干预因素 $\leadsto$ 干预模式
+
+???
+
+1. 研究者必须首先明确实验的目标人群以及核心干预因素，然后据此决定被试的来源和对其进行的干预模式。 
+
+--
+
+1. 剔除（可见干扰 + 不可见干扰）
+
+???
+
+1. 研究设计必须充分考虑对可观察的干扰变量的控制，并通过随机分配控制组和实验组等方法对不可见干扰变量和难以控制的可见干扰变量进行进一步的剔除。 
+
+--
+
+1. 控制组（后测 - 前侧）vs. 实验组（后测 - 前侧）
+    + 统计推断
+    + 存在、大小、方向
+
+???
+
+1. 研究者需要对控制组和实验组在接受干预因素影响前后的态度和行为表现进行比对，并根据统计原则进行跨组比较，据此判断干预因素与行为态度之间的因果关系是否存在。
+
+--
+
++ 三种操作化
+
+.center[
+<img src="images/lab_lab.png" width = 33% />
+<img src="images/lab_field.jpg" width = 33% />
+<img src="images/lab_survey.jpg" width = 32% />
+]
+
+
+---
+
+## “听得对，才能读的准”
+
+> (实验室)实验吧……虽然内在效度高，  
+但是.Large[外在效度太低！]
+
+--
+
++ 什么是实验效度（Validity)?
++ 如何判定实验效度高低？
++ 如何设计高效度实验？
+
+---
+
+## 实验效度
+
+.center[<img src="images/lab_validity.gif" height = 300 />]
+
+--
+
+.center[
+推断与真实的接近程度。
+
++ 与研究目的的接近程度
++ 与广泛人群的接近程度
++ 与现实世界的真实程度
+]
+
+---
+
+## 实验效度的正确理解
+
+* 内部效度: 目标人群
+    + 建构性：是否能合理且有针对性地评鉴目标理论
+    + 因果性：Identification
+    + 统计性: 核心因、果因素间具有显著且稳定的统计关系
+
+--
+
+* 外部效度: 超越目标人群 (Hint:目标人群可不一定就是总体人群)
+
+--
+
+* 生态效度: 与目标人群在非实验环境中行为决策的一致性
+    + *并不关注实证推断与真实规律的联系*，而考察的是研究环境与实际环境的相似程度
+
+--
+
+.center[.red[效度是个整体概念，不能孤立看待!]]
+
+---
+
+## 实验室实验认识谬误
+
+.left-column[
+
+### 复刻危机
+]
+
+.right-column[
++ 心理学三大刊（40%/100, Open Science Collaboration 2015）
++ 经济学十三刊（50%/67, Chang & Li 2015）
++ 政治学（Solt, Hu, et al. 2016 & 2017; Tai, Hu, Solt 2021; Xu 2021）
+
+]
+
+???
+
+Xu Yiqing 对65篇政治学论文的复刻
+
+---
+
+## 实验室实验认识谬误
+
+.left-column[
+
+### 复刻危机
+### 随机分配
+]
+
+.right-column[
+
+Kari Morgan和Donald Rubin： 在一个有10个变量的模型中,
+如果令&alpha; = 0.05, 那么出现随机分配不可控差异的几率为
+1-(1-0.05)<sup>10</sup> &approx; `r round(1 - (1 - 0.05)^10, digits = 4)`。
+
+Data imbalance &rArr; low causal & statistical validity!
+
+]
+
+???
+
+Xu Yiqing 对65篇政治学论文的复刻
+
+---
+
+## 实验室实验认识谬误
+
+.left-column[
+
+### 复刻危机
+### 随机分配
+### “外部”效度
+]
+
+.right-column[
+
+1. 被试问题
+
+> 实验室实验都用的一群学生，怎么能代表总体人口？
+
++ 研究对象总体到底是学生还是全体社会成员？
+    + 学生，那用一个学生样本推断学生，没问题
+    + 全体社会成员，用学生推断全体，是**内部**效度问题。
+    + 对比学生样本和社会样本，二者差异也没有特别大。
+
+]
+
+???
+
+Xu Yiqing 对65篇政治学论文的复刻
+
+EGAS M, RIEDL A：《The Economics of Altruistic Punishment and the Maintenance of Cooperation》：载《Proceedings of the Royal Society of London B: Biological Sciences》2008年第1637期第871–878页。
+
+KAM C D, WILKING J R, ZECHMEISTER E J：《Beyond the ’Narrow Data Base’: Another Convenience Sample for Experimental Research》：载《Political Behavior》2007年第4期第415–440页
+
+---
+
+## 实验室实验认识谬误
+
+.left-column[
+
+### 复刻危机
+### 随机分配
+### “外部”效度
+]
+
+.right-column[
+
+1. 被试问题
+1. 实验效应（experimental effects/experimenter effects）问题
+
+> 在多数情况下，被试者清楚知道自己是实验对象以及何时开始和结束实验。这一点会影响其在实验中的选择和决策，进而做出与现实中不同的表现。
+
++ 是**生态效度**问题, 不是外部效度问题
++ 非自然环境可是实验所需,     
+e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，被试者的选民身份就没有参照现实或进行随机分配，而是根据形式模型的条件进行了人为划分，从而实现了对不同特征群体内选民行为规律的全面考察。
+
+]
+
+---
+
+## 提高实验效度的若干方法
+
+针对内部
+
++ 重复实验
++ 随机分配 + 控制变量
++ 可见因素：计算机成像技术、脑部核磁共振、脑电图等高科技技术
++ 不可见因素：物质和金钱奖励、选择特定实验时间和环境，以及眼动仪及其他阈下直觉测量等手段
++ 建构效度：基于形式模型设计实验（Rebecca Morton 2010）
+
+针对外部
+
++ 被试问题：多类人群实验，精巧实验策略（least-likely case）
++ 实验效应：掩盖实验目的、现实材料作为实验刺激、模拟现实环境、物质刺激
+
+---
+
+class: center
+
+## 回看：实验室 vs. 田野 vs. 调查
+
+区别在哪里？
+
+--
+
+* 时间、空间、被试？
+
+--
+
+* 信息的运用！
+
+---
+
+class: bottom, inverse
+
+# 以实验方法解决政治学问题
+## 三个例子
+
+---
+
+## 政治心理学实验
+
+Pizzi, Elise, and Yue Hu（co-first). 2021. “Does Governmental Policy Shape Migration Decisions?The Case of China’s Hukou System.” *Modern China*.
+
+
+Puzzle 1: Why do people tend to move here rather than there?
+
+.center[<img src="images/cityIn.jpg" height = 400 width = 800 />]
+
+???
+
+first-tier cities (bei,shang, guang different)
+
+Neo-first-tier cities (Hangzhou, nanjing different)
+
+
+---
+
+Puzzle 2: Influence of Hukou
+
+Hukou, a .red[pastime] system?
+
+1. Sure, being in reforming but still "alive and well" .small[(Wang 2004; Chan and Buckingham 2008; Zhang and Treiman 2013)]
+    + Changing the conversion opportunity
+    + Adjusting the associated social benefit
+    
+???
+
+Wang Fei-Ling (2004) Reformed Migration Control and New Targeted People: China’s Hukou System in the 2000s. The China Quarterly 177: 115–132.
+
+Zhang Zhuoni(張卓妮, 香港城市大学，social and behavioural sciences) And Treiman Donald J. (2013) Social Origins, Hukou Conversion, and the Wellbeing of Urban Residents in Contemporary China. Social science research 42(1): 71–89.
+
+    
+--
+
+1. Decentralized policy .small[(Fan 2008; Ha, Yi and Zhang 2009; Zhan 2011; Zhang 2012; Zhou and Wang 2016)]
+
+???
+
+Fan C.Cindy (2008, UCLA, International Studies and Global Engagement) Migration, Hukou, and the City. China urbanizes: Consequences, strategies, and policies: 65–89.
+
+Ha Wei(哈巍, 北京大学教育学院副院长), Yi Junjian (易君健, Department of Economics, National University of Singapore) And Zhang Junsen (張俊森, 港中文) (2009) Internal Migration and Income Inequality in China: Evidence from Village Panel Data.
+
+Zhan Shaohua (南阳理工，School of Social Science) (2011) What Determines Migrant Workers’ Life Chances in Contemporary China? Hukou, Social Exclusion, and the Market. Modern China 37(3): 243–285.
+
+ZHANG LI (张力，复旦社会发展与公共政策学院 2012) Economic Migration and Urban Citizenship in China: The Role of Points Systems. Population and Development Review 38(3): 503–533.
+
+Zhou Yisu (周憶粟, 澳门大学教育系) And Wang Dan (2016) Understanding the Constraints on the Supply of Public Education to the Migrant Population in China: Evidence from Shanghai. Journal of Contemporary China 25(100): 563–578.
+
+--
+
+.center[&rArr; What does hukou mean for migrants, barriers or benefits? ]
+
+1. The stricter, the popular? 
+1. Not everyone want to change their hukou
+
+
+???
+
+Tianjin
+
+---
+
+class: center, middle
+
+## Existing literature can't answer, because...
+
+Outcome driven    
+Macro view
+
+???
+
+Studying migrants who are already in the destination
+
+Analyzing with the flow
+
+--
+
+&dArr;
+
+Psychological path identification .red[w.o.] conditioning on the migration    
+Micro-foundation analysis focusing on .red[individuals]
+
+---
+
+## A Micro-Foundation Perspective
+
+.pull-left[
+H<sub>1</sub> (Barriers): People tend to rule out destination options based on the .red[concern of strict] Hukou requirements.
+
+<img src="images/barrier.jpg" height = 400 width = 500 />
+]
+
+.pull-right[
+H<sub>2</sub> (Benefits): People prefer migration destinations where they can get more local .red[benefits].
+
+<img src="images/benefit.png" height = 400 width = 500 />
+]
+
+
+---
+
+
+## A Micro-Foundation Perspective
+
+.pull-left[
+.gray[H<sub>1</sub> (Barriers): People prefer to migrate to cities with less strict requirements for local hukou status.]
+
+]
+
+.pull-right[
+H<sub>2</sub> (Benefits): People prefer migration destinations where they can get more local benefits.
+
+
++ H<sub>2.1</sub>: People prefer to migrate to places where the benefit of the hukou is .red[easier to gain].
++ H<sub>2.2</sub>: People prefer to migrate to places where they can .red[access benefits], regardless of hukou.
+]
+
+---
+
+class: inverse, bottom
+
+# Empirical Examination
+
+---
+
+## DGP
+
++ Living Environment Satisfaction Survey of Chinese Residents (LESS 2018)
+    + National covered, quota sampling (N = 1,100)
+    + Half migrants (vs. 15%ish in representative samples)
+    + Survey experiment
+    
+.gray[
++ China Labor-Force Dynamics Survey (CLDS 2016)
+    + Nationally representative sample (N = 21,086)
+    + Special pack of question about migration
+]
+???
+
+LESS: quota sampling based on gender and education according to the 2010 census
+
+---
+
+## Mixed Design 
+
+.pull-left[
+### LESS 2018
++ Nonrepresentative
++ Native-migrant comparable
++ Experiment
++ Causal
+]
+
+.pull-right[
+.gray[
+.normal[CLDS 2016]
++ Representative
++ 13% migrants
++ Unique questions
++ Correlative & inferential
+]
+]
+
+--
+
+.center[
+.huge[&dArr;]
+
+Mixed sources (LESS + CLDS) + mixed analyses (econometric + experiment)
+]
+
+
+---
+
+## An Examination of the Benefit Effect
+
+Hukou .large[&#10144;] migration decisions (unconsciously?)
+
+Situational experiment:
+
+> Assuming you have a plan to leave from the city your hukou was registered, there are two available options: City A and B. The two cities are very similar. Both are in economically developed areas and have similar distances to your hukou city. You don’t have any social relations in either of them. The difference is that .blue[you expect to earn twice as much in City A as in City B, while the average living cost in A is also about 1. 5 times of the cost in B]. .red[Also, it is easier to obtain a local hukou in City B than in A.] Given these conditions, where do you prefer to move, A or B?
+
+Tend to moving A or B (Likert scale)
+
+???
+
+Econ is controlled
+
+---
+
+## Evaluation
+
+.pull-left[
+Internal validity
+
++ Constructive validity: Did I test what I want to test?
++ Causal validity: Which is X and which is Y?
++ Statistical validity: (See the result)
++ What tech did I use? 
+]
+
+.pull-right[
+External validity
+
++ Who's the population? 
++ Broader? 
++ What tech did I use? 
+]
+
+.center[
+Ecological validity
+
++ Do people behave the same as they are in their daily lives? 
++ What tech did I use? 
+]
+---
+
+.center[<img src="images/lab_easyAccess.png" height = 600 width = 1000 />]
+
+???
+
+Noticeable increase towards B and indifferent
+
+Empirical cumulative distributive function, the dots march the cumlative difference
+Kolmogorov-Smirnov test, comparing the distributive differences
+
+---
+
+.center[<img src="images/lab_benefitAccess.png" height = 600 width = 1000 />]
+
+???
+
+The benefit stimulus shows more effect
+
+---
+
+## Implications
+
+1. Policy does drive migration flows beyond the economic benefit, and we partially  know how. 
+1. Appealing = More public goods > Released hukou
+
+--
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+The future form of citizenship and patterns of migration are still not clear. 
+]
+
+???
+
+Solinger Dorothy J. (Associate Professor of Political Science, UC Irvine, 1999) Contesting Citizenship in Urban China: Peasant Migrants, the State, and the Logic of the Market. Univ of California Press.
+
+--
+
+.center[Hint: .red[Language] plays a role, too .<sup>\*</sup> ]
+
+.footnote[\* See Hu, Yue, and Elise Pizzi. 2022. “The Role of Language Policy in Migration Decisions.” *China: An International Journal*: Accepted.]
+
+???
+
+Vernacular and putonghua plays different roles (after 60 years of Putonghua promotion)
+
+
+---
+
+# 政治语言/行为实验
+
+Hu, Yue. 2020. “Culture Marker Versus Authority Marker: How Do Language Attitudes Affect Political Trust?” *Political Psychology* 41(4): 699–716.
+
+* Language policy &rarr; language attitudes &rarr; process-based political trust
+
+.center[
+**What's process-based Trust?**
+
+* Institutional-based vs. Process-based trust (Zucker 1986)
+* Imagined vs. Engaged (Thomas 1998; Wang 2005)
+* Support for the government and regime legitimacy (Tolbert and Mossberger 2006; Li 2004; Reisinger et al. 2017)
+]
+
+???
+
+Benedict Anderson, 1983, Imagined Communities.
+
+---
+
+## Language Attitudes
+
+* Speakers of different .red[languages] $\leadsto$ .magenta[Attitudes].
+    + A "turn-on" button<br><br><div class="centered">
+    
+--
+
+.center[<img src="images/lab_hear.gif" height = 300 />]
+
+---
+
+## Culture-Marker Theory
+
+
+.center[<img src="images/lan_culture.png" height = 200 />]
+
+
+* Language marks culture.
+
+--
+
+* People prefer speakers from the same cultural communities.
+
+--
+
+* $H_{Culture}$: *People have more trust in .red[dialect]-speaking government representatives.*
+
+???
+
+1. Other cases: Northern vs. Southern, Nevada
+
+1. Cross nationally: standard mandarin in China and Singapore
+
+---
+
+## Authority-Marker Theory
+
+--
+
+* .magenta["New"] language
+
+--
+
+* .magenta[Unique] voice of the authority
+
+--
+
+* $Attitude_{gov} \leadsto Attitude_{rep}$
+
+--
+
+* $H_{Authority}$: *People have more trust in .red[Putonghua]-speaking government representatives.*
+
+
+???
+
+1956年普通话审音委员会成立
+1963《普通话异读词审音表初稿》
+
+普通话国家通用语言
+
+Other cases: interpreters are more respected in colonial countries.
+
+---
+
+## Adjusted Matched-Guise Experiment
+
+.left-column[
+
+### Original Design
+
+]
+
+.right-column[
+
+.center[<img src="images/lab_matchedGuise.png" height = 450 />]
+
+]
+
+
+---
+
+## Adjusted Matched-Guise Experiment
+
+.left-column[
+
+### Original Design
+### Adjusted Design
+]
+
+.right-column[
+
+.center[<img src="images/lab_matchedGuiseAdj.png" height = 450 width = 600 />]
+
+]
+
+---
+
+## Evaluation
+
+Internal Validity
+
+* Statistical: (Results)
+* Causal: Double-blind assignment + controls
+* Constructive: Matched-guise + delicate measurements
+
+Techniques: Measurement of trust &times; 3
+
+
+* Questions about each speaker respectively.
+    + General trust
+    + Emotional closeness
+    + Content authenticity
+
+???
+
+* 总体信任
+* 感情上亲切
+* 内容上可信
+       
+---
+
+## Measurement of General Trust
+
+Trust game:
+
+* Strength: Abstract trust $\rightarrow$ money decision
+* Process: Subjects have ten golden coins
+    + Play with the speaker
+    + 1-coin investment from subject = 3-coin profits of speaker
+    + Speaker decides how much to return
+    + Goal: maximize the own coins
+    
+
+---
+
+## Measurement of Emotional Closeness
+
+* Direct question
+* IOS   
+.center[<img src="images/lab_ios.png" height="400" width = "650" />]
+
+???
+
+这两个部门的工作人员谁听上去更亲切些？
+
+---
+
+## Measurement of Content Authenticity
+
+* Authenticity: Do you believe what the speaker said?
+     + e.g., "*Given there is one department in the recording actually responsible to the complaint, which department do you think it is, City Department of Property Management or Municipal Construction Committee?*"
+    
+    
+???
+
+如果实际应负责单位就是这两个部门中一个（先听到的是物管办，后听到的是住建委），那么您觉得刚才的通话中是哪个部门在不作为呢？
+
+
+---
+
+## Balance of the Experiment
+
+
+.center[<img src="images/lab_balance-1.png" height = 460 />]
+
+---
+
+## Ecological Validity: 
+
+1. Compensation
+1. Scenarios-embedded
+
+--
+
+* Scenario I: Shuffle Response
+
+> Earlier this month, a downstairs neighbor continually made loud noises in the apartment beneath the one in which one of your classmates lives. It had a serious effect on people's lives there. To resolve this issue, the parent of your classmate called the public service hotline. The call was first transferred to the .magenta[City Department of Property Management] and then to the .magenta[Municipal Construction Committee]. Public servants responded to the call in the following recording.
+
+???
+
+假设你一个同学家楼下是底商。本月初发现楼底下有极大的噪音，请专人测量确实噪音已经超出了规定范围。调查发现底商中央空调的压缩机产生的。为了解决这个问题，这位同学的家长打电话给12345市民服务热线，先后被转到物管办和住建委。录音记录了他们的回应。
+
+---
+
+* Scenario II: Recrimination
+
+.center[<img src="images/lab_chengguan.gif" height = 300 />]
+
+
+???
+
+一天，一名早点摊摊主来你这里对城市管理人员执法进行投诉。以下是投诉录音。
+
+---
+
+## Application in China
+
+* 2016.12 -- 2017.01
+* 421 high school students
+    + Feasible
+    + Valid
+    + Implicatable
+
+???
+
+Gauge [geɪʤ]
+
+Census [sɛnsəs]
+
+over 92% of the current school-age students will enter high school
+
+--
+
+External validity: Sichuan + Meizhou
+
+
+---
+
+## Results: Improving Trust
+
+
+.center[<img src="images/lab_official.png" height = 500 width = 800 />]
+
+
+???
+
+Fixed effect is used to rule out the influence of experiment place on the results. 
+
+Results do not substantively change after controlling for female, local growth, family income, interpersonal trust, mandarin proficiency.
+
+
+---
+
+
+## Results II: Minimzing Distrust
+
+What should a government care more? 
+
+* Trust $\leadsto$ Super trust < .magenta[Distrust] $\leadsto$ .magenta[Trust]
+
+--
+
+.center[<img src="images/lab_distrust.png" height = 400 width = 750 />]
+
+---
+
+## Substantively Significant?
+
+.center[<img src="images/lab_distrust_margin.png" height = 400 width = 750 />]
+
+
+---
+
+## Alternative Explanations?
+
+Esteem of the Educated?
+
+.center[<img src="images/lab_gaokao.jpg" height = 400 width = 750 />]
+
+---
+## What Is This Effect About?
+
+* Respect for the Authority vs. Esteem of the Educated
+
+* Same experiments, same subjects, scenarios of .red[ordinary] people
+    + Response: cell phone selection (friends)
+    + Recrimination: traffic accident (private car drivers)
+
+--
+
+.center[<img src="images/lab_mass.png" height = 300 />]
+
+
+---
+
+## 政治敏感问题实验
+
+Hu, Yue, and Zijie Shao. 2021. “What Drives Chinese Internet Users to Watch State-Media Broadcasts? An Audience Analysis.” *Journal of Chinese Political Science*
+
++ Who watch state-media broadcast and why?
+    + Xinwen Lianbo
+
++ Problem to solve: sociopolitical desirability &rarr; sensitive questions
+
+--
+
++ Solution: A safe environment for subjects
+    + Answer number instead of items 
+    
+???
+
+A: 王刚、张强、刘爽、赵芳
+B: 王刚、张强、刘爽、赵芳、买买提·阿卜力孜
+
+---
+
+## Experiment Setting
+
+1. Random assignment
+1. Answer the question:
+
+> Which of the following statements you agree with? Please answer the total number instead of exactly which one:
+
+---
+
+.pull-left[
+*Control*
+
+A. The radio audience is very small in nowadays society.
+
+B. I doubt about the audience rate of the Spring Gala. There shouldn't be that many people still watching it.
+
+C. The real name registration on Weibo does not affect me much.
+
+D. All the newspapers published in the mainland China are consistent with *People's Daily*
+]
+.pull-right[
+*Treatment*
+
+
+A. The radio audience is very small in nowadays society.
+
+B. I doubt about the audience rate of the Spring Gala. There shouldn't be that many people still watching it.
+
+C. The real name registration on Weibo does not affect me much.
+
+D. All the newspapers published in the mainland China are consistent with *People's Daily*
+
+E. The reports in Xinwen Lianbo is credible.
+]
+
+---
+
+## Take-Home Points
+
+1. 社会科学实验.red[能]解决什么问题？
+    + 因果推断逻辑：Neyman-Rubin Causality Model + SUTVA
+    + 因果推断方法：对比实验(实验室，田野，调查)
+
+1. 什么样的社会科学实验才是个.red[好]实验？
+    + 内部效度
+    + 外部效度
+    + 生态效度
+
+1. .red[怎]样用实验方法解决政治学问题？
+    + 政治心理实验
+    + 政治行为实验
+    + 敏感问题实验
+    
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+<i class="fa fa-envelope fa-lg"></i>&nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+<i class="fa fa-globe fa-lg"></i>&nbsp; https://sammo3182.github.io/
+
+<i class="fab fa-github fa-lg"></i>&nbsp; [sammo3182](https://github.com/sammo3182)
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "experiment.html"), timeout = 400)
+```

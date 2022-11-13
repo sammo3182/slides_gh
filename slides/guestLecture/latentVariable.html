@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>潜在变量分析与诊断</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦" />
+    <script src="latentVariable_files/header-attrs/header-attrs.js"></script>
+    <link href="latentVariable_files/remark-css/default.css" rel="stylesheet" />
+    <script src="latentVariable_files/htmlwidgets/htmlwidgets.js"></script>
+    <script src="latentVariable_files/viz/viz.js"></script>
+    <link href="latentVariable_files/DiagrammeR-styles/styles.css" rel="stylesheet" />
+    <script src="latentVariable_files/grViz-binding/grViz.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# 潜在变量分析与诊断
+## Learning Latent Variable Analysis with Dr. Hu (I)
+### 胡悦
+### 清华大学政治学系
+
+---
+
+
+
+
+
+## 内容概要
+
+* 潜在变量分析概述
+* 什么是EFA
+    + EFA诊断
+    + EFA vs. PCA
+* 什么是CFA
+    + CFA诊断
+* .gray[Bonus：SEM 入门]
+
+---
+
+## 操作语言
+
+* R
+    + [`psych`](https://personality-project.org/r/psych/vignettes/intro.pdf)
+    + [`laavan`](https://lavaan.ugent.be/)
+
+---
+
+class: inverse, bottom
+
+# 潜在变量分析：一种方法
+
+---
+
+## 潜在变量
+
+.left-column[
+&lt;img src="images/lv_LoveLife.jpg" height = 400 /&gt;
+]
+
+???
+
+Anna Kendrick's 2020 show, showing how difficult to find "the one." This "being loved" is a latent variable.
+
+--
+
+.right-column[
+
+1. 不可见(Unobservable)
+1. 多维度(Multidimensional)
+1. 有效果(Consequential)
+
+]
+
+???
+
+The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
+
+---
+
+## 为什么需要了解潜在变量？
+
+公共舆论、政治心理、政治经济……几乎所有社会科学方向：
+
+* 抽象
+* 复杂
+* 综合
+
+--
+
+&gt; .red[Cornerstone] of successful scientific inquiry.  
+---Delli Carpini and Keeter 1993
+
+???
+
+Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Putting First Things First.” American Journal of Political Science 37 (4): 1179–1206.
+
+---
+
+## 举例
+
+例：测量个体的“社会资本”（social capital）
+
+指标问题X（1~10）：
+
+1. 您是否信任身边人？
+1. 您在政府机关有没有亲戚
+1. 您的朋友是否和您的想法经常一致？
+
+`$$\tilde{X} = (X_1 + X_2 + X_3)/3.$$`
+
+累加型综合法(additive scales)
+
+---
+
+看起来可能有用……
+
+--
+
+1. 平等权重(equal weight)
+1. 数据敏感(extreme value sensitivity)
+1. 忽略极化(polarity ignoring)
+
+---
+
+## "易求无价宝，难得有心郎！"
+
+### 因素分析模型(Factorial Models)
+
+1. 探索性因子分析(EFA)
+1. 验证性因子分析(CFA)
+1. 结构方程模型(SEM)
+
+### 类型分析模型(Typological Models)
+
+1. 项目反应理论(IRT)
+1. 跨群组项目反应(MrP, GIRT, DCPO)
+
+???
+
+晚唐诗人 鱼玄机《赠邻女》：羞日遮罗袖，愁春懒起妆。易求无价宝，难得有心郎
+
+---
+
+class: inverse, bottom
+
+# 因素分析综述
+
+---
+
+## 因素分析模型(Factorial Models)
+
+1. 探索性因子分析(EFA)
+1. 验证性因子分析(CFA)
+1. 结构方程模型(SEM)
+
+---
+
+### 理论
+
+.navy[可见]指标(indicators) &amp;larr; .red[潜在]变量(variable)
+
+???
+
+uncover the underlying structure of a relatively large set of variables. 
+
+--
+
+.left-column[
+### 实现
+
+.red[Minimum] factors for the variances
+
+a.k.a. 变量简化  
+(降维打击？)
+]
+
+.right-column[
+&lt;img src="images/lv_jiangwei.jpg" height = 300 /&gt;
+]
+
+???
+
+determine the minimum number of hypothetical factors or components that account for the variance between variables.
+
+---
+
+## 操作
+
+.center[&lt;img src="images/lv_efa.png" height = 500 /&gt;]
+
+???
+
+Known: I wanna fewer variables
+Unknown: how many? how to combine?
+
+---
+
+class: inverse, bottom
+
+# 探索性因子分析
+## Exploratory Factor Analysis
+
+---
+
+## 规范理念
+
+.center[.large[**X&lt;sup&gt;*&lt;/sup&gt; = &amp;Phi;&amp;Lambda;' + &amp;delta;**]]
+
+
+**X&lt;sup&gt;*&lt;/sup&gt;**: 潜在变量  
+**&amp;Phi;**: 指标选择  
+**&amp;Lambda;**: 单项贡献（a.k.a., factor loading）  
+**&amp;delta;** 选择误差
+
+???
+
+Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses.” Political Analysis 12(4): 338–53.
+
+Phi
+Lambda
+delta
+
+---
+
+## 实际操作
+
+1. 因子个数选择
+1. 因子提取
+1. Rotation
+1. 因子合成
+1. 结果检验
+
+---
+
+## 一个心理学案例
+
+19,719 参与者, the "Big Five Personality" Test
+
+变量名：
+
+```
+## race age engnat gender hand source country E1 E2 E3 E4 E5 E6 E7 E8 E9 E10 N1 N2 N3 N4 N5 N6 N7 N8 N9 N10 A1 A2 A3 A4 A5 A6 A7 A8 A9 A10 C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 O1 O2 O3 O4 O5 O6 O7 O8 O9 O10
+```
+
+???
+
+经验开放性Openness, 尽责性Conscientiousness, 外向型Extraversion, 亲和性Agreeableness, 情绪不稳定型Neuroticism
+
+https://quantdev.ssri.psu.edu/tutorials/intro-basic-exploratory-factor-analysis
+
+---
+
+## 因子个数选择
+
+### 相关性分析
+
+&lt;img src="latentVariable_files/figure-html/corrplot-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Horn's Parallel Analysis
+
+&lt;img src="latentVariable_files/figure-html/parallelAnalysis-1.png" style="display: block; margin: auto;" /&gt;
+
+???
+
+已知观测数据集**O**&lt;sub&gt;m&amp;times;n&lt;/sub&gt;
+
+1. 创建随机数据集**R**&lt;sub&gt;m&amp;times;n&lt;/sub&gt;;  
+1. 相关矩阵&lt;sub&gt;**R**&lt;/sub&gt; 和 &amp;lambda;&lt;sub&gt;**R**&lt;/sub&gt;;  
+1. 相关矩阵&lt;sub&gt;**Ok**&lt;/sub&gt; 和 &amp;lambda;&lt;sub&gt;**Ok**&lt;/sub&gt; (k为因子数)
+1. &amp;lambda;&lt;sub&gt;**Ok**&lt;/sub&gt; vs. &amp;lambda;&lt;sub&gt;**R**&lt;/sub&gt;
+
+A. 如果&amp;lambda;&lt;sub&gt;**Ok**&lt;/sub&gt; &lt; &amp;lambda;&lt;sub&gt;**R**&lt;/sub&gt;, 则 ~~k~~  
+B. Kaiser criterion
+
+&amp;lambda;是相关矩阵特征值
+Kaiser criterion: 特征值&lt;1 不可
+
+---
+
+## 因子提取(Factor Extraction)
+
+常见方法：
+
++ .navy[Minimum residual (OLS)]
++ Principal axes
++ Alpha factoring
++ Weighted least squares
++ Minimum rank
++ .red[Maximum likelihood] (ML, minimum &amp;chi;&lt;sup&gt;2&lt;/sup&gt; goodness of fit)
+
+---
+
+## Rotation
+
+.center[&lt;img src="images/lv_rotation.jpg" height = 400 /&gt;]
+
+简化数据结构
+
+???
+Rotation:
+
+A pattern of loadings where each item loads strongly on only one of the factors, and much more weakly on the other factors.
+
+---
+
+## 因子合成
+
+
+```
+## 
+## Loadings:
+##     MR1    MR2    MR3    MR5   
+## E1   0.691                     
+## E2  -0.695                     
+## E3   0.632                     
+## E4  -0.720                     
+## E5   0.723                     
+## E6  -0.544                     
+## E7   0.738                     
+## E8  -0.596                     
+## E9   0.639                     
+## E10 -0.652                     
+## N1          0.689              
+## N2         -0.503              
+## N3          0.614              
+## N4         -0.297              
+## N5          0.534              
+## N6          0.747              
+## N7          0.709              
+## N8          0.741              
+## N9          0.729              
+## N10         0.579              
+## A1                -0.438       
+## A2                 0.501       
+## A3                -0.407       
+## A4                 0.800       
+## A5                -0.658       
+## A6                 0.607       
+## A7                -0.602       
+## A8                 0.575       
+## A9                 0.696       
+## A10                0.335       
+## C1                        0.600
+## C2                       -0.538
+## C3                        0.401
+## C4                       -0.532
+## C5                        0.632
+## C6                       -0.587
+## C7                        0.557
+## C8                       -0.451
+## C9                        0.642
+## C10                       0.471
+## O1                             
+## O2                             
+## O3                             
+## O4                             
+## O5                             
+## O6                             
+## O7                             
+## O8                             
+## O9                             
+## O10                            
+##     MR4   
+## E1        
+## E2        
+## E3        
+## E4        
+## E5        
+## E6        
+## E7        
+## E8        
+## E9        
+## E10       
+## N1        
+## N2        
+## N3        
+## N4        
+## N5        
+## N6        
+## N7        
+## N8        
+## N9        
+## N10       
+## A1        
+## A2        
+## A3        
+## A4        
+## A5        
+## A6        
+## A7        
+## A8        
+## A9        
+## A10       
+## C1        
+## C2        
+## C3        
+## C4        
+## C5        
+## C6        
+## C7        
+## C8        
+## C9        
+## C10       
+## O1   0.600
+## O2  -0.555
+## O3   0.531
+## O4  -0.474
+## O5   0.581
+## O6  -0.491
+## O7   0.489
+## O8   0.565
+## O9   0.350
+## O10  0.661
+## 
+##                  MR1   MR2
+## SS loadings    4.891 4.416
+## Proportion Var 0.098 0.088
+## Cumulative Var 0.098 0.186
+##                  MR3   MR5
+## SS loadings    3.617 3.183
+## Proportion Var 0.072 0.064
+## Cumulative Var 0.258 0.322
+##                  MR4
+## SS loadings    3.155
+## Proportion Var 0.063
+## Cumulative Var 0.385
+```
+
+---
+
+## 成了吗？
+
+### 常见诊断指标
+
+1. Sum of squared (SS) loading&lt;sup&gt;1&lt;/sup&gt;
+1. Communality &amp; Uniqueness
+1. Root means square of residuals(RMSR)
+1. Tucker-Lewis Indes (TLI)
+1. Reliability test (Crobach's &amp;alpha;)&lt;sup&gt;2&lt;/sup&gt;
+
+.footnote[
+[1] 特征值  
+[2] 为每个因子分别计算
+]
+
+???
+
+SS：Kaiser criterion: &amp;lambda; &lt; 1 不可
+Communality:  SS of all the factor loadings for a given variable
+Uniqueness: 1 - Communality
+RMSR &lt; 0.05
+TLI &gt; 0.9
+
+Crobach's &amp;alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要，越高越好，但是对原始数据的测算，而非factor结果
+
+---
+
+## 因子在哪里？
+
+"score"
+
+&lt;img src="latentVariable_files/figure-html/scores-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse, bottom
+
+# 验证性因子分析
+## Confirmative Factor Analysis
+
+---
+
+
+## 探索性 vs 验证性：实现
+
+.left-column[
+### EFA: 数据指向
+
+1. 实证观察（归纳）
+1. 未知维度
+    + 每个维度都产生影响
+1. 多重指标
+    + Loading大小之分
+1. 无视测量偏差关联
+
+]
+
+.right-column[
+### CFA: 理论指向
+
+1. 理论定义（演绎）
+1. 明确维度
+    + 维度-指标关系明确
+1. 单一指标
+    + Loading有无之分
+1. 允许测量误差具有关联
+]
+
+---
+
+## CFA 指标选择
+
+1. 严格依据理论
+1. 每维度一指标
+
+---
+
+## CFA 指标选择
+
+操作原则：
+
+1. 每个维度一个指标，但维度拆分.navy[艺术&gt;技术]
+
+--
+
+1. .red[~~原因~~]效果指标
+
+--
+
+<div id="htmlwidget-8dd7656126e9502090ed" style="width:504px;height:360px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8dd7656126e9502090ed">{"x":{"diagram":"digraph {\n\ngraph[layout = dot]\n\nnode[shape = rectangle, style = filled, fillcolor = Linen]\n\ns [label = \"压力\", shape = \"ellipse\"]\nd [label = \"家人\n去世\"]\nj [label =  \"丢失\n工作\"]\ni [label = \"身患\n疾病\"]\n\n# edge definitions with the node IDs\ns -> {d, j, i}\n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
+## 模型建构
+
+.center[&lt;img src="images/lv_multitrait.png" height = 550 /&gt;]
+
+???
+
+裁判对滑雪运动员的评判
+
+单侧: factor complexity = 1 （一个变量只贡献一个latent）  
+双侧: factor complexity &gt; 1
+
+---
+
+## 你最多能连多少线？：Identification
+
+`\begin{cases}
+y = x + z\\
+x = 2y - 3z
+\end{cases}`
+
+--
+
+.center[**X\* = &amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;&amp;xi; + &amp;delta;**]
+
+当参数存在唯一解时，模型是identified.
+
+???
+
+**X**： 指标向量  
+**&amp;xi;**：潜在变量  
+**&amp;Lambda;&lt;sub&gt;X&lt;/sub&gt;**: X = f(&amp;xi;)系数(a.k.a., loading, path)  
+**&amp;delta;**：偏误向量  
+
+**&amp;Phi;**: 潜在变量的协方差矩阵  
+**&amp;Theta;&lt;sub&gt;&amp;sigma;&lt;/sub&gt;**: 偏误的协方差矩阵
+
+--
+
+**t rule**:
+
+t &lt; q(q + 1)/2
+
+t: 不可见
+q：可见
+
+???
+
+Another way to calculate df.
+
+---
+
+## 成了吗？
+
+### Overall: &amp;chi;&lt;sup&gt;2&lt;/sup&gt;
+
+结果显著则说明整体模型可能有问题。
+
+### Incremental Fit Indices
+
+将模型与基线模型比较
+
+### Tucker-Lewis Index (TLI) &amp; Comparative Fit Index (CFI)
+
++ 1 理想情况
++ &lt;.95 不可接受
+
+???
+
+CFI可以&gt;1, 这种情况视为1
+
+---
+
+### Root Mean Square Error of Approximation (RMSEA) &amp; Standardized Root Mean Square Residual (SRMR)
+
++ 0 理想情况
++ &amp;le; 0.05 不错
++ 0.05 ~ 0.08 差强人意
++ &amp;ge; 0.1 不可接受
+
+---
+
+## 实例：Holzinger &amp; Swineford 1939
+
+.left-column[
+对初中生精神状况的调查：
++ 视觉因素：x&lt;sub&gt;1~3&lt;/sub&gt;
++ 阅读因素：x&lt;sub&gt;4~6&lt;/sub&gt;
++ 表达因素：x&lt;sub&gt;7~9&lt;/sub&gt;
+]
+
+.right-column[
+&lt;img src="latentVariable_files/figure-html/diagram-cfa-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+
+```
+## lavaan 0.6-7 ended normally after 35 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of free parameters                         21
+##                                                       
+##   Number of observations                           301
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                85.306
+##   Degrees of freedom                                24
+##   P-value (Chi-square)                           0.000
+## 
+## Model Test Baseline Model:
+## 
+##   Test statistic                               918.852
+##   Degrees of freedom                                36
+##   P-value                                        0.000
+## 
+## User Model versus Baseline Model:
+## 
+##   Comparative Fit Index (CFI)                    0.931
+##   Tucker-Lewis Index (TLI)                       0.896
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -3737.745
+##   Loglikelihood unrestricted model (H1)      -3695.092
+##                                                       
+##   Akaike (AIC)                                7517.490
+##   Bayesian (BIC)                              7595.339
+##   Sample-size adjusted Bayesian (BIC)         7528.739
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.092
+##   90 Percent confidence interval - lower         0.071
+##   90 Percent confidence interval - upper         0.114
+##   P-value RMSEA &lt;= 0.05                          0.001
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.065
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Standard
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+## 
+## Latent Variables:
+##                    Estimate
+##   visual =~                
+##     x1                1.000
+##     x2                0.554
+##     x3                0.729
+##   textual =~               
+##     x4                1.000
+##     x5                1.113
+##     x6                0.926
+##   speed =~                 
+##     x7                1.000
+##     x8                1.180
+##     x9                1.082
+##   Std.Err  z-value  P(&gt;|z|)
+##                            
+##                            
+##     0.100    5.554    0.000
+##     0.109    6.685    0.000
+##                            
+##                            
+##     0.065   17.014    0.000
+##     0.055   16.703    0.000
+##                            
+##                            
+##     0.165    7.152    0.000
+##     0.151    7.155    0.000
+## 
+## Covariances:
+##                    Estimate
+##   visual ~~                
+##     textual           0.408
+##     speed             0.262
+##   textual ~~               
+##     speed             0.173
+##   Std.Err  z-value  P(&gt;|z|)
+##                            
+##     0.074    5.552    0.000
+##     0.056    4.660    0.000
+##                            
+##     0.049    3.518    0.000
+## 
+## Variances:
+##                    Estimate
+##    .x1                0.549
+##    .x2                1.134
+##    .x3                0.844
+##    .x4                0.371
+##    .x5                0.446
+##    .x6                0.356
+##    .x7                0.799
+##    .x8                0.488
+##    .x9                0.566
+##     visual            0.809
+##     textual           0.979
+##     speed             0.384
+##   Std.Err  z-value  P(&gt;|z|)
+##     0.114    4.833    0.000
+##     0.102   11.146    0.000
+##     0.091    9.317    0.000
+##     0.048    7.779    0.000
+##     0.058    7.642    0.000
+##     0.043    8.277    0.000
+##     0.081    9.823    0.000
+##     0.074    6.573    0.000
+##     0.071    8.003    0.000
+##     0.145    5.564    0.000
+##     0.112    8.737    0.000
+##     0.086    4.451    0.000
+```
+
+---
+
+## 总结一下
+
+* 潜在变量分析概述
+    + **因素分析**
+    + 类型分析
+* EFA
+    + 探索性因子分析：通过相关性找到潜在变量
+        + 个数
+        + 提取
+        + rotation + 合成
+    + EFA诊断：Kaiser‘s criterion, reliability
+* CFA
+    + 验证性因子分析：检验潜在变量对于观察指标是否有影响
+    + CFA诊断：&amp;chi;&lt;sup&gt;2&lt;/sup&gt;, TLI/CFI，RMSEA/SRMR
+
+---
+
+class: inverse, center, middle
+
+# Questions, Comments, and Suggestions?
+
+---
+
+class: inverse, bottom
+
+# 延申：结构方程模型
+## Structural Equation Model
+
+---
+
+## 结构方程模型
+
++ Structural equation models (SEMs)
++ LISREL (Linear Structural ReLationships) models
++ Covariance structure models
++ Latent variable models
++ Structural equations with latent variables
+
+---
+
+## “老朋友”
+
+Confirmative factor analysis  
+Multiple regression  
+Multivariate regression  
+ANOVA  
+General linear model  
+Path analysis  
+Recursive models  
+Dichotomous and ordered probit  
+Seemingly unrelated regressions  
+Simultaneous models  
+Latent growth curve models  
+......
+
+---
+
+## CFA之上
+
+与CFA相比，SEM：
+
++ 观察变量： X, .red[Y]
+
+--
+
++ 模型建构：
+    1. Latent variable model
+    1. Measurement model (CFA)
+    1. Relations among the errors 
+    
+--
+
++ 依然要求identification
+
+---
+
+## 估计
+
+MLE
+
+---
+
+## 诊断
+
++ Overall：&amp;chi;&lt;sup&gt;2&lt;/sup&gt;
++ Incremental：
+    + TLI &amp; CLI
+    + Incremental Fit Index(IFI, &amp;Delta;&lt;sup&gt;2&lt;/sup&gt;): 1理想，&lt;0.9不可接受
++ Absolute:
+    + RMSEA: &lt; 0.06
+    + BIC: 越小越好
+    
+---
+
+实例：Bollen 1989
+
+政治民主（1960，1965）与工业化
+
+&lt;img src="latentVariable_files/figure-html/diagram-sem-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```
+## lavaan 0.6-7 ended normally after 68 iterations
+## 
+##   Estimator                                         ML
+##   Optimization method                           NLMINB
+##   Number of free parameters                         31
+##                                                       
+##   Number of observations                            75
+##                                                       
+## Model Test User Model:
+##                                                       
+##   Test statistic                                38.125
+##   Degrees of freedom                                35
+##   P-value (Chi-square)                           0.329
+## 
+## Model Test Baseline Model:
+## 
+##   Test statistic                               730.654
+##   Degrees of freedom                                55
+##   P-value                                        0.000
+## 
+## User Model versus Baseline Model:
+## 
+##   Comparative Fit Index (CFI)                    0.995
+##   Tucker-Lewis Index (TLI)                       0.993
+## 
+## Loglikelihood and Information Criteria:
+## 
+##   Loglikelihood user model (H0)              -1547.791
+##   Loglikelihood unrestricted model (H1)      -1528.728
+##                                                       
+##   Akaike (AIC)                                3157.582
+##   Bayesian (BIC)                              3229.424
+##   Sample-size adjusted Bayesian (BIC)         3131.720
+## 
+## Root Mean Square Error of Approximation:
+## 
+##   RMSEA                                          0.035
+##   90 Percent confidence interval - lower         0.000
+##   90 Percent confidence interval - upper         0.092
+##   P-value RMSEA &lt;= 0.05                          0.611
+## 
+## Standardized Root Mean Square Residual:
+## 
+##   SRMR                                           0.044
+## 
+## Parameter Estimates:
+## 
+##   Standard errors                             Standard
+##   Information                                 Expected
+##   Information saturated (h1) model          Structured
+## 
+## Latent Variables:
+##                    Estimate
+##   ind60 =~                 
+##     x1                1.000
+##     x2                2.180
+##     x3                1.819
+##   dem60 =~                 
+##     y1                1.000
+##     y2                1.257
+##     y3                1.058
+##     y4                1.265
+##   dem65 =~                 
+##     y5                1.000
+##     y6                1.186
+##     y7                1.280
+##     y8                1.266
+##   Std.Err  z-value  P(&gt;|z|)
+##                            
+##                            
+##     0.139   15.742    0.000
+##     0.152   11.967    0.000
+##                            
+##                            
+##     0.182    6.889    0.000
+##     0.151    6.987    0.000
+##     0.145    8.722    0.000
+##                            
+##                            
+##     0.169    7.024    0.000
+##     0.160    8.002    0.000
+##     0.158    8.007    0.000
+## 
+## Regressions:
+##                    Estimate
+##   dem60 ~                  
+##     ind60             1.483
+##   dem65 ~                  
+##     ind60             0.572
+##     dem60             0.837
+##   Std.Err  z-value  P(&gt;|z|)
+##                            
+##     0.399    3.715    0.000
+##                            
+##     0.221    2.586    0.010
+##     0.098    8.514    0.000
+## 
+## Covariances:
+##                    Estimate
+##  .y1 ~~                    
+##    .y5                0.624
+##  .y2 ~~                    
+##    .y4                1.313
+##    .y6                2.153
+##  .y3 ~~                    
+##    .y7                0.795
+##  .y4 ~~                    
+##    .y8                0.348
+##  .y6 ~~                    
+##    .y8                1.356
+##   Std.Err  z-value  P(&gt;|z|)
+##                            
+##     0.358    1.741    0.082
+##                            
+##     0.702    1.871    0.061
+##     0.734    2.934    0.003
+##                            
+##     0.608    1.308    0.191
+##                            
+##     0.442    0.787    0.431
+##                            
+##     0.568    2.386    0.017
+## 
+## Variances:
+##                    Estimate
+##    .x1                0.082
+##    .x2                0.120
+##    .x3                0.467
+##    .y1                1.891
+##    .y2                7.373
+##    .y3                5.067
+##    .y4                3.148
+##    .y5                2.351
+##    .y6                4.954
+##    .y7                3.431
+##    .y8                3.254
+##     ind60             0.448
+##    .dem60             3.956
+##    .dem65             0.172
+##   Std.Err  z-value  P(&gt;|z|)
+##     0.019    4.184    0.000
+##     0.070    1.718    0.086
+##     0.090    5.177    0.000
+##     0.444    4.256    0.000
+##     1.374    5.366    0.000
+##     0.952    5.324    0.000
+##     0.739    4.261    0.000
+##     0.480    4.895    0.000
+##     0.914    5.419    0.000
+##     0.713    4.814    0.000
+##     0.695    4.685    0.000
+##     0.087    5.173    0.000
+##     0.921    4.295    0.000
+##     0.215    0.803    0.422
+```
+
+---
+
+## 在操作SEM之前，你可能还需要学习
+
+1. SEM怎么对待Measurement errors
+1. SEM怎么处理非线性变量(hint: GSEM)
+1. SEM怎么对待群组效应
+1. SEM如何处理缺失值(hint: 可能比MI还要好哦！)
+
+--
+
+1. .red[SEM 不能证明因果关系！！]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

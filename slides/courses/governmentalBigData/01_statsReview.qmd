@@ -1,0 +1,804 @@
+---
+title: "研究设计与数据分析原则"
+subtitle: "Political Research with Big Data (80700673)"
+
+author: "胡悦"
+institute: "清华大学" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "knitr",
+  "tidyverse",
+  "survey",
+  "janitor"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+## 学习计划
+
+::::{.columns}
+:::{.column width="50%"}
+### 研究设计原则
+
+- 科学研究
+
+
+### 数据收集原则
+
+1. 抽样与权重
+1. 变量测量
+:::
+
+:::{.column width="50%"}
+### 数据分析原则
+
+1. 统计基础
+1. 重复性截面数据分析
+1. 软件与数据资源
+:::
+::::
+
+
+# 研究设计原则
+
+
+## 社会科学从何谈起
+
+:::{.r-fit-text}
+[政]{.blue}务大数据 &sub; [政]{.blue}治[科学]{.red}研究&sub; 社会[科学]{.red}研究
+:::
+
+:::{.fragment .fade-in .Large style="text-align:center; margin-top: 1em"}
+何从谈起？
+
+:::{.fragment .semi-fade-out}
+信念
+:::
+
+程序    
+方法
+:::
+
+
+## 研究程序
+
+::::{.columns style="text-align:center; margin-top: 1em"}
+:::{.column width="50%"}
+### 问题导向
+
+1. [问题]{.red}提出
+1. 理论[假设]{.red}
+1. 数据[方法]{.red}
+1. 实证[检验]{.red}
+
+:::
+
+:::{.notes}
+Jim Gray 早在2006 年就发表了题为《第四范式：数据密集型科学发现》：实验范式、理论范式、仿真范式、Data-Intensive Scientific Discovery
+:::
+
+:::{.column width="50%"}
+### 数据导向
+
+1. [观察]{.red}数据
+1. [分析]{.red}方法
+1. [规律]{.red}总结
+1. 理论[提升]{.red}
+
+:::
+::::
+
+
+## 问题来源
+
+![](images/stat_curiosity.jpg){height=850}
+
+## 研究步骤
+
+理论（一个想法）&rarr; 假设（几个判断）&rarr; 验证（一坨证据）
+
+:::{.fragmewnt}
+**研究形式**
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+*描述*
+
+已知 &rArr; 未知
+
+1. 无偏（正确😄）
+1. 高效（准确😅）
+
+![](images/stat_yangQian.gif){height=350}
+:::
+
+:::{.column width="50%" .fragment}
+*机制*
+
+搞清why & how
+
+......
+
+but how?
+
+![](images/stat_yuXuanji.jfif){height=350}
+
+:::
+::::
+
+## 关于(因果)机制的几个争议
+
+::::{.columns}
+:::{.column width="30%" .fragment}
+**定义**
+
++ 时间序列
+    + 多重因果？
++ 条件角度
+    + 决定论 vs. 概率论
+
+![](images/stat_bookOfWhy.jpg){height=350 style="text-align: center"}
+:::
+
+:::{.column width="20%" .fragment}
+**测量**
+
+Y ~ X vs.
+
+Y ~ A     
+&rarr; B  &rarr; C  &rarr; D &rarr; E &rarr; ...    
+&rarr; X
+
+:::
+
+:::{.column width="40%" .fragment}
+**观测**
+
+![](images/stat_correlation.png){height=350}
+
+:::
+::::
+
+:::{.notes}
+correlation doesn't imply causation
+:::
+
+
+## 机制推断工具：
+
+::::{.columns}
+:::{.column width="30%" .fragment}
+*这些都不（肯定）是*：
+
+- 方差分析
+- 非参数检验
+- 相关系数
+- 回归分析
+- Lasso
+- SEM
+- 倾向值匹配   
+:::
+
+:::{.column width="70%" .fragment}
+(大概率)是：反事实分析（counterfactual analysis)
+
+- 实验
+- 观察数据
+    - Difference in difference
+    - Regression discontinuity
+    - Counterfactual estimators (FEct, IFEct, MC)/ synthetic control
+    - Regression ([Huh?]{.red})
+:::
+::::
+
+:::{.notes}
+Liu, Licheng, Ye Wang, and Yiqing Xu. 2022. “A Practical Guide to Counterfactual Estimators for Causal Inference with Time-Series Cross-Sectional Data.” American Journal of Political Science n/a(n/a): Online.
+
+- fixed effects counterfactual (FEct) estimator
+- interactive fixed effects counterfactual (IFEct) estimator
+- matrix completion (MC) estimator.
+:::
+
+
+## Wrap Up
+
+研究设计原则
+
+1. 科学：信仰 + 程序 + 方法
+1. 步骤：问题导向 or 数据导向
+1. 形式：描述 and/or 机制
+
+
+# 数据收集原则
+
+## 大数据迷思
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+“每日上亿条”
+
+“全网数据”
+
+“《人民日报》所有文章”
+:::
+
+:::{.fragment .r-fit-text}
+大数据[不是]{.red}全数据
+:::
+
+:::{.fragment .r-fit-text}
+全数据[不一定是]{.red}好数据
+:::
+
+:::{.notes}
+1. 贵
+1. 没必要
+1. 可信度呈疑
+:::
+
+## 抽样
+
+从[一大堆]{.blue}到[一小撮]{.red} &rArr; 代表性
+
+
+:::{.notes}
+随机抽样的代表性体现在一定的sample size上
+:::
+
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+**简单随机抽样**
+
++ SHA算法和MD5
++ 计算机随机数
+:::
+
+:::{.notes}
+计算机伪随机数
+
+真随机数：物理现象，如内存、硬件、噪音
+:::
+
+:::{.column width="50%" .fragment}
+**复杂抽样**
+
+*设计*
+
++ 配额（quota）
++ 分组（clustering）
++ 分层（stratification）
+
+*矫正*
+
++ 有限总体校正（finite population corrections, FPC）
++ 不相等权重（unequal weights）
+:::
+::::
+
+
+
+## 复杂抽样
+
+::::{.columns}
+:::{.column width="60%" .fragment}
+![](images/stat_stratifiedCluster.png){height=500 style="text-align: center"}
+:::
+
+:::{.column width="40%" .fragment}
+![](images/stat_quota.png){height=500 style="text-align: center"}
+:::
+::::
+
+:::{.notes}
+Stratification: 分类，每类中随机抽取，每类成员在总体中配比不变        
+Clustering：直接随机抽取一类        
+Quota：成分配比够就行，不用随机
+:::
+
+::::{.columns}
+:::{.column width="40%" .fragment}
+*常见设计*：S + W + (FPC)
+
+- Strata
+    - 减少点估计的标准误；
+    - 不同层抽样权重不等;
+    - PSU/SSU/TSU
+:::
+
+:::{.notes}
+PSU: primary sampling unit    
+SSU: secondary sampling unit    
+TSU: tertiary sampling unit
+:::
+
+
+:::{.column width="60%" .fragment}
+- Weight
+    + 样本入选概率的倒数；
+    + 各抽样阶段权重的乘积；
+    + 抽样权重在总体层面是等概率的，但在个体层面是非等概；影响点估计的计算
+:::
+
+
+:::{.notes}
+$FPC = \sqrt{(N-n)/(N-1)}$, 
+
+N = population size   
+n = sample size.
+
+修正估计结果$s = \frac{\sigma}{\sqrt{n}}\sqrt{(N-n)/(N-1)}.$
+
+Finite Population Correction is used when you sample without replacement from more than 5% of a finite population, leading to more uncertainty. 
+
+当sampling 大于population的5%时使用
+
+For example, if you have selected 200 goldfish out of a population of 1000, the reciprocal of the likelihood of being selected is 1000/200, so the sampling weight for the goldfish would be 5
+:::
+::::
+
+
+## 后果
+
+- Stratification &rarr; 层间方差不齐;
+- Clustering &rarr; 群组间方差不齐，群组内不独立;
+- Weighting &rarr; 某些特征分布与总体不一致.
+
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+[复杂抽样是[不得已而为之]{.red}]
+:::
+
+:::{.fragment}
+**后招**
+
+Post-collection correction &rarr; 把权重纳入分析
+:::
+
+
+
+
+## Correction how?
+
+[Behavioral Risk Factor Surveillance System (BRFSS) ](https://www.cdc.gov/brfss/smart/smart_2011.htm) 
+County data by US Centers of Disease Control and Prevention (CDC)
+
+```{r survey-example}
+#| include: false
+#| eval: false
+
+
+brfss_11 <- Hmisc::sasxport.get("D:/Desktop/CNTY2011.xpt")
+
+brfss_11 <- haven::read_sas("data/CNTY11_SASOUT.SAS")
+
+library(car)
+
+nams<-names(brfss_11)
+
+#we see some names are lower case, some are upper and some have a little _ in the first position. This is a nightmare.
+newnames <- gsub(pattern = "_",
+                 replacement =  "",
+                 x =  nams)
+names(brfss_11) <- tolower(newnames)
+
+#Poor or fair self rated health
+brfss_11$badhealth <- ifelse(brfss_11$genhlth %in% c(4, 5), 1, 0)
+
+#race/ethnicity
+brfss_11$black <-
+  recode(brfss_11$racegr2, recodes = "2=1; 9=NA; else=0")
+brfss_11$white <-
+  recode(brfss_11$racegr2, recodes = "1=1; 9=NA; else=0")
+brfss_11$other <-
+  recode(brfss_11$racegr2, recodes = "3:4=1; 9=NA; else=0")
+brfss_11$hispanic <-
+  recode(brfss_11$racegr2, recodes = "5=1; 9=NA; else=0")
+
+#insurance
+brfss_11$ins <- ifelse(brfss_11$hlthpln1 == 1, 1, 0)
+
+#income grouping
+brfss_11$inc <- ifelse(brfss_11$x.incomg == 9, NA, brfss_11$x.incomg)
+
+#education level
+brfss_11$educ <-
+  recode(brfss_11$educa,
+         recodes = "1:2='0Prim'; 3='1somehs'; 4='2hsgrad'; 5='3somecol'; 6='4colgrad';9=NA",
+         as.factor = T)
+brfss_11$educ <- relevel(brfss_11$educ, ref = '2hsgrad')
+
+#employment
+brfss_11$employ <-
+  recode(brfss_11$employ,
+         recodes = "1:2='Employed'; 2:6='nilf'; 7='retired'; 8='unable'; else=NA",
+         as.factor = T)
+brfss_11$employ <- relevel(brfss_11$employ, ref = 'Employed')
+
+#marital status
+brfss_11$marst <-
+  recode(brfss_11$marital,
+         recodes = "1='married'; 2='divorced'; 3='widowed'; 4='separated'; 5='nm';6='cohab'; else=NA",
+         as.factor = T)
+brfss_11$marst <- relevel(brfss_11$marst, ref = 'married')
+
+#Age cut into intervals
+brfss_11$agec <- cut(brfss_11$age, breaks = c(0, 24, 39, 59, 79, 99))
+
+#BMI, in the brfss_11a the bmi variable has 2 implied decimal places, so we must divide by 100 to get real bmi's
+brfss_11$bmi <- brfss_11$x.bmi5 / 100
+
+library(dplyr)
+
+brfss_11 <- select(brfss_11, badhealth, black, white, other, hispanic, ins, inc, educ, employ, marst, agec, bmi, x.ststr, x.cntywt) %>% 
+  rename(ststr = x.ststr, cntywt = x.cntywt)
+
+saveRDS(brfss_11, "data/brfss_11.Rds")
+```
+
+Set the survey conditions
+
+```{r survey-analysis}
+brfss_11 <- readRDS("data/brfss_11.Rds")
+
+library(survey)
+
+options(survey.lonely.psu = "adjust")
+
+des <-
+  svydesign(
+    ids =  ~ 1,
+    strata =  ~ ststr,
+    weights =  ~ cntywt,
+    data = brfss_11[is.na(brfss_11$cntywt) == F, ] # non-missing case weights
+  )
+```
+
+
+## 描述性统计差异
+
+```{r descriptive}
+library(questionr)
+
+prop.table(table(brfss_11$badhealth,
+                 brfss_11$educ),
+           margin = 2)
+
+prop.table(wtd.table(brfss_11$badhealth,
+                     brfss_11$educ,
+                     weights = brfss_11$cntywt),
+           margin = 2)
+```
+
+## 分析差异
+
+```{r survey-ols}
+raw <- lm(bmi ~ educ + agec, data = brfss_11)
+freqW <- lm(bmi ~ educ + agec, data = brfss_11, weights = cntywt)
+surveyW <- svyglm(bmi ~ educ + agec, des, family = gaussian)
+```
+
+```{r survey-ols-plot}
+#| echo: false
+#| fig.align: center
+#| out-width: 80%
+
+library(dotwhisker)
+
+dwplot(list(
+  NoWeight = raw,
+  FreqWeight = freqW,
+  SurveyWeight = surveyW
+)) +
+  theme_minimal()
+```
+
+
+:::{.notes}
+survey weight is using the inverse-probability weighting
+:::
+
+## Wrap Up
+
++ 代表性 &rarr; 抽样
+    + 简单抽样
+    + 复杂抽样
++ 复杂抽样步骤
+    + 分配额/层/群
+    + 权重
++ 复杂抽样分析：考虑权重
+
+
+# 数据分析原则
+
+
+---
+
+:::{.r-fit-text style="text-align:center; margin-top: 2em"}
+统计学 vs. 计量经济学
+
+Statistics vs. Econometrics
+:::
+
+:::{.notes}
+结果准
+
+方向对
+:::
+
+## 统计学
+
+::::{.columns}
+:::{.column width="30%" .fragment}
+*分类I*
+
+* 理论统计学
+* 应用统计学
+
+*分类II*
+
+* 描述统计
+* 推断统计
+:::
+
+:::{.column width="70%" .fragment}
+![](images/stat_statProcess.png){height=800}
+:::
+::::
+
+:::{.notes}
+研究统计学的一般理论；研究统计方法的数学原理
+
+研究统计方法在具体领域中的应用
+:::
+
+
+## 常用概念
+
+![](images/stat_concepts.png){height=800}
+
+## 概念辨析
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+**数据**
+
+- 总体 vs. 样本
+- 抽样误差
+
+**分析**
+
+- 参数 vs. 系数
+- 期望
+- 不确定性
+
+:::
+
+:::{.notes}
+* 总体：在理论上明确界定的个体全部集合。
+* 样本：从总体中按照一定规则和程序抽出来的个体的集合，是总体一个子集。
+
+
+* 抽样误差: 用样本的统计值去推算总体的参数值时总会有差异，这个差异就是抽样误差。
+
+
+* 参数：概括总体特征的测度值。
+* 系数（统计量）：概括样本特征的测度值。
+
+* 期望值: $E(X) = \sum Xp$
+* 不可确定性： 描述数据的离散趋势
+    + Variance: $\sigma^2 = \sum(X - \mu)^2p(X)$
+    + Standard deviation: $\sigma$
+:::
+
+:::{.column width="50%" .fragment}
+**材料**
+
+- 数据
+- [变量]{.red}、变量值、缺失值
+
+**测量**
+
+- 定类
+- 定序
+- 定距
+- 定比
+:::
+::::
+
+:::{.notes}
+1. 定类：每一种不同的数字或符号代表着不同的类别或标记。定类数据只有类别属性之分， 无大小、程度之分。
+
+1. 定序：每一种数字或符号代表着事物的等级大小、高低、先后的次序。
+
+1. 定距：每一种数字或符号代表着事物的量的间距。定距数据没有绝对的零点，例如，温度、智商，其中的“零”只是一个相对位置，不代表“没有”。
+
+1. 定比：每一种数字或符号代表着事物的所有算术特征。其取值除了具有类别、次序、间距的属性以外，还可以构成一个有意义的比率，其中的“零” 表示真正的“一无所有” 。
+
+
+例子：
+
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有
+-100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
+
+在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
+:::
+
+
+## 练习
+
+> 研究者想了解全市居民上个月的平均通讯支出是多少元，为此随机抽取了1800个居民进行了访问，得到了这些居民上个月的平均通讯支出。
+
+问题：总体、样本、参数、系数？
+
+
+## 练习
+
+> 调查发现：人们对市政府工作的满意度，在不同年龄、教育水平、收入、职业，以 及不同户口人群中有显著的差异。
+
+问题：上述这段描述中提到了几个变量，分别是什么类型的数据？
+
+## （变量）测量类型
+
+::::{.columns}
+:::{.column width=50%}
+直接（Raw data）
+
+整合（Aggregated data）
+
+潜在 (Latent measurement)
+
+* 经典：Factor analysis
+* 新锐：IRT
+* 全面：SEM
+:::
+
+:::{.column width=50% .fragment}
+数据：
+
+1. 变量（variables）
+1. 观测层级 (unit of analysis)
+1. 观测对象（observations）
+:::
+::::
+
+## 结构化数据
+
+Tidy version
+
+![](images/stat_tidydata.png){height=600}
+
+
+## 数据 &rarr; 很多数据
+
+::::{.columns}
+:::{.column width=50%}
+*面板数据*
+
+好
+
+(yysy，成本高，样本局限大🙄)
+:::
+
+:::{.notes}
+
+动态分析
+
+对比性高
+:::
+
+:::{.column width=50% .fragment}
+*重复抽样数据*
+
+* 周期性调查
+* 每次随机
+* 时序性信息
+* e.g., WVS, DCPO, Global barometers, CGSS, CFPS, CEPS, CLDS, CUGS, CHFS, GSS, CESS...
+
+
+* 呈现社会、政治、经济现象的变化[趋势]{.red}
+* 探索特定[人群(Cohort)]{.red}社会行为与态度的变迁模式
+* 适用于识别[自然实验]{.red}的效应
+:::
+::::
+
+
+## 数据分析
+
+::::{.columns}
+:::{.column width=30% .fragment}
+*描述性分析*
+
++ 解读数据结构
++ 显示、理解变化趋势
+:::
+
+:::{.column width=30% .fragment}
+*比较分析*
+
++ 跨层级分析
++ 跨时间分析
++ 跨区域分析
+:::
+
+
+:::{.column width=30% .fragment}
+*总体分析*
+
++ 对核心变量一般表现的衡量
++ 与比较分析不分先后
+:::
+::::
+
+:::{.fragment  style="text-align:center; margin-top: 1em"}
+**数据分析工具**
+
+* 分析软件：STATA, SAS, SPSS, EXCEL
+* 编程语言：R, Python, Matlab, JAVA, C++
+:::
+
+
+## 举例：爱国主义教育基地
+
+::::{.columns}
+:::{.column width=50% .fragment}
+*描述分析*
+
+![](images/stat_patrioBase9705.gif){height=750}
+:::
+
+:::{.column width=50% .fragment}
+*总体比较分析*
+
+![](images/stat_loyal.png){height=750}
+:::
+::::
+
+
+
+## Wrap Up
+
+- 统计/计量
+
+- 变量
+    - 测量类型
+    - 测量手段
+
+- 数据（tidy version）
+
+- 面板数据/重复抽样数据
+
+- 数据分析工具

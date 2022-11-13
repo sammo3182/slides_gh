@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="07_association_files/libs/clipboard/clipboard.min.js"></script>
+<script src="07_association_files/libs/quarto-html/tabby.min.js"></script>
+<script src="07_association_files/libs/quarto-html/popper.min.js"></script>
+<script src="07_association_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="07_association_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="07_association_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="07_association_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="07_association_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="07_association_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.2.247">
+
+  <meta name="author" content="Yue Hu">
+  <title>Association Analysis</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="07_association_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="07_association_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="07_association_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link rel="stylesheet" href="style_basic.css">
+  <link href="07_association_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="07_association_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="07_association_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="07_association_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="07_association_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="07_association_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title">Association Analysis</h1>
+  <p class="subtitle">Large N &amp; Leeuwenhoek (70700173)</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li class="fragment">Linear correlation</li>
+<li class="fragment">Monotonic correlation</li>
+<li class="fragment">Non-monotonic correlation</li>
+</ul>
+</section>
+<section>
+<section id="linear-correlation" class="title-slide slide level1 center">
+<h1>Linear Correlation</h1>
+
+</section>
+<section id="etymoloy" class="slide level2">
+<h2>Etymoloy</h2>
+<div class="r-vstack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cor_etymology_association.png" class="fragment" height="300"></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cor_etymology_correlation.png" class="fragment" height="300"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="covariance" class="slide level2">
+<h2>Covariance</h2>
+<blockquote>
+<p>How one changes then the other.</p>
+</blockquote>
+<div class="fragment">
+<p><span class="math display">\[\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).\]</span></p>
+</div>
+<div class="fragment">
+<p>Remember Variance?</p>
+<p><span class="math display">\[\begin{align}
+\sigma^2_X =&amp; \sum(X - \mu_X)^2p(X),\\
+=&amp; \sum(X - \mu_X)\color{red}{(X - \mu_X)}p(X, \color{red}{X}).
+\end{align}\]</span></p>
+</div>
+<div class="fragment">
+<p>In other words, covariance is literally <span class="red">co</span>-variance.</p>
+</div>
+</section>
+<section id="correlation" class="slide level2">
+<h2>Correlation</h2>
+<blockquote>
+<p>If see one high, when the other is high.</p>
+</blockquote>
+<div class="fragment" style="text-align:center">
+<div class="callout callout-note callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Covariate: Dynamic vs.&nbsp;Correlation: Static</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Common Types:</p>
+<div style="text-align:center; margin-top: 1em">
+<ul>
+<li>Karl Pearson’s r (Linear);</li>
+<li>Maurice Kendall’s τ (Monotonic);</li>
+<li>Charles Spearman’s ρ (Monotonic).</li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>Karl Pearson was an English mathematician and biostatistician.
+<ul>
+<li>Establishing the discipline of mathematical statistics.</li>
+<li>Founded the world’s first university statistics department at University College, London in 1911</li>
+<li>Proponent of social Darwinism, eugenics and scientific racism.</li>
+</ul></li>
+<li>Sir Maurice George Kendall was a prominent British statistician.
+<ul>
+<li>The second chair of statistics at the London School of Economics, University of London</li>
+</ul></li>
+<li>Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
+<ul>
+<li>Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="pearsons-r-linear-correlation" class="slide level2">
+<h2>Pearson’s r: Linear Correlation</h2>
+<div class="callout callout-important callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Assumption</strong></p>
+</div>
+<div class="callout-content">
+<div style="text-align:center">
+<ol type="1">
+<li>Continuous data<br>
+</li>
+<li>Linear Relationship (one-on-one)</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>For a population</p>
+<p><span class="math display">\[\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}.\]</span></p>
+</div>
+<div class="fragment">
+<p>For a sample</p>
+<p><span class="math display">\[r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.\]</span></p>
+</div>
+<aside class="notes">
+<p>Multiple regressions: <span class="math inline">\(partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}\)</span>, a.k.a., partial correlation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="properties" class="slide level2">
+<h2>Properties</h2>
+<ol type="1">
+<li class="fragment">ρ∈ [-1, 1], 0 independent.</li>
+<li class="fragment">Greater value indicates stronger <span class="red">linear</span> relationship.</li>
+<li class="fragment">Parametric test<sup>1</sup></li>
+<li class="fragment"><span class="red">Not robust</span> to skewed data and outliers.</li>
+</ol>
+<div class="fragment">
+<!-- -->
+<h3 id="limination">Limination</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cor_linearity.webp" height="350"></p>
+</figure>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Which means assuming normal distribution, linearity, and homoscedasticity.</p></li></ol></aside></section></section>
+<section>
+<section id="monotonic-correlation" class="title-slide slide level1 center">
+<h1>Monotonic Correlation</h1>
+
+</section>
+<section id="solution-ranking" class="slide level2">
+<h2>Solution: Ranking</h2>
+<p><span class="math display">\[Diff_{quantity} \rightarrow Diff_{relation}.\]</span></p>
+<div class="fragment">
+<p>For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i &lt; j,</p>
+</div>
+<ul>
+<li class="fragment"><p>Concordant pairs: x<sub>i</sub> <span class="blue">&gt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="blue">&gt;</span>y<sub>j</sub> | x<sub>i</sub> <span class="red">&lt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="red">&lt;</span>y<sub>j</sub>;</p></li>
+<li class="fragment"><p>Discordant pairs: x<sub>i</sub> <span class="blue">&gt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="red">&lt;</span>y<sub>j</sub> | x<sub>i</sub> <span class="red">&lt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="blue">&gt;</span>y<sub>j</sub>;</p></li>
+<li class="fragment"><p>Tied pairs: x<sub>i</sub> = x<sub>j</sub> &amp; y<sub>i</sub> = y<sub>j</sub>;</p></li>
+</ul>
+<aside class="notes">
+<p>tie on x or tie on y are also not concordant or discordant</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="tau-monotonic-correlation" class="slide level2">
+<h2>Tau: Monotonic Correlation</h2>
+<div class="callout callout-important callout-captioned callout-style-simple">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Assumption</strong></p>
+</div>
+<div class="callout-content">
+<div>
+<p><del>1. Continuous</del> Ordinal/norminal;<br>
+<del>2. Linear</del> Monotonic</p>
+</div>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column fragment" style="width:40%;">
+<div class="fragment">
+<p>Kendall’s τ<sub>A</sub></p>
+<p><span class="math display">\[\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},\]</span></p>
+<span class="math display">\[\begin{aligned}
+n_{c}&amp;={\text{Number of concordant pairs}},\\
+n_{d}&amp;={\text{Number of discordant pairs}}.
+\end{aligned}\]</span>
+</div>
+<ul>
+<li class="fragment">Ties?</li>
+<li class="fragment">Unequal numbers of observations in X and Y?</li>
+</ul>
+</div><div class="column fragment" style="width:30%;">
+<p>Kendall’s τ<sub>B</sub>: Ties</p>
+<p><span class="math display">\[\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}}\]</span> where</p>
+<div class="small">
+<span class="math display">\[\begin{aligned}
+n_{0}&amp;=n(n-1)/2\\n_{1}&amp;=\sum _{i}t_{i}(t_{i}-1)/2\\
+n_{2}&amp;=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&amp;={\text{Number of concordant pairs}}\\
+n_{d}&amp;={\text{Number of discordant pairs}}\\
+t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}
+\end{aligned}\]</span>
+</div>
+</div><div class="column fragment" style="width:30%;">
+<p>Stuart’s τ<sub>C</sub>: Diff scales</p>
+<p><span class="math display">\[\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}\]</span> where</p>
+<div class="small">
+<span class="math display">\[\begin{aligned}
+n_{c}&amp;={\text{Number of concordant pairs}},\\
+n_{d}&amp;={\text{Number of discordant pairs}},\\
+m&amp;=\min(r,c),\\
+r&amp;={\text{Number of rows}},\\
+c&amp;={\text{Number of columns}}.
+\end{aligned}\]</span>
+</div>
+</div>
+</div>
+</section>
+<section id="spearmans-rho-ranking-version-of-pearsons-r" class="slide level2">
+<h2>Spearman’s rho: Ranking version of Pearson’s R</h2>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p><span class="math display">\[\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}.\]</span> where <span class="math inline">\(rg\)</span>: The rank of the variables.</p>
+<aside class="notes">
+<p>When all n ranks are distinct integers (no tie):</p>
+<p><span class="math display">\[\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},\]</span> where <span class="math inline">\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).\)</span></p>
+<p>https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column fragment" style="width:50%;">
+<p>Properties:</p>
+<ul>
+<li class="fragment">Independent, τ = 0.</li>
+<li class="fragment">Not exactly non-parametric</li>
+</ul>
+<aside class="notes">
+<p>Still based on population parameters, so one can do significant test by <span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p>r vs.&nbsp;τ &amp; ρ:</p>
+<ul>
+<li>r: Linear relationship;</li>
+<li>τ &amp; ρ:
+<ul>
+<li>Monotonic relationship.</li>
+<li>Ordinal variables</li>
+</ul></li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p>ρ vs.&nbsp;τ:</p>
+<ul>
+<li>τ is more robust than ρ;</li>
+<li>ρ has less cost than τ.</li>
+</ul>
+<div class="fragment">
+<p>Ranking version of ANOVA</p>
+<ul>
+<li>Kruskal-Wallis test;</li>
+<li>Friedman test.</li>
+</ul>
+</div>
+<div class="r-fit-text fragment">
+<p><em>How about categorical?</em></p>
+</div>
+</div>
+</div>
+</section>
+<section id="χ2-nominal-variables" class="slide level2">
+<h2>χ<sup>2</sup>: Nominal Variables</h2>
+<p><span class="math display">\[\chi^2 = \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected} = \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}\]</span></p>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p>E.g., The partisan distribution of American fathers and sons. Are they correlated?</p>
+<table>
+<thead>
+<tr class="header">
+<th>Father/Son</th>
+<th>D</th>
+<th>R</th>
+<th>I</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D</td>
+<td>45</td>
+<td>5</td>
+<td>10</td>
+<td>60</td>
+</tr>
+<tr class="even">
+<td>R</td>
+<td>2</td>
+<td>23</td>
+<td>5</td>
+<td>30</td>
+</tr>
+<tr class="odd">
+<td>I</td>
+<td>3</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td>Total</td>
+<td>50</td>
+<td>30</td>
+<td>20</td>
+<td>100</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column fragment" style="width:50%;">
+<div class="fragment">
+<p><span class="math inline">\(H_0:\)</span> Sons’ party ID has no relation with their fathers’; <span class="math inline">\(\pi_{ij} = \pi_i \pi_j, \forall\ i, j.\)</span> (α = 0.05)</p>
+<p>E(D<sub>f</sub>, D<sub>s</sub>) = 50/100 × 60/100 × 100 = 30.</p>
+</div>
+<div class="fragment small">
+<p><span class="math display">\[\begin{align}
+\chi^2 =&amp; \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\\
+\approx&amp; 56.07, d.f.: (r - 1)(c - 1) = (3 - 1)^2 = 4.
+\end{align}\]</span></p>
+</div>
+<div class="fragment">
+<p><span class="math inline">\(\chi^2_{critical} = \chi^2_{0.05, 4} =\)</span> 11.1433&lt; <span class="math inline">\(\chi^2_{observed}\)</span>.<br>
+H<sub>0</sub> is rejected.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="adjustment-of-χ2" class="slide level2">
+<h2>Adjustment of χ<sup>2</sup></h2>
+<ol type="1">
+<li class="fragment">When sample is too small and/or having too many missing data, the distribution might be different from <span class="math inline">\(\chi^2\)</span></li>
+<li class="fragment">When N gets large, <span class="math inline">\(\chi^2\)</span> also increase (esp.&nbsp;over 100,000)</li>
+</ol>
+<div class="fragment">
+<p>Adjustment: Φ and Cramer’s V</p>
+</div>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<ul>
+<li><span class="math inline">\(\Phi = \sqrt{\frac{\chi^2}{n}}\in[0, 1]\)</span>
+<ul>
+<li>2×2 table</li>
+<li>0 means no association</li>
+<li>1 means perfect association</li>
+</ul></li>
+</ul>
+</div><aside class="notes">
+<p>phi</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside><div class="column fragment" style="width:50%;">
+<ul>
+<li>Cramer’s V
+<ul>
+<li>Beyond a 2*2 table (when <span class="math inline">\(\Phi\)</span> &gt; 1).</li>
+<li><span class="math inline">\(V = \sqrt{\frac{\chi^2}{n\times min_{r-1, c-1}}}\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="mean-variance" class="slide level2">
+<h2>Mean → Variance</h2>
+<p>Analysis of variance (ANOVA): A systematic way of variable comparison in the context of <span class="red">experiment</span>.<sup>1</sup></p>
+<div class="fragment">
+<p>When there are <span class="red">more than one</span> treatment group, ANOVA is more useful to reduce the risk of Type I (“Hey grandpa, you are pregnant”).</p>
+</div>
+<div class="fragment">
+<div class="callout callout-important callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Assumption</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li class="fragment">Y normally distributed in eqch group (Type I ↓)</li>
+<li class="fragment">Homogeneity of variance (Type I &amp; II ↓)</li>
+<li class="fragment">Independence of cases (Type I ↓)</li>
+<li class="fragment">No large outliers (Type II ↓)</li>
+<li class="fragment">Large sample (Type I &amp; II ↓)</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Equivalent to t-test</p></li></ol></aside></section>
+<section id="one-way-anova" class="slide level2">
+<h2>One-Way ANOVA</h2>
+<ul>
+<li class="fragment"><span class="math inline">\(\overline X\)</span> is the sample mean; the grant mean <span class="math inline">\(\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}\)</span>, where K is column number.<sup>1</sup></li>
+<li class="fragment">SST: Variance between the samples; SSE: Variance within the samples.</li>
+</ul>
+<div class="fragment">
+<table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 47%">
+<col style="width: 7%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Sum Square</th>
+<th>d.f.</th>
+<th>Mean Square</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat</td>
+<td><span class="math inline">\(SST = \sum n_i (\bar X_i - \overline{\overline{X}})^2\)</span></td>
+<td>K - 1</td>
+<td>MST = SST/(K - 1)</td>
+</tr>
+<tr class="even">
+<td>Error</td>
+<td><span class="math inline">\(SSE = \sum \sum (X_{ik} - \bar{X_i})^2\)</span></td>
+<td>N - K</td>
+<td>MSE = SSE/(N - K)</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td><span class="math inline">\(SS = SST + SSE\)</span></td>
+<td>N - 1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="fragment">
+<p><span class="math display">\[F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\ of\ Unexplained\ Variance}\]</span></p>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>ANOVA is usually used when <span class="math inline">\(K \in [2, 3]\)</span>; for larger K, often use <a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance">MANOVA</a> (rarely used in Poli Sci).</p></li></ol></aside></section>
+<section id="example" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Example</h2>
+<p>The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type?</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<table>
+<thead>
+<tr class="header">
+<th>NS</th>
+<th>ME</th>
+<th>BJ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>27</td>
+<td>23</td>
+<td>48</td>
+</tr>
+<tr class="even">
+<td>22</td>
+<td>36</td>
+<td>35</td>
+</tr>
+<tr class="odd">
+<td>33</td>
+<td>27</td>
+<td>46</td>
+</tr>
+<tr class="even">
+<td>25</td>
+<td>44</td>
+<td>36</td>
+</tr>
+<tr class="odd">
+<td>38</td>
+<td>39</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td>29</td>
+<td>32</td>
+<td>29</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column fragment" style="width:70%;">
+<p><span class="math inline">\(H_0: \mu_1 = \mu_2 = \mu_3,\)</span><br>
+<span class="math inline">\(H_1: \mu_1 \neq \mu_2 \neq \mu_3.\)</span></p>
+<p>α = 0.05.</p>
+<p><span class="math display">\[\begin{align}
+\bar X_{NS} &amp;= 29; \bar X_{ME} = 33.5; \bar X_{BJ} = 37;\\
+\bar{\bar{X}} &amp;= (29 + 33.5 + 37)/3 \approx 33.17
+\end{align}\]</span></p>
+</div>
+</div>
+</section>
+<section id="section" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title"></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="math inline">\(H_0: \mu_1 = \mu_2 = \mu_3,\)</span><br>
+<span class="math inline">\(H_1: \mu_1 \neq \mu_2 \neq \mu_3.\)</span></p>
+<p>α = 0.05.</p>
+<p><span class="math display">\[\begin{align}
+\bar X_{NS} &amp;= 29; \bar X_{ME} = 33.5; \bar X_{BJ} = 37;\\
+\bar{\bar{X}} &amp;= (29 + 33.5 + 37)/3 \approx 33.17
+\end{align}\]</span></p>
+</div><div class="column fragment" style="width:50%;">
+<p>Then, <span class="math inline">\(SST = \sum 6\times (\bar X - \bar{\bar{X}}) = 193\)</span>; <span class="small"><span class="math inline">\(SSE = [(27 - 29)^2 + (22 - 29)^2 + \dots + (29 - 37)^2] = 819.5\)</span></span>.</p>
+<p>Given K = 3, N = 18, <span class="math inline">\(F = \frac{193/(3 - 1)}{819.5/(18 - 3)} \approx 1.77\)</span></p>
+<p><span class="math inline">\(F_{0.05, 2, 15}\)</span> = 4.7650483 <span class="math inline">\(F_obs\)</span>, so fail to reject <span class="math inline">\(H_0\)</span></p>
+</div>
+</div>
+<table>
+<colgroup>
+<col style="width: 11%">
+<col style="width: 47%">
+<col style="width: 7%">
+<col style="width: 34%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Sum Square</th>
+<th>d.f.</th>
+<th>Mean Square</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat</td>
+<td><span class="math inline">\(SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2\)</span></td>
+<td>K - 1</td>
+<td>MST = SST/(K - 1)</td>
+</tr>
+<tr class="even">
+<td>Error</td>
+<td><span class="math inline">\(SSE = \sum \sum (X_{ik} - \bar{X_i})^2\)</span></td>
+<td>N - K</td>
+<td>MSE = SSE/(N - K)</td>
+</tr>
+<tr class="odd">
+<td>Total</td>
+<td><span class="math inline">\(SS = SST + SSE\)</span></td>
+<td>N - 1</td>
+<td><span class="math inline">\(F_{\alpha, K-1, N-K} = MST/MSE\)</span></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="two-way-anova." class="slide level2">
+<h2><a href="#/sec-anovaExt">Two-Way ANOVA</a>.</h2>
+<ul>
+<li class="fragment">Randomized block design (i blocks, j groups)
+<ul>
+<li class="fragment">Equivalent to matched sample in t-test</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<table>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 48%">
+<col style="width: 10%">
+<col style="width: 32%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Source</th>
+<th>Sum Square</th>
+<th>d.f.</th>
+<th>Mean Square</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Treat</td>
+<td><span class="math inline">\(SS_A: b\sum (\bar X_i - \bar{\bar{X}})^2\)</span></td>
+<td>a - 1</td>
+<td>MST_A = SS_A/(a - 1)</td>
+</tr>
+<tr class="even">
+<td>Block</td>
+<td><span class="math inline">\(SS_B: a\sum (\bar X_j - \bar{\bar{X}})^2\)</span></td>
+<td>b - 1</td>
+<td>MST_B = SS_B/(b - 1)</td>
+</tr>
+<tr class="odd">
+<td>Error</td>
+<td><span class="math inline">\(SS_E: \sum^{ab} (X_{ij} - \bar{X_i} - \bar{X_j} + \bar{\bar{X}})^2\)</span></td>
+<td>(a - 1)(b - 1)</td>
+<td><span class="math inline">\(MSE = \frac{SSE}{(a - 1)(b - 1)}\)</span></td>
+</tr>
+<tr class="even">
+<td>Total</td>
+<td><span class="math inline">\(SS: SS_A + SS_B + SS_E\)</span></td>
+<td>ab - 1</td>
+<td><span class="math inline">\(F_{\alpha, a-1, b-1} = \frac{MST_{A or B}}{MSE}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="example-1" class="slide level2">
+<h2>Example</h2>
+<p>Students’ final scores in three majors were recorded in the following table. Does the scores associate with majors?</p>
+<table>
+<thead>
+<tr class="header">
+<th>Major</th>
+<th>Poli Sci</th>
+<th>Sociology</th>
+<th>Psychology</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A+</td>
+<td>41</td>
+<td>45</td>
+<td>51</td>
+</tr>
+<tr class="even">
+<td>A</td>
+<td>36</td>
+<td>38</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>B+</td>
+<td>27</td>
+<td>33</td>
+<td>31</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>32</td>
+<td>29</td>
+<td>35</td>
+</tr>
+<tr class="odd">
+<td>C+</td>
+<td>26</td>
+<td>21</td>
+<td>32</td>
+</tr>
+<tr class="even">
+<td>C</td>
+<td>23</td>
+<td>25</td>
+<td>27</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(H_0: \mu_{PS} = \mu_{SO} = \mu_{PY},\)</span><br>
+<span class="math inline">\(H_1: \mu_{PS} \neq \mu_{SO} \neq \mu_{PY}.\)</span></p>
+<p>α = 0.05.</p>
+</section>
+<section class="slide level2">
+
+<p><span class="math inline">\(\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.\)</span> <span class="math inline">\(\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83, \bar{\bar{X}} = 33.72.\)</span></p>
+<div class="fragment">
+<p>For factor A (major), <span class="math inline">\(SS_A = 6\times [(30.8 - 33.72)^2 + (33.5 - 33.72)^2 + (36.83 - 33.72)^2] = 109.48.\)</span></p>
+<p><span class="math inline">\(MSA = SS_A/(a - 1) = 109.48/(3 - 1).\)</span></p>
+</div>
+<div class="fragment">
+<p>For factor B (GPA), <span class="math inline">\(SS_B = 3\times [(45.67 - 33.72)^2 + \dots + (25 - 33.72)^2] = 854.94.\)</span></p>
+<p><span class="math inline">\(MSB = 854.94 / (6 - 1).\)</span></p>
+</div>
+<div class="fragment">
+<p><span class="math inline">\(SST = \sum^a\sum^b(X_{ij} - \bar{\bar{X}})^2 = 1015.61; SSE = SST - SS_A - SS_B = 52.2\)</span></p>
+<p>Then, <span class="math inline">\(F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}\)</span> is 10.4 &gt; critical F 5.4564, reject <span class="math inline">\(H_0\)</span>.</p>
+</div>
+<div class="fragment">
+<p><img data-src="images/ci_fsmrof.png" height="50"> Χ<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two χ<sup>2</sup>s. <em>In other words, they are consistent with t-test and OLS.</em></p>
+</div>
+</section></section>
+<section>
+<section id="beyond-monotonic" class="title-slide slide level1 center">
+<h1>Beyond Monotonic</h1>
+
+</section>
+<section id="complete-the-correlation-census" class="slide level2">
+<h2><a href="#/sec-ranking">Complete the correlation census</a></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/cor_linearity.webp" height="300"></p>
+</figure>
+</div>
+<div class="fragment">
+<p>A solution:<sup>1</sup> <span class="math inline">\(\xi\)</span> correlation</p>
+</div>
+<ol type="1">
+<li class="fragment"><del>Linearity/monotoncity</del> <span class="red">any</span> functional correlation</li>
+<li class="fragment">As simple as the classical coefficients like Pearson’s correlation or Spearman’s correlation</li>
+<li class="fragment">Consistently estimates some simple and interpretable measure of the degree of dependence between the variables (0, independent; 1 associated)</li>
+</ol>
+<aside><ol class="aside-footnotes"><li id="fn4"><p>Chatterjee, Sourav. 2021. “A New Coefficient of Correlation.” <em>Journal of the American Statistical Association</em> 116(536): 2009–22.</p></li></ol></aside></section>
+<section id="property-of-xi" class="slide level2">
+<h2>Property of <span class="math inline">\(\xi\)</span></h2>
+<p>Asymptotic estimate: As <span class="math inline">\(n\)</span> goes to Infinity…</p>
+<ul>
+<li class="fragment">If <span class="math inline">\(y\)</span> is a function of <span class="math inline">\(x\)</span>, then <span class="math inline">\(\xi\)</span> goes to 1 asymptotically as <span class="math inline">\(n\)</span> (the number of data points, or the length of the vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>) goes to Infinity.</li>
+<li class="fragment">If <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span> are independent, then <span class="math inline">\(\xi\)</span> goes to 0 asymptotically .</li>
+<li class="fragment">No anti-correlation</li>
+</ul>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="07_association_files/figure-revealjs/xi-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="take-home-point" class="slide level2">
+<h2>Take-home point</h2>
+<div style="text-align: center">
+<p><img data-src="images/cor_mindmap.png" height="850"></p>
+</div>
+</section>
+<section id="greek-letters" class="slide level2">
+<h2><a href="http://www.ilearngreek.com/Lessons/alphabet.L1.asp">Greek Letters</a></h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  alpha    beta   gamma   delta epsilon    zeta     eta   theta    iota   kappa 
+    "α"     "β"     "γ"     "δ"     "ε"     "ζ"     "η"     "θ"     "ι"     "κ" 
+ lambda      mu      nu      xi omicron      pi     rho   sigma     tau upsilon 
+    "λ"     "μ"     "ν"     "ξ"     "ο"     "π"     "ρ"     "σ"     "τ"     "υ" 
+    phi     chi     psi   omega 
+    "φ"     "χ"     "ψ"     "ω" </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Alpha    Beta   Gamma   Delta Epsilon    Zeta     Eta   Theta    Iota   Kappa 
+    "Α"     "Β"     "Γ"     "Δ"     "Ε"     "Ζ"     "Η"     "Θ"     "Ι"     "Κ" 
+ Lambda      Mu      Nu      Xi Omicron      Pi     Rho   Sigma     Tau Upsilon 
+    "Λ"     "Μ"     "Ν"     "Ξ"     "Ο"     "Π"     "Ρ"     "Σ"     "Τ"     "Υ" 
+    Phi     Chi     Psi   Omega 
+    "Φ"     "Χ"     "Ψ"     "Ω" </code></pre>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment">β, “veta”</li>
+<li class="fragment">γ, “gjyamma”</li>
+<li class="fragment">η, “eeta”</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment">ι, “yota”</li>
+<li class="fragment">ξ, “ksee”</li>
+<li class="fragment">φ, “fi”</li>
+<li class="fragment">χ, “he”</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="have-a-break" class="slide level2">
+<h2>Have a break</h2>
+<video id="video_shortcode_videojs_video1" height="850" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
+</section></section>
+<section>
+<section id="sec-anovaExt" class="title-slide slide level1 center">
+<h1>Appendix: ANOVA Extension</h1>
+
+</section>
+<section id="ranking-version-of-anova" class="slide level2">
+<h2>Ranking version of ANOVA</h2>
+<p>Analysis of variance<span class="red">-rank</span> + Kruskal-Wallis test; + Friedman test.</p>
+</section>
+<section id="one-way-variance-rank-kruskal-wallis-test" class="slide level2">
+<h2>One-Way Variance-Rank: Kruskal-Wallis Test</h2>
+<p>An extension of the two-sample Wilcoxon test</p>
+<p>Procedure:</p>
+<ul>
+<li class="fragment">Combine k samples and sorting
+<ul>
+<li class="fragment">If the value are the same, use the average;</li>
+<li class="fragment">Let n<sub>k</sub> as the size of the k sample, and n = ∑n<sub>i</sub>, i ∈ {1, 2, …, k}.</li>
+</ul></li>
+<li class="fragment">Calculate the rank sum of each sample, R<sub>i</sub></li>
+<li class="fragment"><span class="math inline">\(H = \frac{12}{n(n + 1)}\sum^k_{i = 1}\frac{R^2_i}{n_i} - 3(n + 1) \sim \chi^2(k - 1).\)</span></li>
+</ul>
+</section>
+<section id="example-2" class="slide level2">
+<h2>Example</h2>
+<p>Botanists conducted an experiment of plant growth. The data records the results obtained under a control and two different treatment conditions (as measured by dried weight of plants).</p>
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">group</th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">IQR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ctrl</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">5.032</td>
+<td style="text-align: right;">0.5830914</td>
+<td style="text-align: right;">5.155</td>
+<td style="text-align: right;">0.7425</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">trt1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">4.661</td>
+<td style="text-align: right;">0.7936757</td>
+<td style="text-align: right;">4.550</td>
+<td style="text-align: right;">0.6625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">trt2</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">5.526</td>
+<td style="text-align: right;">0.4425733</td>
+<td style="text-align: right;">5.435</td>
+<td style="text-align: right;">0.4675</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Kruskal-Wallis rank sum test
+
+data:  weight by group
+Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
+</div>
+</div>
+</section>
+<section id="two-way-variance-rank-friedman-test" class="slide level2">
+<h2>Two-Way Variance-Rank: Friedman Test</h2>
+<p>An extension of the sign test, and also a special case of Durbin test.</p>
+<p>E.g., Person’s recovery score after taking four types of drugs. The type 1 is the placebo.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 20
+Columns: 3
+$ person &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5
+$ drug   &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4
+$ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20, 18, 30, 38, 34, 20, 44,…</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">friedman.test</span>(<span class="at">y =</span> df_drug<span class="sc">$</span>score,</span>
+<span id="cb6-2"><a href="#cb6-2"></a>              <span class="at">groups =</span> df_drug<span class="sc">$</span>drug,</span>
+<span id="cb6-3"><a href="#cb6-3"></a>              <span class="at">blocks =</span> df_drug<span class="sc">$</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Friedman rank sum test
+
+data:  df_drug$score, df_drug$drug and df_drug$person
+Friedman chi-squared = 13.56, df = 3, p-value = 0.00357</code></pre>
+</div>
+</div>
+<p>⇒ Different type of drugs lead to different type of outcomes.</p>
+</section></section>
+<section>
+<section id="sec-ranking" class="title-slide slide level1 center">
+<h1>Appendix: Ranking Test</h1>
+
+</section>
+<section id="association-for-matched-samples-ranking" class="slide level2">
+<h2>Association for Matched Samples: Ranking</h2>
+<table>
+<colgroup>
+<col style="width: 17%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Observation</th>
+<th>Test 1</th>
+<th>Test 2</th>
+<th>Δ</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>X<sub>1</sub></td>
+<td>Y<sub>1</sub></td>
+<td>X<sub>1</sub> - Y<sub>1</sub></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>X<sub>2</sub></td>
+<td>Y<sub>2</sub></td>
+<td>X<sub>2</sub> - Y<sub>2</sub></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>X<sub>3</sub></td>
+<td>Y<sub>3</sub></td>
+<td>X<sub>3</sub> - Y<sub>3</sub></td>
+</tr>
+</tbody>
+</table>
+<p>Goal: whether test 1 and test 2 yield identical results.</p>
+<ul>
+<li class="fragment">+: X<sub>i</sub> &gt; Y<sub>i</sub>;</li>
+<li class="fragment">-: X<sub>i</sub> &lt; Y<sub>i</sub>;</li>
+<li class="fragment">=: X<sub>i</sub> = Y<sub>i</sub>;</li>
+</ul>
+<p><em>Expectation</em>: if test 1 and 2 are identically distributed, the probability of Δ to be + or - should follow the binomial distribution. That is, <em>H<sub>0</sub>: Pr(+) = Pr(-) = 0.5</em>.</p>
+</section>
+<section id="sign-test" class="slide level2">
+<h2>Sign Test</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th>Observation</th>
+<th>Test 1</th>
+<th>Test 2</th>
+<th>Δ</th>
+<th>Sign</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>37</td>
+<td>40</td>
+<td>−3</td>
+<td>−</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>72</td>
+<td>73</td>
+<td>−1</td>
+<td>−</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>57</td>
+<td>59</td>
+<td>−2</td>
+<td>−</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>44</td>
+<td>43</td>
+<td>1</td>
+<td>+</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>43</td>
+<td>51</td>
+<td>−8</td>
+<td>−</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>64</td>
+<td>67</td>
+<td>−3</td>
+<td>−</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>55</td>
+<td>61</td>
+<td>−6</td>
+<td>−</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>65</td>
+<td>74</td>
+<td>−9</td>
+<td>−</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<p>H<sub>0</sub>: Pr(+) = Pr(-) = 0.5;<br>
+H<sub>1</sub>: Pr(+) &lt; Pr(-).</p>
+<p>α = 0.05</p>
+<div class="small">
+<p><span class="math display">\[\begin{align}
+Pr(n_-\geq 7) =&amp; Pr(n_- = 7) + Pr(n_- = 8)\\
+=&amp; {8 \choose 7}(0.5)^7(0.5)^1 + {8 \choose 8}(0.5)^8\\
+=&amp; 0.03125 + 0.0039 = 0.03516 &lt; 0.05.
+\end{align}\]</span></p>
+</div>
+</div>
+</div>
+</section>
+<section id="procedure-of-sign-test" class="slide level2">
+<h2>Procedure of Sign Test</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li class="fragment">Calculate the Δ (or d);</li>
+<li class="fragment">Giving the sign accordign to d, if d = 0, ignore the observation;</li>
+<li class="fragment">Calculate n<sub>-</sub> and n<sub>+</sub>, n = n<sub>-</sub> + n<sub>+</sub></li>
+<li class="fragment">Set H<sub>0</sub> and H<sub>1</sub>, and α</li>
+<li class="fragment">Calculate Pr(+/-)
+<ul>
+<li class="fragment"><span class="math inline">\(Pr(+) = \sum^{n_-}_{i = 0}Pr(n_+ + i)\)</span>;</li>
+<li class="fragment"><span class="math inline">\(Pr(-) = \sum^{n_+}_{j = 0}Pr(n_- + j)\)</span>;</li>
+</ul></li>
+<li class="fragment">Compare the Pr(+/-) with α.</li>
+</ol>
+<p>Although claiming non-parametirc, many of them calculate the significance according to populational parameters.</p>
+</div><div class="column" style="width:50%;">
+<p>Hint:</p>
+<ol type="1">
+<li class="fragment">Work on matched and nonmatched samples.</li>
+<li class="fragment">It is essentially a binomial test (again, “non-parametric” test).</li>
+</ol>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Exact binomial test
+
+data:  7 and 8
+number of successes = 7, number of trials = 8, p-value = 0.03516
+alternative hypothesis: true probability of success is greater than 0.5
+95 percent confidence interval:
+ 0.5293206 1.0000000
+sample estimates:
+probability of success 
+                 0.875 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="normal-approximation-of-sign-test" class="slide level2">
+<h2>Normal Approximation of Sign Test</h2>
+<p>(Often used when n &gt; 10, why? Well…)</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Using normal distribution to estimate sign tests:</p>
+<p>μ = np = n/2; σ<sup>2</sup> = np(1 - p) = n/4.</p>
+<span class="math display">\[Z = \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\]</span> where x’=
+<span class="math display">\[\begin{cases}
+x + 0.5, if x &gt; \frac{n}{2}\\
+x- 0.5, if x &lt; \frac{n}{2}
+\end{cases}\]</span>
+<p><sup>1</sup></p>
+</div><div class="column" style="width:50%;">
+<p>e.g., n = 8, then <span class="math inline">\(Pr(n_-\geq 7)\)</span> ?</p>
+<p><span class="math display">\[\begin{align}
+Z =&amp; \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
+=&amp; \frac{2(7 - 0.5) - 8}{\sqrt{8}} = 1.77.
+\end{align}\]</span></p>
+<p>Then, Pr(Z ≥ 1.77) ≈ 0.038 &lt; 0.05.</p>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn5"><p>±0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.</p></li></ol></aside></section>
+<section id="advanced-version-of-sign-test" class="slide level2">
+<h2>Advanced Version of Sign Test</h2>
+<p>Problems of sign test?</p>
+<p>⇒ Wilcoxon signed-rank test</p>
+<p>Sign test ony identify the sign but not the magnitude, insufficiently using the data.</p>
+<ol type="1">
+<li class="fragment">Calculate the d and .red[|d|];</li>
+<li class="fragment">Sort these quantities, and record their rankings as R<sub>i</sub> so that 0 &lt; |d<sub>R1</sub>| &lt; |d<sub>R2</sub>| &lt;…&lt; |d<sub>Rn</sub>|.</li>
+<li class="fragment">Let sign function sgn(d) = 1 if d &gt; 0, sgn(d) = -1, if d &lt; 0, then calculate the signed-rank sum <span class="math inline">\(T = \sum^n_{i=1}sgn(d_i)R_i.\)</span>
+<ul>
+<li class="fragment"><span class="math inline">\(T^{+}=\sum _{d_{i}&gt;0}R_{i},\)</span></li>
+<li class="fragment"><span class="math inline">\(T^{-}=\sum _{d_{i}&lt;0}R_{i}.\)</span></li>
+</ul></li>
+<li class="fragment">Compare the Pr(T) with α.</li>
+</ol>
+</section>
+<section class="slide level2">
+
+<div class="columns">
+<div class="column" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th>Observation</th>
+<th>Test 1</th>
+<th>Test 2</th>
+<th>Δ</th>
+<th>Ranking</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>37</td>
+<td>40</td>
+<td>−3</td>
+<td><span class="red">4</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>72</td>
+<td>73</td>
+<td>−1</td>
+<td><span class="red">1</span></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>57</td>
+<td>59</td>
+<td>−2</td>
+<td>3</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>44</td>
+<td>43</td>
+<td>1</td>
+<td><span class="red">1</span></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>43</td>
+<td>51</td>
+<td>−8</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>64</td>
+<td>67</td>
+<td>−3</td>
+<td><span class="red">4</span></td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>55</td>
+<td>61</td>
+<td>−6</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>65</td>
+<td>74</td>
+<td>−9</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:50%;">
+<div class="cell">
+
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">wilcox.test</span>(tb_sr<span class="sc">$</span>Test_1, tb_sr<span class="sc">$</span>Test_2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in wilcox.test.default(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE):
+cannot compute exact p-value with ties</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Wilcoxon signed rank test with continuity correction
+
+data:  tb_sr$Test_1 and tb_sr$Test_2
+V = 1.5, p-value = 0.02471
+alternative hypothesis: true location shift is not equal to 0</code></pre>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">When tie happens, using Monte Carlo conditional p-value (<code>coin::wilcox_test</code>) to conduct outcomes .</li>
+<li class="fragment">When n &gt; 25, a normal approximation can be also conducted.</li>
+</ul>
+</section>
+<section id="ranking-test-for-nonmatched-samples" class="slide level2">
+<h2>Ranking Test for Nonmatched Samples</h2>
+<p>Given samples S1 and S2,</p>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Rank-sum test</a></li><li><a href="#tabset-1-2">Wald-Wolfowitz Runs Test</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<ul>
+<li class="fragment">Combining S1 and S2 and rank the pooled observations;</li>
+<li class="fragment">Adding the ranking quantities (i.e., Rs in signed-rank test);</li>
+<li class="fragment">Comparing the sums.</li>
+</ul>
+</div>
+<div id="tabset-1-2">
+<p>Meaning: Values of sorted S1 and S2 randomly occure?</p>
+<p>Procedure:</p>
+<ol type="1">
+<li class="fragment">Combine S1 and S2</li>
+<li class="fragment">Sorting the quantities</li>
+<li class="fragment">Giving those from S1 as 0 and those from S2 1 within their ranking order.</li>
+<li class="fragment">Testing whether the 0/1 occure stocastically.</li>
+</ol>
+<p>When n<sub>1</sub> ≥ 20, n<sub>2</sub> ≥ 20, one can use normal approximation</p>
+</div>
+</div>
+</div>
+<p>Runs test means to test whether an item comes from population 1 and population 2 is random or not</p>
+</section>
+<section id="runs" class="slide level2">
+<h2>Runs</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Trial</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>9</td>
+<td>22</td>
+<td>65</td>
+<td>34</td>
+<td>17</td>
+<td>4</td>
+<td>31</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>58</td>
+<td>53</td>
+<td>26</td>
+<td>11</td>
+<td>52</td>
+<td>51</td>
+<td>8</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<div style="text-align:center; margin-top: 2em">
+<p>⇓</p>
+</div>
+<table>
+<colgroup>
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>4</th>
+<th>8</th>
+<th>9</th>
+<th>11</th>
+<th>17</th>
+<th>22</th>
+<th>26</th>
+<th>28</th>
+<th>31</th>
+<th>34</th>
+<th>51</th>
+<th>52</th>
+<th>53</th>
+<th>58</th>
+<th>64</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+<img data-src="images/cor_runs.png" class="r-stretch quarto-figure-center"></section>
+<section id="example-3" class="slide level2">
+<h2>Example</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>vec_runs1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">times =</span> <span class="dv">5</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>vec_runs2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>vec_runs3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb12-4"><a href="#cb12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5"></a>vec_runs1 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0 1 0 1 0 1 0 1 0 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>vec_runs2 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 0 0 0 0 0 1 1 1 1 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>vec_runs3 <span class="co"># random</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 1 0 0 1 1 1 1 0 0 0</code></pre>
+</div>
+</div>
+</section>
+<section class="slide level2">
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">library</span>(randtests)</span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">runs.test</span>(vec_runs1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Runs Test
+
+data:  vec_runs1
+statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n = 10, p-value =
+0.00729
+alternative hypothesis: nonrandomness</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">runs.test</span>(vec_runs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Runs Test
+
+data:  vec_runs2
+statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n = 10, p-value =
+0.00729
+alternative hypothesis: nonrandomness</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">runs.test</span>(vec_runs3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Runs Test
+
+data:  vec_runs3
+statistic = -1.3416, runs = 4, n1 = 5, n2 = 5, n = 10, p-value = 0.1797
+alternative hypothesis: nonrandomness</code></pre>
+</div>
+</div>
+<div class="footer footer-default">
+
+</div>
+</section></section>
+
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="07_association_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="07_association_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="07_association_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="07_association_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1600,
+
+        height: 900,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+          }
+        }
+    });
+    </script>
+    
+    
+
+</body></html>

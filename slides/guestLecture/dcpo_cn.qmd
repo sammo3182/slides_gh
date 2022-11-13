@@ -1,0 +1,882 @@
+---
+title: "跨时空舆论意涵提取与比较"
+subtitle: "全国社会媒体处理大会前沿技术讲习班（CIPS ATT33）"
+date: "2022-08-19"
+author:
+  - 胡悦
+institute: "清华大学" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: speaker # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 300px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "ltm",
+  "mirt",
+  "TeachingSampling",
+  "lme4",
+  "DCPO",
+  "knitr",
+  "ggalt",
+  "latex2exp",
+  "icons",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## 概要
+
+- 核心问题
+- 解决方法
+- 最新进展
+- 操作秘辛
+
+
+# [实际问题]{.golden} {background="#43464B"}
+
+
+---
+
+社会科学概念通常**复杂而抽象**
+
+. . .
+
+::: {style="text-align: center; margin-top: 1em"}
+[核心关注]{.large}
+
+(民主、回应、剥夺感、性别平等、收入平等......)
+:::
+
+. . .
+
+::: {style="text-align: center; margin-top: 1em"}
+[+]{.Large}
+
+[丰富且累积的数据]{.large}
+
+(WVS, Global barometers, ?GSS, Pew, commercial pools...)
+:::
+
+. . .
+
+::: {style="text-align: center; margin-top: 1em"}
+[&dArr;]{.Large}
+
+[[清晰的规律？]{.red}]{.large}
+
+:::
+
+
+## E.g.，民主支持 &#8621; 制度民主化
+
+. . .
+
+<br>
+
+*民意 &rarr; 制度*：
+
+支持 [&uarr;]{.blue} &rarr; 民主化 [&uarr;]{.blue} [(e.g., Inglehart & Welzel 2005, Claassen 2019)]{.small}    
+支持 [&uarr;]{.blue} &rarr; 民主化 [&#8675;]{.red} [(e.g., Fails & Pierce 2010)]{.small}
+
+:::{.notes}
+Countries with greater democratic 支持 have been found to become stronger and more stable democracies
+
+Inglehart, Ronald and Christian Welzel. 2005. *Modernization, Cultural Change, and 民主化*. Cambridge: Cambridge University Press. 
+
+Fails, Matthew D. and Heather Nicole Pierce. 2010. “Changing Mass Attitudes and Democratic Deepening.” *Political Research Quarterly* 63(1):174–187.
+
+(Insignificant positive with one-year survey, and insig negative with multiple years)
+
+:::
+
+. . . 
+
+<br>
+
+*制度 &rarr; 民意*：
+
+民主化 [&uarr;]{.blue} &rarr; 支持 [&uarr;]{.blue} [(e.g., Wuttke et. al. 2020) ]{.small}   
+民主化 [&uarr;]{.blue} &rarr; 支持 [&darr;]{.red} [(e.g., Foa & Mounk 2017)]{.small}  
+民主化 [&darr;]{.red} &rarr; 支持 [&uarr;]{.blue} [(e.g., Claassen 2020)]{.small}
+
+:::{.notes}
+More experience with 民主化 yields more democratic 支持 
+vs.
+Long-established democracies are suffering from democratic fatigue 
+
+Wuttke, Alexander, Christian Schimpf and Harald Schoen. 2020. “When the Whole Is Greater
+than the Sum of Its Parts: On the Conceptualization and Measurement of Populist Attitudes and Other Multidimensional Constructs.” *American Political Science Review* 114(2):356–374.
+
+Foa, Roberto Stefan and Yascha Mounk. 2017. “The Signs of Deconsolidation.” *Journal of 民主化* 28(1):5–15
+
+thermostatic effect. 
+:::
+
+
+## 问题原因
+
+::: {style="text-align: center; margin-top: 1em"}
+I. 问题的差异性
+
+![](images/dcpo_sparsingData.png){ height="700" }
+:::
+
+:::{.notes}
+Why are there mixed results? 
+
+Difficutlies in measuring. 
+
+First, pub sp is latent variable, unobservable. Uncertainty. 
+
+Sec, a big challenge is the sparced and fragmented data at aggregate level. 
+
+churchihill items,  democracy has its probles, still the best one. 
+
+milltary rule items, military should govern the country. what do you think. 
+
+Worldwide survey project, 4 years. 
+
+across countries, overtime. 
+:::
+
+---
+
+::: {style="text-align: center; margin-top: 1em"}
+II. 答题者的差异性
+:::
+
+::: {.pull-left}
+![](images/dcpo_demo_leaving.gif){ height="600" width="790" }
+:::
+
+:::{.notes}
+United Kindom, lawmakers leave. 
+:::
+
+. . .
+
+::: {.pull-right}
+![](images/dcpo_demo_enter.gif){ height="600" width="790" }
+:::
+
+:::{.notes}
+Swarming Capital defending democracy.  
+:::
+
+# [问题 &rarr; 解法]{.golden} {background="#43464B"}
+
+---
+
+::: {style="text-align: center; margin-top: 1em"}
+Different questions + Different people &rArr; [Incomparable]{.red} data   
+:::
+
+. . .
+
+::: {style="text-align: center; margin-top: 1em"}
+&dArr;   
+[Latent variable analysis]{.blue}
+:::
+
+. . .
+
+:::: {.columns}
+
+::: {.column width="40%"}
+**因素分析模型**   
+(Factorial Models)
+
+:::{.fragment .nonincremental .fade-in-then-semi-out}
+1. 探索性因子分析(EFA)
+1. 验证性因子分析(CFA)
+1. 结构方程模型(SEM)
+:::
+:::
+
+::: {.column width="20%"}
+:::
+
+::: {.column width="40%"}
+**类型分析模型**   
+(Topological Models)
+
+1. 项目反应理论
+1. [MRP]{.grayLight}
+1. 跨群组项目反应
+:::
+
+::::
+
+
+## 取平均值行不行？
+
+:::{.pull-left .nonincremental}
+
+测量个体的“社会资本”
+
+
+指标问题（X: 1~10）：
+
+1. 您是否信任身边人？
+1. 您在政府机关有没有亲戚？
+1. 您的朋友是否和您的想法经常一致？
+:::
+
+. . .
+
+:::{.pull-right}
+
+$$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
+
+:::{.fragment style="text-align: center"}
+累加型综合法(additive scales)
+:::
+
+:::{.fragment}
+- 缺陷:
+    1. 平等权重(equal weight)
+    1. 数据敏感(extreme value sensitivity)
+    1. 忽略极化(polarity ignoring)
+:::
+
+:::
+
+
+## 项目反应理论 (Item Response Theory, IRT)
+
+1. 天生为**非线性**指标设计（最适配二元变量，已派生适应定序变量和连续变量）；
+1. 易与Bayesian inference结合，解决潜在变量**scale不确定**问题；
+1. 在Bayesian框架下更好解决**缺失值和“Don't Know”**问题；
+1. 易与跨群组估计结合，实现指标[**跨组可比**]{.red}
+
+:::{.fragment style="margin-top: 1em"}
+### 常用模型
+:::
+
+::::{.columns}
+:::{.column width="25%" .fragment}
+Rasch Model (1PL)     
+:::
+
+:::{.notes}
+Rasch /resh/  
+
+1-parameter logistic
+:::
+
+:::{.column width="50%" .fragment}
+&rarr; Two-Parameter Logistic Model (2PL)     
+&rarr; Three-Parameter Logistic Model (3PL)     
+&rarr; Four-Parameter Logistic Model (4PL)
+:::
+
+:::{.column width="25%" .fragment}
+&rarr; GIRT    
+&rarr; DGIRT([DCPO]{.red})
+
+:::
+::::
+
+
+## Rasch Model (1PL)
+
+
++ y<sub>iq</sub>&isin;{0,1}: subject `i`'s score on question `q`
++ &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Unbounded latent trait
++ &sigma;<sub>q</sub>: Difficulty
+
+:::{style="text-align: center"}
+[Pr(y<sub>iq</sub> = 1)]{.orange} = [logist<sup>-1</sup>(&theta;<sub>i</sub> - [&sigma;<sub>q</sub>]{.red})]{.blue}
+:::
+
+::::{.columns .fragment}
+:::{.column width="50%" style="text-align: right"}
+[Item response]{.orange}
+:::
+
+:::{.column width="50%"}
+[Response theory]{.blue}
+:::
+::::
+
+:::{.notes}
+Difficulty: 不同的问题回答肯定答案的难易度不一样, 通常显示为z scores， 低于0 表示比较简单
+
+- 当面临重大公共卫生威胁时，政府应该及时响应，采取果断措施
+- 政府是否可以牺牲少数民众安全和权力，来换取大多数社会成员的公共卫生安全时
+:::
+
+## 操作实现
+
+::: {.panel-tabset}
+
+## 环境
+
+```{r install}
+if (!require(mirt)) install.packages("mirt")
+library(mirt)
+```
+
+<br>
+
+数据：Law School Admissions Test, sec 7 (Bock & Lieberman 1970)
+
+- 5个yes/no问题
+
+## 数据
+
+```{r data-verbal}
+df_lsat <- expand.table(LSAT7)
+df_lsat[31:40, ] %>% kable(format = "html")
+```
+
+:::{.notes}
+Darrell Bock, R., and Marcus Lieberman. 1970. “Fitting a Response Model for n Dichotomously Scored Items.” Psychometrika 35(2): 179–97.
+
+[`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
+:::
+
+:::
+
+## 产出 {auto-animate="true"}
+
+```{r difficulty-fit}
+# Fit the model
+m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+```
+
+## 产出 {auto-animate="true"}
+```{r difficulty-out}
+# Fit the model
+m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+
+# Parameters
+coef(m_lsat, simplify = TRUE) %>% 
+  kable(format = "html")
+```
+
+:::{style="text-align: center; margin-top: 2em"}
+
+Pr(y<sub>iq</sub> = 1) = logist<sup>-1</sup>(&theta;<sub>i</sub> - [&sigma;<sub>q</sub>]{.red})
+
+:::
+
+## 产出 {auto-animate="true"}
+```{r difficulty-score}
+# Fit the model
+m_lsat <- mirt(df_lsat, model = 1, itemtype = "Rasch", verbose = FALSE)
+
+# Parameters
+result_para <- coef(m_lsat, simplify = TRUE) %>% 
+  kable(format = "html")
+
+# Output
+fscores(m_lsat, full.scores.SE = TRUE)[1:5,] %>% 
+  kable(format = "html")
+```
+
+
+
+---
+
+:::{.r-fit-text style="text-align: center; margin-top: 2em"}
+[请务必诊断IRT结果拟合性!]{.red}
+:::
+
+:::aside
+(
+- 总体G<sup>2</sup>/M<sup>2</sup>/M<sup>2*</sup>, RMSEA, TLI, ...
+- 个体：Item Characteristic Curves,  Test Charactersitic Curve,...
+)
+:::
+
+
+## 局限与突破
+
+:::: {.columns .fragment}
+
+::: {.column .fragment width="40%"}
+
+![](images/dcpo_measurementError.jpg){fig-align="center"}
+
+:::
+
+::: {.column .fragment width="60%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = logist^{-1}(\color{red}{\kappa_q}\theta_i - \sigma_q).$$
+
+- Discrimination: 一个问题多大程度上能区分做题者
+
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\color{red}{\beta_q}}}{\color{red}{\alpha_q}}].$$
+
+- Dispersion: Measurement error 大小
+
+:::
+
+::::
+
+:::{.notes}
+人们对同一个题理解不同，回答出affirmative答案可能性也不同。
+
+Rule of thumb above 1 meaning a good question in terms of examination
+:::
+
+
+## 局限与突破 {auto-animate="true"}
+
+```{r onePL}
+#| eval: false
+#| code-line-numbers: "3"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+```
+
+## 局限与突破 {auto-animate="true"}
+
+```{r twoPL}
+#| eval: false
+#| code-line-numbers: "7"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+```
+
+:::{.fragment}
+
+```{r twoPL-out}
+#| echo: false
+
+
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL") %>% 
+  coef(simplify = TRUE) %>% 
+  kable
+```
+
+:::
+
+:::{.notes}
+a1: Discrimination
+:::
+
+## 局限与突破
+
+:::: {.columns .fragment}
+
+::: {.column .fragment width="40%"}
+
+![](images/dcpo_chooseC.jpg){fig-align="center"}
+
+:::
+
+::: {.column .fragment width="60%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}]$$
+
+$$Pr(y_{iq} = 1) = \color{red}{c_i + (1 - c_i)}logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+:::
+
+::::
+
+:::{.notes}
+- 如果有人全凭猜咋办？——大量低&theta;人群
+- 鉴于3PL已经需要1000-ish观测点……
+:::
+
+## 局限与突破 {auto-animate="true"}
+
+```{r twoPL2}
+#| eval: false
+#| code-line-numbers: "7"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+```
+
+
+
+## 局限与突破 {auto-animate="true"}
+
+```{r threePL}
+#| eval: false
+#| code-line-numbers: "11"
+
+# Rasch
+mirt(df_lsat, model = 1, verbose = FALSE, 
+     itemtype = "Rasch")
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+# 3PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
+```
+
+:::{.fragment}
+
+```{r threePL-out}
+#| echo: false
+
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL") %>% 
+  coef(simplify = TRUE) %>% 
+  kable
+```
+
+:::
+
+
+## 局限与突破
+
+:::: {.columns .fragment}
+
+::: {.column .fragment width="35%"}
+
+![](images/dcpo_dontCare.jpg){fig-align="center"}
+
+:::
+
+::: {.column .fragment width="65%"}
+
+<br><br><br>
+
+$$Pr(y_{iq} = 1) = c_i + (1 - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+$$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \beta_q)}{\alpha_q}]$$
+
+:::
+
+::::
+
+:::{.notes}
+- 修正carelessness
+:::
+
+## 局限与突破 {auto-animate="true"}
+
+```{r threePL2}
+#| eval: false
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+# 3PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
+```
+
+
+## 局限与突破 {auto-animate="true"}
+
+```{r fourPL}
+#| eval: false
+#| code-line-numbers: "11"
+
+# 2PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "2PL")
+
+# 3PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "3PL")
+
+# 4PL
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "4PL")
+```
+
+:::{.fragment}
+
+```{r fourPL-out}
+#| echo: false
+
+mirt(df_lsat, model = 1, verbose = FALSE,
+     itemtype = "4PL") %>% 
+  coef(simplify = TRUE) %>% 
+  kable
+```
+
+:::
+
+## 发展
+
+- 一维聚合 &rarr; 多维聚合
+    - Multidimentional IRT (MIRT, [Phil Chalmers 2015]{.small})
+
+- 二元 &rarr; 定序
+    1. (Modified) Graded Response Model
+        + 用于scoring rubrics，比如 Likert
+    1. (Generalized) Partial Credit Model，Rating Scale Model
+        + 用于可转化为定序的分类变量
+    1. Nominal Response Model
+        + 用于无序分类变量
+
+- 个体的群组效用（random-effect-like)
+    - Multilevel Mixture IRT with Item Bias Effects [(Stegmueller 2011)]{.small}
+
+:::{.notes}
+Chalmers, R. Philip. 2015. “Extended Mixed-Effects Item Response Models With the MH-RM Algorithm.” *Journal of Educational Measurement* 52(2): 200–222.
+
+Stegmueller, Daniel. 2011. “Apples and Oranges? The Problem of Equivalence in Comparative Research.” *Political Analysis* 19(4): 471–87.
+:::
+
+# [最新进展]{.golden} {background="#43464B"}
+
+## 超越个体
+
+:::{.fragment}
+问题：Individual fallacy
+
+- 总体水平并非简单的个体的和(政治文化、民主、不平等……)
+- Ecological fallacy 的反面
+:::
+
+:::{.fragment}
+重提：求平均行不行？
+
+1. 不同的指标对于潜在变量贡献不一样 &rArr; IRT
+1. 如果群组过小，其平均值的代表意义不大 &rArr; MrP/MssP
+:::
+
+:::{.fragment}
+IRT + MrP &rArr; Dynamic Group-level IRT (Dynamic Group-level IRT, [Caughey & Warshaw 2015]{.small})
+
+:::{.notes}
+Caughey, Devin, and Christopher Warshaw. 2015. “Dynamic Estimation of Latent Opinion Using a Hierarchical Group-Level IRT Model.” *Political Analysis* 23(2): 197–211.
+:::
+
+
+:::{.pull-left}
+1. 在组内个体层面估测IRT；
+1. 在估测IRT过程中加入群组级别变量；
+1. 将时间变量融入IRT估测；
+1. 用MrP给估测进行配重。
+:::
+
+:::{.pull-right}
+- Pro
+    - 囊括诸多因素
+    - 可以部分平衡样本代表性问题
+    
+- Con: 强大，但*复杂*
+:::
+
+:::{.notes}
+Caughey & Warshaw称会跑几个星期
+:::
+
+:::
+
+
+## 高效DGIRT
+
+:::{.fragment .fade-in-then-semi-out}
+版本一：Claassen 2019
+
+简化1：只作用于代表性样本和国家级别  
+简化2：将国家作用从估测&theta;变为估测difficulty  
+简化3：忽略本地问题分布
+:::
+
+::::{.columns .fragment}
+:::{.column width="60%"}
+版本二：    
+[D]{.red}ynamic [C]{.red}omparative [P]{.red}ublic [O]{.red}pinion
+:::
+
+:::{.column width="40%"}
+![](images/dcpo_fsolt.jpeg){fig-align="center"}
+:::
+::::
+
+:::{.fragment style="text-align: center"}
+复杂程度：
+
+Claasseen 2019 < [DCPO]{.red} < DGIRT
+:::
+
+## 方法比较
+
+![](images/dcpo_irtCompare.png){height="800" fig-align="center"}
+
+:::{.notes}
+&sigma;: 跨国群组
+
+Bounded: 使用logit归为0-1
+:::
+
+## 效果比较
+
+![](images/dcpo_irtFitCompare.png){width="1000" fig-align="center" style="margin-top: 2em"}
+
+
+## DCPO操作流程
+
+1. 收集survey数据，明确与感兴趣的变量相关的指标问题（team-work）
+1. 通过`DCPOtools`对数据进行预处理（[半自动]{.red})
+1. 通过`DCPO`进行数据分析（[自动]{.red}）
+1. 通过`shinystan`诊断convergence（[自动]{.red}）
+
+## 应用举例
+
+:::aside
+Woo, Byung-Deuk, Lindsey Allemang, and Frederick Solt. 2022. “Public Gender Egalitarianism: A Dataset of Dynamic Comparative Public Opinion Toward Egalitarian Gender Roles in the Public Sphere.” *British Journal of Political Science*: Forthcoming.
+:::
+
+- 平权意识的跨越时空比较
+    - 124个不同国家，48年（1972--2020）
+    - 273,792个数据点
+
+:::{.fragment}
+![](images/dcpo_eg_data.png){width="1000" height="450" fig-align="center"}
+:::
+
+## Public Gender Egalitarianism
+
+![](images/dcpo_eg_pge.png){width="1000" fig-align="center"}
+
+## 有效性
+
+![](images/dcpo_eg_usa.png){width="1200" fig-align="center"}
+
+# [操作秘辛]{.golden} {background="#43464B"}
+
+## 群组IRT应用的两个重要盲点
+
+- 数据产出的不可确定性
+- 数据收集中的人为因素
+
+## 盲点I：数据产出的不可确定性
+
+:::{.fragment style="text-align: center; margin-top: 3em"}
+IRT产出: 点估计 + [(贝叶斯)置信区间]{.red}
+:::
+
+:::{.fragment style="text-align: center"}
+&darr;
+
+只用点估计 &hArr; 潜变量估计是“[完美的]{.blue}”
+:::
+
+:::{.fragment style="text-align: center"}
+&darr;
+
+分析结果：点估计和置信区间均[**有偏**]{.red}
+:::
+
+:::aside
+Tai, Yuehong ‘Cassandra,’ Yue Hu, and Frederick Solt. 2022. “Democracy, Public Support, and Measurement Uncertainty.” *American Political Science Review*: First View.
+:::
+
+
+## 忽视不可确定性的后果
+
+:::{style="text-align: center"}
+顶刊上的“假”结果：民众支持与民主化
+
+- Claassen 2019 (*AJPS*): The fate of democracy rests on the people's support
+- Claassen 2020 (*APSR*): When democratic institutions are undermined, people's support and constitute “an obstacle to democratic backsliding”
+:::
+
+
+[纳入不可确定性 &rArr;]{.fragment}
+
+:::{.r-stack}
+![](images/dcpo_apsr.png){.fragment height="550" width="1000"}
+
+![](images/dcpo_ajps.png){.fragment height="550" width="1200"}
+:::
+
+
+## 盲点II：数据收集中的人为因素
+
+:::{.r-stack}
+![](images/dcpo_data_source.png){.fragment}
+
+![](images/dcpo_data_out.png){.fragment width="1600"}
+:::
+
+## 解法
+
+1. 数据输入自动化最大化
+1. 交叉检验
+1. 如果可能，团队合作
+1. 熟悉数据输入可能问题和类型
+
+
+# [总结一下]{.golden} {background="#43464B"}
+
+## Take-Home Points
+
+- 核心问题：社会科学研究需要跨[时]{.red}、[空]{.red}比较
+- 解决方法：个体和集体层级的潜变量分析工具
+    - IRT
+    - GIRT
+- 最新进展：DCPO ([https://dcpo.org](https://dcpo.org))
+- 操作秘辛：
+    - 数据产出的不可确定性
+    - 数据收集中的人为因素
+    
+
+## {background="#43464B"}
+
+:::{style="text-align: center; margin-top: 5em"}  
+[Thank You]{.Large}
+
+:::{style="margin-top: 2em"}
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+:::
+:::

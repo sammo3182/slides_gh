@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>以数知文</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="胡悦" />
+    <script src="06_textAnalaysis_files/header-attrs-2.14/header-attrs.js"></script>
+    <link href="06_textAnalaysis_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="06_textAnalaysis_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <link href="06_textAnalaysis_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/panelset-0.2.4/panelset.js"></script>
+    <script src="06_textAnalaysis_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="06_textAnalaysis_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="06_textAnalaysis_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="06_textAnalaysis_files/xaringanExtra-broadcast-0.2.4/broadcast.css" rel="stylesheet" />
+    <script src="06_textAnalaysis_files/xaringanExtra-broadcast-0.2.4/broadcast.js"></script>
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# 以数知文
+]
+.subtitle[
+## 计算机辅助内容分析原理与路径
+]
+.author[
+### 胡悦
+]
+.institute[
+### 清华大学
+]
+
+---
+
+
+
+
+
+## Overview
+
+.pull-left[
+### 原则
+
+* .red[见字如数]：文本与文本数据
+    - 文本&amp;rarr;数据
+    - 文本分析
+    - 应用案例
+&lt;!-- * .red[以字当数]：文本分析研究模式 --&gt;
+]
+
+.pull-right[
+### 操作
+
+.red[以数知文]: 文本数据化原则
+
+* 数据获取
+* 数据整理
+* 基本分析
+* .grayLight[进阶分析]
+]
+
+--
+
+
+### 技术来源 （R）
+
+[`rvest`](https://rvest.tidyverse.org/)   
+[`jiebaR`](https://qinwenfeng.com/jiebaR/)/[`TopWORDS`](http://www.stat.tsinghua.edu.cn/kdeng/r-package/)    
+[`tidytext`](https://www.tidytextmining.com/)   
+
+
+---
+
+class: inverse, bottom
+
+# 见字如数：文本与文本数据化
+
+---
+
+## 文本的数据
+
+每年： 社交媒体用户2017--2018年年增量56,530,000人。
+
+
+每天：
++ 百度.blue[日]用户搜索请求，需.blue[1.7天]才能扫描一遍；
++ 微信.blue[日]增数据.blue[500TB]——比人类所有书籍存量还多。
+
+
+每秒：全世界每秒发送290万封电子邮件，一个人需要.blue[5.5年]日以继夜才能读完。
+
+--
+
+.center[2019年，数据总量达40ZB，人均5.2TB&lt;sup&gt;1&lt;/sup&gt;]
+
+.footnote[&lt;sup&gt;1&lt;/sup&gt; 1ZB = 1,024EB = 1,024&lt;sup&gt;2&lt;/sup&gt;PB = 1,024&lt;sup&gt;3&lt;/sup&gt;TB  = 1024&lt;sup&gt;4&lt;/sup&gt;GB; 1080p HD 2hrs：6GB]
+
+???
+
+Giga Byte &lt; Tera Byte &lt; Peta Byte &lt; 
+Exa Byte &lt; Zetta Byte &lt; Yotta Byte
+
+---
+
+## 文本之于研究人类
+
+历史悠久而非主流 
+
+&amp;uarr; 资料难获取；花时间；难推广；难管理；难分析
+
+--
+
+新兴工具的繁荣：
+
++ 通过文本表达的社会意义更.blue[广泛];
++ 文本.blue[资料]指数级增长；
++ 大规模文本数据.blue[采集]；
++ .blue[存储和管理]能力增强；
++ 可推广、系统化和.blue[廉价]化；
+
+
++ 文本分析.blue[方法]蓬勃发展
+
+
+---
+
+## (计算机辅助）文本分析
+
+.pull-left[
+## 对象
+
+~~文字~~ 语言
+
+## 类型
+
+* Text analysis vs. content analysis
+* Representational analysis vs. Instrumental analysis
+* Thematic analysis vs. semantic analysis
+]
+
+???
+Representational 精确解码，关注外显（manifest）；
+Instrumental 探索意图，关注隐含（latent）
+Thematic 概念是否出现及何种关系，基于词频和向量；
+Semantic 识别主题间的具体关系；考虑语法、逻辑等
+
+语法学(syntax, how to say it)
+语义学(semantic, what is said)
+语用学(pragmatic, what is implicated)
+
+--
+
+.pull-right[
+
+## 挑战
+
+.pull-left[
+*理论*
+
+Single causal mechanism 
+
+*前提*
+
+"A bag of word" assumption
+]
+
+.pull-right[
+*数据*
+
+* DGP
+    + 随机抽取    
+    + Only posted   
+    + One-time censor
+* 非结构化
+* 海量潜在维度
+* 内容复杂且微妙
+]
+]
+
+
+
+???
+
+审查已经使用 machine learning
+
+Su, Y.-S., Y. Ruan, S. Sun, and Y.-T. Chang. 2020. “A Pattern Recognition Framework for Detecting Changes in Chinese Internet Management System.” Journal of Social Computing 1(1): 28–39.
+
+---
+
+## 分析方法实例
+
+Grimmer 2010. 
+
+* 目标：美国参议员的政治沟通
+
+???
+
+Grimmer, Justin. 2010. “A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.” *Political Analysis* 18(1): 1–35.
+
+--
+
+* 核心方法：贝叶斯分层主题模型
+
+--
+
+* 数据：美国参议院2007年来发布的24000余份新闻通告
+
+--
+
+* 发现：
+    + 关注重点与其他参议员的关注事件相关；
+    + 关注重点的地域分布具集聚性；
+    + 议员对挪用的关注程度与他们对禁止挪用法案的投票呈现出正相关关系。
+
+
+---
+
+## Benoit et al. 2016. 
+
+* 问题：专家与普通人对政治理解异同
+* 方法：Crowd-sourced identification
+* 数据：18,263 natural sentences, 1987~2010
+    + 215,107 群众评判
+    + 123,000 专家评判
+
+???
+
+Benoit, Kenneth et al. 2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” *American Political Science Review* 110(2): 278–95.
+
+British Conservative, Labour and Liberal Democrat manifesto, 
+
+---
+
+.center[&lt;img src="images/text_crowd-sourced.jpg" height = 600 /&gt;]
+
+
+---
+
+.center[&lt;img src="images/text_expert-crowd.png" height = 600 /&gt;]
+
+
+---
+
+## Dietrich et al 2019 
+
+* 目标： 测量情感强烈度
+* 数据：74,158 Congressional floor speeches
+* 方法： 统计音高变化
+
+???
+
+Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
+
+--
+
+.center[&lt;img src="images/text_vocalPitch_hcy.png" height = 400 /&gt;]
+
+---
+
+.center[&lt;img src="images/text_vocalPitch.png" height = 600 /&gt;]
+
+
+???
+
+female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
+
+
+---
+
+## Zhang &amp; Pan 2019
+
+* 目标：从社交媒体中获取集体行动信息
+* 数据：A random sample of 20,000 geocoded posts from Weibo, 2010--2017
+* 方法：CNN for images; CNN-RNN for texts
+
+
+???
+
+Zhang, Han, and Jennifer Pan. 2019. “CASM: A Deep-Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media.” Sociological Methodology 49(1): 1–57.
+
+张涵（普林斯顿）
+
+convolutional neural network (CNN) for image classification and a combination of convolutional and recurrent neural networks with long short-term memory (CNN-RNN)
+
+---
+
+background-image: url(images/text_casm.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+.center[
+
+Validation
+
+&lt;img src="images/text_runningMan.png" height = 250 /&gt;
+&lt;img src="images/text_banner.png" height = 250 /&gt;
+
+]
+
+&lt;!-- --- --&gt;
+
+&lt;!-- class: inverse, bottom --&gt;
+
+&lt;!-- # 以字当数：文本分析研究模式 --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- class: center, middle --&gt;
+
+&lt;!-- ## 文本分析研究思路（以King et al. 2013为例） --&gt;
+
+&lt;!-- 问题：Censorship --&gt;
+
+&lt;!-- &amp;vellip;     --&gt;
+&lt;!-- &amp;vellip;     --&gt;
+&lt;!-- &amp;vellip;     --&gt;
+&lt;!-- &amp;vellip;     --&gt;
+&lt;!-- &amp;vellip;     --&gt;
+&lt;!-- &amp;dArr; --&gt;
+
+&lt;!-- 发现：     --&gt;
+&lt;!-- 批评意见；     --&gt;
+&lt;!-- 集体行动。     --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- 是阻止/打击批评政府? --&gt;
+
+&lt;!-- King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43. --&gt;
+
+&lt;!-- + 允许新媒体上存在大量批评政府的意见； --&gt;
+&lt;!-- + 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。 --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## Data Collection --&gt;
+
+&lt;!-- + 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖 --&gt;
+&lt;!-- + 随机抽取:127,283 .center[&lt;img src="images/crimson-hexagon.png" height = 50 /&gt;] --&gt;
+
+&lt;!-- * 对每个网贴，首次出现时下载； --&gt;
+&lt;!-- * 一段时间后再次访问该网贴，识别是否被删帖；  --&gt;
+&lt;!-- * 使用自动文本分析分析海量文本资料。 --&gt;
+
+&lt;!-- .center[&lt;img src="images/censored.png" height = 300 /&gt;] --&gt;
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- 2007年Gary King创办，2018年并入英国Brandwatch. --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- background-image: url(images/chinese-media.png) --&gt;
+&lt;!-- background-position: 50% 50% --&gt;
+&lt;!-- background-size: 100% --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- class: center --&gt;
+
+&lt;!-- ## 研究设计 --&gt;
+
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别发帖量爆发点及相关事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别集体行动事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 判断发帖与行动关联     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 判断支持或批评政府     --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- 识别出87件 --&gt;
+
+&lt;!-- -- --&gt;
+
+&lt;!-- ## 观测指标 --&gt;
+
+&lt;!-- 发帖量    --&gt;
+&lt;!-- 事件类型    --&gt;
+&lt;!-- 贴子内容 --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## 发帖量 --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- .center[ --&gt;
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- .red[识别发帖量爆发点及相关事件]     --&gt;
+&lt;!-- ] --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[&lt;img src="images/post-amount.png" height = 500 /&gt;] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## 事件类型 --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- 1. 情感维度：对政府的负面、正面、或中立意见  --&gt;
+&lt;!-- 1. 主题维度： --&gt;
+&lt;!--     + 集体行动 --&gt;
+&lt;!--     + 对审查者的批评 --&gt;
+&lt;!--     + 色情内容 --&gt;
+&lt;!--     + 新闻 --&gt;
+&lt;!--     + 政府政策 --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- .center[ --&gt;
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别发帖量爆发点及相关事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- .red[识别集体行动事件]     --&gt;
+&lt;!-- ] --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- 网络外抗议或有组织的群体性事件； --&gt;
+&lt;!-- 以往有组织或煽动集体行动的个体； --&gt;
+&lt;!-- 以往煽动抗议或集体行动的民族主义或民族情绪； --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- .pull-left[&lt;img src="images/post-type.png" height = 500 /&gt;] --&gt;
+
+&lt;!-- .pull-right[&lt;img src="images/post-censor.png" height = 500 /&gt;] --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- class: middle --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- .center[ --&gt;
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别发帖量爆发点及相关事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别集体行动事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- .red[判断发帖与行动关联]  --&gt;
+&lt;!-- ]  --&gt;
+
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[&lt;img src="images/inner-mongolia.png" height = 500 /&gt;] --&gt;
+
+
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters. --&gt;
+
+
+&lt;!-- --- --&gt;
+
+&lt;!-- ## 帖子内容 --&gt;
+
+&lt;!-- .pull-left[ --&gt;
+&lt;!-- * 对中文帖子进行结构化编码； --&gt;
+&lt;!-- * 按类别计算被审查掉的词语比例； --&gt;
+
+&lt;!-- &lt;img src="images/post-content.png" height = 300 /&gt; --&gt;
+
+&lt;!-- [`Readme`](https://gking.harvard.edu/readme) in R --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- .pull-right[ --&gt;
+&lt;!-- .center[ --&gt;
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别发帖量爆发点及相关事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别集体行动事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 判断发帖与行动关联     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- .red[判断支持或批评政府] --&gt;
+&lt;!-- ]   --&gt;
+&lt;!-- ] --&gt;
+
+&lt;!-- ??? --&gt;
+
+&lt;!-- This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels. --&gt;
+
+&lt;!-- --- --&gt;
+
+&lt;!-- class: center, middle --&gt;
+
+&lt;!-- .gold[问题：Censorship]     --&gt;
+&lt;!-- &amp;dArr;     --&gt;
+&lt;!-- 数据收集     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 检测各议题领域     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别发帖量爆发点及相关事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 识别集体行动事件     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 判断发帖与行动关联     --&gt;
+&lt;!-- &amp;darr;     --&gt;
+&lt;!-- 判断支持或批评政府     --&gt;
+&lt;!-- &amp;dArr;     --&gt;
+&lt;!-- .gold[发现]： --&gt;
+&lt;!-- + 批评意见； --&gt;
+&lt;!-- + 集体行动。 --&gt;
+
+
+---
+
+class: inverse, bottom
+
+# 以数知文: 文本数据化原则
+
+---
+
+class: normal,center
+
+本节要回答之问题：
+
+1. 文本资源哪里找？
+1. 文本资源怎么得？
+1. 文本信息如何理？
+1. 文本数据能干啥？
+
+---
+
+## 文本资源: 原生数据
+
+* Email/短信
+* 网站HTML
+* RSS feeds
+* 网络社交媒体
+* 网络论坛
+* 网络问答平台
+* 媒体数据库
+* 网络交易行为    
+……
+
+---
+
+## 社交媒体
+
+.center[&lt;img src="images/text_social-media.gif" height = 500 /&gt;]
+
+???
+
+新浪微博1.4亿，微信用户5.5亿;
+微信日增数据500TB，QQ日增数据200TB。
+
+---
+
+## 公共开放平台
+
+.center[&lt;img src="images/text_zhongsheng_index.png" height = 550 /&gt;]
+
+---
+
+## 网络问政平台
+
+.center[&lt;img src="images/text_henan-Egovernment.png" height = 500 /&gt;]
+
+---
+
+## 社会化问答网站
+
+.center[&lt;img src="images/text_zhihu.png" height = 500 /&gt;]
+
+???
+
+Quora, Stack Overflow
+
+---
+
+## 媒体数据库
+
+.center[&lt;img src="images/renminribao.png" height = 500 /&gt;]
+
+---
+
+## 问卷开放性问题
+
+.center[&lt;img src="images/text_survey_openQuestion.png" height = 500 /&gt;]
+
+---
+
+## 文本资源: 档案数据
+
+* 中国知网等数据库（期刊、报刊、年鉴等）
+* Google Books、百度学术
+* Google Trend、百度指数
+* JSTOR Data for Research……
+
+---
+
+## 百度指数
+
+.center[&lt;img src="images/text_baidu_zhishu.png" height = 500 /&gt;]
+
+---
+
+## 文本数字化
+
+* 文本扫描 + OCR
+.center[&lt;img src="images/text_hongkong_lib.png" height = 500 /&gt;]
+
+---
+
+.center[&lt;img src="images/text_cbdb.png" height = 600 /&gt;]
+
+---
+
+## 文本获取
+
+* 二手数据：档案数据和数字化数据
+* 原生数据：Spider/crawler/scraper
+
+Some foolproof scrapers
+
+.center[&lt;img src="images/text_bazhuayu.png" height = 400 /&gt;]
+
+---
+
+.pull-left[&lt;img src="images/text_huochetou.png" height = 550 /&gt;]
+
+.pull-right[&lt;img src="images/text_gooseeker.png" height = 550 /&gt;]
+
+---
+
+class: bottom
+
+background-image: url(images/text_gooseekerI.png)
+background-position: 50% 50%
+background-size: 100%
+
+## 使用案例: 冰箱信息
+
+---
+
+background-image: url(images/text_gooseekerII.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+background-image: url(images/text_gooseekerIII.png)
+background-position: 50% 50%
+background-size: 100%
+
+---
+
+## 用R进行文本抓取
+
+`SelectorGadget`(Chrome)
+
+.center[&lt;img src="images/text_zhongsheng_page.png" height = 500 /&gt;]
+
+---
+
+`rvest`(R)
+
+
+
+
+```r
+ls_zhongsheng &lt;- read_html("http://politics.people.com.cn/GB/8198/426918/index.html") %&gt;% # index page
+  html_nodes("h5 a") %&gt;% # the nodes of the links
+  html_attr("href") %&gt;% # just the links
+  str_replace("^/n1", "http://politics.people.com.cn/n1")
+
+df_zhongsheng &lt;- map_df(ls_zhongsheng, function(link) {
+  zs_article &lt;- read_html(link, encoding = "GB18030") # read the html
+  
+  zs_title &lt;- html_nodes(zs_article, "h1") %&gt;%
+    html_text
+  
+  zs_time &lt;- html_nodes(zs_article, ".box01 .fl") %&gt;%
+    html_text %&gt;%
+    str_extract("\\d{4}年\\d{2}月\\d{2}日")
+  
+  zs_content &lt;- html_nodes(zs_article, "#rwb_zw p") %&gt;%
+    html_text %&gt;%
+    str_c(collapse = "") %&gt;% # combined the paragraphs
+    str_remove_all("\\s|\\n|\\t") # remove the horizontal spaces
+  
+  zs_data &lt;- data.frame(title = zs_title,
+                        time = zs_time,
+                        content = zs_content) 
+})
+```
+
+---
+
+## 抓取特定形式：Regular Expression
+
+.center[&lt;img src="images/text_regular_expression.png" height = 550 /&gt;]
+
+---
+
+## 结果·结构化文本数据
+
+
+
+.center[&lt;img src="images/text_zhongsheng_output.png" height = 450 width = 900 /&gt;]
+
+---
+
+## 文本分析方法概览
+
+.center[&lt;img src="images/text_analysis-method.png" height = 550 /&gt;]
+
+???
+
+Grimmer, Justin (Stanford), and Brandon M. Stewart (Princeton). 2013. “Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts.” Political Analysis 21(3): 267–97.
+
+
+---
+
+## 常见文本分析层次
+
+### 描述
+
+词云(word-cloud)、网络
+
+.center[
+### 聚类
+
+知类分文、知文分类
+]
+
+.pull-right[
+.center[
+### 语义
+
+情感分析(sentiment analysis)
+]
+]
+
+---
+
+## 基本原则
+
+(Grimmer &amp; Stewart 2013)
+
+--
+
+1. 所有现存关于语言的定量模型都是有.blue[偏误]的——但不乏能提供有用的信息。
+
+--
+
+1. 文本定量模型旨在.blue[增强人]（作为主体）的辨识范围和能力。
+
+--
+
+1. .blue[不存在]通行的文本分析最优模型。
+
+--
+
+1. .blue[Validation! Validation! Validation!]
+
+---
+
+## "偏误“的假定： A Bag of Words
+
+A text is represented as the bag (multiset) of its words. 
+
+--
+
+.center[
+&lt;img src="images/text_bagOfWords.png" width = 700 /&gt;
+]
+
+---
+
+## 操作化: Tokenization
+
+1.  文章打散
+
+1. 洗去Syntax
+    + 大小写
+    + stemming (e.g., 美国式、美式)
+    + 标点
+    + 非字符（@#￥%……&amp;*）
+
+1. 区别词性
+    + Content vs. function
+    + 名、动、形、副、介、代……
+
+
+
+---
+
+### Stop words
+
+
+```
+##  [1] "to"            "can"           "could"         "dare"          "do"            "did"           "does"          "may"          
+##  [9] "might"         "would"         "should"        "must"          "will"          "ought"         "shall"         "need"         
+## [17] "is"            "a"             "am"            "are"           "about"         "according"     "after"         "against"      
+## [25] "all"           "almost"        "also"          "although"      "among"         "an"            "and"           "another"      
+## [33] "any"           "anything"      "approximately" "as"            "asked"         "at"            "back"          "because"      
+## [41] "before"        "besides"       "between"       "both"          "but"           "by"            "call"          "called"       
+## [49] "currently"     "despite"       "did"
+```
+
+--
+
+
+```
+##  [1] "一些"     "一何"     "一切"     "一则"     "一方面"   "一旦"     "一来"     "一样"     "一般"     "一转眼"   "万一"     "上"      
+## [13] "上下"     "下"       "不"       "不仅"     "不但"     "不光"     "不单"     "不只"     "不外乎"   "不如"     "不妨"     "不尽"    
+## [25] "不尽然"   "不得"     "不怕"     "不惟"     "不成"     "不拘"     "不料"     "不是"     "不比"     "不然"     "不特"     "不独"    
+## [37] "不管"     "不至于"   "不若"     "不论"     "不过"     "不问"     "与"       "与其"     "与其说"   "与否"     "与此同时" "且"      
+## [49] "且不说"   "且说"     "两者"
+```
+
+---
+
+常见中文stop words资源
+
+* 百度停词表
+* 哈工大停词表
+* 网络搜集停词表，如[“最全中文停用词表整理（1893个）”](https://blog.csdn.net/shijiebei2009/article/details/39696571)
+* 自定义
+
+---
+
+## 转化结果
+
+.center[&lt;img src="images/text_bagOfWords2.jpg" height = 550 /&gt;]
+
+---
+
+class: small
+
+## 亚洲特色：Segment
+
+"一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"——"难道非要撞了南墙才回头——意孤行必将失败", 《人民日报》（2019年05月30日02版）
+
+
+
+```r
+library(jiebaR)
+
+zhongsheng &lt;- "一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"
+cutter &lt;- worker() # segment engine
+new_user_word(cutter, "萨米·卡姆哈维", "nr") # customize segmentation
+```
+
+```
+## [1] TRUE
+```
+
+```r
+segment(zhongsheng, cutter)
+```
+
+```
+##  [1] "一场"          "经贸"          "摩擦"          "让"            "世界"          "看到"          "了"            "一个"         
+##  [9] "有"            "担当"          "负责"          "任"            "的"            "中国"          "和"            "一个"         
+## [17] "一意孤行"      "的"            "美国"          "埃及"          "金字塔"        "报"            "资深"          "记者"         
+## [25] "萨米·卡姆哈维" "的话"          "意味深长"      "近年来"        "美国"          "一些"          "政客"          "被"           
+## [33] "美国"          "优先"          "遮住"          "了"            "双眼"          "大"            "搞"            "贸易"         
+## [41] "保护主义"      "单边主义"      "肆意"          "挥舞"          "关税"          "大棒"          "全然不顾"      "中美"         
+## [49] "两国人民"      "和"            "全世界"        "人民"          "的"            "强烈"          "反对"
+```
+
+---
+
+"壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！"
+
+
+```r
+tx_huangGai &lt;- "壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！"
+
+library(TopWORDS) # Made by Ke Deng
+
+topwords(tx_huangGai)
+```
+
+
+---
+
+class: small
+
+## 词频与词性分析
+
+
+|title                                          |time       |word |
+|:----------------------------------------------|:----------|:----|
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |一   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |场   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |经贸 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |摩擦 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |让   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |世界 |
+
+--
+
+去掉停词
+
+
+|title                                          |time       |word |
+|:----------------------------------------------|:----------|:----|
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |场   |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |经贸 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |摩擦 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |世界 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |看到 |
+|难道非要撞了南墙才回头——意孤行必将失败（钟声） |2019-05-30 |一个 |
+
+---
+
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-frequency-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+.pull-left[
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-phase-freq-1.png" width="100%" /&gt;
+]
+
+???
+
+The Economist journalist Simon Rabinovitch
+
+--
+
+.pull-right[
+&lt;img src="06_textAnalaysis_files/figure-html/zhongsheng-fre-compare-1.png" width="100%" /&gt;
+]
+
+???
+
+x = proportion, y = `US_fail`
+
+proportion = n / sum(n)
+
+---
+
+## Keyword Analysis
+
+
+
+```
+## $simhash
+## [1] "9551059633200593385"
+## 
+## $keyword
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界"
+```
+
+---
+
+class: small
+
+Hamming Distance
+
+.pull-left[
+&lt;img src="images/text_hammingDis_org.png" height = 250 /&gt;
+&lt;img src="images/text_hammingDis_comp.png" height = 250 /&gt;
+]
+
+???
+
+the Hamming distance between two strings of equal length is the number of .blue[positions] at which the .red[corresponding symbols are different]. 
+
+It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
+
+Two example distances: 100→011 has distance 3; 010→111 has distance 2
+
+
+--
+
+.pull-right[
+05-30 vs. 05-22
+
+
+```
+## $distance
+## [1] 30
+## 
+## $lhs
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界" 
+## 
+## $rhs
+## 171.456 135.966 123.366 114.446 93.1847 
+##  "磋商"  "美方"  "中方"  "背弃"  "倒退"
+```
+
+05-30 vs. 05-23
+
+
+```
+## $distance
+## [1] 18
+## 
+## $lhs
+## 99.7583 56.3389 37.4295 35.7857 34.9402 
+##  "美国"  "政客"  "别国"  "国际"  "世界" 
+## 
+## $rhs
+##    137.594    91.4451    63.4508    53.6785    37.6035 
+##     "规则"     "美国"     "美方"     "国际" "世贸组织"
+```
+]
+
+
+---
+
+## Topic Modeling
+
+.center[
+&lt;video width="500" height="500" controls&gt;
+&lt;source src="images/text_topicModeling.webm" type="video/webm"&gt;
+&lt;/video&gt;
+]
+
+---
+
+## 超越A Bag of Words
+
+* Stop words
+* 词性分析
+
+--
+
+* Word order: Markov Model of Order N
+    + Unigram: 清华 大学 政治 系
+    + Bigram: 清华大学 政治系/清华 大学政治 系
+    + Trigram：清华大学政治 系/清华 大学政治系
+
+--
+
+* Weighted words: TF-IDF
+
+???
+
+term frequency-inverse document frequency
+
+--
+
+* Word vector: word2vec; text2vec; doc2vec
+
+???
+
+ word embeddings
+
+---
+
+## 文本比较
+
+.pull-left[
+文本特征：
++ 长度
++ 用词
++ 词频
++ 关键词    
+……
+
+]
+
+.pull-right[
+语义特征
++ 政治立场
++ 文化
++ 主张
++ 价值
++ 意义
+……
+]
+
+---
+
+## Bonus: 文本分析的“黑话”
+
+* Corpus
+    + Document
+    + DTM/TDM
+
+???
+Document-term matrix
+
+--
+
+* Classification
+    + Dictionary
+    + Machine learning
+    
+--
+
+* Clustering
+    + Membership
+    + Topic modeling
+        + LDA
+        + STM
+        
+???
+Latent Dirichlet Allocation
+
+---
+
+## Take Home Points
+
+.pull-left[
+*What You Already Know*
+
+1. 文本之于研究
+    + 丰富资源
+    + 分析门槛
+1. 文本分析路径
+    + 词 &amp;dzigrarr; 图
+1. 文本分析步骤
+    + 打散
+    + 聚合
+
+&lt;img src="images/text_indirect_phone.gif" width = 300 /&gt;
+
+]
+
+--
+
+.pull-right[
+
+*Prospect*
+
+文字分析
+
++ 词频分析
++ 信息提取
++ 情感标记
++ 语义网络
+
+文本分析
+
++ 文本分类
++ 主题分析
++ 语义联系
+
+]
+
+
+---
+
+class: inverse, center, middle
+
+# Thank you!
+
+&lt;i class="fa fa-envelope fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+&lt;i class="fa fa-globe fa-lg"&gt;&lt;/i&gt;&amp;nbsp; https://sammo3182.github.io/
+
+&lt;i class="fab fa-github fa-lg"&gt;&lt;/i&gt;&amp;nbsp; [sammo3182](https://github.com/sammo3182)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

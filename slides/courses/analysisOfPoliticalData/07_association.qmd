@@ -1,0 +1,991 @@
+---
+title: "Association Analysis"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+## Overview
+
+```{r setup, include = FALSE}
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse,
+  patchwork,
+  drhutools,
+  greekLetters,
+  XICOR
+) 
+
+
+# Functions preload
+set.seed(114)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+- Linear correlation
+- Monotonic correlation
+- Non-monotonic correlation
+
+
+# Linear Correlation
+
+## Etymoloy
+
+:::{.r-vstack}
+
+![](images/cor_etymology_association.png){.fragment fig-align="center" height=300}
+
+![](images/cor_etymology_correlation.png){.fragment fig-align="center" height=300}
+
+:::
+
+## Covariance
+
+> How one changes then the other.
+
+:::{.fragment}
+$$\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).$$
+:::
+
+
+:::{.fragment}
+Remember Variance?
+
+\begin{align}
+\sigma^2_X =& \sum(X - \mu_X)^2p(X),\\
+=& \sum(X - \mu_X)\color{red}{(X - \mu_X)}p(X, \color{red}{X}).
+\end{align}
+:::
+
+:::{.fragment}
+In other words, covariance is literally [co]{.red}-variance.
+:::
+
+
+## Correlation
+
+> If see one high, when the other is high.
+
+:::{.fragment style="text-align:center"}
+:::{.callout-note}
+Covariate: Dynamic vs. Correlation: Static
+:::
+:::
+
+:::{.fragment}
+Common Types: 
+
+:::{.nonincremental style="text-align:center; margin-top: 1em"}
++ Karl Pearson's r (Linear); 
++ Maurice Kendall's &tau; (Monotonic);
++ Charles Spearman's &rho;  (Monotonic).
+:::
+
+:::
+
+:::{.notes}
+- Karl Pearson was an English mathematician and biostatistician. 
+  - Establishing the discipline of mathematical statistics.
+  - Founded the world's first university statistics department at University College, London in 1911
+  - Proponent of social Darwinism, eugenics and scientific racism. 
+
+- Sir Maurice George Kendall was a prominent British statistician. 
+  -  The second chair of statistics at the London School of Economics, University of London
+  
+- Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
+  - Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.
+:::
+
+
+
+## Pearson's r: Linear Correlation
+
+:::{.callout-important}
+
+## Assumption
+
+:::{.nonincremental style="text-align:center"}
+1. Continuous data   
+1. Linear Relationship (one-on-one)
+:::
+
+:::
+
+:::{.fragment}
+For a population
+
+$$\rho_{X,Y} = \frac{\sum(X - \mu_X)(Y - \mu_Y)p(x,y)}{\sqrt{\sum(X - \mu_X)^2p(X)}\sqrt{\sum(Y - \mu_Y)^2p(Y)}} = \frac{\sigma_{X, Y}}{\sigma_X\sigma_Y}.$$
+:::
+
+
+:::{.fragment}
+For a sample
+
+$$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.$$
+:::
+
+:::{.notes}
+Multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$, a.k.a., partial correlation.
+:::
+
+
+## Properties 
+
+1. &rho;&in; [-1, 1], 0 independent.
+1. Greater value indicates stronger [linear]{.red} relationship.
+1. Parametric test^[Which means assuming normal distribution, linearity, and homoscedasticity.]
+1. [Not robust]{.red} to skewed data and outliers.
+
+:::{.fragment}
+### Limination
+
+![](images/cor_linearity.webp){fig-align="center" height=350}
+:::
+
+# Monotonic Correlation
+
+## Solution: Ranking
+
+$$Diff_{quantity} \rightarrow Diff_{relation}.$$
+
+:::{.fragment}
+For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i < j,
+:::
+
++ Concordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub>;
+
++ Discordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub>;
+
++ Tied pairs: x<sub>i</sub> = x<sub>j</sub> & y<sub>i</sub> = y<sub>j</sub>;
+
+:::{.notes}
+tie on x or tie on y are also not concordant or discordant
+:::
+
+
+## Tau: Monotonic Correlation
+
+:::{.callout-important appearance="simple"}
+
+## Assumption
+
+:::{.nonincremental}
+~~1\. Continuous~~ Ordinal/norminal;   
+~~2\. Linear~~ Monotonic
+:::
+
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="40%"}
+
+:::{.fragment}
+Kendall's &tau;<sub>A</sub>
+
+$$\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},$$
+
+\begin{aligned}
+n_{c}&={\text{Number of concordant pairs}},\\
+n_{d}&={\text{Number of discordant pairs}}.
+\end{aligned}
+:::
+
+- Ties? 
+- Unequal numbers of observations in X and Y?
+
+:::
+
+::: {.column .fragment width="30%"}
+Kendall's  &tau;<sub>B</sub>: Ties
+
+$$\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}}$$
+where
+
+:::{.small}
+\begin{aligned}
+n_{0}&=n(n-1)/2\\n_{1}&=\sum _{i}t_{i}(t_{i}-1)/2\\
+n_{2}&=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&={\text{Number of concordant pairs}}\\
+n_{d}&={\text{Number of discordant pairs}}\\
+t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}
+\end{aligned}
+:::
+
+:::
+
+::: {.column .fragment width="30%"}
+Stuart's &tau;<sub>C</sub>: Diff scales
+
+$$\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}$$
+where
+
+:::{.small}
+
+\begin{aligned}
+n_{c}&={\text{Number of concordant pairs}},\\
+n_{d}&={\text{Number of discordant pairs}},\\
+m&=\min(r,c),\\
+r&={\text{Number of rows}},\\
+c&={\text{Number of columns}}.
+\end{aligned}
+:::
+:::
+
+::::
+
+## Spearman's rho: Ranking version of Pearson's R
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+$$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}.$$ where $rg$: The rank of the variables.
+
+:::{.notes}
+When all n ranks are distinct integers (no tie):
+
+$$\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},$$ where $d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).$
+
+https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
+:::
+:::
+
+::: {.column .fragment width="50%"}
+Properties:
+
+- Independent, &tau; = 0.
+- Not exactly non-parametric
+
+:::{.notes}
+Still based on population parameters, so one can do significant test by $z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$.
+:::
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="50%"}
+r vs. &tau; & &rho;:
+
++ r: Linear relationship;
++ &tau; & &rho;: 
+  - Monotonic relationship.
+  - Ordinal variables
+:::
+
+
+::: {.column .fragment .nonincremental width="50%"}
+&rho; vs. &tau;: 
+
++ &tau; is more robust than &rho;;
++ &rho; has less cost than &tau;.
+
+:::{.fragment}
+Ranking version of ANOVA
+
++ Kruskal-Wallis test;
++ Friedman test.
+:::
+
+
+:::{.r-fit-text .fragment}
+*How about categorical?*
+:::
+
+:::
+
+::::
+
+
+## &chi;<sup>2</sup>: Nominal Variables
+
+$$\chi^2 = \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected} = \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}$$
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+E.g., The partisan distribution of American fathers and sons.
+Are they correlated?
+
+
+| Father/Son 	| D  	| R  	| I  	| Total 	|
+|------------	|----	|----	|----	|-------	|
+| D          	| 45 	| 5  	| 10 	| 60    	|
+| R          	| 2  	| 23 	| 5  	| 30    	|
+| I          	| 3  	| 2  	| 5  	| 10    	|
+| Total      	| 50 	| 30 	| 20 	| 100   	|
+
+:::
+
+::: {.column .fragment width="50%"}
+:::{.fragment}
+$H_0:$ Sons' party ID has no relation with their fathers'; $\pi_{ij} = \pi_i \pi_j, \forall\ i, j.$ (&alpha; = 0.05)
+
+E(D<sub>f</sub>, D<sub>s</sub>) = 50/100 &times; 60/100 &times; 100 = 30.
+:::
+
+:::{.fragment .small}
+\begin{align}
+\chi^2 =& \frac{(45 - 30)^2}{30} + \frac{(5 - 18)^2}{18} + \dots + \frac{(5 - 2)^2}{2}\\
+\approx& 56.07, d.f.: (r - 1)(c - 1) = (3 - 1)^2 = 4.
+\end{align}
+:::
+
+
+:::{.fragment}
+$\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`< $\chi^2_{observed}$.    
+H<sub>0</sub> is rejected.
+:::
+
+:::
+
+::::
+
+
+## Adjustment of &chi;<sup>2</sup>
+
+1. When sample is too small and/or having too many missing data, the distribution might be different from $\chi^2$
+2. When N gets large, $\chi^2$ also increase (esp. over 100,000)
+
+:::{.fragment}
+Adjustment: &Phi; and Cramer's V
+:::
+
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="50%"}
+* $\Phi = \sqrt{\frac{\chi^2}{n}}\in[0, 1]$
+    + 2&times;2 table
+    + 0 means no association
+    + 1 means perfect association
+:::
+
+:::{.notes}
+phi
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+* Cramer's V
+    + Beyond a 2*2 table (when $\Phi$ > 1).
+    + $V = \sqrt{\frac{\chi^2}{n\times min_{r-1, c-1}}}$.
+:::
+
+::::
+
+
+## Mean &rightarrow; Variance
+
+Analysis of variance (ANOVA): A systematic way of variable comparison in the context of [experiment]{.red}.^[Equivalent to t-test]
+
+:::{.fragment}
+When there are [more than one]{.red} treatment group, ANOVA is more useful to reduce the risk of Type I ("Hey grandpa, you are pregnant").
+:::
+
+
+:::{.fragment}
+:::{.callout-important}
+## Assumption
+
+1. Y normally distributed in eqch group (Type I &darr;)
+1. Homogeneity of variance (Type I & II &darr;)
+1. Independence of cases (Type I &darr;)
+1. No large outliers (Type II &darr;)
+1. Large sample (Type I & II &darr;)
+:::
+:::
+
+
+
+## One-Way ANOVA
+
++ $\overline X$ is the sample mean; the grant mean $\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}$, where K is column number.^[ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci).]
++ SST: Variance between the samples; SSE: Variance within the samples.
+
+:::{.fragment}
+| Source    	| Sum Square                                    | d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------|-------	|----------------------------------	|
+| Treat 	| $SST = \sum n_i (\bar X_i - \overline{\overline{X}})^2$ | K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      | N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| $SS = SST + SSE$                              | N - 1 	| |
+:::
+
+
+:::{.fragment}
+$$F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\ of\ Unexplained\ Variance}$$
+:::
+
+
+## Example {auto-animate=true}
+
+The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type? 
+
+:::: {.columns}
+
+::: {.column width="30%"}
+| NS 	| ME 	| BJ 	|
+|-----	|-----	|----	|
+| 27  	| 23  	| 48 	|
+| 22  	| 36  	| 35 	|
+| 33  	| 27  	| 46 	|
+| 25  	| 44  	| 36 	|
+| 38  	| 39  	| 28 	|
+| 29  	| 32  	| 29 	|
+:::
+
+::: {.column .fragment width="70%"}
+$H_0: \mu_1 = \mu_2 = \mu_3,$     
+$H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
+
+&alpha; = 0.05.
+
+\begin{align}
+\bar X_{NS} &= 29; \bar X_{ME} = 33.5; \bar X_{BJ} = 37;\\
+\bar{\bar{X}} &= (29 + 33.5 + 37)/3 \approx 33.17
+\end{align}
+:::
+
+::::
+
+## {auto-animate=true}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+$H_0: \mu_1 = \mu_2 = \mu_3,$     
+$H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
+
+&alpha; = 0.05.
+
+\begin{align}
+\bar X_{NS} &= 29; \bar X_{ME} = 33.5; \bar X_{BJ} = 37;\\
+\bar{\bar{X}} &= (29 + 33.5 + 37)/3 \approx 33.17
+\end{align}
+:::
+
+::: {.column .fragment width="50%"}
+Then, $SST = \sum 6\times (\bar X - \bar{\bar{X}}) = 193$; 
+[$SSE = [(27 - 29)^2 + (22 - 29)^2 + \dots + (29 - 37)^2] = 819.5$]{.small}.
+
+Given K = 3, N = 18, $F = \frac{193/(3 - 1)}{819.5/(18 - 3)} \approx 1.77$
+
+$F_{0.05, 2, 15}$ = `r qf(.975, 2, 15)` $F_obs$, so fail to reject $H_0$
+:::
+
+::::
+
+
+| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+|-----------	|-----------------------------------------------	|-------	|----------------------------------	|
+| Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
+| Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
+| Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-K} = MST/MSE$ 	|
+
+
+## [Two-Way ANOVA](#sec-anovaExt).
+
++ Randomized block design (i blocks, j groups)
+  + Equivalent to matched sample in t-test
+
+:::{.fragment}
+| Source    	| Sum Square                                                             	| d.f.           	| Mean Square                                    	|
+|-----------	|------------------------------------------------------------------------	|----------------	|------------------------------------------------	|
+| Treat 	| $SS_A: b\sum (\bar X_i - \bar{\bar{X}})^2$                            	| a - 1          	| MST_A = SS_A/(a - 1)                           	|
+| Block     	| $SS_B: a\sum (\bar X_j - \bar{\bar{X}})^2$                            	| b - 1          	| MST_B = SS_B/(b - 1)                           	|
+| Error     	| $SS_E: \sum^{ab} (X_{ij} - \bar{X_i} - \bar{X_j} + \bar{\bar{X}})^2$ 	| (a - 1)(b - 1) 	| $MSE = \frac{SSE}{(a - 1)(b - 1)}$                     	|
+| Total     	| $SS: SS_A + SS_B + SS_E$                                              	| ab - 1         	| $F_{\alpha, a-1, b-1} = \frac{MST_{A or B}}{MSE}$ 	|
+:::
+
+
+## Example
+
+Students' final scores in three majors were recorded in the following table. Does the scores associate with majors?
+
+| Major 	| Poli Sci 	| Sociology 	| Psychology 	|
+|-------	|----------	|-----------	|------------	|
+| A+    	| 41       	| 45        	| 51         	|
+| A     	| 36       	| 38        	| 45         	|
+| B+    	| 27       	| 33        	| 31         	|
+| B     	| 32       	| 29        	| 35         	|
+| C+    	| 26       	| 21        	| 32         	|
+| C     	| 23       	| 25        	| 27         	|
+
+$H_0: \mu_{PS} = \mu_{SO} = \mu_{PY},$  
+$H_1: \mu_{PS} \neq \mu_{SO} \neq \mu_{PY}.$
+
+&alpha; = 0.05.
+
+---
+
+$\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.$
+$\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83, \bar{\bar{X}} = 33.72.$
+
+:::{.fragment}
+For factor A (major), $SS_A = 6\times [(30.8 - 33.72)^2 + (33.5 - 33.72)^2 + (36.83 - 33.72)^2] = 109.48.$
+
+$MSA = SS_A/(a - 1) = 109.48/(3 - 1).$
+:::
+
+:::{.fragment}
+For factor B (GPA), $SS_B = 3\times [(45.67 - 33.72)^2 + \dots + (25 - 33.72)^2] = 854.94.$
+
+$MSB = 854.94 / (6 - 1).$
+:::
+
+:::{.fragment}
+$SST = \sum^a\sum^b(X_{ij} - \bar{\bar{X}})^2 = 1015.61; SSE = SST - SS_A - SS_B = 52.2$
+
+Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}$ is 10.4 > critical F `r round(qf(.975, 2, 10), digits = 4)`, reject $H_0$.
+:::
+
+:::{.fragment}
+![](images/ci_fsmrof.png){height=50} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*
+:::
+
+
+# Beyond Monotonic
+
+## [Complete the correlation census](#sec-ranking)
+
+![](images/cor_linearity.webp){fig-align="center" height=300}
+
+:::{.fragment}
+A solution:^[Chatterjee, Sourav. 2021. “A New Coefficient of Correlation.” *Journal of the American Statistical Association* 116(536): 2009–22.] $\xi$ correlation
+:::
+
+1. ~~Linearity/monotoncity~~ [any]{.red} functional correlation
+1. As simple as the classical coefficients like Pearson's correlation or Spearman's correlation
+1. Consistently estimates some simple and interpretable measure of the degree of dependence between the variables (0, independent; 1 associated)
+  
+
+## Property of $\xi$
+
+Asymptotic estimate: As $n$ goes to Infinity...
+
+- If $y$ is a function of $x$, then $\xi$ goes to 1 asymptotically as $n$ (the number of data points, or the length of the vectors $x$ and $y$) goes to Infinity.
+- If $y$ and $x$ are independent, then $\xi$ goes to 0 asymptotically .
+- No anti-correlation
+
+:::{.fragment}
+```{r xi}
+#| fig-align: center
+
+base_case <- function(nrows) {
+  x = seq(from = -2 * pi,
+          to = 2 * pi,
+          length.out = nrows)
+  y = cos(x)
+  data.frame(x = x, y = y)
+}
+
+df_base <- base_case(1000)
+
+vec_cor <- format(cor(df_base$x, df_base$y), digits = 3)
+vec_xi <- format(calculateXI(df_base$x, df_base$y), digits = 3)
+
+ggplot(df_base, aes(x = x, y = y)) +
+  geom_line() +
+  ggtitle(bquote("Pearson's R"[xy] == .(vec_cor)~"; "~ xi[xy] == .(vec_xi)))
+
+```
+:::
+
+## Take-home point
+
+::: {style="text-align: center"}
+![](images/cor_mindmap.png){height="850"}
+:::
+
+## [Greek Letters](http://www.ilearngreek.com/Lessons/alphabet.L1.asp)
+
+```{r greek}
+vec_greek <- greek[1:48] %>% unlist
+vec_greek[1:24]
+vec_greek[25:48]
+```
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- &beta;, "veta"
+- &gamma;, "gjyamma"
+- &eta;, "eeta"
+:::
+
+::: {.column width="50%"}
+- &iota;, "yota"
+- &xi;, "ksee"
+- &phi;, "fi"
+- &chi;, "he"
+:::
+
+::::
+
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}
+
+
+# Appendix: ANOVA Extension {#sec-anovaExt}
+
+## Ranking version of ANOVA
+
+Analysis of variance[-rank]{.red}
++ Kruskal-Wallis test;
++ Friedman test.
+
+## One-Way Variance-Rank: Kruskal-Wallis Test
+
+An extension of the two-sample Wilcoxon test
+
+Procedure: 
+
++ Combine k samples and sorting
+    + If the value are the same, use the average;
+    + Let n<sub>k</sub> as the size of the k sample, and n = &sum;n<sub>i</sub>, i &isin; {1, 2, ..., k}.
++ Calculate the rank sum of each sample, R<sub>i</sub>
++ $H = \frac{12}{n(n + 1)}\sum^k_{i = 1}\frac{R^2_i}{n_i} - 3(n + 1) \sim \chi^2(k - 1).$
+
+## Example
+
+Botanists conducted an experiment of plant growth.
+The data records the results obtained under a control and two different treatment conditions (as measured by dried weight of plants).
+
+```{r kw-data}
+group_by(PlantGrowth, group) %>%
+  summarise(
+    count = n(),
+    mean = mean(weight, na.rm = TRUE),
+    sd = sd(weight, na.rm = TRUE),
+    median = median(weight, na.rm = TRUE),
+    IQR = IQR(weight, na.rm = TRUE)
+  ) %>% 
+  knitr::kable()
+```
+
+
+```{r kw-test, echo=TRUE}
+kruskal.test(weight ~ group, data = PlantGrowth)
+```
+
+## Two-Way Variance-Rank: Friedman Test
+
+An extension of the sign test, and also a special case of Durbin test. 
+
+E.g., Person's recovery score after taking four types of drugs. The type 1 is the placebo. 
+
+```{r friedman-data}
+#create data
+df_drug <- data.frame(person = rep(1:5, each=4),
+                   drug = rep(c(1, 2, 3, 4), times=5),
+                   score = c(30, 28, 16, 34, 14, 18, 10, 22, 24, 20,
+                             18, 30, 38, 34, 20, 44, 26, 28, 14, 30))
+
+glimpse(df_drug)
+```
+
+```{r friedman-test, echo=TRUE}
+friedman.test(y = df_drug$score,
+              groups = df_drug$drug,
+              blocks = df_drug$person)
+```
+
+&rArr; Different type of drugs lead to different type of outcomes.
+
+# Appendix: Ranking Test {#sec-ranking}
+
+## Association for Matched Samples: Ranking
+
+| Observation | Test 1        | Test 2        | &Delta;                       |
+|-------------|---------------|---------------|-------------------------------|
+| 1           | X<sub>1</sub> | Y<sub>1</sub> | X<sub>1</sub> - Y<sub>1</sub> |
+| 2           | X<sub>2</sub> | Y<sub>2</sub> | X<sub>2</sub> - Y<sub>2</sub> |
+| 3           | X<sub>3</sub> | Y<sub>3</sub> | X<sub>3</sub> - Y<sub>3</sub> |
+
+Goal: whether test 1 and test 2 yield identical results.
+
+
++ \+: X<sub>i</sub> > Y<sub>i</sub>;
++ \-: X<sub>i</sub> < Y<sub>i</sub>;
++ =: X<sub>i</sub> = Y<sub>i</sub>;
+
+
+*Expectation*: if test 1 and 2 are identically distributed, the probability of &Delta; to be + or - should follow the binomial distribution. That is, *H<sub>0</sub>: Pr(+) = Pr(-) = 0.5*.
+
+
+## Sign Test
+
+:::: {.columns}
+
+::: {.column width="50%"}
+| Observation | Test 1 | Test 2 | &Delta; | Sign |
+|-------------|--------|--------|---------|------|
+| 1           | 37     | 40     | −3      | −    |
+| 2           | 72     | 73     | −1      | −    |
+| 3           | 57     | 59     | −2      | −    |
+| 4           | 44     | 43     | 1       | +    |
+| 5           | 43     | 51     | −8      | −    |
+| 6           | 64     | 67     | −3      | −    |
+| 7           | 55     | 61     | −6      | −    |
+| 8           | 65     | 74     | −9      | −    |
+:::
+
+::: {.column width="50%"}
+H<sub>0</sub>: Pr(+) = Pr(-) = 0.5;   
+H<sub>1</sub>: Pr(+) < Pr(-).
+
+&alpha; = 0.05
+
+:::{.small}
+\begin{align}
+Pr(n_-\geq 7) =& Pr(n_- = 7) + Pr(n_- = 8)\\
+=& {8 \choose 7}(0.5)^7(0.5)^1 + {8 \choose 8}(0.5)^8\\
+=& 0.03125 + 0.0039 = 0.03516 < 0.05.
+\end{align}
+:::
+
+:::
+
+::::
+
+
+## Procedure of Sign Test
+
+:::: {.columns}
+
+::: {.column width="50%"}
+1. Calculate the &Delta; (or d); 
+1. Giving the sign accordign to d, if d = 0, ignore the observation;
+1. Calculate n<sub>-</sub> and n<sub>+</sub>, n = n<sub>-</sub> + n<sub>+</sub>
+1. Set H<sub>0</sub> and H<sub>1</sub>, and &alpha;
+1. Calculate Pr(+/-)
+    + $Pr(+) = \sum^{n_-}_{i = 0}Pr(n_+ + i)$;
+    + $Pr(-) = \sum^{n_+}_{j = 0}Pr(n_- + j)$;
+1. Compare the Pr(+/-) with &alpha;.
+
+Although claiming non-parametirc, many of them calculate the significance according to populational parameters.
+:::
+
+::: {.column width="50%"}
+Hint:
+
+1. Work on matched and nonmatched samples.
+1. It is essentially a binomial test (again, "non-parametric" test).
+
+```{r signTest}
+binom.test(7,8, p = .5, alternative = "greater", conf.level = 0.95)
+```
+
+:::
+
+::::
+
+
+## Normal Approximation of Sign Test
+
+(Often used when n > 10, why? Well...)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Using normal distribution to estimate sign tests:
+
+&mu; = np = n/2; &sigma;<sup>2</sup> = np(1 - p) = n/4.
+
+$$Z = \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},$$ where x'=
+\begin{cases}
+x + 0.5, if x > \frac{n}{2}\\
+x- 0.5, if x < \frac{n}{2}
+\end{cases}^[&pm;0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.]
+
+:::
+
+::: {.column width="50%"}
+e.g., n = 8, then $Pr(n_-\geq 7)$ ?
+
+\begin{align}
+Z =& \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
+=& \frac{2(7 - 0.5) - 8}{\sqrt{8}} = 1.77.
+\end{align}
+
+Then, Pr(Z &geq; 1.77) &approx; 0.038 < 0.05.
+:::
+
+::::
+
+
+
+## Advanced Version of Sign Test
+
+Problems of sign test? 
+
+&rArr; Wilcoxon signed-rank test
+
+Sign test ony identify the sign but not the magnitude, insufficiently using the data.
+
+1. Calculate the d and .red[|d|];
+1. Sort these quantities, and record their rankings as R<sub>i</sub> so that 0 < |d<sub>R1</sub>| < |d<sub>R2</sub>| <...< |d<sub>Rn</sub>|.
+1. Let sign function sgn(d) = 1 if d > 0, sgn(d) = -1, if d < 0, then calculate the signed-rank sum $T = \sum^n_{i=1}sgn(d_i)R_i.$
+    + $T^{+}=\sum _{d_{i}>0}R_{i},$
+    + $T^{-}=\sum _{d_{i}<0}R_{i}.$
+
+1. Compare the Pr(T) with &alpha;.
+
+---
+
+:::: {.columns}
+
+::: {.column width="50%"}
+| Observation | Test 1 | Test 2 | &Delta; | Ranking |
+|-------------|--------|--------|---------|------|
+| 1           | 37     | 40     | −3      | [4]{.red}    |
+| 2           | 72     | 73     | −1      | [1]{.red}    |
+| 3           | 57     | 59     | −2      | 3    |
+| 4           | 44     | 43     | 1       | [1]{.red}    |
+| 5           | 43     | 51     | −8      | 7    |
+| 6           | 64     | 67     | −3      | [4]{.red}    |
+| 7           | 55     | 61     | −6      | 6    |
+| 8           | 65     | 74     | −9      | 8    |
+:::
+
+::: {.column width="50%"}
+```{r signedRank_tb}
+tb_sr <- tibble::tribble(
+  ~Test_1, ~Test_2,
+       37,      40,
+       72,      73,
+       57,      59,
+       44,      43,
+       43,      51,
+       64,      67,
+       55,      61,
+       65,      74
+  )
+```
+
+```{r signedRank_test, echo=TRUE, warning=TRUE}
+wilcox.test(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE)
+```
+
+:::
+
+::::
+
+
++ When tie happens, using Monte Carlo conditional p-value (`coin::wilcox_test`) to conduct outcomes .
++ When n > 25, a normal approximation can be also conducted.
+
+
+## Ranking Test for Nonmatched Samples
+
+Given samples S1 and S2,
+
+::: {.panel-tabset}
+## Rank-sum test
+
++ Combining S1 and S2 and rank the pooled observations;
++ Adding the ranking quantities (i.e., Rs in signed-rank test);
++ Comparing the sums.
+
+## Wald-Wolfowitz Runs Test
+
+Meaning: Values of sorted S1 and S2 randomly occure?
+
+Procedure: 
+
+1. Combine S1 and S2
+1. Sorting the quantities
+1. Giving those from S1 as 0 and those from S2 1 within their ranking order.
+1. Testing whether the 0/1 occure stocastically.
+
+When n<sub>1</sub> &geq; 20, n<sub>2</sub> &geq; 20, one can use normal approximation
+
+:::
+
+
+Runs test means to test whether an item comes from population 1 and population 2 is random or not
+
+
+
+## Runs
+
+| Trial | 1  | 2  | 3  | 4  | 5  | 6  | 7  | 8  |
+|-------|----|----|----|----|----|----|----|----|
+| A     | 9  | 22 | 65 | 34 | 17 | 4  | 31 | 28 |
+| B     | 58 | 53 | 26 | 11 | 52 | 51 | 8  |    |
+
+:::{style="text-align:center; margin-top: 2em"}
+&dArr;
+:::
+
+
+| 4 | 8 | 9 | 11 | 17 | 22 | 26 | 28 | 31 | 34 | 51 | 52 | 53 | 58 | 64 |
+|---|---|---|----|----|----|----|----|----|----|----|----|----|----|----|
+| 0 | 1 | 0 | 1  | 0  | 0  | 1  | 0  | 0  | 0  | 1  | 1  | 1  | 1  | 0  |
+
+![](images/cor_runs.png){fig-align="center"}
+
+## Example
+
+```{r runs, echo=TRUE}
+vec_runs1 <- rep(c(0,1), times = 5)
+vec_runs2 <- rep(c(0,1), each = 5)
+vec_runs3 <- c(1, 0, 0, 1, 1, 1, 1, 0, 0, 0)
+
+vec_runs1 # nonrandom
+vec_runs2 # nonrandom
+vec_runs3 # random
+```
+
+---
+
+```{r runstest, echo = TRUE}
+library(randtests)
+
+runs.test(vec_runs1)
+runs.test(vec_runs2)
+runs.test(vec_runs3)
+```
+

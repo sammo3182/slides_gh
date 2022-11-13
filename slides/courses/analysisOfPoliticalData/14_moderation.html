@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Moderation Effect</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Yue Hu" />
+    <script src="14_moderation_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="14_moderation_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="14_moderation_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
+    <script src="14_moderation_files/tile-view-0.2.6/tile-view.js"></script>
+    <link href="14_moderation_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
+    <script src="14_moderation_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
+    <link href="14_moderation_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
+    <script src="14_moderation_files/panelset-0.2.6/panelset.js"></script>
+    <script src="14_moderation_files/js-cookie-3.0.0/js.cookie.js"></script>
+    <script src="14_moderation_files/peerjs-1.3.1/peerjs.min.js"></script>
+    <script src="14_moderation_files/tiny.toast-1.0.0/toast.min.js"></script>
+    <link href="14_moderation_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
+    <script src="14_moderation_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
+    <link href="14_moderation_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
+    <link rel="stylesheet" href="style_ui.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Moderation Effect
+## Large N &amp; Leeuwenhoek (70700173)
+### Yue Hu
+
+---
+
+
+
+
+
+## Overview
+
+*Moderation in Methodology*
+
+1. Specialty
+1. Wrong ways
+1. Correct way
+    
+*Moderation in Practice*
+
+1. Theory
+1. Data
+1. Interpretation
+
+---
+
+class: inverse, bottom
+
+# Moderation in Theory
+
+---
+
+## Moderation
+
+Conditional effect: the .red[contribution] of X on the variance of Y varies when Z has .red[different] values, a.k.a., a nonlinear effect.
+
+--
+
+Formally,
+
+.center[Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.]
+
+Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
+
+--
+
+Nonlinear &amp;rarr; one unit change of X does .red[not] lead to &amp;beta; unit change in Y.    
+.center[.large[&amp;dArr;]]
+
+--
+
+.center[
+H&lt;sub&gt;0&lt;/sub&gt;: If effects of X depends on Z (&amp;beta;&lt;sub&gt;3&lt;/sub&gt; = 0).
+
+H&lt;sub&gt;0&lt;/sub&gt;: If X has an effect when Z varies (&amp;beta;&lt;sub&gt;1&lt;/sub&gt; + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Z = 0). 
+]
+
+???
+
+The second is more useful, since X is the focus/prerequesite
+
+
+---
+
+## The Simplest Version: Dichotomous Z
+
+Let X = X&lt;sup&gt;0&lt;/sup&gt; when Z = 0; X = X&lt;sup&gt;1&lt;/sup&gt; when Z = 1, then 
+
+`\begin{align}
+\hat Y =&amp; \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
+\Leftrightarrow \hat{\tilde{Y}} =&amp; \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1
+\end{align}`
+
+--
+
+* When Z = 0, `\(H_0: \tilde\beta_1 = 0;\)`
+* When Z = 1, `\(H_0: \tilde\beta_3 = 0.\)`
+
+Hint: This case applied to DID methodologically
+
+---
+
+## General Version: Continuous/Ordinal Z
+
+Effect of X: 
+
+`$$\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$$`
+
+Statistics:
+
+`$$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4}$$`
+
+---
+
+## Interpreting It Wrong?
+
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️] **Only &amp;beta;&lt;sub&gt;1&lt;/sub&gt;**    
+A.k.a., "Controlling the moderator"
+]
+
+--
+
+Let Z increases by c, 
+
+`\begin{align}
+Y =&amp; \beta_0' + \color{red}{\beta_1'}X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u,\\
+  =&amp; (\beta_0' + \beta_2'c) + \color{red}{(\beta_1' + \beta_3'c)}X + \beta_2'Z + \beta_3'XZ + u.
+\end{align}`
+
+--
+
+The coefficient of X .red[changes] by changing Z.
+
+---
+
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️] **No &amp;beta;&lt;sub&gt;1&lt;/sub&gt;**    
+A.k.a., "I just care about the interaction"
+]
+
+
+`$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',$$`
+
+--
+
+which means `\(u' = \beta_1X + u\)`. Then 
+
+`\begin{align}
+E(u'|X) \neq&amp; 0,\\
+E[u'(X,Z)] \neq&amp; 0.
+\end{align}`
+
+Unless &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X or XZ is zero.
+
+(What does this problem called?)
+
+???
+
+Omitted variable bias; endogeneity
+
+---
+
+.center[*Y = &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Z + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;X&amp;times; Z + u.*]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3.center[
+.large[☠️☠️☠️] **Only &amp;beta;&lt;sub&gt;3&lt;/sub&gt;**    
+A.k.a., "The significance of the interaction term"
+]
+
+When testing the X's effect, `\(\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.\)`
+
+The standard error:
+
+`$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$`
+
+It's possible for the contribution of X on Y to be statistically .red[significant] for certain values of Z, even if all of the model parameters are .red[insignificant]. One cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &amp;beta;&lt;sub&gt;1&lt;/sub&gt; or &amp;beta;&lt;sub&gt;3&lt;/sub&gt;].
+
+???
+
+ Brambor, Clark and Golder 2006
+
+
+---
+
+More Risky Points...
+
+* Point estimation may not be reliable
+    + Link function (e.g., logit and probit) is involved
+    
+???
+
+Berry, DeMeritt, and Esarey (2016)
+
+--
+
+* Substantive significance of the .red[conditional effect] highly relates to the distribution of the .red[conditioning variable] (viz., Z in the above example). 
+
+???
+
+Berry, Golder, and Milton (2012)
+
+---
+
+## Recommendation
+
+1. Plotting the .red[marginal effects].
+1. Showing the confidence intervals
+1. Presenting the frequency distribution of Z
+    + esp., when the effect trend goes across the zero point.
+
+--
+
+NB:  Marginal effects aren't a panacea
+
+The estimation of the regular marginal effects might cause a "multiple comparison problem": 
++ Leading to over- or under-confidence of the confidential intervals.
+
+--
+
+&amp;rArr; Adjust the CIs with a critical t-statistics by Benjamini 1995
+
+???
+
+Esarey and Sumner (2017)
+
+---
+
+## Beyond Moderation Effect of Interest
+
+As a "control" (Beiser-McGrath &amp; Beiser-McGrath 2020)
+
+Pr(Civil War) ~ &amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;Inequality + &amp;beta;&lt;sub&gt;2&lt;/sub&gt;Regime Type + &amp;beta;&lt;sub&gt;3&lt;/sub&gt;Inequality &amp;times; Regime Type + &amp;beta;&lt;sub&gt;4&lt;/sub&gt;GDP + &amp;beta;&lt;sub&gt;5&lt;/sub&gt;.red[Inequality &amp;times; GDP] + u.
+
+What happened if .red[Inequality &amp;times; GDP] is not in the model?
+
+???
+
+Omitted variable
+
+Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
+
+
+N &lt;= 3,000: 
++ Lasso
+
+N &gt; 3,000:
++ Bayesian Additive Regression Trees (BART)
+
+Unknown or cross: 
++ Kernel Regularized Least Squares (KRLS)
+
+Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
+
+
+---
+
+class: inverse, bottom
+
+# Interaction in Practice
+
+---
+
+## Meritocracy vs. Inequality
+
+.pull-left[
+.center[
+&lt;img src="images/mod_zootopia.gif" height = 300 /&gt;
+
+Low-income &amp;rarr; Meritocracy   
+.red[&amp;uarr;]    
+Income inequality 
+]
+]
+
+--
+
+.pull-right[
+Conflict theory vs. relative power theory
+
+
+* Poor vs. Rich
+* Social Structure: Self-reproducing vs. self-negating
+]
+
+???
+
+Self-reproducing: relative power theory
+Self-negating: conflict theory
+
+
+---
+
+## Conflict Theory
+
+.center[&lt;img src="images/mod_hulk.gif" height = 400 /&gt;]
+
+H&lt;sub&gt;0&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[less].
+
+---
+
+## Relative Power Theory
+
+.center[&lt;img src="images/mod_hypnosis.gif" height = 400 /&gt;]
+
+H&lt;sub&gt;1&lt;/sub&gt;: Poor people living with high inequality believe in meritocracy .red[more].
+
+---
+
+## Model and Data
+
+`\begin{align}
+Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
+                      &amp;+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
+\end{align}`
+
+Empirical: [Pew survey](https://www.pewresearch.org/)
+
+
+---
+
+.pull-left[
+## Answer from AJPS
+
+.center[&lt;img src="images/mod_NJL_plot.png" height = 500 /&gt;]
+]
+
+???
+
+Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
+
+
+--
+
+.pull-right[
+## Query of the AJPS Answer
+
+.center[&lt;img src="images/mod_interaction1.jpg" height = 500 /&gt;]
+]
+
+
+---
+
+## When Digging in More
+
+.center[&lt;img src="images/mod_three_measures.jpg" height = 500 /&gt;]
+
+---
+
+## Moderation with Better Data
+
+.pull-left[&lt;img src="images/mod_SH_plot2.png" height = 500 /&gt;]
+
+--
+
+.pull-right[&lt;img src="images/spe_interaction2.jpg" height = 500 /&gt;]
+
+---
+
+## Wrap Up
+
+.pull-left[
+*Moderation in Methodology*
+
+1. Specialty: Nonlinear
+1. Wrong ways
+    + Specification w.o. base terms
+    + Interpretation of only the product term
+1. Correct way
+    + Marginal effect
+ ]
+ 
+.pull-right[
+*Moderation in Practice*
+
+1. Theory
+    + Conflict vs. Relative Power
+1. Data
+    + Selective vs. all available
+1. Interpretation
+    + Point estimates vs. `interplot`
+]    
+    
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="libs/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"highlightSpans": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

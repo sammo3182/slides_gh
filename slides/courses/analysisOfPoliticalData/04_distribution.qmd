@@ -1,0 +1,528 @@
+---
+title: "Population and Distribution"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+## Overview
+
+1. Properties of distribution
+1. Common types of distributions
+1. Expectation
+
+
+# What's a distribution
+
+## (Probability) distribution
+
+:::{.fragment .fade-in-then-semi-out}
+> The mathematical function that gives the probabilities of occurrence of different possible [outcomes]{.red} for an experiment.
+
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+![](images/dist_packageInsert.jfif){height=500 fig-align="center"}
+:::
+
+:::{.column width="50%" .fragment}
+- Probability Mass Function (PMF): 
+    - Discrete
+    - Histogram
+- Probability Density Function (PDF): 
+    - Continuous
+    - Density plot
+- Cumulative density function (CDF): $F(x) = P(X \leq x)$
+:::
+::::
+
+## Distribution in Visualization
+
+![](images/dist_pmfPdf.png){height=800}
+
+
+## Properties of PMF/PDF
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+![](images/dist_integral.gif)
+
+- None-negative
+- Total area = $\int^{+\infty}_{-\infty}f(x)dx = 1.$
+
+:::
+
+:::{.column width="50%" .fragment}
+- $P(x = c) = \int^c_cf(x)dx = 0.$
+
+- $$\begin{aligned}P(a\leq x \leq b) =& \int^b_af(x)x,\\
+=& \int^b_{-\infty}f(x)dx -\\
+ &\int^a_{-\infty}f(x)dx.
+\end{aligned}$$
+
+- CDF: $P(X\leq x)$, PDF = $\frac{\partial CDF}{\partial X}.$
+:::
+::::
+
+
+:::{.notes}
+
+导数是斜率，即在某一点函数变化的加速度；
+偏导数是把二元函数的一个自变量不变，另一个正常求导，就分别想象成z对x，y的函数。
+
+https://www.zhihu.com/question/276405042#:~:text=%E5%81%8F%E5%AF%BC%E6%95%B0%E5%B0%B1%E6%98%AF%E5%90%AB%E6%9C%89%E5%A4%9A,%E5%BC%95%E8%B5%B7%E5%87%BD%E6%95%B0%E7%9A%84%E6%80%BB%E5%8F%98%E5%8C%96%E3%80%82
+:::
+
+## How to Describe A Probability Distribution
+
+> **Moments**: Specific quantitative measures of [the shape]{.red} of a function.
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+*Physics*
+
++ 0th: Total mass
++ 1st: Center of mass
++ 2ed: Rotational inertia
+
+:::{.fragment}
+![](images/dist_rotation.gif){height=400}
+:::
+:::
+
+:::{.notes}
+Rotational inertia: 惯性矩
+:::
+
+:::{.column width="50%" .fragment}
+*Statistics*
+
+![](images/dist_moments.png){height=600}
+:::
+::::
+
+
+:::{.notes}
++ 0th: Total probability
++ 1st: Mean
++ 2ed: Variance
++ 3id: Skewness
++ 4th: Kurtosis (tailedness)
+
+Kurtosis：尖锐程度
+:::
+
+
+# Types of Distribution
+
+## Basic Types of Distributions
+
+::::{.columns style="text-align:center; margin-top: 3em"}
+:::{.column width="50%"}
+*Discrete*
+
++ Binomial
++ Poisson
+:::
+
+:::{.column width="50%"}
+*Continuous*
+
++ Uniform
++ Normal
+:::
+::::
+
+
+## Bernoulli
+
+:::{style="text-align: center"}
+*Throwing a fair coin*
+:::
+
+:::{.fragment}
+Bernoulli: Let $k\in 0, 1,$ p is P(X = 1)
+:::
+
+:::{.fragment}
+CDF: 
+$$
+F = \begin{cases}
+0, if\ k<0,\\
+1 - p, if\ k \in[0, 1),\\
+1, if\ k \geq 1.
+\end{cases}
+$$
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+PMF: 
+
+$$f(k;p) = p^k(1 - p)^{1 - k}$$
+
++ &mu; = p
++ &sigma;<sup>2</sup> = p(1 - p)
+:::
+
+:::{.column width="50%" .fragment}
+![](images/dist_bernoulli_pmf.gif){height=350}
+:::
+::::
+
+:::{.notes}
+
+why pmf? Discrete
+
+There is only cdf, no cmf:
+
+The proper terminology is Cumulative Distribution Function, (CDF). The CDF is defined as
+
+$$F_X(x) = \mathrm{P}\{X \leq x\}.$$
+
+With this definition, the nature of the random variable X is irrelevant: continuous, discrete, or hybrids all have the same definition. As you note, for a discrete random variable the CDF has a very different appearance than for a continuous random variable. In the first case, it is a step function; in the second it is a continuous function.
+:::
+
+
+## Binomial distribution
+
+:::{style="text-align: center"}
+*Throwing multiple fair coins*
+:::
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="50%" .fragment}
+PDF: $f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}$
+
++ n, number of trials; 
++ p, the success probability in each trial; 
++ k, the number of success
++ ${n \choose k} = \frac{n!}{k!(n - k)!}$ (what's this?)
+
+:::{.fragment}
+&mu; = np    
+&sigma;<sup>2</sup> = np(1 - p)
+:::
+:::
+
+:::{.notes}
+Combination: no order, every draw is independent
+:::
+
+:::{.column width="50%" .fragment}
+![](images/dist_binomial_pdf.png){height=500}
+:::
+::::
+
+
+## Application
+
+A university hired 100 graduate students per year, 25 female and 75 male. 
+Given that the general hired ratio is 4:6 for women:men, what's the chance that the employment is gender discrimination free?
+
+:::{.fragment}
+*Let's [assume]{.red} the employment of any student does not affect the chance of hiring others. (Why is this important?)*
+:::
+
+:::{.fragment .fade-in-then-semi-out}
+$$PDF = {n \choose r}\pi^r(1 - \pi)^{n - r}$$
+:::
+
+:::{.fragment}
+$$P(25) = {100 \choose 25}0.4^{25}(1 - 0.4)^{75} = 0.0006.$$
+:::
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+Implication:
+
+*Very unlikely*.
+:::
+
+
+## Poisson Distribution
+
+:::{style="text-align:center"}
+PMF:
+$Pr(X{=}k)= \frac{\lambda^k e^{-\lambda}}{k!},$
+
+k is the number of occurrences
+
+&mu; = &lambda;;    
+&sigma;<sup>2</sup> = &lambda;.
+:::
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+:::{.column width="40%" .fragment}
+![](images/dist_poisson.gif){height=500}
+:::
+
+:::{.column width="60%" .fragment}
+*Application*
+
+1. Number of Network Failures per Week
+1. Number of Website Visitors per Hour
+1. Number of Arrivals at a Restaurant
+1. Number of Calls per Hour at a Call Center
+1. Average Number of Storms in a City
+1. Number of Emergency Calls Received by a Hospital Every Minute
+:::
+::::
+
+
+## Uniform Distribution
+
+:::{style="text-align: center"}
+*The Most Important Distribution for Bayesian Analysis*
+:::
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+CDF: 
+$$F = \begin{cases}
+0, if\ x < a,\\
+\frac{x - a}{b - a}, if\ x \in[a, b),\\
+1, if\ x \geq b.
+\end{cases}$$
+
+![](images/dist_uniform_cdf.png){height=350}
+:::
+
+:::{.column width="50%" .fragment}
+PDF:
+
+$$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$
+
+![](images/dist_uniform_pdf.png){height=350}
+:::
+::::
+
+
+## Moments of the Uniform Distribution
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+\begin{align}
+\mu =& \int^b_a x \frac{1}{b - a} dx, \\
+=& \frac{1}{b - a}\int^b_axdx, \\
+=& \frac{1}{b - a}\frac{x^2}{2}|^b_a, \\
+=& \frac{b^2 - a^2}{2(b - a)}, \\
+=& \frac{a + b}{2}.
+\end{align}
+:::
+
+:::{.notes}
+\begin{align}
+(b - a)^3 =& b^3 - 3b^2a + 3a^2b - 3a^3\\
+\Rightarrow b^3 - a^3 =& (b - a)^3 + (3b^2a - 3a^2b),\\
+=&(b - a)[(b - a)^2 + 3ba].\\
+
+\therefore\frac{b^3 - a^3}{3(b - a)} - (\frac{a + b}{2})^2 =& \frac{(b - a)[(b - a)^2 + 3ba]}{3(b - a)} - \frac{(a + b)^2}{4},\\
+=& \frac{4[(b - a)^2 + 3ba] - 3(a + b)^2}{12},\\
+=& \frac{4b^2 + 4ab + 4a^2 - 3b^2 - 3a^2 - 6ab}{12},\\
+=& \frac{b^2 - 2ab + a^2}{12} = \frac{(b - a)^2}{12}.
+\end{align}
+:::
+
+
+:::{.column width="50%" .fragment}
+\begin{align}
+\sigma^2 =& \sum x^2p(x) - \mu^2, \\
+=& \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2, \\
+=& \frac{1}{b - a}\int^b_ax^2dx - (\frac{a + b}{2})^2,\\
+=& \frac{1}{b - a}\frac{x^3}{3}|^b_a - (\frac{a + b}{2})^2,\\
+=& \frac{b^3 - a^3}{3(b - a)} - (\frac{a + b}{2})^2 = \frac{(b - a)^2}{12}.
+\end{align}
+:::
+::::
+
+## Application of the Uniform Distribution
+
+![](images/dist_lotteryGenerator.gif){height=300 fig-align="center"}
+
+:::{.fragment style="text-align: center"}
+Any type of random number generators.
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+![](images/ci_fsmrof.png) Discrete uniform distribution
+
+> The probability of occurrence of the events is [equally]{.red} likely and falls within a finite set of values
+
+:::
+
+:::{.column width="50%" .fragment}
+E.g.: 
+
+1. Guessing a birthday of a stranger
+1. Raffle tickets
+1. Lucky Draw Contest
+1. Throwing a Dart
+:::
+::::
+
+
+## Normal Distribution: Gaussian curve
+
+PDF: 
+
+$$f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(x - \mu)^2}{2\sigma^2}}.$$
+
+When &mu; = 0; &sigma;<sup>2</Sup> = 1, standard normal distribution.
+
+:::{.notes}
+丘成桐(1949)被誉为数学皇帝，高斯(1777)被誉为数学王子, 说高斯是数学王子，意思不是高斯之上还有这个王那个王，而是把数学比作王。数学是王，高斯是王子.
+:::
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment style="margin-top: 2em"}
+*Z Score:*
+
+$Z = \frac{x - \mu}{\sigma}$ &larr; $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(z)^2}{2}}$
+:::
+
+:::{.column width="50%" .fragment}
+![](images/dist_zscoreNormal.gif){height=400 fig-align="center"}
+:::
+::::
+
+:::{.notes}
+Knowing Z-score, one can calculate the probability of it accordingly
+:::
+
+## How to know
+
+:::{.panel-tabset}
+## Old days
+
+![](images/dist_zScore.gif){height=700 fig-align="center"}
+
+## Cool kids
+Using R:
+
+- `pnorm(<Z-score>)`
+- P(X &ge; 125) = `1 - pnorm(1.056)` = `r 1 - pnorm(1.056)`
+- P(X < 85) = `pnorm(-0.9375)` = `r pnorm(-0.9375)`
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+p-value: $P(z\leq x)$.
+
+We'll talk about about that later.
+:::
+:::
+
+## How to Use
+
+Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+$Z_1 = \frac{125 - 100}{16} = 1.056$
+
+$Z_2 = \frac{85 - 100}{16} = -0.9375$
+:::
+
+
+# Expectation
+
+## Meaning
+
+:::{style="text-align:center"}
+"What would you guess if asking you the chance of heads to toss a coin?"
+:::
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+1. &mu; = E(X) = &sum; xp(x)
+2. &sigma;<sup>2</sup> = E(x - &mu;)<sup>2</sup> = &sum; (x - &mu;)<sup>2</sup>p(x)
+:::
+
+:::{.fragment style="margin-top: 2em"}
+*Rule of expectation*
+
+- E(aX + bY + c) = aE(X) + bE(Y) + c;
+- var(aX + bY) = a<sup>2</sup>var(x) + b<sup>2</sup>var(y) + 2ab&bull;cov(x, y)
+:::
+
+## Application
+
+X is the reward generator of a paid module of a video game, the seed of which is based on tossing a fair dice (😑).
+When the dice is tossed, the reward is produced following this function: g(X) = 2 + 3X.
+
+:::{.fragment style="margin-top: 2em"}
+What's the expectation of rewards "ke-jin" players can get by purchasing this module?
+:::
+
+:::{.fragment style="margin-top: 2em"}
+$$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6} = 3.5.$$
+
+Then $$E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5.$$
+:::
+
+
+## ![](images/ci_fsmrof.png)Inventors of Distributions
+
+::::{.columns style="text-align:center"}
+:::{.column width="50%" .fragment}
+Jacob Bernoulli & Gerolamo Cardano
+
+![](images/dist_Jakob_Bernoulli.jpg){height=300}
+![](images/dist_Cardano.jpg){height=300}
+
+:::
+
+:::{.column width="50%" .fragment}
+Siméon Poisson   
+
+![](images/dist_Poisson.jpg){height=300}
+
+:::
+::::
+
+:::{.fragment style="text-align:center"}
+Clarl F. Gauss   
+![](images/dist_Gauss.jpg)
+:::
+
+
+:::{.notes}
+Bernoulli is discovered by Jacob, who also invented mathematical constant e.
+
+Cardano defined uniform in the 16th century, "意大利文艺复兴时期百科全书式的学者， 数学家、物理学家、占星家、哲学家和赌徒，古典概率论创始人"
+:::
+
+
+## Take-home point
+
+::: {style="text-align: center"}
+![](images/dist_mindmap.png){height="850"}
+:::
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}

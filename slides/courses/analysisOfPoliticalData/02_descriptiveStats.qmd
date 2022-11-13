@@ -1,0 +1,406 @@
+---
+title: "Descriptive Statistic"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+format: 
+  revealjs:
+    css: style_basic.css
+    # theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "knitr",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+## Overview
+
+- Data
+- Variable
+    - Typology
+    - Point
+    - Dispersion
+
+# What's Data
+
+
+## Nature
+
+Common definition: 
+
+:::{.fragment .fade-in}
+:::{.fragment .shrink}
+:::{.fragment .semi-fade-out}
+> The quantities, characters, or symbols on which operations are performed by a computer, being stored and transmitted in the form of electrical signals and recorded on magnetic, optical, or mechanical recording media.
+
+:::
+:::
+:::
+
+:::{.fragment .fade-in}
+:::{.fragment .grow}
+
+Things known or assumed as [facts]{.red}, making the basis of *reasoning or calculation*. 
+
+:::{style="text-align: right"}
+---[Oxford Language](https://languages.oup.com/google-dictionary-en/)
+:::
+
+:::
+:::
+
+:::{.fragment}
+### Etymology
+
+:::{style="text-align: center"}
+![](images/desc_etymData.png){height="300"}
+:::
+:::
+
+:::{.notes}
+/ˌɛtɪ'mɑlədʒi/
+
+from "a piece of info, something to give" to now
+:::
+
+
+## Way to break down: variable
+
+:::{.fragment}
+**Specifically**, a variable = [a dimension(well...)]{.gray} = a column
+:::
+
+:::{.fragment}
+**Empirically**, a variable = a piece of data with *homogeneous*
+:::
+
+:::{.fragment}
+**Relationally**, an observation &sub; {var1, var2, var3,...} &sub; a dataset
+:::
+
+
+:::{.fragment}
+### Etymology
+
+:::{style="text-align: center"}
+![](images/desc_etymVariable.png){height="500"}
+:::
+:::
+
+## Typology
+
+* Constant vs. variables
+* Dependent/**outcome**/response ~
+* Independent/**explanatory**/treatment ~
+
+:::{.fragment .fade-in}
+:::{.fragment .fade-out}
+:::{.r-fit-text}
+When would you want a variable to be [constant]{.red} in a research?
+:::
+:::
+:::
+
+:::{.notes}
+1. Get rid of the effect
+1. Testing if X is a necessary condition for Y
+    - Is hard work necessary for successes?
+    - A works 12h, B works 12h, A success, B doesn't
+    - Is good governance produced by democracy?
+        - Democracy with Trump
+        - Democracy with Clinton
+:::
+
+:::{.fragment}
+### Categories
+
+- Nominal/categorical
+- Ordinal
+- Numeric: 
+:::
+
+
+
+::::{.columns}
+:::{.column width="40%" .fragment}
+- Interval: Meaningful distance
+    - Discrete/continuous
+    - Zero is a terminal
+    - Meaningful addition/subtraction
+:::
+
+:::{.column width="60%" .fragment}
+- Ratio: Interval with meaningful zero
+    - Continuous
+    - Zero means absence
+    - Meaningful multiplication/division
+:::
+::::
+
+:::{.notes}
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有, so an interval;
+-100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
+
+Ratio: the ratio of two points on the scale conveys the same meaning regardless of where one is on the scale
+
+e.g.1, Public budget, safty:health = 4:1 then no matter how much in total, it will 4:1
+e.g.2, event history, vaccine rate
+:::
+
+# Description
+
+## Features of Variable
+
+Level of description
+
++ Raw data ![](images/desc_rawData.png){height=100}
++ Frequency distribution: 
+  n<sub>i</sub>, n<sub>.</sub> = &sum;n<sub>i</sub>, n<sub>..</sub> = &sum;n<sub>ij</sub> ![](images/desc_frequency.png){height=100}
+
++ Histogram ![](images/desc_histogram.png){height=100}
++ Time series plots, scatter plots ![](images/desc_scatter.png){height=100}
+
++ Percentiles: "I rated the applicant among the top 10-15% students taking BSc-courses at Manchester; and now I know for sure that she is among the best..."
++ Moments
+
+:::{.notes}
+A prospective student graduated from Manchester and Cambridge
+
+Information lost increasingly more
+:::
+
+
+## Describing a Variable
+
+### Point estimate
+
++ **Mode**: most frequent occurring number, not good of central tendency, bimodal (two modes)
++ **Median**: at 50%
+    + Odd: middle value
+    + Even: mean of two mid values
+    + Sensitive for outliers
++ **Mean**: $\bar{X}\rightarrow\mu.$
+    + Group: $\bar{X} = 1/n\sum xf.$, x is the cell midpoint and f is the frequency of $X_i$.
+    + Symmetric distribution, median and mean are identical
+
+## When to use what
+
+::::{.columns}
+:::{.column width="50%" .fragment style="text-align: center; margin-top: 3em"}
+
+```{r, fig.show='animate', animation.hook = 'gifski', fig.width=6, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE, results = 'hide', interval=0.5, eval = FALSE, include=FALSE}
+library(fGarch)
+library(ggplot2)
+library(gifski)
+skew <- seq(0.5, 1, 0.05)
+skew2 <- seq(1.1, 2, 0.1)
+skew3 <- seq(1.9, 1, -0.1)
+skew4 <- seq(0.95, 0.55, -0.05)
+skew <- c(skew, skew2, skew3, skew4)
+plot1 <- function(x){
+	d <- lapply(1:40, function(x){
+		d <- data.frame(x=rsnorm(100000, mean=0, sd=2, xi=skew[x]), frame=x)
+		return(d)
+	})
+medians <- c(seq(0.31,-0.31, -0.031), seq(-0.279,0.279, 0.031))
+#medians <<- lapply(1:40, function(x) median(d[[x]]$x))
+p <- lapply(1:40, function(y) ggplot(data=d[[y]], aes(x))+geom_histogram(binwidth=0.25, color="white", fill="skyblue2")+theme_light()+theme(panel.border=element_blank(),panel.grid.minor=element_blank(), axis.ticks=element_blank(), axis.text=element_blank())+guides(fill=FALSE)+labs(x=NULL, y=NULL)+scale_y_continuous(expand=c(0,0),limits=c(0,5600), breaks=c(0,2000, 4000))+geom_vline(xintercept=0, size=0.5, linetype="dashed")+geom_vline(xintercept=medians[y], size=0.5)+xlim(-5,5)+annotate("text", label="Mean", size=3.4, x=-4.1, y=5300, hjust=0)+annotate("text", label="Median", size=3.4 ,x=-4.1, y=4600, hjust=0)+geom_segment(aes(x=-4.8, xend=-4.3, y=5300, yend=5300), linetype="dashed")+geom_segment(aes(x=-4.8, xend=-4.3, y=4600, yend=4600)))
+print (p)
+}
+
+gif_file <-  file.path(getwd(), 'median.gif')
+save_gif(plot1(), gif_file= gif_file, progress = FALSE, loop= TRUE, delay= 0.5, width=400, height= 133, res= 100)
+
+utils::browseURL(gif_file)
+```
+
+![](images/desc_median.gif){height=400}
+:::
+
+:::{.column width="50%" .fragment style="text-align: center;"}
+![](images/desc_sheHulk.png){height=800}
+:::
+
+::::
+
+## Describing a Variable
+### Dispersion
+
+::::{.columns}
+:::{.column width="50%"}
+[**Range**: Max - min; [min, max]]{.fragment}
+
+[Q: What's the range of  2, 2, 2, 2?]{.fragment .fade-in-then-out}
+
+![](images/desc_dispersion.png){.fragment}
+:::
+
+:::{.column width="50% .fragment}
+- **Interquartile Range (IQR)**: [25% quartile, 75% quartile]
+- **Mean absolute deviation (MAD)**: $1/n\sum|X - \bar{X}|.$
+- **Mean square deviation (MSD)**: $1/n\sum(X - \bar{X})^2.$
+:::
+::::
+
+:::{.notes}
+MAD: Intractable, difficult in differentiate absolute values
+:::
+
+---
+
+&#8618; **Variance**: &sigma;<sup>2</sup> for the population;^[The entire group you care ([finite]{.red}).] s<sup>2</sup> for a sample^[The group you collect data]
+
+$$\begin{align}
+\sigma^2 =& \sum(X - \mu)^2p(X);\\
+s^2 =& \sum(X - \bar X)^2p(x), \\
+=& \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}$$
+
+:::{.notes}
+&sigma;: sigma
+
+finite: finite
+
+- Population
+- Sample
+:::
+
+:::{.r-fit-text .fragment}
+Why n - 1? 
+:::
+
+## Why n - 1
+
+[Intuitively, Only when there are [more than one]{.red} items, the variance can exist.]{.fragment}
+
+:::{.fragment}
+
+In statistics, degree of freedom (d.f.)<sup>\*</sup>^[For a crosstable: (r - 1)(c - 1)]
+
+
+\begin{equation}
+\begin{bmatrix}
+X_1\\ \vdots \\ X_n
+\end{bmatrix} = \bar{X}
+\begin{bmatrix}
+1 \\\vdots \\ 1
+\end{bmatrix} + \begin{bmatrix}
+X_1 - \bar{X} \\ \vdots \\ X_n - \bar{X}
+\end{bmatrix}
+\end{equation}
+
+
+:::
+
+:::{.notes}
+The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is ${\bar {X}}$. It therefore has 1 degree of freedom.
+
+The second vector is constrained by the relation ${\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}$. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
+
+In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
+:::
+
+
+## Two Formats of Variance
+
+::::{.columns}
+:::{.column width="50%"}
+
+Definition：
+
+\begin{align}
+\sigma^2 =& \sum(X - \mu)^2p(X);\\
+s^2 =& \sum(X - \bar X)^2p(x), \\
+=& \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}
+
+:::
+
+:::{.column width="50%" .fragment}
+Given &mu; = &sum;Xp(x), &sum;p(x) = 1,
+
+
+\begin{aligned}
+\sigma^2 =& \sum(X - \mu)^2p(x),\\
+=& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+=& \sum X^2p(x) - \mu^2.
+\end{aligned}
+
+:::
+::::
+
+:::{.notes}
+NB: Pay attention to the .red[punctuation marks].]
+:::
+
+## Standard deviation (SD)
+
+- Population: $\sigma = \sqrt{\sum(X - \mu)^2p(X)}$;
+- Sample: $s = \sqrt{\frac{\sum(X - \bar{X})^2}{n - 1}}$;
+- Ratio: $\sigma = \sqrt{\pi(1 - \pi)}$;
+- Group: $\sqrt{\frac{f}{n}\sum(X - \bar{X})^2}$.
+
+:::{.fragment style="text-align: center;"}
+![](images/desc_sd.png){height=400}
+:::
+
+
+## Take-home point
+
+::: {style="text-align: center"}
+![](images/desc_mindmap.png){ height="800" }
+:::
+
+
+# R Lab
+
+## Learning R with Dr. Hu
+
+:::{.fragment}
+::: {style="text-align: center"}
+Starting from math {{< fa solid skull >}} 
+
+![](images/desc_math4PoliSci.jfif){ height="800" }
+:::
+
+:::
+
+## Hey, no fear
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGtFZ0F0ZVZzTElHNjdxP2U9U3Fpb0do.mp4" height="800" >}}
+

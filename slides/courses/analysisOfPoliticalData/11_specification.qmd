@@ -1,0 +1,687 @@
+---
+title: "Model Specification"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup, include = FALSE}
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse,
+  patchwork,
+  drhutools,
+  ggeffects,
+  dotwhisker
+) 
+
+
+# Functions preload
+set.seed(114)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+## Overview
+
+:::{style="text-align:center"}
+How can you get things wrong?
+:::
+
+:::{.fragment style="text-align:center; margin-top: 2em; margin-bottom: 2em"}
+
+Like...many ways!
+
+:::
+
+
+:::: {.columns}
+
+::: {.column .fragment width="30%"}
+### Measuring [variable]{.red} wrong
+
+- Proxy variable
+- Measurement error
+- Variable type
+:::
+
+::: {.column width="8%"}
+:::
+
+::: {.column .fragment width="26%"}
+### Specifying [model]{.red} wrong
+
+- Functional form
+- Omitted variable
+:::
+
+::: {.column width="8%"}
+:::
+
+::: {.column .fragment width="28%"}
+### Interpreting [results]{.red} wrong
+
+- Nonlinear model
+:::
+
+::::
+
+
+# Measurement Problem
+
+## Proxy Variable
+
+True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + u.
+
+However, X<sub>3</sub><sup>\*</sup> is unobserved. Instead, we can observe X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>X<sub>3</sub> + v. 
+
+In other words, 
+
+:::{style="text-align:center; margin-top: 2em"}
+Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (u + &beta;<sub>3</sub>v).
+:::
+
+
+:::{.fragment}
+Assuming cov(u,v) = 0, 
+
+:::{style="text-align:center; margin-top: 2em"}
+E(u + &beta;<sub>3</sub>v|X) = 0;
+
+var(u + &beta;<sub>3</sub>v|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>v</sub><sup>2</sup> + &sigma;<sub>u</sub><sup>2</sup>.
+:::
+:::
+
+
+
+:::{.notes}
+cov(u,v) = 0: u, v independent
+:::
+
+:::{.fragment}
+Only when 
+
+[cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0,]{.r-fit-text} 
+
+the model can produce unbiased estimates.
+:::
+
+## Measurement Error {.auto-animate}
+
+:::: {.columns}
+
+::: {.column width="40%"}
+*Random error in Y*, Y = Y<sup>*</sup> + e.
+
+\begin{align}
+&Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
+&Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+\end{align}
+
+:::{.fragment}
+### Consequence
+
++ &beta; Unbiased 
++ var(&beta;) &uarr;
+:::
+
+:::
+
+::: {.column width="60%"}
+
+:::{.fragment}
+*Random error in X*, X = X<sup>*</sup> + e. If E(eX) = 0, then 
+
+\begin{align}
+Y =& \beta_0 + \beta_1(X_1 - e) + u,\\
+  =& \beta_0 + \beta_1X_1 + (u - \beta_1e).
+\end{align}
+:::
+
+:::{.fragment}
+\begin{align}
+cov(e, X_1) =& E(eX_1) - E(e)E(X_1) = E(eX_1),\\
+          =& E[e(X_1^* + e)] = E(eX_1^*) + E(e^2), \\
+          =& \sigma_e^2\neq0.\\
+cov(u - \beta_1e, X_1) =& cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1),\\
+                       =& -\beta_1\sigma_e^2.\\
+\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)},\\
+                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
+                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e},\\
+                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+\end{align}
+:::
+
+:::{.notes}
+plim: probability limit operation, convergence in probability
+:::
+
+:::{.fragment}
+Unbiased [only]{.red} when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>\*</sup> + e), i.e., &sigma;<sup>2</sup><sub>X<sub>1</sub></sub> = &sigma;X<sub>1</sub><sup>\*2</sup>+ &sigma;<sub>e</sub><sup>2</sup>
+:::
+
+:::
+
+::::
+
+## Measurement Error {.auto-animate}
+
+:::: {.columns}
+
+::: {.column .nonincremental width="40%"}
+*Random error in Y*, Y = Y<sup>*</sup> + e.
+
+\begin{align}
+&Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
+&Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+\end{align}
+
+### Consequence
+
++ &beta; Unbiased 
++ var(&beta;) &uarr;
+
+
+:::
+
+::: {.column width="60%"}
+
+*Random error in X*, X = X<sup>*</sup> + e. If E(eX) = 0, then 
+
+\begin{align}
+Y =& \beta_0 + \beta_1(X_1 - e) + u,\\
+  =& \beta_0 + \beta_1X_1 + (u - \beta_1e).
+\end{align}
+
+### Consequence
+
+$|\hat\beta_1| < \beta_1$, a.k.a., [attenuation]{.red} bias. 
+
++ &beta;<sub>1</sub>: underestimated;
++ Affecting the estimations of others in unknown ways .
+
+:::
+
+::::
+
+
+## Variable Type Issue
+
+:::{.callout-tip}
+### Tip
+
+In OLS, there is no requirement (assumption) for Xs to be linear. (Is there one for Y? Where?)
+:::
+
+* Indicator: Binary usually
+    + $Y = \beta_0 + \beta_1X_i + u_i,$ where X is either male (0) or female(1)
+        + &beta;<sub>0</sub>: E(Y|X = male);
+        + &beta;<sub>1</sub>: E(Y|X = female) - E(Y|X = male).
+
+* Nominal: 
+    + Can't regress unless being broken up into indicator variables.
+    + e.g., A race variable: white, black, native
+        + H<sub>0</sub>: &beta;<sub>black</sub> = 0, testing the difference between black and white
+        + H<sub>0</sub>: &beta;<sub>black</sub> = &beta;<sub>native</sub> = 0, testing if the race has any effect.
+
+:::{.notes}
+In a regression, the information of the baseline is captured by the intercept
+:::
+
+:::{.fragment}
+
+:::{.callout-note}
+### Log(X)
+
+Have you ever seen social scientists conduct a [logarithm transformation]{.red} on some variables like GDP and income?
+What's that for?
+:::
+
+
+:::
+
+## Logarithm Transformation: Making X More Linear?
+
+:::{.r-stack}
+
+:::{.fragment}
+```{r hist}
+mammals <- MASS::mammals
+mammals_l <- pivot_longer(mammals,
+                          cols = everything(),
+                          names_to = "variable",
+                          values_to = "value")
+
+
+
+ggplot(data = mammals_l, aes(x = value, fill = variable)) + 
+    geom_histogram(position = "dodge") +
+    scale_fill_gb(reverse = TRUE) + 
+    theme(legend.position = "top") +
+    ggtitle("Brain and Body Weights for 62 Species of Land Mammals")
+```
+:::
+
+:::{.fragment}
+```{r bodyBrain}
+ggplot(mammals, aes(body, brain)) + geom_point()
+```
+
+:::
+
+:::{.fragment}
+```{r bodyLBrain}
+ggplot(data = mammals, aes(x = body, y = brain)) +
+  geom_point() +
+  scale_x_log10()
+```
+:::
+
+:::{.fragment}
+```{r bodyBrainL}
+ggplot(data = mammals, aes(x = body, y = brain)) +
+  geom_point() +
+  scale_y_log10()
+```
+:::
+
+:::{.fragment}
+```{r bodyLBrainL}
+ggplot(data = mammals, aes(x = body, y = brain)) +
+  geom_point() +
+  scale_x_log10() + 
+    scale_y_log10()
+```
+:::
+
+
+:::
+
+## Model Fit with Logarithm Transformation
+
+:::{.r-vstack}
+
+:::{.fragment}
+```{r fit}
+#| fig-height: 3
+
+fit <- vector(mode = "list")
+fit$original <- lm(brain ~ body, data = mammals)
+fit$log <- lm(log(brain) ~ log(body), data = mammals)
+
+dwplot(fit) +
+    scale_color_gb(reverse = TRUE) + 
+    theme(legend.position = "top") + 
+    ggtitle("Coefficient Estimation")
+```
+:::
+
+:::{.fragment}
+```{r residual}
+#| fig-height: 3
+
+df_residual <- map_dfc(fit, ~.$residuals) %>% 
+    pivot_longer(cols = everything(), names_to = "model", values_to = "residual")
+
+ggplot(df_residual, aes(x = residual)) +
+    geom_density() + 
+    facet_wrap(~ model, scales = "free") + 
+    ggtitle("Model Residuals")
+```
+:::
+
+:::
+
+
+## When Using Logrithm Transformation
+
+Problem: OLS assumption violation (linearity)
+
+:::{.fragment}
+Critical criterion: Skewness
+:::
+
+
+:::{.fragment}
+Rule of thumb:
+
+- |Skewness| < 0.5, the distribution is approximately symmetric (0 &hArr; perfect symmetric)
+- |Skewness| < 1, moderately skewed
+- [|Skewness| > 1, highly skewed]{.red}
+:::
+
+
+:::{.fragment}
+Example data:
+
+```{r skew}
+map(mammals, e1071::skewness)
+```
+:::
+
+
+# Misspecification
+
+## Problem Types
+
+1. Functional form
+1. Omitted variable
+
+## Functional Form
+
+Q: When there are two ways to specify the model:
+
+\begin{align}
+Y =& f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
+Y =& f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
+\end{align}
+
+Which specification is [correct]{.red}?
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+:::{.fragment}
+**How to figure out?**
+
+Test &beta;<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?
+
+Probably not. Hint: How many [true]{.red} models are there?
+:::
+
+:::{.notes}
+Only one true model 
+:::
+
+:::{.fragment}
+Let's assume f<sub>1</sub> is the true model:
+
+$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$
+
+&rho;<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>
+
+When &rho;<sub>12</sub> &uarr;......
+:::
+
+:::{.notes}
+Variance is inflated when &rho;<sub>12</sub> &uarr;
+:::
+:::
+
+::: {.column .fragment width="50%"}
+*Better way*
+
+Joint test: 
+
+H<sub>0</sub>: &beta;<sub>1</sub> = &beta;<sub>2</sub> = &beta;<sub>3</sub> = 0 or 
+
+&beta;<sub>4</sub> = &beta;<sub>5</sub> = &beta;<sub>6</sub> = 0
+
+Statistics: Davidson-Mackinnon test
+
+1. Run $Y = f_2(X) + u$ and calculate the expected value $\hat Y = E[Y|f_2(X)]$
+1. Run $Y = f_1(X) + \theta\hat Y + u$, and test if &theta; = 0.
+:::
+
+::::
+
+
+## Omitted Variable
+
+\begin{align}
+True: Y_i =& \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
+Specified: Y_i =& \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i
+\end{align}
+
+How does $\tilde\beta_1$ compare to $\beta_1$?
+
+:::{.fragment}
+\begin{align}
+Y_i =& \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i,\\
+Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u),\\
+(Y_i -\bar Y)(X_1 - \bar X_1) =& \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1)\\ 
+            &+ (u_i - \bar u)(X_1 - \bar X_1),\\
+\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =& \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}.\\
+\text{That is, } \tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
+\Rightarrow E(\tilde\beta_1|X_1) =& E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1],\\
+                     =& \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1),\\
+                     =& \hat\beta_1 + \hat\beta_2\delta_1.
+\end{align}
+
+:::
+
+
+## Biased or Not
+
+$$E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,$$ in which $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
+
+- $\tilde\beta_1$: [Biased]{.red}, unless X<sub>2</sub> is an irrelevant variable.
+    - Even if &delta;<sub>1</sub> = 0, $X_1 = \delta_0 + r$, the model may increase the risk of Type I error
+
+:::{.notes}
+False positive
+:::
+
+
+:::{.notes}
+How About the Residual?
+
+$$Y_i = \beta_0 + \beta_1X_{1} + \epsilon,$$
+
+$$\epsilon = \beta_2X_{2} + u_i.$$
+
+
+$E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0$
+
++ Against the assumption.
+  
+
+$var(\epsilon|X_1) = var(\beta_2X_{2} + u_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2$
+
++ All values are fixed, that is, still homoscedasitic.  
+
+$E(X_1\epsilon) = \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],$ 
+
++ When cov(X<sub>1</sub>, X<sub>2</sub>)&ne;0 &rArr; Increase the difficulty to isolate X from u.
+    
+$E(\epsilon_i\epsilon_j|X_i)\neq 0$
+
+\begin{align}
+E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =& E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)] - \beta_2^2\mu^2_{X_2},\\
+=& E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j) - \beta_2^2\mu^2_{X_2},\\
+=& \beta_2^2E(X_{2i}X_{2j}) - \beta_2^2\mu^2_{X_2},\\
+=& \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2},\\
+=& \beta_2^2cov(X_{2i}, X_{2j}).
+\end{align}
+
+
+\begin{align}
+E(X_1\epsilon) =& E[X_1(\beta_2X_2 + u)], \\
+=& E(X_1\beta_2X_2) + E(X_1u),\\
+=& \beta_2E(X_1X_2),\\
+=& \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}].
+\end{align}
+
++ When cov(X<sub>1</sub>, X<sub>2</sub>) &ne; 0, E(X<sub>1</sub>&epsilon;) &ne; 0.
+
+:::
+
+# Misinterpretation
+
+## Nonlinear Modeling
+
+![](https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xaWVDYkM3SWJiTm5wZ1FLP2U9V200dzNl.jpg){fig-align="center" height=300}
+
+```{r nonlinear}
+#| layout-ncol: 2
+#| layout-align: center
+
+df_nl1 <- tibble(x = seq(0, 3,length.out = 1000),
+                y = 4*x - x^2 + rnorm(1000,0,sd = 1))
+
+ggplot(data = df_nl1, aes(x, y)) +
+  geom_smooth() + 
+  ggtitle(expression(Y == beta[0]*X + beta[1]*X^2 + u)) + 
+  theme(
+  plot.title = element_text(size = 28),
+  axis.text=element_text(size=20),
+  axis.title=element_text(size=20,face="bold"),
+  legend.text = element_text(size = 20)
+  )
+
+df_nl2 <- tibble(x = seq(0, 10,length.out = 1000),
+                 y = 3 + log(x) + rnorm(1000,0,sd = 1))
+
+ggplot(data = df_nl2, aes(x, y)) +
+  geom_smooth() + 
+  ggtitle(expression(Y == beta[0] + beta[1]*ln(X) + u)) + 
+  theme(
+  plot.title = element_text(size = 28),
+  axis.text=element_text(size=20),
+  axis.title=element_text(size=20,face="bold"),
+  legend.text = element_text(size = 20)
+  )
+```
+
+:::{notes}
+
+[Unbiased & efficient]{.red} linear estimates, 
+
+but what does &beta;<sub>1</sub> mean? 
+:::
+
+## Marginal Effect
+
+Discrete:
+
+$$Pr(Y|x = X_{n + 1}) - Pr(Y|x = X_n)$$
+
+Continuous: 
+
+$$\lim_{\Delta x\to0} \frac{ f(x + \Delta x) - f(x)}{\Delta x}$$
+
+:::{.fragment}
+That's to say, every value in X (n > 1) has a marginal effect (&Delta;<sub>x</sub>). Which one should we use?
+:::
+
+
+:::: {.columns}
+
+::: {.column .fragment width="30%"}
+*Average Marginal Effect (AME)*
+
+1. Calculate the marginal effect of each variable x for [each observation]{.red}.
+1. Calculate the average.
+:::
+
+::: {.column .fragment width="30%"}
+*Marginal Effect at the Mean (MEM)*
+
+- Calculate the marginal effect of each variable x for [each's mean value]{.red}.
+
+*Marginal Effect at Representative Values (MER)*
+
+- Calculate the marginal effect of each variable x for [value(s) of interest]{.red}.
+:::
+
+::: {.column .fragment width="40%"}
+
+![](images/spe_interaction2.jpg){fig-align="center" height=350}
+
+:::
+
+::::
+
+
+## Hypothesis Testing of A Nonlinear Model {auto-animate=true}
+
+$$e.g., Y = \beta_0 + \beta_1X + \beta_2X^2 + u.$$
+
+- Margins: $\frac{\partial Y}{\partial X} = \beta_1 + 2\beta_2X$
+- Let &alpha; = 0.05
+- H<sub>0</sub>: &beta;<sub>1</sub> + 2&beta;<sub>2</sub>X = 0;
+    - The average acceleration is zero
+
+:::{.fragment}
+Statistics: 
+
+\begin{align}
+\frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim& t_{n - 3}.\\
+SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)}, \\
+=& \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}.
+\end{align}
+:::
+
+
+
+## Interpretation {auto-animate=true}
+
+Statistics: 
+
+\begin{align}
+\frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim& t_{n - 3}.\\
+SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)}, \\
+=& \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}.
+\end{align}
+
+:::{.fragment}
+
+:::{.callout-warning}
+### Interpretation dilemma
+
+Can't simply say whether the null hypothesis is rejected, because it may [not be a coherent conclusion]{.red} in the entire domain of X, due to the nonlinearity. 
+:::
+
+:::
+
+- Better way: "In the range from a to b, the hypothesis can be rejected."
+    * Max - min
+    * First difference
+    * Marginal effects across values
+- Just plot it. (Do this, cool kids!)
+
+## Take-home point
+
+![](images/spe_mindmap.png){.r-stretch}
+
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
+

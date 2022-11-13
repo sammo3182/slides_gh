@@ -1,0 +1,251 @@
+---
+title: "Analysis of Political Data"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+filters:
+   - lightbox
+lightbox: auto
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    width: 1600
+    height: 900
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "knitr",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+# Course Introduction
+
+## What a class
+
+::::{.columns}
+:::{.column width="40%" .fragment}
+- Very basic
+    - (1 + 2 + 3 + 4 + 5) / 5
+    - OLS
+- Not (that) methodologistic
+    - Yeah, equations
+    - Yeah, statistics
+    - Yeah, operations
+:::
+
+:::{.column width="60%" .fragment}
+![](images/intro_assignmentDesign.png){ height="260" }
+
+- Considerable load
+- Unmuddlable (assignments, project, interactions)
+
+:::
+::::
+
+## Map of the Class
+
+::: {style="text-align: center"}
+![](images/intro_mindmap.png){ height="800" }
+:::
+
+## The Leeuwenhoek
+
+::: {style="text-align: center; margin-top: 3em"}
+
+$$
+\begin{aligned}
+\sigma^2 =& \sum(X - \mu)^2p(x),\\
+=& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x),\\
+=& \sum X^2p(x) - \mu^2.
+\end{aligned}
+$$
+
+:::
+
+- *Meaning* of equations
+- *Traps* in concepts, terms, and process
+    - What does randomization actually do?
+    - Do you need to worry about multicollinearity?
+    - How do you explain the interactive term in a conditional-effect model?
+
+
+
+---
+
+## Structure
+
+::: {style="text-align: center"}
+### Lecture: 1/2
+### R Lab: 1/2
+:::
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+- Gateway training (first 8 weeks)
+    - R basics
+    - Munging
+    - Basic Visualization
+    - Lecture related skills    
+    ![2.0](images/intro_drhur.png){ height="300" }
+:::
+
+:::{.column width="50%" .fragment}
+- [Student-oriented]{.red} Learning 
+    - Project
+    - Map
+    - Regular expression
+    - Rstudio addin
+    - Version control
+    - Rmarkdown and academic writing
+    - Slides
+    - Poster
+:::
+::::
+
+
+## Assignments
+
+![](images/intro_assignmentDesign.png)
+
+::: {.fragment style="text-align: center"}
+- Assignments
+    - Three required
+    - Four to five questions
+    - Final project
+        - Original paper
+        - Replication ([recommended]{.red})
+:::
+
+---
+
+## Replication, replication
+
+> The [only]{.red} way to understand and evaluate an empirical analysis filly is to know the exact process by which the data were generated and the analysis produced. ---King, Gary. 1995. “Replication, Replication.” *PS: Political Science & Politics*.
+
+- It's responsibility;
+- It's a training;
+- It can be a contribution;
+- It'll be 40% of your grade, and you just need to "redo".
+
+- Three requirements:
+    1. OLS (!!!)
+    1. Data available
+    1. Political paper
+
+
+## Your Instructor
+
+- Political Scientist
+    - Political psychology, inequality, political linguistics 
+
+- Methodologist
+    - Experiment, survey, latent variable analysis, network analysis, spatial analysis, text analysis, etc.
+
+- Hardcore R fan
+    - *Learning R with Dr. Hu and His Friends*
+    - ![](images/intro_hives.png){ height="200" }
+        - `dotwhisker`![](http://cranlogs.r-pkg.org/badges/grand-total/dotwhisker)![](http://cranlogs.r-pkg.org/badges/dotwhisker?color=orange)
+        - `interplot`![](http://cranlogs.r-pkg.org/badges/grand-total/interplot)![](http://cranlogs.r-pkg.org/badges/interplot?color=orange)
+
+---
+
+::: {.r-fit-text style="text-align: center; margin-top: 3em"}
+Pure [liberal-art]{.red} background
+:::
+
+
+## Goal
+
+::::{.columns}
+:::{.column width="40%" .fragment }
+Someone like this
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGY3d09LeFNwZzNVaVRnP2U9SzFkUjJz.mp4" height="750" >}}
+:::
+
+:::{.column width="60%" .fragment style="text-align: center"}
+Like this
+
+![](images/intro_busters.png){height="750" width="1200" }
+:::
+::::
+
+
+## A Decision: What a Researcher You Want to Be
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+This?
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xSGJfZWUzMmV0eWZJUDhaP2U9d2VlR2Nm.mp4" height="750" >}}
+:::
+
+:::{.column width="50%" .fragment}
+Or this?
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xSGhiZy1wcVZOWV9SeHpUP2U9eFhqZVZP.mp4" height="750" width="1200" >}}
+:::
+::::
+
+
+## Responses from Previous Students
+
+::::{.columns}
+:::{.column width="70%" .fragment style="text-align: center"}
+
+![](images/intro_eval2.png){height="150"}
+![](images/intro_eval3.png){height="300"}
+![](images/intro_eval4.png){height="300"}
+:::
+
+:::{.column .fragment width="30%" style="text-align: center"}
+![](images/intro_eval1.jpg)
+:::
+::::
+
+## Who Should Not Take
+
+::: {.r-fit-text .fragment .fade-in}
+- **Muddling** in for grades
+- Super **anti-English**;
+- Taking econometrics **already**;
+- Considering yourself **conservative**;
+
+::: {.fragment .highlight-red}
+- Not required for Poli Sci students.
+:::
+:::
+
+## Still here? Let's Begin!
+
+[Lecture 1: Descriptive Statistics](02_descriptiveStats.html)
