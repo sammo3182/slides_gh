@@ -410,31 +410,24 @@ var(\boldsymbol{u}) =& \Omega_{n\times n} = \left(
        0 & \sigma_2^2 & \cdots & 0\\
        \vdots & \vdots & \vdots & \vdots \\
        0 & 0 & \cdots & \sigma_n^2\\
-       \end{array}\right)\\
-\text{Then, } \boldsymbol{\hat\beta_{GLS}} =& (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y})\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} =& \boldsymbol{HH^{-1}},\\
-\text{Then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u}
+       \end{array}\right),\\
+\text{Then, } \boldsymbol{\hat\beta_{GLS}} =& (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u},
+\boldsymbol{H^{-1}u} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{u})=& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
 \end{align}
 
 . . .
-
-In this case
-
-\begin{align}
-\boldsymbol{H^{-1}u} =& \boldsymbol{H^{-1}(H^{-1})'}var(\boldsymbol{u})\\
-                     =& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I}.\\
-var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}
-\end{align}
 
 * If there's no heteroscedasticity, $\boldsymbol{\Omega} = \sigma\boldsymbol{I}.$
 * If there is heteroscedasticity and $\boldsymbol{\Omega}$ is known, then WLS (a special type of GLS).
 * If $\boldsymbol{\Omega}$ is unknown, run $\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{u}$ to estimate $\boldsymbol{\Omega}$ with $\boldsymbol{\hat\Omega} = \boldsymbol{\hat u\hat u'}$
 
---
+:::{.callout-warning}
+NB: This method does not get SE, and also [biased].red for small N.
+:::
 
-.center[NB: This method does not get SE, and also .red[biased] for small N.]
-
----
 
 ## "Sandwich" Matrix
 

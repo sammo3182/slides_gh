@@ -692,25 +692,32 @@ var(\boldsymbol{u}) =&amp; \Omega_{n\times n} = \left(
        0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
        \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
        0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
-       \end{array}\right)\\
-\text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y})\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} =&amp; \boldsymbol{HH^{-1}},\\
-\text{Then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u}
+       \end{array}\right),\\
+\text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u},
+\boldsymbol{H^{-1}u} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{u})=&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
 \end{align}\]</span></p>
 <div class="fragment">
-<p>In this case</p>
-<p><span class="math display">\[\begin{align}
-\boldsymbol{H^{-1}u} =&amp; \boldsymbol{H^{-1}(H^{-1})'}var(\boldsymbol{u})\\
-                     =&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I}.\\
-var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}
-\end{align}\]</span></p>
 <ul>
 <li class="fragment">If there’s no heteroscedasticity, <span class="math inline">\(\boldsymbol{\Omega} = \sigma\boldsymbol{I}.\)</span></li>
 <li class="fragment">If there is heteroscedasticity and <span class="math inline">\(\boldsymbol{\Omega}\)</span> is known, then WLS (a special type of GLS).</li>
 <li class="fragment">If <span class="math inline">\(\boldsymbol{\Omega}\)</span> is unknown, run <span class="math inline">\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{u}\)</span> to estimate <span class="math inline">\(\boldsymbol{\Omega}\)</span> with <span class="math inline">\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat u\hat u'}\)</span></li>
 </ul>
-<p>–</p>
-<p>.center[NB: This method does not get SE, and also .red[biased] for small N.]</p>
+<div class="callout callout-warning callout-captioned callout-style-default">
+<div class="callout-body">
+<div class="callout-caption">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>NB: This method does not get SE, and also [biased].red for small N.</p>
+</div>
+</div>
+</div>
 </div>
 </section>
 <section id="sandwich-matrix" class="slide level2">
