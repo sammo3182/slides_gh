@@ -1,0 +1,268 @@
+---
+title: "Identity Politics in Chinese Courts"
+subtitle: "A Political-Psychological Explanation"
+date: "2022-12-03"
+date-format: iso
+
+knitr: 
+    opts_chunk: 
+      echo: true
+
+bibliography: p_identityAssessor.bib
+
+author: 
+  - Yue Hu
+  - Yi Shu
+  - Xiaohong Yu
+institute: 
+  - Tsinghua University
+  - Tsinghua University
+  - Tsinghua University
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    
+    show-slide-number: speaker # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  icons,
+  tidyverse, 
+  ggalt, 
+  drhutools
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+## TL;DR
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Object
+  - Identity influence in judicial politics
+- Theory: Trigger + amplifier effect
+- Design: Big data + econometrics
+- Finding
+  - Significant and [specific]{.red} triggered
+  - Amplifier effect works but [restrictively]{.red}
+:::
+
+::: {.column width="50%"}
+- Conclusion
+  - *Effect*: Politics influences judicial decisions
+    - [Not only]{.red} in a common-law society
+    - [Not only]{.red} through judges
+    - [Not only]{.red} based on essentialist identities
+  - *Mechanism*: Identity influences are [conditional]{.red}
+  - *Empirics*: Identity politics in [Chinese]{.red} courts
+:::
+
+::::
+
+## Research Puzzle
+
+*Literature shows*
+
+- Essentialist identities (gender, race) matter
+    - Social movements [@Bernstein2005]
+    - Representative bureaucracy [@Li2020;@PetersArnesen2017;@WilkinsKeiser2006]
+- Identity in judicial process
+    - Judge[@SteffensmeierBritt2001;@CohenYang2019] & jury[@MaederEtAl2018;@HoekstraStreet2021] 
+    - Gender[@AshenfelterEtAl1995] & race [@AnwarEtAl2012]
+    - Ideology[@SegalSpaeth2002;@EpsteinEtAl2007]
+
+## {auto-animate=true}
+
+*Literature doesn't answer*
+
+:::{.r-hstack}
+![](images/multiIdentities.jpg){fig-align="center" .fragment height=300}
+![](images/identityWhere.png){fig-align="center" .fragment height=300}
+:::
+
+:::{.notes}
+Matter of multi-identity
+
+- People have multiple identities
+- Only gender, race, and ideology matter?
+
+When and how beyond where (choose identity according to occasions)
+
+- when does the identity work
+- How: behave according to what and how to interact with the environment (court panel, etc.)
+
+:::
+
+:::{.fragment style="text-align:center"}
+![](images/assessor.jpg){.r-stretch}
+:::
+
+## Context: Lay Assessor System {auto-animate=true}
+
+![](images/assessor.jpg){fig-align="center" height=300}
+
+- A mixed tribunal that resembles the German model
+- People's assessors
+  - Local courts decide whether and how many in the panel
+  - Randomly selected and assigned
+  - Same power as the judges to determine the decision
+- Academic debates
+
+:::{.notes}
+He, among others, conclude that lay participation in China is subject both to the superior legal knowledge of professional judges and the ultimate control of the regime over judges
+
+Wang and Yu (forthcoming) found that lay assessors systematically impacted case outcomes.
+:::
+
+## Context: Cadres and Representatives in Administrative Litigation (AL)
+
+- AL: "Frail weapon" [@Finder1989;@OBrienLi2004]
+- Leading cadres & representatives
+    - Cadres: Chief and deputies above township level
+    - Representatives: People's Congresses (PCs) and the People’s Political Consultative Conferences (PPCCs) 
+    - [Who do they stay with, citizens or mandarins?]{.red} 
+
+:::{.notes}
+throwing an egg against a stone, more about 体制因素 & judge
+
+副科长及以上
+:::
+
+![](images/al.jpg){fig-align="center" height=300}
+
+
+## Theoretical Hypotheses
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+![](images/trigger.jpg){fig-align="center" height=400}
+
+H<sub>1</sub>: Assessors' official identity, rather than others, are more likely to associate with a court decision [in favor of]{.red} the government.
+:::
+
+::: {.column .fragment width="50%"}
+![](images/amplifier.jpg){fig-align="center" height=400}
+
+H<sub>2</sub>: The official assessors’ influence on the court decisions is larger when they are [outnumbered]{.red}.
+:::
+
+::::
+
+
+## Research Design
+
+- Data sources
+  - People's assessor: China Judicial Process Information Online
+    - 69,322 assessors in court cases from 2017-02 to 2022-03
+  - Judicial decisions
+    - Chinese Judicial Political Dataset (CLJD)
+      - 57,688 AL cases
+
+:::{.notes}
+China Judicial Process Information Online: 中国审判流程信息公开网
+:::
+
+- Model
+  - OV: Winning odds (0 fail, 1 win)
+  - EV: Including cadres(representatives)/assessor ratio/panel ratio
+  - Adjust: 
+    - Assessor personal identity (gender and occupation types)
+    - Court property (assessor outnumbered, intermediate court)
+
+## Data Collection
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](images/assessor.png){fig-align="center" height=400}
+
+- Name-court matching
+  - 7,275 assessors
+  - 92,569 assessor-case dyads.
+:::
+
+::: {.column .fragment width="50%"}
+![](images/judicialDecision.png){fig-align="center" height=400}
+
+- [Long Short-Term Memory Convolutional Neural Network algorithm in TensorFlow and Viterbi framework ]{.small}
+- Precision rate: 100%, Recall rate: 99.71%, F1: 99.86%. 
+
+:::{.notes}
+![](images/Precisionrecall.png)
+:::
+:::
+
+::::
+
+## Empirical Findings
+
+![](images/trigger.png){fig-align="center" height=600}
+
+## Placebo Test
+
+- 1,945,362 criminal cases
+
+![](images/placebo.png){.fragment fig-align="center" height=550}
+
+## Amplifier Effect
+
+![](images/amplifier.png){fig-align="center" height=600}
+
+
+## Conclusions
+
+Lit hasn't answered:
+
+- Multi-identity
+  - Identity effect is [more than]{.red} gender, race, and ideology
+- When and how beyond where:
+  - [Trigger]{.red}
+  - Amplifier
+- Judicial Politics in Non-Common Law System
+  - Identity effect in [Chinese]{.red} courtrooms
+  - Politics in courts through identity
+
+
+## {background="#43464B"}
+
+:::{style="text-align: center; margin-top: 5em"}  
+[Thank you!]{.Large}
+
+:::{style="margin-top: 2em"}
+[`r feather_icons("mail")`&nbsp; xyu@tsinghua.edu.cn](mailto:xyu@tsinghua.edu.cn) 
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+:::
+:::
+
+## Reference
+
