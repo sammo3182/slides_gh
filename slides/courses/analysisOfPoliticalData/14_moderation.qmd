@@ -35,8 +35,7 @@ library(pacman)
 
 p_load(
   tidyverse,
-  drhutools,
-  dotwhisker
+  drhutools
 ) 
 
 
@@ -59,7 +58,7 @@ theme_update(
 ## Overview
 
 
-**Moderation in Methodology**
+**Moderation in Theory**
 
 1. Specialty
 1. Wrong ways
@@ -71,47 +70,41 @@ theme_update(
 1. Data
 1. Interpretation
 
----
-
-class: inverse, bottom
 
 # Moderation in Theory
 
----
-
 ## Moderation
 
-Conditional effect: the .red[contribution] of X on the variance of Y varies when Z has .red[different] values, a.k.a., a nonlinear effect.
+Conditional effect: the [contribution]{.red} of X on the variance of Y varies when Z has [different]{.red} values, a.k.a., a nonlinear effect &rarr; one unit change of X does [not]{.red} lead to &beta; unit change in Y..\
 
---
+. . .
 
-Formally,
-
-.center[Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.]
+$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3XZ + u.$$
 
 Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
 
---
+. . .
 
-Nonlinear &rarr; one unit change of X does .red[not] lead to &beta; unit change in Y.    
-.center[.large[&dArr;]]
-
---
-
-.center[
+:::{style="text-align:center"}
 H<sub>0</sub>: If effects of X depends on Z (&beta;<sub>3</sub> = 0).
+:::
 
+:::{.fragment style="text-align:center"}
+:::{.fragment .grow}
 H<sub>0</sub>: If X has an effect when Z varies (&beta;<sub>1</sub> + &beta;<sub>3</sub>Z = 0). 
-]
+:::
+:::
 
-???
-
+:::{.notes}
 The second is more useful, since X is the focus/prerequesite
+:::
 
+## Two Versions 
 
----
+:::: {.columns}
 
-## The Simplest Version: Dichotomous Z
+::: {.column width="50%"}
+### Dichotomous Z
 
 Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
 
@@ -120,16 +113,16 @@ Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then
 \Leftrightarrow \hat{\tilde{Y}} =& \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1
 \end{align}
 
---
-
 * When Z = 0, $H_0: \tilde\beta_1 = 0;$
 * When Z = 1, $H_0: \tilde\beta_3 = 0.$
 
-Hint: This case applied to DID methodologically
+:::{.notes}
+This case applied to DID methodologically
+:::
+:::
 
----
-
-## General Version: Continuous/Ordinal Z
+::: {.column .fragment width="50%"}
+### Continuous/Ordinal Z
 
 Effect of X: 
 
@@ -139,43 +132,41 @@ Statistics:
 
 $$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4}$$
 
----
+:::
 
-## Interpreting It Wrong?
+::::
 
-.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
 
-.bg-black.golden.ba.shadow-5.ph4.mt3.center[
-.large[☠️] **Only &beta;<sub>1</sub>**    
-A.k.a., "Controlling the moderator"
-]
+# How Things Get Wrong?
 
---
+## Not Including the Interaction
 
-Let Z increases by c, 
+> [☠️]{.large} "I don't care about the interaction, and so just control the moderator." 
 
 \begin{align}
-Y =& \beta_0' + \color{red}{\beta_1'}X + \beta_2'(Z + c) + \beta_3'X(Z + c) + u,\\
-  =& (\beta_0' + \beta_2'c) + \color{red}{(\beta_1' + \beta_3'c)}X + \beta_2'Z + \beta_3'XZ + u.
+Y =& \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + u,\\
+  =& \beta_0 + (\beta_1 + \beta_3Z) X + \beta_2Z + u.\\
+\text{Let Z increases by c, } Y =& \beta_0 + [\beta_1 + \beta_3(Z + c)] X + \beta_2(Z + c) + u,\\
+  =& (\beta_0 + \beta_2c) + \color{red}{(\beta_1 + \beta_3c + \beta_3Z)}X + \beta_2Z + u.
 \end{align}
 
---
+:::{.fragment}
+:::{.callout-warning}
+## Consequence
 
-The coefficient of X .red[changes] by changing Z.
+The coefficient of X [changes]{.red} by changing Z.
+:::
+:::
 
 ---
 
-.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
+## No &beta;<sub>1</sub>
 
-.bg-black.golden.ba.shadow-5.ph4.mt3.center[
-.large[☠️☠️] **No &beta;<sub>1</sub>**    
-A.k.a., "I just care about the interaction"
-]
-
+> [☠️☠️]{.large} "I just care about the interaction."
 
 $$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',$$
 
---
+. . .
 
 which means $u' = \beta_1X + u$. Then 
 
@@ -184,91 +175,96 @@ E(u'|X) \neq& 0,\\
 E[u'(X,Z)] \neq& 0.
 \end{align}
 
-Unless &beta;<sub>1</sub>X or XZ is zero.
+...unless &beta;<sub>1</sub>X or XZ is zero &rarr; $beta;<sub>3</sub> is biased and meaningless.
 
-(What does this problem called?)
+. . .
 
-???
+(What is this problem called?)
 
+:::{.notes}
 Omitted variable bias; endogeneity
+:::
 
----
+## Only &beta;<sub>3</sub>
 
-.center[*Y = &beta;<sub>0</sub> + &beta;<sub>1</sub>X + &beta;<sub>2</sub>Z + &beta;<sub>3</sub>X&times; Z + u.*]
-
-.bg-black.golden.ba.shadow-5.ph4.mt3.center[
-.large[☠️☠️☠️] **Only &beta;<sub>3</sub>**    
-A.k.a., "The significance of the interaction term"
-]
+> [☠️☠️☠️]{.large} "The significance of the interaction term"
 
 When testing the X's effect, $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$
 
+. . .
+
 The standard error:
 
-$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})}.$$
-
-It's possible for the contribution of X on Y to be statistically .red[significant] for certain values of Z, even if all of the model parameters are .red[insignificant]. One cannot infer whether X has a meaningful conditional effect on Y .red[simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>].
-
-???
-
- Brambor, Clark and Golder 2006
+$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} > SE_{\beta_3}$$
 
 
----
+- It's possible for the contribution of X on Y to be statistically [significant]{.red} for certain values of Z, *even if all of the model parameters are [insignificant]{.red}*. 
 
-More Risky Points...
+:::{.fragment}
+:::{.callout-important}
+One cannot infer whether X has a meaningful conditional effect on Y [simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>]{.red}.
+:::
+:::
 
-* Point estimation may not be reliable
-    + Link function (e.g., logit and probit) is involved
-    
-???
+:::{.notes}
+Brambor, Clark and Golder 2006
+:::
 
+* Point estimation may not be reliable, if link function (e.g., logit and probit) is involved
+
+:::{.notes}
 Berry, DeMeritt, and Esarey (2016)
+:::
 
---
+* Substantive significance of the [conditional effect]{.red} highly relates to the distribution of the [conditioning variable]{.red} (viz., Z in the above example). 
 
-* Substantive significance of the .red[conditional effect] highly relates to the distribution of the .red[conditioning variable] (viz., Z in the above example). 
-
-???
-
+:::{.notes}
 Berry, Golder, and Milton (2012)
+:::
 
----
+## How to Interpret Right
 
-## Recommendation
+"Sins":
 
-1. Plotting the .red[marginal effects].
-1. Showing the confidence intervals
-1. Presenting the frequency distribution of Z
-    + esp., when the effect trend goes across the zero point.
+1. Not including XZ [☠️]{.large} 
+1. Not including X [☠️☠️]{.large}
+1. The significance of the interaction term [☠️☠️☠️]{.large} 
 
---
+- Solution:
+    - Plotting the [marginal effects]{.red}.
+    - Showing the confidence intervals
+    - Presenting the frequency distribution of Z, esp., when the effect trend goes across the zero point.
 
-NB:  Marginal effects aren't a panacea
+:::{.fragment}
+:::{.callout-note}
+Marginal effects may not be enough
 
-The estimation of the regular marginal effects might cause a "multiple comparison problem": 
-+ Leading to over- or under-confidence of the confidential intervals.
+- The estimation of the regular marginal effects might cause a "multiple comparison problem"
+    - Leading to [over- or under-confidence]{.red} of the confidential intervals.
+    - Adjust the CIs with a critical t-statistics by Benjamini 1995
+:::
+:::
 
---
-
-&rArr; Adjust the CIs with a critical t-statistics by Benjamini 1995
-
-???
-
+:::{.notes}
 Esarey and Sumner (2017)
+:::
 
----
 
 ## Beyond Moderation Effect of Interest
 
-As a "control" (Beiser-McGrath & Beiser-McGrath 2020)
+As a "control":
 
-Pr(Civil War) ~ &beta;<sub>0</sub> + &beta;<sub>1</sub>Inequality + &beta;<sub>2</sub>Regime Type + &beta;<sub>3</sub>Inequality &times; Regime Type + &beta;<sub>4</sub>GDP + &beta;<sub>5</sub>.red[Inequality &times; GDP] + u.
+\begin{align}
+Pr(Civil\ War) ~& \beta_0 + \beta_1Inequality + \beta_2Regime\ Type + \beta_3 Inequality \times Regime + \\
+& \beta_4GDP + \beta_5Inequality \times GDP + u.
+\end{align}(Beiser-McGrath & Beiser-McGrath 2020).
 
-What happened if .red[Inequality &times; GDP] is not in the model?
 
-???
+. . .
 
+[What happened if [Inequality &times; GDP]{.red} is not in the model?]{.r-fit-text}
+
+:::{.notes}
 Omitted variable
 
 Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.
@@ -284,109 +280,112 @@ Unknown or cross:
 + Kernel Regularized Least Squares (KRLS)
 
 Controversial: Lasso avoided over fitting by setting "useless" variables to zero. So did BART and KRLS. So all of them produced biased results.
+:::
 
 
----
-
-class: inverse, bottom
 
 # Interaction in Practice
 
----
 
-## Meritocracy vs. Inequality
+## Context: Meritocracy and Inequality
 
-.pull-left[
-.center[
-<img src="images/mod_zootopia.gif" height = 300 />
+:::: {.columns}
 
+::: {.column width="30%"}
+:::{style="text-align:center"}
 Low-income &rarr; Meritocracy   
-.red[&uarr;]    
+[&uarr;]{.red}    
 Income inequality 
-]
-]
+:::
 
---
+![](images/mod_zootopia.gif){.fragment fig-align="center"}
 
-.pull-right[
-Conflict theory vs. relative power theory
-
-
-* Poor vs. Rich
-* Social Structure: Self-reproducing vs. self-negating
-]
-
-???
-
+:::{.notes}
 Self-reproducing: relative power theory
 Self-negating: conflict theory
+:::
+
+:::
+
+::: {.column .fragment width="35%"}
+*Self-reproducing*
+
+![](images/mod_hulk.gif){width=350}
+
+H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [less]{.red}.
+
+:::
+
+::: {.column .fragment width="35%"}
+*Self-negating*
 
 
----
+![](images/mod_hypnosis.gif){width=350}
 
-## Conflict Theory
+H<sub>1</sub>: Poor people living with high inequality believe in meritocracy [more]{.red}.
+:::
 
-.center[<img src="images/mod_hulk.gif" height = 400 />]
+::::
 
-H<sub>0</sub>: Poor people living with high inequality believe in meritocracy .red[less].
-
----
-
-## Relative Power Theory
-
-.center[<img src="images/mod_hypnosis.gif" height = 400 />]
-
-H<sub>1</sub>: Poor people living with high inequality believe in meritocracy .red[more].
-
----
-
-## Model and Data
+## Examination
 
 \begin{align}
 Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
                       &+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
 \end{align}
 
-Empirical: [Pew survey](https://www.pewresearch.org/)
+Data: [Pew survey](https://www.pewresearch.org/)
+
+### Answers
 
 
----
+:::: {.columns}
 
-.pull-left[
-## Answer from AJPS
+::: {.column .fragment width="50%"}
+Newman, Johnston, & Lown(2015, *AJPS*)
 
-.center[<img src="images/mod_NJL_plot.png" height = 500 />]
-]
+![](images/mod_NJL_plot.png){fig-align="center" height=350}
 
-???
-
+:::{.notes}
 Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+Solt, Hu, Hundson, Song, & Yu (2017, *JOP*)
+
+![](images/mod_interaction1.jpg){height=350 fig-align="center"}
+:::
+
+::::
 
 
---
 
-.pull-right[
-## Query of the AJPS Answer
+## Suspicious Data
 
-.center[<img src="images/mod_interaction1.jpg" height = 500 />]
-]
+:::: {.columns}
 
+::: {.column .fragment width="35%"}
+![](images/mod_three_measures.jpg){fig-align="center" height=400}
+:::
 
----
+::: {.column .fragment width="35%"}
 
-## When Digging in More
+W. better data
 
-.center[<img src="images/mod_three_measures.jpg" height = 500 />]
+![](images/mod_SH_plot2.png){fig-align="center" height=400}
+:::
 
----
+::: {.column .fragment width="30%"}
 
-## Moderation with Better Data
+Marginal effects
 
-.pull-left[<img src="images/mod_SH_plot2.png" height = 500 />]
+![](images/spe_interaction2.jpg){fig-align="center" height=400}
+:::
 
---
+::::
 
-.pull-right[<img src="images/spe_interaction2.jpg" height = 500 />]
 
 
 ## Take-home point
