@@ -1,68 +1,379 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
-  <head>
-    <title>Missing Data and Generalized Linear Model</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Yue Hu" />
-    <script src="15_logitMissing_files/header-attrs-2.11/header-attrs.js"></script>
-    <link href="15_logitMissing_files/remark-css-0.0.1/default.css" rel="stylesheet" />
-    <link href="15_logitMissing_files/tile-view-0.2.6/tile-view.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/tile-view-0.2.6/tile-view.js"></script>
-    <link href="15_logitMissing_files/tachyons-4.12.0/tachyons.min.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/xaringanExtra_fit-screen-0.2.6/fit-screen.js"></script>
-    <link href="15_logitMissing_files/panelset-0.2.6/panelset.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/panelset-0.2.6/panelset.js"></script>
-    <script src="15_logitMissing_files/js-cookie-3.0.0/js.cookie.js"></script>
-    <script src="15_logitMissing_files/peerjs-1.3.1/peerjs.min.js"></script>
-    <script src="15_logitMissing_files/tiny.toast-1.0.0/toast.min.js"></script>
-    <link href="15_logitMissing_files/xaringanExtra-broadcast-0.2.6/broadcast.css" rel="stylesheet" />
-    <script src="15_logitMissing_files/xaringanExtra-broadcast-0.2.6/broadcast.js"></script>
-    <link href="15_logitMissing_files/xaringanExtra-extra-styles-0.2.6/xaringanExtra-extra-styles.css" rel="stylesheet" />
-    <link rel="stylesheet" href="zh-CN_custom.css" type="text/css" />
-    <link rel="stylesheet" href="style_ui.css" type="text/css" />
-  </head>
-  <body>
-    <textarea id="source">
-class: center, middle, inverse, title-slide
+<html lang="en"><head>
+<script src="15_logitMissing_files/libs/clipboard/clipboard.min.js"></script>
+<script src="15_logitMissing_files/libs/quarto-html/tabby.min.js"></script>
+<script src="15_logitMissing_files/libs/quarto-html/popper.min.js"></script>
+<script src="15_logitMissing_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="15_logitMissing_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="15_logitMissing_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="15_logitMissing_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="15_logitMissing_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="15_logitMissing_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.2.269">
 
-# Missing Data and Generalized Linear Model
-## Large N &amp; Leeuwenhoek (70700173)
-### Yue Hu
+  <meta name="author" content="Yue Hu">
+  <title>quarto-input16359148</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="15_logitMissing_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="15_logitMissing_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <link rel="stylesheet" href="15_logitMissing_files/libs/revealjs/dist/theme/quarto.css" id="theme">
+  <link rel="stylesheet" href="style_basic.css">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="15_logitMissing_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
 
----
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
 
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
 
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
 
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
 
-## Overview
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
 
-### Missing Data
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
 
-+ What's missingness
-+ Where does missingness come from
-+ Dealing with missingness
+  .callout.callout-captioned.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
 
+  .callout:not(.callout-captioned) .callout-body {
+      display: flex;
+  }
 
-### Generalized Linear Model
+  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
 
-From OLS to 
-+ Link function
-+ Model fitness
+  .callout.callout-captioned .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
 
----
+  .callout.callout-captioned .callout-caption  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-captioned.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
 
-class: inverse, bottom
+  .callout.callout-captioned.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
 
-# Missing Data
+  .callout.callout-style-simple div.callout-caption {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
 
----
+  .callout.callout-style-default  div.callout-caption {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
 
-## Modeling Missing Data
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
 
-Let's define  **X**, **Y**, and m&lt;sub&gt;ij&lt;/sub&gt; = 1 if X&lt;sub&gt;i&lt;/sub&gt; is missing.
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
 
-`\begin{align}
-\boldsymbol{D} =&amp; 
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-caption {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-captioned .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-captioned .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-captioned) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-caption {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-caption {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-caption {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-caption {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-caption {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title"><p>Missing Data<br>
+and<br>
+Generalized Linear Model</p></h1>
+  <p class="subtitle">Large N &amp; Leeuwenhoek (70700173)</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="overview" class="slide level2">
+<h2>Overview</h2>
+<h3 id="missing-data">Missing Data</h3>
+<ul>
+<li class="fragment">What’s missingness</li>
+<li class="fragment">Type of missingness</li>
+<li class="fragment">Dealing with missingness</li>
+</ul>
+<h3 id="generalized-linear-model">Generalized Linear Model</h3>
+<ul>
+<li class="fragment">From OLS to
+<ul>
+<li class="fragment">Link function</li>
+<li class="fragment">Model fitness</li>
+</ul></li>
+</ul>
+</section>
+<section>
+<section id="missing-data-1" class="title-slide slide level1 center">
+<h1>Missing Data</h1>
+
+</section>
+<section id="modeling-missing-data" class="slide level2">
+<h2>Modeling Missing Data</h2>
+<p>Let’s define <strong>X</strong>, <strong>Y</strong>, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.</p>
+<div class="fragment">
+<p><span class="math display">\[\begin{align}
+\boldsymbol{D} =&amp;
 \left(\begin{array}{cc}
 X_1 &amp; Y_1\\
 X_2 &amp; Y_2\\
@@ -74,7 +385,7 @@ X_1 &amp; Y_1\\
     &amp; Y_2\\
 X_3 &amp; Y_3\\
     &amp; Y_4\end{array}\right);\\
-\boldsymbol{M} =&amp; 
+\boldsymbol{M} =&amp;
 \left(\begin{array}{cc}
 0 &amp; 0\\
 1 &amp; 0\\
@@ -82,309 +393,373 @@ X_3 &amp; Y_3\\
 1 &amp; 0\end{array}\right);
 \boldsymbol{D^M} =
 \left(\begin{array}{cc}
- &amp; \\
+&amp; \\
 X_2 &amp; \\
- &amp; \\
+&amp; \\
 X_4 &amp; \end{array}\right)
-\end{align}`
-
----
-
-class: center, middle
-
-## Where D&lt;sub&gt;M&lt;/sub&gt; Comes From: Type of Missingness
-
-**Missing completely at random (MCAR)**
-
-P(M|D) = P(M)
-
---
-
-.pull-left[
-**Missing at random (MAR)**
-
-P(M|D) = P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
-]
-
---
-
-.pull-right[
-**Non-ignorable (NI/MNAR)**
-
-P(M|D) &amp;ne; P(M|D&lt;sup&gt;Observed&lt;/sup&gt;)
-]
-
---
-
-.red[Consequence of Missing]
-
-|      | Summary Stats | Regression          | SE vs. complete |
-|------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | *Inefficient*     |
-| MAR  | *Biased*        | Unbiased/consistent | *Inefficient*     |
-| NI   | *Biased*        | *Biased*              | --     |
-
-???
-
-Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
-Biasedness in NI is because of the censor with an X within the model
-
----
-
-## Dealing with Missing
-
-**Ignore it**: Listwise deletion
-
-???
-
-Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &amp;ne; 0, so often pairwise deletion
-
---
-
-**Fill it manually**: hot deck method 
-
-???
-
-Using neayby approximate values, e.g., mean, the right last-observed observation, The term "hot deck" dates back to the storage of data on punched cards, and indicates that the information donors come from the same dataset as the recipients. The stack of cards was "hot" because it was currently being processed.
-
---
-
-**Imputation**
-
-1. Interpolation
-1. Extrapolation
-1. Regression imputation: `\(M = \boldsymbol{X\gamma} + u\)`
-    + For multidimentional variable use joint distribution and iterative chain.
-    
-???
-
-&lt;img src="images/interpolation.png" height = 200 /&gt;
-&lt;img src="images/extrapolation.png" height = 200 /&gt;
-
-    
----
-
-## Better Way: Multiple Imputations (MI)
-
-1. Take multiple guess given estimated distribution (Expectation-Maximization)
-
---
-
-2. Result `\(\hat\beta(1), \hat\beta(2), \hat\beta(3)\)`,... and their variance.
-
---
-
-3. Combine: Rubin's formula
-
-`\begin{align}
+\end{align}\]</span></p>
+</div>
+</section>
+<section id="type-of-missingness" class="slide level2">
+<h2>Type of Missingness</h2>
+<div class="fragment" style="text-align:center">
+<p><strong>Missing completely at random (MCAR)</strong></p>
+<p>P(M|D) = P(M)</p>
+</div>
+<div class="columns">
+<div class="column fragment" style="text-align:center">
+<p><strong>Missing at random (MAR)</strong></p>
+<p>P(M|D) = P(M|D<sup>Observed</sup>)</p>
+</div><div class="column fragment" style="text-align:center">
+<p><strong>Non-ignorable (NI/MNAR)</strong></p>
+<p>P(M|D) ≠ P(M|D<sup>Observed</sup>)</p>
+</div>
+</div>
+<div class="fragment" style="text-align:center; margin-top: 2em">
+<p><span class="red">Consequence of Missing</span></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Summary Stats</th>
+<th>Regression</th>
+<th>SE vs.&nbsp;complete</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MCAR</td>
+<td>Unbiased</td>
+<td>Unbiased/consistent</td>
+<td><em>Inefficient</em></td>
+</tr>
+<tr class="even">
+<td>MAR</td>
+<td><em>Biased</em></td>
+<td>Unbiased/consistent</td>
+<td><em>Inefficient</em></td>
+</tr>
+<tr class="odd">
+<td>NI</td>
+<td><em>Biased</em></td>
+<td><em>Biased</em></td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+</div>
+<aside class="notes">
+<p>Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;</p>
+<p>Biasedness in NI is because of the censor with an X within the model</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="dealing-with-missing" class="slide level2">
+<h2>Dealing with Missing</h2>
+<p><strong>Ignore it</strong>: Listwise deletion</p>
+<aside class="notes">
+<p>Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) ≠ 0, so often pairwise deletion</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p><strong>Fill it manually</strong>: hot deck method</p>
+<aside class="notes">
+<p>Using neayby approximate values, e.g., mean, the right last-observed observation, The term “hot deck” dates back to the storage of data on punched cards, and indicates that the information donors come from the same dataset as the recipients. The stack of cards was “hot” because it was currently being processed.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div class="fragment">
+<p><strong>Imputation</strong></p>
+<ol type="1">
+<li class="fragment">Interpolation</li>
+<li class="fragment">Extrapolation</li>
+<li class="fragment">Regression imputation: <span class="math inline">\(M = \boldsymbol{X\gamma} + u\)</span>
+<ul>
+<li class="fragment">For multidimentional variable use joint distribution and iterative chain.</li>
+</ul></li>
+</ol>
+<aside class="notes">
+<p><img src="images/interpolation.png" height="200"> <img src="images/extrapolation.png" height="200"></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment r-fit-text">
+<p>What’s the problem?</p>
+</div>
+</div>
+</section>
+<section id="better-way-multiple-imputations-mi" class="slide level2">
+<h2>Better Way: Multiple Imputations (MI)</h2>
+<ol type="1">
+<li class="fragment">Take multiple guess given estimated distribution (Expectation-Maximization)</li>
+<li class="fragment">Result <span class="math inline">\(\hat\beta(1), \hat\beta(2), \hat\beta(3)\)</span>,… and their variance.</li>
+<li class="fragment">Combine: Rubin’s formula</li>
+</ol>
+<div class="fragment">
+<p><span class="math display">\[\begin{align}
 \hat\beta =&amp; \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
 var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
-\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2 
-\end{align}`
+\text{where}\ W =&amp; \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2
+\end{align}\]</span></p>
+</div>
+<aside class="notes">
+<p><span class="math inline">\(\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}\)</span> variance within each complete dataset;</p>
+<p><span class="math inline">\(\frac{m + 1}{m}W\)</span> variance across datasets.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p><em>Advantages</em></p>
+<p>Imputations are <span class="red">separated</span> from the analysis ⇒</p>
+<p>Misspecification of the model does not affect MI.</p>
+</div><div class="column fragment" style="width:50%;">
+<p><em>Concern</em></p>
+<ol type="1">
+<li class="fragment">Not exactly replicable</li>
+<li class="fragment">Rubin’s formula does not always work
+<ul>
+<li class="fragment">Esp. for complex models.</li>
+</ul></li>
+<li class="fragment">Time consuming and times to impute.
+<ul>
+<li class="fragment">Rule of thumb: 10 (…)</li>
+</ul></li>
+</ol>
+</div>
+</div>
+</section>
+<section id="when-mi-isnt-a-good-idea" class="slide level2">
+<h2>When MI Isn’t a Good Idea</h2>
+<ol type="1">
+<li class="fragment">Model is <span class="red">conditional on X</span> + <span class="red">correctly specified</span>: Listwise would not affect the analysis.</li>
+<li class="fragment"><span class="red">Large</span> data: Listwise is <a href="https://statisticalhorizons.com/listwise-deletion-its-not-evil">trivial</a>.</li>
+<li class="fragment">Missingness in X is <span class="red">not a function of Y</span>, and there is no unobserved omitted values that affects Y.</li>
+<li class="fragment">There is <span class="red">NI</span> missingness in X: EMs incorrect</li>
+<li class="fragment">The model is <span class="red">nonlinear</span> and complicated.</li>
+<li class="fragment"><span class="red">Extreme distributional divergence</span> in missing data from multivariate normal.</li>
+</ol>
+<aside class="notes">
+<p>5% is the rule of thumb, Jakobsen, Janus Christian, Christian Gluud, Jørn Wetterslev, and Per Winkel. 2017. “When and How Should Multiple Imputation Be Used for Handling Missing Data in Randomised Clinical Trials—A Practical Guide with Flowcharts.” BMC Medical Research Methodology 17(1): 162.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p>Solution:</p>
+<p><strong>Likelihood approach</strong></p>
+<p>Estimate distribution and integrate over it (the results are identical no matter how many times doing it).</p>
+<p>e.g., SEM</p>
+</div>
+</section>
+<section id="non-ignorable-missing" class="slide level2">
+<h2>Non-Ignorable Missing</h2>
+<p>When we know what happened:</p>
+<div class="fragment">
+<p>Censored data:</p>
+<p>Have <span class="red">some</span> information about values of missing data, e.g., all data &lt;0 are coded as 0.</p>
+</div>
+<ul>
+<li class="fragment">Leading to heteroscedasticity and nonnormal error</li>
+<li class="fragment">Solution: For Y missing, two-stage process, 2SLS (Heckman model).</li>
+</ul>
+<aside class="notes">
+<p>2SLS: Two-Stage least squares</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<div class="fragment">
+<p>Truncated data:</p>
+<p>Have <span class="red">no</span> information about values of missing data, e.g., the data are only observable when it &lt; 100,000</p>
+</div>
+<ul>
+<li class="fragment"><code>tobit</code>, use the right distribution—a combination of P(Y<sub>i</sub><sup>*</sup> &lt; 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).</li>
+</ul>
+<aside class="notes">
+<p><img src="images/censorTruncated.png" height="200"></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section></section>
+<section>
+<section id="generalized-linear-regression" class="title-slide slide level1 center">
+<h1>Generalized Linear Regression</h1>
 
-???
-
-`\(\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}\)` variance within each complete dataset;
-
-`\(\frac{m + 1}{m}W\)` variance across datasets.
-
----
-
-
-*Advantages*
-
-Imputations are .red[separated] from the analysis &amp;rArr; misspecification of the model does not affect MI.
-
-
---
-
-
-*Concern*
-
-1. Not exactly replicable
-1. Rubin's formula does not always work
-    + Esp. for complex models.
-1. Time consuming and times to impute.
-    + Rule of thumb: 10 (...)
-
-
----
-
-## When MI Isn't a Good Idea
-
-1. Model is .red[conditional on X] + .red[correctly specified]: Listwise would not affect the analysis.
-    
---
-
-1. .red[Large] data: Listwise is [trivial](https://statisticalhorizons.com/listwise-deletion-its-not-evil).
-
-???
-
-5% is the rule of thumb, Jakobsen, Janus Christian, Christian Gluud, Jørn Wetterslev, and Per Winkel. 2017. “When and How Should Multiple Imputation Be Used for Handling Missing Data in Randomised Clinical Trials---A Practical Guide with Flowcharts.” BMC Medical Research Methodology 17(1): 162.
-
-    
---
-
-1. Missingness in X is .red[not a function of Y], and there is no unobserved omitted values that affects Y.
-
---
-
-1. There is .red[NI] missingness in X: EMs incorrect
-
---
-
-1. The model is .red[nonlinear] and complicated.
-
---
-
-1. .red[Extreme distributional divergence] in missing data from multivariate normal.
-
----
-
-**Likelihood approach**
-
-Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
-
-e.g., SEM
-
----
-
-## Non-Ignorable Missing
-
-When we know what happened:
-
-Censored data: 
-
-Have .red[some] information about values of missing data, e.g., all data &lt;0 are
-coded as 0.
-
-+ Leading to heteroscedasticity and nonnormal error
-+ Solution: For Y missing, two-stage process, 2SLS (Heckman model).
-
-???
-
-2SLS: Two-Stage least squares
-
---
-
-Truncated data:
-
-Have .red[no] information about values of missing data, e.g., the data are only
-observable when it &lt; 100,000
-
-+ `tobit`, use the right distribution---a combination of P(Y&lt;sub&gt;i&lt;/sub&gt;&lt;sup&gt;*&lt;/sup&gt; &lt; 0|X) and f(Y&lt;sub&gt;i&lt;/sub&gt;|X&lt;sub&gt;i&lt;/sub&gt;).
-
-???
-
-&lt;img src="images/censorTruncated.png" height = 200 /&gt;
-
----
-
-class: inverse, bottom
-
-# Generalized Linear Regression
-
----
-
-## When to Use GLR
-
-+ .red[Generalized] linear regression is not .red[general] linear regression
-+ Using when the very first assumption of OLS is violated.
-+ Basic logic: Transforming non-continuous to continuous
-
-???
-
-General linear regression is multivariate regression
-
---
-
-Most common situation: Noncontinuous Y
-
----
-
-## Traditional Approaches
-
-OLS?
-
-1. Unrealistic and nonsensitive predicted outcomes
-1. Heteroscedasticity
-
---
-
-Linear Probability Model (LPM)? 
-
-`\begin{align}
+</section>
+<section id="terminology" class="slide level2">
+<h2>Terminology</h2>
+<ul>
+<li class="fragment"><span class="red">Generalized</span> linear regression is not <span class="red">general</span> linear regression</li>
+<li class="fragment">Using when the very first assumption of OLS is violated.
+<ul>
+<li class="fragment">Most common situation: Noncontinuous Y</li>
+</ul></li>
+<li class="fragment">Basic logic: Transforming non-continuous to continuous</li>
+</ul>
+<aside class="notes">
+<p>General linear regression is multivariate regression</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="approaches" class="slide level2">
+<h2>Approaches</h2>
+<ul>
+<li class="fragment">OLS
+<ol type="1">
+<li class="fragment">Unrealistic and nonsensitive predicted outcomes</li>
+<li class="fragment">Heteroscedasticity</li>
+</ol></li>
+<li class="fragment">Linear Probability Model (LPM)?</li>
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\begin{align}
 \pi_i\equiv P(Y = 1|X) =&amp; \beta_0 + \beta_1X_i\\
 var(\pi_i) =&amp; \pi(1 - \pi) \\
            =&amp; (\beta_0 +  \beta_1X_i)[1 - (\beta_0 + \beta_1X_i)]
-\end{align}`
-
-???
-
-The specification of var addresses heteroscedasticity
-
---
-
-.pull-left[
-
-*Pros*
-
-Interpreted as OLS
-+ % changes in a unit of X
-
-]
-
-.pull-right[
-
-*Cons*
-
-Not very reliable transformation
-
-]
-
-???
-
-Rule of thumb: 0.2~0.8
-
-1. When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432), 
-
-2. unless restrictions are placed on {\displaystyle \beta }\beta , the estimated coefficients can imply probabilities outside the unit interval {\displaystyle [0,1]}[0,1]. 
-
----
-
-## Superior Method: Link Functions Method
-
-Specifically, latent variable approach
-
-.center[P(Y = 1|X) = G(&amp;beta;&lt;sub&gt;0&lt;/sub&gt; + &amp;beta;&lt;sub&gt;1&lt;/sub&gt;X&lt;sub&gt;1&lt;/sub&gt; + ... + &amp;beta;&lt;sub&gt;k&lt;/sub&gt;X&lt;sub&gt;k&lt;/sub&gt;)]
-
-
-This G() is the *link* function.
-
-When G() = &amp;Lambda;(X), logit (.red[log]istic un.red[it])
-
-When G() = &amp;Phi;(X), probit (.red[pro]bability un.red[it])
-
----
-
-## Logit
-
-.red[ASSUMPTION]:
-
-The outcome of a binary variable Y&lt;sub&gt;i&lt;/sub&gt; depends on an unobserved continuous probability Y&lt;sup&gt;*&lt;/sup&gt;:
-
-`\begin{align}
+\end{align}\]</span></p>
+</div>
+<aside class="notes">
+<p>The specification of var addresses heteroscedasticity</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p><em>Pros</em></p>
+<p>Interpreted as OLS + % changes in a unit of X</p>
+</div><div class="column fragment" style="width:50%;">
+<p><em>Cons</em></p>
+<p>Not very reliable transformation</p>
+</div>
+</div>
+<aside class="notes">
+<p>Rule of thumb: 0.2~0.8</p>
+<ol type="1">
+<li><p>When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432),</p></li>
+<li><p>unless restrictions are placed on {}, the estimated coefficients can imply probabilities outside the unit interval {}[0,1].</p></li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<ul>
+<li class="fragment">Link Functions Method
+<ul>
+<li class="fragment"><span class="math display">\[P(Y = 1|X) = G(\beta_0 + \beta_1X_1 + ... + \beta_kX_k).\]</span></li>
+<li class="fragment">This G() is the <em>link</em> function.
+<ul>
+<li class="fragment">When G() = Λ(X), logit (<span class="red">log</span>istic un<span class="red">it</span>)</li>
+<li class="fragment">When G() = Φ(X), probit (<span class="red">pro</span>bability un<span class="red">it</span>)</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="link-functions" class="slide level2">
+<h2>Link Functions</h2>
+<h3 id="logit">Logit</h3>
+<p><span class="red">ASSUMPTION</span>:</p>
+<p>The outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:</p>
+<p><span class="math display">\[\begin{align}
 Y_i =&amp; \begin{cases}
 0, \text{if } Y^*\leq 0,\\
 1, \text{if } Y^*&gt; 0.\end{cases}\\
 Y^* =&amp; X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
-\end{align}`
-
----
-
-Given the PDF of a logistic distribution is `\(\Lambda(x) = \frac{e^x}{1 + e^x}\)`, 
-
-`\begin{align}
+\end{align}\]</span></p>
+<aside class="notes">
+<p>Given the PDF of a logistic distribution is <span class="math inline">\(\Lambda(x) = \frac{e^x}{1 + e^x}\)</span>,</p>
+<p><span class="math display">\[\begin{align}
 P(Y_i = 1|X) =&amp; P(Y^* &gt; 0|X) = P(X\beta + u\geq 0|X)\\
               =&amp; P(u\geq 0 - X\beta|X)\\
               =&amp; 1 - P(u\leq - X\beta|X) = 1 - \Lambda(-X\beta)\\
@@ -393,366 +768,646 @@ P(Y_i = 1|X) =&amp; P(Y^* &gt; 0|X) = P(X\beta + u\geq 0|X)\\
 P(Y_i = 0|X) =&amp; P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
              =&amp; \Lambda(-X\beta) = \frac{e^{-X\beta}}{1 + e^{-X\beta}} = \frac{1}{1 + e^{X\beta}}\\
              =&amp; 1 - \Lambda(X\beta)
-\end{align}`
-
----
-
-## Probit
-
-`\begin{align}
+\end{align}\]</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<!-- -->
+<h3 id="probit">Probit</h3>
+<p><span class="math display">\[\begin{align}
 Y_i =&amp; \begin{cases}
 0, \text{if } Y^*\leq 0,\\
 1, \text{if } Y^*&gt; 0.\end{cases}\\
 Y^* =&amp; X\beta + u, u\sim \Phi(0, 1)\\
 \text{Similarly, } P(Y_i = 1|X) =&amp; 1 - \Phi(-X\beta)\\
 f(x) =&amp;\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
-\end{align}`
-
-
----
-
-## Logit vs. Probit
-
-* Probit is a little *more* computationally costly than logit  
-( `\(\frac{e^x}{1 + e^x}\)` vs. `\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)`)
-
---
-
-* Logit and probit coefficients are identical but on different scales (var&lt;sub&gt;logit&lt;/sub&gt; = &amp;pi;&lt;sup&gt;2&lt;/sup&gt;/3, var&lt;sub&gt;probit&lt;/sub&gt; = 1)
-
-Let's say the true model is a logit, but we estimate a probit model
-
-`\begin{align}
+\end{align}\]</span></p>
+</div>
+</section>
+<section id="logit-vs.-probit" class="slide level2">
+<h2>Logit vs.&nbsp;Probit</h2>
+<ul>
+<li class="fragment"><p>Probit is a little <em>more</em> computationally costly than logit<br>
+( <span class="math inline">\(\frac{e^x}{1 + e^x}\)</span> vs.&nbsp;<span class="math inline">\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)</span>)</p></li>
+<li class="fragment"><p>Logit and probit coefficients are identical but on different scales (var<sub>logit</sub> = π<sup>2</sup>/3, var<sub>probit</sub> = 1)</p></li>
+</ul>
+<div class="fragment">
+<p>Let’s say the true model is a logit, but we estimate a probit model</p>
+<p><span class="math display">\[\begin{align}
 P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
            =&amp; 1 - \Phi(\frac{-X\beta_{probit}}{\pi^2/3})\\
            =&amp; 1 - \Lambda(-X\beta_{logit})\\
 \Leftrightarrow\ \beta_{logit} =&amp; \frac{\sqrt{3}}{\pi}\beta_{probit}\approx 0.55\beta_{probit}
-\end{align}`
-
-
----
-
-## Estimation
-
-Minimize the least square? No~
-
-The maximum likelihood estimation:
-
-`$$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)$$`
-
-Define: `\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)`, the .red[maximum likelihood estimate] of &amp;theta; from among all possible values of &amp;theta;&lt;sup&gt;*&lt;/sup&gt;
-
-???
-
-We cannot minimize the least square as in OLS, since Y&lt;sup&gt;*&lt;/sup&gt; is not observed (unable to calculate `\((Y - \bar Y)^2\)` ). 
-So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
-
-m: a model
-
-&amp;theta;: parameter
-
-k: an arbitrary function, depending on the data.
-
-argmax: when having the argument, the function get the max
-
-
-`\begin{align}
+\end{align}\]</span></p>
+</div>
+</section>
+<section id="estimation" class="slide level2">
+<h2>Estimation</h2>
+<p>Minimize the least square? No~</p>
+<p>The maximum likelihood estimation:</p>
+<p><span class="math display">\[\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)\]</span></p>
+<p>Define: <span class="math inline">\(\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)\)</span>, the .red[maximum likelihood estimate] of θ from among all possible values of θ<sup>*</sup></p>
+<aside class="notes">
+<p>We cannot minimize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate <span class="math inline">\((Y - \bar Y)^2\)</span> ). So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:</p>
+<p>m: a model</p>
+<p>θ: parameter</p>
+<p>k: an arbitrary function, depending on the data.</p>
+<p>argmax: when having the argument, the function get the max</p>
+<p><span class="math display">\[\begin{align}
 \mathcal{L}(\beta|Y, X) =&amp; \Pi_{y = 1}P(Y = 1|X)\Pi_{y = 0}P(Y = 0|X)\\
                         =&amp; \Pi_{y = 1}F(X\beta)\Pi_{y = 0}[1 - F(X\beta)]\\
 \Leftrightarrow\ ln(\mathcal{L}) =&amp; \sum ln[F(X\beta)] + \sum ln[1 - F(X\beta)]
-\end{align}`
+\end{align}\]</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<ul>
+<li class="fragment">If there is an analytic solution, calculate it.</li>
+<li class="fragment">If no, computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><em>Property</em>:</p>
+<ol type="1">
+<li class="fragment">Consistent;</li>
+<li class="fragment">Asymptotically unbiased;</li>
+<li class="fragment">Generally asymptotically efficient.</li>
+</ol>
+</div>
+</div>
+<aside class="notes">
+<p>Asymptotical: 渐进式的</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="interpretation" class="slide level2">
+<h2>Interpretation</h2>
+<p><span class="math display">\[P(Y = 1|X) = \frac{e^{XP}}{1 + e^{X\beta}}\]</span></p>
+<p>What’s the effect of every one unit change of X on P(Y = 1|X)?</p>
+<div class="fragment">
+<p>Ways to interpret GLM outcomes:</p>
+<ol type="1">
+<li class="fragment">Predicted value plots</li>
+<li class="fragment">Marginal effect</li>
+<li class="fragment">First difference</li>
+</ol>
+</div>
+</section>
+<section id="predicted-value-plots" class="slide level2">
+<h2>Predicted Value Plots</h2>
 
---
-
-.pull-left[
-* If there is an analytic solution, calculate it.
-* If no, computational approaches, e.g., Hill-climber (small step iteration) and Newton-Raphson (large step after detecting a deep slop, i.e., a fast acceleration).
-]
-
---
-
-.pull-right[
-*Property*:
-
-1. Consistent;
-1. Asymptotically unbiased;
-1. Generally asymptotically efficient.
-]
-
-???
-
-Asymptotical: 渐进式的
-
----
-
-## Interpretation
-
-`$$P(Y = 1|X) = \frac{e^{XP}}{1 + e^{X\beta}}$$`
-
-What's the effect of every one unit change of X on P(Y = 1|X)?
-
---
-
-Ways to interpret GLM outcomes:
-
-1. Predicted value plots
-1. Marginal effect
-1. First difference
-
----
-
-## Predicted Value Plots
-
-&lt;img src="15_logitMissing_files/figure-html/predVal-1.png" style="display: block; margin: auto;" /&gt;
-
-???
-
-Compare when beta equals different values, the larger the more s
-
----
-
-## Marginal Effects
-
-The instantaneous change
-
-`\begin{align}
+<img data-src="15_logitMissing_files/figure-revealjs/predVal-1.png" width="960" class="r-stretch quarto-figure-center"><aside class="notes">
+<p>Compare when beta equals different values, the larger the more s</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside class="notes">
+<h3 id="marginal-effects">Marginal Effects</h3>
+<p>The instantaneous change</p>
+<p><span class="math display">\[\begin{align}
 &amp;\frac{\partial P(Y = 1|X)}{\partial X} \\
 =&amp; \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
 &amp; -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
 =&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
 =&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
 =&amp; \beta_1P(Y = 1|X)P(Y = 0|X)
-\end{align}`
+\end{align}\]</span></p>
+<p>The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying Xβ = 0. In other words, marginal effect depends on the value of X.</p>
+<p>In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.</p>
+<h3 id="first-difference">First Difference</h3>
+<p>The discrete version of marginal effect.</p>
+<p><span class="math display">\[FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})\]</span></p>
+<p>X<sub>-k</sub>:</p>
+<ol type="1">
+<li>All other independent variables (holding them constant)</li>
+<li>Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.</li>
+</ol>
+<p>X<sub>k</sub><sup>H,L</sup>:</p>
+<ol type="1">
+<li>Max → Min</li>
+<li>Median/mean ± σ<sub>X<sub>k</sub></sub></li>
+<li>Two theoretical interesting values</li>
+<li>Discrete: 0/1</li>
+<li>Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.</li>
+</ol>
+<h3 id="uncertainty-of-marginal-effects-and-fds">Uncertainty of Marginal Effects and FDs</h3>
+<ol type="1">
+<li>Mathematical: Approximating with the <a href="https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html">delta method</a>.</li>
+<li>Simulation: It is nice since one variable may not (often not) have symmetric distributions.</li>
+<li>Just using the variance of <span class="math inline">\(X\hat\beta\)</span>.</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="goodness-of-fit" class="slide level2">
+<h2>Goodness of Fit</h2>
+<p><em>Psedo-R<sup>2</sup></em></p>
+<p>Several <a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/">ways</a> to estimate it, but none of them is quite straightforward.</p>
+<div class="fragment">
+<p><em>Proportional reduction in error (PRE)</em>, a.k.a., Percent correctly predicted (PCP)</p>
+<p>Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) &gt; 0.5, define Ŷ = 1, otherwise, Ŷ = 0. Let’s denote</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Y = 1</th>
+<th>Y = 0</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ŷ = 1</td>
+<td>n<sub>11</sub></td>
+<td>n<sub>01</sub></td>
+</tr>
+<tr class="even">
+<td>Ŷ = 0</td>
+<td>n<sub>10</sub></td>
+<td>n<sub>00</sub></td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[PCP = \frac{n_{11} + n_{00}}{\sum n}\]</span></p>
+</div><div class="column" style="width:50%;">
+<p>Advanced: How much better the model predict than plain guess. Define <em>PMC</em> as the percent modal category (the plain guess). That is,</p>
+<p><span class="math display">\[PRE = \frac{PCP - PMC}{1 - PMC}\]</span></p>
+</div>
+</div>
+<aside class="notes">
+<p>An advanced version is <a href="https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D">ePRE</a>.</p>
+<p>ePRE: expected PRE, Herron 1999, PA</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="take-home-point" class="slide level2">
+<h2>Take-home point</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/lm_mindmap.png" height="600"></p>
+</figure>
+</div>
+</section>
+<section id="have-a-break" class="slide level2">
+<h2>Have a break</h2>
+<video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
+<div class="footer footer-default">
 
----
+</div>
+</section></section>
+    </div>
+  </div>
 
-The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&amp;beta; = 0. In other words, marginal effect depends on the value of X.
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="15_logitMissing_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="15_logitMissing_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
 
-In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.
+  <script src="15_logitMissing_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="15_logitMissing_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
 
+  <script>
 
----
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
 
-## First Difference
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
 
-The discrete version of marginal effect.
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
 
-`$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$`
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
 
-X&lt;sub&gt;-k&lt;/sub&gt;: 
+        // Display a presentation progress bar
+        progress: true,
 
-1. All other independent variables (holding them constant)
-1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
 
---
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
 
-X&lt;sub&gt;k&lt;/sub&gt;&lt;sup&gt;H,L&lt;/sup&gt;: 
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
 
-1. Max &amp;rarr; Min
-1. Median/mean &amp;plusmn; &amp;sigma;&lt;sub&gt;X&lt;sub&gt;k&lt;/sub&gt;&lt;/sub&gt;
-1. Two theoretical interesting values
-1. Discrete: 0/1
-1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
 
----
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
 
-## Uncertainty of Marginal Effects and FDs
+        // Push each slide change to the browser history
+        history: true,
 
-1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
-1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
-1. Just using the variance of `\(X\hat\beta\)`.
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
 
----
+        // Enable the slide overview mode
+        overview: true,
 
-## Goodness of Fit
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
 
-*Psedo-R&lt;sup&gt;2&lt;/sup&gt;*
+        // Vertical centering of slides
+        center: false,
 
-Several [ways](https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/) to estimate it, but none of them is quite straightforward.
+        // Enables touch navigation on devices with touch input
+        touch: true,
 
---
+        // Loop the presentation
+        loop: false,
 
-*Proportional reduction in error (PRE)*, a.k.a., Percent correctly predicted (PCP)
+        // Change the presentation direction to be RTL
+        rtl: false,
 
-Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) &gt; 0.5, define Y&amp;#770; = 1, otherwise, Y&amp;#770; = 0. Let's denote
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
 
-.pull-left[
-|             | Y = 1          | Y = 0          |
-|-------------|----------------|----------------|
-| Y&amp;#770; = 1 | n&lt;sub&gt;11&lt;/sub&gt; | n&lt;sub&gt;01&lt;/sub&gt; |
-| Y&amp;#770; = 0 | n&lt;sub&gt;10&lt;/sub&gt; | n&lt;sub&gt;00&lt;/sub&gt; |
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
 
-`$$PCP = \frac{n_{11} + n_{00}}{\sum n}$$`
-]
+        // Turns fragments on and off globally
+        fragments: true,
 
---
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
 
-.pull-right[
-Advanced: How much better the model predict than plain guess. Define *PMC* as the percent modal category (the plain guess). That is,
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
 
-`$$PRE = \frac{PCP - PMC}{1 - PMC}$$`
-]
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
 
-???
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
 
-An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
 
-ePRE: expected PRE, Herron 1999, PA
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
 
----
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
 
-## Wrap Up
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
 
-.pull-left[
-### Missing Data
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
 
-+ What's missing
-    + There is, but there isn't.
-+ Type of missing
-    + MCAR
-    + MAR
-    + NI
-+ Dealing with missing
-    + Listwise
-    + Manually impute
-    + Multiple imputations
-]
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
 
-.pull-right[
-### Generalized Linear Model
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
 
-+ OLS(?)
-    + Nonsensitive outcomes
-    + Heteroscedasticity
-+ Link function
-    + Logit
-    + Probit
-+ Model fitness
-    + Psedo-R&lt;sup&gt;2&lt;/sup&gt;
-    + PCP/PRE
-]
-    </textarea>
-<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
-<script src="libs/remark-latest.min.js"></script>
-<script>var slideshow = remark.create({
-"highlightStyle": "github",
-"highlightLines": true,
-"highlightSpans": true,
-"countIncrementalSlides": false,
-"ratio": "16:9"
-});
-if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
-  window.dispatchEvent(new Event('resize'));
-});
-(function(d) {
-  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
-  if (!r) return;
-  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
-  d.head.appendChild(s);
-})(document);
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
 
-(function(d) {
-  var el = d.getElementsByClassName("remark-slides-area");
-  if (!el) return;
-  var slide, slides = slideshow.getSlides(), els = el[0].children;
-  for (var i = 1; i < slides.length; i++) {
-    slide = slides[i];
-    if (slide.properties.continued === "true" || slide.properties.count === "false") {
-      els[i - 1].className += ' has-continuation';
-    }
-  }
-  var s = d.createElement("style");
-  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
-  d.head.appendChild(s);
-})(document);
-// delete the temporary CSS (for displaying all slides initially) when the user
-// starts to view slides
-(function() {
-  var deleted = false;
-  slideshow.on('beforeShowSlide', function(slide) {
-    if (deleted) return;
-    var sheets = document.styleSheets, node;
-    for (var i = 0; i < sheets.length; i++) {
-      node = sheets[i].ownerNode;
-      if (node.dataset["target"] !== "print-only") continue;
-      node.parentNode.removeChild(node);
-    }
-    deleted = true;
-  });
-})();
-(function() {
-  "use strict"
-  // Replace <script> tags in slides area to make them executable
-  var scripts = document.querySelectorAll(
-    '.remark-slides-area .remark-slide-container script'
-  );
-  if (!scripts.length) return;
-  for (var i = 0; i < scripts.length; i++) {
-    var s = document.createElement('script');
-    var code = document.createTextNode(scripts[i].textContent);
-    s.appendChild(code);
-    var scriptAttrs = scripts[i].attributes;
-    for (var j = 0; j < scriptAttrs.length; j++) {
-      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
-    }
-    scripts[i].parentElement.replaceChild(s, scripts[i]);
-  }
-})();
-(function() {
-  var links = document.getElementsByTagName('a');
-  for (var i = 0; i < links.length; i++) {
-    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
-      links[i].target = '_blank';
-    }
-  }
-})();
-// adds .remark-code-has-line-highlighted class to <pre> parent elements
-// of code chunks containing highlighted lines with class .remark-code-line-highlighted
-(function(d) {
-  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
-  const preParents = [];
-  const findPreParent = function(line, p = 0) {
-    if (p > 1) return null; // traverse up no further than grandparent
-    const el = line.parentElement;
-    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
-  };
+        // The display mode that will be used to show slides
+        display: 'block',
 
-  for (let line of hlines) {
-    let pre = findPreParent(line);
-    if (pre && !preParents.includes(pre)) preParents.push(pre);
-  }
-  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
-})(document);</script>
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
 
-<script>
-slideshow._releaseMath = function(el) {
-  var i, text, code, codes = el.getElementsByTagName('code');
-  for (i = 0; i < codes.length;) {
-    code = codes[i];
-    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
-      text = code.textContent;
-      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
-          /^\$\$(.|\s)+\$\$$/.test(text) ||
-          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
-        code.outerHTML = code.innerHTML;  // remove <code></code>
-        continue;
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
       }
-    }
-    i++;
-  }
-};
-slideshow._releaseMath(document);
-</script>
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-(function () {
-  var script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
-  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
-    script.src  = script.src.replace(/^https?:/, '');
-  document.getElementsByTagName('head')[0].appendChild(script);
-})();
-</script>
-  </body>
-</html>
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        target: function(trigger) {
+          return trigger.previousElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'quarto-reveal',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+          }
+        }
+    });
+    </script>
+    
+    
+
+</body></html>
