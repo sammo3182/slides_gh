@@ -1,0 +1,794 @@
+---
+title: |
+    | Latent Variable Analysis (Basic)
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup, include = FALSE}
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  psych, 
+  lavaan, 
+  semPlot, 
+  qgraph, 
+  haven, 
+  corrplot,
+  tidyverse,
+  drhutools
+) 
+
+
+# Functions preload
+set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+## Overview
+
+- 
+- What's EFA
+  - Diagnosis
+  - EFA vs. PCA
+- CFA
+  - Diagnosis
+- SEM
+
+
+# Latent Variable Analysis: A Methodology
+
+
+## What's Latent Variable
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+![](images/lv_symptoms.jpg){fig-align="center" height=500}
+
+:::
+
+::: {.column .fragment width="50%"}
+
+![](images/lv_anger.webp){fig-align="center" height=500}
+
+:::
+
+::::
+
+
+:::{.notes}
+<img src="images/lv_jamesStimson.jpg" height = 400 />
+
+James Stimson is a beginner for latent variable on American political attitudes (voting)
+:::
+
+:::{.fragment}
+> Latent variable analysis is the [cornerstone]{.red} of successful scientific inquiry.--- Delli Carpini and Keeter (1993)
+
+:::
+
+:::{.notes}
+Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Putting First Things First.” American Journal of Political Science 37 (4): 1179–1206.
+:::
+
+
+## Why LV
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+*Characteristics of Social Science Concepts*
+
+- Abstract
+- Complex
+- Comprehensive
+:::
+
+::: {.column .fragment width="50%"}
+*Difficulty to study LV*
+
+1. Unobservable
+1. Multidimensional
+1. Consequential
+:::
+
+::::
+
+
+:::{.notes}
+兜里有多少钱，不可见，但维度单一，不宜用潜变量分析，更好的办法是翻兜
+
+The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
+:::
+
+## How LV
+
+E.g., "Social capital"
+
+Indicators:
+
+1. How much do you trust strangers?
+1. Do you have some close connections in governments?
+1. Are your friends consistent with you on social and political issues?
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+*Additive scales*
+
+$$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
+:::
+
+::: {.column .fragment width="50%"}
+*Concerns*:
+
+1. Equal weight
+1. Extreme value sensitivity
+1. Polarity ignoring
+:::
+
+::::
+
+:::{.fragment}
+**Advanced methods**
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+*Factorial models*
+
+- Exploratory factor analysis
+- Confirmative factor analysis
+- Structural equation model
+:::
+
+::: {.column .fragment width="50%"}
+:::{.fragment .semi-fade-out}
+*Topological models*
+
+- Item response theory (IRT)
+  - GIRT, DCPO, etc.
+- MrP/MssP
+:::
+:::
+
+::::
+
+## Goals
+
+:::{style="text-align:center; margin-top: 2em"}
+Indicators [&larr;]{.red .large} latent variable
+:::
+
+:::{.notes}
+uncover the underlying structure of a relatively large set of variables. 
+:::
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*In Theory*
+
+[Minimum]{.red} factors for the variances
+
+![](images/lv_jiangwei.jpg){fig-align="center" height=400}
+
+:::{.notes}
+determine the minimum number of hypothetical factors or components that account for the variance between variables.
+:::
+
+:::
+
+::: {.column width="50%"}
+
+*In Operation*
+
+![](images/lv_efa.png){fig-align="center" height=400}
+
++ How many? 
++ How to combine?
+
+:::
+
+::::
+
+
+# Factorial Models
+
+## Formal Expression
+
+$$\boldsymbol{X^*} = \boldsymbol{\Phi\Lambda'} + \boldsymbol{\delta}.$$
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- **X<sup>\*</sup>**: 潜在变量  
+- **&Phi;**: 指标选择  
+- **&Lambda;**: 单项贡献（a.k.a., factor loading）  
+- **&delta;** 选择误差
+
+:::{.notes}
+Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses.” Political Analysis 12(4): 338–53.
+:::
+:::
+
+::: {.column .fragment width="50%"}
+*Operation*
+
+1. Number of factors
+1. Factor extraction
+1. Rotation
+1. Factor compound
+1. Diagnosis
+:::
+
+::::
+
+:::{.fragment}
+*Example*: "Big Five" Test
+:::
+
+:::{.notes}
+经验开放性Openness, 尽责性Conscientiousness, 外向型Extraversion, 亲和性Agreeableness, 情绪不稳定型Neuroticism
+
+https://quantdev.ssri.psu.edu/tutorials/intro-basic-exploratory-factor-analysis
+:::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Openness
+- Conscientiousness
+- Extraversion
+- Aggreeableness
+- Neuroticism
+:::
+
+::: {.column .fragment width="50%"}
+Toy data: 
+
+19,719 subjects
+
+```{r data-big5}
+df_big5 <- read_csv("data/lv_dataBIG5.csv")
+df_big5[df_big5 == 0] <- NA
+```
+:::
+
+::::
+
+
+
+## How many factors
+
+Method 1: Correlation analysis
+
+```{r corrplot, fig.align='center'}
+df_big5 %>%
+  select(8:57) %>%
+  cor(use = "complete.obs") %>%
+  corrplot(order = "hclust",
+           tl.col = 'black',
+           tl.cex = .75) 
+```
+
+
+## Method 2: Horn's Parallel Analysis
+
+- Given the observed data **O**<sub>m&times;n</sub>
+  1. Generate the random data **R**<sub>m&times;n</sub>;  
+  1. Calculate the random data's correlaiton matrix <sub>**R**</sub> and eigenvalues &lambda;<sub>**R**</sub>;  
+  1. Calculate the observed data's correlation matrix<sub>**Ok**</sub>   and &lambda;<sub>**Ok**</sub> (k is preset number of factors)
+  1. &lambda;<sub>**Ok**</sub> vs. &lambda;<sub>**R**</sub>
+      - If &lambda;<sub>**Ok**</sub> < &lambda;<sub>**R**</sub>, then ~~k~~
+      - Kaiser criterion
+
+:::{.notes}
+&lambda;是相关矩阵特征值
+Kaiser criterion: 特征值<1 不可
+:::
+
+:::{.fragment}
+
+```{r parallelAnalysis, fig.align='center', results='hide', fig.height=3.5}
+df_big5 %>%
+  select(8:57) %>%
+  fa.parallel(fa = "fa")
+```
+
+:::
+
+
+## Factor Extraction
+
++ Minimum residual (OLS)
++ Principal axes
++ Alpha factoring
++ Weighted least squares
++ Minimum rank
++ [Maximum likelihood (ML, minimum &chi;<sup>2</sup> goodness of fit)]{.red}
+
+
+## Rotation
+
+![](images/lv_rotation.jpg){fig-align="center" height=400}
+
+:::{.notes}
+Rotation:
+
+A pattern of loadings where each item loads strongly on only one of the factors, and much more weakly on the other factors.
+:::
+
+* Orthogonal: Varimax, quartimax, bentlerT, geominT, bifactor  
+* [Oblique]{.red}: Oblimin, quartimin, simplimax, bentlerQ, geominQ, biquartimin
+
+:::{.notes}
+Orthogonal(正交)
+
+优选Oblique，允许factor间correlate
+:::
+
+## Factor compound and diagnosis
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Compound
+
+```{r efa, eval = TRUE}
+result_efa <- df_big5 %>%
+  select(8:57) %>%
+  fa(nfactors = 5,
+     rotate = "oblimin",
+     fm = "minres")
+
+print(result_efa$loadings, cutoff = .296) # the point was picked for the purpose of presentation
+```
+:::
+
+::: {.column width="50%"}
+### Diagnosis
+
+1. Sum of squared (SS) loading^[Eigenvalues]
+1. Communality & Uniqueness
+1. Root means square of residuals(RMSR)
+1. Tucker-Lewis Indes (TLI)
+1. Reliability test (Crobach's &alpha;)^[For each factor]
+:::
+
+::::
+
+:::{.notes}
+SS：Kaiser criterion: &lambda; < 1 不可
+Communality:  SS of all the factor loadings for a given variable
+Uniqueness: 1 - Communality
+RMSR < 0.05
+TLI > 0.9
+
+Crobach's &alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要
+:::
+
+
+## Principal Component Analysis (PCA)
+
+> Similar outcome, different logic
+
+![](images/lv_pcaVsEfa.PNG){.r-stretch}
+
+:::{.fragment}
+(attention to the arrow directions!)
+:::
+
+:::{.notes}
+PCA: measurement to index   
+
+write all variables in terms of a smaller set of features which allows for a maximum amount of variance to be retained in the data.   
+
+
+EFA: indices to measurement (of a latent variable)   
+
+find a set of features which allow for understanding as much of the correlations between measured variables as possible. individually.
+:::
+
+:::{.fragment}
+When to use which
+:::
+
+- PCA maximumly maintains the observed [information]{.red}, while EFA strives for extracting the [characters]{.red}
+- When the indicators do [not relate]{.red} to each other closely or affected by a small number of latent variables, then PCA > EFA;
+- PCA may [extraggregate]{.red} the influences of indicators on the latent variable.
+
+
+# Confirmative Factor Analysis
+
+## Exploratory vs. Confirmative
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### EFA: Data-oriented
+
+1. Inductive process
+1. Unknown factors/dimensions
+    - Assuming every dimension has influences.
+1. Quantitative critarion
+    - Magnitudes of loadings
+1. Ignoring the correlated errors
+1. Underidentified
+
+:::
+
+::: {.column width="50%"}
+### CFA: Theory-oriented
+
+1. Deductive process
+1. Preset factors/dimensions
+    - Clear dimension-indicator relationship
+1. Qualitative critarion
+    + Loading significance
+1. Allowing correlated errors
+1. Identifiable
+:::
+
+::::
+
+
+
+## CFA Indicator Selection
+
+:::{style="text-align:center"}
+- Being consistent with the theory
+- One indicator per dimension (Art > skill)
+    - ~~Reason~~ Result indicators
+:::
+
+
+:::{.fragment}
+E.g., interpersonal trust
+
+> Definition: [Believe]{.red} others not [hurting you]{.blue} or [breaking the commitments]{.orange}
+:::
+
+[Indicator:]{.fragment}
+
+1. [In general, which statement do you agree more, "most people are trustworthy" and "you should always be on gaurd"?]{.red}
+1. [Do you think most people are altruistic or selfish?]{.blue}
+1. [If there is possible to cheat, do you think people would more likely to take advantage of you or follow their promises?]{.orange}
+
+
+
+## Modeling CFA
+
+![](images/lv_multitrait.png){fig-align="center" height=600}
+
+:::{.notes}
+裁判对滑雪运动员的评判
+
+单侧: factor complexity = 1 （一个变量只贡献一个latent）  
+双侧: factor complexity > 1
+:::
+
+## 定义公式
+
+$$\text{EFA: }\boldsymbol{X^*} = \boldsymbol{\Phi\Lambda'} + \boldsymbol{\delta}.$$
+$$\text{CFA: }\boldsymbol{X} = \boldsymbol{\Lambda_X\phi^*} + \boldsymbol{\delta}.$$
+
+
+
+**X**： Indicator vector  
+**&phi;**：Latent variable   
+**&Lambda;<sub>X</sub>**: X = f(&xi;) coefficient(a.k.a., loading)  
+**&delta;**：Error  
+
+**&Phi;**: Latent variable covariate matrix   
+**&Theta;<sub>&sigma;</sub>**: Error covariate matrix
+
+:::{.notes}
+**&xi;**: ksi  
+**&delta;**: delta  
+**&Phi;**: phi  
+**&Theta;<sub>&sigma;</sub>**: theta  
+
+在EFA中潜在变量在等号左边，观测变量在右边
+:::
+
+
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+$$\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+x_5
+\end{bmatrix} = 
+\begin{bmatrix}
+1 & 1 & 0\\
+\lambda_{21} & 1 & 0\\
+\lambda_{31} & 1 & 0\\
+\lambda_{41} & 0 & 1\\
+\lambda_{51} & 0 & 1
+\end{bmatrix} \begin{bmatrix}\xi_1\\
+\xi_2\\
+\xi_3
+\end{bmatrix} + \begin{bmatrix}\delta_1\\
+\delta_2\\
+\delta_3\\
+\delta_4\\
+\delta_5
+\end{bmatrix}$$
+:::
+
+::: {.column .fragment width="50%"}
+*Latent variable matrix*
+
+$$\Phi = \begin{bmatrix}
+\phi_{11} & & \\
+0 & \phi_{22} & \\
+0 & \phi_{23} & \phi_{33}
+\end{bmatrix}$$
+
+*Error matrix*
+
+diag **&Theta;<sub>&sigma;</sub>** = diag[var(&delta;<sub>1</sub>) var(&delta;<sub>2</sub>)...var(&delta;<sub>5</sub>)]
+:::
+
+::::
+
+:::{.notes}
+&phi;23$: classical 和showy 裁判的相关性
+:::
+
+
+
+## Identification
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Identified: **&Lambda;、&Phi;、&Theta;** have only solution
+
+- &Lambda;: $X = f(\phi)$ coefficient (a.k.a., loading)  
+- &Phi;: Latent variable covariate matrix
+- &Theta; Error covariate matrix
+
+- **t rule**: t < q(q + 1)/2
+  - t: latent variable
+  - q：observed
+
+:::{.notes}
+Another way to calculate df.
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+To [guarantee]{.red} identifable &rArr; restricted CFA
+
+1. Scaling
+    + &lambda;<sub>11</sub> = 1;
+    + SD(&phi;) = 1 (Standardized metric)
+2. Parameter
+    + Set the loading of a factor as 0;
+    + Error covariate matrix 0;
+    + Error variance matrix 0.
+:::
+
+::::
+
+
+
+## Estimation
+
+$$\sum(\theta) = \Lambda_X\Phi\Lambda'_X + \Theta_{\delta}$$
+
+**&Sigma;**: Observed indicator covariate matrix
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*Full-information estimation*:
+
+Maximum likelihood:   
+Generalized Least Squares  
+Unweighted Least Squares
+
+:::{.notes}
+寻找最优**&Sigma;**
+:::
+
+:::
+
+::: {.column width="50%"}
+*Limited-information estimation*:
+
+Two Stage Least Squares
+:::
+
+::::
+
+
+
+## Diagnosis
+
+:::: {.columns}
+
+::: {.column .fragment width="35%"}
+*Overall: &chi;<sup>2</sup>*
+
+- Significance means the modeling is likely to be [problematic]{.red}
+    - Significant when N is [large]{.red}
+
+:::{.notes}
+1. Because models are almost always incorrect, any otherwise reasonably fitting model can be rejected when sample size is sufficient
+1. Also a poor fitting model could be accepted if there is insufficient power to detect misspecification.
+:::
+
+:::
+
+::: {.column .fragment width="30%"}
+*Incremental Fit Indices*
+
+Fitted model vs. basic model
+
+1. Tucker-Lewis Index (TLI, &rho;<sub>2</sub>, Non-Normed Fit Index)
+1. Comparative Fit Index (CFI)
+
+- Criterion
+    + 1 ideal
+    + <.95 unacceptable
+    
+:::{.notes}
+基线模型：只保留可见变量的方差和协方差
+
+CFI可以>1, 这种情况视为1
+:::
+
+:::
+
+::: {.column .fragment width="35%"}
+*Absolute Fit Indices*
+
+1. Root Mean Square Error of Approximation (RMSEA)
+1. Standardized Root Mean Square Residual (SRMR)
+
+- Criterion
+    + 0 ideal
+    + &le; 0.05 ok
+    + 0.05 ~ 0.08 acceptable
+    + &ge; 0.1 unacceptable
+:::
+
+::::
+
+
+# Structural Equation Model
+
+## You Know SEM already
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Special SEM
+
+- Confirmative factor analysis  
+- Multiple regression  
+- Multivariate regression  
+- ANOVA  
+- General linear model  
+- Path analysis  
+- Recursive models  
+- Dichotomous and ordered probit  
+- Seemingly unrelated regressions  
+- Simultaneous models  
+- Latent growth curve models  
+......
+:::
+
+::: {.column .fragment width="50%"}
+
+[Nicknames]{.fragment}
+
++ Structural equation models (SEMs)
++ LISREL (Linear Structural ReLationships) models
++ Covariance structure models
++ Latent variable models
++ Structural equations with latent variables
+:::
+
+::::
+
+
+## Some Knowledge abou SEM
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*vs. CFA*
+
++ Observed variables: both X and [Y]{.red}
+    - Endogeneous (latent) and exogeneous (observed) variables
++ Model structure
+    1. Latent variable model
+    1. Measurement model (CFA)
+    1. Relations among the errors 
++ Identification requirement
+:::
+
+::: {.column .fragment width="50%"}
+*Estimation*
+
+MLE
+
+*Diagnosis*
+
++ Overall：&chi;<sup>2</sup>
++ Incremental：
+    + TLI & CLI
+    + Incremental Fit Index(IFI, &Delta;<sup>2</sup>): 1 ideal, < 0.9 unacceptable
++ Absolute:
+    + RMSEA: < 0.06
+    + BIC: smaller the better
+:::
+
+::::
+
+
+[Using SEM does [not]{.red} imply causality!]{.r-fit-text .fragment}
+
+
+
+## Take-home point
+
+![](images/lv_mindmap.png){fig-align="center" height=600}
+
+
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
+
