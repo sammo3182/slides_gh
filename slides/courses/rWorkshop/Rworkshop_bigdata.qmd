@@ -1,0 +1,331 @@
+---
+title: "R You Ready"
+subtitle: "大数据分析-A (60700033)"
+
+author: "胡悦"
+institute: "清华大学政治学系" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup, include=FALSE}
+chooseCRANmirror(graphics = FALSE, ind = 1)
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  knitr, # dependency
+  icons, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(114)
+```
+
+## 开场
+
+- 为什么要学习R
+    - 还用学习R（或其他编程语言吗？）
+    - R语言能带来的科研优势
+    - 为什么不选择Python或者STATA
+- 从哪里开始
+
+## 我是谁
+
+:::: {.columns}
+::: {.column width="60%"}
+*个人经历*
+
+- 政治[科学]{.red}博士[（University of Iowa)]{.small}
+  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 清华大学计算社会科学平台[(副主任)]{.small}
+  - 清华数据与治理中心[(副主任)]{.small}
+
+*课程相关*：
+
+- Learning R with Dr. Hu and His Friends
+    - \> 3,000 学员
+- 开发六个R软件
+    - 最大下载量200k+
+- [不是程序员]{.red .large}
+    - [纯文科生]{.red .large}
+
+
+:::
+
+::: {.column width="40%"}
+*研究领域*
+
+- W. 心理学 & 社会学 & 传播学
+  - 记忆政治（参与、公卫）
+  - 政治传播（官媒、青年）
+  - 身份[认知]{.red}（城乡、香港、司法）
+- W. 经济学
+  - 宏观经济 &rarr; 微观认知 &rarr; 中观行为公共政策
+  - 社会经济[不平等]{.red}
+- W. 语言学 & 教育学
+  - [语言]{.red}能力的政治影响
+  - 语言政策的治理功能
+  - 社会政治意识塑造
+
+:::
+
+::::
+
+# 为什么要学习R
+
+## 还用学R（或任何编程语言吗？）
+
+![](images/chatGpt.gif){fig-align="center" height=600}
+
+:::{.notes}
+1. Who will contribute the human progress more, the ones who travel with a flight or the ones who design a flight? 
+    - Autonomy
+1. Do you think you just learn vocabularies, grammars, and syntax when learning English?
+    - Creativity
+1. Do you think Baidu is as powerful as Google?
+    - Technological barrier
+:::
+
+## 什么是R
+
+- A high-level programming language
+
+:::{.fragment}
+![](images/languageLevel.jpg){fig-align="center" height=500}
+:::
+
+- An object-oriented programming language
+
+:::{.notes}
+
+* Implement of S(tatistical) language, S3, S4 standards.
+
+* Named after Ross Ihaka /i:haka/, and Robert Gentelman
+    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
+    + STATA: Stats + Data
+    + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
+
+* High-level > assembly language (only using ADD, MOVE, etc.) > machine language (010101) > hardware
+
+* High-level: C, JAVA, Python, Fortun, R
+
+* Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
+
+* **Object-oriented** programming (OOP): Class &rarr; objects
+    + Carb &rarr; Steam ban
+    + University &rarr; Tsinghua
+
+
+C++, Python, Ruby, Perl, Matlab
+:::
+
+
+
+## R可以帮你做什么
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+  Statistics and econometrics.
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+  Crunching almost any sizes of data.
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Edit and running codes from Excel, STATA, Python, C++, ...
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Scrape data from local files, websites, databases, pdf...
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Create webpages
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Write academic articles, books, or dissertations in html, pdf, or docx
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Create presentation slides
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Sending emails    
+......
+:::
+
+## R 的强项
+
+:::: {.columns style="text-align:center"}
+
+::: {.column width="30%"}
+### 数据分析
+
+`r nrow(available.packages())`+ packages
+
+e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
+:::
+
+::: {.column width="70%"}
+### 可视化
+:::{.r-stack}
+
+![](images/ggmap.png){.fragment height=600}
+
+![](images/hillShade.png){.fragment height=600}
+
+![](images/distributionHill.png){.fragment height=600}
+
+:::
+:::
+
+::::
+
+
+
+## R vs Others
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### R vs. STATA
+
+**STATA > R**
+
+- Reliable
+- Your supervisors
+
+**R > STATA**
+
+- Frequently update
+- Visualization
+- Language vs. software
+- [Free]{.red}
+
+:::
+
+::: {.column width="50%"}
+### R vs. Python
+
+**Python > R**
+
+- API ports
+- Automation tools
+- Machine learning
+
+**R > Python**
+
+- Analysis
+- Visualization
+- Ecology
+
+:::
+
+::::
+
+## {background-image="images/rPython.jpg" background-size="auto auto" background-opacity=0.1}
+
+![](images/rPython.jpg){fig-align="center" height=650}
+
+# 从哪开始
+
+## 软件安装
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*核心程序*
+
+![](images/Rlogo.png){fig-align="center" height=500}
+:::
+
+::: {.column width="50%"}
+*Integrated development environment（IDE）*
+
+![](images/rstudio.jpg){fig-align="center" height=500}
+:::
+
+::::
+
+
+## Packages
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](images/apps.jpeg){fig-align="center" height=500}
+:::
+
+::: {.column width="60%"}
+
+:::{.fragment}
+
+### 安装
+
+```{r installPg, eval=FALSE}
+#| eval: false
+#| echo: true
+
+install.packages("drhur")
+```
+
+:::
+
+:::{.fragment style="margin-top:1em"}
+### 调用
+
+```{r usingPg}
+#| eval: false
+#| echo: true
+
+library(drhur)
+drhur::drhur("playing")
+```
+
+![](images/librarian.gif){.fragment fig-align="center" height=300}
+
+:::
+
+:::
+
+::::
+
+
+## {background="#43464B"}
+
+:::{style="text-align: center; margin-top: 5em"}  
+[Before Leaving]{.large}
+
+:::{style="margin-top: 2em"}
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+:::
+:::
