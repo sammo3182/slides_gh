@@ -1,6 +1,6 @@
 ---
-title: "Quasi-Experiment: Large-N Analysis"
-subtitle: "Understanding Policies: Perspectives and Case (10700193)"
+title: "Case Illustration: Large-N Method"
+subtitle: "Understanding Policies: Interdisciplinary Perspectives and Case Illustrations (10700193)"
 author: "Yue HU"
 institute: "Political Science, Tsinghua University"
 output:
@@ -20,6 +20,8 @@ output:
       ratio: 16:9
 ---
 
+## Overview
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
@@ -27,8 +29,7 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
-p_load(
-  emo, knitr, kableExtra, # dependency
+p_load(icons, knitr, kableExtra, # dependency
        stringr, arm, car, 
        modelsummary,
        broom, tidyverse
@@ -45,44 +46,72 @@ xaringanExtra::use_fit_screen() # Alt + F
 set.seed(313)
 ```
 
-background-image: url("images/cha_challenge.gif")
-background-position: center
-background-size: contain
-
----
-
-## Overview
 
 
 .pull-left[
-+ What & why
-    + Large-N
-    + Why large?
-    + How large?
++ What
+  + How large is large?
+- Why
+  - Why Not experiment?
+  - Why analysis with large-N data?
+  - What do we look for from the LNA?
 ]
 
 .pull-right[
 + How
-    + Univariate
-    + Bivariate
-    + Multivariate
+    + One
+    + Two
+    + More than two
+
+<img src="images/lar_econometrics.jpg" height = 300 />
+
 ]
 
-.center[<img src="images/lar_econometrics.jpg" height = 300 />]
 
 ---
 
 class: inverse, bottom
 
-# Large-N Analysis
+# What
 
 ---
 
-## What's Large-N Analyses
+## What's Large-N
 
-+ Large N vs. Small N
-+ Coherent observations (e.g. citizens, states)
-+ Average ("Get the mean right is good.")
+In lieu of "quantitative"...
+
+???
+
+What's a 定量研究?
+
+- 定结果的量
+- 定数据的量
+  - 都是量吗？binary，categorical， ordinary
+
+Did you really 定量？
+
+--
+
+Large-.red[N]: Number of **observations**---not subjects, not trails
+
+- How large? 10, 100, 1000, 10000?
+    - > We don't know......   
+    - > It depends......  
+    - > The larger, the better!
+
+???
+
+How about experiment
+
+--
+
+.center[To know what, you need to know WHY]
+
+---
+
+class: inverse, bottom
+
+# Why
 
 ---
 
@@ -101,17 +130,76 @@ class: inverse, bottom
 ### However,
 
 1. .red[Not always] practical
-1. .blue[Easy] to collect observed data
-1. .blue[Well-developed] methods
+1. .red[Difficult] to collect observed data
+1. "Not-cool" methods
 ]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[
+Goal*
+
+Quasi-experiment
+]
+]
+
+.footnote[\* *Collins Thesaurus*: Quasi- =  pseudo-, apparent, seeming, semi-, so-called, would-be]
+
 ---
 
-## Why .red[Large]-N Works?
+## Why Have to Be LARGE-N
+
+.bg-dark-red.golden.ba.shadow-5.ph4.mt3[
+要围绕大局反映情况、报送信息，做“千里眼、顺风耳”,把各方面新情况新问题、贯彻落实党中央方针政策 的意见和建议、干部群众关注的热点焦点问题等及时收集上来，**归纳综合**，分析研判，第一时间报送党中央，为党中央科学决策提供重要依据。
+
+.tr[
+--- 习近平 (《坚持高度自觉的大局意识》, 2014年5月8日)
+]
+]
+
+--
+
+Statistically, 
+
+.center[*Law of Large Numbers(LLN)*]
+
+> As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
+
+
+???
+
+Using sample to estimate population
+
+---
+
+## Then How Large
+
+LLN gives a rule of thumb: 100
+
+--
+
+.center[Is LLN enough? ]
+
+--
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+
+.center[*Central Limit Theorem*(CLT)]
+
+The sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.
+]
+
+???
+
+Why using normal distribution
+
+---
+
+## Let's Feel It
 
 .pull-left[
-Come on, my highly-educated fellows!
+My highly-educated fellows, let's play a .blue[happy-happy] kid game!
 
-Let's play a .orange[happy-happy] kid game:
+And we are going outside! 😈
 
 ]
 
@@ -128,71 +216,55 @@ Let's play a .orange[happy-happy] kid game:
 
 ---
 
-<video width="1000" height="600" controls>
-    <source src="images/lar_normalDistribution_bbc.mp4" type="video/mp4">
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xR3lVRGoxaEpFODFDVkN0P2U9SWJHUWRY.mp4" type="video/mp4">
 </video>
-
----
-
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
-
-.tr[
----"Law of Large Numbers"
-]
-]
-
-???
-
-Using sample to estimate population
-
---
-
-.bg-black.golden.ba.shadow-5.ph4.mt3[
-The sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.
-
-.tr[
----"Central Limit Theorem"
-]
-]
-
-???
-
-Why using normal distribution
 
 ---
 
 ## How Large Is Large?
 
-* Rule of thumb: > 100 ~ 200
+.center[LLN says 100. CLT ?]
+
+.center[<img src="images/lar_largeNumber.gif" />]
 
 --
 
-But really?
+.center[Should we always get 10,000?]
 
-.center[<img src="images/lar_largeNumber.gif" height = 350 />]
+.pull-left[
+$\text{Margin of Error} = Z \times \frac{S}{\sqrt n}.$
+]
+.pull-right[
+| Sample Size (n) | Margin of Error (M.E.) |
+|-----------------|------------------------|
+| 200             | 7.1%                   |
+| 1000            | 3.2%                   |
+| 2000            | 2.2%                   |
+| 4000            | 1.6%                   |
+]
+
+???
+
+To cut the margin of error in half, like from 3.2% down to 1.6%, you need four times as big of a sample, like going from 1000 to 4000 respondents. To cut the margin of error by a factor of five, you need 25 times as big of a sample
 
 ---
 
 class: inverse, bottom
 
-* Univariate analysis
-* Bivariate analysis
-* Multivariate analysis
-
-# Large-N Approaches
+# How
 
 ---
 
 ## Univariate analysis
 
 .pull-left[
-.center[<img src="images/lar_watchingShows.gif" height = 300 />]
+.center[<img src="images/lar_tooManyCourses.jpg" />]
 ]
 
 .pull-right[
 ```{r data}
-showWatching <- tibble(Student_ID = paste0("202109", sample(1000:9000, size = 7)), Episodes = c(1, 1, 1, 2, 3, 3, 4))
+showWatching <- tibble(Student_ID = paste0("202309", sample(1000:9000, size = 7)), Courses = c(9, 9, 12, 10, 8, 10, 15))
 
 kable(showWatching, "html", align = "cl")%>%
   kable_styling(full_width = TRUE, font_size = 25)
@@ -201,64 +273,55 @@ kable(showWatching, "html", align = "cl")%>%
 
 ???
 
-Let's say we'll test a school policy of Internet access management. 
-To do so, researchers surveyed a dorm room, asking the members how many shows they watched in the past week.
+Let's say we'll test a school policy of course management
 
 ---
 
-## How to Describe This Variable
+## How to Represent Variable
 
-+ Given the list: (1, 1, 1, 2, 3, 3, 4)
+Given the courses students took: (9, 9, 12, 10, 8, 10, 15)
+--
+
+.pull-left[
+
++ Mean: $\frac{9 + 9 + 12 + 10 + 8 + 10 + 15}{7} \approx 11.$
++ Median: 8, 9, 9, .red[10], 10, 12, 15
++ Mode: 8, .red[9], .red[9], .red[10], .red[10], 12, 15
+
+Which one is better?
+
+]
 
 --
 
-+ Mean: $\frac{1 + 1 + 1 + 2 + 3 + 3 + 4}{7} = \frac{15}{7} \approx 2.143.$
+.pull-right[
+How about this data?
 
---
+<img src="../analysisOfPoliticalData/images/desc_sheHulk.png" height = 400 />
 
-+ Median: 1, 1, 1, .magenta[2], 3, 3, 4
-
---
-
-+ Mode: three .magenta[1]s, one 2, two 3s, and one 4.
+]
 
 ---
-
-## Mean, Median, or Mode?
-
-```{r distribution, fig.align='center'}
-df_var <- data.frame(x = rnorm(10000, mean = 0, sd = 1),
-                     y = c(rbeta(9900, shape1 = 5, shape2 = 2), rep(1.5, 100)),
-                     z = rnorm(10000, mean = 10, sd = 1),
-                     w = rbinom(10000, 1, .5)) %>%
-                       mutate(z = w * x + (1 - w) * z) %>%
-                         select(x, y, z) %>%
-                           gather(var, value)
-
-ggplot(df_var, aes(value)) +
-  geom_histogram() +
-  facet_wrap(~ var, scales = "free") +
-  xlab("") + ylab("")
-```
-
----
-
-class: small
 
 ## Descriptive Statistics
+
+- Number (mean, usually)
+- Statistics
+- Plot (.red[**&check;**])
 
 ```{r descriptive}
 df_descrptive <- select(mtcars, -am, -carb) %>% 
   mutate(across(where(~length(unique(.x)) == 2), as.logical),
          across(where(~length(unique(.x)) < 7 & !is.logical(.x)), as.factor))
 
-datasummary_skim(df_descrptive)
-datasummary_skim(df_descrptive, type = "categorical")
+datasummary_skim(df_descrptive, histogram = FALSE)
 ```
 
 ---
 
 ## Binary Analysis
+
+.pull-left[
 
 Relations between variables
 
@@ -268,15 +331,45 @@ ggplot(mtcars, aes(wt, mpg)) +
   ylab("Mileage per Gallon") +
   xlab("Weight")
 ```
+]
+
+--
+
+.pull-right[
+
+How about...
+
+```{r scatterMess, fig.align='center'}
+data(tobacco, package = "summarytools")
+
+ggplot(tobacco, aes(age, cigs.per.day)) +
+  geom_point() +
+  ylab("Cigrate per day") +
+  xlab("Age")
+```
+]
 
 ---
 
 ## Multivariate Analysis
 
-.pull-left[<img src="images/lab_buyerSeller.jpg" height = 450 />]
-.pull-right[<img src="images/lab_matching.png" height = 450 />]
+.center[<img src="../analysisOfPublicPolicy/images/lar_buyerSeller.jpg" height = 250 />]
 
-.center[Hnit: That's what the ".blue[control]" means.]
+.pull-left[
+<img src="../analysisOfPublicPolicy/images/lar_matching.png" height = 250 />
+]
+
+.pull-right[
+.center[<img src="../analysisOfPublicPolicy/images/lar_fitOLS.png" height = 250 />]
+]
+
+---
+
+## Controls May Not Work
+
+<video width="1000" height="500" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8ybkpQMndTTjZ2MGRiUjFnP2U9bXBIV1NK.mp4" type="video/mp4">
+</video>
 
 ---
 
@@ -301,12 +394,15 @@ ggplot(mtcars, aes(wt, mpg)) +
 ## Take-Home Points
 
 .pull-left[
-+ When large-N: When experiments are not available
-+ Why large-N: 
-    + Law of Large Number
-    + Central Limit Theorem
-+ How large? 100 ~ 1000
-+ Ways: 
++ What: "Quantitative" analysis
+  + How large is large?
+    + LLN: 100
+    + CLT: 1000
+- Why
+  - Why Not experiment?
+  - What do we look for from the LNA?
+    - Average and distribution
++ How 
     + Univariate
     + Bivariate
     + Multivariate
@@ -315,7 +411,7 @@ ggplot(mtcars, aes(wt, mpg)) +
 --
 
 .pull-right[
-### Bonus: Wonder how to conduct such analysis?
+### Bonus: Wonder how to conduct large-N analysis?
 
 Ta-da~~~
 
