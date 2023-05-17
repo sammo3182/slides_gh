@@ -1,0 +1,721 @@
+---
+title: |
+    | 政务数据的分析价值
+    | 和基本原则
+subtitle: |
+    | 教育部直属机关专题研修课程
+date: "2023-05"
+date-format: "iso"
+
+author: "胡悦"
+institute: |
+    | 清华大学社会科学学院政治学系
+    | 副教授
+
+# bibliography: pre_efficacy.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+## 概要
+
+- 分析价值与功能
+    - 战略价值
+    - 分析价值
+- 分析原则
+    - 研究设计原则
+    - 数据收集原则
+    - 人才培养原则
+
+
+## 什么是大数据
+
+> 这段话的中文翻译是：特征在于包含大量^[Volume] 经常更新^[Velocity] 的、多种格式^[Variety] 的数据，比如数字、文本或者图片/视频的数据集。
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+重要的却常被忽视的内容
+
+- Veracity
+- Value
+:::
+
+:::{.notes}
+veracity: accuracy, integrity (how do you know?)  
+value: how much value for each unit of data?
+:::
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+基础：[“不是数据”]{.red}的数据
+:::
+
+## （大）数据的战略价值
+
+:::{style="text-align:center; margin-top: 3em"}
+> [[大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动，深入了解大数据发展现状和趋势及其对经济社会发展的影响，分析我国大数据发展取得的成绩和存在的问题，推动实施国家大数据战略，加快完善数字基础设施，推进数据资源整合和开放共享，保障数据安全，加快建设数字中国，更好服务我国经济社会发展和人民生活改善。]{.red .large}    
+[——习近平 (《中共中央政治局第二次集体学习》, 2017年]{.large}]{.fragment .r-fit-text}
+:::
+
+
+
+## （大）数据的战略价值^[Liu, Lizhi. 2021. “The Rise of Data Politics: Digital China and the World.” Studies in Comparative International Development 56(1): 45–67.]
+
+
+|        	| 排他                                                  	| 非排他                                  	|
+|--------	|-------------------------------------------------------	|-----------------------------------------	|
+| 竞争   	| *私有产品*： <br>食物、石油、普通制成品、私人池塘里的鱼等。 	| *公共资源*： <br>森林、矿山、海洋中的鱼等。 	|
+| 非竞争 	| *俱乐部产品*： <br>卫星电视、私人公园等。<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;[**数据**]{.red}	| *公共产品*： <br>国防、航空、阳光、新闻等。 	|
+
+
+:::{style="text-align:center; margin-top: 2em"}
+- 估值困境
+- 管理困境
+:::
+
+:::{.notes}
+
+数据不是新的石油
+
+- 估值困境
+    - GDP只能测量有固定价格产品
+    - 数据：无限复制，不同组合价值也不一样
+
+- 管理困境
+    - Data regulation: overdue, regulatory overkill, risk management or overreaction
+
+:::
+
+
+## 大数据的政策分析价值
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*数据来源*
+
+1. 电子政务、公务电话热线、政府与公民互动数据
+2. 各机构和部门的官方数据
+3. 演讲、声明
+4. 传统和新媒体
+5. 官方文件档案
+6. 司法文件
+......
+:::
+
+::: {.column width="50%"}
+*目标*
+
+1. 议程的启动
+2. 政策制定者的概况
+3. 政策制定过程
+4. 政策决策和执行的逻辑
+5. 政策评估
+6. 政策结果的预测
+......
+:::
+
+::::
+
+
+
+## 大数据分析的层次
+
+:::{style="text-align:center; margin-top: 2em"}
+
+描述分析
+（数据科学手段）
+
+:::{.fragment}
+↓
+
+关系分析
+（计量经济学手段）
+:::
+
+
+:::{.fragment}
+↓
+
+模式学习
+（社会科学手段）
+:::
+
+
+:::{.fragment}
+↓
+
+因果推断
+（跨学科手段）
+:::
+
+:::
+
+:::{.notes}
+因果推断：统计学、经济学、计算机等
+:::
+
+
+## 描述
+
+全球 Covid-19
+
+<iframe src="https://ourworldindata.org/explorers/coronavirus-data-explorer?tab=map&facet=none&Metric=Confirmed+deaths&Interval=7-day+rolling+average&Relative+to+Population=true&Color+by+test+positivity=false&country=USA~ITA~CAN~DEU~GBR~FRA~JPN&hideControls=true" loading="lazy" style="width: 100%; height: 500px; border: 0px none;"></iframe>
+
+---
+
+Standardized World Income Inequality Database (Solt 2020)
+
+<iframe src="https://fsolt.shinyapps.io/SWIIDweb" style="border: none; width: 100%; height: 550px; border: 0px none;"></iframe>
+
+
+## 关系分析  {auto-animate=true}
+
+![](images/idea_pd7.png){fig-align="center" height=550}
+
+:::{.notes}
+1997
+:::
+
+
+## 模式学习  {auto-animate=true}
+
+::: {.panel-tabset}
+### 比较
+
+:::{.r-hstack}
+![](images/idea_pd7.png){fig-align="center" height=500}
+
+![](images/idea_pd0.png){.fragment fig-align="center" height=500}
+:::
+
+### 多元
+
+![](images/idea_pdregression.png){fig-align="center" height=500}
+
+:::
+
+
+
+## 因果推断
+
+![](images/idea_closed.gif){fig-align="center" height=550}
+
+
+## 举例：儒学院关闭的因果效应
+
+:::: {.columns}
+
+::: {.column width="50%"}
++ 得到[Google Jigsaw](https://jigsaw.google.com/)的支持
++ 监控全球100多种语言的广播、印刷和网络新闻[无处不在]{.red}
++ 变量：人物、地点、组织机构、主题、来源、情感、计数、引语、图像和事件
+
+:::{.notes}
+Jigsaw is a unit within Google that explores threats to open societies, and builds technology that inspires scalable solutions.
+:::
+:::
+
+::: {.column width="50%"}
+![](images/idea_gdelt.gif){fig-align="center" height=550}
+:::
+
+::::
+
+## Shutting-down vs. Ice cream
+
+:::{.r-hstack}
+![](images/idea_closeEffect.jpg){.fragment fig-align="center" height=550}
+
+![](images/idea_iceCreamEffect.gif){.fragment fig-align="center" height=550}
+:::
+
+## 推断结果
+
+![](images/idea_closeEffect.png){fig-align="center" height=550}
+
+
+## 大数据的分析陷阱
+
+:::{.large style="text-align:center; margin-top: 2em"}
+1. 创新性
+2. 伦理性
+3. 合理性 (下节讨论)
+:::
+
+
+
+## 创新性
+
+:::{style="text-align:center"}
+[<img src="images/idea_alreadyKnow1.png" height = 250 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
+[<img src="images/idea_alreadyKnow2.png" height = 250 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)
+:::
+
+
+## 伦理性：来源
+
+[<img src="images/idea_illegalCollection.png" height = 550 />](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
+
+:::{.notes}
+FTC（美国联邦贸易委员会）和纽约州总检察长指控YouTube频道在未经父母同意的情况下收集儿童个人信息用于定向广告。
+:::
+
+
+## 伦理性：用处
+
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xRzNZWGJWQ096bWFHMDNxP2U9Q2xlWlNk.mp4" type="video/mp4">
+</video>
+
+
+## 伦理性：诱导
+
+![](images/idea_ca.jpg){fig-align="center" height=550}
+
+
+:::{.notes}
+2018年Facebook数据泄露事件：Facebook在2015年就发现剑桥分析公司非法获取大量用户隐私数据用于政治广告投放，但为何没有及时告知用户，直到今年媒体曝光才承认？
+
+剑桥分析助选
+:::
+
+
+## 伦理性：误导
+
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xRzR6RzJFWERqbS1BcHZyP2U9eEF5REpX.mp4" type="video/mp4">
+</video>
+
+
+## 小结
+
+数据性质与价值
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 数据价值
+    1. 战略价值
+    1. 分析价值
+        - 描述
+        - 关系
+        - 模式
+        - 因果
+:::
+
+::: {.column width="50%"}
+- 分析陷阱
+    - 创新性
+    - 伦理性
+    - [合理性]{.grayLight}
+:::
+
+::::
+
+
+
+# 政务数据分析原则
+
+## 原则向度
+::::{.columns}
+:::{.column width="50%"}
+### 研究设计原则
+
+- 科学研究
+
+
+### 数据收集原则
+
+1. 样本选取
+1. 变量测量
+
+:::
+
+:::{.column width="50%"}
+### 人才培养原则
+
+1. 知识基础
+1. 软硬件基础
+1. 认知基础
+:::
+::::
+
+
+# 研究设计原则
+
+
+## 科学研究
+
+:::{style="text-align:center; margin-top: 3em"}
+> [[综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、深入分析论证、**科学把握尺度**。]{.red .large}    
+[——习近平 (《中央政治局的同志必须有很强的看齐意识》, 2015年12月）]{.large}]{.fragment .r-fit-text}
+:::
+
+:::{.fragment .fade-in style="text-align:center; margin-top: 1em"}
+如何科学？
+
+:::{.fragment .semi-fade-out}
+信念
+:::
+
+程序    
+方法
+:::
+
+
+## 研究程序
+
+::::{.columns style="text-align:center; margin-top: 1em"}
+:::{.column width="50%"}
+### 问题导向
+
+1. [问题]{.red}提出
+1. 理论[假设]{.red}
+1. 数据[方法]{.red}
+1. 实证[检验]{.red}
+
+:::
+
+:::{.notes}
+Jim Gray 早在2006 年就发表了题为《第四范式：数据密集型科学发现》：实验范式、理论范式、仿真范式、Data-Intensive Scientific Discovery
+:::
+
+:::{.column width="50%"}
+### 数据导向&star;
+
+1. [观察]{.red}数据
+1. [分析]{.red}方法
+1. [规律]{.red}总结
+1. 理论[提升]{.red}
+
+:::
+::::
+
+
+
+## 研究形式
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+*描述*
+
+已知 &rArr; 未知
+
+1. 无偏（正确😄）
+1. 高效（准确😅）
+
+![](images/stat_yangQian.gif){.fragment height=250}
+:::
+
+:::{.column width="50%" .fragment}
+*机制*
+
+搞清why & how
+
+......
+
+but how?
+
+![](images/stat_yuXuanji.jfif){height=250}
+
+:::
+::::
+
+## 关于(因果)机制的几个争议
+
+::::{.columns}
+:::{.column width="30%" .fragment}
+**定义**
+
++ 时间序列
+    + 多重因果？
++ 条件角度
+    + 决定论 vs. 概率论
+
+![](images/stat_bookOfWhy.jpg){.fragment height=250 fig-align="center"}
+:::
+
+:::{.column width="20%" .fragment}
+**测量**
+
+Y ~ X vs.
+
+Y ~ A     
+&rarr; B  &rarr; C  &rarr; D &rarr; E &rarr; ...    
+&rarr; X
+
+:::
+
+:::{.column width="40%" .fragment}
+**观测**
+
+![](images/stat_correlation.png){height=350}
+
+:::
+::::
+
+:::{.notes}
+correlation doesn't imply causation
+:::
+
+
+## 机制推断工具：
+
+::::{.columns}
+:::{.column width="30%" .fragment}
+*这些都不（肯定）是*：
+
+- 方差分析
+- 非参数检验
+- 相关系数
+- 回归分析
+- Lasso
+- SEM
+- 倾向值匹配   
+:::
+
+:::{.column width="70%" .fragment}
+(大概率)是：反事实分析（counterfactual analysis)
+
+- 实验
+- 观察数据
+    - Difference in difference
+    - Regression discontinuity
+    - Counterfactual estimators (FEct, IFEct, MC)/ synthetic control
+    - Regression
+:::
+::::
+
+:::{.notes}
+Liu, Licheng, Ye Wang, and Yiqing Xu. 2022. “A Practical Guide to Counterfactual Estimators for Causal Inference with Time-Series Cross-Sectional Data.” American Journal of Political Science n/a(n/a): Online.
+
+- fixed effects counterfactual (FEct) estimator
+- interactive fixed effects counterfactual (IFEct) estimator
+- matrix completion (MC) estimator.
+:::
+
+
+# 数据收集原则
+
+## 大数据"迷思"
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+“每日上亿条”
+
+“全网数据”
+
+“《人民日报》所有文章”
+:::
+
+:::{.fragment .r-fit-text}
+大数据[不是]{.red}全数据
+:::
+
+:::{.fragment .r-fit-text}
+全数据[不一定是]{.red}好数据
+:::
+
+:::{.notes}
+1. 贵
+1. 没必要
+1. 可信度呈疑
+:::
+
+## 抽样
+
+从[一大堆]{.blue}到[一小撮]{.red} &rArr; 代表性
+
+
+:::{.notes}
+随机抽样的代表性体现在一定的sample size上
+:::
+
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+**简单随机抽样**
+
++ SHA算法和MD5
++ 计算机随机数
+:::
+
+:::{.notes}
+计算机伪随机数
+
+真随机数：物理现象，如内存、硬件、噪音
+:::
+
+:::{.column width="50%" .fragment}
+**复杂抽样**
+
+*设计*
+
++ 配额（quota）
++ 分组（clustering）
++ 分层（stratification）
+
+*矫正*
+
++ 有限总体校正（finite population corrections, FPC）
++ 不相等权重（unequal weights）
+:::
+::::
+
+
+
+## 复杂抽样
+
+::::{.columns}
+:::{.column width="60%" .fragment}
+![](images/stat_stratifiedCluster.png){height=500 style="text-align: center"}
+:::
+
+:::{.column width="40%" .fragment}
+![](images/stat_quota.png){height=500 style="text-align: center"}
+:::
+::::
+
+:::{.notes}
+Stratification: 分类，每类中随机抽取，每类成员在总体中配比不变        
+Clustering：直接随机抽取一类        
+Quota：成分配比够就行，不用随机
+:::
+
+::::{.columns}
+:::{.column width="40%" .fragment}
+*常见设计*：S + W + (FPC)
+
+- Strata
+    - 减少点估计的标准误；
+    - 不同层抽样权重不等;
+    - PSU/SSU/TSU
+:::
+
+:::{.notes}
+PSU: primary sampling unit    
+SSU: secondary sampling unit    
+TSU: tertiary sampling unit
+:::
+
+
+:::{.column width="60%" .fragment}
+- Weight
+    + 样本入选概率的倒数；
+    + 各抽样阶段权重的乘积；
+    + 抽样权重在总体层面是等概率的，但在个体层面是非等概；影响点估计的计算
+:::
+
+
+:::{.notes}
+$FPC = \sqrt{(N-n)/(N-1)}$, 
+
+N = population size   
+n = sample size.
+
+修正估计结果$s = \frac{\sigma}{\sqrt{n}}\sqrt{(N-n)/(N-1)}.$
+
+Finite Population Correction is used when you sample without replacement from more than 5% of a finite population, leading to more uncertainty. 
+
+当sampling 大于population的5%时使用
+
+For example, if you have selected 200 goldfish out of a population of 1000, the reciprocal of the likelihood of being selected is 1000/200, so the sampling weight for the goldfish would be 5
+:::
+::::
+
+
+## 合理性
+
+> 为了系统地描述他们的观点，我们从2010年到2015年的社交媒体帖子中获取了一个随机样本...... 从这些数据中，我们.red[抽取了]128个帖子，这些帖子是由人们......--- King、Pan和Roberts 2017年《美国政治科学评论》（APSR）
+
+> 该分析仅限于.red[随机样本]的推文，我们收集了手工标注的数据...... --- Cirone和Hobbs 2022年《政治科学研究方法》（PSRM）
+
+
+[抽样偏差、数据来源冲突、波动增加、误差率...]{.fragment}
+
+
+---
+
+![](images/idea_dataNeverTalk2.jpg){fig-align="center" height=600}
+
+:::{.notes}
+数据来源冲突：数据源问题
+
+Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Chicago Booth Review. http://review.chicagobooth.edu/economics/2019/article/purely-evidence-based-policy-doesn-t-exist（2019年3月27日）。
+:::s
+
+
+
+## Wrap Up
+
++ 代表性 &rarr; 抽样
+    + 简单抽样
+    + 复杂抽样
++ 复杂抽样步骤
+    + 分配额/层/群
+    + 权重
++ 复杂抽样分析：考虑权重
+
+
+## 教育神话
+
+典型对话：
+
+> A：我想在我的项目中使用大数据方法。我应该怎么做？
+> B：去学Python吧！！
+
+--
+
+.pull-left[
+<img src = "images/big_dataScience.png" height = 380>
+]
+
+--
+
+.pull-right[
+.large[更不用说一个基于数据的社会科学家了！]
+]
+
+
+---
+
+
+
+???
+
+除非人们愿意改
+
