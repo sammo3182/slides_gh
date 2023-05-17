@@ -1,0 +1,283 @@
+---
+title: |
+    | 计算·社会科学
+subtitle: |
+    | 星火茶话会
+date: "2023-05"
+date-format: "iso"
+
+author: "胡悦"
+institute: |
+    | 清华大学社会科学学院政治学系
+    | 副教授
+
+# bibliography: pre_efficacy.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## 个人简介
+
+:::: {.columns}
+
+::: {.column width="60%"}
+*个人经历*
+
+- 政治[科学]{.red}博士[（University of Iowa)]{.small}
+  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 清华大学计算社会科学平台[(副主任)]{.small}
+  - 清华数据与治理中心[(副主任)]{.small}
+- Learning R with Dr. Hu and His Friends
+
+*研究特点*：*现代性与学科[交叉]{.red}*
+
+- W. 计量与数据科学
+  - 实验室和调查实验
+  - 潜变量分析、网络分析、空间分析
+  - 文本大数据分析、数据可视化等
+:::
+
+::: {.column width="40%"}
+*研究领域*
+
+- W. 心理学
+  - 记忆政治（参与、公卫）
+  - 政治传播（官媒、青年）
+  - 身份[认知]{.red}（城乡、香港、司法）
+- W. 经济学
+  - 宏观经济 &rarr; 微观认知 &rarr; 中观行为公共政策
+  - 社会经济[不平等]{.red}
+- W. 语言学
+  - [语言]{.red}能力的政治影响
+  - 语言政策的治理功能
+
+:::
+
+::::
+
+## 概述
+
+- 新时代数据观
+- 四个迷思
+- 成为计算社会科学家
+
+# 新时代数据管
+
+## （大）数据的战略价值
+
+:::{style="text-align:center; margin-top: 3em"}
+> [[大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动，深入了解大数据发展现状和趋势及其对经济社会发展的影响，分析我国大数据发展取得的成绩和存在的问题，推动实施国家大数据战略，加快完善数字基础设施，推进数据资源整合和开放共享，保障数据安全，加快建设数字中国，更好服务我国经济社会发展和人民生活改善。]{.red .large}    
+[——习近平 (《中共中央政治局第二次集体学习》, 2017年]{.large}]{.fragment .r-fit-text}
+:::
+
+
+
+## （大）数据的战略价值^[Liu, Lizhi. 2021. “The Rise of Data Politics: Digital China and the World.” Studies in Comparative International Development 56(1): 45–67.]
+
+
+|        	| 排他                                                  	| 非排他                                  	|
+|--------	|-------------------------------------------------------	|-----------------------------------------	|
+| 竞争   	| *私有产品*： <br>食物、石油、普通制成品、私人池塘里的鱼等。 	| *公共资源*： <br>森林、矿山、海洋中的鱼等。 	|
+| 非竞争 	| *俱乐部产品*： <br>卫星电视、私人公园等。<br>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;[**数据**]{.red}	| *公共产品*： <br>国防、航空、阳光、新闻等。 	|
+
+
+:::{style="text-align:center; margin-top: 2em"}
+- 估值困境
+- 管理困境
+:::
+
+:::{.notes}
+
+数据不是新的石油
+
+- 估值困境
+    - GDP只能测量有固定价格产品
+    - 数据：无限复制，不同组合价值也不一样
+
+- 管理困境
+    - Data regulation: overdue, regulatory overkill, risk management or overreaction
+
+:::
+
+# 计算社会科学迷思
+
+## 关于计算社会科学的三个迷思
+
+- 数据量迷思
+- 抽样迷思
+- 方法迷思
+
+## 数据量迷思
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+“每日上亿条”
+
+“全网数据”
+
+“《人民日报》所有文章”
+:::
+
+:::{.fragment .r-fit-text}
+大数据[不是]{.red}全数据
+:::
+
+:::{.fragment .r-fit-text}
+全数据[不一定是]{.red}好数据
+:::
+
+:::{.notes}
+1. 贵
+1. 没必要
+1. 可信度呈疑
+:::
+
+## 抽样迷思
+
+> 为了系统地描述他们的观点，我们从2010年到2015年的社交媒体帖子中获取了一个随机样本...... 从这些数据中，我们.red[抽取了]128个帖子，这些帖子是由人们......--- King、Pan和Roberts 2017年《美国政治科学评论》（APSR）
+
+> 该分析仅限于.red[随机样本]的推文，我们收集了手工标注的数据...... --- Cirone和Hobbs 2022年《政治科学研究方法》（PSRM）
+
+
+- 简单和复杂抽样是否适用于政务大数据？
+- 抽样偏差、数据来源冲突、波动增加、误差率...
+- "Let data talk"?
+
+---
+
+![](images/css_dataNeverTalk2.jpg){fig-align="center" height=600}
+
+:::{.notes}
+数据来源冲突：数据源问题
+
+Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Chicago Booth Review. http://review.chicagobooth.edu/economics/2019/article/purely-evidence-based-policy-doesn-t-exist（2019年3月27日）。
+:::
+
+## 方法迷思
+
+1. > 调研都是主观数据，靠不住。大数据是[客观数据]{.red}，更能反映人类行为规律。
+
+1. > 大数据研究有[全数据]{.red}，数据可视化已经能够体现规律
+
+1. > 大数据都是[描述数据]{.red}，没法进行因果推断
+
+## 学习迷思
+
+典型对话：
+
+> 负责人：我想在项目中使用大数据方法。我应该怎么做？
+
+> 顾问：去学Python吧！！
+
+
+# 成为计算社会科学家
+
+## 知识基础 {background-image="images/css_dataScience.jpg" background-size="auto auto" background-opacity=0.9}
+
+## 操作基础
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Python > R**
+
+- API ports
+- Automation tools
+- Commercial usage
+
+:::
+
+::: {.column width="50%"}
+
+**R > Python**
+
+- Analysis
+- Visualization
+- Ecology
+
+:::
+
+::::
+
+## 认知基础
+
+![](images/css_dataScience.png){fig-align="center" height=600}
+
+---
+
+![](images/css_curiosity.jpg){fig-align="center" height=600}
+
+## 小结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 新时代数据观
+    - 战略价值
+- 四个迷思
+    1. 数据量迷思
+    1. 抽样迷思
+    1. 方法迷思
+    1. 学习迷思
+:::
+
+::: {.column width="50%"}
+- 成为计算社会科学家
+    1. 知识基础
+    1. 操作基础
+    1. 认知基础
+:::
+
+::::
+
+
+## {background="#43464B"}
+
+:::{style="text-align: center; margin-top: 5em"}  
+[Thank You]{.Large}
+
+:::{style="margin-top: 2em"}
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){fig-align="center" height=200}
+
+:::
+:::
