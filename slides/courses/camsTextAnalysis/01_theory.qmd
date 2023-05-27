@@ -1,0 +1,1014 @@
+---
+title: |
+    | Principles of 
+    | Text Analysis
+subtitle: |
+    | Class Advanced Methods School, CityU
+date: "2023-06-11"
+date-format: "iso"
+
+author: "Yue Hu"
+institute: |
+    | Associate professor of Political Science
+    | Deputy director of Digit and Governance Center
+    | Tsinghua University
+
+bibliography: pre_cams.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: style_basic.css
+    theme: goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    history: false # not record slides in browser history
+    progress: false
+    controls: false
+    pointer:
+      pointerSize: 18
+      color: '#32cd32'
+    sc-sb-title: true
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+
+    # spotlight:
+    #   size: 30
+    #   presentingCursor: "default" # showing the cursor on the presentation page
+    #   disablingUserSelect: false
+    
+    # show-slide-number: speaker # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px
+      data-background-position: top 10% right 5%
+
+filters:
+  - code-fullscreen
+  - reveal-header
+  - lightbox
+
+revealjs-plugins:
+  - pointer # adding q to activate/deactivate a pointer
+  # - spotlight
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  icons,
+  tidyverse, 
+  flextable, gridExtra,
+  rvest, stringr, broom, jiebaR, tidytext, tidyverse
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## Self Brief
+
+:::: {.columns}
+
+::: {.column width="60%"}
+*Experience*
+
+- PhD. of Poli. Sci., U of Iowa
+  - Grad. Certificate in Informatics
+- Deputy director
+    - Computational Social Science Platform
+    - Data and Governance Center, THU
+- Founder of *Learning R with Dr. Hu and His Friends*
+:::
+
+::: {.column .fragment width="40%"}
+*Research interest*: 
+
+> Interdisciplinary
+
+- W. data science
+  - Lab and survey experiments
+  - Latent variable, network, spatial
+  - [Text analysis, data visualization]{.red}
+:::
+
+::::
+
+## Research Areas
+
+- W. psychology
+  - Political [**communication**]{.red} (state media, youth)
+  - **Memory** politics(participation, public health)
+  - **Identity** cognition (urban/rural, Hong Kong, Judiciary)
+- W. economics
+  - Macro economy &rarr; micro cognition &rarr; meso-policy
+  - Socioeconomic [**inequality**]{.red}
+- W. linguistics
+  - Political **influence** of language
+  - Language planning and [**policies**]{.red}
+
+## Overview
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*Principles of the Approach*
+
+- Structralization
+- Assumptions
+- Applications
+:::
+
+::: {.column width="50%"}
+*Principles of Data Generation Process (DGS)*
+
+- Text source
+- Text wrangling
+- Text analysis
+:::
+
+::::
+
+
+# Text-As-Data Approach
+
+## When text becomes data
+
+- Yearly: The annual increase of social media users from 2017 to 2018 is 56,530,000.
+- Daily: 
+    + Baidu ("Chinese google") [day]{.red} user search request, it takes [1.7 days]{.red} to scan once;
+    + Wechat ("Chinese whatsup") [day]{.red} added data [500TB]{.red}---more than all human books.
+- Timely: 2.9 million emails around the world [every second]{.red}
+    - A person's [5.5 years]{.red} of day and night to read them all.
+
+
+:::{.fragment}
+
+:::{.callout-tip collapse="true"}
+By 2020, the size of global data has reached 40ZB (5.2TB/person).^[
+<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB---reference: 1080p HD 2hrs：6GB
+]
+:::
+
+:::
+
+:::{.notes}
+http://pdf.dfcfw.com/pdf/H3_AP201903111304577789_1.pdf
+
+Giga Byte < Tera Byte < Peta Byte < 
+Exa Byte < Zetta Byte < Yotta Byte
+:::
+
+## History of text as data
+
+- Long history
+    - @Coase1960: how the law resolves externality problems
+    - @FriedmanSchwartz2008: Construction of policy surprises via historical documents.
+    - Difficulties:
+        - Data maintaining and update
+        - Text analytic methods
+        - Time-consuming
+        - Low generalization
+
+## Boom of Text Analysis
+
++ Text data grows [exponentially]{.red}
++ Large-scale text data [collection]{.red}
++ Enhanced [storage and management]{.red} capabilities
++ Extensive [social meaning]{.red} expressed through text
++ Scalable, well-developed and economic [methods]{.red}
+
+## Text-as-data methods
+
+:::: {.columns}
+
+::: {.column width="40%"}
+*Objective*
+
+~~Text~~ vs. Language [&check;]{.green}
+:::
+
+::: {.column width="60%"}
+*Type*
+
+* Text analysis vs. content analysis
+* Representational analysis vs. Instrumental analysis
+* Thematic analysis vs. semantic analysis
+
+:::{.notes}
+Representational 精确解码，关注外显（manifest）；
+Instrumental 探索意图，关注隐含（latent）
+Thematic 概念是否出现及何种关系，基于词频和向量；
+Semantic 识别主题间的具体关系；考虑语法、逻辑等
+
+语法学(syntax, how to say it)
+语义学(semantic, what is said)
+语用学(pragmatic, what is implicated)
+:::
+:::
+
+
+::::
+
+
+## Illustration: @Grimmer2010
+
+- Objective
+    - The priorities political actors emphasize in statements
+- Method
+    - Bayesian Hierarchical Topic Model
+- Data
+    - An original collection of over 24,000 Senate press releases in 2007
+
+## Findings
+
+::: {.panel-tabset}
+### Focus
+
+:::: {.columns}
+
+::: {.column width="30%"}
+Committee Leaders Focus on their Committee’s Issues
+:::
+
+::: {.column width="70%"}
+![](images/theory_grimmer1.png){.lightbox fig-align="center" height=450}
+:::
+
+:::{.notes}
+Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees’ jurisdiction than other senators. **This figure compares the attention that Senate committee leaders—chairs or ranking members—dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
+:::
+
+::::
+
+
+### Cluster
+
+![](images/theory_grimmer2.png){fig-align="center"}
+
+Expressed Agendas Cluster Geographically
+
+:::{.notes}
+Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators’ expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state’s delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture’s importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicates the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
+:::
+
+### Predict
+
+![](images/theory_grimmer3.png){fig-align="center"}
+
+Attention to Appropriations Predicts Opposition to Earmark Reform
+
+:::{.notes}
+Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose DemintMcCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator’s posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
+:::
+:::
+
+
+
+## Illustration: @BenoitEtAl2016
+
+- Objective
+    - Professionals vs. Masses
+- Method
+    - Crowd-sourced identification
+- Data
+    - 18,263 natural sentences from *British Conservative, Labour and Liberal Democrat* manifestos
+    
+
+## Operation
+
+::: {.panel-tabset}
+### Coding
+
+![](images/theory_crowd-sourced.jpg){fig-align="center" height=500}
+
+:::{.notes}
+Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.
+:::
+
+### Results
+
+![](images/theory_expert-crowd.png){fig-align="center" height=500}
+
+:::{.notes}
+Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
+:::
+
+:::
+
+
+
+## Illustration: @DietrichEtAl2019
+
+- Objective
+    - Speakers' emotional state
+- Method
+    - Analyses of vocal pitch
+- Data
+    - 74,158 Congressional floor speeches
+
+## Operation
+
+:::{.r-stack}
+![](images/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
+
+:::{.fragment}
+![](images/theory_vocalPitch.png){.lightbox fig-align="center" height="500"}
+:::
+
+:::
+
+
+
+## Illustration: @ZhangPan2019
+
+- Objective
+    - Group activities from social media
+- Method
+    - CNN for images; CNN-RNN for texts
+- Data
+    - A random sample of 20,000 geocoded posts from Weibo, 2010--2017
+
+## Operation
+
+:::{.r-stack}
+![](images/theory_casm.png){fig-align="center" width="1000"}
+
+![](images/theory_runningMan.png){.fragment fig-align="center"}
+
+![](images/theory_banner.png){.fragment fig-align="center" height=500}
+:::
+
+
+## Challenges of text as data
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*Theory*
+
+- Single causal mechanism?
+    - Intentional writing vs. measurement errors
+
+*Assumption*
+
+- A bag of words (elaborated later)
+:::
+
+::: {.column width="50%"}
+*Data*
+
+- Unstructuralized data
+- Manifest and latent dimension reduction
+- Concept relations and context ignorance
+- DGP
+    - Only posted
+    - One-time censor?
+    - Random sampling?
+:::
+
+:::{.notes}
+审查已经使用 machine learning @SuEtAl2020
+:::
+
+::::
+
+## Wrap it up
+
+- History of text-as-data
+    - Long and short
+- Text-as-data methods
+    - Objective: language
+    - Types
+- Illustrations
+    - Text &rarr; audio, video
+
+# DGS for Text-As-Data
+
+## Points to cover
+
+1. Where to find text resources?
+1. How to get text resources?
+1. How to deal with text information?
+1. What can text data do?
+
+
+## Text source: Original
+
+:::{style="text-align:center; margin-top: 2em"}
+*Text from authors*
+
+* Email/SMS
+* Website HTML
+* RSS feeds
+* Internet social media
+* Internet Forum
+* Network question and answer platform
+* Media database
+* Internet transaction behavior       
+......
+:::
+
+## Open Platforms
+
+![](images/theory_zhongsheng_index.png){fig-align="center" height=600}
+
+## Media database
+
+![](images/theory_renminribao.png){fig-align="center" height=600}
+
+## E-Government
+
+![](images/theory_henan-Egovernment.png){fig-align="center" height=600}
+
+## Social Media
+
+![](images/theory_social-media.gif){fig-align="center" height=600}
+
+:::{.notes}
+新浪微博1.4亿，微信用户5.5亿;
+微信日增数据500TB，QQ日增数据200TB。
+:::
+
+## Reddit
+
+![](images/theory_zhihu.png){fig-align="center" height=600}
+
+:::{.notes}
+Quora, Stack Overflow
+:::
+
+## Open question
+
+![](images/theory_survey_openQuestion.png){fig-align="center" height=600}
+
+
+## Text source: Second-hand
+
+:::{style="text-align:center; margin-top: 2em"}
+*Text from archives*
+
+* CNKI and other databases (journals, newspapers, yearbooks, etc.)
+* Google Books, Baidu Scholar
+* Google Trend, Baidu Index
+* JSTOR Data for Research   
+......
+:::
+
+## Indicators
+
+![](images/theory_baidu_zhishu.png){fig-align="center" height=600}
+
+## Digitalized documents
+
+:::{.r-stack}
+![](images/theory_hongkong_lib.png){fig-align="center" height=600}
+
+![](images/theory_cbdb.png){.fragment fig-align="center" height=600}
+:::
+
+## Text collection
+
+- Second-hand: archive and digital database
+- First-hand: Spider/crawler/scraper
+
+:::{.r-stack}
+![](images/theory_bazhuayu.png){.fragment fig-align="center" height=450}
+
+![](images/theory_huochetou.png){.fragment fig-align="center" height=450}
+
+![](images/theory_gooseeker.png){.fragment fig-align="center" height=450}
+:::
+
+## Scraper operation
+
+:::{.r-stack}
+![](images/theory_gooseekerI.png){.fragment fig-align="center" height=600}
+
+![](images/theory_gooseekerII.png){.fragment fig-align="center" height=600}
+
+![](images/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+:::
+
+## Customized Scrapping
+
+`SelectorGadget` (Chrome add-in)
+
+![](images/theory_zhongsheng_page.png){fig-align="center" height=500}
+
+## Scrapping programming
+
+`rvest`(R)
+
+```{r zhongsheng-eg, eval = FALSE, echo=TRUE}
+ls_zhongsheng <-
+  read_html("http://politics.people.com.cn/GB/8198/426918/index.html") |> # index page
+  html_nodes("h5 a") |> # the nodes of the links
+  html_attr("href") |> # just the links
+  str_replace("^/n1", "http://politics.people.com.cn/n1")
+
+df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
+  zs_article <- read_html(link, encoding = "GB18030") # read the html
+  
+  zs_title <- html_nodes(zs_article, "h1") |>
+    html_text
+  
+  zs_time <- html_nodes(zs_article, ".box01 .fl") |>
+    html_text |>
+    str_extract("\\d{4}年\\d{2}月\\d{2}日")
+  
+  zs_content <- html_nodes(zs_article, "#rwb_zw p") |>
+    html_text |>
+    str_c(collapse = "") |> # combined the paragraphs
+    str_remove_all("\\s|\\n|\\t") # remove the horizontal spaces
+  
+  zs_data <- data.frame(title = zs_title,
+                        time = zs_time,
+                        content = zs_content)
+})
+```
+
+## Regular Expression
+
+![](images/theory_regular_expression.png){fig-align="center" height=600}
+
+## Structuralization
+
+![](images/theory_zhongsheng_output.png){.lightbox fig-align="center"}
+
+## Wrap it up
+
+- Source of text data
+    - Original
+    - Second-hand
+- Scrapping
+    - Foolproof software
+    - Programming
+        - Regular expression
+- Structuralization
+
+# Analyzing text
+
+## An (Classic) Overview^[@GrimmerStewart2013]
+
+![](images/theory_analysis-method.png){fig-align="center" height=550}
+
+## Level of Analysis
+
+:::{style="text-align:center; margin-top: 2em"}
+:::{.fragment .fade-in-then-semi-out}
+*Description*
+
+Frequency, word cloud ([NO!]{.red}), network
+:::
+
+
+:::{.fragment .fade-in-then-semi-out}
+*Classification*
+
+Supervised, unsupervised, self-supervised
+:::
+
+:::{.fragment}
+*Semantics*
+
+Sentiment analysis, word embedding, word sequence, relationship
+:::
+:::
+
+## Principle of Analysis
+
+:::{style="text-align:center; margin-top: 2em"}
+1. All quantitative models of language are [wrong]{.red}---but some are useful. 
+1. Quantitative methods for text amplify resources and [augment humans]{.red}. 
+1. There is [no globally best]{.red} method for automated text analysis. 
+1. [Validate, Validate, Validate.]{.fragment .highlight-blue}
+:::
+
+## "Fake" Assumption
+
+:::{.callout-important}
+**Bag of word**
+
+A text is represented as the bag (multiset) of its words.
+:::
+
+![](images/theory_bagOfWords.png){.fragment fig-align="center" height=300}
+
+## Words in different names/processing
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Corpus
+    - Document (volumn, chapter, section)
+        - Paragraph
+            - Sentence
+                - Clause
+                    - Word (1-gram)
+                        - Token
+:::
+
+::: {.column .fragment width="50%"}
+:::{.callout-tip}
+## Token
+
+Sequence of linguistic features
+:::
+
+- Token in a document: term
+- Token in a group: N-gram 
+    - A word = a Unigram
+
+:::
+
+::::
+
+## Preprocessing
+
+:::{style="text-align:center; margin-top: 2em"}
+- Segmentation
+- Tokenization
+- Stopwords/function words removing   
+......
+:::
+
+
+## Segmentation
+
+:::: {.columns}
+
+::: {.column width="30%"}
+*Analytic languages* (e.g., English)
+
+Document &rarr; paragraphs/sentences
+:::
+
+::: {.column width="70%"}
+*Isolating languages* (e.g, CJK)
+
+> "近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。——“难道非要撞了南墙才回头——意孤行必将失败”,《人民日报》（2019年05月30日02版）
+
+```{r segment}
+library(jiebaR)
+
+zhongsheng <- "近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"
+cutter <- worker() # segment engine
+
+segment(zhongsheng, cutter)
+```
+:::
+
+::::
+
+
+## Tokenization
+
+- Goal: Removing syntax
+- Removing: capitalization, punctuation, non-alphanumeric characters (@#$%……&*), stop words
+
+:::{.fragment}
+
+*Stopwords examples*
+
+```{r stop-words}
+read_lines(STOPPATH)[883:903]
+read_lines(STOPPATH)[157:177]
+```
+:::
+
+
+:::{.fragment}
+:::{.callout-tip}
+## Stopwords sources in Chinese
+
+* 百度停词表
+* 哈工大停词表
+* 网络搜集停词表，如[“最全中文停用词表整理（1893个）”](https://blog.csdn.net/shijiebei2009/article/details/39696571)
+:::
+:::
+
+
+---
+
+- Dimension reduction
+    - Lemmization: (happy, happier, happiness) &rarr; happy
+    - Stemming: (happy, happier, happiness) &rarr; happi
+
+:::{.fragment}
+:::{.callout-tip}
+## More Examples
+
+- Lemmization: (went, leaves, geese, unhappy) &rarr; (go, leaf, goose, unhappy)
+- Stemming: (went, leaves, geese, unhappy) &rarr; (went, leav, geese , unhappi)
+:::
+:::
+
+- Labelling
+    - Content vs. function
+    - Linguistic features: n., v., adj., adv., prep., conj.......
+
+## Outcomes
+
+![](images/theory_bagOfWords2.jpg){fig-align="center" height=600}
+
+## Analysis of Words
+
+*Original*
+
+```{r zhongsheng-clean}
+df_zhongsheng <- readRDS("data/zhongsheng.RDS")
+
+df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
+  segment(content, cutter) %>% paste(collapse = " ")
+})
+
+df_zhongsheng$phase <- "US_fail"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-22"] <- "theory_test"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-11"] <- "reassessment"
+df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-08"] <- "optimism"
+
+
+df_token <- df_zhongsheng %>% 
+  select(-content) %>% 
+  unnest_tokens(word, segmented) # tokenization
+
+# Show the word counts
+select(df_token, -phase) %>% head
+```
+
+:::{.fragment}
+*Removing the stopwords*
+
+```{r zhongsheng-stop}
+# removing the stop words
+df_stopWords <- tibble(word = read_lines(STOPPATH))
+
+df_token <- df_token %>% 
+  anti_join(df_stopWords) 
+
+select(df_token, -phase) %>% head
+```
+
+:::
+
+## Frequency Analysis
+
+```{r zhongsheng-frequency, fig.align='center'}
+df_token %>% count(word, sort = TRUE) %>% 
+  filter(n > 151) %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  ylab("Word Frequency") + 
+  theme(axis.text = element_text(size = 20)) +
+  coord_flip()
+```
+
+## Frequency Dynamics
+
+```{r zhongsheng-phase-freq, out.width="100%"}
+df_token %>% 
+  group_by(phase) %>% 
+  count(word, sort = TRUE) %>% 
+  top_n(10) %>%
+  ungroup() %>% 
+  mutate(word = reorder(word, n),
+         word = factor(word, levels = rev(unique(word)))) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  xlab(NULL) +
+  coord_flip() +
+  ylab("Word FRequency") + 
+  theme(axis.text = element_text(size = 12)) +
+  facet_wrap(~ phase, scales = "free")
+```
+
+:::{.notes}
+The Economist journalist Simon Rabinovitch
+:::
+
+## Frequency Correlations
+
+```{r zhongsheng-fre-compare, out.width="100%"}
+frequency <- df_token %>% 
+  count(phase, word) %>%
+  group_by(phase) %>%
+  mutate(proportion = n / sum(n)) %>% 
+  select(-n) %>% 
+  spread(phase, proportion) %>% 
+  gather(phase, proportion, optimism:theory_test)
+
+library(scales)
+
+# expect a warning about rows with missing values being removed
+ggplot(frequency, aes(x = proportion, y = `US_fail`, color = abs(`US_fail` - proportion))) +
+  geom_abline(color = "gray40", lty = 2) +
+  geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
+  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5, family = "WenQuanYi Micro Hei") +
+  scale_x_log10(labels = percent_format()) +
+  scale_y_log10(labels = percent_format()) +
+  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+  facet_wrap(~phase, ncol = 2) +
+  theme(legend.position="none") +
+  labs(y = "US Inevitable Failure", x = NULL) +
+  theme(text = element_text(family = "WenQuanYi Micro Hei"))
+```
+
+:::{.notes}
+x = proportion, y = `US_fail`
+
+proportion = n / sum(n)
+:::
+
+## Keyword analysis
+
+Keywords for articles published on 2019-05-07
+
+```{r keyword}
+extractor_keyword <- worker("simhash", topn = 5)
+
+simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-07"], extractor_keyword)
+```
+
+. . .
+
+Keywords for articles published on 2019-05-30
+
+```{r keword2}
+simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"], extractor_keyword)
+```
+
+
+## Similarity analysis
+
+Measuring the distance between texts
+
+> Hamming distance: the distance between two strings of equal length is the number of [positions]{.blue} at which the [corresponding symbols are different]{.red}. 
+
+:::{.r-stack}
+![](images/theory_hammingDis_org.png){fig-align="center" height=num}
+![](images/theory_hammingDis_comp.png){fig-align="center" height=num}
+:::
+
+e.g., H(100→011) = 3; H(010→111) = 2.
+
+:::{.notes}
+It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
+:::
+
+## Application
+
+:::: {.columns}
+
+::: {.column width="50%"}
+*05-30 vs. 05-[22]{.red}*
+
+```{r keyword-distnace}
+distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+         df_zhongsheng$content[df_zhongsheng$time == "2019-05-22"],
+         extractor_keyword)
+```
+:::
+
+::: {.column width="50%"}
+*05-30 vs. 05-[23]{.red}*
+
+```{r keyword-distance2}
+distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+         df_zhongsheng$content[df_zhongsheng$time == "2019-05-23"][1],
+         extractor_keyword)
+```
+:::
+
+::::
+
+## Beyond "Bag of Words"
+
+> Bring the context back
+
+- Analysis of function words (stopwords, parts of speech)
+- Word weights: e.g., term frequency-inverse document frequency (TF-IDF)
+- Neighbor words:  Markov Model of Order N
+    + Unigram: 清华 大学 政治 系
+    + Bigram: 清华大学 政治系/清华 大学政治 系
+    + Trigram：清华大学政治 系/清华 大学政治系
+
+## Word embedding: 
+
+`GloVe`, `word2Vec`: Words' meanings depend not just on immediate neighbors
+
+![](images/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
+
+:::{.notes}
+The term "embedding" comes from the neural network literature, in which an “embedding layer” is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
+
+- The embedding model GloVe (“Global Vectors”) by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
+- An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
+:::
+
+---
+
+Topic modeling
+
+<video width="600" height="1000" controls preload>
+<source src="images/theory_topicModeling.webm" type="video/webm">
+</video>
+
+:::{.notes}
+LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.
+:::
+
+## Attention Function
+
+> As a leading firm in the [MASK] sector, we hire highly skilled software engineers.    
+> As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.
+
+What's should be filled into the "[MASK]"? How do you figure out?
+
+> As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.   
+> As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
+
+Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
+
+
+## Word Sequence
+
+:::{.callout-note}
+## Self-attention function
+
+Take as input a sequence of initial token embeddings and outputs a sequence of new token embeddings that [allow the initial embeddings to interact]{.red}.
+:::
+
+- Massive neural networks composed of stacked attention and feed forward neural network layerscan be efficiently parallelized for training using specialized processors.
+    - A.k.a., the [Transformer]{.red}
+- Common transformer models
+    - BERT
+        - RoBERTa, PALM
+    - The [GPT]{.red .large} family
+
+
+## Wrap it up
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Principles
+    1. All models are wrong
+    1. Aim for assist human
+    1. No best method
+    1. Validation, validation, validation
+- Levels of analysis
+    - Description
+    - Classification
+    - Semantics
+:::
+
+::: {.column width="50%"}
+- Procedure
+    - Preprocessing
+        - Segmentation
+        - Tokenization
+    - Frequency analysis
+        - Frequency, dynamics, correlation
+        - Keyword
+    - Similarity analysis
+    - Semantic analysis
+        - Word embedding, sequence
+        - Topic modeling
+:::
+
+::::
+
+
+
+## {background="#43464B"}
+
+:::{style="text-align: center; margin-top: 5em"}  
+[Thank You]{.Large}
+
+:::{style="margin-top: 2em"}
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){fig-align="center" height=200}
+
+:::
+:::
+
+## References
