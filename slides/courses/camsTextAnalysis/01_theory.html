@@ -18,11 +18,11 @@
 <script src="01_theory_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="01_theory_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="01_theory_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+  <meta name="generator" content="quarto-1.3.340">
 
   <meta name="author" content="Yue Hu">
   <meta name="dcterms.date" content="2023-06-11">
-  <title>quarto-input14a087bf</title>
+  <title>quarto-input1a95a262</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -1307,11 +1307,10 @@ Yue Hu
 </blockquote>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "近年来"   "美国"     "一些"     "政客"     "被"       "美国"    
- [7] "优先"     "遮住"     "了"       "双眼"     "大"       "搞"      
-[13] "贸易"     "保护主义" "单边主义" "肆意"     "挥舞"     "关税"    
-[19] "大棒"     "全然不顾" "中美"     "两国人民" "和"       "全世界"  
-[25] "人民"     "的"       "强烈"     "反对"    </code></pre>
+<pre><code> [1] "近年来"   "美国"     "一些"     "政客"     "被"       "美国"     "优先"    
+ [8] "遮住"     "了"       "双眼"     "大"       "搞"       "贸易"     "保护主义"
+[15] "单边主义" "肆意"     "挥舞"     "关税"     "大棒"     "全然不顾" "中美"    
+[22] "两国人民" "和"       "全世界"   "人民"     "的"       "强烈"     "反对"    </code></pre>
 </div>
 </div>
 </div>
@@ -1327,14 +1326,14 @@ Yue Hu
 <p><em>Stopwords examples</em></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "to"     "can"    "could"  "dare"   "do"     "did"    "does"   "may"   
- [9] "might"  "would"  "should" "must"   "will"   "ought"  "shall"  "need"  
-[17] "is"     "a"      "am"     "are"    "about" </code></pre>
+<pre><code> [1] "to"     "can"    "could"  "dare"   "do"     "did"    "does"   "may"    "might" 
+[10] "would"  "should" "must"   "will"   "ought"  "shall"  "need"   "is"     "a"     
+[19] "am"     "are"    "about" </code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "一些"   "一何"   "一切"   "一则"   "一方面" "一旦"   "一来"   "一样"  
- [9] "一般"   "一转眼" "万一"   "上"     "上下"   "下"     "不"     "不仅"  
-[17] "不但"   "不光"   "不单"   "不只"   "不外乎"</code></pre>
+<pre><code> [1] "一些"   "一何"   "一切"   "一则"   "一方面" "一旦"   "一来"   "一样"   "一般"  
+[10] "一转眼" "万一"   "上"     "上下"   "下"     "不"     "不仅"   "不但"   "不光"  
+[19] "不单"   "不只"   "不外乎"</code></pre>
 </div>
 </div>
 </div>
@@ -1565,13 +1564,44 @@ $rhs
 </blockquote>
 <ul>
 <li class="fragment">Analysis of function words (stopwords, parts of speech)</li>
-<li class="fragment">Word weights: e.g., term frequency-inverse document frequency (TF-IDF)</li>
 <li class="fragment">Neighbor words: Markov Model of Order N
 <ul>
 <li class="fragment">Unigram: 清华 大学 政治 系</li>
 <li class="fragment">Bigram: 清华大学 政治系/清华 大学政治 系</li>
 <li class="fragment">Trigram：清华大学政治 系/清华 大学政治系</li>
 </ul></li>
+<li class="fragment">Word weights</li>
+</ul>
+</section>
+<section id="word-frequency-to-weighted-frequency" class="slide level2">
+<h2>Word Frequency to Weighted Frequency</h2>
+<p>Cons of DTM</p>
+<ol type="1">
+<li class="fragment">Not distinguish important words</li>
+<li class="fragment">Over-emphasize common words</li>
+<li class="fragment">Under-emphasize rare words</li>
+</ol>
+<ul>
+<li class="fragment">Word weights: e.g., term frequency-inverse document frequency (TF-IDF)
+<ul>
+<li class="fragment">Pros:
+<ol type="1">
+<li class="fragment">Identify important words</li>
+<li class="fragment">Reduces the weight of common words</li>
+<li class="fragment">Improve the performance of machine learning models</li>
+</ol></li>
+</ul></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<ul>
+<li class="fragment">Cons:
+<ol type="1">
+<li class="fragment">Assume independence of terms (same as DTM)</li>
+<li class="fragment">Give high weight to rare words that is very rare in the corpus but appears a few times in a particular document</li>
+<li class="fragment">Sensitive to the size and diversity of the corpus</li>
+</ol></li>
 </ul>
 </section>
 <section id="word-embedding" class="slide level2">
@@ -1603,7 +1633,7 @@ $rhs
 <section class="slide level2">
 
 <p>Topic modeling</p>
-<video width="600" height="1000" controls="" preload="">
+<video width="1000" height="600" controls="" preload="">
 <source src="images/theory_topicModeling.webm" type="video/webm">
 </video>
 <aside class="notes">
@@ -1627,11 +1657,13 @@ $rhs
 As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.</p>
 </blockquote>
 <p>What’s should be filled into the “[MASK]”? How do you figure out?</p>
+<div class="fragment">
 <blockquote>
 <p>As a leading firm in the [<em>information technology</em>] sector, we hire highly skilled <span class="red">software</span> engineers.<br>
 As a leading firm in the [<em>energy</em>] sector, we hire highly skilled <span class="red">petroleum</span> engineers.</p>
 </blockquote>
 <p>Word embedding weights all the words equally in the context<span class="large">🤦‍♂️</span></p>
+</div>
 </section>
 <section id="word-sequence" class="slide level2">
 <h2>Word Sequence</h2>
@@ -1709,7 +1741,7 @@ As a leading firm in the [<em>energy</em>] sector, we hire highly skilled <span 
 </section>
 <section id="section" class="slide level2" data-background="#43464B">
 <h2></h2>
-<div style="text-align: center; margin-top: 5em">
+<div style="text-align: center; margin-top: 1em">
 <p><span class="Large">Thank You</span></p>
 <div style="margin-top: 2em">
 <p><a href="mailto:yuehu@tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn</a></p>

@@ -904,11 +904,33 @@ distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
 > Bring the context back
 
 - Analysis of function words (stopwords, parts of speech)
-- Word weights: e.g., term frequency-inverse document frequency (TF-IDF)
 - Neighbor words:  Markov Model of Order N
     + Unigram: 清华 大学 政治 系
     + Bigram: 清华大学 政治系/清华 大学政治 系
     + Trigram：清华大学政治 系/清华 大学政治系
+- Word weights
+
+## Word Frequency to Weighted Frequency
+
+Cons of DTM
+
+1. Not distinguish important words
+2. Over-emphasize common words
+3. Under-emphasize rare words
+
+- Word weights: e.g., term frequency-inverse document frequency (TF-IDF)
+  - Pros: 
+    1. Identify important words
+    2. Reduces the weight of common words
+    3. Improve the performance of machine learning models
+    
+---
+
+- Cons:
+  1. Assume independence of terms (same as DTM)
+  2. Give high weight to rare words that is very rare in the corpus but appears a few times in a particular document
+  3. Sensitive to the size and diversity of the corpus
+
 
 ## Word embedding: 
 
@@ -927,7 +949,7 @@ The term "embedding" comes from the neural network literature, in which an “em
 
 Topic modeling
 
-<video width="600" height="1000" controls preload>
+<video width="1000" height="600" controls preload>
 <source src="images/theory_topicModeling.webm" type="video/webm">
 </video>
 
@@ -942,10 +964,14 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 
 What's should be filled into the "[MASK]"? How do you figure out?
 
+:::{.fragment}
+
 > As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.   
 > As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
 
 Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
+
+:::
 
 
 ## Word Sequence
@@ -1000,7 +1026,7 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
 
 ## {background="#43464B"}
 
-:::{style="text-align: center; margin-top: 5em"}  
+:::{style="text-align: center; margin-top: 1em"}  
 [Thank You]{.Large}
 
 :::{style="margin-top: 2em"}
