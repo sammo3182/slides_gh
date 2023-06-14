@@ -332,7 +332,7 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 - Illustrations
     - Text &rarr; audio, video
 
-# DGS for Text-As-Data
+# DGP for Text-As-Data
 
 ## Points to cover
 
@@ -588,13 +588,13 @@ Sequence of linguistic features
 :::: {.columns}
 
 ::: {.column width="30%"}
-*Analytic languages* (e.g., English)
+*Synthetic languages* (e.g., English)
 
 Document &rarr; paragraphs/sentences
 :::
 
 ::: {.column width="70%"}
-*Isolating languages* (e.g, CJK)
+*Analytic/isolating languages* (e.g, CJK)
 
 > "近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。——“难道非要撞了南墙才回头——意孤行必将失败”,《人民日报》（2019年05月30日02版）
 
@@ -641,7 +641,7 @@ read_lines(STOPPATH)[157:177]
 ---
 
 - Dimension reduction
-    - Lemmization: (happy, happier, happiness) &rarr; happy
+    - Lemmatization: (happy, happier, happiness) &rarr; happy
     - Stemming: (happy, happier, happiness) &rarr; happi
 
 :::{.fragment}
@@ -669,7 +669,7 @@ read_lines(STOPPATH)[157:177]
 df_zhongsheng <- readRDS("data/zhongsheng.RDS")
 
 df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
-  segment(content, cutter) %>% paste(collapse = " ")
+  segment(content, cutter) |> paste(collapse = " ")
 })
 
 df_zhongsheng$phase <- "US_fail"
@@ -678,12 +678,12 @@ df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-11"] <- "reassessment"
 df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-08"] <- "optimism"
 
 
-df_token <- df_zhongsheng %>% 
-  select(-content) %>% 
+df_token <- df_zhongsheng |> 
+  select(-content) |> 
   unnest_tokens(word, segmented) # tokenization
 
 # Show the word counts
-select(df_token, -phase) %>% head
+select(df_token, -phase) |> head()
 ```
 
 :::{.fragment}
@@ -693,10 +693,10 @@ select(df_token, -phase) %>% head
 # removing the stop words
 df_stopWords <- tibble(word = read_lines(STOPPATH))
 
-df_token <- df_token %>% 
+df_token <- df_token |> 
   anti_join(df_stopWords) 
 
-select(df_token, -phase) %>% head
+select(df_token, -phase) |> head()
 ```
 
 :::
@@ -704,12 +704,12 @@ select(df_token, -phase) %>% head
 ## Frequency Analysis
 
 ```{r zhongsheng-frequency, fig.align='center'}
-df_token %>% count(word, sort = TRUE) %>% 
-  filter(n > 151) %>%
-  mutate(word = reorder(word, n)) %>%
-  ggplot(aes(word, n)) +
-  geom_col() +
-  xlab(NULL) +
+df_plot <- df_token |> count(word, sort = TRUE) |> 
+  filter(n > 151) |>
+  mutate(word = reorder(word, n))
+
+ggplot(df_plot) +
+  geom_col(aes(word, n)) +
   ylab("Word Frequency") + 
   theme(axis.text = element_text(size = 20)) +
   coord_flip()
@@ -718,14 +718,15 @@ df_token %>% count(word, sort = TRUE) %>%
 ## Frequency Dynamics
 
 ```{r zhongsheng-phase-freq, out.width="100%"}
-df_token %>% 
-  group_by(phase) %>% 
-  count(word, sort = TRUE) %>% 
-  top_n(10) %>%
-  ungroup() %>% 
+df_plot <- df_token |> 
+  group_by(phase) |> 
+  count(word, sort = TRUE) |> 
+  top_n(10) |>
+  ungroup() |> 
   mutate(word = reorder(word, n),
-         word = factor(word, levels = rev(unique(word)))) %>%
-  ggplot(aes(word, n)) +
+         word = factor(word, levels = rev(unique(word))))
+
+ggplot(df_plot, aes(word, n)) +
   geom_col() +
   xlab(NULL) +
   coord_flip() +
@@ -741,12 +742,12 @@ The Economist journalist Simon Rabinovitch
 ## Frequency Correlations
 
 ```{r zhongsheng-fre-compare, out.width="100%"}
-frequency <- df_token %>% 
-  count(phase, word) %>%
-  group_by(phase) %>%
-  mutate(proportion = n / sum(n)) %>% 
-  select(-n) %>% 
-  spread(phase, proportion) %>% 
+frequency <- df_token |> 
+  count(phase, word) |>
+  group_by(phase) |>
+  mutate(proportion = n / sum(n)) |> 
+  select(-n) |> 
+  spread(phase, proportion) |> 
   gather(phase, proportion, optimism:theory_test)
 
 library(scales)
@@ -956,6 +957,9 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
 
 ::::
 
+## Evaluation
+
+![](images/evaluation.png){fig-align="center" height=600}
 
 
 ## {background="#43464B"}
