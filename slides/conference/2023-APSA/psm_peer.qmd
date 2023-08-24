@@ -1,0 +1,525 @@
+---
+title: |
+  | Beyond Righteousness
+  | Experimental Evidence on Extrinsic Motivation and Cocktail Strategy in Public Service Co-Production
+date: "2023-09-02"
+date-format: "iso"
+
+author: 
+  - Yue Hu
+  - Ziyi Chen
+  - Yufei Sun
+
+institute: "Department of Political Science, Tsinghua University"
+
+bibliography: pre_experiment.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - reveal-header
+  - lightbox
+
+revealjs-plugins:
+  # - pointer # adding q to activate/deactivate a pointer
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## 概要
+
+1. 方法概要：因果推断之圣杯，三维世界之权宜
+1. 基本原理：Internal and external validity
+1. 应用举例：心理实验；行为实验；特殊实验
+
+:::{.fragment}
+:::{.callout-warning}
+
+:::: {.columns}
+::: {.column .nonincremental width="50%"}
+**You won't**
+
+- 学会“七十二般”实验设计
+- 掌握“狂拽炫酷”数据分析
+
+:::
+
+::: {.column .nonincremental width="50%"}
+**You will**
+
+- 方法去魅
+- 掌握核心要旨
+- 至少成为“鉴赏家”
+:::
+
+::::
+
+:::
+:::
+
+
+# 方法概要
+
+## 何为使用实验法
+
+:::{style="text-align:center"}
+
+> [[我们必须坚持解放思想、实事求是、与时俱进、求真务实……得出**符合客观规律的科学认识**，形成与时俱进的理论成果，更好指导中国实践。]{.red .large}    
+[——习近平 (《在中国共产党第二十次全国代表大会上的报告》，2020）]{.large}]{.r-fit-text}
+
+- 何以“实事求是、求真务实”
+- 如何获得“科学认识”
+
+:::
+
+
+## 实验法目标问题
+
+:::{.r-hstack}
+![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_confounder.jpg){.fragment height=500}
+
+![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_breakConfounder.png){.fragment height=500}
+:::
+
+:::{.notes}
+实验法的核心是寻找到干净纯洁的X，或者说孤立X
+:::
+
+## 实验法核心逻辑
+
+反事实模型/潜在结果模型
+
+- Potential outcome model
+- Neyman-Rubin Causality Model [RCM, @Splawa-NeymanEtAl1923; @Rubin1990]
+
+![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_everything.gif){.fragment fig-align="center" height=400}
+
+:::{.notes}
+Jerzy Neyman,  Polish mathematician and statistician, UC Berkeley
+
+Everything Everywhere All at Once
+:::
+
+## 因果推断的圣杯
+
+:::: {.columns}
+
+::: {.column width="40%"}
+*RCM的强悍之处*
+
+1. 因果律 &rarr; 单一因素因果效果;
+1. 定义了因果关系;
+1. 使因果关系可见、可测。
+
+:::{.fragment}
+实验甚至成为了“科学”的象征
+:::
+:::
+
+::: {.column .fragment width="60%"}
+![](images/lab_science.png){fig-align="center" height=500}
+:::
+
+::::
+
+
+
+## 当“人生不售来回票”
+
+一种妥协：个体 &rarr; 群体
+
+![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_controlTreatment.png){fig-align="center" height=num}
+
+:::{.notes}
+
+人生不售来回票，一旦动身，绝不能复返。---罗曼·罗兰的《约翰·克里斯朵夫》
+
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+因果推断的圣杯    
+(But) 三维动物的[权益之计]{.red}
+:::
+
+## 为什么实验要包含随机
+
+:::{style="text-align:center;"}
+寻找“[最相近]{.red}的两组”
+:::
+
+![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_balance.png){fig-align="center" height=500}
+
+## 实验流程
+
+:::: {.columns}
+
+::: {.column width="25%"}
+**完整版**
+
+1. 随机分组
+1. 前测
+1. 干预
+1. 后测
+1. 比较
+
+- Randomized Controlled Trials (RCTs)
+:::
+
+::: {.column .fragment width="25%"}
+**缩略版 I **
+
+1. 随机分组
+1. ~~前测~~
+1. 干预
+1. 后测
+1. 比较
+
+- “社科实验”
+
+:::
+
+::: {.column .fragment width="25%"}
+**缩略版 II**
+
+1. ~~随机分组~~
+1. 前测
+1. 干预
+1. 后测
+1. 比较
+
+- “物理试验”
+
+:::
+
+::: {.column .fragment width="25%"}
+**缩略版 III**
+
+1. ~~随机分组~~
+1. ~~前测~~
+1. 干预
+1. 后测
+1. 比较
+
+
+- "自然实验"
+
+:::
+
+::::
+
+## 实验设计
+
+按干预形式分：
+
+:::{.r-hstack}
+![](images/lab_game.jpg){.fragment height=200}
+
+![](images/lab_psyc.png){.fragment height=200}
+
+![](images/lab_natural.jpg){.fragment height=200}
+:::
+
+:::{.notes}
+自然实验: 亚洲人的绿地使用，@LuEtAl2021
+
+Reason: As global communities respond to the spread of coronavirus disease 2019 (COVID-19), urban residents worldwide have reduced their mobility, which may have incidentally kept people away from greenspaces. Surprisingly, anecdotal evidence suggests greenspace use surged in Asian cities.
+
+
+Conclusion: because of the established physical and mental health benefits of greenspaces, people have been escaping to nature to cope with the pandemic in Asian cities.
+:::
+
+按实验环境分：
+
+:::{.r-hstack .fragment}
+![](images/lab_lab.png){height=200}
+
+![](images/lab_survey.jpg){height=200}
+
+![](images/lab_field.jpg){height=200}
+:::
+
+:::{.notes}
+本质区别是信息的调控
+:::
+
+## 政治科学研究中的实验方法
+
+- **早期采用（1920年代-1950年代）：** Harold @Gosnell1926; 早期实验主要在实验室中进行，集中在选民行为和政治沟通。
+
+:::{.notes}
+The first experiment in political science is regarded to be Harold Gosnell's on 1924 presidential election, voter turnout in Chicago.
+In this experiment, he randomly assigned districts to receive information on voter registration and encouragement to vote.
+:::
+
+- **行为主义革命（1950年代-1960年代）：** 政治科学中的行为主义革命导致了对经验研究的更大重视，为实验方法铺平了道路。
+
+- **引入田野实验（1970年代-1980年代）：** 现场实验的引入使研究人员能够在自然环境中研究政治行为。Donald Green 和 Alan Gerber在此方面起到了关键作用。
+
+:::{.notes}
+@GreenGerber2019 : Get out the vote: how to increase voter turnout
+
+Donald P Green: Political Science, Columbia University
+
+Alan Gerber: Political Science, Yale
+:::
+
+- **随机对照试验（1990年代至今）：** 随机对照试验（RCT）的使用变得更加普遍，允许进行严格的因果推断。
+
+## 小结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+1. 实验目标：获得科学结论
+    - 干净的X，清晰的效果
+2. 实验法核心逻辑
+    - 反事实模型/潜在结果模型
+    - 因果推断的圣杯
+    - 三维动物之权益
+        - 随机分组的重要性
+
+:::
+
+::: {.column width="50%"}
+3. 实验流程
+    - 完整版（RCTs）和三类缩略版
+    - 设计：环境；干预
+4. 政治科学中的实验
+    - 蔚然成风
+
+:::
+
+::::
+
+
+# 基本原理
+
+## 衡量实验（及其他研究）的标准
+
+效度（Validity）：推断与真实的接近程度。
+
+![](images/lab_validity.gif){fig-align="center" height=400}
+
++ 与研究目的的接近程度——内部效度
++ 与广泛人群的接近程度——外部效度
+
+
+## 正确理解实验效度
+
+:::: {.columns}
+
+::: {.column width="50%"}
+* 内部效度: 目标人群
+    + 建构性：是否能合理且有针对性地评鉴目标理论
+    + 因果性：Identification
+    + 统计性: 核心因、果因素间具有显著且稳定的统计关系
+:::
+
+::: {.column width="50%"}
+* 外部效度: 超越目标人群 (Hint:目标人群可不一定就是总体人群)
+
+:::{.fragment}
+:::{.callout-note}
+* 生态效度: 与目标人群在非实验环境中行为决策的一致性
+    + *并不关注实证推断与真实规律的联系*，而考察的是研究环境与实际环境的相似程度
+    - 内部效度的一个维度
+:::
+:::
+
+:::
+
+::::
+
+
+::: {.r-fit-text .fragment}
+效度是个整体概念，[不能孤立看待]{.red}!
+:::
+
+
+
+## 对实验法的认知谬误
+
+::: {.panel-tabset}
+## 实验结果是科学的
+
++ 心理学三大刊 [100篇研究中40%通过, @OpenScienceCollaboration2015]
++ 经济学十三刊 [67篇研究中50%通过, @ChangLi2015]
++ 政治学 [e.g., @SoltEtAl2017; @TaiEtAl2022a]
+
+
+:::{.notes}
+Xu Yiqing 对65篇政治学论文的复刻
+:::
+
+## 随机是万灵药
+
+@MorganRubin2012: 
+
+在一个有10个变量的模型中, 如果令&alpha; = 0.05, 那么出现随机分配不可控差异的几率为
+1-(1-0.05)<sup>10</sup> &approx; `r round(1 - (1 - 0.05)^10, digits = 4)`。
+
+::: {.r-fit-text}
+Data imbalance &rArr; low causal & statistical validity!
+:::
+
+## 实验室实验外部效度低
+
+1. 被试问题
+    - > 实验室实验都用的一群学生，怎么能代表总体人口？
+        + 对于更广泛人群，用学生推断全体，是**内部**效度问题。
+            + 对比学生样本和社会样本，二者差异也没有特别大 [@EgasRiedl2008;@KamEtAl2007]。
+1. 实验效应（experimental effects/experimenter effects）问题
+    - > 在多数情况下，被试者清楚知道自己在做实验，进而影响行为决策。
+    + 是**生态效度**问题, 不是外部效度问题
+    + 非自然环境可是实验所需[@BassiEtAl2011]
+
+:::{.notes}
+非自然环境：
+
+e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，被试者的选民身份就没有参照现实或进行随机分配，而是根据形式模型的条件进行了人为划分，从而实现了对不同特征群体内选民行为规律的全面考察。
+:::
+
+
+:::
+
+
+## 提高实验效度方法
+
+:::{.r-fit-text style="text-align:center; margin-top: 1em"}
+详见 @HuYue2021
+:::
+
+
+# 应用举例
+
+## 心理实验^[胡悦，孙宇飞，陈子怡 2023："扣动公心之弦：公共服务动机激发机制适用性与稳定性研究"，工作论文]
+
+- 研究问题：抽象道德驱动力 vs. 具体复权驱动力
+- 实验设计：分区随机析因实验
+  - > 邀请您参与回答一份日常生活和社会观察的问卷，您不会从参与本次研究中获得重大的直接收益
+  - 干预：
+      1. 但我们希望您的参与能够帮助增进对于相关问题的理解，进而为公共福祉做出贡献。（集体主义）
+      1. 但我们希望您的参与能够帮助增进对于相关人群的理解，从而更好地帮助那些有需要的人们。（利他主义）
+      1. 您被选中是因为您特殊的背景和专业。（自我价值）
+      1. 但我们希望您的参与能够帮助政策制定者增进对于相关问题的理解，进而为改进相关政策提供借鉴。[（政策影响赋权）]{.red}
+
+## 实验结果（Average Treatment Effect, ATE）
+
+![](images/lab_psmExperiment.png){fig-align="center" height=num}
+
+## 行为（心理混合）实验
+
+:::{.callout-tip}
+**信任博弈（Trust Game）**:
+
+1. **玩家A（信任者）：** 玩家A首先收到一定数量的货币单位（例如10元）。然后，他们可以选择将其中的一部分或全部交给玩家B。交给玩家B的金额将乘以一个系数（例如3），从而增加总金额。
+2. **玩家B（受托人）：** 玩家B接收到乘以系数后的金额，并可以选择将其中的一部分或全部归还给玩家A。
+3. **结果：** 游戏的结果揭示了玩家A对玩家B的信任程度，以及玩家B对这种信任的回应。
+
+:::
+
+[@Hu2020: 改良变语匹配实验 +（半）信任博弈测量]{.fragment}
+
+:::{.r-hstack}
+![](images/lab_matchedGuise.png){.fragment fig-align="center" height=250}
+
+![](images/lab_matchedGuiseAdj.png){.fragment fig-align="center" height=250}
+:::
+
+## 实验结果
+
+![](images/lab_language.png){fig-align="center" height=num}
+
+## 特殊实验
+
+探索敏感问题：列举实验（“有几个？”）
+
+![控制组](images/lab_listC.png){fig-align="center" height=200}
+
+![实验组](images/lab_listT.png){fig-align="center" height=200}
+
+## 实际应用
+
+![](images/lab_tigerFly.jpg){fig-align="center" height=num}
+
+![](images/lab_corruption.png){.fragment fig-align="center" height=200}
+
+:::{.notes}
+@TangHu2022
+:::
+
+## 总结
+
+1. 方法概要：因果推断之圣杯，三维世界之权宜
+1. 基本原理：Internal and external validity
+1. 应用举例：心理实验；行为实验；特殊实验
+
+:::{.fragment}
+:::{.callout-tip}
+延伸阅读：
+
+Morton, Rebecca B., and Kenneth C. Williams. 2010. *Experimental Political Science and the Study of Causality: From Nature to the Lab*. Cambridge; New York: Cambridge University Press.
+
+胡悦. 2021. 《实验室实验：政治科学研究的一种有效方法?》 国外理论动态 (06): 160–71.
+
+[“如何用实验探索政治——对话清华大学胡悦副教授”](https://mp.weixin.qq.com/s/PrgDxaTFpbx1-XyK_gY6hw)      
+![](images/lab_qrcode.png){fig-align="center" height=150}
+:::
+:::
+
+# 感谢关注，欢迎交流 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+
+## 参考文献
