@@ -1,0 +1,216 @@
+---
+title: "Beyond Righteousness"
+subtitle: "Experimental Evidence on Extrinsic Motivation and Cocktail Strategy in Public Service Co-Production"
+date: "2023-09-02"
+date-format: "iso"
+
+author: 
+  - Yue Hu
+  - Ziyi Chen
+  - Yufei Sun
+
+bibliography: p_psm_peer.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: false
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - reveal-header
+  - lightbox
+
+revealjs-plugins:
+  # - pointer # adding q to activate/deactivate a pointer
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  icons,
+  gt,
+  tidyverse
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## TL;DR
+
+**Objective**:  
+
+- Motivation of public service co-production: Extrinsic vs. intrinsic
+    - Cocktail strategy
+
+**Method**: 
+
+- Block-randomized factorial experiment
+- (Quota) nationally representative sample
+
+**Finding**: 
+
+1. Extrinsic impetus &rarr; co-production
+    - [Noticeable]{.red} > &sum; intrinsic motivations
+    - [Robust]{.red} across demographic and socioeconomic groups
+1. Cocktail strategy is [no]{.red} more efficient
+
+# Puzzle and Theory
+
+## Motivating Co-Production
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Known**
+
+- Intrinsic impetus: *abstract righteousness*
+    - Identity-based morality [e.g., collectivism & altruism, @FredericksonHart1985; @Pedersen2015]
+    - Self-actualization [@Vandenabeele2007;@BattaglioEtAl2022]
+    - Empowerment [@PerryWise1990, less empirically tested]
+
+:::
+
+::: {.column width="50%"}
+**Unknown**
+
+- [Extrinsic impetus]{.red}: social circumstance
+    - Existing research: organization and neighborhood [@Farr2016; @SiciliaEtAl2016]
+- [Cocktail strategy]{.red}
+    - Extrinsic + intrinsic
+    - Well practices but rarely tested [@BirungiEtAl2002]
+- [Diverse masses]{.red}
+    - Civil servant/student sample
+    - Developed, civil society
+:::
+
+::::
+
+## Theory and Inference
+
+1. **Extrinsic vs. intrinsic**
+    - Extrinsic (peer pressure): Nature of belonging + Emotion of shame and guilt &rarr; co-production willingness [&uarr;]{.red}
+    - Intrinsic: PSM findings
+        - Collectivism &rarr; co-production willingness [&uarr;]{.red}
+        - Altruism &rarr; co-production willingness [&uarr;]{.red}
+        - Self-actualization &rarr; co-production willingness [&uarr;]{.red}
+        - Empowerment (policy influence) &rarr; co-production willingness [&uarr;]{.red}
+1. **Together vs. separate**
+    - Cocktail: Extrinsic + Intrinsic &rarr; co-production willingness [&uarr;]{.red}
+
+# Experimental Design and Operation
+
+## Design
+
+- Factorial experiment
+    - > If we invite you to participate in a survey about your daily life and social observations, you will not gain significant direct benefits from participating. *[Intrinsic]*
+How many minutes are you willing to spend to complete the survey? *[Extrinsic]*
+
+```{r researchDesign}
+tibble(
+  "Extrinsic\n Impetus\n (E)" = c("No", "Yes"),
+  "Control" = c("", "E"),
+  "Collectivism\n (C)" = c("C","C + E"),
+  "Altruism\n (A)" = c("A", "A + E"),
+  "Self-\n Actualization\n (S)" = c("S", "S + E"),
+  "Empowerment\n (P)" = c("P", "P + E")
+) |> 
+  gt() |> 
+  opt_stylize(style = 5, color = "red") |>
+  tab_options(table.font.size = px(22))
+  
+```
+
+- Block-randomization on age
+
+## Data
+
+- China Social Value 2022
+    - Quota representative: national distribution of age, gender, and education according to the *Seventh National Population Census*.
+    - 4,002 subjects
+
+:::{.callout-tip}
+*Case selection rationale*: 
+
+1. Sample of diverse masses
+1. "Least likely" case
+    - "Over-mobilized" during COVID-19
+    - Non-Western civil society
+:::
+
+# Results
+
+## Extrinsic vs. intrinsic
+
+![](images/plot_isolated){fig-align="center" height=num}
+
+## Robustness
+
+:::{.r-hstack}
+![](images/plot_robustI){fig-align="center" height=num}
+
+![](images/plot_robustII){fig-align="center" height=num}
+:::
+
+## Together vs. separate
+
+![](images/plot_compound){fig-align="center" height=num}
+
+## Conclusion Remarks
+
+- Findings
+    - Extrinsic impetus motivates co-production [remarkably and robustly]{.red}
+    - Cocktail strategy [<]{.red} extrinsic impetus
+    - Intrinsic impetus works for a [non-Western]{.red} society
+- Implications
+    - **Connect** co-production motivation with the lits of *political participation*, *psychology* and *sociology*
+    - **Echo** the call for more in-depth research on public service motivation in different circumstances and regimes and on the concrete "motivational dynamics of multiple incentives" [@PerryVandenabeele2015, p. 694].
+    - **Demonstrate** the experimental examination of practical strategies
+
+## Thank you {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){fig-align="center" height=300}
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
