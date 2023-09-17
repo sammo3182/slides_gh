@@ -13,10 +13,10 @@ p_load(tidyverse, lubridate, rio)
 
 ```{r calendar, include=FALSE}
 # Opening Date ####
-start <- ymd("2022-09-12")
+start <- ymd("2023-09-18")
 
 # Final Week ####
-end <- start + dweeks(16) 
+end <- start + dweeks(15) 
 
 schedule <-
   tibble(day = seq(from = start, to = end, by = "days")) %>%
@@ -26,11 +26,11 @@ schedule <-
 
 # Holiday
 
-schedule$day[schedule$day == "2022-10-03"] <- "2022-11-19"
+schedule$day[schedule$day == "2023-10-02"] <- "2023-10-07"
 
-midAutumn <- ymd(20220910)%--%ymd(20220912)
-nationalDay <- ymd(20221001)%--%ymd(20221007)
-newYear <- ymd(20221231)%--%ymd(20230102)
+midAutumn <- ymd(20230929)%--%ymd(20230930)
+nationalDay <- ymd(20231001)%--%ymd(20231006)
+newYear <- ymd(20231230)%--%ymd(20240101)
 
 
 schedule$topic[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- "Public Holiday"
@@ -46,10 +46,11 @@ schedule <- arrange(schedule, day) %>%
 
 # Final Week
 
-schedule$topic[schedule$day == max(schedule$day)] <- "考试周"
-schedule$translation[schedule$day == max(schedule$day)] <- "Final Week"
+schedule$topic[schedule$day == max(schedule$day)] <- "Final Week"
+schedule$translation[schedule$day == max(schedule$day)] <- "期末周"
 
 content <- import("schedule_editable.xlsx")
+content <- content[-nrow(content), ]
 
 schedule$topic[is.na(schedule$topic)] <- content$topic
 schedule$translation[is.na(schedule$translation)] <- content$translation
@@ -69,34 +70,33 @@ Learn how to describe, analyze, and diagnose large-N data with Dr. Hu!
 <br><br>
 
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">序章 (Course Initiation)</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html">`r schedule$caption[1]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/02_descriptiveStats.html">`r schedule$caption[1]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/02_descriptiveStats.html">`r schedule$caption[2]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/03_probability.html">`r schedule$caption[2]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/03_probability.html">`r schedule$caption[3]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/04_distribution.html">`r schedule$caption[3]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/04_distribution.html">`r schedule$caption[4]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/05_ciSample.html">`r schedule$caption[4]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/05_ciSample.html">`r schedule$caption[5]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/06_hypothesis.html">`r schedule$caption[5]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/06_hypothesis.html">`r schedule$caption[6]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/07_association.html">`r schedule$caption[6]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/07_association.html">`r schedule$caption[7]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/08_simpleOLS.html">`r schedule$caption[7]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/08_simpleOLS.html">`r schedule$caption[8]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/09_assumptions.html">`r schedule$caption[8]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/09_assumptions.html">`r schedule$caption[9]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/10_multipleRegression.html">`r schedule$caption[9]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/10_multipleRegression.html">`r schedule$caption[10]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">`r schedule$caption[10]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">`r schedule$caption[11]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/12_multiHeter.html">`r schedule$caption[11]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/12_multiHeter.html">`r schedule$caption[12]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">`r schedule$caption[12]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">`r schedule$caption[13]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">`r schedule$caption[13]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">`r schedule$caption[14]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">`r schedule$caption[14]`</a>
+* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">`r schedule$caption[15]`</a>
 
-* <a href="/slides_gh/slides/courses/analysisOfPoliticalData/16_latentVariable.html">`r schedule$caption[15]`</a>
