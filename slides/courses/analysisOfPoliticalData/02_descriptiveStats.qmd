@@ -3,16 +3,15 @@ title: "Descriptive Statistic"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
 
 knitr: 
     opts_chunk: 
-      echo: true
+      echo: false
 
 format: 
   revealjs:
-    css: style_basic.css
-    # theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,14 +19,26 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 
@@ -46,6 +57,12 @@ p_load(
 set.seed(313)
 ```
 
+## Administrative
+
+- Less time on the less important components
+- Meeting with me in the coming three weeks
+- R workshop
+
 
 ## Overview
 
@@ -54,51 +71,65 @@ set.seed(313)
     - Typology
     - Point
     - Dispersion
+- Description
+    - Point
+    - Dispersion
 
-# What's Data
+# Data
 
-
-## Nature
+## Concept
 
 Common definition: 
 
 :::{.fragment .fade-in}
-:::{.fragment .shrink}
 :::{.fragment .semi-fade-out}
+
 > The quantities, characters, or symbols on which operations are performed by a computer, being stored and transmitted in the form of electrical signals and recorded on magnetic, optical, or mechanical recording media.
 
 :::
 :::
-:::
 
 :::{.fragment .fade-in}
-:::{.fragment .grow}
 
-Things known or assumed as [facts]{.red}, making the basis of *reasoning or calculation*. 
+[Oxford Language](https://languages.oup.com/google-dictionary-en/): 
 
-:::{style="text-align: right"}
----[Oxford Language](https://languages.oup.com/google-dictionary-en/)
-:::
+> Things known or assumed as [facts]{.red}, making the basis of *reasoning or calculation*. 
 
 :::
-:::
 
-:::{.fragment}
-### Etymology
-
-:::{style="text-align: center"}
-![](images/desc_etymData.png){height="300"}
-:::
-:::
+![](images/desc_etymData.png){.fragment fig-align="center" height=num}
 
 :::{.notes}
+
+Etymology
+
 /ˌɛtɪ'mɑlədʒi/
 
 from "a piece of info, something to give" to now
 :::
 
+## Nature
 
-## Way to break down: variable
+::: {.r-fit-text}
+- Is data a product?
+- Is data the "new oil"?
+- Is noise data?
+:::
+
+:::{.notes}
+- Data is a type of project, but a special one among private, club, common resources (exclusiveness and rivalry), between the club and public goods
+- Difference from oil
+    - Unlimited
+    - Can't valued
+    - Replicable
+- Noise is not data
+    - Data's value is from analysis
+:::
+
+
+# Variable
+
+## Definition
 
 :::{.fragment}
 **Specifically**, a variable = [a dimension(well...)]{.gray} = a column
@@ -112,14 +143,22 @@ from "a piece of info, something to give" to now
 **Relationally**, an observation &sub; {var1, var2, var3,...} &sub; a dataset
 :::
 
+![](images/desc_etymVariable.png){.fragment fig-align="center" height=num}
 
-:::{.fragment}
-### Etymology
+## Do you really understand
 
-:::{style="text-align: center"}
-![](images/desc_etymVariable.png){height="500"}
+:::{style="text-align:center; margin-top: 0.5em"}
+![](images/desc_gender.jpg){fig-align="center" height=num}
+
+A concept?      
+A variable?     
+A measurement?
 :::
+
+:::{.fragment style="text-align:center; margin-top: 0.5em"}
+How about...**GDP**
 :::
+
 
 ## Typology
 
@@ -145,15 +184,7 @@ When would you want a variable to be [constant]{.red} in a research?
         - Democracy with Clinton
 :::
 
-:::{.fragment}
-### Categories
-
-- Nominal/categorical
-- Ordinal
-- Numeric: 
-:::
-
-
+- Nominal/categorical &larr; Ordinal &larr; Numeric
 
 ::::{.columns}
 :::{.column width="40%" .fragment}
@@ -181,6 +212,14 @@ e.g.1, Public budget, safty:health = 4:1 then no matter how much in total, it wi
 e.g.2, event history, vaccine rate
 :::
 
+## Interval vs. Ratio
+
+:::{.r-stack}
+![](images/desc_tongshencun.png){fig-align="center" height=600}
+
+![](https://sammo3182.github.io/slides_gh/slides/guestLecture/images/gini.gif){.fragment height=600}
+:::
+
 # Description
 
 ## Features of Variable
@@ -192,9 +231,13 @@ Level of description
   n<sub>i</sub>, n<sub>.</sub> = &sum;n<sub>i</sub>, n<sub>..</sub> = &sum;n<sub>ij</sub> ![](images/desc_frequency.png){height=100}
 
 + Histogram ![](images/desc_histogram.png){height=100}
-+ Time series plots, scatter plots ![](images/desc_scatter.png){height=100}
 
-+ Percentiles: "I rated the applicant among the top 10-15% students taking BSc-courses at Manchester; and now I know for sure that she is among the best..."
+---
+
++ &#8618; Time series plots, scatter plots ![](images/desc_scatter.png){height=300}
+
++ Percentiles: 
+    - > I rated the applicant among the top 10-15% students taking BSc-courses at Manchester; and now I know for sure that she is among the best...
 + Moments
 
 :::{.notes}
@@ -204,9 +247,7 @@ Information lost increasingly more
 :::
 
 
-## Describing a Variable
-
-### Point estimate
+## Describing a Variable: Point
 
 + **Mode**: most frequent occurring number, not good of central tendency, bimodal (two modes)
 + **Median**: at 50%
@@ -217,10 +258,21 @@ Information lost increasingly more
     + Group: $\bar{X} = 1/n\sum xf.$, x is the cell midpoint and f is the frequency of $X_i$.
     + Symmetric distribution, median and mean are identical
 
+
+:::{.fragment}
+::: {.callout-tip appearance="minimal"}
+
+![](images/ci_fsmrof.png){fig-align="center" height=30} Point == "common," "usual,""average"
+
+:::
+:::
+
+
+
 ## When to use what
 
 ::::{.columns}
-:::{.column width="50%" .fragment style="text-align: center; margin-top: 3em"}
+:::{.column width="50%"}
 
 ```{r, fig.show='animate', animation.hook = 'gifski', fig.width=6, fig.height=2, echo=FALSE, message=FALSE, warning=FALSE, results = 'hide', interval=0.5, eval = FALSE, include=FALSE}
 library(fGarch)
@@ -251,14 +303,17 @@ utils::browseURL(gif_file)
 ![](images/desc_median.gif){height=400}
 :::
 
-:::{.column width="50%" .fragment style="text-align: center;"}
-![](images/desc_sheHulk.png){height=800}
+:::{.column width="50%"}
+![](images/desc_sheHulk.png){.fragment height=600}
 :::
 
 ::::
 
-## Describing a Variable
-### Dispersion
+## How to measure it
+
+![](images/desc_barbie.jpeg){fig-align="center" height=num}
+
+## Describing a Variable: Dispersion
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -279,6 +334,15 @@ utils::browseURL(gif_file)
 :::{.notes}
 MAD: Intractable, difficult in differentiate absolute values
 :::
+
+:::{.fragment}
+::: {.callout-tip appearance="minimal"}
+
+![](images/ci_fsmrof.png){fig-align="center" height=30} Dispersion means how *wild* one can be
+
+:::
+:::
+
 
 ---
 
@@ -338,7 +402,7 @@ In statistical testing applications, often one isn't directly interested in the 
 ## Two Formats of Variance
 
 ::::{.columns}
-:::{.column width="50%"}
+:::{.column width="40%"}
 
 Definition：
 
@@ -350,9 +414,8 @@ s^2 =& \sum(X - \bar X)^2p(x), \\
 
 :::
 
-:::{.column width="50%" .fragment}
+:::{.column .small width="60%" .fragment}
 Given &mu; = &sum;Xp(x), &sum;p(x) = 1,
-
 
 \begin{aligned}
 \sigma^2 =& \sum(X - \mu)^2p(x),\\
@@ -375,15 +438,13 @@ NB: Pay attention to the .red[punctuation marks].]
 - Ratio: $\sigma = \sqrt{\pi(1 - \pi)}$;
 - Group: $\sqrt{\frac{f}{n}\sum(X - \bar{X})^2}$.
 
-:::{.fragment style="text-align: center;"}
-![](images/desc_sd.png){height=400}
-:::
+![](images/desc_sd.png){.fragment fig-align="center" height=300}
 
 
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](images/desc_mindmap.png){ height="800" }
+![](images/desc_mindmap.png){ height="600" }
 :::
 
 
@@ -395,12 +456,12 @@ NB: Pay attention to the .red[punctuation marks].]
 ::: {style="text-align: center"}
 Starting from math {{< fa solid skull >}} 
 
-![](images/desc_math4PoliSci.jfif){ height="800" }
+![](images/desc_math4PoliSci.jfif){height="600"}
 :::
 
 :::
 
 ## Hey, no fear
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGtFZ0F0ZVZzTElHNjdxP2U9U3Fpb0do.mp4" height="800" >}}
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGtFZ0F0ZVZzTElHNjdxP2U9U3Fpb0do.mp4" height="550" >}}
 
