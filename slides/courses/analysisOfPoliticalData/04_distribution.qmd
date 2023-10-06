@@ -3,16 +3,15 @@ title: "Population and Distribution"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
 
 knitr: 
     opts_chunk: 
-      echo: true
+      echo: false
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,30 +19,42 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 
 ## Overview
 
-1. Properties of distribution
-1. Common types of distributions
-1. Expectation
+1. Properties of distributions
+1. Types of distributions
+1. Distribution &rarr; Prediction
 
 
-# What's a distribution
+# Properties of distributions
 
 ## (Probability) distribution
 
 :::{.fragment .fade-in-then-semi-out}
-> The mathematical function that gives the probabilities of occurrence of different possible [outcomes]{.red} for an experiment.
+> The mathematical [function]{.red} that gives the probabilities of occurrence of different possible outcomes for an experiment.
 
 :::
 
@@ -59,37 +70,29 @@ format:
 - Probability Density Function (PDF): 
     - Continuous
     - Density plot
-- Cumulative density function (CDF): $F(x) = P(X \leq x)$
+- Cumulative density function (CDF): $F(x) = P(X \leq x) = \int_{-\infty}^{x} f(t) \, dt$
 :::
 ::::
 
 ## Distribution in Visualization
 
-![](images/dist_pmfPdf.png){height=800}
+:::{.r-stack}
+![](images/dist_integral.gif){.fragment fig-align="center" height=500}
+
+![](images/dist_pmfPdf.png){.fragment fig-align="center" height=500}
+:::
 
 
 ## Properties of PMF/PDF
 
-::::{.columns}
-:::{.column width="50%" .fragment}
-![](images/dist_integral.gif)
-
 - None-negative
 - Total area = $\int^{+\infty}_{-\infty}f(x)dx = 1.$
 
-:::
-
-:::{.column width="50%" .fragment}
 - $P(x = c) = \int^c_cf(x)dx = 0.$
 
-- $$\begin{aligned}P(a\leq x \leq b) =& \int^b_af(x)x,\\
-=& \int^b_{-\infty}f(x)dx -\\
- &\int^a_{-\infty}f(x)dx.
-\end{aligned}$$
+- $$P(a\leq x \leq b) = \int^b_af(x)x = \int^b_{-\infty}f(x)dx -\int^a_{-\infty}f(x)dx.$$
 
 - CDF: $P(X\leq x)$, PDF = $\frac{\partial CDF}{\partial X}.$
-:::
-::::
 
 
 :::{.notes}
@@ -100,7 +103,7 @@ format:
 https://www.zhihu.com/question/276405042#:~:text=%E5%81%8F%E5%AF%BC%E6%95%B0%E5%B0%B1%E6%98%AF%E5%90%AB%E6%9C%89%E5%A4%9A,%E5%BC%95%E8%B5%B7%E5%87%BD%E6%95%B0%E7%9A%84%E6%80%BB%E5%8F%98%E5%8C%96%E3%80%82
 :::
 
-## How to Describe A Probability Distribution
+## Describe a distribution
 
 > **Moments**: Specific quantitative measures of [the shape]{.red} of a function.
 
@@ -113,7 +116,7 @@ https://www.zhihu.com/question/276405042#:~:text=%E5%81%8F%E5%AF%BC%E6%95%B0%E5%
 + 2ed: Rotational inertia
 
 :::{.fragment}
-![](images/dist_rotation.gif){height=400}
+![](images/dist_rotation.gif){height=260}
 :::
 :::
 
@@ -124,7 +127,7 @@ Rotational inertia: 惯性矩
 :::{.column width="50%" .fragment}
 *Statistics*
 
-![](images/dist_moments.png){height=600}
+![](images/dist_moments.png){height=400}
 :::
 ::::
 
@@ -136,29 +139,113 @@ Rotational inertia: 惯性矩
 + 3id: Skewness
 + 4th: Kurtosis (tailedness)
 
-Kurtosis：尖锐程度
+Kurtosis：尖锐程度, can be used to test prositivity assumption in causal inference, (Ratkovic 2023)
 :::
+
+## About Means ![](images/ci_fsmrof.png){.lightbox fig-align="center" height=30}
+
+- **Arithmetic Mean (AM)**:
+   - $$\bar{x} = \frac{x_1 + x_2 + x_3 + \ldots + x_n}{n} = \frac{\sum x_i}{n}$$
+- **Geometric Mean (GM)**:
+   - $$GM = \left( x_1 \cdot x_2 \cdot x_3 \cdot \ldots \cdot x_n \right)^{\frac{1}{n}} = \left( \prod x_i \right)^{\frac{1}{n}}$$
+- **Harmonic Mean (HM)**:
+   - $$HM = \frac{n}{\left(\frac{1}{x_1} + \frac{1}{x_2} + \frac{1}{x_3} + \ldots + \frac{1}{x_n}\right)} = \frac{n}{\sum \left(\frac{1}{x_i}\right)}$$
+   - A special type of weighted mean
+
+:::{.notes}
+经典的例子是以不同的速度通过相同的距离。
+
+考虑一次去便利店并返回的行程：
+
+去程速度为30 mph
+返程时交通有一些拥堵，所以速度为10 mph
+去程和返程走的是同一路线，也就是说距离一样（5英里）
+整个行程的平均速度是多少？
+
+如果不假思索地应用算术平均数的话，结果是20 mph（(30+10)/2）。
+
+但是这么算不对。因为去程速度更快，所以你更快地完成了去程的5英里，整个行程中以30 mph的速度行驶的时间更少，以10 mph的速度行驶的时间更多，所以整个行程期间你的平均速度不会是30 mph和10 mph的中点，而应该更接近10 mph。
+
+为了正确地应用算术平均数，我们需要判定以每种速率行驶所花的时间，然后以适当的权重加权算术平均数的计算：
+
+去程： 5 / (30/60) = 10分钟
+返程： 5 / (10/60) = 30 分钟
+总行程： 10 + 30 = 40分钟
+加权算术平均数： (30 * 10/40) + (10 * 30/40) = 15 mph
+所以，我们看到，真正的平均速度是15 mph，比使用未加权的算术平均数计算所得低了5 mph（或者25%）。
+
+那如果用调和平均数呢？
+
+2 / (1/30 + 1/10) = 15
+
+一下子得到了真正的行程平均速度，自动根据在每个方向上使用的时间进行调整。
+
+需要注意的是，这里之所以可以直接应用调和平均数，是因为去程和返程的距离是相等的，如果两者距离不等（比如去程和返程走了不同路线），那么需要应用加权调和平均数。
+
+在财经上，加权调和平均数可以用于计算组合投资多个股票的市盈率（P/E）。
+
+当然调和平均数还有很多应用场景，比如统计学上的F1评分，就是准确率和召回的调和平均数。
+
+因为是导数，所以是指数，从指数分布的变化率来看，调和平均更重视较小值：较小值的变化对调和平均的影响大于较大值的变化。
+————————————————
+版权声明：本文为CSDN博主「stray_world」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/stray_world/article/details/104323693
+
+:::
+
+---
+
+![](images/prob_means.jpg){fig-align="center" height=num}
 
 
 # Types of Distribution
 
-## Basic Types of Distributions
+## Distribution: Types and Examples
 
-::::{.columns style="text-align:center; margin-top: 3em"}
-:::{.column width="50%"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
 *Discrete*
 
-+ Binomial
-+ Poisson
+:::{.r-vstack}
+![Jacob Bernoulli (1654--1705)](images/dist_Jakob_Bernoulli.jpg){height=200}
+
+![Siméon Poisson (1781--1804)](images/dist_Poisson.jpg){height=200}
 :::
 
-:::{.column width="50%"}
+:::
+
+::: {.column width="50%"}
+
 *Continuous*
 
-+ Uniform
-+ Normal
+:::{.r-vstack}
+![Gerolamo Cardano (1501--1576)](images/dist_Cardano.jpg){height=200}
+
+![Clarl F. Gauss (1777--1855)](images/dist_Gauss.jpg){height=200}
 :::
+
+:::
+
 ::::
+
+
+:::{.notes}
+
+*Discrete*
+
++ Binomial: Bernoulli is discovered by Jacob, who also invented mathematical constant e.
++ Poisson
+
+*Continuous*
+
++ Uniform: Cardano defined uniform in the 16th century, "意大利文艺复兴时期百科全书式的学者， 数学家、物理学家、占星家、哲学家和赌徒，古典概率论创始人"
++ Normal
+    - 丘成桐(1949)被誉为[数学皇帝]{https://www.nytimes.com/2006/10/17/science/17yau.html}，高斯(1777)被誉为数学王子, 说高斯是数学王子，意思不是高斯之上还有这个王那个王，而是把数学比作王。数学是王，高斯是王子.
+
+:::
 
 
 ## Bernoulli
@@ -193,7 +280,7 @@ $$f(k;p) = p^k(1 - p)^{1 - k}$$
 :::
 
 :::{.column width="50%" .fragment}
-![](images/dist_bernoulli_pmf.gif){height=350}
+![](images/dist_bernoulli_pmf.gif){height=250}
 :::
 ::::
 
@@ -217,30 +304,29 @@ With this definition, the nature of the random variable X is irrelevant: continu
 *Throwing multiple fair coins*
 :::
 
-::::{.columns style="text-align:center; margin-top: 2em"}
-:::{.column width="50%" .fragment}
-PDF: $f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}$
+PDF: $f(k; n, p) = {n \choose k}p^k(1 - p)^{n - k}$ [*Why combination?*]{.small}
 
+:::: {.columns}
+
+::: {.column width="40%"}
 + n, number of trials; 
 + p, the success probability in each trial; 
 + k, the number of success
-+ ${n \choose k} = \frac{n!}{k!(n - k)!}$ (what's this?)
+:::
 
-:::{.fragment}
-&mu; = np    
-&sigma;<sup>2</sup> = np(1 - p)
+::: {.column width="60%"}
+- &mu; = np    
+- &sigma;<sup>2</sup> = np(1 - p)
+
+![](images/dist_binomial_pdf.png){.fragment fig-align="center" height=400}
 :::
-:::
+
+::::
+
 
 :::{.notes}
 Combination: no order, every draw is independent
 :::
-
-:::{.column width="50%" .fragment}
-![](images/dist_binomial_pdf.png){height=500}
-:::
-::::
-
 
 ## Application
 
@@ -248,7 +334,7 @@ A university hired 100 graduate students per year, 25 female and 75 male.
 Given that the general hired ratio is 4:6 for women:men, what's the chance that the employment is gender discrimination free?
 
 :::{.fragment}
-*Let's [assume]{.red} the employment of any student does not affect the chance of hiring others. (Why is this important?)*
+Let's [assume]{.red} the employment of any student does not affect the chance of hiring others. [Why is this important?]{.fragment .small}
 :::
 
 :::{.fragment .fade-in-then-semi-out}
@@ -280,7 +366,7 @@ k is the number of occurrences
 
 ::::{.columns style="text-align:center; margin-top: 2em"}
 :::{.column width="40%" .fragment}
-![](images/dist_poisson.gif){height=500}
+![](images/dist_poisson.gif){height=400}
 :::
 
 :::{.column width="60%" .fragment}
@@ -298,9 +384,6 @@ k is the number of occurrences
 
 ## Uniform Distribution
 
-:::{style="text-align: center"}
-*The Most Important Distribution for Bayesian Analysis*
-:::
 
 ::::{.columns style="text-align:center"}
 :::{.column width="50%" .fragment}
@@ -327,7 +410,7 @@ $$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$
 ## Moments of the Uniform Distribution
 
 ::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
+:::{.column width="40%" .fragment}
 \begin{align}
 \mu =& \int^b_a x \frac{1}{b - a} dx, \\
 =& \frac{1}{b - a}\int^b_axdx, \\
@@ -351,7 +434,7 @@ $$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$
 :::
 
 
-:::{.column width="50%" .fragment}
+:::{.column width="60%" .fragment}
 \begin{align}
 \sigma^2 =& \sum x^2p(x) - \mu^2, \\
 =& \int^b_ax^2\frac{1}{b - a}dx - (\frac{a + b}{2})^2, \\
@@ -364,7 +447,7 @@ $$f(x) = \begin{cases} 1/(b - a), if\ x \in [a, b],\\ 0, otherwise.\end{cases}$$
 
 ## Application of the Uniform Distribution
 
-![](images/dist_lotteryGenerator.gif){height=300 fig-align="center"}
+![](images/dist_lotteryGenerator.gif){height=200 fig-align="center"}
 
 :::{.fragment style="text-align: center"}
 Any type of random number generators.
@@ -372,7 +455,7 @@ Any type of random number generators.
 
 ::::{.columns}
 :::{.column width="50%" .fragment}
-![](images/ci_fsmrof.png) Discrete uniform distribution
+![](images/ci_fsmrof.png){height=30} Discrete uniform distribution
 
 > The probability of occurrence of the events is [equally]{.red} likely and falls within a finite set of values
 
@@ -397,9 +480,6 @@ $$f(x) = \varphi(\frac{x - \mu}{\sigma}) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{
 
 When &mu; = 0; &sigma;<sup>2</Sup> = 1, standard normal distribution.
 
-:::{.notes}
-丘成桐(1949)被誉为数学皇帝，高斯(1777)被誉为数学王子, 说高斯是数学王子，意思不是高斯之上还有这个王那个王，而是把数学比作王。数学是王，高斯是王子.
-:::
 
 ::::{.columns style="text-align:center"}
 :::{.column width="50%" .fragment style="margin-top: 2em"}
@@ -417,17 +497,35 @@ $Z = \frac{x - \mu}{\sigma}$ &larr; $f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac
 Knowing Z-score, one can calculate the probability of it accordingly
 :::
 
-## How to know
+## Z to Probability
 
-:::{.panel-tabset}
-## Old days
+:::: {.columns}
 
-![](images/dist_zScore.gif){height=700 fig-align="center"}
+::: {.column width="70%"}
+Old days
 
-## Cool kids
-Using R:
+![](images/dist_zScore.gif){.fragment height=400 fig-align="center"}
+:::
 
-- `pnorm(<Z-score>)`
+::: {.column .fragment width="30%"}
+Cool kids
+
+`pnorm(<Z-score>)`
+:::
+
+::::
+
+
+## Application
+
+Given that the average IQ in the U.S. is 100 with a standard deviation of 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+$Z_1 = \frac{125 - 100}{16} = 1.056$
+
+$Z_2 = \frac{85 - 100}{16} = -0.9375$
+:::
+
 - P(X &ge; 125) = `1 - pnorm(1.056)` = `r 1 - pnorm(1.056)`
 - P(X < 85) = `pnorm(-0.9375)` = `r pnorm(-0.9375)`
 
@@ -436,26 +534,13 @@ p-value: $P(z\leq x)$.
 
 We'll talk about about that later.
 :::
-:::
-
-## How to Use
-
-Known that the average IQ in the U.S. is 100, standard deviation is 16, what's the probability a US citizen's IQ is higher than 125 or lower than 85?
-
-:::{.fragment style="text-align:center; margin-top: 2em"}
-$Z_1 = \frac{125 - 100}{16} = 1.056$
-
-$Z_2 = \frac{85 - 100}{16} = -0.9375$
-:::
 
 
-# Expectation
+# Distribution &rarr; Prediction
 
 ## Meaning
 
-:::{style="text-align:center"}
-"What would you guess if asking you the chance of heads to toss a coin?"
-:::
+*"What would you guess if asking you the chance of heads to toss a coin?"*
 
 :::{.fragment style="text-align:center; margin-top: 2em"}
 1. &mu; = E(X) = &sum; xp(x)
@@ -473,10 +558,7 @@ $Z_2 = \frac{85 - 100}{16} = -0.9375$
 
 X is the reward generator of a paid module of a video game, the seed of which is based on tossing a fair dice (😑).
 When the dice is tossed, the reward is produced following this function: g(X) = 2 + 3X.
-
-:::{.fragment style="margin-top: 2em"}
-What's the expectation of rewards "ke-jin" players can get by purchasing this module?
-:::
+What's the expectation of rewards a whale can get by purchasing this module?
 
 :::{.fragment style="margin-top: 2em"}
 $$E(X) = \sum xp(x) = 1\times\frac{1}{6} + 2\times\frac{1}{6} +\dots+6\times\frac{1}{6} = 3.5.$$
@@ -485,44 +567,16 @@ Then $$E(g(x)) = E(2 + 3X) = 2 + 3\times 3.5 = 12.5.$$
 :::
 
 
-## ![](images/ci_fsmrof.png)Inventors of Distributions
-
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
-Jacob Bernoulli & Gerolamo Cardano
-
-![](images/dist_Jakob_Bernoulli.jpg){height=300}
-![](images/dist_Cardano.jpg){height=300}
-
-:::
-
-:::{.column width="50%" .fragment}
-Siméon Poisson   
-
-![](images/dist_Poisson.jpg){height=300}
-
-:::
-::::
-
-:::{.fragment style="text-align:center"}
-Clarl F. Gauss   
-![](images/dist_Gauss.jpg)
-:::
-
-
 :::{.notes}
-Bernoulli is discovered by Jacob, who also invented mathematical constant e.
-
-Cardano defined uniform in the 16th century, "意大利文艺复兴时期百科全书式的学者， 数学家、物理学家、占星家、哲学家和赌徒，古典概率论创始人"
+Whale: 氪金玩家
 :::
-
 
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](images/dist_mindmap.png){height="850"}
+![](images/dist_mindmap.png){height="600"}
 :::
 
 ## Have a break
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="600" >}}

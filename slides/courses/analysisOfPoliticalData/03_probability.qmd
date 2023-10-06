@@ -3,16 +3,15 @@ title: "Probability Theory"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
 
 knitr: 
     opts_chunk: 
-      echo: true
+      echo: false
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,27 +19,69 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "knitr",
+  "tidyverse",
+  "DiagrammeR"
+)
+
+# Functions preload
+set.seed(313)
+```
+
 
 
 ## Overview
 
-* Event Probability
-* Calculating probabilities
-* Presenting Probability
-* Distribution
+* Probability as a Concept
+* Probabilities as Estimand
+* Probability as a Statistic
 
+# Probability as a Concept
 
-# Understanding Probability
+## Determinism vs. Probabilism
 
+:::{.r-hstack}
+![](images/prob_zhuyingfusheng.jpg){fig-align="center" height=400}
+
+![](images/prob_smokingCancer.png){.fragment fig-align="center" height=500}
+:::
+
+:::{.notes}
+- Determinism
+    - 说岳全传
+        - 赵匡胤赤须龙转世， 烛影斧声被赵光义所害，转世金兀术扰乱大宋江山，为岳飞所阻，赵构杀岳飞，苗刘兵变后阳痿，传位养子孝宗赵昚（shen4）
+        - 女土蝠听经放屁，被大鹏金翅明王啄死，转世王氏。大鹏鸟犯杀戒下凡，见铁背虬龙操练虾兵蟹将，啄瞎一眼，后转世秦桧，乌龟王八螃蟹转世张俊、罗汝辑、万俟卨
+- Probabilism
+    - 
+:::
 
 ## Perspectives of Probability
 
@@ -52,6 +93,7 @@ format:
 - **Evolutionary ("subjective")**: Bayesian, based on beliefs (prior), game theory
 
 
+# Probability as a Estimand
 
 ## How Do You Know the Probability
 
@@ -63,8 +105,8 @@ format:
 
 
 :::{.fragment}
+*Methods to "find" probability in a sample space*
 
-### Methods to "find" probability in a sample space
 1. Sample Point Method
 1. Event Composition Method
 1. Bayesian Method
@@ -73,64 +115,63 @@ format:
 
 ## Sample Point Method
 
-"Count out"
-
-*(Objective perspective)*
+"Count out" *(Objective perspective)*
 
 1. Define experiment event;
 1. Define sample space;
 1. Assign probabilities, P(E<sub>i</sub>) &GreaterEqual; 0, &sum; P(E<sub>i</sub>) = 1;
 1. Define event of interest, A;
 1. Find Pr(A) by summing probability of A.
+    - With or without [replacement]{.red}? 
 
 
-## Replacements
+## Replacement
 
 W/o replacement means once being picked out, never put it back.
 
-::::{.columns}
-:::{.column width="50%" .fragment}
-![](images/prob_drawBalls.jpg)
-5 soccer balls, 5 basketballs (in the same size and surface).
+:::: {.columns}
 
-The chance to get 5 soccer balls in five spilling out?
-
+::: {.column width="30%"}
+![](images/prob_drawBalls.jpg){fig-align="center" height=num}
 :::
 
-:::{.column width="50%" .fragment}
-- W. replacement: $0.5^5$; 
-- W/o replacement: ${10 \choose 5}^{-1} = \frac{5!(10 - 5)!}{10!}.$ 
+::: {.column width="70%"}
+Five soccer balls and five basketballs (in the same size and surface).
+
+What's the chance (a.k.a., probability) to get 5 soccer balls in five spilling out?
 :::
+
 ::::
+
+
+- W. replacement: $0.5^5$; 
+- W/o replacement: $\frac{5}{10}\times\frac{4}{9}\times\frac{3}{8}\times\frac{2}{7}\times\frac{1}{6} = {10 \choose 5}^{-1} = \frac{5!(10 - 5)!}{10!}.$ 
+
 
 :::{.notes}
 n! factorial
 
-- w. independent
-- w.o no repitation
+- w. independent, no memory
+- w.o no repetition, global results
 :::
 
 :::{.r-fit-text .fragment}
-Q: Is cross-sectional survey sampling a w. or w.o. replacement process? 
+Q: Is the cross-sectional survey sampling a w. or w.o. replacement process? 
 :::
-
-
 
 ## Event Composition Method (ECM)
 
-"Calculate"
-
-*(Objective perspective)*
+"Calculate" *(Objective perspective)*
 
 Applying [multiplicative and additive]{.red} rules.
 
 ::::{.columns}
-:::{.column width="50%" style="text-align: right"}
+:::{.column width="30%"}
 - E<sub>1</sub>: m outcomes
 - E<sub>2</sub>: n outcomes
 :::
 
-:::{.column .fragment width="50%"}
+:::{.column .fragment width="70%"}
 &rArr; $m\times n$ possible outcomes for E<sub>1</sub>E<sub>2</sub>. 
 :::
 ::::
@@ -158,7 +199,7 @@ $$P(n, r) = \frac{n!}{(n - r)!}.$$
 :::
 
 :::{.column width="50%" .fragment}
-Combination: Order doesn't matter
+Combination: ~~Order~~
 
 $${n \choose r} = \frac{n!}{r!(n - r)!}.$$
 :::
@@ -167,15 +208,14 @@ $${n \choose r} = \frac{n!}{r!(n - r)!}.$$
 
 :::{.fragment style="text-align: center"}
 
-Event G and H
-
+* Intersection: Event G and H, G&cap;H = $\{S_i: S_i\in G\ and\ S_i\in H\}$
 * Union: G&cup;H = $\{S_i: S_i\in G\ or\ S_i\in H\}$
     - P(G&cup;H) = P(G) + P(H) - P(G)&cap;P(H).
-* Intersection: G&cap;H = $\{S_i: S_i\in G\ and\ S_i\in H\}$
 * Exclusive: G&cap;H = &empty;
 * Complement: J &sub; -G &cap; H
-* Conditional: $P(H|G) = \frac{P(G\cap H)}{P(G)}$
-* Independent: P(H|G) = P(H); P(G&cap;H) = P(G)P(H)
+* [Conditional: $P(H|G) = \frac{P(G\cap H)}{P(G)}$]{.red}
+    - Independent: P(H|G) = P(H); P(G&cap;H) = P(G)P(H)
+
 :::
 
 
@@ -212,7 +252,7 @@ Thomas Bayes (1702--1761)
 
 ---
 
-![](images/prob_bayesComponents.png){height="900"}
+![](images/prob_bayesComponents.png){height="600"}
  
 
 :::{.notes}
@@ -231,69 +271,59 @@ $$\begin{align}
 \end{align}$$
 
 
-```{r diagramCar, echo = FALSE, fig.height=6}
-
-library("DiagrammeR")
-
-grViz("
+```{dot bayesDiagram}
 digraph usedCar {
-
   # a 'graph' statement
-  graph [overlap = true, fontsize = 10]
+  graph [overlap=true fontsize=10]
 
   # several 'node' statements
-  node [shape = circle,
-        fixedsize = true,
-        width = 0.9] // sets as circles
-  N[label = 'Nature'];
-  MF[label = 'Verify'];
-  MS[label = 'Verify'];
-  RFF[label = 'Result'];
-  RFS[label = 'Result'];
-  RSF[label = 'Result'];
-  RSS[label = 'Result']
+  node [shape=circle fixedsize=true width=0.9] // sets as circles
+  
+  N[label = "Nature"];
+  MF[label = "Verify"];
+  MS[label = "Verify"];
+  RFF[label = "Result"];
+  RFS[label = "Result"];
+  RSF[label = "Result"];
+  RSS[label = "Result"]
 
   # several 'edge' statements
-  N -> MF[label='K: .3']
-  N -> MS[label='A: .7']
-  MF -> RFF[label='K: .9']
-  MF -> RFS[label='A: .1']
-  MS -> RSF[label='K: .2']
-  MS -> RSS[label='A: .8']
-  
-}
-")
+  N -> MF[label = "K: .3"]
+  N -> MS[label = "A: .7"]
+  MF -> RFF[label = "K: .9"]
+  MF -> RFS[label = "A: .1"]
+  MS -> RSF[label = "K: .2"]
+  MS -> RSS[label = "A: .8"]
 
+}
 ```
+
+
 :::
 
 ## Bayesian probability of your roommate is a pervert
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSHBMQjlxSVhKaEdFWnlmP2U9WFFvb2xn.mp4" height="850" >}}
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSHBMQjlxSVhKaEdFWnlmP2U9WFFvb2xn.mp4" height="600" >}}
 
 
 ## Mutural Diss
 
-::::{.columns}
-:::{.column width="50%" .fragment}
-Bayesian {{< fa solid gun size=large >}} Frequentist
+Frequentist 🔫 Bayesian
 
 1. *Repeated sample*: When the population data are collected, the repeat-sample makes no sense.
 1. *Future event*: It is impossible to have repeat samples for future.
+
+:::{.fragment}
+Bayesian 🔫 Frequentist
+
+![](images/prob_freqBayesian.png){.lightbox fig-align="center" height=num}
 :::
 
-:::{.column width="50%" .fragment}
-Frequentist {{< fa solid gun size=large >}} Bayesian
-![](images/prob_freqBayesian.png){width=800}
-:::
-::::
-
-
-# Presenting Probability
+# Probability as a Statistic
 
 ## Four Common Ways to Presenting Probability
 
-1. Percentage
+1. Percentage &check;
 1. Relative risk
 1. Odds Ratio
 1. Bayesian method
@@ -305,17 +335,24 @@ Frequentist {{< fa solid gun size=large >}} Bayesian
 * $\hat{\pi}_{1|1}/\hat{\pi}_{1|2} = \frac{n_{11}/n_{\bullet 1}}{n_{12}/n_{\bullet 2}}$
 
 :::{.fragment}
-E.g., A hospital investigated whether drinking has a relation with fatal illness. 
+E.g., A hospital investigated whether alcoholism relates to fatal illness. 
 
-| Drinking 	| Yes 	| No 	|
+| Alcoholism 	| Yes 	| No 	|
 |----------	|-------	|----------	|
 | Fatal      	| 1,601  	| 510   	|
 | Nonfatal       	| 162,527   	| 412,368   	|
 
 $$Risk_{fatal} = \frac{1601/(1601 + 162527)}{510/(510 + 412368)} = 7.897$$
-
-- That is, when people drink, they are **7.9 more times** to die in a fatal accident than those w/o.
 :::
+
+:::{.fragment}
+:::{.callout-important appearance="simple"}
+When people drink, they are *7.9 more times* to die in a fatal accident than those w/o.
+
+**The above line distinguishes a scholar from a student.**
+:::
+:::
+
 
 ## Odds Ratio
 
@@ -331,7 +368,7 @@ O_{12} =& \frac{\pi_{1|1}/\pi_{1|2}}{\pi_{2|1}/\pi_{2|2}}, \\
 :::{.column width="50%" .fragment}
 The previous e.g., 
 
-| Drinking 	| Yes 	| No 	|
+| Alcoholism 	| Yes 	| No 	|
 |----------	|-------	|----------	|
 | Fatal      	| 1,601  	| 510   	|
 | Nonfatal       	| 162,527   	| 412,368   	|
@@ -340,45 +377,40 @@ $O_{fatal} = \frac{1601/510}{162527/412368}$ = 7.965
 :::
 ::::
 
+:::{.fragment}
+:::{.callout-important appearance="simple"}
+The fatal risk of alcoholism is *8 times larger* than not.
+:::
+:::
 
-- The fatal risk of wearing a belt is **8 times larger** than not
-- *Log odds*: mapping the range (0,1) to (-&infin;, +&infin;) using log of odds, a.k.a., "logistic unit" (logit)
-    - If independent, then log odds = 0.
+:::{.fragment}
+::: {.callout-tip appearance="minimal"}
+![](images/ci_fsmrof.png){.lightbox fig-align="center" height=30} *Log odds*: mapping the range (0,1) to (-&infin;, +&infin;) using log of odds, 
+
+- A.k.a., "logistic unit" (logit) 
+- If independent, then log odds = 0.
+:::
+:::
+
 
 
 ## RR vs. OR
 
 :::{style="text-align: center"}
-![](images/prob_rrOr.png){height="500"}
+![](images/prob_rrOr.png){height="450"}
 :::
 
 * For common cases, RR is better.
 * For rare cases, both ok.
 
-
-# Probability &rarr; Distribution
-
-
 ## Puting Probability Together
 
-(Probability) distribution: 
-
-The mathematical [function]{.red} that gives the probabilities of occurrence of different possible [outcomes]{.red} for an [experiment]{.red}.
+> (Probability) distribution: The mathematical [function]{.red} that gives the probabilities of occurrence of different possible [outcomes]{.red} for an [experiment]{.red}.
 
 
 ::::{.columns}
 :::{.column width="50%" .fragment}
-**Marginal and joint distributions**
 
-- Marginal \begin{align}
-\pi_{i\bullet} =& \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
-\pi_{\bullet j} =& \sum_i \pi_{ij}, \hat{\pi_{\bullet j}} =  n_{\bullet j}/n_{\bullet\bullet}.
-\end{align}
-
-- Joint: $\pi_{\bullet\bullet}$ = &sum;&sum; &pi;<sub>ij</sub> = 1.
-:::
-
-:::{.column width="50%" .fragment}
 **Marginal and joint totals**
 
 \begin{align} 
@@ -392,19 +424,41 @@ n_{\bullet\bullet} =& \sum\sum n_{ij}.
 \pi_{i|j} = \pi_{ij} / \pi_{\bullet j}; \\
 \hat{\pi_{i|j}} = n_{ij}/n_{\bullet j}.
 \end{align}
+
+:::
+
+:::{.column width="50%" .fragment}
+**Marginal and joint distributions**
+
+- Marginal \begin{align}
+\pi_{i\bullet} =& \sum_j \pi_{ij}, \hat{\pi_{i\bullet}} =  n_{i\bullet}/n_{\bullet\bullet}; \\
+\pi_{\bullet j} =& \sum_i \pi_{ij}, \hat{\pi_{\bullet j}} =  n_{\bullet j}/n_{\bullet\bullet}.
+\end{align}
+
+- Joint: $\pi_{\bullet\bullet}$ = &sum;&sum; &pi;<sub>ij</sub> = 1.
 :::
 ::::
 
 
----
+## Calculate the Distributions
 
-E.g., Do you like ”Love Between Fairy and Devil"? 
+:::: {.columns}
+
+::: {.column width="60%"}
+E.g., Do you like "The Knockout"? 
 
 | Gender 	| Yes 	| No 	| Total 	|
 |--------	|-----	|----	|-------	|
 | Male   	| 5   	| 12 	| 17    	|
 | Female 	| 6   	| 5  	| 11    	|
 | Total  	| 11  	| 17 	| 28    	|
+:::
+
+::: {.column .fragment width="40%"}
+![](images/prob_zhujiaomian.jpg){fig-align="center" height=250}
+:::
+
+::::
 
 - What's the probability for a female that don't like?
     - $Pr(FN) = 5/28.$ (event probability)
@@ -412,16 +466,17 @@ E.g., Do you like ”Love Between Fairy and Devil"?
     - $Pr(N) = 17/28.$ (marginal distribution)
 - What's the probability of disliking given the respondent is a female?
     - $P(N|F) = 5/11.$ (conditional distribution)
-    
-    
+
+
 :::{.notes}
-苍兰诀
+狂飙
 :::
 
 
 ## Independence
 
 $$P(X\cap Y) = P(X)P(Y); P(Y|X) = P(X).$$
+
 ::::{.columns}
 :::{.column width="40%" .fragment}
 Such event's probability is: 
@@ -431,7 +486,7 @@ Such event's probability is:
 :::
 
 :::{.column width="60%" .fragment}
-E.g., Do you like ”Love Between Fairy and Devil"? 
+E.g., Do you like "The Knockout"? 
 
 | Gender 	| Yes 	| No 	| Total 	|
 |--------	|-----	|----	|-------	|
@@ -440,7 +495,7 @@ E.g., Do you like ”Love Between Fairy and Devil"?
 | Total  	| 11  	| 17 	| 28    	|
 
 - Are gender and approval independent? 
-    - Pr(MY) = [11/28 &times; 17/28]{.blue} &ne; 5/28
+    - Pr(MY) = [11/28 &times; 17/28]{.red} &ne; 5/28
 :::
 ::::
 
@@ -454,5 +509,9 @@ $\chi^2 = \sum(\frac{Observation - Expected}{Expected})^2.$
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](images/prob_mindmap.png){ height="850" }
+![](images/prob_mindmap.png){ height="600" }
 :::
+
+## Have a break
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="600" >}}
