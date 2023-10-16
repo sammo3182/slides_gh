@@ -1,0 +1,438 @@
+---
+title: "Descriptive Statistic"
+subtitle: "Large N & Leeuwenhoek (70700173)"
+
+author: "Yue Hu"
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+
+
+
+## Administrative
+
+- Less time on the less important components
+- Meeting with me in the coming three weeks
+- R workshop
+
+
+## Overview
+
+- Data
+- Variable
+    - Typology
+    - Point
+    - Dispersion
+- Description
+    - Point
+    - Dispersion
+
+# Data
+
+## Concept
+
+Common definition: 
+
+:::{.fragment .fade-in}
+:::{.fragment .semi-fade-out}
+
+> The quantities, characters, or symbols on which operations are performed by a computer, being stored and transmitted in the form of electrical signals and recorded on magnetic, optical, or mechanical recording media.
+
+:::
+:::
+
+:::{.fragment .fade-in}
+
+[Oxford Language](https://languages.oup.com/google-dictionary-en/): 
+
+> Things known or assumed as [facts]{.red}, making the basis of *reasoning or calculation*. 
+
+:::
+
+![](images/desc_etymData.png){.fragment fig-align="center" height=200}
+
+:::{.notes}
+
+Etymology
+
+/ˌɛtɪ'mɑlədʒi/
+
+from "a piece of info, something to give" to now
+:::
+
+## Nature
+
+::: {.r-fit-text}
+- Is data a product?
+- Is data the "new oil"?
+- Is noise data?
+:::
+
+:::{.notes}
+- Data is a type of project, but a special one among private, club, common resources (exclusiveness and rivalry), between the club and public goods
+- Difference from oil
+    - Unlimited
+    - Can't valued
+    - Replicable
+- Noise is not data
+    - Data's value is from analysis
+:::
+
+
+# Variable
+
+## Definition
+
+:::{.fragment}
+**Specifically**, a variable = [a dimension(well...)]{.gray} = a column
+:::
+
+:::{.fragment}
+**Empirically**, a variable = a piece of data with *homogeneous* properties
+:::
+
+:::{.fragment}
+**Relationally**, an observation &sub; {var1, var2, var3,...} &sub; a dataset
+:::
+
+![](images/desc_etymVariable.png){.fragment fig-align="center" height=num}
+
+## Do you really understand
+
+:::{style="text-align:center; margin-top: 0.5em"}
+![](images/desc_gender.jpg){fig-align="center" height=num}
+
+A concept?      
+A variable?     
+A measurement?
+:::
+
+:::{.fragment style="text-align:center; margin-top: 0.5em"}
+How about...**GDP**
+:::
+
+
+## Typology
+
+* Constant vs. variables
+* Dependent/**outcome**/response ~
+* Independent/**explanatory**/treatment ~
+
+:::{.fragment .fade-in}
+:::{.fragment .fade-out}
+:::{.r-fit-text}
+When would you want a variable to be [constant]{.red} in a research?
+:::
+
+:::{.notes}
+1. Get rid of the effect
+1. Testing if X is a necessary condition for Y
+    - Is hard work necessary for successes?
+    - A works 12h, B works 12h, A success, B doesn't
+    - Is good governance produced by democracy?
+        - Democracy with Trump
+        - Democracy with Clinton
+:::
+
+:::
+:::
+
+
+- Nominal/categorical &larr; Ordinal &larr; **Numeric**
+
+::::{.columns}
+:::{.column width="50%" .fragment}
+- Interval: Meaningful distance
+    - Discrete/continuous
+    - Zero is a terminal
+    - Meaningful addition/subtraction
+:::
+
+:::{.column width="50%" .fragment}
+- Ratio: Interval with meaningful zero
+    - Continuous
+    - Zero means absence
+    - Meaningful multiplication/division
+    
+:::{.notes}
+feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代表没有, so an interval;
+-100-0-100， 0代表0的意思，ratio 是唯一一种scale可以表示meaningful ratio
+
+Ratio: the ratio of two points on the scale conveys the same meaning regardless of where one is on the scale
+
+e.g.1, Public budget, safty:health = 4:1 then no matter how much in total, it will 4:1
+e.g.2, event history, vaccine rate
+:::
+:::
+::::
+
+
+
+## Interval vs. Ratio
+
+:::{.r-stack}
+![](images/desc_tongshencun.png){fig-align="center" height=600}
+
+![](https://sammo3182.github.io/slides_gh/slides/guestLecture/images/gini.gif){.fragment height=600}
+:::
+
+# Description
+
+## Features of Variable
+
+Level of description
+
++ Raw data ![](images/desc_rawData.png){height=100}
++ Frequency distribution: 
+  n<sub>i</sub>, n<sub>.</sub> = &sum;n<sub>i</sub>, n<sub>..</sub> = &sum;n<sub>ij</sub> ![](images/desc_frequency.png){height=100}
+
++ Histogram ![](images/desc_histogram.png){height=100}
+
+---
+
++ &#8618; Time series plots, scatter plots ![](images/desc_scatter.png){height=300}
+
++ Percentiles: 
+    - > I rated the applicant among the top 10-15% students taking BSc-courses at Manchester; and now I know for sure that she is among the best...
++ Moments
+
+:::{.notes}
+A prospective student graduated from Manchester and Cambridge
+
+Information lost increasingly more
+:::
+
+
+## Describing a Variable: Point
+
++ **Mode**: most frequent occurring number, not good of central tendency, bimodal (two modes)
++ **Median**: at 50%
+    + Odd: middle value
+    + Even: mean of two mid values
+    + Sensitive for outliers
++ **Mean**: $\bar{X}\rightarrow\mu.$
+    + Group: $\bar{X} = 1/n\sum xf.$, x is the cell midpoint and f is the frequency of $X_i$.
+    + Symmetric distribution, median and mean are identical
+
+
+:::{.fragment}
+::: {.callout-tip appearance="minimal"}
+
+![](images/ci_fsmrof.png){fig-align="center" height=30} Point == "common," "usual,""average"
+
+:::
+:::
+
+
+
+## When to use what
+
+::::{.columns}
+:::{.column width="50%"}
+
+
+
+
+
+![](images/desc_median.gif){height=400}
+:::
+
+:::{.column width="50%"}
+![](images/desc_sheHulk.png){.fragment height=600}
+:::
+
+::::
+
+## How to measure it
+
+![](images/desc_barbie.jpeg){fig-align="center" height=num}
+
+## Describing a Variable: Dispersion
+
+::::{.columns}
+:::{.column width="50%"}
+[**Range**: Max - min; [min, max]]{.fragment}
+
+[Q: What's the range of  2, 2, 2, 2?]{.fragment .fade-in-then-out}
+
+![](images/desc_dispersion.png){.fragment}
+:::
+
+:::{.column width="50% .fragment}
+- **Interquartile Range (IQR)**: [25% quartile, 75% quartile]
+- **Mean absolute deviation (MAD)**: $1/n\sum|X - \bar{X}|.$
+- **Mean square deviation (MSD)**: $1/n\sum(X - \bar{X})^2.$
+:::
+::::
+
+:::{.notes}
+MAD: Intractable, difficult in differentiate absolute values
+:::
+
+:::{.fragment}
+::: {.callout-tip appearance="minimal"}
+
+![](images/ci_fsmrof.png){fig-align="center" height=30} Dispersion means how *wild* one can be
+
+:::
+:::
+
+
+---
+
+&#8618; **Variance**: &sigma;<sup>2</sup> for the population;^[The entire group you care ([finite]{.red}).] s<sup>2</sup> for a sample^[The group you collect data]
+
+$$\begin{align}
+\sigma^2 =& \sum(X - \mu)^2p(X);\\
+s^2 =& \sum(X - \bar X)^2p(x), \\
+=& \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}$$
+
+:::{.notes}
+&sigma;: sigma
+
+finite: finite
+
+- Population
+- Sample
+:::
+
+:::{.r-fit-text .fragment}
+Why n - 1? 
+:::
+
+## Why n - 1
+
+[Intuitively, Only when there are [more than one]{.red} items, the variance can exist.]{.fragment}
+
+:::{.fragment}
+
+In statistics, degree of freedom (d.f.)<sup>\*</sup>^[For a crosstable: (r - 1)(c - 1)]
+
+
+\begin{equation}
+\begin{bmatrix}
+X_1\\ \vdots \\ X_n
+\end{bmatrix} = \bar{X}
+\begin{bmatrix}
+1 \\\vdots \\ 1
+\end{bmatrix} + \begin{bmatrix}
+X_1 - \bar{X} \\ \vdots \\ X_n - \bar{X}
+\end{bmatrix}
+\end{equation}
+
+
+:::
+
+:::{.notes}
+The first vector on the right-hand side is constrained to be a multiple of the vector of 1's, and the only free quantity is ${\bar {X}}$. It therefore has 1 degree of freedom.
+
+The second vector is constrained by the relation ${\displaystyle \sum _{i=1}^{n}(X_{i}-{\bar {X}})=0}$. The first n − 1 components of this vector can be anything. However, once you know the first n − 1 components, the constraint tells you the value of the nth component. Therefore, this vector has n − 1 degrees of freedom.
+
+In statistical testing applications, often one isn't directly interested in the component vectors, but rather in their squared lengths.
+:::
+
+
+## Two Formats of Variance
+
+::::{.columns}
+:::{.column width="40%"}
+
+Definition：
+
+\begin{align}
+\sigma^2 =& \sum(X - \mu)^2p(X);\\
+s^2 =& \sum(X - \bar X)^2p(x), \\
+=& \frac{\sum(X - \bar{X})^2}{n - 1}.
+\end{align}
+
+:::
+
+:::{.column .small width="60%" .fragment}
+Given &mu; = &sum;Xp(x), &sum;p(x) = 1,
+
+\begin{aligned}
+\sigma^2 =& \sum(X - \mu)^2p(x),\\
+=& \sum(X^2 -2X\mu + \mu^2)p(x),\\
+=& \sum X^2p(x) - 2\mu\sum Xp(x) + \mu^2\sum p(x). \\
+=& \sum X^2p(x) - \mu^2.
+\end{aligned}
+
+:::
+::::
+
+:::{.notes}
+NB: Pay attention to the .red[punctuation marks].]
+:::
+
+## Standard deviation (SD)
+
+- Population: $\sigma = \sqrt{\sum(X - \mu)^2p(X)}$;
+- Sample: $s = \sqrt{\frac{\sum(X - \bar{X})^2}{n - 1}}$;
+- Ratio: $\sigma = \sqrt{\pi(1 - \pi)}$;
+- Group: $\sqrt{\frac{f}{n}\sum(X - \bar{X})^2}$.
+
+![](images/desc_sd.png){.fragment fig-align="center" height=300}
+
+
+## Take-home point
+
+::: {style="text-align: center"}
+![](images/desc_mindmap.png){ height="600" }
+:::
+
+
+# R Lab
+
+## Learning R with Dr. Hu
+
+:::{.fragment}
+::: {style="text-align: center"}
+Starting from math {{< fa solid skull >}} 
+
+![](images/desc_math4PoliSci.jfif){height="600"}
+:::
+
+:::
+
+## Hey, no fear
+
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGtFZ0F0ZVZzTElHNjdxP2U9U3Fpb0do.mp4" height="550" >}}
+
+
