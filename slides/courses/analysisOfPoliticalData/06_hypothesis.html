@@ -5,11 +5,10 @@
 <script src="06_hypothesis_files/libs/quarto-html/popper.min.js"></script>
 <script src="06_hypothesis_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="06_hypothesis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="06_hypothesis_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="06_hypothesis_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="06_hypothesis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="06_hypothesis_files/libs/quarto-contrib/videojs/video.min.js"></script>
-<link href="06_hypothesis_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.1.251">
+<link href="06_hypothesis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.435">
 
   <meta name="author" content="Yue Hu">
   <title>Hypothesis Testing: Concept and Operation</title>
@@ -27,12 +26,12 @@
     ul.task-list{list-style: none;}
     ul.task-list li input[type="checkbox"] {
       width: 0.8em;
-      margin: 0 0.8em 0.2em -1.6em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="06_hypothesis_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="style_basic.css">
+  <link rel="stylesheet" href="06_hypothesis_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
   <link href="06_hypothesis_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="06_hypothesis_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="06_hypothesis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -77,44 +76,44 @@
     font-weight: 400;
   }
 
-  .callout.callout-captioned.callout-style-simple .callout-body {
+  .callout.callout-titled.callout-style-simple .callout-body {
     margin-top: 0.2em;
   }
 
-  .callout:not(.callout-captioned) .callout-body {
+  .callout:not(.callout-titled) .callout-body {
       display: flex;
   }
 
-  .callout:not(.no-icon).callout-captioned.callout-style-simple .callout-content {
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
     padding-left: 1.6em;
   }
 
-  .callout.callout-captioned .callout-header {
+  .callout.callout-titled .callout-header {
     padding-top: 0.2em;
     margin-bottom: -0.2em;
   }
 
-  .callout.callout-captioned .callout-caption  p {
+  .callout.callout-titled .callout-title  p {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
   }
     
-  .callout.callout-captioned.callout-style-simple .callout-content  p {
+  .callout.callout-titled.callout-style-simple .callout-content  p {
     margin-top: 0;
   }
 
-  .callout.callout-captioned.callout-style-default .callout-content  p {
+  .callout.callout-titled.callout-style-default .callout-content  p {
     margin-top: 0.7em;
   }
 
-  .callout.callout-style-simple div.callout-caption {
+  .callout.callout-style-simple div.callout-title {
     border-bottom: none;
     font-size: .9rem;
     font-weight: 600;
     opacity: 75%;
   }
 
-  .callout.callout-style-default  div.callout-caption {
+  .callout.callout-style-default  div.callout-title {
     border-bottom: none;
     font-weight: 600;
     opacity: 85%;
@@ -146,7 +145,7 @@
     background-size: 0.9rem 0.9rem;
   }
 
-  .callout-caption {
+  .callout-title {
     display: flex
   }
     
@@ -159,16 +158,17 @@
     display: none !important;
   }
 
-  .callout.callout-captioned .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
-  .callout.callout-captioned .callout-icon::before {
+  .callout.callout-titled .callout-icon::before {
     margin-top: .5rem;
     padding-right: .5rem;
   }
 
-  .callout:not(.callout-captioned) .callout-icon::before {
+  .callout:not(.callout-titled) .callout-icon::before {
     margin-top: 1rem;
     padding-right: .5rem;
   }
@@ -183,7 +183,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
   }
 
-  div.callout-note.callout-style-default .callout-caption {
+  div.callout-note.callout-style-default .callout-title {
     background-color: #dae6fb
   }
 
@@ -195,7 +195,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
   }
 
-  div.callout-important.callout-style-default .callout-caption {
+  div.callout-important.callout-style-default .callout-title {
     background-color: #f7dddc
   }
 
@@ -207,7 +207,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
   }
 
-  div.callout-warning.callout-style-default .callout-caption {
+  div.callout-warning.callout-style-default .callout-title {
     background-color: #fcefdc
   }
 
@@ -219,7 +219,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
   }
 
-  div.callout-tip.callout-style-default .callout-caption {
+  div.callout-tip.callout-style-default .callout-title {
     background-color: #ccf1e3
   }
 
@@ -231,7 +231,7 @@
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
   }
 
-  div.callout-caution.callout-style-default .callout-caption {
+  div.callout-caution.callout-style-default .callout-title {
     background-color: #ffe5d0
   }
 
@@ -328,27 +328,33 @@
   <div class="reveal">
     <div class="slides">
 
-<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="center">
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">Hypothesis Testing: Concept and Operation</h1>
   <p class="subtitle">Large N &amp; Leeuwenhoek (70700173)</p>
-  <p class="author">Yue Hu</p>
-  <p class="institute">Tsinghua University</p>
-</section>
 
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+</div>
+</div>
+
+</section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
 <ul>
-<li class="fragment">Hypothesis as a concept
+<li class="fragment">Understand hypothesis testing
 <ul>
 <li class="fragment">Substantive concept</li>
 <li class="fragment">Operational concept</li>
 </ul></li>
-<li class="fragment">Hypothesis testing</li>
+<li class="fragment">Process a hypothesis test</li>
 </ul>
 </section>
 <section>
-<section id="hypothesis-as-a-concept" class="title-slide slide level1 center">
-<h1>Hypothesis as a concept</h1>
+<section id="understand-hypothesis-testing" class="title-slide slide level1 center">
+<h1>Understand hypothesis testing</h1>
 
 </section>
 <section id="substantive-definition" class="slide level2">
@@ -359,7 +365,9 @@
 <div class="columns">
 <div class="column" style="width:30%;">
 <div class="r-vstack">
-<p><img data-src="images/hpy_checkBalance_ideal.jpg" class="fragment" data-fig-align="center" height="350"> <img data-src="images/hpy_checkBalance_real.png" class="fragment" data-fig-align="center" height="350"></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_checkBalance_ideal.jpg" class="fragment quarto-figure-center" height="250"></p>
+<p><span class="fragment" style="&quot;text-align:center">↓</span></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_checkBalance_real.png" class="fragment quarto-figure-center" height="250"></p>
 </div>
 <aside class="notes">
 <p>In June 2022, the Supreme Court overruled Roe vs.&nbsp;Wade by 6:3</p>
@@ -376,7 +384,9 @@
       }</style></aside>
 </div><div class="column" style="width:70%;">
 <div class="r-hstack">
-<p><img data-src="images/hpy_ChinaCollapse.jpg" class="fragment" height="700"> <img data-src="images/hpy_ChinaNotCollapse.png" class="fragment" height="700"></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_ChinaCollapse.jpg" class="fragment" height="400"></p>
+<p><span class="fragment" style="&quot;text-align:center">→</span></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_ChinaNotCollapse.png" class="fragment" height="400"></p>
 </div>
 </div><aside class="notes">
 <p>Gordon Guthrie Chang (born July 5, 1951) is a columnist, author, and lawyer., In 2010, Chang wrote in The Christian Science Monitor that “China could fail soon” and predicted an economic crash.[8] In an article, “The Coming Collapse of China: 2012 Edition,” published by the Foreign Policy magazine website, Gordon G. Chang admitted that his prediction was wrong but arguing that he was off only by one year: “Instead of 2011, the mighty communist party of China will fall in 2012. Bet on it.”[9] On May 21, 2016, The National Interest published another article by Chang, “China’s Coming Revolution.” In it, he argued that the ruling class in China is divided and that it cannot deal with its economic problems. Chang claimed that would lead to a revolution, which would overthrow the Communist Party. Unlike for his other predictions, he did not give the exact year that those events would take place</p>
@@ -396,7 +406,7 @@
 <section id="operational-definition" class="slide level2">
 <h2>Operational definition</h2>
 <div style="text-align:center">
-<p>Theory (logic) ← real world (conceptual)</p>
+<p>Theory (logic) → real world (conceptual)</p>
 </div>
 <div style="text-align:center">
 <p>↓</p>
@@ -410,16 +420,21 @@
 <div style="text-align:center">
 <p>↓</p>
 <p>Ideal world ≠ real world: How?</p>
-<p>Covariate analysis</p>
+<ol type="1">
+<li class="fragment">Identification</li>
+<li class="fragment">Correlation analysis + Causal inference</li>
+</ol>
+<p>↓</p>
+<p>Estimates (coefficients + <span class="red">uncertainty</span>)</p>
 </div>
 </section>
-<section id="where-the-coefficient-come-from" class="slide level2">
-<h2>Where the coefficient come from</h2>
+<section id="how-to-get-the-coefficients" class="slide level2">
+<h2>How to get the coefficients</h2>
 <div class="fragment fade-in-then-semi-out">
 <p><em>Probability</em>: The <span class="red">chance</span> of occurrence of X<sub>i</sub> given the PDF of X, P(O|θ).</p>
 </div>
 <div class="fragment">
-<p><em>Likelihood</em> : How probable a given set of <span class="red">observations</span> is for certain values of the parameters of a distribution, ℒ(θ|O) = <span class="math inline">\(\prod_{i=1}^n y_i\)</span></p>
+<p><em>Likelihood</em> : How probable a given set of <span class="red">observations</span> is for certain values of the parameters of a distribution, ℒ(θ|O) = <span class="math inline">\(\prod_{i=1}^n y_i\)</span><sup>1</sup></p>
 </div>
 <aside class="notes">
 <p>ℒ Lagrangian or Laplace transform</p>
@@ -438,19 +453,12 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="fragment" style="margin-top: 1em">
+<div class="fragment">
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="06_hypothesis_files/figure-revealjs/likelihood-1.png" width="960"></p>
-</figure>
+<p><img data-src="06_hypothesis_files/figure-revealjs/likelihood-1.png" class="quarto-figure-center" width="960"></p>
 </div>
 </div>
-</div>
-</div>
-<div class="fragment">
-<p>Maximum Likelihood Estimation: Maximizing the probability that ℒ(θ|O) = P(O|θ)</p>
 </div>
 <aside class="notes">
 <ul>
@@ -487,9 +495,22 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment"><strong>Maximum Likelihood Estimation</strong>: Maximizing the probability that ℒ(θ|O) = P(O|θ).</span></p></li></ol></aside></section>
+<section id="how-to-get-uncertainty" class="slide level2">
+<h2>How to get uncertainty</h2>
+<ul>
+<li class="fragment">Parametric: CI estimation
+<ul>
+<li class="fragment"><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_parametric.webp" height="200"></li>
+</ul></li>
+<li class="fragment">Nonparametric: Bootstrap
+<ul>
+<li class="fragment"><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_nonparametric.webp" height="300"></li>
+</ul></li>
+</ul>
 </section>
-<section id="hypothesis-testing-statistically" class="slide level2">
-<h2>Hypothesis Testing Statistically</h2>
+<section id="format" class="slide level2">
+<h2>Format</h2>
 <div style="text-align:center; margin-top: 1em">
 <ul>
 <li class="fragment">Null (Random distribution): ℒ(null): Y = β<sub>0</sub> + ε</li>
@@ -497,24 +518,23 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
 <li class="fragment">Testing (Hypothesis testing): ℒ(null) vs.&nbsp;ℒ(theory)</li>
 </ul>
 </div>
-<div class="fragment" style="text-align:center; margin-top: 1em">
-<!-- -->
-<h3 id="statistical-pillas">Statistical Pillas</h3>
-<ul>
-<li class="fragment">Law of Large Number (LLN)</li>
-<li class="fragment">Central limit theorem (CLT)</li>
-</ul>
-</div>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/20231022145849.png" class="fragment quarto-figure-center" height="400"></p>
+</section></section>
+<section>
+<section id="process-a-hypothesis-test" class="title-slide slide level1 center">
+<h1>Process a hypothesis test</h1>
+
 </section>
-<section id="two-pillas" class="slide level2">
-<h2>Two Pillas</h2>
+<section id="statistical-foundations" class="slide level2">
+<h2>Statistical Foundations</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><strong>LLN</strong>: For a sample with size n of a random variable X,</p>
-<p><span class="math display">\[{\displaystyle \lim _{n\to \infty }\sum _{i=1}^{n}{\frac {X_{i}}{n}}= \mu.} \]</span></p>
+<p>Law of Large Number(<strong>LLN</strong>): For a sample with size n of a random variable X,</p>
+<p><span class="math display">\[{\displaystyle \lim _{n\to \infty }\sum _{i=1}^{n}{\frac {X_{i}}{n}} = \lim _{n\to \infty }\bar{X} = \mu.} \]</span></p>
 <aside class="notes">
 <p>When n gets larger, the ratio of outcomes, X̄, will <span class="red">converge to</span> the theoretical (population) average μ</p>
 <p>Converge = concentrated around</p>
+<p>Convergence in probability</p>
 <p>Proof: https://blog.csdn.net/a19990412/article/details/85283729</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -528,8 +548,8 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
           display:block!important;
       }</style></aside>
 </div><div class="column" style="width:50%;">
-<p><strong>CLT</strong>: For a random sample of n, X̄ fluctuate around μ with an uncertainty,</p>
-<p><span class="math display">\[When\ n \rightarrow +\infty, Pr(\bar X) \sim \mathcal{N(\mu, \sigma)}. \]</span></p>
+<p>Central limit theorem (<strong>CLT</strong>): For a random sample of n, X̄ fluctuate around μ with an uncertainty,</p>
+<p><span class="math display">\[When\ n \rightarrow \infty, Pr(\bar X) \sim \mathcal{N(\mu, \sigma)}. \]</span></p>
 <aside class="notes">
 <p>When <span class="red">independent</span> random variables are summed up, their properly normalized sum tends toward a normal distribution, even if the original variables themselves are not normally distributed.</p>
 <p>Proof: https://zhuanlan.zhihu.com/p/93738110</p>
@@ -548,8 +568,8 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
 </div>
 <div class="fragment" style="text-align:center">
 <p>When n gets larger…</p>
-<p>‍CLT: X̄ will <span class="red">distribute</span> normally;<br>
-‍LLN: X̄ will <span class="red">approach</span> to μ</p>
+<p>‍LLN: X̄ will <span class="red">approach</span> to μ<br>
+‍CLT: X̄ will <span class="red">distribute</span> normally.</p>
 </div>
 <div class="fragment" style="text-align:center; margin-top: 2em">
 <p>Contradictory?</p>
@@ -568,20 +588,15 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
           display:block!important;
       }</style></aside>
 </div>
-</section></section>
-<section>
-<section id="conduct-hypothesis-testing" class="title-slide slide level1 center">
-<h1>Conduct Hypothesis testing</h1>
-
 </section>
-<section id="procedure" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Procedure</h2>
+<section id="steps-parametric-test" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Steps (parametric test)</h2>
 <ol type="1">
 <li class="fragment">An observed sample;</li>
 <li class="fragment">Making the IID assumption;</li>
 <li class="fragment">Set up the null (and alternative) hypotheses</li>
 <li class="fragment">Set the confidence level;</li>
-<li class="fragment">Compare the X̄ with &amp;mu.</li>
+<li class="fragment">Compare the X̄ with μ.</li>
 </ol>
 </section>
 <section id="iid" class="slide level2" data-auto-animate="true">
@@ -589,7 +604,7 @@ s - s\pi &amp;= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
 <div>
 <ol type="1">
 <li><span class="grayLight">An observed sample;</span></li>
-<li>Making the IID assumption;
+<li>Making the IID assumption;<sup>1</sup>
 <ul>
 <li>Identical: X and Y are from the same distribution, <span class="math inline">\({\displaystyle F_{X}(x)=F_{Y}(x)\,\forall x\in I}\)</span></li>
 <li>Independent: <span class="math inline">\({\displaystyle F_{X,Y}(x,y)=F_{X}(x)\cdot F_{Y}(y)\,\forall x,y\in I}\)</span></li>
@@ -611,6 +626,7 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
   =&amp; \frac{1}{n}[\sigma^2 + \sigma^2 + \dots + \sigma^2] = \frac{\sigma^2}{n}\\
 \therefore\ SE =&amp; \frac{\sigma}{\sqrt{n}}.
 \end{align}\]</span></p>
+<p>Lindeberg-Feller CLT extend CLT to non-iid random variables, which does not require identical σ but as long as there is not big outliers, CLT should be fine.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -622,7 +638,7 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment">No need under <a href="https://myweb.uiowa.edu/pbreheny/7110/wiki/lindeberg-feller.html">Lindeberg-Feller CLT</a>.</span></p></li></ol></aside></section>
 <section id="hypothesis-setting" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Hypothesis Setting</h2>
 <div>
@@ -660,17 +676,17 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
 </ul></li>
 <li>Set the confidence level;
 <ul>
-<li>1 - α</li>
+<li>1 - <span class="red">α</span></li>
 </ul></li>
 <li><span class="grayLight">Compare the X̄ with &amp;mu.</span></li>
 </ol>
 </div>
 </section>
-<section id="whats-alpha" class="slide level2">
-<h2>What’s Alpha</h2>
+<section id="lets-talk-about-alpha" class="slide level2">
+<h2>Let’s talk about alpha</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p><img src="images/hyp_errorType.png" height="700"></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_errorType.png" class="quarto-figure-center"></p>
 </div><div class="column fragment" style="width:50%;">
 <table>
 <colgroup>
@@ -720,8 +736,8 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
 <h2>Why 0.05</h2>
 <p>It’s not arbitrary, α = 0.05 ⇒ 1 - α = 0.95 (one-tailed) or 0.975 (two tailed)</p>
 
-<img data-src="06_hypothesis_files/figure-revealjs/ci-1.png" width="960" class="r-stretch quarto-figure-center"><div class="fragment r-fit-text">
-<p>Well…it’s <span class="red"><strong>arbitrary</strong></span> ANNNNNNNNNND <span class="red">qualitative</span>.</p>
+<img data-src="06_hypothesis_files/figure-revealjs/ci-1.png" class="quarto-figure-center r-stretch" width="960"><div class="fragment r-fit-text">
+<p>Well…it’s actually <span class="red"><strong>arbitrary</strong></span> ANNNNNNNNNND <span class="red">qualitative</span>.</p>
 </div>
 <aside class="notes">
 <p>Not calculate the p-value and set the significance but set the confidence level and conduct the test. This is scientific</p>
@@ -737,6 +753,28 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
           display:block!important;
       }</style></aside>
 </section>
+<section id="how-to-get-p-0.05" class="slide level2">
+<h2>How to get p &lt; 0.05</h2>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_phacking.jpg" class="fragment quarto-figure-center" height="300"></p>
+<div class="fragment">
+<div class="callout callout-important callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<blockquote>
+<p><span class="red">守住拒腐防变防线，最紧要的是守住内心，从小事小节上守起，正心明道、怀德自重，勤掸“思想尘”、多思“贪欲害”、常破“心中贼”，以内无妄思保证外无妄动。</span><br>
+<span class="golden">—— 2022年3月1日，习近平在中央党校（国家行政学院）中青年干部培训班开班式上的讲话</span></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment large" style="text-align:center">
+<p>You <span class="red">DON’T</span>!</p>
+</div>
+</section>
 <section id="deploy-hypothesis-testing" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Deploy Hypothesis testing</h2>
 <div>
@@ -745,7 +783,7 @@ s(\bar X)^2 =&amp; \frac{[E(s(X_1)^2) + E(s(X_2)^2) + \dots + E(s(X_n)^2)]}{n^2}
 <li><span class="grayLight">Making the IID assumption;</span></li>
 <li><span class="grayLight">Set up the null (and alternative) hypotheses</span></li>
 <li><span class="grayLight">Set the confidence level;</span></li>
-<li>Compare the X̄ with &amp;mu.
+<li>Compare the X̄ with μ, two steps:
 <ul>
 <li>SE</li>
 <li>Critical value / Confidence intervals</li>
@@ -764,20 +802,46 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="se-and-z-score" class="slide level2">
-<h2>SE and Z-Score</h2>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Individual-level Data</a></li><li><a href="#tabset-1-2">Aggregate Data</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
+<section id="correct-se" class="slide level2">
+<h2>Correct SE <img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png" height="30"></h2>
+<div class="callout callout-warning callout-style-simple">
+<div class="callout-body">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-content">
+<p>For small <strong>population</strong>, not small sample)</p>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">Finite population correction, FPC: Without replacement, SE of X̄ <span class="red">↑</span>
+<ul>
+<li class="fragment">⇒ uncertainty overestimated ⇒ correction: <span class="math inline">\(\sqrt{\frac{N - n}{N - 1}}\)</span></li>
+<li class="fragment">n = 1 (sampling only one sample), Then <span class="math inline">\(SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}\)</span>, no changes;</li>
+<li class="fragment">n = N (sampling all), SE = 0.</li>
+<li class="fragment">n = 1000, N = 100,000,000 (large sample of a large population), <span class="math inline">\(FPC = \sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999\)</span>, little changes.</li>
+<li class="fragment">n = 100, N = 108 (large sample of a <span class="red">small</span> population), <span class="math inline">\(FPC = \sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075\)</span>, some changes.</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-does-the-fpc-correct" class="slide level2">
+<h2>What does the FPC correct</h2>
+
+<img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/20231022160554.png" class="quarto-figure-center r-stretch"></section>
+<section id="statistical-test" class="slide level2">
+<h2>Statistical Test</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li class="fragment">SE → Z(t)-score →
+<ol type="1">
+<li class="fragment">Critical values (z/t), or</li>
+<li class="fragment">Confidence intervals</li>
+</ol></li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
 <p><span class="math display">\[Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}.\]</span></p>
-<div class="fragment">
-<p>E.g. Given <span class="math inline">\(\mu\)</span> = 72 and <span class="math inline">\(\sigma\)</span> = 9, and a random sample of 10. Calculate the probabilities of P(X &gt; 80) and P(X̄ &gt; 80)</p>
-<p><span class="math inline">\(Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z &gt; .89) =\)</span> 0.1867;</p>
-<p><span class="math inline">\(Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z &gt; 2.81) =\)</span> 0.0025.</p>
-</div>
-</div>
-<div id="tabset-1-2">
 <p><span class="math display">\[Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}.\]</span></p>
 <aside class="notes">
 <p>In a sample of N, the sample proportion P fluctuates around the population proportion π with SE, <span class="math inline">\(\sqrt{\frac{\pi(1 - \pi)}{n}}\)</span>. (Why?)</p>
@@ -796,8 +860,21 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</div>
+</div>
+<div class="panel-tabset fragment">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Individual-level Data</a></li><li><a href="#tabset-1-2">Aggregate Data</a></li></ul>
+<div class="tab-content fragment">
+<div id="tabset-1-1">
 <div class="fragment">
-<p>E.g., Given the Republican are 60% of the population, while the Democrats are 40%. What’s the probability that the Republican are the minority in a random sample of 100 people from the population?</p>
+<p>E.g. Given <span class="math inline">\(\mu\)</span> = 72 and <span class="math inline">\(\sigma\)</span> = 9, and a random sample of 10. Calculate the probabilities of P(X &gt; 80) and P(X̄ &gt; 80)</p>
+<p><span class="math inline">\(Z = \frac{80 - 72}{9} = .89\Rightarrow P(Z &gt; .89) =\)</span> 0.1867;</p>
+<p><span class="math inline">\(Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z &gt; 2.81) =\)</span> 0.0025.</p>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="fragment">
+<p>E.g., Given the Republican are 60% of the U.S. population, what’s the probability that the Republican are the minority in a random sample of 100 people from the national population?</p>
 <p>Minority means <span class="math inline">\(P(\pi &lt; 0.5)\)</span>.</p>
 <p>Then, <span class="math inline">\(Z = \frac{0.5 - 0.6}{\sqrt{\frac{0.6(1 - 0.6)}{100}}} =\)</span> 2.0412, therefore, P(Z &lt; 2.0412) = 0.0206.</p>
 </div>
@@ -805,48 +882,9 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
 </div>
 </div>
 </section>
-<section id="correcting-small-population" class="slide level2">
-<h2><img data-src="images/ci_fsmrof.png"> Correcting Small Population</h2>
-<p>Remember sampling w.o. replacement?</p>
-<div class="fragment">
-<p>Without replacement, SE of X̄ is reduced by <span class="math inline">\(\sqrt{\frac{N - n}{N - 1}}\)</span> (finite population correction, FPC) ⇒ More uncertainty.</p>
-</div>
-<div class="fragment">
-<p>Illustration:</p>
-<ul>
-<li class="fragment">n = 1 (sampling only one sample), Then <span class="math inline">\(SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}\)</span>, no changes;</li>
-<li class="fragment">n = N (sampling all), SE = 0.</li>
-<li class="fragment">n = 1000, N = 100,000,000 (large sample of a large population), <span class="math inline">\(FPC = \sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999\)</span>, little changes.</li>
-<li class="fragment">n = 100, N = 108 (large sample of a <span class="red">small</span> population), <span class="math inline">\(FPC = \sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075\)</span>, some changes.</li>
-</ul>
-</div>
-</section>
-<section id="preset-alpha-vs.-estimated-statistics-significance" class="slide level2">
-<h2>Preset Alpha vs.&nbsp;Estimated Statistics = Significance</h2>
-<p>(Review) Hypothesis testing statistically (a.k.a., what’s the significance for?)</p>
-<div style="text-align:center">
-<ul>
-<li class="fragment">Null (Random distribution): ℒ(null): Y = β<sub>0</sub> + ε</li>
-<li class="fragment">Theoretical (Your thought): ℒ(theory): Y = β<sub>0</sub> + β<sub>1</sub>X + ε</li>
-<li class="fragment">Testing (Hypothesis testing): ℒ(null) <span class="red">vs.</span> ℒ(theory)</li>
-</ul>
-</div>
-<div class="fragment">
-<p>How <span class="red">versus</span>?</p>
-<p>Check if the ℒ(null) and ℒ(theory) are the same<br>
-(Remember difference in means?)</p>
-</div>
-<div class="fragment">
-<p>Two deploying ways:</p>
-<ul>
-<li class="fragment">Critical (z/t) values</li>
-<li class="fragment">Confidence intervals</li>
-</ul>
-</div>
-</section>
-<section id="example" class="slide level2">
-<h2>Example</h2>
-<p>Given a virus can influence 10% of the population. Now there’s a sample of senior people, n = 527, within which there are 14% infected the virus. Are senior people more likely to be victimized?</p>
+<section id="full-process-illustration" class="slide level2">
+<h2>Full Process Illustration</h2>
+<p>Given a virus can influence 10% of the population. Now there’s a sample of senior people, n = 527, within which there are 14% infected. Are senior people more likely to be victimized?</p>
 <ul>
 <li class="fragment">Assuming the sample is IID sampled and <span class="math inline">\(H_0: \pi \leq 10; H_1: \pi &gt; 10.\)</span></li>
 <li class="fragment">α = 0.05</li>
@@ -856,31 +894,23 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
 </ul></li>
 <li class="fragment">Critical value method
 <ul>
-<li class="fragment"><span class="math inline">\(Z_{obs} = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.\)</span> Given the level of $= 0.05, Z_{critical} = $ 1.96 &lt; <span class="math inline">\(Z_{obs}\)</span>,<sup>1</sup> therefore reject the <span class="math inline">\(H_0.\)</span></li>
+<li class="fragment"><span class="math inline">\(Z_{obs} = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.\)</span> Given the level of <span class="math inline">\(\alpha = 0.05\)</span>, <span class="math inline">\(Z_{critical}\)</span> = 1.96 &lt; <span class="math inline">\(Z_{obs}\)</span>,<sup>1</sup> therefore reject the <span class="math inline">\(H_0.\)</span></li>
 </ul></li>
 </ul>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>(in r, <code>qnorm(0.975)</code>, 0.975, huh?)</p></li></ol></aside></section>
-<section id="one-last-thing-one-or-two-tailed-test" class="slide level2">
-<h2>One Last Thing: One or Two Tailed Test</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/hyp_tailed.png" height="500"></p>
-</figure>
-</div>
+<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="fragment">In r, <code>qnorm(0.975)</code>. 0.975, huh?</span></p></li></ol></aside></section>
+<section id="one-or-two-tailed-test" class="slide level2">
+<h2>One or Two Tailed Test</h2>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_tailed.png" class="quarto-figure-center" height="400"></p>
 <ul>
-<li class="fragment">One-tailed/two-tailed test: Most applications are one-tail tests, while most software gives two-tail results.</li>
+<li class="fragment">Most applications are one-tail tests, while most software gives two-tail results.</li>
 <li class="fragment">One-tailed test more often apply the critical value than confidence interval method.</li>
 </ul>
 </section>
 <section id="take-home-point" class="slide level2">
 <h2>Take-home point</h2>
 <div style="text-align: center">
-<p><img data-src="images/hyp_mindmap.png" height="850"></p>
+<p><img data-src="https://raw.githubusercontent.com/sammo3182/backup/master/images/20231022141302.png" height="600"></p>
 </div>
-</section>
-<section id="have-a-break" class="slide level2">
-<h2>Have a break</h2>
-<video id="video_shortcode_videojs_video1" height="850" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
 <div class="footer footer-default">
 
 </div>
@@ -897,6 +927,7 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
   <script src="06_hypothesis_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="06_hypothesis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
   <script src="06_hypothesis_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="06_hypothesis_files/libs/revealjs/plugin/reveal-spotlight/spotlight.js"></script>
   <script src="06_hypothesis_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -913,13 +944,13 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
+'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1065,9 +1096,9 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1600,
+        width: 1050,
 
-        height: 900,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
@@ -1090,7 +1121,7 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealSpotlight, QuartoSupport,
 
           RevealMath,
           RevealNotes,
@@ -1105,12 +1136,15 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
       // slide changes (different for each slide format).
       (function () {
-        function fireSlideChanged(previousSlide, currentSlide) {
-
-          // dispatch for htmlwidgets
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
           const event = window.document.createEvent("Event");
           event.initEvent("slideenter", true, true);
           window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
 
           // dispatch for shiny
           if (window.jQuery) {
@@ -1121,13 +1155,6 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
               window.jQuery(currentSlide).trigger("shown");
             }
           }
-        }
-
-        // hookup for reveal
-        if (window.Reveal) {
-          window.Reveal.addEventListener("slidechanged", function(event) {
-            fireSlideChanged(event.previousSlide, event.currentSlide);
-          });
         }
 
         // hookup for slidy
@@ -1165,9 +1192,23 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
       tabsets.forEach(function(tabset) {
         const tabby = new Tabby('#' + tabset.id);
       });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
       const clipboard = new window.ClipboardJS('.code-copy-button', {
-        target: function(trigger) {
-          return trigger.previousElementSibling;
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
         }
       });
       clipboard.on('success', function(e) {
@@ -1179,17 +1220,33 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
         button.classList.add('code-copy-button-checked');
         var currentTitle = button.getAttribute("title");
         button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
         setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
           button.setAttribute("title", currentTitle);
           button.classList.remove('code-copy-button-checked');
         }, 1000);
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1198,9 +1255,18 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
           },
           interactive: true,
           interactiveBorder: 10,
-          theme: 'quarto-reveal',
-          placement: 'bottom-start'
+          theme: 'light-border',
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1217,42 +1283,63 @@ E(\bar X) =&amp; \mu = 69; \sigma = 3.2, \\
           return note.innerHTML;
         });
       }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
       var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
       for (var i=0; i<bibliorefs.length; i++) {
         const ref = bibliorefs[i];
-        const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-        tippyHover(ref, function() {
-          var popup = window.document.createElement('div');
-          cites.forEach(function(cite) {
-            var citeDiv = window.document.createElement('div');
-            citeDiv.classList.add('hanging-indent');
-            citeDiv.classList.add('csl-entry');
-            var biblioDiv = window.document.getElementById('ref-' + cite);
-            if (biblioDiv) {
-              citeDiv.innerHTML = biblioDiv.innerHTML;
-            }
-            popup.appendChild(citeDiv);
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
           });
-          return popup.innerHTML;
-        });
+        }
       }
         var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
           var filterRegex = new RegExp('/' + window.location.host + '/');
         var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
         }
         // Inspect non-navigation links and adorn them if external
-        var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external)');
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
         for (var i=0; i<links.length; i++) {
           const link = links[i];
           if (!isInternal(link.href)) {
               // target, if specified
               link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
           }
         }
     });
     </script>
-    
     
 
 </body></html>
