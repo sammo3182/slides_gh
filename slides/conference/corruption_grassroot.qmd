@@ -1,0 +1,354 @@
+---
+title: |
+  | 基层腐败治理的民心导向
+  | 与结构差异
+subtitle: "城市治理与政治发展学术论坛"
+date: "2023-10-29"
+date-format: "iso"
+
+author: "胡悦"
+institute: "清华大学社会科学学院"
+
+bibliography: China_corruption.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - reveal-header
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+## “太长不读”^[@TangHu2022]
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse",
+  "ggalt",
+  "drhutools"
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+- 话题
+    - 中国的基层腐败现象
+
+- 方法
+    - 全国代表性调查（N = 2,581）
+    - 列举实验[权重矫正]{.red}法
+
+- 发现
+    - 基层腐败治理民心感知[真实分布]{.red}与高敏感性
+    - 基层腐败的治理感知异质性反映[反腐成效]{.red}
+    - 基层腐败治理效果感知存在[结构差异]{.red}
+
+- 结论
+    - 以[民意导向]{.red}推进新阶段反腐工作
+
+# 研究问题
+
+## 腐败治理研究已知与未知
+
+:::{style="text-align:center"}
+- 影响
+    - 制度、非常规政府行为、政权合法性[[@NiXingChenShanShan2013;@Manion2004;@ClaypoolEtAl2018]]{.small}
+    - 经济发展[[@SunGangEtAl2005; @WuYiPingZhuJiangNan2012;@GongZhou2015;@Tsai2007]]{.small}
+    - 国别与类型差异[[@ZhangYuanHuangPengDeCai2017;@Bardhan2009;@Ramirez2014]]{.small}  
+- 反腐
+    - 精英政治[[@ChenGang2013;@NieHuiHuaWangMengQi2014;@JiangYang2016]]{.small}
+    - 制度化[[@WangHuNing1995;@WangHuNing1995;@ZhuGuangLeiShengLin2006;@Ang2020]]{.small}
+- 缺乏研究
+    - 基层腐败？[[@NiXingChenShanShan2013; @WuYiPingZhuJiangNan2012]]{.small}
+    - 反腐感知？[[@GongTing2016; @WangZheEtAl2016a]]{.small}
+:::
+
+:::{.notes}
+@NiXingChenShanShan2013; @WuYiPingZhuJiangNan2012：县域、市域腐败立案
+
+公婷2016年专刊四篇文章讨论感知，仍然以survey为主，且非针对grassroots
+:::
+
+
+
+## 基层腐败治理的中国场景与世界之问
+
+:::: {.columns}
+
+::: {.column width="50%"}
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xWEpLOFNSbTZUeHdTZXloP2U9RkI5VkFi.mp4" height="300">}}
+
+:::{.notes}
+
+深圳街道办干部办公室受贿收礼过程被曝光
+
+http://news.sina.com.cn/c/2019-03-12/doc-ihsxncvh1996107.shtml
+
+Cash and cash cards 8 times in 16 days 
+:::
+:::
+
+::: {.column width="50%"}
+- 中国场景：“苍蝇”的分布情况
+    - 下降说 &larr; 反腐斗争
+    - 供需说
+        - &larr; 可支配收入
+        - &larr; 过程信息
+        - &larr; 公共服务资源
+        - &larr; [反腐能力]{.red}
+:::
+
+::::
+
+:::: {.columns}
+
+::: {.fragment .column width="50%"}
+“世界之问”：
+
+腐败感知的社会期望偏差
+:::
+
+::: {.fragment .column width="50%"}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/corruption_desirability.png){.fragment fig-align="center" height=250}
+:::
+
+::::
+
+
+
+## 研究目标
+
+1. 中国基层腐败（感知）状况的[去偏]{.red}分布状况
+    - H<sub>1</sub>: 常规公众调查会极大低估基层腐败感知程度。
+1. 基层腐败的结构性因素
+    - H<sub>2</sub>: 处于（反腐）能力强、公共服务充足地区公众基层腐败感知更低。
+        - 政策性因素：户口/流动人口状态 &rarr; 地方公共资源可获取性 [&uarr;]{.red}
+        - 工作性因素：国有 vs. 非国有 &rarr; 纪律性约束 [&darr;]{.green}
+        - 能力性因素：城市层级(非线性) &rarr; 大型城市能力强，小型城市需求少 [&darr;]{.green}
+1. 基层腐败的社会性因素
+    - H<sub>3</sub>: 政治动员渠道的信息副作用 [&uarr;]{.red}
+    - H<sub>4</sub>: 人际网络的调节作用 [&uarr;]{.red}
+    - H<sub>5</sub>: 长期经济状态（教育、经济期望）[&darr;]{.green} vs. 短期经济收益（家庭收入）[&uarr;]{.red}
+
+# 基层腐败感知的去偏估计
+
+## 敏感问题实验
+
+常见技术：列举实验、支持实验、随机回应技术 [@RosenfeldEtAl2016;@BlairEtAl2014a]
+
+:::{.r-vstack}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/lab_listC.png){.fragment fig-align="center" height=200}
+
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/lab_listT.png){.fragment fig-align="center" height=200}
+:::
+
+
+:::{.notes}
+在俄罗斯问，请问有几个领导人是值得信任的
+
+日本首相岸田文雄
+:::
+
+## 局限与拓展
+
+局限：
+
+- 仅针对特定问题
+- 仅能体现“真实”回答，无法衡量偏差大小
+
+突破：
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 添加直接问题（direct questions)
+- 多题估测
+- 权重纠偏
+:::
+
+::: {.column .fragment width="50%"}
+\begin{align}
+O^{type} =& \frac{Pr^{type}_{list}}{Pr^{type}_{direct}},\\
+W_i =& \sum I_i^{type}\cdot\frac{O^{type}}{t_i}.
+\end{align}
+:::
+::::
+
+:::{.notes}
+$I_i^{type}$: 0/1, whether *i* report;
+
+$O^{type}$: Experiment/direct;
+
+$t_i$: Type counts that *i* reports
+:::
+
+
+# 应用与发现
+
+## 研究设计
+
+2018 中国经济行为调查 （全国代表性，N: 2,581）
+
+- 过去两年中与下列哪些部门打过交道
+    - 医疗部门 (37%, [7.12%]{.red})
+    - 教育部门 (54%, [8.62%]{.red})
+    - 地方政府 (22%, [6.77%]{.red})
+    - 公安司法 (17%, [6.44%]{.red})
+
+:::{.notes}
+当代中国研究中心
+
+红包、提供帮助、服务
+:::
+
+
+## 研究结果
+
+```{r list-experiment}
+df_bribery <- tibble::tribble(
+  ~ bribery,
+  ~ direct,
+  ~ experiment,
+  "医疗部门",
+  0.0712,
+  0.1836,
+  "教育部门",
+  0.0862,
+  0.1740,
+  "地方政府",
+  0.0677,
+  0.0876,
+  "公安司法",
+  0.0644,
+  0.2499
+) %>%
+  mutate(bribery = factor(bribery, levels = rev(
+    c("医疗部门", "教育部门", "地方政府", "公安司法")
+  )))
+
+percent_first <- function(x) {
+  x <- sprintf("%d%%", round(x * 100))
+  x[2:length(x)] <- sub("%$", "", x[2:length(x)])
+  x
+}
+
+ggplot(data = df_bribery, aes(y = bribery)) +
+  geom_segment(aes(yend = bribery,
+                   x = 0,
+                   xend = 0.3),
+               linewidth = 0.15) +
+  geom_dumbbell(
+    aes(x = direct, xend = experiment),
+    size = 1.5,
+    size_x = 3,
+    size_xend = 3,
+    colour = gb_cols("light grey"),
+    colour_x = "black",
+    colour_xend = gb_cols("gold")
+  ) +
+  geom_text(
+    data = filter(df_bribery, bribery == "医疗部门"),
+    aes(x = direct, label = "自报"),
+    color = "black",
+    size = 6,
+    vjust = -1.5,
+    fontface = "bold"
+  ) +
+  geom_text(
+    data = filter(df_bribery, bribery == "医疗部门"),
+    aes(x = experiment, label = "列举实验"),
+    color = gb_cols("gold"),
+    size = 6,
+    vjust = -1.5,
+    fontface = "bold"
+  ) +
+  geom_text(
+    aes(x = direct, label = percent_first(direct)),
+    color = "black",
+    size = 6,
+    vjust = 2.5
+  ) +
+  geom_text(
+    aes(x = experiment, label = percent_first(experiment)),
+    color = gb_cols("orange"),
+    size = 6,
+    vjust = 2.5
+  ) +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 16)
+  )
+```
+
+:::{style="text-align:center"}
+综合纠偏：[47.65%]{.red}
+:::
+
+---
+
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/coefplot.png){fig-align="center" height=600}
+
+## 研究结论
+
+- 准确理解基层腐败感知 &rarr; [民意]{.red}导向
+- 基层腐败行为存在结构性特征 &rarr; [精准]{.red}治理
+
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/lab_tigerFly.jpg){.fragment fig-align="center" height=400}
+
+# 感谢倾听 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
