@@ -2,17 +2,14 @@
 title: "Association Analysis"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
-author: "Yue Hu"
-institute: "Tsinghua University" 
-
 knitr: 
     opts_chunk: 
       echo: false
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,21 +17,33 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    callout-appearance: simple
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 
 ## Overview
 
 ```{r setup, include = FALSE}
-
 
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
@@ -74,15 +83,15 @@ theme_update(
 
 :::{.r-vstack}
 
-![](images/cor_etymology_association.png){.fragment fig-align="center" height=300}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_etymology_association.png){.fragment fig-align="center" height=300}
 
-![](images/cor_etymology_correlation.png){.fragment fig-align="center" height=300}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_etymology_correlation.png){.fragment fig-align="center" height=300}
 
 :::
 
 ## Covariance
 
-> How one changes then the other.
+> When a variable (X) changes, how is the other (Y)?
 
 :::{.fragment}
 $$\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).$$
@@ -99,30 +108,33 @@ Remember Variance?
 :::
 
 :::{.fragment}
-In other words, covariance is literally [co]{.red}-variance.
+Covariance is literally [co]{.red}-variance.
 :::
 
 
 ## Correlation
 
-> If see one high, when the other is high.
+> If one variable (X) is high, how about the other (Y), given each's variance?
 
 :::{.fragment style="text-align:center"}
 :::{.callout-note}
-Covariate: Dynamic vs. Correlation: Static
-:::
-:::
+Covariate vs. Correlation
 
-:::{.fragment}
-Common Types: 
+:::{.r-hstack}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_covariance.GIF){fig-align="center" height=300}
 
-:::{.nonincremental style="text-align:center; margin-top: 1em"}
-+ Karl Pearson's r (Linear); 
-+ Maurice Kendall's &tau; (Monotonic);
-+ Charles Spearman's &rho;  (Monotonic).
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_correlation.WEBP){fig-align="center" height=300}
 :::
 
 :::
+:::
+
+
+- Common Types: 
+    + Karl Pearson's r (Linear); 
+    + Maurice Kendall's &tau; (Monotonic);
+    + Charles Spearman's &rho;  (Monotonic).
+
 
 :::{.notes}
 - Karl Pearson was an English mathematician and biostatistician. 
@@ -139,7 +151,7 @@ Common Types:
 
 
 
-## Pearson's r: Linear Correlation
+## Pearson's r
 
 :::{.callout-important}
 
@@ -178,16 +190,18 @@ Multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$, 
 1. [Not robust]{.red} to skewed data and outliers.
 
 :::{.fragment}
-### Limination
+**Limitation**
 
-![](images/cor_linearity.webp){fig-align="center" height=350}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_linearity.webp){fig-align="center" height=300}
 :::
 
 # Monotonic Correlation
 
-## Solution: Ranking
+## Ranking
 
-$$Diff_{quantity} \rightarrow Diff_{relation}.$$
+Solving problem: Assumptions of linear correlation
+
+[$$\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.$$]{.fragment}
 
 :::{.fragment}
 For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i < j,
@@ -219,21 +233,16 @@ tie on x or tie on y are also not concordant or discordant
 
 :::: {.columns}
 
-::: {.column .fragment width="40%"}
-
-:::{.fragment}
+::: {.column .fragment width="35%"}
 Kendall's &tau;<sub>A</sub>
 
 $$\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},$$
 
-\begin{aligned}
-n_{c}&={\text{Number of concordant pairs}},\\
-n_{d}&={\text{Number of discordant pairs}}.
-\end{aligned}
-:::
-
-- Ties? 
-- Unequal numbers of observations in X and Y?
+- n<sub>c</sub>: Number of concordant pairs
+- n<sub>d</sub>: Number of discordant pairs
+- Remind problems:
+    - Ties? 
+    - N(X) &ne; N(Y)
 
 :::
 
@@ -254,7 +263,7 @@ t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties 
 
 :::
 
-::: {.column .fragment width="30%"}
+::: {.column .fragment width="35%"}
 Stuart's &tau;<sub>C</sub>: Diff scales
 
 $$\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}$$
@@ -579,7 +588,7 @@ Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(
 :::
 
 :::{.fragment}
-![](images/ci_fsmrof.png){height=50} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png){height=50} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*
 :::
 
 
@@ -587,7 +596,7 @@ Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(
 
 ## [Complete the correlation census](#sec-ranking)
 
-![](images/cor_linearity.webp){fig-align="center" height=300}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_linearity.webp){fig-align="center" height=300}
 
 :::{.fragment}
 A solution:^[Chatterjee, Sourav. 2021. “A New Coefficient of Correlation.” *Journal of the American Statistical Association* 116(536): 2009–22.] $\xi$ correlation
@@ -633,7 +642,7 @@ ggplot(df_base, aes(x = x, y = y)) +
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](images/cor_mindmap.png){height="850"}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_mindmap.png){height="850"}
 :::
 
 ## [Greek Letters](http://www.ilearngreek.com/Lessons/alphabet.L1.asp)
@@ -965,7 +974,7 @@ Runs test means to test whether an item comes from population 1 and population 2
 |---|---|---|----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 1 | 0 | 1  | 0  | 0  | 1  | 0  | 0  | 0  | 1  | 1  | 1  | 1  | 0  |
 
-![](images/cor_runs.png){fig-align="center"}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_runs.png){fig-align="center"}
 
 ## Example
 
@@ -988,4 +997,3 @@ runs.test(vec_runs1)
 runs.test(vec_runs2)
 runs.test(vec_runs3)
 ```
-
