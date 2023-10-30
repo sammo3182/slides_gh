@@ -114,16 +114,16 @@ Covariance is literally [co]{.red}-variance.
 
 ## Correlation
 
-> If one variable (X) is high, how about the other (Y), given each's variance?
+> If one variable (X) is high, how about the other (Y)?
 
 :::{.fragment style="text-align:center"}
 :::{.callout-note}
 Covariate vs. Correlation
 
 :::{.r-hstack}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_covariance.GIF){fig-align="center" height=300}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_covariance.GIF){fig-align="center" height=200}
 
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_correlation.WEBP){fig-align="center" height=300}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_correlation.WEBP){fig-align="center" height=200}
 :::
 
 :::
@@ -186,7 +186,7 @@ Multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$, 
 
 1. &rho;&in; [-1, 1], 0 independent.
 1. Greater value indicates stronger [linear]{.red} relationship.
-1. Parametric test^[Which means assuming normal distribution, linearity, and homoscedasticity.]
+1. Parametric test^[[Which means assuming normal distribution, linearity, and homoscedasticity.]{.fragment}]
 1. [Not robust]{.red} to skewed data and outliers.
 
 :::{.fragment}
@@ -218,7 +218,7 @@ tie on x or tie on y are also not concordant or discordant
 :::
 
 
-## Tau: Monotonic Correlation
+## Tau: Monotonic Correlation {.smaller}
 
 :::{.callout-important appearance="simple"}
 
@@ -249,7 +249,7 @@ $$\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},$$
 ::: {.column .fragment width="30%"}
 Kendall's  &tau;<sub>B</sub>: Ties
 
-$$\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}}$$
+$$\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}},$$
 where
 
 :::{.small}
@@ -261,12 +261,16 @@ t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties 
 \end{aligned}
 :::
 
+:::{.notes}
+Dealing with ties
+:::
+
 :::
 
 ::: {.column .fragment width="35%"}
 Stuart's &tau;<sub>C</sub>: Diff scales
 
-$$\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}}$$
+$$\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}},$$
 where
 
 :::{.small}
@@ -278,7 +282,13 @@ m&=\min(r,c),\\
 r&={\text{Number of rows}},\\
 c&={\text{Number of columns}}.
 \end{aligned}
+
 :::
+
+:::{.notes}
+Dealing with retangle (nx != ny)
+:::
+
 :::
 
 ::::
@@ -331,7 +341,7 @@ r vs. &tau; & &rho;:
 + &rho; has less cost than &tau;.
 
 :::{.fragment}
-Ranking version of ANOVA
+Ranking version of ANOVA ![](https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png){height=30}
 
 + Kruskal-Wallis test;
 + Friedman test.
@@ -425,7 +435,7 @@ phi
 
 ## Mean &rightarrow; Variance
 
-Analysis of variance (ANOVA): A systematic way of variable comparison in the context of [experiment]{.red}.^[Equivalent to t-test]
+Analysis of variance (ANOVA): A systematic way of variable comparison in the context of [experiment]{.red}.^[[Equivalent to t-test.]{.fragment}]
 
 :::{.fragment}
 When there are [more than one]{.red} treatment group, ANOVA is more useful to reduce the risk of Type I ("Hey grandpa, you are pregnant").
@@ -448,12 +458,12 @@ When there are [more than one]{.red} treatment group, ANOVA is more useful to re
 
 ## One-Way ANOVA
 
-+ $\overline X$ is the sample mean; the grant mean $\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}$, where K is column number.^[ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci).]
-+ SST: Variance between the samples; SSE: Variance within the samples.
++ $\overline X$, sample mean; the grant mean $\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}$, where K is column number.^[[ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci).]{.fragment}]
++ SST: Variance between the samples; SSE: Variance within the samples.^[[![](https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png){height=20} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*]{.fragment}]
 
 :::{.fragment}
-| Source    	| Sum Square                                    | d.f.  	| Mean Square                      	|
-|-----------	|-----------------------------------------------|-------	|----------------------------------	|
+| Source    	| Sum Square                         | d.o.f.  | Mean Square                      	|
+|-----------	|-------------------------------------|-------|----------------------------------	|
 | Treat 	| $SST = \sum n_i (\bar X_i - \overline{\overline{X}})^2$ | K - 1 	| MST = SST/(K - 1)                	|
 | Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      | N - K 	| MSE = SSE/(N - K)                	|
 | Total     	| $SS = SST + SSE$                              | N - 1 	| |
@@ -461,7 +471,7 @@ When there are [more than one]{.red} treatment group, ANOVA is more useful to re
 
 
 :::{.fragment}
-$$F_{\alpha, K-1, N-1} = MST/MSE = \frac{Ratio\ of \ Explained\ Variance}{Ratio\ of\ Unexplained\ Variance}$$
+$$F_{\alpha, K-1, N-1} = \frac{MST}{MSE} = \frac{\text{Ratio of Explained Variance}}{\text{Ratio of Unexplained Variance}}.$$
 :::
 
 
@@ -507,8 +517,9 @@ $H_1: \mu_1 \neq \mu_2 \neq \mu_3.$
 &alpha; = 0.05.
 
 \begin{align}
-\bar X_{NS} &= 29; \bar X_{ME} = 33.5; \bar X_{BJ} = 37;\\
-\bar{\bar{X}} &= (29 + 33.5 + 37)/3 \approx 33.17
+\bar X_{NS} &= 29; \bar X_{ME} = 33.5; \\
+\bar X_{BJ} &= 37;\\
+\bar{\bar{X}} =& (29 + 33.5 + 37)/3 \approx 33.17
 \end{align}
 :::
 
@@ -524,20 +535,20 @@ $F_{0.05, 2, 15}$ = `r qf(.975, 2, 15)` $F_obs$, so fail to reject $H_0$
 ::::
 
 
-| Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
+| Source    	| Sum Square                                    	| d.o.f.  	| Mean Square                      	|
 |-----------	|-----------------------------------------------	|-------	|----------------------------------	|
 | Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
 | Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
 | Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-K} = MST/MSE$ 	|
 
 
-## [Two-Way ANOVA](#sec-anovaExt).
+## [Two-Way ANOVA](#sec-anovaExt)
 
 + Randomized block design (i blocks, j groups)
   + Equivalent to matched sample in t-test
 
-:::{.fragment}
-| Source    	| Sum Square                                                             	| d.f.           	| Mean Square                                    	|
+:::{.small .fragment}
+| Source    	| Sum Square                                                             	| d.o.freedom           	| Mean Square                                    	|
 |-----------	|------------------------------------------------------------------------	|----------------	|------------------------------------------------	|
 | Treat 	| $SS_A: b\sum (\bar X_i - \bar{\bar{X}})^2$                            	| a - 1          	| MST_A = SS_A/(a - 1)                           	|
 | Block     	| $SS_B: a\sum (\bar X_j - \bar{\bar{X}})^2$                            	| b - 1          	| MST_B = SS_B/(b - 1)                           	|
@@ -567,6 +578,7 @@ $H_1: \mu_{PS} \neq \mu_{SO} \neq \mu_{PY}.$
 ---
 
 $\bar A_+ = 45.67; \bar A = 39.67; \bar B_+ = 30.33; \bar B = 32; \bar C_+ = 29.67; \bar C = 25.$
+
 $\bar X_{PS} = 30.8; \bar X_{SO} = 33.5; \bar X_{PY} = 36.83, \bar{\bar{X}} = 33.72.$
 
 :::{.fragment}
@@ -587,37 +599,38 @@ $SST = \sum^a\sum^b(X_{ij} - \bar{\bar{X}})^2 = 1015.61; SSE = SST - SS_A - SS_B
 Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(6 - 1)}$ is 10.4 > critical F `r round(qf(.975, 2, 10), digits = 4)`, reject $H_0$.
 :::
 
-:::{.fragment}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png){height=50} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*
-:::
-
 
 # Beyond Monotonic
 
-## [Complete the correlation census](#sec-ranking)
+## [Complete the correlation census (Chatterjee 2021)](#sec-ranking)
 
 ![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_linearity.webp){fig-align="center" height=300}
 
 :::{.fragment}
-A solution:^[Chatterjee, Sourav. 2021. “A New Coefficient of Correlation.” *Journal of the American Statistical Association* 116(536): 2009–22.] $\xi$ correlation
+A solution: $\xi$ correlation
+:::
+
+:::{.notes}
+Chatterjee, Sourav. 2021. “A New Coefficient of Correlation.” *Journal of the American Statistical Association* 116(536): 2009–22.
 :::
 
 1. ~~Linearity/monotoncity~~ [any]{.red} functional correlation
 1. As simple as the classical coefficients like Pearson's correlation or Spearman's correlation
-1. Consistently estimates some simple and interpretable measure of the degree of dependence between the variables (0, independent; 1 associated)
+1. Consistently estimates simple and interpretable measure of the degree of dependence between the variables (0, independent; 1 associated)
   
 
 ## Property of $\xi$
 
 Asymptotic estimate: As $n$ goes to Infinity...
 
-- If $y$ is a function of $x$, then $\xi$ goes to 1 asymptotically as $n$ (the number of data points, or the length of the vectors $x$ and $y$) goes to Infinity.
+- If $y$ is a function of $x$, then $\xi$ goes to 1 asymptotically as $n$ (the number of data points, or the length of the vectors $x$ and $y$) goes to infinity.
 - If $y$ and $x$ are independent, then $\xi$ goes to 0 asymptotically .
 - No anti-correlation
 
 :::{.fragment}
 ```{r xi}
 #| fig-align: center
+#| fig-height: 3
 
 base_case <- function(nrows) {
   x = seq(from = -2 * pi,
@@ -642,7 +655,7 @@ ggplot(df_base, aes(x = x, y = y)) +
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_mindmap.png){height="850"}
+![](https://raw.githubusercontent.com/sammo3182/backup/master/images/cor_mindmap.png){height="600"}
 :::
 
 ## [Greek Letters](http://www.ilearngreek.com/Lessons/alphabet.L1.asp)
@@ -670,11 +683,6 @@ vec_greek[25:48]
 :::
 
 ::::
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="850" >}}
 
 
 # Appendix: ANOVA Extension {#sec-anovaExt}
