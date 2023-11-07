@@ -386,6 +386,9 @@
       margin-right: 0; 
     }
   </style>
+  
+  <script src="07_association_files/libs/kePrint-0.0.1/kePrint.js"></script>
+  <link href="07_association_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -579,7 +582,7 @@
 </section>
 <section id="ranking" class="slide level2">
 <h2>Ranking</h2>
-<p>Solving problem: Assumptions of linear correlation</p>
+<p>Solving problem: Assumptions of linear correlation + non-parametric estimation</p>
 <p><span class="fragment"><span class="math display">\[\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.\]</span></span></p>
 <div class="fragment">
 <p>For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i &lt; j,</p>
@@ -603,8 +606,186 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="tau-monotonic-correlation" class="slide level2 smaller">
-<h2>Tau: Monotonic Correlation</h2>
+<section id="ranking-in-practice" class="slide level2">
+<h2>Ranking in practice<sup>1</sup></h2>
+<div class="columns">
+<div class="column" style="width:20%;">
+<p><em>Raw</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">95</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div><div class="column fragment" style="width:20%;">
+<p>→ <em>Ordered</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">95</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div><div class="column fragment" style="width:60%;">
+<p>→ <em>Ranked</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">x_rank</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">y_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">8</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment">“Pairs” haven’t been used yet so far.</span></p></li></ol></aside></section>
+<section id="what-does-ranking-do" class="slide level2">
+<h2>What does ranking do</h2>
+
+<img data-src="07_association_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section id="spearmans-rho-ranking-version-of-pearsons-r" class="slide level2">
+<h2>Spearman’s rho: Ranking version of Pearson’s R</h2>
 <div class="callout callout-important callout-titled callout-style-simple">
 <div class="callout-body">
 <div class="callout-title">
@@ -621,6 +802,187 @@
 </div>
 </div>
 </div>
+<p><span class="math inline">\(\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}},\)</span> where <span class="math inline">\(rg\)</span>: The rank of the variables.</p>
+<ul>
+<li class="fragment">When all n ranks are distinct integers (no tie): <span class="math inline">\(\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},\)</span> where <span class="math inline">\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).\)</span></li>
+<li class="fragment">Properties:
+<ul>
+<li class="fragment">Independent, ρ = 0.</li>
+<li class="fragment">Not necessarily non-parametric
+<ul>
+<li class="fragment">Option 1: Permutation (non-parametric)</li>
+<li class="fragment">Option 2: Fisher transformation (parametric), <span class="small"><span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span></span></li>
+</ul></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php</p>
+<p>https://www.youtube.com/watch?v=XV_W1w4Nwoc</p>
+<p>Still based on population parameters, so one can do significant test by <span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="calculate-the-pairs" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Calculate the pairs</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 9
+  x_rank y_rank p1    p2    p3    p4    p5    p6    p7   
+   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
+1      1      1 " "   " "   " "   " "   " "   " "   " "  
+2      2      3 "+"   " "   " "   " "   " "   " "   " "  
+3      3      2 "+"   "-"   " "   " "   " "   " "   " "  
+4      4      5 "+"   "+"   "+"   " "   " "   " "   " "  
+5      5      6 "+"   "+"   "+"   "+"   " "   " "   " "  
+6      6      4 "+"   "+"   "+"   "-"   "-"   " "   " "  
+7      7      7 "+"   "+"   "+"   "+"   "+"   "+ "  " "  
+8      8      8 "+"   "+"   "+"   "+"   "+"   "+"   "+"  </code></pre>
+</div>
+</div>
+</section>
+<section id="count-the-pairs" class="slide level2">
+<h2>Count the pairs</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: right;" data-quarto-table-cell-role="th">x_rank</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">y_rank</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p1</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p2</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p3</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p4</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p5</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p6</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">p7</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">c</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">d</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">1</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">1</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">3</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">4</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">3</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">6</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: left;">+</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">7</td>
+<td style="text-align: right; font-weight: bold; color: white !important; background-color: darkred !important;">0</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="tau-monotonic-correlation" class="slide level2 smaller">
+<h2>Tau: Monotonic Correlation</h2>
 <div class="columns">
 <div class="column fragment" style="width:35%;">
 <p>Kendall’s τ<sub>A</sub></p>
@@ -642,7 +1004,7 @@
 n_{0}&amp;=n(n-1)/2\\n_{1}&amp;=\sum _{i}t_{i}(t_{i}-1)/2\\
 n_{2}&amp;=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&amp;={\text{Number of concordant pairs}}\\
 n_{d}&amp;={\text{Number of discordant pairs}}\\
-t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity}}
+t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity, a.k.a., ties in x}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity, a.k.a., ties in y}}
 \end{aligned}\]</span>
 </div>
 <aside class="notes">
@@ -685,16 +1047,12 @@ c&amp;={\text{Number of columns}}.
       }</style></aside>
 </div>
 </div>
-</section>
-<section id="spearmans-rho-ranking-version-of-pearsons-r" class="slide level2">
-<h2>Spearman’s rho: Ranking version of Pearson’s R</h2>
-<div class="columns">
-<div class="column fragment" style="width:50%;">
-<p><span class="math display">\[\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}}.\]</span> where <span class="math inline">\(rg\)</span>: The rank of the variables.</p>
+<div class="fragment">
+<p>In the previous example, n<sub>c</sub> = Σc = 25, n<sub>c</sub> = Σd = 3, t<sub>x</sub> = u<sub>j</sub> = 0.</p>
+<p><span class="math display">\[\tau = \frac{25 - 3}{25 + 3} \approx 0.7857.\]</span></p>
+</div>
 <aside class="notes">
-<p>When all n ranks are distinct integers (no tie):</p>
-<p><span class="math display">\[\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},\]</span> where <span class="math inline">\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).\)</span></p>
-<p>https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php</p>
+<p>Ref: https://www.youtube.com/watch?v=Pm8KV5f3JM0</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -706,25 +1064,49 @@ c&amp;={\text{Number of columns}}.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div><div class="column fragment" style="width:50%;">
-<p>Properties:</p>
 <ul>
-<li class="fragment">Independent, τ = 0.</li>
-<li class="fragment">Not exactly non-parametric</li>
+<li class="fragment">Hypothesis testing: pure non-parametric
+<ul>
+<li class="fragment">P-value is given through extensive simulation, such as Monte Carlo simulations</li>
+</ul></li>
 </ul>
-<aside class="notes">
-<p>Still based on population parameters, so one can do significant test by <span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span>.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+</section>
+<section id="difference-and-which-to-use" class="slide level2">
+<h2>Difference and which to use</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">type</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">r</td>
+<td style="text-align: right;">0.8915742</td>
+<td style="text-align: right;">4.822311</td>
+<td style="text-align: right;">0.0029332</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rho</td>
+<td style="text-align: right;">0.9047619</td>
+<td style="text-align: right;">8.000000</td>
+<td style="text-align: right;">0.0045635</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tau</td>
+<td style="text-align: right;">0.7857143</td>
+<td style="text-align: right;">25.000000</td>
+<td style="text-align: right;">0.0055060</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
 <div class="columns">
@@ -745,20 +1127,13 @@ c&amp;={\text{Number of columns}}.
 <li>ρ has less cost than τ.</li>
 </ul>
 <div class="fragment">
-<p>Ranking version of ANOVA <img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30"></p>
-<ul>
-<li>Kruskal-Wallis test;</li>
-<li>Friedman test.</li>
-</ul>
-</div>
-<div class="r-fit-text fragment">
-<p><em>How about categorical?</em></p>
+<p>τ<sub>A</sub> vs.&nbsp;τ<sub>B</sub>: τ<sub>B</sub></p>
 </div>
 </div>
 </div>
 </section>
-<section id="χ2-nominal-variables" class="slide level2">
-<h2>χ<sup>2</sup>: Nominal Variables</h2>
+<section id="χ2-categoricalnominal-variables" class="slide level2">
+<h2>χ<sup>2</sup>: Categorical/Nominal Variables</h2>
 <p><span class="math display">\[\chi^2 = \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected} = \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}\]</span></p>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
@@ -891,7 +1266,7 @@ H<sub>0</sub> is rejected.</p>
 </div>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment">Equivalent to t-test.</span></p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="fragment">Equivalent to t-test.</span></p></li></ol></aside></section>
 <section id="one-way-anova" class="slide level2">
 <h2>One-Way ANOVA</h2>
 <ul>
@@ -939,7 +1314,7 @@ H<sub>0</sub> is rejected.</p>
 <div class="fragment">
 <p><span class="math display">\[F_{\alpha, K-1, N-1} = \frac{MST}{MSE} = \frac{\text{Ratio of Explained Variance}}{\text{Ratio of Unexplained Variance}}.\]</span></p>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="fragment">ANOVA is usually used when <span class="math inline">\(K \in [2, 3]\)</span>; for larger K, often use <a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance">MANOVA</a> (rarely used in Poli Sci).</span></p></li><li id="fn4"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="20"> Χ<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two χ<sup>2</sup>s. <em>In other words, they are consistent with t-test and OLS.</em></span></p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn4"><p><span class="fragment">ANOVA is usually used when <span class="math inline">\(K \in [2, 3]\)</span>; for larger K, often use <a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance">MANOVA</a> (rarely used in Poli Sci).</span></p></li><li id="fn5"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="20"> Χ<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two χ<sup>2</sup>s. <em>In other words, they are consistent with t-test and OLS.</em></span></p></li></ol></aside></section>
 <section id="example" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Example</h2>
 <p>The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type?</p>
@@ -1057,7 +1432,7 @@ H<sub>0</sub> is rejected.</p>
 <ul>
 <li class="fragment">Randomized block design (i blocks, j groups)
 <ul>
-<li class="fragment">Equivalent to matched sample in t-test</li>
+<li class="fragment">Equivalent to matched sample in t-test<sup>1</sup></li>
 </ul></li>
 </ul>
 <div class="small fragment">
@@ -1104,7 +1479,7 @@ H<sub>0</sub> is rejected.</p>
 </tbody>
 </table>
 </div>
-</section>
+<aside><ol class="aside-footnotes"><li id="fn6"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30">Ranking version of ANOVA: Kruskal-Wallis test, Friedman test.</span></p></li></ol></aside></section>
 <section id="example-1" class="slide level2">
 <h2>Example</h2>
 <p>Students’ final scores in three majors were recorded in the following table. Does the scores associate with majors?</p>
@@ -1302,15 +1677,15 @@ H<sub>0</sub> is rejected.</p>
 <p>Botanists conducted an experiment of plant growth. The data records the results obtained under a control and two different treatment conditions (as measured by dried weight of plants).</p>
 <div class="cell">
 <div class="cell-output-display">
-<table>
+<table data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th style="text-align: left;">group</th>
-<th style="text-align: right;">count</th>
-<th style="text-align: right;">mean</th>
-<th style="text-align: right;">sd</th>
-<th style="text-align: right;">median</th>
-<th style="text-align: right;">IQR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">group</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">count</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">mean</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">sd</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">median</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">IQR</th>
 </tr>
 </thead>
 <tbody>
@@ -1340,10 +1715,12 @@ H<sub>0</sub> is rejected.</p>
 </tr>
 </tbody>
 </table>
+
+
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Kruskal-Wallis rank sum test
@@ -1367,9 +1744,9 @@ $ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20, 18, 30, 38, 34, 20,
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">friedman.test</span>(<span class="at">y =</span> df_drug<span class="sc">$</span>score,</span>
-<span id="cb6-2"><a href="#cb6-2"></a>              <span class="at">groups =</span> df_drug<span class="sc">$</span>drug,</span>
-<span id="cb6-3"><a href="#cb6-3"></a>              <span class="at">blocks =</span> df_drug<span class="sc">$</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">friedman.test</span>(<span class="at">y =</span> df_drug<span class="sc">$</span>score,</span>
+<span id="cb7-2"><a href="#cb7-2"></a>              <span class="at">groups =</span> df_drug<span class="sc">$</span>drug,</span>
+<span id="cb7-3"><a href="#cb7-3"></a>              <span class="at">blocks =</span> df_drug<span class="sc">$</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Friedman rank sum test
@@ -1581,7 +1958,7 @@ Z =&amp; \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
 <p>Then, Pr(Z ≥ 1.77) ≈ 0.038 &lt; 0.05.</p>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn5"><p>±0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.</p></li></ol></aside></section>
+<aside><ol class="aside-footnotes"><li id="fn7"><p>±0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.</p></li></ol></aside></section>
 <section id="advanced-version-of-sign-test" class="slide level2">
 <h2>Advanced Version of Sign Test</h2>
 <p>Problems of sign test?</p>
@@ -1673,7 +2050,7 @@ Z =&amp; \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
 </table>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">wilcox.test</span>(tb_sr<span class="sc">$</span>Test_1, tb_sr<span class="sc">$</span>Test_2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">wilcox.test</span>(tb_sr<span class="sc">$</span>Test_1, tb_sr<span class="sc">$</span>Test_2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in wilcox.test.default(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE):
 cannot compute exact p-value with ties</code></pre>
@@ -1828,19 +2205,19 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <section id="example-3" class="slide level2">
 <h2>Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>vec_runs1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">times =</span> <span class="dv">5</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>vec_runs2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>vec_runs3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb12-4"><a href="#cb12-4"></a></span>
-<span id="cb12-5"><a href="#cb12-5"></a>vec_runs1 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>vec_runs1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">times =</span> <span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>vec_runs2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>vec_runs3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a>vec_runs1 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0 1 0 1 0 1 0 1 0 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>vec_runs2 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>vec_runs2 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0 0 0 0 0 1 1 1 1 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>vec_runs3 <span class="co"># random</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>vec_runs3 <span class="co"># random</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 1 0 0 1 1 1 1 0 0 0</code></pre>
 </div>
@@ -1849,9 +2226,9 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="fu">library</span>(randtests)</span>
-<span id="cb18-2"><a href="#cb18-2"></a></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">runs.test</span>(vec_runs1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">library</span>(randtests)</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="fu">runs.test</span>(vec_runs1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
@@ -1861,7 +2238,7 @@ statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n = 10, p-value =
 0.00729
 alternative hypothesis: nonrandomness</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="fu">runs.test</span>(vec_runs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">runs.test</span>(vec_runs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
@@ -1871,7 +2248,7 @@ statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n = 10, p-value =
 0.00729
 alternative hypothesis: nonrandomness</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="fu">runs.test</span>(vec_runs3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">runs.test</span>(vec_runs3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
