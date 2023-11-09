@@ -1,0 +1,369 @@
+---
+title: |
+  | 基层非正规经济行为
+  | 感知现状及其影响
+subtitle: "第三届廉政与治理工作坊"
+date: "2023-11-11"
+date-format: "iso"
+
+author: "胡悦"
+institute: "清华大学社会科学学院"
+
+bibliography: China_corruption.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - reveal-header
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+## “太长不读”
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse",
+  "ggalt",
+  "drhutools"
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+- 话题
+    - 基层非正规经济行为[感知]{.red}的全国分布与政治后果
+
+- 方法
+    - 全国代表性调查（N = 2,581）
+    - 列举实验[权重矫正]{.red}
+
+- 发现
+    - 基层非正规经济行为感知具有高敏感性（&rarr; 传统调查偏差）
+    - 基层非正规经济行为感知反映[廉政建设成效]{.red}
+    - 基层非正规经济行为感知直接影响执政合法性
+
+- 结论
+    - 准确理解基层感知，推进[以人民为中心]{.red}的廉政建设
+    - 充分重视基层非正规经济行为严重后果， 实现[精准]{.red}腐败治理
+
+# 研究问题
+
+## 腐败治理研究已知与未知
+
+:::{style="text-align:center"}
+- 非正规经济行为影响
+    - 制度、非正规政府行为、政权合法性[[@NiXingChenShanShan2013;@Manion2004;@ClaypoolEtAl2018]]{.small}
+    - 经济发展[[@SunGangEtAl2005; @WuYiPingZhuJiangNan2012;@GongZhou2015;@Tsai2007]]{.small}
+    - 国别与类型差异[[@ZhangYuanHuangPengDeCai2017;@Bardhan2009;@Ramirez2014]]{.small}
+- 非正规经济行为治理
+    - 精英政治[[@ChenGang2013;@NieHuiHuaWangMengQi2014;@JiangYang2016]]{.small}
+    - 制度化[[@WangHuNing1995;@WangHuNing1995;@ZhuGuangLeiShengLin2006;@Ang2020]]{.small}
+- **有待研究**
+    - “苍蝇”在哪？[[@NiXingChenShanShan2013; @WuYiPingZhuJiangNan2012;@ZhuLinChenYuQing2022]]{.small}
+    - 民心何向？[[@GongTing2016; @WangZheEtAl2016;@ZhuLin2017; @ZhuLinGongFuJia2015]]{.small}
+:::
+
+:::{.notes}
+@NiXingChenShanShan2013; @WuYiPingZhuJiangNan2012：县域、市域腐败立案
+
+公婷2016年专刊四篇文章讨论感知，仍然以survey为主，且非针对grassroots
+
+朱琳（2022）教育领域腐败状况
+
+朱琳等发现主客观感知有差别，在一定的腐败客观数量的前提下，扩 大打击腐败规模和办要案的策略有助于降低感知
+:::
+
+
+
+## 基层非正规经济行为：中国场景与世界之问
+
+:::: {.columns}
+
+::: {.column width="50%"}
+中国场景：“苍蝇”的分布情况
+
+{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xWEpLOFNSbTZUeHdTZXloP2U9RkI5VkFi.mp4" width="500">}}
+
+:::{.notes}
+
+2019 深圳街道办干部办公室受贿收礼过程被曝光
+
+爆料人称因为偷拍视频已取保候审，龙岗区公安分局向记者证实确有此事
+
+http://news.sina.com.cn/c/2019-03-12/doc-ihsxncvh1996107.shtml
+
+Cash and cash cards 8 times in 16 days 
+:::
+:::
+
+::: {.column .fragment width="50%"}
+“世界之问”：如何有效衡量腐败感知
+
+- 传统问卷研究偏差 ![](http://103.238.162.29:10002/webdav/sammo3182/figure/corruption_desirability.png){.fragment fig-align="center" height=300}
+- 实验研究生态效能
+    - “实验方法对腐败行为的识别只能停留在实验情境中” [@ZhuLin2017, p.178]
+
+
+
+:::{.notes}
+@ZhuLin2017 做过系统总结
+:::
+:::
+
+::::
+
+## 研究目标
+
+1. 基层非正规经济行为的[去偏]{.red}估计
+    - 传统调查方法会[严重低估]{.red}基层非正规经济行为感知程度。
+1. 基层非正规经济行为的政治影响
+
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="50%"}
+- 腐败治理
+    - 非正规经济行为感知（`corruptgov`）[&uarr;]{.blue}
+- 外溢效应
+    - 公共服务满意度（`sat4`）[&darr;]{.red}
+    - 广义政策满意度（`satpolicy6`）[&darr;]{.red}
+    - 政治效能感（`efficacy`）[&darr;]{.red}
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+- 制度自信
+    - 政治信任（`trustgov`）[&darr;]{.red}
+    - 机构信任（`trustpub`）[&darr;]{.red}
+    - 系统信任（`systemok`）[&darr;]{.red}
+:::
+
+::::
+
+
+
+# 基层非正规经济行为去偏估计
+
+## 敏感问题研究方法
+
+*列举实验*、支持实验、随机回应技术 [@RosenfeldEtAl2016;@WangPuQuJiChengYuan2016]
+
+
+局限：
+
+- 仅能体现“真实”回答，无法衡量偏差大小
+- 仅针对单一问题
+
+
+突破：
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 添加直接问题与“直接-实验”比较 [@BlairImai2012]
+- [多题估测]{.red}
+- [权重纠偏]{.red}
+:::
+
+::: {.column .fragment width="50%"}
+\begin{align}
+O^{type} =& \frac{Pr^{type}_{list}}{Pr^{type}_{direct}},\\
+W_i =& \sum I_i^{type}\cdot\frac{O^{type}}{t_i}.
+\end{align}
+:::
+::::
+
+:::{.notes}
+$I_i^{type}$: 0/1, whether *i* report;
+
+$O^{type}$: Experiment/direct;
+
+$t_i$: Type counts that *i* reports
+:::
+
+
+# 应用与发现
+
+## 研究设计
+
+2018 中国经济行为调查 （全国代表性，N: 2,581）
+
+- 过去两年中与下列哪些部门打过交道
+    - 医疗部门 (37%, [7.12%]{.red})
+    - 教育部门 (54%, [8.62%]{.red})
+    - 地方政府 (22%, [6.77%]{.red})
+    - 公安司法 (17%, [6.44%]{.red})
+
+:::{.notes}
+当代中国研究中心
+
+红包、提供帮助、服务
+:::
+
+
+## 研究结果
+
+```{r list-experiment}
+df_bribery <- tibble::tribble(
+  ~ bribery,
+  ~ direct,
+  ~ experiment,
+  "医疗部门",
+  0.0712,
+  0.3016,
+  "教育部门",
+  0.0862,
+  0.3719,
+  "地方政府",
+  0.0677,
+  0.2067,
+  "公安司法",
+  0.0644,
+  0.2440,
+  "合计",
+  0.1233,
+  0.4765,
+) %>%
+  mutate(bribery = factor(bribery, levels = rev(
+    c("医疗部门", "教育部门", "地方政府", "公安司法", "合计")
+  )))
+
+percent_first <- function(x) {
+  x <- sprintf("%.2f%%", x * 100)
+  # x[2:length(x)] <- sub("%$", "", x[2:length(x)])
+  # x
+}
+
+ggplot(data = df_bribery, aes(y = bribery)) +
+  geom_segment(aes(yend = bribery,
+                   x = 0,
+                   xend = 0.3),
+               linewidth = 0.15) +
+  geom_dumbbell(
+    aes(x = direct, xend = experiment),
+    size = 1.5,
+    size_x = 3,
+    size_xend = 3,
+    colour = gb_cols("light grey"),
+    colour_x = "black",
+    colour_xend = gb_cols("gold")
+  ) +
+  geom_text(
+    data = filter(df_bribery, bribery == "医疗部门"),
+    aes(x = direct, label = "自报"),
+    color = "black",
+    size = 6,
+    vjust = -1.5,
+    fontface = "bold"
+  ) +
+  geom_text(
+    data = filter(df_bribery, bribery == "医疗部门"),
+    aes(x = experiment, label = "加权纠偏"),
+    color = gb_cols("gold"),
+    size = 6,
+    vjust = -1.5,
+    fontface = "bold"
+  ) +
+  geom_text(
+    aes(x = direct, label = percent_first(direct)),
+    color = "black",
+    size = 6,
+    vjust = 2.5
+  ) +
+  geom_text(
+    aes(x = experiment, label = percent_first(experiment)),
+    color = gb_cols("orange"),
+    size = 6,
+    vjust = 2.5
+  ) +
+  theme(
+    axis.title = element_blank(),
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(size = 16)
+  )
+```
+
+## 非正规经济行为感知的政治后果
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/corruption_consequence.png){fig-align="center" height=600}
+
+## 研究结论
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_tigerFly.jpg){fig-align="center" height=300}
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+- 准确理解基层感知    
+&rarr; [以人民为中心]{.red}的廉政建设
+- 充分重视基层非正规经济行为严重后果    
+&rarr; [精准]{.red}腐败治理
+
+:::
+
+::: {.column .fragment width="55%"}
+中央纪委国家监委通报(1-9月处分40.5万)
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/corruption_jijian.jpg){fig-align="center" height=200}
+:::
+
+::::
+
+
+
+# 感谢倾听 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
