@@ -2,12 +2,14 @@
 title: |
   | 社会科学实验研究方法
   | 从原理到实践
-date: "2023-08-13"
+subtitle: "南国讲堂"
+date: "2023-11-10"
 date-format: "iso"
 
 author: "胡悦"
 institute: |
-    | 清华大学社会科学学院政治学系
+    | 清华大学政治学系
+    | 清华大学计算社会科学平台
     | 清华大学数据与治理研究中心
 
 bibliography: pre_experiment.bib
@@ -27,7 +29,7 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
-    # callout-icon: false
+    callout-appearance: simple
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
@@ -36,11 +38,9 @@ format:
       data-background-position: top 10% right 5%
       
 filters:
-  - reveal-header
   - lightbox
 
 revealjs-plugins:
-  # - pointer # adding q to activate/deactivate a pointer
   - spotlight
 
 # lightbox: auto
@@ -49,7 +49,6 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
-
 ---
 
 ```{r setup}
@@ -67,39 +66,35 @@ set.seed(313)
 
 ## 概要
 
-1. 方法概要：因果推断之圣杯，三维世界之权宜
-1. 基本原理：Internal and external validity
-1. 应用举例：心理实验；行为实验；特殊实验
+1. 实验方法总括：
+    - *为什么*要做实验、*为什么*要分组、*为什么*要随机
+    - *怎么样*进行一个实验、*怎么样*进入的政治学
+1. 实验设计的核心原则与应用举例
+    - 科学性原则
+    - 设计认知谬误
+    - 方法应用局限
+    - 应用举例
 
-:::{.fragment}
 :::{.callout-warning}
 
-:::: {.columns}
-::: {.column .nonincremental width="50%"}
-**You won't**
+- **包含**
+    - 核心要旨
+    - 设计原则
+    - 方法局限
 
-- 学会“七十二般”实验设计
-- 掌握“狂拽炫酷”数据分析
+- **不包含**
+    - 具体实验设计
+    - 实验结果分析
 
-:::
-
-::: {.column .nonincremental width="50%"}
-**You will**
-
-- 方法去魅
-- 掌握核心要旨
-- 至少成为“鉴赏家”
-:::
-
-::::
+[&rarr; “理论家” + “鉴赏家”]{.fragment}
 
 :::
-:::
 
 
-# 方法概要
 
-## 何为使用实验法
+# 实验方法总括
+
+## 为何使用实验法
 
 :::{style="text-align:center"}
 
@@ -112,26 +107,29 @@ set.seed(313)
 :::
 
 
-## 实验法目标问题
+## 研究目标与理论解法
 
-:::{.r-hstack}
-![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_confounder.jpg){.fragment height=500}
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_causalEffect.jpg){fig-align="center" height=500}
 
-![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_breakConfounder.png){.fragment height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_multiverse.png){.fragment fig-align="center" height=500}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_everything.gif){.fragment fig-align="center" height=400}
 :::
 
 :::{.notes}
-实验法的核心是寻找到干净纯洁的X，或者说孤立X
+反事实模型仍处于思想实验阶段
+
+- Everything Everywhere All at Once
+- 超人之死
+- 球状闪电
 :::
 
-## 实验法核心逻辑
+## 建模因果
 
-反事实模型/潜在结果模型
-
-- Potential outcome model
-- Neyman-Rubin Causality Model [RCM, @Splawa-NeymanEtAl1923; @Rubin1990]
-
-![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_everything.gif){.fragment fig-align="center" height=400}
+- 反事实模型/潜在结果模型
+    - Counterfactual/Potential outcome model
+    - Neyman-Rubin Causality Model [RCM, @Splawa-NeymanEtAl1923; @Rubin1990]
 
 :::{.notes}
 Jerzy Neyman,  Polish mathematician and statistician, UC Berkeley
@@ -139,35 +137,24 @@ Jerzy Neyman,  Polish mathematician and statistician, UC Berkeley
 Everything Everywhere All at Once
 :::
 
-## 因果推断的圣杯
-
-:::: {.columns}
-
-::: {.column width="40%"}
-*RCM的强悍之处*
-
-1. 因果律 &rarr; 单一因素因果效果;
-1. 定义了因果关系;
-1. 使因果关系可见、可测。
-
 :::{.fragment}
-实验甚至成为了“科学”的象征
+干预因素（Treatment, $T$, 0/1） 对实验对象（Subject, 被试） $i$ 引发效果（Effect, $Y_i$） , 那么$T$对$Y_i$的因果效为实验效果（treatment effect, TE or $\Delta$)：
+
+$$\Delta_i = Y_{0i} - Y_{1i}.$$
+$$\Downarrow$$
+$$Y_i = TY_{i1} + (1 - T)Y_{i0}.$$
 :::
+
+
+
+## 实验：检验RCM
+
+:::{style="text-align:center; margin-top: 2em"}
+TE &rarr; [**A**]{.red}TE (Average treatment effect)
 :::
 
-::: {.column .fragment width="60%"}
-![](images/lab_science.png){fig-align="center" height=500}
-:::
 
-::::
-
-
-
-## 当“人生不售来回票”
-
-一种妥协：个体 &rarr; 群体
-
-![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_controlTreatment.png){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_controlTreatment.png){fig-align="center" height=400}
 
 :::{.notes}
 
@@ -175,20 +162,56 @@ Everything Everywhere All at Once
 
 :::
 
-:::{.fragment style="text-align:center; margin-top: 1em"}
-因果推断的圣杯    
-(But) 三维动物的[权益之计]{.red}
+:::{.fragment}
+:::{.callout-tip}
+实验室一种对因果效果的[模拟]{.red}和基于人类认知局限的[妥协]{.red}。
+:::
 :::
 
-## 为什么实验要包含随机
 
-:::{style="text-align:center;"}
-寻找“[最相近]{.red}的两组”
+## 因果推断的“圣杯”
+
+:::: {.columns}
+
+::: {.column width="40%"}
+*RCM强悍之处*
+
+1. 因果律 &rarr; 单一因素因果效果;
+1. 定义了因果关系;
+1. 使因果关系可见、可测。
+
+:::{.fragment}
+实验甚至成为“科学”的象征
+:::
 :::
 
-![](https://sammo3182.github.io/slides_gh/slides/courses/understandingPolicy/images/lab_balance.png){fig-align="center" height=500}
+::: {.column .fragment width="60%"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_science.png){fig-align="center" height=500}
+:::
 
-## 实验流程
+::::
+
+## 随机
+
+:::{.r-hstack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_multiverse.png){fig-align="center" height=300}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_controlTreatment.png){fig-align="center" height=300}
+:::
+
+:::{.r-hstack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_confounder.jpg){.fragment height=250}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_breakConfounder.png){.fragment height=250}
+:::
+
+
+## 创建“一样的”的两组
+
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_balance.png){fig-align="center" height=600}
+
+## 操作流程
 
 :::: {.columns}
 
@@ -226,7 +249,7 @@ Everything Everywhere All at Once
 1. 后测
 1. 比较
 
-- “物理试验”
+- “初中试验”
 
 :::
 
@@ -241,24 +264,29 @@ Everything Everywhere All at Once
 
 
 - "自然实验"
-
+    - **不是**实验
 :::
 
 ::::
 
-## 实验设计
+## 设计种类
 
 按干预形式分：
 
 :::{.r-hstack}
-![](images/lab_game.jpg){.fragment height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_game.jpg){.fragment height=200}
 
-![](images/lab_psyc.png){.fragment height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_psyc.png){.fragment height=200}
 
-![](images/lab_natural.jpg){.fragment height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_natural.jpg){.fragment height=200}
 :::
 
 :::{.notes}
+1. game
+1. psychological
+1. natural
+
+
 自然实验: 亚洲人的绿地使用，@LuEtAl2021
 
 Reason: As global communities respond to the spread of coronavirus disease 2019 (COVID-19), urban residents worldwide have reduced their mobility, which may have incidentally kept people away from greenspaces. Surprisingly, anecdotal evidence suggests greenspace use surged in Asian cities.
@@ -270,20 +298,20 @@ Conclusion: because of the established physical and mental health benefits of gr
 按实验环境分：
 
 :::{.r-hstack .fragment}
-![](images/lab_lab.png){height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_lab.png){height=200}
 
-![](images/lab_survey.jpg){height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_survey.jpg){height=200}
 
-![](images/lab_field.jpg){height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_field.jpg){height=200}
 :::
 
 :::{.notes}
 本质区别是信息的调控
 :::
 
-## 政治科学研究中的实验方法
+## 政治学的应用
 
-- **早期采用（1920年代-1950年代）：** Harold @Gosnell1926; 早期实验主要在实验室中进行，集中在选民行为和政治沟通。
+- **早期（1920年代-1950年代）：** Harold @Gosnell1926; 早期实验主要在实验室中进行，集中在选民行为和政治沟通。
 
 :::{.notes}
 The first experiment in political science is regarded to be Harold Gosnell's on 1924 presidential election, voter turnout in Chicago.
@@ -292,7 +320,7 @@ In this experiment, he randomly assigned districts to receive information on vot
 
 - **行为主义革命（1950年代-1960年代）：** 政治科学中的行为主义革命导致了对经验研究的更大重视，为实验方法铺平了道路。
 
-- **引入田野实验（1970年代-1980年代）：** 现场实验的引入使研究人员能够在自然环境中研究政治行为。Donald Green 和 Alan Gerber在此方面起到了关键作用。
+- **田野实验（1970年代-1980年代）：** 现场实验的引入使研究人员能够在自然环境中研究政治行为。Donald Green 和 Alan Gerber在此方面起到了关键作用。
 
 :::{.notes}
 @GreenGerber2019 : Get out the vote: how to increase voter turnout
@@ -308,36 +336,36 @@ Alan Gerber: Political Science, Yale
 
 :::: {.columns}
 
-::: {.column width="50%"}
-1. 实验目标：获得科学结论
-    - 干净的X，清晰的效果
-2. 实验法核心逻辑
-    - 反事实模型/潜在结果模型
-    - 因果推断的圣杯
-    - 三维动物之权益
-        - 随机分组的重要性
+::: {.column width="60%"}
+1. 为什么要做实验：获得科学的因果推论
+1. 为什么要分组
+    - 因果模型： RCM
+    - 个体（treatment effect） &rarr; 群体 (average treatment effect)
+1. 为什么要随机
+    - 获得“一样的”两组人
+
 
 :::
 
-::: {.column width="50%"}
-3. 实验流程
-    - 完整版（RCTs）和三类缩略版
+::: {.column width="40%"}
+4. 怎么样进行一个实验
+    - 完整版（RCTs）及缩略版
     - 设计：环境；干预
-4. 政治科学中的实验
-    - 蔚然成风
+5. 怎么样进入的政治学
+    - 仿照自然科学 &rarr; 行为主义革命 &rarr; 田野 &rarr; 标准RCTs
 
 :::
 
 ::::
 
 
-# 基本原理
+# 实验设计的核心原则与应用举例
 
-## 衡量实验（及其他研究）的标准
+## 衡量实验（及其他研究）科学性的标准
 
 效度（Validity）：推断与真实的接近程度。
 
-![](images/lab_validity.gif){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_validity.gif){fig-align="center" height=400}
 
 + 与研究目的的接近程度——内部效度
 + 与广泛人群的接近程度——外部效度
@@ -350,17 +378,18 @@ Alan Gerber: Political Science, Yale
 ::: {.column width="50%"}
 * 内部效度: 目标人群
     + 建构性：是否能合理且有针对性地评鉴目标理论
-    + 因果性：Identification
-    + 统计性: 核心因、果因素间具有显著且稳定的统计关系
+    + 因果性：可识别性
+    + 统计性: 因-果因素间显著且稳定的统计关系
 :::
 
 ::: {.column width="50%"}
-* 外部效度: 超越目标人群 (Hint:目标人群可不一定就是总体人群)
+* 外部效度: 超越目标人群
 
 :::{.fragment}
 :::{.callout-note}
-* 生态效度: 与目标人群在非实验环境中行为决策的一致性
-    + *并不关注实证推断与真实规律的联系*，而考察的是研究环境与实际环境的相似程度
+- 目标人群 &ne; 总体
+- [生态效度]{.red}: 与目标人群在非实验环境中行为决策的一致性
+    - *并不关注*实证推断与真实规律的联系，而考察的是研究环境与实际环境的*相似*程度
     - 内部效度的一个维度
 :::
 :::
@@ -371,7 +400,7 @@ Alan Gerber: Political Science, Yale
 
 
 ::: {.r-fit-text .fragment}
-效度是个整体概念，[不能孤立看待]{.red}!
+效度是个整体概念，[不能完全孤立看待]{.red}!
 :::
 
 
@@ -401,6 +430,11 @@ Xu Yiqing 对65篇政治学论文的复刻
 Data imbalance &rArr; low causal & statistical validity!
 :::
 
+- 解法
+    - Rerandomization
+    - Matching
+    - Control
+
 ## 实验室实验外部效度低
 
 1. 被试问题
@@ -410,7 +444,7 @@ Data imbalance &rArr; low causal & statistical validity!
 1. 实验效应（experimental effects/experimenter effects）问题
     - > 在多数情况下，被试者清楚知道自己在做实验，进而影响行为决策。
     + 是**生态效度**问题, 不是外部效度问题
-    + 非自然环境可是实验所需[@BassiEtAl2011]
+    + 非自然环境,可是实验所需[@BassiEtAl2011]
 
 :::{.notes}
 非自然环境：
@@ -422,11 +456,15 @@ e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，�
 :::
 
 
-## 提高实验效度方法
+## 实验方法掣肘之处与破局之法
 
-:::{.r-fit-text style="text-align:center; margin-top: 1em"}
-详见 @HuYue2021
-:::
+- 实验方法（RCTs）的局限
+    - 被试的局限性
+    - 数据质量（compliance问题）
+    - 实验数据分析并不简单
+        - 只能比较平均值
+    - 生态效度始终是个问题
+- 提高效度方法：详见 @HuYue2021
 
 
 # 应用举例
@@ -444,7 +482,7 @@ e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，�
 
 ## 实验结果（Average Treatment Effect, ATE）
 
-![](images/lab_psmExperiment.png){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_psmExperiment.png){fig-align="center" height=num}
 
 ## 行为（心理混合）实验
 
@@ -460,28 +498,28 @@ e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，�
 [@Hu2020: 改良变语匹配实验 +（半）信任博弈测量]{.fragment}
 
 :::{.r-hstack}
-![](images/lab_matchedGuise.png){.fragment fig-align="center" height=250}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_matchedGuise.png){.fragment fig-align="center" height=250}
 
-![](images/lab_matchedGuiseAdj.png){.fragment fig-align="center" height=250}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_matchedGuiseAdj.png){.fragment fig-align="center" height=250}
 :::
 
 ## 实验结果
 
-![](images/lab_language.png){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_language.png){fig-align="center" height=num}
 
 ## 特殊实验
 
 探索敏感问题：列举实验（“有几个？”）
 
-![控制组](images/lab_listC.png){fig-align="center" height=200}
+![控制组](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_listC.png){fig-align="center" height=200}
 
-![实验组](images/lab_listT.png){fig-align="center" height=200}
+![实验组](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_listT.png){fig-align="center" height=200}
 
 ## 实际应用
 
-![](images/lab_tigerFly.jpg){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_tigerFly.jpg){fig-align="center" height=num}
 
-![](images/lab_corruption.png){.fragment fig-align="center" height=200}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_corruption.png){.fragment fig-align="center" height=200}
 
 :::{.notes}
 @TangHu2022
@@ -489,22 +527,35 @@ e.g., Anna Bassi （2011）等对于选民身份与投票意愿地研究中，�
 
 ## 总结
 
-1. 方法概要：因果推断之圣杯，三维世界之权宜
-1. 基本原理：Internal and external validity
-1. 应用举例：心理实验；行为实验；特殊实验
+:::: {.columns}
 
-:::{.fragment}
+::: {.column width="40%"}
+1. 实验方法概要： 三个为什么和两个怎么样
+1. 实验设计的核心原则与应用举例
+    - 科学性原则: 内部与外部有效性
+    - 设计认知谬误：科学性迷信、随机迷信、外部效度低
+    - 方法应用局限：被试、数据、分析
+    - 应用举例：心理、行为、特殊
+:::
+
+::: {.column .fragment width="60%"}
 :::{.callout-tip}
 延伸阅读：
 
 Morton, Rebecca B., and Kenneth C. Williams. 2010. *Experimental Political Science and the Study of Causality: From Nature to the Lab*. Cambridge; New York: Cambridge University Press.
 
-胡悦. 2021. 《实验室实验：政治科学研究的一种有效方法?》 国外理论动态 (06): 160–71.
+胡悦. 2021. “实验室实验：政治科学研究的一种有效方法？” 《国外理论动态》 (06): 160–71.
 
-[“如何用实验探索政治——对话清华大学胡悦副教授”](https://mp.weixin.qq.com/s/PrgDxaTFpbx1-XyK_gY6hw)      
-![](images/lab_qrcode.png){fig-align="center" height=150}
+[“如何用实验探索政治——对话清华大学胡悦副教授”](https://mp.weixin.qq.com/s/PrgDxaTFpbx1-XyK_gY6hw)
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lab_qrcode.png){fig-align="center" height=200}
 :::
 :::
+
+::::
+
+
+
 
 # 感谢关注，欢迎交流 {background="#43464B"}
 
