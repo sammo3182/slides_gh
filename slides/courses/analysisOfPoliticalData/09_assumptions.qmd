@@ -3,7 +3,6 @@ title: "Gauss-Markov Theorem"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
 
 knitr: 
     opts_chunk: 
@@ -11,8 +10,8 @@ knitr:
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,12 +19,27 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    callout-appearance: simple
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -35,7 +49,6 @@ library(pacman)
 p_load(
   tidyverse
 ) 
-
 
 # Functions preload
 set.seed(114)
@@ -49,7 +62,6 @@ theme_update(
   axis.title = element_text(size = 22), 
   axis.text = element_text(size = 18)
 )
-
 ```
 
 ## Overview
@@ -67,16 +79,16 @@ $$Y_i = \beta_0 + \beta_1X + \epsilon.$$
 ## What does BLUE mean
 
 :::{.r-stack}
-![](images/clrm_blue.png){.fragment height=650}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.png){.fragment height=650}
 
-![](images/clrm_blue.gif){.fragment height=650}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.gif){.fragment height=650}
 
 :::
 
 
 ## How can computer do it
 
-![](images/clrm_ols.gif){.r-stretch fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_ols.gif){.r-stretch fig-align="center"}
 
 
 [What's the problem here?]{.fragment .r-fit-text}
@@ -86,14 +98,14 @@ $$Y_i = \beta_0 + \beta_1X + \epsilon.$$
 Wasting computing power, slow ending with large data
 :::
 
-## Solution: Better Algorithm by Statistics
+## Solution: Better Algorithm by Statistics{.smaller}
 
 :::{.fragment style="text-align:center"}
 Statistically, *unbiased* and *consistent*
 :::
 
 :::{.fragment}
-### Unbiasedness
+**Unbiasedness**
 
 $$E(\hat\beta_1|X) = \beta_1$$
 
@@ -102,7 +114,7 @@ Proof:
 \begin{align}
 E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X],\\
                  =& \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X),\\
-                 =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + \epsilon) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X),\\
+                 =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + \color{red}{\epsilon}) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X),\\
                  =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)],\\
                  =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0,\\
                  =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1.\blacksquare
@@ -117,39 +129,39 @@ $\epsilon$ went away by assuming
 ## Consistency
 
 1. $var(\beta_1|X) = \frac{\sigma^2}{\sum (X_i - \bar X)^2}$. 
-    - So when N increases, $\sum (X_i - \bar X)^2$ increases &rarr; $var(\beta_1)$ decreasing.
+    - So when N increases, $\sum (X_i - \bar X)^2$ increases &rarr; var(&beta;<sub>1</sub>) decreasing.
         + $\displaystyle{\lim_{n\to\infty}} var(\beta_1) = 0.$
 1. $var(\hat \beta_0|X) =\sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}=\sigma^2\frac{\sum X_i^2}{n\sum X_i^2 - n\bar X^2}$
-    + When there's a $X_{n + 1}$, 
+    + When there's a X<sub>n + 1</sub>,
       - Nominator $\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2)$;
       - Denominator $(n + 1)\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2) - (n + 1)\bar X^2$
     + The denominator increases quicker than the nominator.
 
-## "Ten Commandments"
+## "Ten Commandments"{.smaller}
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-1. [Linearity]{.golden} in the parameter;
 1. [Nonstochastic X]{.golden} ("X is fixed");
 1. X has positive [noninfinite variance]{.golden} (&sigma;<sub>X</sub> > 0);
-1. [Identification]{.golden}
+1. Correct [specification]{.golden};
+1. [Linearity]{.red} in the parameter;
+1. [Full rank/identification]{.red}
     - N > K; K = 2 for a simple OLS);
-1. [Mean zero errors]{.golden}
+1. [Mean zero errors]{.red}
     - E(&epsilon;<sub>i</sub>|X<sub>i</sub>) = 0;
-1. Correct [specification]{.red};
 1. [Exogeneity]{.red}: No covariance between X<sub>i</sub> and &epsilon;<sub>i</sub>
     - E(X<sub>i</sub>&epsilon;<sub>i</sub>) = cov(x<sub>i</sub>, &epsilon;<sub>i</sub>) =0;
-1. [No autocorrelation]{.red}
-    - E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
-1. [Homoskedasticity]{.green}: constant variance of &epsilon;<sub>i</sub>
-    - var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
+1. Spherical disturbances
+    1. [No autocorrelation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
+    1. [Homoskedasticity]{.green}: constant variance of &epsilon;<sub>i</sub>,  var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
+1. [Normality]{.green}: $U|X \sim N(0, \sigma^2I).$
 1. No perfect [collinearity]{.green}: there are more than one X,  &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum;<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>
 :::
 
 ::: {.column width="50%"}
 :::{.fragment}
-&rarr; Classic Linear Regression Model (CLRM)
+&rarr; Classic Linear Regression Model (CLRM, esp. 4~9)
 :::
 
 :::{.fragment}
@@ -189,9 +201,9 @@ homoskedasticity: residual randomly distributed in the same variance across the 
 
 ::: {.column .fragment width="50%"}
 \begin{align}
-u_i\sim& \text{i.i.d.} N(0, \sigma^2)\\
-\hat\beta_1\sim& N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
-\hat\beta_0\sim& N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
+u_i|X \sim& \text{i.i.d.} N(0, \sigma^2)\\
+\hat\beta_1|X\sim& N(\beta_1, \frac{\hat\sigma^2}{\sum (X_i - \bar X)^2})\\
+\hat\beta_0|X\sim& N(\beta_0, \frac{\hat\sigma^2\sum X_i^2}{n\sum (X_i - \bar X)^2})
 \end{align}
 :::
 
@@ -249,7 +261,7 @@ F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent w
 :::
 
 
-## ANOVA  vis-&aacute;-vis OLS
+## ANOVA  vis-&aacute;-vis OLS{.smaller}
 
 :::: {.columns}
 
@@ -476,7 +488,7 @@ E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]
 
 
 
-## About the Error
+## About the Error{.smaller}
 
 ### $\boldsymbol{X'\epsilon} = 0$
 
@@ -510,9 +522,4 @@ Idempotent: 幂等
 
 ## Take-home point
 
-![](images/clrm_mindmap.png){.r-stretch}
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_mindmap.png){height="600" fig-position="center"}
