@@ -79,16 +79,16 @@ $$Y_i = \beta_0 + \beta_1X + \epsilon.$$
 ## What does BLUE mean
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.png){.fragment height=650}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.png){.fragment height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.gif){.fragment height=650}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.gif){.fragment height=600}
 
 :::
 
 
 ## How can computer do it
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_ols.gif){.r-stretch fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_ols.gif){fig-align="center" height=600}
 
 
 [What's the problem here?]{.fragment .r-fit-text}
@@ -142,8 +142,7 @@ $\epsilon$ went away by assuming
 :::: {.columns}
 
 ::: {.column width="50%"}
-1. [Nonstochastic X]{.golden} ("X is fixed");
-1. X has positive [noninfinite variance]{.golden} (&sigma;<sub>X</sub> > 0);
+1. [Nonstochastic X]{.golden} ("X is fixed"), and X has positive [noninfinite variance]{.golden} (&sigma;<sub>X</sub> > 0);
 1. Correct [specification]{.golden};
 1. [Linearity]{.red} in the parameter;
 1. [Full rank/identification]{.red}
@@ -152,11 +151,16 @@ $\epsilon$ went away by assuming
     - E(&epsilon;<sub>i</sub>|X<sub>i</sub>) = 0;
 1. [Exogeneity]{.red}: No covariance between X<sub>i</sub> and &epsilon;<sub>i</sub>
     - E(X<sub>i</sub>&epsilon;<sub>i</sub>) = cov(x<sub>i</sub>, &epsilon;<sub>i</sub>) =0;
-1. Spherical disturbances
-    1. [No autocorrelation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
-    1. [Homoskedasticity]{.green}: constant variance of &epsilon;<sub>i</sub>,  var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
-1. [Normality]{.green}: $U|X \sim N(0, \sigma^2I).$
+1. [No autocorrelation/serial correlation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
+1. [Normality]{.red}: $U|X \sim N(0, \sigma^2I).$
+1. [Homoskedasticity/Spherical disturbances]{.green}: constant variance of &epsilon;<sub>i</sub>,  var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
 1. No perfect [collinearity]{.green}: there are more than one X,  &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum;<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>
+
+:::{.notes}
+- Spherical disturbances: the assumption of homoscedasticity,
+    - Disturbance: the variance of error term
+:::
+
 :::
 
 ::: {.column width="50%"}
@@ -175,7 +179,7 @@ In a linear regression model in which *the errors are uncorrelated, have equal v
 
 
 :::{.fragment}
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xemoybEpfdlN0QVVnWHFuP2U9U1g4c2xY.mp4" width="500" >}}
+{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/clrm_commandments.mp4" width="500" >}}
 
 :::
 
@@ -443,7 +447,7 @@ According to the above rules,
 :::
 
 
-## Proving $\hat\beta = \beta$
+## $\hat\beta = \beta$: A Proof{.smaller}
 
 \begin{align}
 \boldsymbol{\epsilon\epsilon'}= \frac{d(\boldsymbol{Y} - \boldsymbol{X}\beta)'(\boldsymbol{Y} - \boldsymbol{X}\hat\beta)}{d\hat\beta} =& 0,\\
@@ -475,7 +479,7 @@ var(\beta) =& \sigma^2(X'X)^{-1}, \text{where}\ \sigma^2 = \frac{\epsilon'\epsil
 **X**': Transposition.
 
 
-## C.f. Elementary Algebra
+## C.f. Elementary Algebra{.smaller}
 
 \begin{align}
 E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]= E[\frac{\sum(X - \bar X)Y}{\sum(X - \bar X)^2}|X],\\
