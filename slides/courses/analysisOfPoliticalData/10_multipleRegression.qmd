@@ -3,7 +3,6 @@ title: "Multiple Regression"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
 
 knitr: 
     opts_chunk: 
@@ -11,8 +10,8 @@ knitr:
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -20,13 +19,27 @@ format:
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
-    callout-icon: false
+    # callout-icon: false
+    callout-appearance: simple
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -57,23 +70,26 @@ theme_update(
 
 ## Overview
 
-+ Fitting Multiple regression
++ Multiple regression
     + Goodness of fit: R<sup>2</sup>
 + Post-estimation inferences
 
 
-# Fitting Multiple regression
+# Multiple regression
 
-![](images/mr_fit.gif){.r-stretch fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_fit.gif){.r-stretch fig-align="center"}
 
 ## Expression
 
 :::{style="text-align:center"}
-Multivariate regression/analysis or multiple regression? 
+Terminology: Multivariate vs. Multiple
 :::
 
+:::: {.columns}
+
+::: {.column width="50%"}
 :::{.fragment}
-Population Regression Function (PRF): $$Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + \epsilon_i.$$
+Population Regression Function (PRF, two explanatory variables): $$Y_i = \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + \epsilon_i.$$
 :::
 
 
@@ -85,14 +101,24 @@ According to CLRM: $E[\epsilon_i|\boldsymbol{X}] = 0.$
 :::{.fragment}
 Sample Regression Function (SRF): $$Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat\beta_2X_{2i} + \hat \epsilon_i$$
 :::
+:::
+
+::: {.column width="50%"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_2x.png){.fragment fig-align="center" height=500}
+:::
+
+::::
 
 
-## Meaning of &beta;<sub>1</sub>
+
+
+
+## Meaning of &beta;<sub>1</sub>{.smaller}
 
 :::: {.columns}
 
 ::: {.column .fragment width="20%"}
-To [BLUE]{.blue},
+To be [BLUE]{.blue},
 
 $min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat \epsilon_i^2$
 
@@ -121,9 +147,7 @@ $\hat\sigma^2 = \frac{\sum\hat \epsilon_i^2}{n - 3}.$
 
 :::{.fragment}
 :::{.callout-important}
-## Interpretation
-
-Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y [on average]{.red}, [holding everything else constant]{.red}.
+[**Interpretation**: Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y [on average]{.red}, [ceteris paribus/holding everything else constant]{.red}.]{.large}
 :::
 :::
 
@@ -139,7 +163,7 @@ hold on mean or median
 
 
 # Goodness of Fit
-## R<sup>2</sup>: Multiple Coefficient of Determination
+## R<sup>2</sup>: Multiple Coefficient of Determination{.smaller}
 
 :::: {.columns}
 
@@ -174,14 +198,16 @@ SST =& SSR + SSE\\
 
 ## My Attitude towards R<sup>2</sup>
 
-![](images/mr_bad4ya.jpg){.r-stretch fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_bad4ya.jpg){.r-stretch fig-align="center"}
 
 
-## Why Is R<sup>2</sup> Bad? Very [low]{.red} for a correct model
+## Why Is R<sup>2</sup> Bad? 
+
+> Can be very [low]{.red} for a correct model
 
 $$R^2 = \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST} = \frac{\sum[(Y_i - \epsilon_i) - \bar Y]^2}{SST}.$$
 
-When the residual (&sigma;, estimated by &epsilon<sub>i</sub> in sample estimations) is large enough, R<sup>2</sup> could approach a very low score towards zero.
+When the residual (thus &sigma;, estimated by &epsilon;<sub>i</sub> in sample estimations) is large enough, R<sup>2</sup> could approach a very low score towards zero.
 
 
 ```{r rsmall, fig.align='center'}
@@ -205,7 +231,9 @@ ggplot(data = df_r, aes(x = sigma, y = rout)) +
 )
 ```
 
-## Why Is R<sup>2</sup> Bad? Very [high]{.red} for a misspecified model
+## Why Is R<sup>2</sup> Bad? 
+
+> Can be very [high]{.red} for a misspecified model
 
 ```{r rlarge, fig.align='center'}
 df_rLarge <-
@@ -235,12 +263,11 @@ ggplot(data = df_rLarge, aes(x, y)) +
     )
 ```
 
-## Why Is R<sup>2</sup> Bad? Very [high]{.red} for a redundant model
+## Why Is R<sup>2</sup> Bad? {auto-animate=true}
 
-\begin{align}
-R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i - \bar Y)^2}{SST}\\
-    =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}
-\end{align}
+> Can be very [high]{.red} for a redundant model
+
+$$R^2 = \frac{\sum(\hat Y_i - \bar Y)^2}{SST} = \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}.$$
 
 Therefore, the more Xs are added, the larger SSR (and thus R<sup>2</sup>) is, a.k.a., the "trash-can" model.
 
@@ -251,20 +278,23 @@ $\hat Y_i  - \bar Y = 0$
 :::{.fragment}
 **Revision**
 
-$$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
+$$\text{Adj. } R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 :::
 
+## Is Adj. R<sup>2</sup> still bad? {auto-animate=true}
+
+$$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-### Issue adjusted
+**Adjusted**
 
 X booming
 :::
 
 ::: {.column width="50%"}
-### Issues not adjusted
+**Not adjusted**
 
 * Goodness of fit;
 * Predictive error;
@@ -285,8 +315,7 @@ Model comparison
 
 ## Predicted Value 
 
-
-### Goal
+**Goal**
 
 1. Forecast
 1. Interpretation: 
@@ -294,7 +323,7 @@ Model comparison
     + What substantive changes can Xs make?
 
 :::{.fragment}
-### Approach
+**Approach**
 
 1. Expected value (average) of $\hat Y$
 1. A one-time draw of $\hat Y$
@@ -302,52 +331,41 @@ Model comparison
 :::
 
 
-## Forecasting
+## Forecasting: Expected Value
 
-### Expected Value
-
-:::: {.columns}
-::: {.column width="50%"}
-
-Let X<sub>0</sub> be the values at which we want to predict, the the expected value of Y is:
+Let X<sub>0</sub> be the values at which we want to predict. 
+Then the expected value of Y is:
 
 \begin{align}
 E(\hat Y_0|X_0) =& E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
-var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 \\
-                   &+ 2cov(\hat\beta_0, \hat\beta_1)X_0\\
+var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 + 2cov(\hat\beta_0, \hat\beta_1)X_0\\
                   =& \sigma^2[\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}
-:::
 
-::: {.column width="50%"}
-```{r predicted}
+```{r predicted, fig.align='center'}
 ggplot(mtcars, aes(x = mpg, y = wt)) +
     geom_smooth(method = lm, se = TRUE) +
     ylab(bquote(hat(Y[0]))) +
     xlab(bquote(hat(X[0]))) +
-    labs(caption = "Why is the ribbon wider at the two ends?") +
+    labs(caption = "The ribbon represents the standard error. Why is it wider at the two ends?") +
     theme(
         plot.title = element_text(size = 28),
         axis.text = element_text(size = 20),
         axis.title = element_text(size = 20, face = "bold")
     )
 ```
-:::
 
-::::
 
 :::{.notes}
 Fewer observations at two terminals, thus wider rainbow.
 :::
 
-:::{.fragment}
-### Single-Point Forecast
+## Forcasting: Single-Point Forecast
 
 \begin{align}
 \hat Y_0 =& \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
-var(\hat Y_0|X_0) =& \sigma^2[1 + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+var(\hat Y_0|X_0) =& \sigma^2[\color{red}{1} + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}
-:::
 
 :::{.fragment}
 There is an error term to account for.
@@ -357,9 +375,9 @@ In other words, single prediction is [more uncertain]{.red} than the average pre
 
 
 
-## Hypothesis Testing
+## Hypothesis Test: Coefficient and variance
 
-Let's set &alpha; = 0.05.
+Let &alpha; = 0.05.
 
 :::: {.columns}
 
@@ -379,10 +397,6 @@ Statistics:
 
 $$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\sim t_{n-k}.$$
 
-
-Interpretation: 
-
-For every unit change of X<sub>1</sub>, Y changes by &beta;<sub>1</sub>, [holding everything else constant]{.red}.
 :::
 
 ::: {.column .fragment width="50%"}
@@ -404,7 +418,7 @@ $$(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.$$
 ::::
 
 
-## Hypothesis Test for the Restricted Model
+## Hypothesis Test: Restricted Model{.smaller}
 
 Let's set &alpha; = 0.05.
 
@@ -446,18 +460,14 @@ Hint: When testing general linear restrictions, that is, comparing the pair of n
 ## "When" to use OLS
 
 :::{.r-stretch}
+Just kidding~~😂
 
 {{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xbUxzbHZTc01NeGF2Sm54P2U9MWViYjIx.mp4" >}}
 
 :::
 
-:::{.fragmnt style="text-align:center;}
-Just kidding~~😂
-:::
 
-
-
-## <img src = "images/ci_fsmrof.png" height = 40> Latin Terms
+## Latin Terms <img src = "http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height = 30>
 
 - *a fortiori*: Not even saying.    
 - *ad hoc*: To this, immediate purpose.   
@@ -472,15 +482,6 @@ Just kidding~~😂
 - [*QED*]{.red}: $\blacksquare$ "quod erat demonstrandum," that which was to have been shown.    
 
 
-- Bonus: Good.
-- Vise versa: In a turned position.
-
 ## Take-home point
 
-![](images/mr_mindmap.png){.r-stretch}
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
-
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_mindmap.png){.r-stretch}
