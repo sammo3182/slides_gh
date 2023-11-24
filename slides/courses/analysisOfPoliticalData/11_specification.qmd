@@ -173,42 +173,38 @@ $$plim(\hat\beta_1) = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}
     + &beta;<sub>1</sub>: underestimated;
     + Affecting the estimations of others in unknown ways .
 
-## Variable Type Issue
+## Concerns caused by variable type
 
 :::{.callout-tip}
-### Tip
-
-In OLS, there is no requirement (assumption) for Xs to be linear. (Is there one for Y? Where?)
+In OLS, there is no requirement (assumption) for Xs to be linear. 
 :::
 
-* Indicator: Binary usually
+* Indicator variable (binary)
     + $Y = \beta_0 + \beta_1X_i + u_i,$ where X is either male (0) or female(1)
         + &beta;<sub>0</sub>: E(Y|X = male);
         + &beta;<sub>1</sub>: E(Y|X = female) - E(Y|X = male).
 
 * Nominal: 
-    + Can't regress unless being broken up into indicator variables.
+    + Can't regress unless being broken up into indicators
     + e.g., A race variable: white, black, native
         + H<sub>0</sub>: &beta;<sub>black</sub> = 0, testing the difference between black and white
         + H<sub>0</sub>: &beta;<sub>black</sub> = &beta;<sub>native</sub> = 0, testing if the race has any effect.
+
+- How about variable transition, e.g., log(x)?
 
 :::{.notes}
 In a regression, the information of the baseline is captured by the intercept
 :::
 
-:::{.fragment}
 
-:::{.callout-note}
-### Log(X)
+## Logarithm Transformation
 
-Have you ever seen social scientists conduct a [logarithm transformation]{.red} on some variables like GDP and income?
-What's that for?
+What does a [logarithm transformation]{.red} on some variables for? 
+
+:::{.notes}
+Some may say making X more linear? However, no assumption on X
 :::
 
-
-:::
-
-## Logarithm Transformation: Making X More Linear?
 
 :::{.r-stack}
 
@@ -241,7 +237,8 @@ ggplot(mammals, aes(body, brain)) + geom_point()
 ```{r bodyLBrain}
 ggplot(data = mammals, aes(x = body, y = brain)) +
   geom_point() +
-  scale_x_log10()
+  scale_x_log10() +
+  xlab("Log(body)")
 ```
 :::
 
@@ -249,7 +246,8 @@ ggplot(data = mammals, aes(x = body, y = brain)) +
 ```{r bodyBrainL}
 ggplot(data = mammals, aes(x = body, y = brain)) +
   geom_point() +
-  scale_y_log10()
+  scale_y_log10() +
+  ylab("Log(brain)")
 ```
 :::
 
@@ -258,7 +256,8 @@ ggplot(data = mammals, aes(x = body, y = brain)) +
 ggplot(data = mammals, aes(x = body, y = brain)) +
   geom_point() +
   scale_x_log10() + 
-    scale_y_log10()
+    scale_y_log10() +
+  xlab("Log(body)") + ylab("Log(brain)")
 ```
 :::
 
@@ -303,7 +302,7 @@ ggplot(df_residual, aes(x = residual)) +
 
 ## When Using Logrithm Transformation
 
-Problem: OLS assumption violation (linearity)
+Problem to solve: Assumption violation (linearity)
 
 :::{.fragment}
 Critical criterion: Skewness
@@ -355,7 +354,7 @@ Which specification is [correct]{.red}?
 
 Test &beta;<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?
 
-Probably not. Hint: How many [true]{.red} models are there?
+Probably not. [Hint: How many [true]{.red} models are there?]{.small}
 :::
 
 :::{.notes}
@@ -367,9 +366,7 @@ Let's assume f<sub>1</sub> is the true model:
 
 $$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$
 
-&rho;<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>
-
-When &rho;<sub>12</sub> &uarr;......
+&rho;<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when &rho;<sub>12</sub> &uarr;......
 :::
 
 :::{.notes}
@@ -378,9 +375,7 @@ Variance is inflated when &rho;<sub>12</sub> &uarr;
 :::
 
 ::: {.column .fragment width="50%"}
-*Better way*
-
-Joint test: 
+**Joint test**
 
 H<sub>0</sub>: &beta;<sub>1</sub> = &beta;<sub>2</sub> = &beta;<sub>3</sub> = 0 or 
 
@@ -395,7 +390,7 @@ Statistics: Davidson-Mackinnon test
 ::::
 
 
-## Omitted Variable
+## Omitted Variable{.smaller}
 
 \begin{align}
 True: Y_i =& \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
@@ -422,7 +417,7 @@ Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \b
 
 ## Biased or Not
 
-$$E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,$$ in which $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
+$E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,$ in which $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
 
 - $\tilde\beta_1$: [Biased]{.red}, unless X<sub>2</sub> is an irrelevant variable.
     - Even if &delta;<sub>1</sub> = 0, $X_1 = \delta_0 + r$, the model may increase the risk of Type I error
@@ -479,7 +474,7 @@ E(X_1\epsilon) =& E[X_1(\beta_2X_2 + u)], \\
 
 ## Nonlinear Modeling
 
-![](https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xaWVDYkM3SWJiTm5wZ1FLP2U9V200dzNl.jpg){fig-align="center" height=300}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/nonlinearity.jpg){fig-align="center" height=300}
 
 :::{.fragment}
 ```{r nonlinear}

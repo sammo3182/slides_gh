@@ -478,23 +478,20 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
 </ul></li>
 </ul>
 </section>
-<section id="variable-type-issue" class="slide level2">
-<h2>Variable Type Issue</h2>
-<div class="callout callout-tip callout-titled callout-style-simple">
+<section id="concerns-caused-by-variable-type" class="slide level2">
+<h2>Concerns caused by variable type</h2>
+<div class="callout callout-tip callout-style-simple">
 <div class="callout-body">
-<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Tip</strong></p>
-</div>
 <div class="callout-content">
-<p>In OLS, there is no requirement (assumption) for Xs to be linear. (Is there one for Y? Where?)</p>
+<p>In OLS, there is no requirement (assumption) for Xs to be linear.</p>
 </div>
 </div>
 </div>
 <ul>
-<li class="fragment">Indicator: Binary usually
+<li class="fragment">Indicator variable (binary)
 <ul>
 <li class="fragment"><span class="math inline">\(Y = \beta_0 + \beta_1X_i + u_i,\)</span> where X is either male (0) or female(1)
 <ul>
@@ -504,13 +501,14 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
 </ul></li>
 <li class="fragment">Nominal:
 <ul>
-<li class="fragment">Can’t regress unless being broken up into indicator variables.</li>
+<li class="fragment">Can’t regress unless being broken up into indicators</li>
 <li class="fragment">e.g., A race variable: white, black, native
 <ul>
 <li class="fragment">H<sub>0</sub>: β<sub>black</sub> = 0, testing the difference between black and white</li>
 <li class="fragment">H<sub>0</sub>: β<sub>black</sub> = β<sub>native</sub> = 0, testing if the race has any effect.</li>
 </ul></li>
 </ul></li>
+<li class="fragment">How about variable transition, e.g., log(x)?</li>
 </ul>
 <aside class="notes">
 <p>In a regression, the information of the baseline is captured by the intercept</p>
@@ -525,24 +523,23 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="fragment">
-<div class="callout callout-note callout-titled callout-style-simple">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Log(X)</strong></p>
-</div>
-<div class="callout-content">
-<p>Have you ever seen social scientists conduct a <span class="red">logarithm transformation</span> on some variables like GDP and income? What’s that for?</p>
-</div>
-</div>
-</div>
-</div>
 </section>
-<section id="logarithm-transformation-making-x-more-linear" class="slide level2">
-<h2>Logarithm Transformation: Making X More Linear?</h2>
+<section id="logarithm-transformation" class="slide level2">
+<h2>Logarithm Transformation</h2>
+<p>What does a <span class="red">logarithm transformation</span> on some variables for?</p>
+<aside class="notes">
+<p>Some may say making X more linear? However, no assumption on X</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="r-stack">
 <div class="fragment">
 <div class="cell">
@@ -602,7 +599,7 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
 </section>
 <section id="when-using-logrithm-transformation" class="slide level2">
 <h2>When Using Logrithm Transformation</h2>
-<p>Problem: OLS assumption violation (linearity)</p>
+<p>Problem to solve: Assumption violation (linearity)</p>
 <div class="fragment">
 <p>Critical criterion: Skewness</p>
 </div>
@@ -652,7 +649,7 @@ Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
 <div class="fragment">
 <p><strong>How to figure out?</strong></p>
 <p>Test β<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?</p>
-<p>Probably not. Hint: How many <span class="red">true</span> models are there?</p>
+<p>Probably not. <span class="small">Hint: How many <span class="red">true</span> models are there?</span></p>
 </div>
 <aside class="notes">
 <p>Only one true model</p>
@@ -670,8 +667,7 @@ Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
 <div class="fragment">
 <p>Let’s assume f<sub>1</sub> is the true model:</p>
 <p><span class="math display">\[var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.\]</span></p>
-<p>ρ<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup></p>
-<p>When ρ<sub>12</sub> ↑……</p>
+<p>ρ<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when ρ<sub>12</sub> ↑……</p>
 </div>
 <aside class="notes">
 <p>Variance is inflated when ρ<sub>12</sub> ↑</p>
@@ -687,8 +683,7 @@ Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
           display:block!important;
       }</style></aside>
 </div><div class="column fragment" style="width:50%;">
-<p><em>Better way</em></p>
-<p>Joint test:</p>
+<p><strong>Joint test</strong></p>
 <p>H<sub>0</sub>: β<sub>1</sub> = β<sub>2</sub> = β<sub>3</sub> = 0 or</p>
 <p>β<sub>4</sub> = β<sub>5</sub> = β<sub>6</sub> = 0</p>
 <p>Statistics: Davidson-Mackinnon test</p>
@@ -699,7 +694,7 @@ Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
 </div>
 </div>
 </section>
-<section id="omitted-variable" class="slide level2">
+<section id="omitted-variable" class="slide level2 smaller">
 <h2>Omitted Variable</h2>
 <p><span class="math display">\[\begin{align}
 True: Y_i =&amp; \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
@@ -722,7 +717,7 @@ Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i 
 </section>
 <section id="biased-or-not" class="slide level2">
 <h2>Biased or Not</h2>
-<p><span class="math display">\[E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,\]</span> in which <span class="math inline">\(\hat\delta_1\)</span> is the regression coefficient of <span class="math inline">\(X_2\)</span> on <span class="math inline">\(X_1\)</span> ( <span class="math inline">\(X_1 = \delta_0 + \delta_1X_2 + r\)</span>).</p>
+<p><span class="math inline">\(E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,\)</span> in which <span class="math inline">\(\hat\delta_1\)</span> is the regression coefficient of <span class="math inline">\(X_2\)</span> on <span class="math inline">\(X_1\)</span> ( <span class="math inline">\(X_1 = \delta_0 + \delta_1X_2 + r\)</span>).</p>
 <ul>
 <li class="fragment"><span class="math inline">\(\tilde\beta_1\)</span>: <span class="red">Biased</span>, unless X<sub>2</sub> is an irrelevant variable.
 <ul>
@@ -796,7 +791,7 @@ E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)], \\
 <h2>Nonlinear Modeling</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xaWVDYkM3SWJiTm5wZ1FLP2U9V200dzNl.jpg" height="300"></p>
+<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/nonlinearity.jpg" height="300"></p>
 </figure>
 </div>
 <div class="fragment">
