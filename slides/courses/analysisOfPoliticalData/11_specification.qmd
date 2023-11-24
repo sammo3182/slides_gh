@@ -3,8 +3,6 @@ title: "Model Specification"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 
 author: "Yue Hu"
-institute: "Tsinghua University" 
-date: "2022-11-19"
 
 knitr: 
     opts_chunk: 
@@ -12,8 +10,8 @@ knitr:
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
@@ -22,12 +20,26 @@ format:
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
+    callout-appearance: simple
     
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -44,7 +56,7 @@ p_load(
 
 
 # Functions preload
-set.seed(114)
+set.seed(313)
 
 theme_set(
   theme_minimal(base_size = 18)
@@ -61,10 +73,10 @@ theme_update(
 ## Overview
 
 :::{style="text-align:center"}
-How can you get things wrong?
+How can you get things wrong in *model specificiation*?
 :::
 
-:::{.fragment style="text-align:center; margin-top: 2em; margin-bottom: 2em"}
+:::{.fragment style="text-align:center; margin-top: 2em; margin-bottom: 1em"}
 
 Like...many ways!
 
@@ -73,29 +85,23 @@ Like...many ways!
 
 :::: {.columns}
 
-::: {.column .fragment width="30%"}
-### Measuring [variable]{.red} wrong
+::: {.column .fragment width="40%"}
+**[Measurement]{.red} Issues**
 
 - Proxy variable
 - Measurement error
 - Variable type
 :::
 
-::: {.column width="8%"}
-:::
-
-::: {.column .fragment width="26%"}
-### Specifying [model]{.red} wrong
+::: {.column .fragment width="30%"}
+**[Specification]{.red} Issues**
 
 - Functional form
 - Omitted variable
 :::
 
-::: {.column width="8%"}
-:::
-
-::: {.column .fragment width="28%"}
-### Interpreting [results]{.red} wrong
+::: {.column .fragment width="30%"}
+**[Interpretation]{.red} Issues**
 
 - Nonlinear model
 :::
@@ -103,143 +109,69 @@ Like...many ways!
 ::::
 
 
-# Measurement Problem
+# Measurement Issues
 
 ## Proxy Variable
 
-True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + u.
+True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>[X<sub>1</sub>]{.red} + &beta;<sub>2</sub>[X<sub>2</sub>]{.red} + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + [&epsilon;]{.red}, &epsilon; ~ &Phi;(0, &sigma;<sub>&epsilon;</sub><sup>2</sup>).
 
-However, X<sub>3</sub><sup>\*</sup> is unobserved. Instead, we can observe X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>X<sub>3</sub> + v. 
-
-In other words, 
-
-:::{style="text-align:center; margin-top: 2em"}
-Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (u + &beta;<sub>3</sub>v).
-:::
-
-
-:::{.fragment}
-Assuming cov(u,v) = 0, 
-
-:::{style="text-align:center; margin-top: 2em"}
-E(u + &beta;<sub>3</sub>v|X) = 0;
-
-var(u + &beta;<sub>3</sub>v|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>v</sub><sup>2</sup> + &sigma;<sub>u</sub><sup>2</sup>.
-:::
-:::
-
-
+- Unobservable: X<sub>3</sub><sup>*</sup>.
+    - Observable X<sub>3</sub><sup>*</sup> = &delta;<sub>0</sub> + &delta;<sub>1</sub>[X<sub>3</sub>]{.blue} + [&nu;]{.blue}, &nu; ~ &Phi;(0, &sigma;<sub>&nu;</sub><sup>2</sup>).
+- &rArr; Y = (&beta;<sub>0</sub> + &beta;<sub>3</sub>&delta;<sub>0</sub>) + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + &beta;<sub>3</sub>&delta;<sub>1</sub>X<sub>3</sub> + (&epsilon; + &beta;<sub>3</sub>&nu;).
+    - *Assuming* cov(&epsilon;, &nu;) = 0, then
+        1. E(&epsilon; + &beta;<sub>3</sub>&nu;|X) = 0;
+        1. var(&epsilon; + &beta;<sub>3</sub>&nu;|X) = &beta;<sub>3</sub><sup>2</sup>&sigma;<sub>&nu;</sub><sup>2</sup> + &sigma;<sub>&epsilon;</sub><sup>2</sup>.
 
 :::{.notes}
 cov(u,v) = 0: u, v independent
 :::
 
 :::{.fragment}
-Only when 
-
-[cov(u, X<sub>3</sub>) = cov(v, X<sub>1</sub>) = cov(v, X<sub>2</sub>) = 0,]{.r-fit-text} 
-
-the model can produce unbiased estimates.
+:::{.callout-important}
+Only when cov([&epsilon;]{.red}, [X<sub>3</sub>]{.blue}) = cov([&nu;]{.blue}, [X<sub>1</sub>]{.red}) = cov([&nu;]{.blue}, [X<sub>2</sub>]{.red}) = 0, can the model produce *unbiased* estimates.
 :::
 
-## Measurement Error {.auto-animate}
+:::
 
-:::: {.columns}
+## Measurement Error
 
-::: {.column width="40%"}
-*Random error in Y*, Y = Y<sup>*</sup> + e.
-
-\begin{align}
-&Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
-&Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
+- Nonrandom error &rarr; bias
+- Random error in Y: Y = Y<sup>*</sup> + &epsilon;.
+    - \begin{align}
+&Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + \epsilon;\\
+&Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (\nu + \epsilon)
 \end{align}
+- *Consequence*
+    + &beta; Unbiased 
+    + var(&beta;) &uarr;
 
-:::{.fragment}
-### Consequence
+## Measurement Error
 
-+ &beta; Unbiased 
-+ var(&beta;) &uarr;
-:::
-
-:::
-
-::: {.column width="60%"}
-
-:::{.fragment}
-*Random error in X*, X = X<sup>*</sup> + e. If E(eX) = 0, then 
-
-\begin{align}
-Y =& \beta_0 + \beta_1(X_1 - e) + u,\\
-  =& \beta_0 + \beta_1X_1 + (u - \beta_1e).
+- Random error in X: X = X<sup>*</sup> + &nu;. If E(&nu;X) = 0, then \begin{align}
+Y =& \beta_0 + \beta_1(X_1 - \nu) + \epsilon,\\
+  =& \beta_0 + \beta_1X_1 + (\epsilon - \beta_1\nu).
 \end{align}
-:::
-
-:::{.fragment}
-\begin{align}
-cov(e, X_1) =& E(eX_1) - E(e)E(X_1) = E(eX_1),\\
-          =& E[e(X_1^* + e)] = E(eX_1^*) + E(e^2), \\
-          =& \sigma_e^2\neq0.\\
-cov(u - \beta_1e, X_1) =& cov(-\beta_1e, X_1) = -\beta_1cov(e, X_1),\\
-                       =& -\beta_1\sigma_e^2.\\
-\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(u - \beta_1e, X_1)}{var(X_1)},\\
-                               =& \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^2}
-                               = \beta_1 + \frac{-\beta_1\sigma_e^2}{\sigma_{X_1}^{*2} + \sigma^2_e},\\
-                               =& \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_e}\beta_1.
+- \begin{align}
+cov(\epsilon, X_1) =& E(\epsilon X_1) - E(\epsilon)E(X_1) = E(\epsilon X_1), \\
+          =& E[\epsilon (X_1^* + \epsilon)] = E(\epsilon X_1^*) + E(\epsilon^2) = \sigma_\epsilon^2\neq0.\\
+cov(\epsilon - \beta_1\nu, X_1) =& cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, X_1) = -\beta_1\sigma_\nu^2.\\
+\Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(\epsilon - \beta_1\nu, X_1)}{var(X_1)},\\
+                               =& \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^2}
+                               = \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^{*2} + \sigma^2_\epsilon} = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.
 \end{align}
-:::
 
 :::{.notes}
 plim: probability limit operation, convergence in probability
 :::
 
-:::{.fragment}
-Unbiased [only]{.red} when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>\*</sup> + e), i.e., &sigma;<sup>2</sup><sub>X<sub>1</sub></sub> = &sigma;X<sub>1</sub><sup>\*2</sup>+ &sigma;<sub>e</sub><sup>2</sup>
-:::
+## Measurement Error
 
-:::
+$$plim(\hat\beta_1) = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.$$
 
-::::
-
-## Measurement Error {.auto-animate}
-
-:::: {.columns}
-
-::: {.column .nonincremental width="40%"}
-*Random error in Y*, Y = Y<sup>*</sup> + e.
-
-\begin{align}
-&Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + u\\
-&Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (u + e)
-\end{align}
-
-### Consequence
-
-+ &beta; Unbiased 
-+ var(&beta;) &uarr;
-
-
-:::
-
-::: {.column width="60%"}
-
-*Random error in X*, X = X<sup>*</sup> + e. If E(eX) = 0, then 
-
-\begin{align}
-Y =& \beta_0 + \beta_1(X_1 - e) + u,\\
-  =& \beta_0 + \beta_1X_1 + (u - \beta_1e).
-\end{align}
-
-### Consequence
-
-$|\hat\beta_1| < \beta_1$, a.k.a., [attenuation]{.red} bias. 
-
-+ &beta;<sub>1</sub>: underestimated;
-+ Affecting the estimations of others in unknown ways .
-
-:::
-
-::::
-
+- Unbiased [only]{.red} when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>\*</sup> + &nu;), i.e., &sigma;<sup>2</sup><sub>X<sub>1</sub></sub> = &sigma;X<sub>1</sub><sup>\*2</sup>+ &sigma;<sub>&nu;</sub><sup>2</sup>
+- Consequence: $|\hat\beta_1| < \beta_1$, a.k.a., [attenuation]{.red} bias. 
+    + &beta;<sub>1</sub>: underestimated;
+    + Affecting the estimations of others in unknown ways .
 
 ## Variable Type Issue
 
@@ -626,7 +558,7 @@ That's to say, every value in X (n > 1) has a marginal effect (&Delta;<sub>x</su
 
 ::: {.column .fragment width="40%"}
 
-![](images/spe_interaction2.jpg){fig-align="center" height=350}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg){fig-align="center" height=350}
 
 :::
 
@@ -682,10 +614,5 @@ Can't simply say whether the null hypothesis is rejected, because it may [not be
 
 ## Take-home point
 
-![](images/spe_mindmap.png){.r-stretch}
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_mindmap.png){.r-stretch}
 
