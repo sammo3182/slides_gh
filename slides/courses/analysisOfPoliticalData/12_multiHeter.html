@@ -31,6 +31,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="12_multiHeter_files/libs/revealjs/dist/theme/quarto.css" id="theme">
   <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
@@ -345,14 +410,13 @@ Yue Hu
 <section id="a-question-left-from-the-last-lecture" class="slide level2">
 <h2>A Question Left from the Last Lecture</h2>
 <div class="fragment" style="text-align:center">
-<p>Why should we use multiple regression?</p>
-</div>
-<div class="fragment" style="text-align:center">
-<p>Why <em>controls</em>?</p>
+<p>Why should we use multiple regression, and why <em>controls</em>?</p>
 </div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif" class="r-stretch fragment"> <img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif" class="r-stretch fragment"></p>
+<div class="r-stack">
+<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif" class="fragment"> <img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif" class="fragment"></p>
+</div>
 <aside class="notes">
 <p>We wanna understand things realistically and predict them.</p>
 <p>Things happens all together, while we care what’s the most important</p>
@@ -382,8 +446,8 @@ Yue Hu
 <li class="fragment">X has positive noninfinite variance (var(X)); ← <span class="gray">✓</span> Data collection</li>
 <li class="fragment">Correct specification; ← <span class="green">✓</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a></li>
 <li class="fragment">Identification (N &gt; K; K = 2 for a simple OLS); ← <span class="gray">✓</span> Data collection &amp; perfect collinearity <span class="golden">(Today)</span></li>
-<li class="fragment">Mean zero errors (E(u<sub>i</sub>|X<sub>i</sub>) = 0); ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a> (Omited variables, etc.) &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">Missing</a></li>
-<li class="fragment">No covariance between X<sub>i</sub> and u<sub>i</sub>; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Endogeneity issue</a></li>
+<li class="fragment">Mean zero errors (E(ε<sub>i</sub>|X<sub>i</sub>) = 0); ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a> (Omited variables, etc.) &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">Missing</a></li>
+<li class="fragment">No covariance between X<sub>i</sub> and ε<sub>i</sub>; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Endogeneity issue</a></li>
 <li class="fragment">No autocorrelation; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Autocorrelation issue</a></li>
 <li class="fragment">No perfect collinearity ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
 <li class="fragment">Homoskedasticity; ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
@@ -391,8 +455,8 @@ Yue Hu
 </section>
 <section id="quiz-time" class="slide level2">
 <h2>Quiz Time</h2>
-<p>Based on what you’ve known, what does the youtuber did right &amp; wrong?</p>
-<video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xMWhrbmMyN1VtWnZicDlRP2U9ZzIxQjNt.mp4"></video>
+<p>Based on what you’ve known, what does the Upper did right &amp; wrong?</p>
+<video id="video_shortcode_videojs_video1" height="500" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_quiz.mp4"></video>
 </section>
 <section id="overview" class="slide level2">
 <h2>Overview</h2>
@@ -418,20 +482,28 @@ Yue Hu
 </section>
 <section id="perfect-collinearity" class="slide level2">
 <h2>Perfect Collinearity</h2>
-<p><span class="math display">\[X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}\]</span></p>
+<p><span class="math display">\[X_{2i} = \hat\delta_0 + \hat\delta_1X_{1i} + \hat r_{1i}.\]</span></p>
 <p>When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then <span class="math inline">\(\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}\)</span> cannot be estimated.</p>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
+<p>E.g., <span class="math inline">\(X_{2i} = 1 + 2X_{1i}.\)</span></p>
 <p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg" width="450"></p>
 </div><div class="column fragment" style="width:50%;">
-<p>e.g., Let’s say in the PRF Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>X<sub>1</sub> + β<sub>2</sub>X<sub>2</sub> + u, X<sub>2</sub> = 1 + 2X<sub>1</sub>, then</p>
+<div class="small">
 <p><span class="math display">\[\begin{align}
-Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
-    =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat u \\
-    =&amp; (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat u\\
-\Rightarrow Y_i =&amp; \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
+Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \text{(PRF)}\\
+    =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat \epsilon, \\
+    =&amp; (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat \epsilon,\\
+\Rightarrow Y_i =&amp; \tilde\beta_0 + \tilde\beta_1X_{1} + \hat \epsilon.
 \end{align}\]</span></p>
-<p>PRF (β<sub>1</sub> or β<sub>2</sub>) is non-identifiable.</p>
+</div>
+<ul>
+<li class="fragment">Consequence
+<ul>
+<li class="fragment"><span class="math inline">\(\hat\epsilon\)</span> is unbiased</li>
+<li class="fragment">PRF (β<sub>2</sub>) is <span class="red">nonidentifiable</span></li>
+</ul></li>
+</ul>
 <aside class="notes">
 <p>PRF: population regression function</p>
 <style type="text/css">
@@ -447,47 +519,55 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
       }</style></aside>
 </div>
 </div>
-<div class="fragment r-fit-text">
-<p><em>Problematic, but <span class="red">only</span> when perfect</em></p>
-</div>
 </section>
 <section id="multicollinearity" class="slide level2">
 <h2>Multicollinearity</h2>
-<p>If <strong>X</strong><sub>2</sub> is not a transformation of X<sub>1</sub>, the estimators (<strong>β</strong>) remain <span class="red">unbiased</span>, yet</p>
-<div class="fragment">
-<p><span class="math display">\[\begin{align}
-var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
-=&amp;\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
-\end{align}\]</span></p>
-</div>
-<div class="fragment">
-<p>As β<sub>12</sub> increases, the variance also increases (What does that mean?).</p>
-</div>
-</section>
-<section id="diagnosis" class="slide level2">
-<h2>Diagnosis</h2>
-<p><strong>Variance Inflation Factors</strong> (VIF, [1, +∞]): A measure of how much the variance of the estimated coefficient β<sub>k</sub> is “inflated” by the correlation among the predictor variables.</p>
-<p><span class="math display">\[VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}\]</span></p>
-<div class="fragment">
-<p>1 means that no correlation among the k<sup>th</sup> predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.</p>
-</div>
-<div class="fragment">
-<p>Rule of thumb: 4, 10</p>
-</div>
-<div class="fragment">
-<div class="callout callout-tip callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>In most cases, you don’t need this, why?</p>
-</div>
-</div>
-</div>
-</div>
+<ul>
+<li class="fragment">Variance
+<ul>
+<li class="fragment"><span class="math inline">\(var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},\)</span>
+<ul>
+<li class="fragment">Where <span class="math inline">\(\beta_{12} = cov(X_1, X_2)\)</span>.</li>
+</ul></li>
+<li class="fragment">As β<sub>12</sub> increases, the variance also increases <span class="small">(What does that mean?)</span>.</li>
+</ul></li>
+<li class="fragment">Coefficient
+<ul>
+<li class="fragment"><span class="math inline">\(\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}\)</span>
+<ul>
+<li class="fragment">Small changes in X can lead to dramatic changes in <span class="math inline">\((\boldsymbol{X'X})^{-1}\)</span>, and thus <span class="math inline">\(\hat\beta\)</span>. <span class="small">(Why?)</span></li>
+</ul></li>
+</ul></li>
+</ul>
 <aside class="notes">
-<p>Perfect then unidentified; but if your core X is insignificant.</p>
+<p>E.g., <span class="math inline">\(X = \begin{bmatrix} 1 &amp; 0.99 \\ 0.99 &amp; 1 \end{bmatrix}, \tilde X = \begin{bmatrix} 1 &amp; 0.99 \\ 0.99 &amp; 1.01 \end{bmatrix}\)</span></p>
+<p>To calculate the inverse matrix of matrix X, <span class="math inline">\(X^{-1} = \frac{1}{\text{det}(X)} \cdot \text{adj}(X)\)</span>, where det(X) is the determinant of matrix X, and the adj(X) is the adjugate of matrix X (the transpose of the cofactor matrix of X).</p>
+<ul>
+<li><span class="math inline">\(\text{det}(X) = \sum_{i=1}^{n} (-1)^{i+j} \cdot x_{ij} \cdot \text{det}(X_{ij})\)</span> where:
+<ul>
+<li><span class="math inline">\(n\)</span> is the order (number of rows or columns) of matrix X.</li>
+<li><span class="math inline">\(x_{ij}\)</span> represents the element in the <span class="math inline">\(i\)</span>-th row and <span class="math inline">\(j\)</span>-th column of matrix X.</li>
+<li><span class="math inline">\(\text{det}(X_{ij})\)</span> is the determinant of the submatrix obtained by removing the <span class="math inline">\(i\)</span>-th row and <span class="math inline">\(j\)</span>-th column from X.</li>
+<li>For a 2×2 matrix, <span class="math inline">\(\text{det}(X) = x_{11} \cdot x_{22} - x_{12} \cdot x_{21}\)</span></li>
+</ul></li>
+<li><span class="math inline">\(\text{adj}(X) = (C_{ij})^{T}\)</span>, <span class="math inline">\(C_{ij} = (-1)^{i+j} \cdot \text{det}(X_{ji})\)</span>, where:
+<ul>
+<li><span class="math inline">\(C_{ij}\)</span> is the element in the <span class="math inline">\(i\)</span>-th row and <span class="math inline">\(j\)</span>-th column of the cofactor matrix <span class="math inline">\(C\)</span>.</li>
+<li><span class="math inline">\(\text{det}(X_{ji})\)</span> is the determinant of the submatrix obtained by removing the <span class="math inline">\(j\)</span>-th row and <span class="math inline">\(i\)</span>-th column from X (note the reversal of indices compared to the determinant formula).</li>
+</ul></li>
+<li>For the X in the example,
+<ul>
+<li><span class="math inline">\(\text{det}(X) = 1 \cdot 1 - 0.99 \cdot 0.99 = 1 - 0.9801 = 0.0199,\)</span></li>
+<li><span class="math inline">\(\text{adj}(X) = \begin{bmatrix} 1 &amp; -0.99 \\ -0.99 &amp; 1 \end{bmatrix}.\)</span></li>
+<li><span class="math inline">\(X^{-1} = \frac{1}{0.0199} \cdot \begin{bmatrix} 1 &amp; -0.99 \\ -0.99 &amp; 1\end{bmatrix} \approx \begin{bmatrix} 50.25 &amp; -49.75 \\ -49.75 &amp; 50.25 \end{bmatrix}\)</span></li>
+</ul></li>
+<li>For the <span class="math inline">\(\tilde X\)</span> in the example,
+<ul>
+<li><span class="math inline">\(\text{det}(\tilde X) = 1 \cdot 1.01 - 0.99 \cdot 0.99 = 1.01 - 0.9801 = 0.0299,\)</span></li>
+<li><span class="math inline">\(\text{adj}(\tilde X) = \begin{bmatrix} 1 &amp; -0.99 \\ -0.99 &amp; 1.01 \end{bmatrix}.\)</span></li>
+<li><span class="math inline">\(\tilde X^{-1} = \frac{1}{0.0299} \cdot \begin{bmatrix} 1 &amp; -0.99 \\ -0.99 &amp; 1.01 \end{bmatrix} \approx \approx \begin{bmatrix} 33.44 &amp; 0.3311 \\ 0.3311 &amp; 33.78 \end{bmatrix}\)</span></li>
+</ul></li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -499,14 +579,77 @@ var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - 
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="fragment">
-<!-- -->
-<h3 id="adjustment">Adjustment</h3>
-<ol type="1">
-<li class="fragment">Removed the highly collinear variables.</li>
-<li class="fragment">Remeasure the collinear variables (e.g., EFA, CFA, IRT)</li>
-</ol>
+</section>
+<section id="illustration-with-simulated-data" class="slide level2">
+<h2>Illustration with simulated data</h2>
+<p>E.g., <span class="math inline">\(X'_2 = 0.5X_1 + 0.5X_2 + \nu.\)</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a>df_sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  <span class="at">x1 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="fl">3.13</span>), <span class="at">x2 =</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.4</span>),</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  <span class="at">y =</span> <span class="dv">2</span> <span class="sc">+</span> .<span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> .<span class="dv">4</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7"></a></span>
+<span id="cb1-8"><a href="#cb1-8"></a>df_fake <span class="ot">&lt;-</span> df_sim <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9"></a>  <span class="fu">mutate</span>(<span class="at">x2 =</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.1</span>))  </span>
+<span id="cb1-10"><a href="#cb1-10"></a></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">cor</span>(df_fake<span class="sc">$</span>x1, df_fake<span class="sc">$</span>x2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9118169</code></pre>
 </div>
+</div>
+</section>
+<section id="consequence-of-multicollinearity-illustration" class="slide level2">
+<h2>Consequence of multicollinearity: Illustration</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ls_result <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">list</span>(df_sim, df_fake), \(dataset){</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dataset)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>}) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">set_names</span>(<span class="fu">c</span>(<span class="st">"True"</span>, <span class="st">"W. multicol"</span>))</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="fu">small_multiple</span>(ls_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
+<div class="cell-output-display">
+<p><img data-src="12_multiHeter_files/figure-revealjs/regComp-1.png" width="960"></p>
+</div>
+</div>
+</section>
+<section id="diagnosis" class="slide level2 smaller">
+<h2>Diagnosis</h2>
+<p><strong>Variance Inflation Factors</strong> (VIF, [1, +∞]): A measure of how much the variance of the estimated coefficient β<sub>x</sub> is “inflated” by the correlation among the predictor variables.</p>
+<p><span class="math display">\[VIF = \frac{1}{1 - {R}^{2}_{X_i}} = \frac{1}{Tolerance}\]</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\({R}^{2}_{X_i}\)</span>: The coefficient of determination for a regression model where X<sub>i</sub> is the dependent variable, and all other predictor variables are independent variables.
+<ul>
+<li class="fragment">1: no correlation between X<sub>1</sub> and the rest</li>
+<li class="fragment">Rule of thumb: 4, 10</li>
+<li class="fragment">E.g., VIF of the true model is 1.0000473, 1.0000473, and for the one with multicollinearity is 5.9315546, 5.9315546</li>
+</ul></li>
+<li class="fragment">Adjustment
+<ol type="1">
+<li class="fragment">Removed the highly collinear variables <span class="small">(what’s the problem of using it?)</span>.</li>
+<li class="fragment">Remeasure the collinear variables (e.g., EFA, CFA, IRT)</li>
+</ol></li>
+</ul>
+<aside class="notes">
+<p>Problems of using the first adjustment</p>
+<ol type="1">
+<li>Removing useful information</li>
+<li>Which variable to remove</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section></section>
 <section>
 <section id="heteroscedasticity" class="title-slide slide level1 center">
@@ -515,7 +658,12 @@ var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - 
 </section>
 <section id="whats-heteroscedasticity" class="slide level2">
 <h2>What’s Heteroscedasticity</h2>
-<p>Homo/heteroscedasticity ≈ Homo/heterogeneity (of variance)</p>
+<ul>
+<li class="fragment">Homo/heteroscedasticity ≈ Homo/heterogeneity (of variance), var(ε<sub>i</sub>|X) = σ<sup>2</sup>
+<ul>
+<li class="fragment">Violation: <span class="math inline">\(var(\epsilon_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.\)</span></li>
+</ul></li>
+</ul>
 <aside class="notes">
 <p>The word “heteroscedasticity” comes from the Greek, and quite literally means data with a different (hetero) dispersion (skedasis).</p>
 <p>Regression: Heteroscedasticity</p>
@@ -531,65 +679,98 @@ var(\hat\beta_1|X) =&amp;\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - 
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="fragment">
-<p>In CLR words, var(u<sub>i</sub>|X) = σ<sup>2</sup></p>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png" class="fragment" height="400"></p>
+</figure>
 </div>
-<div class="fragment">
-<p>Violation: <span class="math inline">\(var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.\)</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp" class="fragment" height="400"></p>
+</figure>
 </div>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png" class="r-stretch fragment">
-</section>
-<section id="heteroscedasticikty-in-distribution" class="slide level2">
-<h2>Heteroscedasticikty in Distribution</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp" class="r-stretch">
+</div>
 </section>
 <section id="consequence" class="slide level2">
 <h2>Consequence</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><span class="red">Unbiased</span>, expected consistent, but inefficient</p>
 <p><span class="math display">\[\begin{align}
-var(\hat\beta|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X),\\
-                 =&amp; var(\frac{\sum(X_i - \bar X)Y_i}{\sum(X_i - \bar X)^2}|X),\\
-                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}var(Y_i|X),\\
-                 =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.
-\end{align}\]</span></p>
-</div><div class="column fragment" style="width:50%;">
-<p><span class="math display">\[\begin{align}
+var(\hat\beta|X) =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.\\
 H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 \Leftrightarrow\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =&amp; \frac{\sigma^2}{\sum(X_i - \bar X)^2},\\
 \sum(X_i - \bar X)^2\frac{\sigma_i^2}{\sigma^2} =&amp; \sum(X_i - \bar X)^2
 \end{align}\]</span></p>
-<p>Only when <span class="math inline">\(\frac{\sigma_i^2}{\sigma^2} = 1\)</span>, the estimate is efficient.</p>
+<ul>
+<li class="fragment">Consequence
+<ul>
+<li class="fragment"><span class="red">Unbiased</span>, expected consistent, but inefficient</li>
+<li class="fragment">Only when <span class="math inline">\(\frac{\sigma_i^2}{\sigma^2} = 1\)</span>, the estimate is efficient.</li>
+</ul></li>
+<li class="fragment">Diagnosis: Breusck-Pagan(-Godfreg) test, Goldfeld-Quandt test, Park test, White test, etc.</li>
+</ul>
+</section>
+<section id="diagnosis-breusck-pagan-godfreg-test" class="slide level2">
+<h2>Diagnosis: Breusck-Pagan(-Godfreg) test</h2>
+<ol type="1">
+<li class="fragment">Assuming <span class="math inline">\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)</span></li>
+<li class="fragment">Regress <span class="math inline">\(\hat \epsilon_i^2\)</span> on <span class="math inline">\(X_1, X_2, \cdots, X_{k - 1}\)</span>,
+<ul>
+<li class="fragment"><span class="math inline">\(H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0\)</span></li>
+<li class="fragment"><span class="math inline">\(H_1\)</span>: At least one of the σ≠0</li>
+<li class="fragment">Statistics <span class="math inline">\(F_{k - 1, n - k}\)</span></li>
+</ul></li>
+</ol>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="12_multiHeter_files/figure-revealjs/bp-1.png" width="960"></p>
+</figure>
+</div>
+</div>
 </div>
 </div>
 </section>
-<section id="diagnosis-1" class="slide level2">
-<h2>Diagnosis</h2>
-<p>Goldfeld-Quandt test, Park test, Breusck-Pagan(-Godfreg) test, White test</p>
-<div class="fragment">
-<p><strong>Goldfeld-Quandt test</strong>:</p>
+<section id="diagnosis-goldfeld-quandt-test" class="slide level2 smaller">
+<h2>Diagnosis: Goldfeld-Quandt test</h2>
 <ol type="1">
-<li class="fragment">Divide the domain of X to three parts, <span class="math inline">\(\frac{n -c}{2}, c, \frac{n -c}{2}\)</span>.</li>
+<li class="fragment">Divide the domain of X to three parts, <span class="math inline">\(\frac{n -c}{2}, c, \frac{n -c}{2}\)</span>.<sup>1</sup></li>
 <li class="fragment">Regress Y on X as usual for each part.</li>
-<li class="fragment">Calculate <span class="math inline">\(\sigma_L^2\)</span> from part 1 and <span class="math inline">\(\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat u_i^2\)</span> from part 3.</li>
+<li class="fragment">Calculate <span class="math inline">\(\sigma_L^2\)</span> from part 1 and <span class="math inline">\(\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat \epsilon_i^2\)</span> from part 3.</li>
 <li class="fragment">Then test <span class="math inline">\(H_0: \sigma_L^2 = \sigma_H^2\)</span>
 <ul>
 <li class="fragment">Statistics: <span class="math inline">\(\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}\)</span></li>
 </ul></li>
 </ol>
-</div>
 <div class="fragment">
-<p>Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="12_multiHeter_files/figure-revealjs/gq-1.png" width="960"></p>
+</figure>
 </div>
-</section>
-<section class="slide level2">
-
-<p><strong>Park test</strong></p>
-<p>Ocular-inspection test: Use the scalar points of <span class="math inline">\(\hat u_i^2\)</span> against <span class="math inline">\(X_i\)</span>, or <span class="math inline">\(\hat u_i^2\)</span> against <span class="math inline">\(Y_i\)</span></p>
-<p>Regress <span class="math inline">\(ln(\hat u_i^2)\)</span> on some <span class="math inline">\(X_{ki}\)</span>:</p>
-<p><span class="math display">\[ln(\hat u_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.\]</span></p>
+</div>
+</div>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.</span></p></li></ol></aside></section>
+<section id="diagnosis-park-test" class="slide level2">
+<h2>Diagnosis: Park test</h2>
+<p>Ocular-inspection test: Use the scalar points of <span class="math inline">\(\hat \epsilon_i^2\)</span> against <span class="math inline">\(X_i\)</span><sup>1</sup></p>
+<p>Regress <span class="math inline">\(ln(\hat \epsilon_i^2)\)</span> on some <span class="math inline">\(X_{ki}\)</span>: <span class="math display">\[ln(\hat \epsilon_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.\]</span></p>
 <p>Do the t-test of coefficient in <span class="math inline">\(ln(X_i)\)</span>: <span class="math inline">\(H_0: \hat\delta_1 = 0.\)</span></p>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="12_multiHeter_files/figure-revealjs/park-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
 <aside class="notes">
 <p>Ocular: 望远镜</p>
 <p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_parkTest.png" height="200"></p>
@@ -604,37 +785,91 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="columns">
-<div class="column fragment" style="width:50%;">
-<p><strong>Breusck-Pagan(-Godfreg) test</strong></p>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>Or <span class="math inline">\(\hat \epsilon_i^2\)</span> against <span class="math inline">\(Y_i\)</span></p></li></ol></aside></section>
+<section id="diagnosis-white-test" class="slide level2">
+<h2>Diagnosis: White Test</h2>
 <ol type="1">
-<li class="fragment">Assuming <span class="math inline">\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)</span></li>
-<li class="fragment">Regress <span class="math inline">\(\hat u_i^2\)</span> on <span class="math inline">\(X_1, X_2, \cdots, X_{k - 1}\)</span>,
-<ul>
-<li class="fragment"><span class="math inline">\(H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0\)</span></li>
-<li class="fragment"><span class="math inline">\(H_1\)</span>: At least one of the σ≠0</li>
-<li class="fragment">Statistics <span class="math inline">\(F_{k - 1, n - k}\)</span></li>
-</ul></li>
-</ol>
-</div><div class="column fragment" style="width:50%;">
-<p><strong>White Test</strong></p>
-<ol type="1">
-<li class="fragment">Regress Y on X to get <span class="math inline">\(\hat u_i^2\)</span></li>
-<li class="fragment">Regress <span class="math inline">\(\hat u_i^2\)</span> on <span class="math inline">\(\sum X_i + \sum X_i^2 + \sum X_iX_j\)</span> or <span class="math inline">\(\hat Y_i\)</span>.</li>
+<li class="fragment">Regress Y on X to get <span class="math inline">\(\hat \epsilon_i^2\)</span></li>
+<li class="fragment">Regress <span class="math inline">\(\hat \epsilon_i^2\)</span> on <span class="math inline">\(\sum X_i + \sum X_i^2 + \sum X_iX_j\)</span> or <span class="math inline">\(\hat Y_i\)</span>.</li>
 <li class="fragment">Test this model against a model with no variables (F test).</li>
 </ol>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="12_multiHeter_files/figure-revealjs/white-1.png" width="960"></p>
+</figure>
 </div>
 </div>
+</div>
+</div>
+</section>
+<section id="when-to-use-which" class="slide level2">
+<h2>When to use which</h2>
+<ul>
+<li class="fragment">Choose based on data conditions
+<ul>
+<li class="fragment">E.g., BP test examines X<sub>i</sub> affects the squared residuals, GQ tests differences between subsamples ⇒ Not yield the same result</li>
+</ul></li>
+</ul>
+
+<img data-src="12_multiHeter_files/figure-revealjs/simulatedData-1.png" width="960" class="r-stretch quarto-figure-center"></section>
+<section class="slide level2">
+
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Goldfeld-Quandt test
+
+data:  m_fit
+GQ = 8.6335, df1 = 4997, df2 = 4997, p-value &lt; 2.2e-16
+alternative hypothesis: variance increases from segment 1 to 2</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Goldfeld-Quandt test
+
+data:  m_fit
+GQ = 1.0463, df1 = 4997, df2 = 4997, p-value = 0.05494
+alternative hypothesis: variance increases from segment 1 to 2</code></pre>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  m_fit
+BP = 1546.1, df = 1, p-value &lt; 2.2e-16</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  m_fit
+BP = 1.0021, df = 1, p-value = 0.3168</code></pre>
+</div>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">If you have a <strong>specific</strong> hypothesis about the variance changes (e.g., increasing with the level of an explanatory variable), the Goldfeld-Quandt or Park test might be appropriate.</li>
+<li class="fragment">If you’re <strong>unsure</strong> of the form of heteroscedasticity or have <strong>multiple</strong> Xs, the Breusch-Pagan or White test would be more suitable.</li>
+</ul>
 </section>
 <section id="adjustment-white-covariance-matrix" class="slide level2">
 <h2>Adjustment: White covariance matrix</h2>
 <p>(a.k.a., Heteroscedasitic-consistent covariance matrix).</p>
-<p><span class="math display">\[E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}\]</span></p>
+<p><span class="math display">\[E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}\]</span></p>
 <div class="fragment">
-<p>Since E(u<sub>i</sub>|X) = 0 by assumption, we can estimate <span class="math inline">\(u_i\)</span> with <span class="math inline">\(\hat u_i^2\)</span> and estimate <span class="math inline">\(var(\hat\beta_1|X)\)</span> with <span class="math inline">\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.\)</span></p>
+<p>Since E(ε<sub>i</sub>|X) = 0 by assumption, we can estimate <span class="math inline">\(\epsilon_i\)</span> with <span class="math inline">\(\hat \epsilon_i^2\)</span> and estimate <span class="math inline">\(var(\hat\beta_1|X)\)</span> with <span class="math inline">\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.\)</span></p>
 </div>
 <div class="fragment">
-<p>The estimates turn out to be <span class="red">biased</span>, but converge asymptotically in n to the true distribution. (What does this imply?)</p>
+<p>The estimates turn out to be <span class="red">biased</span>, but converge asymptotically in n to the true distribution. <span class="small">(What does this imply?)</span></p>
 </div>
 <aside class="notes">
 <p>Means it’s fine when N is large enough.</p>
@@ -654,19 +889,22 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <h2>Adjustment: Weighted least square</h2>
 <p>Reduce the substantive effect of the change in X by <span class="math inline">\(\frac{1}{\sigma_i}\)</span>, in order to squeeze the value towards the middle: If σ<sub>i</sub> is known,</p>
 <p><span class="math display">\[\begin{align}
-\frac{Y_i}{\sigma_i} =&amp; \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{u_i}{\sigma_i};\\
-\text{Then, } var(\frac{u_i}{\sigma_i}) =&amp; \frac{1}{\sigma_i^2}var(u_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
-\Rightarrow Y_i^* =&amp; \beta_0X^*_{0i} + \beta_1X^*_{1i} + u_i^*.
+\frac{Y_i}{\sigma_i} =&amp; \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
+\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =&amp; \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
+\Rightarrow Y_i^* =&amp; \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*.
 \end{align}\]</span></p>
 <div class="fragment">
-<p>The last equation is homoscedastistic. However, in most cases, we don’t know σ<sub>i</sub> ⇒ var(u<sub>i</sub>)∼ X<sub>1i</sub>, i.e., var(u<sub>i</sub>) = σ<sub>i</sub><sup>2</sup> = σ<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>σ<sup>2</sup>.</p>
+<p>The last equation is homoscedastistic. However, in most cases, we don’t know σ<sub>i</sub> ⇒ var(ε<sub>i</sub>)∼ X<sub>1i</sub>, i.e., var(ε<sub>i</sub>) = σ<sub>i</sub><sup>2</sup> = σ<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>σ<sup>2</sup>.</p>
 </div>
+</section>
+<section class="slide level2">
+
 <div class="columns">
 <div class="column fragment" style="width:70%;">
-<p>Given the goal var(u<sup>*</sup><sub>i</sub>) = var(u<sup>*</sup><sub>j</sub>), ∀ i,j.</p>
+<p>Given the goal var(ε<sup>*</sup><sub>i</sub>) = var(ε<sup>*</sup><sub>j</sub>), ∀ i,j.</p>
 <p><span class="math display">\[\begin{align}
-u^*_i =&amp; \frac{u_i}{\sqrt{h_i}},\\
-var(\frac{u_i}{\sqrt{h_i}}) =&amp; \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
+\epsilon^*_i =&amp; \frac{\epsilon_i}{\sqrt{h_i}},\\
+var(\frac{\epsilon_i}{\sqrt{h_i}}) =&amp; \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
 \Rightarrow Y_i^* =&amp; \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
 \end{align}\]</span></p>
 </div><div class="column fragment" style="width:30%;">
@@ -683,11 +921,11 @@ var(\frac{u_i}{\sqrt{h_i}}) =&amp; \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i
 </div>
 </div>
 </section>
-<section id="adjustment-feasible-generalized-linear-squares-fgls" class="slide level2">
+<section id="adjustment-feasible-generalized-linear-squares-fgls" class="slide level2 smaller">
 <h2>Adjustment: Feasible Generalized Linear Squares (FGLS)</h2>
 <p><span class="math display">\[\begin{align}
-\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{u}; \\
-var(\boldsymbol{u}) =&amp; \Omega_{n\times n} = \left(
+\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
+var(\boldsymbol{\epsilon}) =&amp; \Omega_{n\times n} = \left(
        \begin{array}{cccc}
        \sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
        0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
@@ -695,24 +933,24 @@ var(\boldsymbol{u}) =&amp; \Omega_{n\times n} = \left(
        0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
        \end{array}\right),\\
 \text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u},
-\boldsymbol{H^{-1}u} = \boldsymbol{H^{-1}(H^{-1})'};\\
-var(\boldsymbol{u})=&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
+\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{\epsilon})=&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
 var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
 \end{align}\]</span></p>
-<div class="fragment">
 <ul>
 <li class="fragment">If there’s no heteroscedasticity, <span class="math inline">\(\boldsymbol{\Omega} = \sigma\boldsymbol{I}.\)</span></li>
 <li class="fragment">If there is heteroscedasticity and <span class="math inline">\(\boldsymbol{\Omega}\)</span> is known, then WLS (a special type of GLS).</li>
-<li class="fragment">If <span class="math inline">\(\boldsymbol{\Omega}\)</span> is unknown, run <span class="math inline">\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{u}\)</span> to estimate <span class="math inline">\(\boldsymbol{\Omega}\)</span> with <span class="math inline">\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat u\hat u'}\)</span></li>
+<li class="fragment">If <span class="math inline">\(\boldsymbol{\Omega}\)</span> is unknown, run <span class="math inline">\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}\)</span> to estimate <span class="math inline">\(\boldsymbol{\Omega}\)</span> with <span class="math inline">\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}\)</span></li>
 </ul>
+<div class="fragment">
 <div class="callout callout-warning callout-style-simple">
 <div class="callout-body">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-content">
-<p>NB: This method does not get SE, and also [biased].red for small N.</p>
+<p>NB: This method does not get SE, and also <span class="red">biased</span> for small N.</p>
 </div>
 </div>
 </div>
@@ -735,62 +973,96 @@ var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\
 <p>But when heteroscedasticity occurs, <span class="math inline">\(var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}\)</span>.</p>
 <p>Instead, let <span class="math inline">\(\boldsymbol{G} = \boldsymbol{X'GX}\)</span>, then <span class="math inline">\(var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.\)</span></p>
 </section>
-<section id="heterogeneity-in-tscs-data" class="slide level2">
-<h2>Heterogeneity in TSCS Data</h2>
-<p>TSCS: Time-series cross-sectional data. Sometimes, they are called “pooled data”, “panel data”(wrong!)</p>
-<p>Dealing with heterogeneity in TSCS data:</p>
+<section id="heteroscedasticity-in-tscs-data" class="slide level2">
+<h2>Heteroscedasticity in TSCS Data</h2>
+<ul>
+<li class="fragment">TSCS: Time-series cross-sectional data.
+<ul>
+<li class="fragment">Sometimes, they are called “pooled data”, “panel data”(WRONG!)</li>
+</ul></li>
+<li class="fragment">Reason of heterosceasticity
+<ul>
+<li class="fragment">Spatical heterogeneity</li>
+<li class="fragment">Temporal heterogeneity</li>
+</ul></li>
+<li class="fragment">Deal with heteroscedasticity in TSCS data:
 <ol type="1">
 <li class="fragment">Robust standard error</li>
 <li class="fragment">Fixed effect</li>
 <li class="fragment">Multilevel modeling</li>
-</ol>
+</ol></li>
+</ul>
 </section>
-<section id="robust-standard-error" class="slide level2">
+<section id="robust-standard-error" class="slide level2 smaller">
 <h2>Robust Standard Error</h2>
-<p><strong>Sandwich SE</strong></p>
-<p>In the FGLS version, the “meat” can be identified only when T &gt; N, and before this, the autocorrelation (<span class="math inline">\(cov(u_i, u_j|X_i, X_j) = 0, \forall i, j\)</span>) has to be eliminated.</p>
-<div class="fragment">
-<p><strong>Panel-corrected SE</strong></p>
-<p>An alternative version of the sandwich SE. Ω is clustered by time periods: <span class="math inline">\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)</span></p>
-</div>
-<div class="fragment">
-<p><strong>Cluster SE</strong></p>
-<p>Adjust SE to account for correlations within clusters.</p>
-<div class="fragment">
-<p><strong>Within-between model</strong></p>
+<ul>
+<li class="fragment"><strong>Sandwich SE</strong>
+<ul>
+<li class="fragment">In the FGLS version, the “meat” can be identified only when T &gt; N, and before this, the autocorrelation (<span class="math inline">\(cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j\)</span>) has to be eliminated.</li>
+</ul></li>
+<li class="fragment"><strong>Panel-corrected SE</strong>
+<ul>
+<li class="fragment">An alternative version of the sandwich SE. Ω is clustered by time periods: <span class="math inline">\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)</span></li>
+</ul></li>
+<li class="fragment"><strong>Cluster SE</strong>
+<ul>
+<li class="fragment">Adjust SE to account for correlations within clusters.</li>
+</ul></li>
+<li class="fragment"><strong>Within-between model</strong>
 <ol type="1">
 <li class="fragment">Run separate models in each group</li>
 <li class="fragment">Run an aggregate regression</li>
-</ol>
-</div>
+</ol></li>
+</ul>
 <div class="fragment">
-<p>Let <span class="math inline">\(\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar u_i = \frac{\sum^n_{i=1}u_{it}}{n_i}\)</span>. Then,</p>
+<p>Let <span class="math inline">\(\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}\)</span>. Then,</p>
 <p><span class="math display">\[\begin{align}
-\bar{Y_i} =&amp; \beta_0 + \beta_1\bar{X_i} + \epsilon_i + u_i\\
-Y_{it} - \bar{Y_i} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (u_{it} - u_i)\\
-\hat{Y_i} =&amp; \beta_1\hat{X_{it}} + \hat{u_{it}}, \text{(a.k.a., the within model)}\\
-Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it}, \text{(a.k.a., the between model)}
+\bar{Y_i} =&amp; \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
+Y_{it} - \bar{Y_i} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
+\hat{Y_i} =&amp; \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
+Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
 \end{align}\]</span></p>
 </div>
-</div>
+</section>
+<section id="alternative-methods" class="slide level2">
+<h2>Alternative Methods</h2>
+<ul>
+<li class="fragment">Fixed effect
+<ul>
+<li class="fragment">Least Square with Dummy Variables (LSDV)</li>
+<li class="fragment">Demeaning</li>
+<li class="fragment">Fixed effect vector decomposition (FEVD)</li>
+</ul></li>
+<li class="fragment">Multilevel modeling
+<ul>
+<li class="fragment">Random intercept</li>
+<li class="fragment">Random slop</li>
+</ul></li>
+</ul>
+</section>
+<section id="take-home-point" class="slide level2">
+<h2>Take-home point</h2>
+<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png" class="r-stretch">
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 center">
+<h1>Appendix</h1>
+
 </section>
 <section id="fixed-effect" class="slide level2">
 <h2>Fixed Effect</h2>
 <p><strong>Least Square with Dummy Variables</strong> (LSDV)</p>
-<p>Type I:</p>
-<p><span class="math display">\[Y_{it} = \beta_1X_{it} + \alpha_i + u_{it},\]</span> in which α is unit-specific mean differences (unit fixed effect).</p>
-<div class="fragment">
-<p>Type II:</p>
-<p><span class="math display">\[Y_it = \sum^T_{t = 1}\delta_tD_{t_i} + \beta_1X_{it} + u_{it},\]</span> in which <span class="math inline">\(\delta_tD_{t_i}\)</span> is the fixed effect for time.</p>
-</div>
-<div class="fragment">
-<h3 id="issues-of-lsdv">Issues of LSDV</h3>
+<ul>
+<li class="fragment">Type I: <span class="math inline">\(Y_{it} = \beta_1X_{it} + \alpha_i + \epsilon_{it},\)</span> in which α is unit-specific mean differences (unit fixed effect).</li>
+<li class="fragment">Type II: <span class="math inline">\(Y_it = \sum^T_{t = 1}\delta_tD_{t_i} + \beta_1X_{it} + \epsilon_{it},\)</span> in which <span class="math inline">\(\delta_tD_{t_i}\)</span> is the fixed effect for time.</li>
+<li class="fragment">Issues for using LSDV
 <ol type="1">
 <li class="fragment">Adding a lot of variables (risk of using out of the d.f.);</li>
 <li class="fragment">Additional high multicollinearity;</li>
 <li class="fragment">Losing time invariant variables;</li>
 <li class="fragment">Inefficient estimates of FE on binary and dependent variables.</li>
-</ol>
+</ol></li>
+</ul>
 <aside class="notes">
 <p>For the last two concerns, considering using duration models.</p>
 <style type="text/css">
@@ -804,7 +1076,6 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it},
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section>
 <section id="alternatives-adjustments" class="slide level2">
 <h2>Alternatives adjustments</h2>
@@ -813,7 +1084,7 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it},
 <li class="fragment">Fixed effect vector decomposition (FEVD)</li>
 </ol>
 <div class="fragment">
-<p>Con :</p>
+<p>Cons:</p>
 <ol type="1">
 <li class="fragment">Can’t offer sufficient information (heterogeneous to what extent?).</li>
 <li class="fragment">Difficult to calculate substantive effects, e.g., first differences.</li>
@@ -826,9 +1097,12 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it},
 </section>
 <section id="mlm" class="slide level2">
 <h2>MLM</h2>
-<p>Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes.</p>
+<ul>
+<li class="fragment">Target: Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes.</li>
+<li class="fragment">Also called as hierarchical linear models (HLM), mixed models, random coefficient models, and variance component models</li>
+</ul>
 <aside class="notes">
-<p>e.g., Assuming var(u<sub>i</sub>) = σ<sup>2</sup>e<sup>γ<sub>1</sub>X<sub>2i</sub></sup>.</p>
+<p>e.g., Assuming var(ε<sub>i</sub>) = σ<sup>2</sup>e<sup>γ<sub>1</sub>X<sub>2i</sub></sup>.</p>
 <p>If γ<sub>1</sub> = 0, then the model is homoscedastistic; otherwise, one has to use MLE to test H<sub>0</sub>: γ<sub>1</sub> = 0.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -866,9 +1140,9 @@ Y_{ij} = \beta_{0j}&amp; + \beta_{1j}X_{ij} + \epsilon_{ij}, \epsilon_{ij}\sim N
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="columns">
-<div class="column fragment" style="width:60%;">
-<p>Random Slop:</p>
+</section>
+<section id="random-slop-mlm" class="slide level2">
+<h2>Random-Slop MLM</h2>
 <p><span class="math display">\[\begin{align}
 Y_{ij} = &amp;\beta_{0j} + \beta_{1j}X_{ij} + \epsilon_{ij}\\
        &amp;\beta_{0j} = \gamma_{00} + \gamma_{01}Z_j + u_{0j}\\
@@ -895,13 +1169,6 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div><div class="column fragment" style="width:40%;">
-<p><span class="math display">\[\begin{align}
-\left(\begin{array}{cc}
-\tau_0^2 &amp; \tau_0\tau_1\\
-\tau_0\tau_1 &amp; \tau_1^2
-\end{array}\right)
-\end{align}\]</span></p>
 <ol type="1">
 <li class="fragment">Identity: τ<sub>0</sub><sup>2</sup> = τ<sub>1</sub><sup>2</sup> = 1;</li>
 <li class="fragment"><span class="navy">Exchangeable: τ<sub>0</sub><sup>2</sup>= τ<sub>1</sub><sup>2</sup>;</span></li>
@@ -921,20 +1188,11 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
-</div>
-</section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png" class="r-stretch">
-</section>
-<section id="have-a-break" class="slide level2">
-<h2>Have a break</h2>
-<video id="video_shortcode_videojs_video2" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
 <div class="footer footer-default">
 
 </div>
 </section></section>
+
     </div>
   </div>
 
@@ -1348,7 +1606,6 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
         }
     });
     </script>
-    
     
     
 

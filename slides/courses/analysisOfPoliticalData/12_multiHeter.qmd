@@ -1,13 +1,13 @@
 ---
 title: "Multicollinearity & Heteroskedasticity"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
-knitr: 
-    opts_chunk: 
-      echo: false
-
+execute:
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
     css: https://sammo3182.github.io/slides_gh/css/style_basic.css
@@ -21,19 +21,16 @@ format:
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
     callout-appearance: simple
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
 filters:
   - lightbox
-
 revealjs-plugins:
   - spotlight
-
 # lightbox: auto
 spotlight:
   size: 50
@@ -47,16 +44,17 @@ if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  tidyverse,
   patchwork,
   drhutools,
   ggeffects,
-  dotwhisker
+  dotwhisker,
+  lmtest,
+  tidyverse
 ) 
 
 
 # Functions preload
-set.seed(114)
+set.seed(313)
 
 theme_set(
   theme_minimal(base_size = 18)
@@ -73,19 +71,17 @@ theme_update(
 ## A Question Left from the Last Lecture
 
 :::{.fragment style="text-align:center"}
-Why should we use multiple regression? 
+Why should we use multiple regression, and why *controls*? 
 :::
-
-:::{.fragment style="text-align:center"}
-Why *controls*? 
-:::
-
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif){.r-stretch .fragment}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif){.r-stretch .fragment}
+
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif){.fragment}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif){.fragment}
+:::
 
 :::{.notes}
 We wanna understand things realistically and predict them.
@@ -109,17 +105,17 @@ Things happens all together, while we care what's the most important
 1. X has positive noninfinite variance (var(X)); &larr; [&check;]{.gray} Data collection
 1. Correct specification;  &larr; [&check;]{.green} [Specification](/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html)
 1. Identification (N > K; K = 2 for a simple OLS);  &larr; [&check;]{.gray} Data collection & perfect collinearity [(Today)]{.golden}
-1. Mean zero errors (E(u<sub>i</sub>|X<sub>i</sub>) = 0); &larr; [&#9083;]{.green} [Specification](/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html) (Omited variables, etc.) & [Missing](/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html)
-1. No covariance between X<sub>i</sub> and u<sub>i</sub>; &larr; [&cross;]{.red} [Endogeneity issue](/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html)
+1. Mean zero errors (E(&epsilon;<sub>i</sub>|X<sub>i</sub>) = 0); &larr; [&#9083;]{.green} [Specification](/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html) (Omited variables, etc.) & [Missing](/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html)
+1. No covariance between X<sub>i</sub> and &epsilon;<sub>i</sub>; &larr; [&cross;]{.red} [Endogeneity issue](/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html)
 1. No autocorrelation; &larr; [&cross;]{.red} [Autocorrelation issue](/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html)
 1. No perfect collinearity &larr; [&cross;]{.red} [(Today)]{.golden}
 1. Homoskedasticity; &larr; [&cross;]{.red} [(Today)]{.golden}
 
 ## Quiz Time
 
-Based on what you've known, what does the youtuber did right & wrong?
+Based on what you've known, what does the Upper did right & wrong?
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xMWhrbmMyN1VtWnZicDlRP2U9ZzIxQjNt.mp4" >}}
+{{< video src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_quiz.mp4" height="500" >}}
 
 
 
@@ -140,7 +136,7 @@ Based on what you've known, what does the youtuber did right & wrong?
 
 ## Perfect Collinearity
 
-$$X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$$
+$$X_{2i} = \hat\delta_0 + \hat\delta_1X_{1i} + \hat r_{1i}.$$
 
 When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then $\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}$ cannot be estimated.
 
@@ -148,21 +144,26 @@ When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then $\hat\beta_
 
 ::: {.column .fragment width="50%"}
 
+E.g., $X_{2i} = 1 + 2X_{1i}.$
+
 ![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg){width=450}
 
 :::
 
 ::: {.column .fragment width="50%"}
-e.g., Let's say in the PRF Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>1</sub> + &beta;<sub>2</sub>X<sub>2</sub> + u, X<sub>2</sub> = 1 + 2X<sub>1</sub>, then
 
+:::{.small}
 \begin{align}
-Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat u \\
-    =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat u \\
-    =& (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat u\\
-\Rightarrow Y_i =& \hat\alpha_0 + \hat\alpha_1X_{1} + \hat u
+Y_i =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \text{(PRF)}\\
+    =& \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2(1 + 2X_1) + \hat \epsilon, \\
+    =& (\hat\beta_0 + \hat\beta_2) + (\hat\beta_1 + 2\hat\beta_2)X_1 + \hat \epsilon,\\
+\Rightarrow Y_i =& \tilde\beta_0 + \tilde\beta_1X_{1} + \hat \epsilon.
 \end{align}
+:::
 
-PRF (&beta;<sub>1</sub> or &beta;<sub>2</sub>) is non-identifiable. 
+- Consequence
+    - $\hat\epsilon$ is unbiased
+    - PRF (&beta;<sub>2</sub>) is [nonidentifiable]{.red} 
 
 :::{.notes}
 PRF: population regression function
@@ -172,73 +173,109 @@ PRF: population regression function
 
 ::::
 
-:::{.fragment .r-fit-text}
-*Problematic, but [only]{.red} when perfect*
-:::
-
 
 
 ## Multicollinearity
 
-If **X**<sub>2</sub> is not a transformation of X<sub>1</sub>, the estimators (**&beta;**) remain [unbiased]{.red}, yet
+- Variance
+    - $var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},$
+        - Where $\beta_{12} = cov(X_1, X_2)$.
+    - As &beta;<sub>12</sub> increases, the variance also increases [(What does that mean?)]{.small}.
+- Coefficient
+    - $\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}$
+        - Small changes in X can lead to dramatic changes in $(\boldsymbol{X'X})^{-1}$, and thus $\hat\beta$. [(Why?)]{.small}
 
-:::{.fragment}
-\begin{align}
-var(\hat\beta_1|X) =&\frac{\sigma^2\sum(X_{2i} - \bar X_2)^2}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
-=&\frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)}, \text{where }\beta_{12} = cov(X_1, X_2).
-\end{align}
+:::{.notes}
+E.g., $X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1 \end{bmatrix}, \tilde X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1.01 \end{bmatrix}$
+
+To calculate the inverse matrix of matrix X, $X^{-1} = \frac{1}{\text{det}(X)} \cdot \text{adj}(X)$, where det(X) is the determinant of matrix X, and the adj(X) is the adjugate of matrix X (the transpose of the cofactor matrix of X).
+
+- $\text{det}(X) = \sum_{i=1}^{n} (-1)^{i+j} \cdot x_{ij} \cdot \text{det}(X_{ij})$ where:
+    - $n$ is the order (number of rows or columns) of matrix X.
+    - $x_{ij}$ represents the element in the $i$-th row and $j$-th column of matrix X.
+    - $\text{det}(X_{ij})$ is the determinant of the submatrix obtained by removing the $i$-th row and $j$-th column from X.
+    - For a 2&times;2 matrix, $\text{det}(X) = x_{11} \cdot x_{22} - x_{12} \cdot x_{21}$
+
+- $\text{adj}(X) = (C_{ij})^{T}$, $C_{ij} = (-1)^{i+j} \cdot \text{det}(X_{ji})$, where:
+    - $C_{ij}$ is the element in the $i$-th row and $j$-th column of the cofactor matrix $C$.
+    - $\text{det}(X_{ji})$ is the determinant of the submatrix obtained by removing the $j$-th row and $i$-th column from X (note the reversal of indices compared to the determinant formula).
+
+- For the X in the example,
+    - $\text{det}(X) = 1 \cdot 1 - 0.99 \cdot 0.99 = 1 - 0.9801 = 0.0199,$
+    - $\text{adj}(X) = \begin{bmatrix} 1 & -0.99 \\ -0.99 & 1 \end{bmatrix}.$
+    - $X^{-1} = \frac{1}{0.0199} \cdot \begin{bmatrix} 1 & -0.99 \\ -0.99 & 1\end{bmatrix} \approx \begin{bmatrix} 50.25 & -49.75 \\ -49.75 & 50.25 \end{bmatrix}$
+
+- For the $\tilde X$ in the example,
+    - $\text{det}(\tilde X) = 1 \cdot 1.01 - 0.99 \cdot 0.99 = 1.01 - 0.9801 = 0.0299,$
+    - $\text{adj}(\tilde X) = \begin{bmatrix} 1 & -0.99 \\ -0.99 & 1.01 \end{bmatrix}.$
+    - $\tilde X^{-1} = \frac{1}{0.0299} \cdot \begin{bmatrix} 1 & -0.99 \\ -0.99 & 1.01 \end{bmatrix} \approx \approx \begin{bmatrix} 33.44 & 0.3311 \\ 0.3311 & 33.78 \end{bmatrix}$
+    
 :::
 
-:::{.fragment}
-As &beta;<sub>12</sub> increases, the variance also increases (What does that mean?).
-:::
+## Illustration with simulated data
+
+E.g., $X'_2 = 0.5X_1 + 0.5X_2 + \nu.$
+
+```{r simulation}
+#| echo: true
+
+n <- 10000
+
+df_sim <- tibble(
+  x1 = rnorm(n, mean = 3.13), x2 = rnorm(n, sd = 0.4),
+  y = 2 + .2 * x1 + .4 * x2 + rnorm(n)
+)
+
+df_fake <- df_sim |> 
+  mutate(x2 = 0.5 * x1 + 0.5 * x2 + rnorm(n, sd = 0.1))  
+
+cor(df_fake$x1, df_fake$x2)
+```
+
+## Consequence of multicollinearity: Illustration
+
+```{r regComp}
+#| echo: true
+#| output-location: fragment
+
+ls_result <- map(list(df_sim, df_fake), \(dataset){
+  lm(y ~ x1 + x2, data = dataset)
+}) |>
+  set_names(c("True", "W. multicol"))
+
+small_multiple(ls_result)
+```
 
 
----
+## Diagnosis {.smaller}
 
-## Diagnosis
+**Variance Inflation Factors** (VIF, [1, +&infin;]): A measure of how much the variance of the estimated coefficient &beta;<sub>x</sub> is "inflated" by the correlation among the predictor variables.
 
-**Variance Inflation Factors** (VIF, [1, +&infin;]): A measure of how much the variance of the estimated coefficient &beta;<sub>k</sub> is "inflated" by the correlation among the predictor variables.
+$$VIF = \frac{1}{1 - {R}^{2}_{X_i}} = \frac{1}{Tolerance}$$
 
-$$VIF = \frac{1}{1 - {R}^{2}_{k}} = \frac{1}{Tolerance}$$
+- ${R}^{2}_{X_i}$: The coefficient of determination for a regression model where X<sub>i</sub> is the dependent variable, and all other predictor variables are independent variables.
+    - 1: no correlation between X<sub>1</sub> and the rest
+    - Rule of thumb: 4, 10
+    - E.g., VIF of the true model is `r car::vif(ls_result[[1]])`, and for the one with multicollinearity is `r car::vif(ls_result[[2]])`
 
-
-:::{.fragment}
-1 means that no correlation among the k<sup>th</sup> predictor and the remaining predictor variables, and hence the variance of the coefficient is not inflated at all.
-:::
-
-
-:::{.fragment}
-Rule of thumb: 4, 10
-:::
-
-:::{.fragment}
-:::{.callout-tip}
-In most cases, you don't need this, why?
-:::
-:::
-
+- Adjustment
+    1. Removed the highly collinear variables [(what's the problem of using it?)]{.small}.
+    1. Remeasure the collinear variables (e.g., EFA, CFA, IRT)
 
 
 :::{.notes}
-Perfect then unidentified; but if your core X is insignificant.
+Problems of using the first adjustment
+
+1. Removing useful information
+1. Which variable to remove
 :::
-
-
-:::{.fragment}
-### Adjustment
-
-1. Removed the highly collinear variables.
-1. Remeasure the collinear variables (e.g., EFA, CFA, IRT)
-:::
-
-
 
 # Heteroscedasticity
 
 ##  What's Heteroscedasticity
 
-Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance)
+- Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance), var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>
+    - Violation: $var(\epsilon_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$
 
 :::{.notes}
 The word “heteroscedasticity” comes from the Greek, and quite literally means data with a different (hetero) dispersion (skedasis).
@@ -249,81 +286,109 @@ ANOVA: Heterogeneity (of variance)
 :::
 
 
-:::{.fragment}
-In CLR words, var(u<sub>i</sub>|X) = &sigma;<sup>2</sup>
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png){.fragment fig-align="center" height=400}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp){.fragment fig-align="center" height=400}
 :::
-
-:::{.fragment}
-Violation: $var(u_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$
-:::
-
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png){.r-stretch .fragment}
-
-## Heteroscedasticikty in Distribution
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp){.r-stretch}
 
 
 ## Consequence
 
-:::: {.columns}
-
-::: {.column width="50%"}
-[Unbiased]{.red}, expected consistent, but inefficient
-
 \begin{align}
-var(\hat\beta|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X),\\
-                 =& var(\frac{\sum(X_i - \bar X)Y_i}{\sum(X_i - \bar X)^2}|X),\\
-                 =& \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}var(Y_i|X),\\
-                 =& \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.
-\end{align}
-:::
-
-::: {.column .fragment width="50%"}
-\begin{align}
+var(\hat\beta|X) =& \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.\\
 H_0: var(\hat\beta|X) =& \sum(X_i - \bar X)^2;\\
 \Leftrightarrow\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2 =& \frac{\sigma^2}{\sum(X_i - \bar X)^2},\\
 \sum(X_i - \bar X)^2\frac{\sigma_i^2}{\sigma^2} =& \sum(X_i - \bar X)^2
 \end{align}
 
-Only when $\frac{\sigma_i^2}{\sigma^2} = 1$, the estimate is efficient.
-:::
+- Consequence
+    - [Unbiased]{.red}, expected consistent, but inefficient
+    - Only when $\frac{\sigma_i^2}{\sigma^2} = 1$, the estimate is efficient.
 
-::::
+- Diagnosis: Breusck-Pagan(-Godfreg) test, Goldfeld-Quandt test, Park test, White test, etc.
 
+## Diagnosis: Breusck-Pagan(-Godfreg) test
 
-
-## Diagnosis
-
-Goldfeld-Quandt test, Park test, Breusck-Pagan(-Godfreg) test, White test
+1. Assuming $\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}$
+1. Regress $\hat \epsilon_i^2$ on $X_1, X_2, \cdots, X_{k - 1}$, 
+    - $H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0$
+    - $H_1$: At least one of the &sigma;&ne;0
+    - Statistics $F_{k - 1, n - k}$
 
 :::{.fragment}
-**Goldfeld-Quandt test**:
+```{r bp}
+#| fig-align: center
+#| fig-height: 3.5
 
-1. Divide the domain of X to three parts, $\frac{n -c}{2}, c, \frac{n -c}{2}$. 
+n <- 1000
+
+df_sim <- tibble(x = runif(n, 1, 10),
+                 y = 2 * x + rnorm(n, sd = x / 2)) %>% 
+  mutate(cut = case_when(x < median(x) - sd(x)/4 ~ "L(n - c)",
+                         x > median(x) + sd(x)/4 ~ "U(n - c)",
+                         TRUE ~ NA),
+         res = lm(y ~ x) %>% resid())
+
+# Breusch-Pagan-Godfrey Test Visualization
+
+df_sim$squared_resid <- df_sim$res^2
+
+ggplot(df_sim, aes(x = x, y = squared_resid)) +
+  geom_point() +
+  xlab("X") +
+  ylab(expression(epsilon[i]^2))
+```
+:::
+
+
+## Diagnosis: Goldfeld-Quandt test {.smaller}
+
+1. Divide the domain of X to three parts, $\frac{n -c}{2}, c, \frac{n -c}{2}$.^[[Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.]{.fragment}]
 1. Regress Y on X as usual for each part.
-1. Calculate $\sigma_L^2$ from part 1 and $\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat u_i^2$ from part 3.
+1. Calculate $\sigma_L^2$ from part 1 and $\sigma_H^2 = \frac{\sum^n_{i = \frac{n + c}{2} + 1}}{\frac{n - c}{2} - k}\hat \epsilon_i^2$ from part 3.
 1. Then test $H_0: \sigma_L^2 = \sigma_H^2$
     + Statistics: $\frac{\sigma_L^2}{\sigma_H^2}\sim F_{\frac{n - c - 2k}{2}, \frac{n - c - 2k}{2}}$
-:::
-
 
 :::{.fragment}
-Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.
+
+```{r gq}
+#| fig-height: 3
+#| fig-align: center
+
+# Goldfeld-Quandt Test Visualization
+ggplot(filter(df_sim, !is.na(cut)), aes(x = x, y = res, color = cut)) +
+  geom_point() +
+  xlab("X") +
+  ylab(expression(epsilon[i]^2)) +
+  scale_color_gb()
+```
+
 :::
 
----
 
-**Park test**
+## Diagnosis: Park test
 
-Ocular-inspection test: Use the scalar points of $\hat u_i^2$ against $X_i$, or $\hat u_i^2$ against $Y_i$
+Ocular-inspection test: Use the scalar points of $\hat \epsilon_i^2$ against $X_i$^[Or $\hat \epsilon_i^2$ against $Y_i$]
 
-Regress $ln(\hat u_i^2)$ on some $X_{ki}$:
-
-$$ln(\hat u_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.$$
+Regress $ln(\hat \epsilon_i^2)$ on some $X_{ki}$: $$ln(\hat \epsilon_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.$$
 
 Do the t-test of coefficient in $ln(X_i)$: $H_0: \hat\delta_1 = 0.$
+
+:::{.fragment}
+```{r park}
+#| fig-height: 3
+#| fig-align: center
+
+# Park Test Visualization
+ggplot(df_sim, aes(x = log(x), y = log(abs(res)))) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  ggtitle("Park Test Visualization") +
+  xlab("log(X)") +
+  ylab(expression(log(epsilon[i]^2)))
+```
+:::
 
 
 :::{.notes}
@@ -332,43 +397,89 @@ Ocular: 望远镜
 <img src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_parkTest.png" height = 200 />
 :::
 
+
+## Diagnosis: White Test
+
+1. Regress Y on X to get $\hat \epsilon_i^2$
+1. Regress $\hat \epsilon_i^2$ on $\sum X_i + \sum X_i^2 + \sum X_iX_j$ or $\hat Y_i$.
+1. Test this model against a model with no variables (F test).
+
+:::{.fragment}
+```{r white}
+#| fig-align: center
+#| fig-height: 3
+
+# White Test Visualization - Showing only one plot for simplicity
+ggplot(df_sim, aes(x = x + I(x^2) + I(x*y), y = squared_resid)) +
+              geom_point() +
+              xlab(expression(X + X^2 + XY)) +
+              ylab(expression(epsilon[i]^2))
+```
+:::
+
+## When to use which
+
+- Choose based on data conditions
+    - E.g., BP test examines X<sub>i</sub> affects the squared residuals, GQ tests differences between subsamples &rArr; Not yield the same result
+
+```{r simulatedData}
+#| fig-align: center
+
+n <- 10000
+x1 <- 1 + rnorm(n)
+x2 <- -1 + rnorm(n)
+u <- x1 * rnorm(n)
+y <- u
+
+m_fit <- lm(y ~ x1 + x2)
+
+df_fake <- tibble(y, x1, x2, u = resid(m_fit)) %>% 
+  pivot_longer(x1:x2, names_to = "variable", values_to = "covariate")
+
+
+ggplot(data = df_fake) + 
+  geom_point(aes(y = u, x = covariate)) +
+  facet_wrap(~variable, scales = "free") +
+  xlab("X") +
+  ylab(expression(epsilon[i]))
+```
+
+----
+
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-**Breusck-Pagan(-Godfreg) test**
-
-1. Assuming $\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}$
-1. Regress $\hat u_i^2$ on $X_1, X_2, \cdots, X_{k - 1}$, 
-    - $H_0: \sigma_1 = \sigma_2 =\cdots=\sigma_{k - 1} = 0$
-    - $H_1$: At least one of the &sigma;&ne;0
-    - Statistics $F_{k - 1, n - k}$
+```{r testGQ}
+gqtest(m_fit, order.by = x1) # 按照协方差产生方式检验
+gqtest(m_fit, order.by = x2) # 非按照协方差产生方式检验
+```
 :::
 
 ::: {.column .fragment width="50%"}
-**White Test**
-
-1. Regress Y on X to get $\hat u_i^2$
-1. Regress $\hat u_i^2$ on $\sum X_i + \sum X_i^2 + \sum X_iX_j$ or $\hat Y_i$.
-1. Test this model against a model with no variables (F test).
+```{r testBP}
+bptest(m_fit, varformula = ~x1)
+bptest(m_fit, varformula = ~x2)
+```
 :::
 
 ::::
 
-
+- If you have a **specific** hypothesis about the variance changes (e.g., increasing with the level of an explanatory variable), the Goldfeld-Quandt or Park test might be appropriate.
+- If you're **unsure** of the form of heteroscedasticity or have **multiple** Xs, the Breusch-Pagan or White test would be more suitable.
 
 ## Adjustment: White covariance matrix
 
 (a.k.a., Heteroscedasitic-consistent covariance matrix).
 
-$$E(u_i|X) = E\{\sqrt{[u_i - E(u_i)]^2}|X\}$$
+$$E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}$$
 
 :::{.fragment}
-Since E(u<sub>i</sub>|X) = 0 by assumption, we can estimate $u_i$ with $\hat u_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat u_i^2.$
+Since E(&epsilon;<sub>i</sub>|X) = 0 by assumption, we can estimate $\epsilon_i$ with $\hat \epsilon_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.$
 :::
 
 
 :::{.fragment}
-The estimates turn out to be [biased]{.red}, but converge asymptotically in n to the true distribution. (What does this imply?) 
+The estimates turn out to be [biased]{.red}, but converge asymptotically in n to the true distribution. [(What does this imply?)]{.small}
 :::
 
 
@@ -381,25 +492,26 @@ Means it's fine when N is large enough.
 Reduce the substantive effect of the change in X by $\frac{1}{\sigma_i}$, in order to squeeze the value towards the middle: If &sigma;<sub>i</sub> is known, 
 
 \begin{align}
-\frac{Y_i}{\sigma_i} =& \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{u_i}{\sigma_i};\\
-\text{Then, } var(\frac{u_i}{\sigma_i}) =& \frac{1}{\sigma_i^2}var(u_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
-\Rightarrow Y_i^* =& \beta_0X^*_{0i} + \beta_1X^*_{1i} + u_i^*. 
+\frac{Y_i}{\sigma_i} =& \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
+\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =& \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
+\Rightarrow Y_i^* =& \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*. 
 \end{align}
 
 :::{.fragment}
 The last equation is homoscedastistic. 
-However, in most cases, we don't know &sigma;<sub>i</sub> &rArr; var(u<sub>i</sub>)&sim; X<sub>1i</sub>, i.e., var(u<sub>i</sub>) = &sigma;<sub>i</sub><sup>2</sup> = &sigma;<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>&sigma;<sup>2</sup>.
+However, in most cases, we don't know &sigma;<sub>i</sub> &rArr; var(&epsilon;<sub>i</sub>)&sim; X<sub>1i</sub>, i.e., var(&epsilon;<sub>i</sub>) = &sigma;<sub>i</sub><sup>2</sup> = &sigma;<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>&sigma;<sup>2</sup>.
 :::
 
+----
 
 :::: {.columns}
 
 ::: {.column .fragment width="70%"}
-Given the goal var(u<sup>\*</sup><sub>i</sub>) = var(u<sup>\*</sup><sub>j</sub>), &forall; i,j. 
+Given the goal var(&epsilon;<sup>\*</sup><sub>i</sub>) = var(&epsilon;<sup>\*</sup><sub>j</sub>), &forall; i,j. 
 
 \begin{align}
-u^*_i =& \frac{u_i}{\sqrt{h_i}},\\
-var(\frac{u_i}{\sqrt{h_i}}) =& \frac{var(u_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
+\epsilon^*_i =& \frac{\epsilon_i}{\sqrt{h_i}},\\
+var(\frac{\epsilon_i}{\sqrt{h_i}}) =& \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
 \Rightarrow Y_i^* =& \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
 \end{align}
 :::
@@ -413,11 +525,11 @@ In practice, there are different ways to estimate the weight, one need to carefu
 ::::
 
 
-## Adjustment: Feasible Generalized Linear Squares (FGLS)
+## Adjustment: Feasible Generalized Linear Squares (FGLS) {.smaller}
 
 \begin{align}
-\boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{u}; \\
-var(\boldsymbol{u}) =& \Omega_{n\times n} = \left(
+\boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
+var(\boldsymbol{\epsilon}) =& \Omega_{n\times n} = \left(
        \begin{array}{cccc}
        \sigma_1^2 & 0 & \cdots & 0\\
        0 & \sigma_2^2 & \cdots & 0\\
@@ -425,21 +537,23 @@ var(\boldsymbol{u}) =& \Omega_{n\times n} = \left(
        0 & 0 & \cdots & \sigma_n^2\\
        \end{array}\right),\\
 \text{Then, } \boldsymbol{\hat\beta_{GLS}} =& (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}u},
-\boldsymbol{H^{-1}u} = \boldsymbol{H^{-1}(H^{-1})'};\\
-var(\boldsymbol{u})=& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
+\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{\epsilon})=& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
 var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
 \end{align}
 
-. . .
 
 * If there's no heteroscedasticity, $\boldsymbol{\Omega} = \sigma\boldsymbol{I}.$
 * If there is heteroscedasticity and $\boldsymbol{\Omega}$ is known, then WLS (a special type of GLS).
-* If $\boldsymbol{\Omega}$ is unknown, run $\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{u}$ to estimate $\boldsymbol{\Omega}$ with $\boldsymbol{\hat\Omega} = \boldsymbol{\hat u\hat u'}$
+* If $\boldsymbol{\Omega}$ is unknown, run $\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}$ to estimate $\boldsymbol{\Omega}$ with $\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}$
 
+:::{.fragment}
 :::{.callout-warning}
-NB: This method does not get SE, and also [biased].red for small N.
+NB: This method does not get SE, and also [biased]{.red} for small N.
 :::
+:::
+
 
 
 ## "Sandwich" Matrix
@@ -465,84 +579,71 @@ But when heteroscedasticity occurs, $var(\boldsymbol{\beta}|X)\neq \sigma^2\bold
 Instead, let $\boldsymbol{G} = \boldsymbol{X'GX}$, then $var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.$
 
 
-## Heterogeneity in TSCS Data
+## Heteroscedasticity in TSCS Data
 
-TSCS: Time-series cross-sectional data.
-Sometimes, they are called "pooled data", "panel data"(wrong!)
-
-Dealing with heterogeneity in TSCS data:
-
-1. Robust standard error
-1. Fixed effect
-1. Multilevel modeling
-
----
-
-## Robust Standard Error
-
-**Sandwich SE**
-
-In the FGLS version, the "meat" can be identified only when T > N, and before this, the autocorrelation ($cov(u_i, u_j|X_i, X_j) = 0, \forall i, j$) has to be eliminated.
-
-. . .
-
-**Panel-corrected SE**
-
-An alternative version of the sandwich SE. &Omega; is clustered by time periods: $\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}$
-
-. . .
-
-**Cluster SE**
-
-Adjust SE to account for correlations within clusters.
+- TSCS: Time-series cross-sectional data.
+    - Sometimes, they are called "pooled data", "panel data"(WRONG!)
+- Reason of heterosceasticity
+    - Spatical heterogeneity
+    - Temporal heterogeneity
+- Deal with heteroscedasticity in TSCS data:
+    1. Robust standard error
+    1. Fixed effect
+    1. Multilevel modeling
 
 
-:::{.fragment}
-**Within-between model**
+## Robust Standard Error{.smaller}
 
-1. Run separate models in each group
-1. Run an aggregate regression
-
-:::
+- **Sandwich SE**
+    - In the FGLS version, the "meat" can be identified only when T > N, and before this, the autocorrelation ($cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j$) has to be eliminated.
+- **Panel-corrected SE**
+    - An alternative version of the sandwich SE. &Omega; is clustered by time periods: $\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}$
+- **Cluster SE**
+    - Adjust SE to account for correlations within clusters.
+- **Within-between model**
+    1. Run separate models in each group
+    1. Run an aggregate regression
 
  
 :::{.fragment}
 
-Let $\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar u_i = \frac{\sum^n_{i=1}u_{it}}{n_i}$. Then,
+Let $\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}$. Then,
 
 \begin{align}
-\bar{Y_i} =& \beta_0 + \beta_1\bar{X_i} + \epsilon_i + u_i\\
-Y_{it} - \bar{Y_i} =& (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (u_{it} - u_i)\\
-\hat{Y_i} =& \beta_1\hat{X_{it}} + \hat{u_{it}}, \text{(a.k.a., the within model)}\\
-Y_{it} =& \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + u_{it}, \text{(a.k.a., the between model)}
+\bar{Y_i} =& \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
+Y_{it} - \bar{Y_i} =& (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
+\hat{Y_i} =& \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
+Y_{it} =& \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
 \end{align}
 :::
 
+## Alternative Methods
 
----
+- Fixed effect
+    - Least Square with Dummy Variables (LSDV)
+    - Demeaning
+    - Fixed effect vector decomposition (FEVD)
+- Multilevel modeling
+    - Random intercept
+    - Random slop
+
+## Take-home point
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png){.r-stretch}
+
+# Appendix
 
 ## Fixed Effect
 
 **Least Square with Dummy Variables** (LSDV)
 
-Type I: 
-
-$$Y_{it} = \beta_1X_{it} + \alpha_i + u_{it},$$ in which &alpha; is unit-specific mean differences (unit fixed effect). 
-
-. . .
-
-Type II: 
-
-$$Y_it = \sum^T_{t = 1}\delta_tD_{t_i} + \beta_1X_{it} + u_{it},$$ in which $\delta_tD_{t_i}$ is the fixed effect for time.
-
-. . .
-
-### Issues of LSDV
-
-1. Adding a lot of variables (risk of using out of the d.f.);
-1. Additional high multicollinearity;
-1. Losing time invariant variables;
-1. Inefficient estimates of FE on binary and dependent variables.
+- Type I: $Y_{it} = \beta_1X_{it} + \alpha_i + \epsilon_{it},$ in which &alpha; is unit-specific mean differences (unit fixed effect). 
+- Type II: $Y_it = \sum^T_{t = 1}\delta_tD_{t_i} + \beta_1X_{it} + \epsilon_{it},$ in which $\delta_tD_{t_i}$ is the fixed effect for time.
+- Issues for using LSDV
+    1. Adding a lot of variables (risk of using out of the d.f.);
+    1. Additional high multicollinearity;
+    1. Losing time invariant variables;
+    1. Inefficient estimates of FE on binary and dependent variables.
 
 :::{.notes}
 For the last two concerns, considering using duration models.
@@ -554,7 +655,7 @@ For the last two concerns, considering using duration models.
 1. Fixed effect vector decomposition (FEVD)
 
 :::{.fragment}
-Con : 
+Cons: 
 
 1. Can't offer sufficient information (heterogeneous to what extent?).
 1. Difficult to calculate substantive effects, e.g., first differences.
@@ -569,10 +670,12 @@ Multilevel modeling (MLM)
 
 ## MLM
 
-Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes. 
+- Target: Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes. 
+- Also called as hierarchical linear models (HLM), mixed models, random coefficient models, and variance component models
+
 
 :::{.notes}
-e.g., Assuming var(u<sub>i</sub>) = &sigma;<sup>2</sup>e<sup>&gamma;<sub>1</sub>X<sub>2i</sub></sup>. 
+e.g., Assuming var(&epsilon;<sub>i</sub>) = &sigma;<sup>2</sup>e<sup>&gamma;<sub>1</sub>X<sub>2i</sub></sup>. 
 
 If &gamma;<sub>1</sub> = 0, then the model is homoscedastistic; otherwise, one has to use MLE to test H<sub>0</sub>: &gamma;<sub>1</sub> = 0.
 :::
@@ -598,10 +701,7 @@ Z is the group indicator.
 Represent the similarity between individual and group level. 0 means no group effect.
 :::
 
-:::: {.columns}
-
-::: {.column .fragment width="60%"}
-Random Slop:
+## Random-Slop MLM
 
 \begin{align}
 Y_{ij} = &\beta_{0j} + \beta_{1j}X_{ij} + \epsilon_{ij}\\
@@ -622,16 +722,6 @@ BVN: Bivariate Normal
 The two variables in a bivariate normal are both are normally distributed, and they have a normal distribution when both are added together. Visually, the bivariate normal distribution is a three-dimensional bell curve.
 :::
 
-:::
-
-::: {.column .fragment width="40%"}
-
-\begin{align}
-\left(\begin{array}{cc}
-\tau_0^2 & \tau_0\tau_1\\ 
-\tau_0\tau_1 & \tau_1^2
-\end{array}\right)
-\end{align}
 
 1. Identity: &tau;<sub>0</sub><sup>2</sup> = &tau;<sub>1</sub><sup>2</sup> = 1;
 1. [Exchangeable: &tau;<sub>0</sub><sup>2</sup>= &tau;<sub>1</sub><sup>2</sup>;]{.navy}
@@ -641,19 +731,5 @@ The two variables in a bivariate normal are both are normally distributed, and t
 :::{.notes}
 Covariate Matrix 
 :::
-
-:::
-
-::::
-
-## Take-home point
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png){.r-stretch}
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
-
 
 
