@@ -1,32 +1,42 @@
 ---
 title: "Endogeneity and Autocorrelation"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-institute: "Tsinghua University" 
-
-knitr: 
-    opts_chunk: 
-      echo: false
-
+execute:
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
-    preview-links: true # open an iframe for a link
+    preview-links: false # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
+    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+filters:
+  - lightbox
+revealjs-plugins:
+  - spotlight
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -55,9 +65,16 @@ theme_update(
 
 ```
 
+## Quiz Time
+
+Based on what you've known, what does the Upper did right & wrong?
+
+{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/mh_quiz.mp4" height="500" >}}
+
 
 ## Overview
 
+:::{.nonincremental}
 1. Endogeneity
     + Issue
     + Diagnosis
@@ -66,7 +83,7 @@ theme_update(
     + Issue
     + Diagnosis
     + Adjustment
-
+:::
 
 
 # Endogeneity
@@ -78,7 +95,7 @@ theme_update(
 Institutional Confidence ~ Evaluation of Redistribution Performance 
 
 :::{.fragment style="text-align:center; margin-top: 1em"}
-Which influences which? (Causal [direction]{.red})
+Causal [direction]{.red}?
 :::
 
 . . .
@@ -105,7 +122,7 @@ X =& \beta'_0 + \beta'_1Y + v
 
 ## One Cause: Yule-Simpson's Paradox
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8yQUpQYk9GZmt1LTZXOGxGP2U9Y0xETjFv.mp4" >}}
+{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/ea_simpsonsParadox.mp4" >}}
 
 :::{.notes}
 + Edward H. Simpson 1951
@@ -119,31 +136,27 @@ X =& \beta'_0 + \beta'_1Y + v
 
 ## Data Illustration
 
-![](images/ea_yuleSimpson.gif){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_yuleSimpson.gif){fig-align="center" height=600}
 
 
-## Causal Diagram(-ish)
+## Causal Diagram(-ish){.smaller}
 
-![](images/ea_correlation.png){fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_correlation.png){fig-align="center"}
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 
-*Selections on the Observables* (SOO)
+*Selections on the Observables*
 
-![](images/ea_selectionBias.png){.r-stretch}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_selectionBias.png){fig-align="center"}
 
 :::{.fragment}
 **Diagnosis**
 
-Hausman Procedure (using t distribution):
-
-Full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
-
-To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test:
-
-H<sub>0</sub>: cov(u', v) = 0.
+- Hausman Procedure:
+    - Full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
+    - To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test: H<sub>0</sub>: cov(u', v) = 0.
 :::
 
 
@@ -153,7 +166,7 @@ H<sub>0</sub>: cov(u', v) = 0.
 
 *Unobservable Confounders*
 
-![](images/ea_unobservable.png){.r-stretch}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_unobservable.png){fig-align="center"}
 
 :::{.fragment}
 **Diagnosis**
@@ -170,13 +183,11 @@ lm(mpg ~ wt, data = mtcars) %>% plot(1)
 
 ## Adjustment: Observable
 
-*Fully observable*: Matching, weighting, even better controls would be helpful.
+*Fully ~*: Matching, weighting, even better controls would be helpful.
 
 . . .
 
-*Partially observable*
-
-E.g., Wage  ~ **X**<sub>labor</sub>, but only **X**<sub>employed</sub> is observable.
+*Partially ~*: e.g., Wage  ~ **X**<sub>labor</sub>, but only **X**<sub>employed</sub> is observable.
 
 :::{.notes}
 Suppose that a researcher wants to estimate the determinants of wage offers, but has access to wage observations for only those who work. Since people who work are selected non-randomly from the population, estimating the determinants of wages from the subpopulation who work may introduce bias.
@@ -190,33 +201,35 @@ Suppose that a researcher wants to estimate the determinants of wage offers, but
 ::: {.column .fragment width="50%"}
 Stage I: **E** ~ **Z**&gamma; + **u**<sub>e</sub>;
 
-:::{.notes}
-ASSUMPTION: The errors are jointly normal.
-
-Mills ratio: Complementary cumulative distribution function OVER probability density function:
-
-\begin{align}
-m(x) :=& \frac{\bar{F}(x)}{f(x)},\\
-\bar{F}(x) := \Pr[X>x] = \int_x^{+\infty} f(u)\, du
-\end{align}
-
-:::
-
-:::{.notes}
-E is the probability to be hired; W is the explanatory variables
-:::
-
-:::
-
-::: {.column .fragment width="50%"}
 Stage II:     
 **Wage**|(E, **X**),  ~ **X**<sub>employed</sub> + **u**<sub>w</sub>
 
 E[W|X,E]=X&beta; +&rho;&sigma;<sub>**u**<sub>w</sub></sub>&lambda; (Z&gamma;),
 
+E is the probability to be hired; Z is the explanatory variables
+
+:::{.notes}
+
+ASSUMPTION: The errors are jointly normal.
+
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+
 1. &lambda;: Inverse Mills Ratio from stage I;
+    - [\begin{align}
+m(x) :=& \frac{\bar{F}(x)}{f(x)},\\
+\bar{F}(x) :=& \Pr[X>x] = \int_x^{+\infty} f(u)\, du
+\end{align}]{.small}
 1. &rho; = corr(**u**<sub>e</sub>, **u**<sub>w</sub>)<sup>\*</sup>;
 1. &sigma;<sub>**u**<sub>w</sub></sub>: Standard deviation of **u**<sub>w</sub>.
+
+:::{.notes}
+Mills ratio: Complementary cumulative distribution function OVER probability density function
+:::
+
 :::
 
 ::::
@@ -224,9 +237,9 @@ E[W|X,E]=X&beta; +&rho;&sigma;<sub>**u**<sub>w</sub></sub>&lambda; (Z&gamma;),
 
 ## Adjustment: Unobservables
 
-Famous or "notorious" instrumental variables (IV)
+Famous/"notorious" instrumental variables (IV)
 
-![](images/ea_instrumental.png){.r-stretch}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_instrumental.png){fig-align="center" height=150}
 
 - Statistically, we need a variable Z<sub>i</sub> that [simultaneously]{.red} satisfies: 
   1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
@@ -242,16 +255,14 @@ The effect of education on earnings
 OV: Income  
 EV: Likelihood of going to school
 
-
-
 :::{.notes}
 Individual ability
 :::
 
-
 - IV candidates: 
   1. Proximity to college (Card 1995)
   1. Month of birth (Angrist and Krueger 1991)
+
 :::
 
 ::: {.column .fragment width="50%"}
@@ -272,7 +283,9 @@ Endogeneity: religious fractionalization, mountainous terrain, and population
 Miguel, Satyanath, and Sergenti 2004, Journal of Political Economy
 :::
 
-- Concerns? 
+:::{.fragment style="text-align:center; margin-top: 2em"}
+Any concern? 
+:::
 
 :::{.notes}
 Agriculture only? 
@@ -284,34 +297,74 @@ Is rainfall random? Drought in one country could make another country's projects
 
 ::::
 
-### So...how to find a proper IV
+## Secret to find a proper IV
+
+1. Seeking something seemingly irrelevant, like geographic stuff
+1. Seeking back to the time, such as old distribution, parental features
+1. Seeking for diverse laws or policies
+1. Making some assumptions, like weather is random
 
 . . .
 
-Seeking something seemingly irrelevant
+Ok, ...IV is a [myth]{.red}, unless by design...
 
-. . .
+. . . 
 
-Seeking back to the time
+Expedient strategy: Multiple IVs
 
-. . .
+- Dreaming that Z<sub>weak1</sub> + Z<sub>weak2</sub> + Z<sub>weak3</sub> +... = Z<sub>super</sub>
+- Picking out the *one*
+- Different sources of endogeneity
 
-Making some assumptions 
 
-. . .
+:::{.notes}
+1. **Improved Identification**: Multiple IVs can provide a more robust identification strategy, especially when each IV is weakly correlated with the independent variable but collectively they are strongly correlated.
 
-Ok, ok, IV is a [myth]{.red}, unless by design...
+2. **Testing Over-Identifying Restrictions**: Using multiple IVs allows researchers to test for over-identifying restrictions, which is a way to check if the IVs are indeed exogenous. 
 
----
+3. **Addressing Different Sources of Endogeneity**: Different IVs might be needed to address different sources of endogeneity in the model.
+:::
 
-## Assuming You Found One
+## Weak Instruments
+
+An ideal Z<sub>i</sub> simultaneously satisfies cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0, and cov(u<sub>i</sub>, Z<sub>i</sub>) = 0. 
+When cov(Y, Z) is small but not equal 0, then "weak" ~.
+
+$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
+
+:::{.notes}
+Check for the Problem: Stock and Watson (2007, 735)
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
++ When cov(X, Z) is salient, not fatal. 
++ When it's small, the estimate will be [biased]{.red}^[[in which case, OLS may be even better.]{.fragment}]
+
+{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/olsEvenBetter.mp4" height=200 >}}
+
+
+
+:::
+
+::: {.column .fragment width="50%"}
+Check:  Sargan–Hansen test (Sargan's J test, Statistics: $\chi^2$)
+
+- Computing from residuals from instrumental variables regression by constructing a quadratic form based on the cross-product of the residuals and exogenous variables
+- $H_0$: The over-identifying restrictions are valid
+:::
+
+::::
+
+## Assuming You've Got One
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 Two Stage Least Squares (2SLS)
 
-A pretty rough way to think about it: 
+[A pretty rough way to make sense of it~]{.small}
 
 1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
 1. Regress **Y** on $\boldsymbol{\hat X}$.
@@ -342,9 +395,8 @@ because the additional instruments can be used to increase the precision of the 
 
 ::::
 
-### Outcome{.fragment}
+## Consequences
 
-[
 \begin{align}
 cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
               =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
@@ -352,46 +404,14 @@ cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
 \Rightarrow\beta_1 =& \frac{cov(Y_i, Z_i)}{\beta_1cov(X_i, Z_i)} = \frac{\sum(Y_i - \bar Y)(Z_i - \bar Z)}{\sum(X_i - \bar X)(Z_i - \bar Z)},\\
        var(\hat\beta_1) =& \frac{\sigma^2}{n\sigma_X^2\rho_{XZ}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
 \end{align}
-]{.small .fragment}
+
 
 :::{.fragment}
 Trade-off: [Unbiased estimates]{.navy} from IV, yet a [bigger variance]{.red} (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
 :::
 
 
-## Weak Instruments
 
-An ideal Z<sub>i</sub> simultaneously satisfies cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0, and cov(u<sub>i</sub>, Z<sub>i</sub>) = 0. 
-However, when cov(Y, Z) is small but not equal 0, then "weak" instrument.
-
-$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
-
-+ When cov(X, Z) is salient, not fatal. 
-+ When it's small, the estimate will be [biased]{.red}---in which case, OLS may be even better.
-
-:::{.notes}
-Check for the Problem: Stock and Watson (2007, 735)
-:::
-
-:::: {.columns}
-
-::: {.column .fragment width="50%"}
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xbklkeVNiUjlFY3BSRWtLP2U9Mnd6T3hC.mp4" height="40%" >}}
-
-:::
-
-::: {.column .fragment width="50%"}
-Check:  Sargan–Hansen test (Sargan's J test)
-
-- Testing over-identifying restriction
-- Computing from residuals from instrumental variables regression by constructing a quadratic form based on the cross-product of the residuals and exogenous variables
-- $H_0$: The over-identifying restrictions are valid
-- Statistics: $\chi^2$
-
-:::
-
-::::
 
 # Autocorrelation
 
@@ -410,36 +430,35 @@ E(u<sub>1</sub>, u<sub>2</sub>) = 0
 
 [*Temporal autocorrelation*]{.fragment}
 
+## Temporal autocorrelation
+
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 
-![](images/ea_oneShot.gif)
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_oneShot.gif)
 
 One-period shock
 
-:::{.notes}
-\begin{align}
-Y_t =& \beta_0 + \beta_1(Z_t + 1) + \beta_2Z_{t-1} + \cdots + u\\
-Y_{t + 1} =& \beta_0 + \beta_1Z_{t + 1} + \beta_2(Z_t + 1) + \beta_3Z_{t-1} + \cdots + u\\
-Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \beta_3(Z_t + 1) + \cdots + u
-\end{align}
-:::
+[\begin{align}
+Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_t + 1)} + \beta_2Z_{t-1} + \cdots + u\\
+Y_{t + 1} =& \beta_0 + \beta_1Z_{t + 1} + \color{maroon}{\beta_2(Z_t + 1)} + \beta_3Z_{t-1} + \cdots + u\\
+Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \color{maroon}{\beta_3(Z_t + 1)} + \cdots + u
+\end{align}]{.small}
 
 :::
 
 ::: {.column .fragment width="50%"}
 
-![](images/ea_loki.jpg){height=250}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_loki.jpg){height=250}
 
 Permanent Shift
 
-:::{.notes}
-\begin{align}
-Y_t =& \beta_0 + \beta_1(Z_{t + 1}) + \cdots + u\\
-Y_{t + 1} =& \beta_0 + \beta_1(Z_{t + 1} + 1) + \beta_1(Z_t + 1) + \cdots + u
-\end{align}
-:::
+[\begin{align}
+Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1})} + \cdots + u\\
+Y_{t + 1} =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} + \color{maroon}{\beta_2(Z_t + 1)} + \cdots + u
+\end{align}]{.small}
+
 :::
 
 ::::
@@ -456,7 +475,7 @@ When two variables both have, e.g., a positive trend, then they appear correlate
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="60%"}
 - Fixed Effect: $Y_t\sim X_t + Time_t$
 - De-trend: $Y_t\sim X_t$
   - \begin{align}
@@ -468,10 +487,11 @@ When two variables both have, e.g., a positive trend, then they appear correlate
 \end{align}
 :::
 
-::: {.column width="50%"}
+::: {.column width="40%"}
 - Spline
-  - ![](images/ea_spline.png){height=200}
-- Smooth function: t + t<sup>2</sup> + t<sup>3</sup>
+  - ![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_spline.png){height=250}
+- Smooth function
+    - t + t<sup>2</sup> + t<sup>3</sup>
 
 :::{.notes}
 "nearly identical substantively [with spline]", Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.
@@ -507,9 +527,9 @@ u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,... where t<sub>1</sub> < t<sub>2</sub> < t<sub>3</sub>...), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
 
 
-<img src="images/ea_baguazhang.gif" height = 300 />
+<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_baguazhang.gif" height = 300 />
 
-<img src="images/ea_zuiquan.gif" height = 300 />
+<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_zuiquan.gif" height = 300 />
 
 
 ### Covariance Stationary
@@ -609,7 +629,7 @@ d<sub>l</sub> < (4 - DW) < d<sub>u</sub>, inconclusive;
 Most common model: Autoregressive distributed lag model (ADL)
 
 :::{.fragment style="text-align:center"}
-[![](images/ea_hugePit.jfif){.r-stretch}](https://cran.r-project.org/web/views/TimeSeries.html)
+[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_hugePit.jfif){.r-stretch}](https://cran.r-project.org/web/views/TimeSeries.html)
 :::
 
 
@@ -712,12 +732,8 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 
 ## Take-home point
 
-![](images/ea_mindmap.png){.r-stretch}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_mindMap.png){.r-stretch}
 
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
 
 
 
