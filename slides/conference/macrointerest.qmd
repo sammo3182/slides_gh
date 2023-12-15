@@ -1,0 +1,246 @@
+---
+title: "Macrointerest <br> Across Countries"
+subtitle: "叶澄海·励新论坛2023: 比较视野下的中国之治"
+date: "2023-12-17"
+date-format: "iso"
+
+author: "Yue Hu"
+institute: "Tsinghua University"
+
+bibliography: dcpo-macrointerest.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    embed-resources: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+      
+filters:
+  - lightbox
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+## TL;DR
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+*Objective*:  
+
+- Substantive: What influence macro-(political)-interests?
+- Methodological: Common interest, incompatible data
+
+*Method*: 
+
+- DCPO: 128 + 40 panel
+- Bayesian within-between model
+
+*Finding*: Structure &rarr; microfoundation of democracy
+
+1. Election campaigns &rarr; macrointerest [&uarr;]{.red}
+1. Inclusive institutions &rarr; macrointerest [&uarr;]{.red}
+1. **Good economic time &rarr; macrointerest** [&uarr;]{.red}
+
+:::{.notes}
+195 + 2 in the UN
+:::
+
+# Macrointerest
+
+## Why political interest
+
+- It is the **foundation** [@Almond1963;@Peterson2022]:
+    - Widespread civic engagement
+    - Governmental accountability
+    - Institutional effectiveness of democracy
+- It is the **way** [@MillerEtAl2023;@LaneEtAl2022;@Foa2016]:
+    - Information process and attitude development
+    - Quality of democratic decisions
+    - Political indifference &rarr; political distrust, corruption, etc.
+
+## Why macrointerest
+
+> Macrointerest: Aggregative political interest of a country [@Peterson2022]
+
+- Common standard of democracy
+- (Literally), the [will of the people]{.red}
+- Myth of macrointerest
+    - Stability in microinterest &rarr; stability in macrointerest [@Prior2010]
+    - Coexistence of "individual-level stability and aggregate-level volatility" [@Peterson2022, p.202]
+
+## Why should Chinese politics care 
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/dcpo_chineseDem.png){.fragment fig-align="center" height=200}
+
+- Macrointerest &rarr; participation order [@XiongYiHan2008]
+- Macrointerest &rarr; governance efficiency [@MengTianGuangNingJing2018]
+- Macrointerest &rarr; perceptive state accountability [@LiYingLinGongCheng2015]
+- Tones of [DON'T KNOW]{.red} yet
+
+## Don't knows
+
+- How does political interest affect Chinese public's institutional confidence and political participation?---**We barely know** [@LiYingLinGongCheng2015; @XiaZhiLiYueHua1991; @ZhangFuLiang2004]
+- What factors affect Chinese people's political interest---**We barely know** [@ChenZhong1999;@ZhongHu2013;@ZhongKim2005]
+- How does the macrointerest of China evolve?---[**We don't know**]{.red} 
+- Is Chinese macrointerest **different from** other democracies and other regimes?---[**We don't know**]{.red} 
+- How does macrointerest vary across institutional settings?---[**We don't know**]{.red} [**&check;**]{.green}
+- How does macrointerest respond to economic development?---[**We don't know**]{.red} [**&check;**]{.green}
+
+:::{.notes}
+@YangGuangBin1995: 政治兴趣太高不一定是好事
+:::
+
+
+# Analysis of Macrointerst
+
+## Theoretical Inferences
+
+:::{style="text-align:center; margin-top: 2em"}
+*What Explains the Variances in Macrointerest?*
+:::
+
+1. Campaigns and elections &rarr; Decisions on important political positions &rarr; Macrointerest [&uarr;]{.red} [@Larsen2022]
+1. Inclusive institutions &rarr; Every group's opinion matters &rarr; Macrointerest [&uarr;]{.red} [@Kittilson2010]
+1. Bad time &rarr; Public demand for accountability &rarr; Macrointerest [&uarr;]{.red} [@Peterson2022]
+1. Good time &rarr; More resources/more shaped mindset  &rarr; Macrointerest [&uarr;]{.red} [@Inglehart2005;@Solt2008;@Stimson2015]
+ 
+## Empirical Obstacle and Solution  {auto-animate=true}
+
+:::{.fragment .semi-fade-out}
+Obstacle: 
+
+Rich data, different set, no complete panel, sparseness across countries
+
+:::
+
+
+[Solution: ]{.fragment}
+
+- Dynamic Comparative Public Opinion
+    - A method to allow cross-national, over-time, multi-survey comparison
+- Global dataset
+    - 128 countries, 40 years
+
+[Design: ]{.fragment}
+
+- Democratic Electoral Systems (DES): Institutional features
+- Gallagher index: disproportionality
+- Eco development : OECD.Stat, SWIID
+
+## Research Design
+
+- Test macrointerest in the socioeoconomically most "developed" societies: OECD members
+- Bayesian multilevel model with intercepts varying across countries [@Shor2007]
+- 'Within-between random effects' specification [@Bell2015]
+    - Within: Short-term effects
+    - Between: Long-term, historical effects
+
+## Data and Trends
+
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_description.png){.fragment fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_interestURC.png){.fragment fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_vsESS.png){.fragment fig-align="center" height=600}
+:::
+
+## Findings
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_coef.png){.fragment fig-align="center" height=600}
+
+
+
+## Conclusion
+
+:::{.nonincremental}
+- Small but well-estimated increases in political interest in **election years**
+- **Parliamentarism, federalism, and proportionality** yield greater macrointerest
+- **Good times** that lead the public to take interest in politics.
+:::
+
+- Future steps
+    - Developing areas
+    - China
+    - Mechanism analysis
+
+
+# Thank you {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
+
+# Appendix
+
+## Validation
+
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_internal.png){fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_external.png){.fragment fig-align="center" height=600}
+:::
+
+## Global Trend
+
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_europe.png){fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_asia.png){.fragment fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_america.png){.fragment fig-align="center" height=600}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/macroint_africa.png){.fragment fig-align="center" height=600}
+
+:::
