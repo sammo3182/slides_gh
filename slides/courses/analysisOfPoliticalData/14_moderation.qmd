@@ -1,32 +1,42 @@
 ---
 title: "Moderation Effect"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-institute: "Tsinghua University" 
-
-knitr: 
-    opts_chunk: 
-      echo: false
-
+execute:
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
-    preview-links: true # open an iframe for a link
+    preview-links: false # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
+    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+filters:
+  - lightbox
+revealjs-plugins:
+  - spotlight
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -75,7 +85,11 @@ theme_update(
 
 ## Moderation
 
-Conditional effect: the [contribution]{.red} of X on the variance of Y varies when Z has [different]{.red} values, a.k.a., a nonlinear effect &rarr; one unit change of X does [not]{.red} lead to &beta; unit change in Y..\
+**Conditional effect**: the [contribution]{.red} of X on the variance of Y varies when Z has [different]{.red} values
+
+. . .
+
+A.k.a., a nonlinear effect &rarr; one unit change of X does [not]{.red} lead to &beta; unit change in Y.
 
 . . .
 
@@ -175,7 +189,7 @@ E(u'|X) \neq& 0,\\
 E[u'(X,Z)] \neq& 0.
 \end{align}
 
-...unless &beta;<sub>1</sub>X or XZ is zero &rarr; $beta;<sub>3</sub> is biased and meaningless.
+...unless &beta;<sub>1</sub>X or XZ is zero &rarr; &beta;<sub>3</sub> is biased and meaningless.
 
 . . .
 
@@ -193,9 +207,7 @@ When testing the X's effect, $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z
 
 . . .
 
-The standard error:
-
-$$SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} > SE_{\beta_3}$$
+The standard error: $SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} > SE_{\beta_3}$
 
 
 - It's possible for the contribution of X on Y to be statistically [significant]{.red} for certain values of Z, *even if all of the model parameters are [insignificant]{.red}*. 
@@ -211,26 +223,24 @@ Brambor, Clark and Golder 2006
 :::
 
 * Point estimation may not be reliable, if link function (e.g., logit and probit) is involved
-
-:::{.notes}
-Berry, DeMeritt, and Esarey (2016)
-:::
-
 * Substantive significance of the [conditional effect]{.red} highly relates to the distribution of the [conditioning variable]{.red} (viz., Z in the above example). 
 
+
 :::{.notes}
-Berry, Golder, and Milton (2012)
+- Berry, DeMeritt, and Esarey (2016)
+- Berry, Golder, and Milton (2012)
 :::
 
 ## How to Interpret Right
 
 "Sins":
 
-1. Not including XZ [☠️]{.large} 
-1. Not including X or Z [☠️☠️]{.large}
-1. The significance of the interaction term [☠️☠️☠️]{.large} 
+1. Not including XZ ☠️ 
+1. Not including X or Z ☠️☠️
+1. The significance of the interaction term ☠️☠️☠️
 
 - Solution:
+    - Using the full model
     - Plotting the [marginal effects]{.red}.
     - Showing the confidence intervals
     - Presenting the frequency distribution of Z, esp., when the effect trend goes across the zero point.
@@ -298,7 +308,7 @@ Low-income &rarr; Meritocracy
 Income inequality 
 :::
 
-![](images/mod_zootopia.gif){.fragment fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_zootopia.gif){.fragment fig-align="center"}
 
 :::{.notes}
 Self-reproducing: relative power theory
@@ -310,7 +320,7 @@ Self-negating: conflict theory
 ::: {.column .fragment width="35%"}
 *Self-reproducing*
 
-![](images/mod_hulk.gif){width=350}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hulk.gif){width=350}
 
 H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [less]{.red}.
 
@@ -320,7 +330,7 @@ H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [l
 *Self-negating*
 
 
-![](images/mod_hypnosis.gif){width=350}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hypnosis.gif){width=350}
 
 H<sub>1</sub>: Poor people living with high inequality believe in meritocracy [more]{.red}.
 :::
@@ -344,7 +354,7 @@ Data: [Pew survey](https://www.pewresearch.org/)
 ::: {.column .fragment width="50%"}
 Newman, Johnston, & Lown(2015, *AJPS*)
 
-![](images/mod_NJL_plot.png){fig-align="center" height=350}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_NJL_plot.png){fig-align="center" height=350}
 
 :::{.notes}
 Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
@@ -355,7 +365,7 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
 ::: {.column .fragment width="50%"}
 Solt, Hu, Hundson, Song, & Yu (2017, *JOP*)
 
-![](images/mod_interaction1.jpg){height=350 fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_interaction1.jpg){height=350 fig-align="center"}
 :::
 
 ::::
@@ -367,21 +377,21 @@ Solt, Hu, Hundson, Song, & Yu (2017, *JOP*)
 :::: {.columns}
 
 ::: {.column .fragment width="35%"}
-![](images/mod_three_measures.jpg){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_three_measures.jpg){fig-align="center" height=400}
 :::
 
 ::: {.column .fragment width="35%"}
 
 W. better data
 
-![](images/mod_SH_plot2.png){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_SH_plot2.png){fig-align="center" height=400}
 :::
 
 ::: {.column .fragment width="30%"}
 
 Marginal effects
 
-![](images/spe_interaction2.jpg){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg){fig-align="center" height=400}
 :::
 
 ::::
@@ -390,12 +400,6 @@ Marginal effects
 
 ## Take-home point
 
-![](images/mod_mindmap.png){.r-stretch}
-
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
-
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_mindmap.png){.r-stretch}
 
 
