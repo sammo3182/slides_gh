@@ -1,11 +1,17 @@
 ---
-title: "Learning R"
-subtitle: "With Dr. Hu & His Friends"
-
-knitr: 
-    opts_chunk: 
-      echo: false
-
+title: "计算社会科学“敲门砖”"
+subtitle: "新文科人才编程语言精准学习法·以R为例"
+author: "胡悦"
+institute: |
+    | 清华大学政治学系
+    | 清华大学计算社会科学平台
+    | 清华大学数据与治理研究中心
+execute:
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
     css: https://sammo3182.github.io/slides_gh/css/style_basic.css
@@ -18,19 +24,17 @@ format:
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
+    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
 filters:
   - lightbox
-
 revealjs-plugins:
   - spotlight
-
 # lightbox: auto
 spotlight:
   size: 50
@@ -53,20 +57,239 @@ p_load(
 set.seed(114)
 ```
 
-## 开场
+## 个人简介{.Small}
 
-:::{style="text-align:center; margin-top: 2em"}
-1. 你参加的是一个什么项目？
-1. 为什么要学习R语言?
-1. 从哪里开始？
+:::: {.columns}
+
+::: {.column width="60%"}
+*个人经历*
+
+- 政治[科学]{.red}博士[（University of Iowa)]{.small}
+  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 清华大学计算社会科学平台[(副主任)]{.small}
+  - 清华数据与治理中心[(副主任)]{.small}
+- 计算社会科学编程语言证书项目
+
+*研究特点*：*现代性与学科[交叉]{.red}*
+
+- **W. 数据科学**
+  - 实验室和调查实验
+  - 潜变量分析、网络分析、空间分析
+  - 文本大数据分析、数据可视化
+  - R package: 270K+
+:::
+
+::: {.column width="40%"}
+*研究领域*
+
+- **W. 心理学**
+  - 政治[认知]{.red}（参与、公卫）
+  - 政治传播（官媒、青年）
+  - 身份政治（城乡、香港、司法）
+- **W. 经济学**
+  - 宏观经济 &rarr; 微观认知 &rarr; 中观行为公共政策
+  - 不平等[感知]{.red}
+- **W. 语言学**
+  - 语言能力的政治影响
+  - 语言政策的[治理功能]{.red}
+
+:::
+
+::::
+
+## 讲座概要
+
+:::{.large style="text-align:center; margin-top: 2em"}
+- Cognition
+- Confidence
+- Curriculum
 :::
 
 
-# 项目简介
+:::{.fragment}
+:::{.callout-warning}
+
+## 不包含
+
+- R语言“速成”
+- “零售”代码
+    
+:::
+:::
+
+# Cognition
+
+正确认知编程语言
+
+## R是什么
+
+- A [language]{.red}, not software, nor method
+- An object-oriented programming language
+
+:::{.notes}
+
+* Implement of S(tatistical) language, S3, S4 standards.
+
+* Named after Ross Ihaka /i:haka/, and Robert Gentelman
+    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
+    + STATA: Stats + Data
+    + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
+
+* High-level > assembly language (only using ADD, MOVE, etc.) > machine language (010101) > hardware
+
+* High-level: C, JAVA, Python, Fortun, R
+
+* Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
+
+* **Object-oriented** programming (OOP): Class &rarr; objects
+    + Carb &rarr; Steam ban
+    + University &rarr; Tsinghua
+
+
+C++, Python, Ruby, Perl, Matlab
+:::
+
+- R可以帮你做什么
+    - Statistics and econometrics
+    - Crunching almost any sizes of data
+    - Edit and running codes from Excel, STATA, Python, C++, ...
+    - Scrape data from local files, websites, databases, pdf...
+    - Create webpages
+    - Write academic articles, books, or dissertations in html, pdf, or docx
+    - Create presentation slides
+    - Sending emails    
+    - ......
+
+## R 的强项
+
+:::: {.columns style="text-align:center"}
+
+::: {.column width="30%"}
+### 数据分析
+
+`r nrow(available.packages())`+ packages
+
+e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
+:::
+
+::: {.column width="70%"}
+### 可视化
+:::{.r-stack}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ggmap.png){.fragment height=500}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/hillShade.png){.fragment height=500}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/distributionHill.png){.fragment}
+
+:::
+:::
+
+::::
+
+
+## 研究生态
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rflow.png){fig-align="center" width=500}
+
+## R vs Others
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### R vs. STATA
+
+**STATA > R**
+
+- Reliable
+- Your supervisors
+
+**R > STATA**
+
+- Frequently update
+- Visualization
+- Language vs. software
+- [Free]{.red}
+
+:::
+
+::: {.column width="50%"}
+### R vs. Python
+
+**Python > R**
+
+- API ports
+- Automation tools
+- Machine learning
+
+**R > Python**
+
+- Analysis
+- Visualization
+- Ecology
+
+:::
+
+::::
+
+## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg" background-size="auto auto" background-opacity=0.1}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg){fig-align="center" height=600}
+
+
+## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg){fig-align="center" height=600}
+
+
+# Confidence
+
+为什么文科生能学[好]{.red}编程
+
+## 文科生学习R的系统优势（与劣势）
+
+:::: {.columns}
+
+::: {.column width="30%"}
+### 优势
+
+1. 语感
+    - 一般性语言能力
+    - 英语能力
+1. 阅读能力
+1. 社交能力
+1. 问题驱动
+:::
+
+::: {.column width="20%"}
+### 劣势
+
+1. 心理问题
+    - 心理障碍
+    - 内在动力
+1. 应用场景
+1. 系统认知
+:::
+
+::: {.column width="50%"}
+### 排难
+
+1. [**信我**]{.red}
+1. 完成“计算社会科学编程学习项目”
+1. 修习一门社科教师主教的相关课程
+1. 实践一项计算社会科学科研项目
+:::
+
+::::
+
+
+# Curriculum
+
+新文科人才如何系统学习R语言
 
 ## Learning R with Dr. Hu & His Friends
 
-> 面向所有人，包括[无任何编程、计算机或统计基础]{.red}但对数据分析有兴趣的朋友
+> 面向所有[无任何编程、计算机或统计基础]{.red}但对数据分析有兴趣的朋友
 
 ::::{.columns}
 
@@ -152,148 +375,7 @@ set.seed(114)
 
 ::::
 
-
-## 谁现在不适合
-
-:::{.large style="text-align:center; margin-top: 2em"}
-  - 怕冷的娃
-  - 只有上课时间的娃
-  - Overload的娃
-:::
-
-# 为什么要学习R语言
-
-## 什么是R
-
-- Language, not software, nor method
-- An object-oriented programming language
-
-:::{.notes}
-
-* Implement of S(tatistical) language, S3, S4 standards.
-
-* Named after Ross Ihaka /i:haka/, and Robert Gentelman
-    + Python: British comedy group Monty Python, whom Python creator Guido van Rossum enjoyed
-    + STATA: Stats + Data
-    + SPSS (Statistical Package for the Social Sciences, created by Norman Nie and several poli sci grads in Stanford)
-
-* High-level > assembly language (only using ADD, MOVE, etc.) > machine language (010101) > hardware
-
-* High-level: C, JAVA, Python, Fortun, R
-
-* Friendly tips: STATA (C), SPSS (JAVA), SAS, Minitab
-
-* **Object-oriented** programming (OOP): Class &rarr; objects
-    + Carb &rarr; Steam ban
-    + University &rarr; Tsinghua
-
-
-C++, Python, Ruby, Perl, Matlab
-:::
-
-- R可以帮你做什么
-    - Statistics and econometrics
-    - Crunching almost any sizes of data
-    - Edit and running codes from Excel, STATA, Python, C++, ...
-    - Scrape data from local files, websites, databases, pdf...
-    - Create webpages
-    - Write academic articles, books, or dissertations in html, pdf, or docx
-    - Create presentation slides
-    - Sending emails    
-    - ......
-
-
-## R 的强项
-
-:::: {.columns style="text-align:center"}
-
-::: {.column width="30%"}
-### 数据分析
-
-`r nrow(available.packages())`+ packages
-
-e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
-:::
-
-::: {.column width="70%"}
-### 可视化
-:::{.r-stack}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ggmap.png){.fragment height=500}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/hillShade.png){.fragment height=500}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/distributionHill.png){.fragment height=500}
-
-:::
-:::
-
-::::
-
-
----
-
-:::{style="text-align:center"}
-[**研究生态**]{.Large}
-:::
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rflow.png){fig-align="center" width=500}
-
-
-
-## R vs Others
-
-:::: {.columns}
-
-::: {.column width="50%"}
-### R vs. STATA
-
-**STATA > R**
-
-- Reliable
-- Your supervisors
-
-**R > STATA**
-
-- Frequently update
-- Visualization
-- Language vs. software
-- [Free]{.red}
-
-:::
-
-::: {.column width="50%"}
-### R vs. Python
-
-**Python > R**
-
-- API ports
-- Automation tools
-- Machine learning
-
-**R > Python**
-
-- Analysis
-- Visualization
-- Ecology
-
-:::
-
-::::
-
-## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg" background-size="auto auto" background-opacity=0.1}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg){fig-align="center" height=600}
-
-
-## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg){fig-align="center" height=700}
-
-
-# 准备工作
-
-## 软件安装
+## Kick off
 
 :::: {.columns}
 
@@ -352,8 +434,7 @@ drhur::drhur("playing")
 
 ::::
 
-
-# Thank you {background="#43464B"}
+# 感谢倾听，期待交流 {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
 
