@@ -1,35 +1,44 @@
 ---
-title: |
-    | Missing Data 
-    | and 
-    | Generalized Linear Model
+title: "Missingness & GLM"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-institute: "Tsinghua University" 
-
-knitr: 
-    opts_chunk: 
-      echo: false
-
+execute:
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
     preview-links: true # open an iframe for a link
-    link-external-newwindow: true
-    self-contained: false
+    embed-resources: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
+    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+
+revealjs-plugins:
+  - spotlight
+  
+lightbox:
+  match: auto
+  effect: fade
+
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup, include = FALSE}
@@ -59,26 +68,34 @@ theme_update(
 
 ## Overview
 
-### Missing Data
+:::: {.columns}
 
-+ What's missingness
-+ Type of missingness
-+ Dealing with missingness
+::: {.column width="50%"}
+
+**Missingness Issue**
+
+- Understand missing data from OLS assumptions
+    - Type of missingness
+    - Consequences
+- Solutions for missingness
+:::
+
+::: {.column width="50%"}
+**Continueous &rarr; Discrete**
+
+- How to use linear regression to estimate discrete Ys
+- Model fitness
+:::
+
+::::
 
 
-### Generalized Linear Model
-
-+ From OLS to 
-    + Link function
-    + Model fitness
+# Missingness
 
 
-# Missing Data
+## Modeling Missingness
 
-
-## Modeling Missing Data
-
-Let's define  **X**, **Y**, and m<sub>ij</sub> = 1 if X<sub>i</sub> is missing.
+True data: **D**; observable: **X**, **Y**, & **M**.^[m<sub>ij</sub> = 1, if X<sub>i</sub> is missing.]
 
 :::{.fragment}
 \begin{align}
@@ -134,17 +151,83 @@ P(M|D) &ne; P(M|D<sup>Observed</sup>)
 
 ::::
 
-:::{.fragment style="text-align:center; margin-top: 2em"}
+:::{.fragment}
+*Illustrate with fake data*
+:::
 
-[Consequence of Missing]{.red}
+- N: 100
+- X, Z ~ &Phi;(0, 1), Y = 0.5X - 6Z + &epsilon; (let's pretend Z is unobservable)
+- Missingness:
+  - MCAR: Complete randomly
+  - MAR: Missing Y on the 3rd quantile of X
+  - NI: Missing Y on the 3rd quantile of Z
+
+
+
+## Illustration
+
+:::{.fragment}
+```{r missingness}
+#| fig-align: center
+
+# Number of observations
+n <- 100
+
+# Generating a dataset
+
+df_sim <- tibble(
+  x = rnorm(n, 0, 1),
+  z = rnorm(n, 0, 1),
+  y = 0.5 * x - 6 * z + rnorm(n, 0, 0.5)
+) |>
+  mutate(
+    mcar = sample(
+      0:1,
+      size = n,
+      replace = TRUE, 
+      prob = c(0.75, 0.25)
+    ),
+    mar = ifelse(x > quantile(x, 0.75), 1, 0),
+    ni = ifelse(z > quantile(z, 0.75), 1, 0)
+  ) |>
+  pivot_longer(cols = mcar:ni,
+               names_to = "missingness",
+               values_to = "miss") %>% 
+  mutate(missingness = factor(missingness, levels = c("mcar", "mar", "ni")), 
+         miss = factor(miss, labels = c("Observed", "Missing")))
+
+ggplot(df_sim, aes(x = x, y = y, color = miss)) +
+  geom_point(size = 3, alpha = 0.8) +
+  scale_color_gb() +
+  facet_wrap(~ missingness, ncol = 1)
+```
+:::
+
+
+## NI
+
+```{r ni}
+#| fig-align: center
+
+library(plotly)
+
+color_gb <- c("gold", "black")
+
+filter(df_sim, missingness == "ni") %>%
+  plot_ly(x = ~z, y = ~x, z = ~y,
+          color = ~miss, colors = color_gb, opacity = 0.8,
+          type = "scatter3d", mode = "markers")
+```
+
+## Consequence of Missingness
+
+$$Y = \hat \beta_0 + \hat \beta_1 X + \hat \epsilon_i$$
 
 |      | Summary Stats | Regression          | SE vs. complete |
 |------|---------------|---------------------|-----------------|
-| MCAR | Unbiased      | Unbiased/consistent | *Inefficient*     |
-| MAR  | *Biased*        | Unbiased/consistent | *Inefficient*     |
-| NI   | *Biased*        | *Biased*              | --     |
-
-:::
+| MCAR | Unbiased      | Unbiased/consistent | *Inefficient*   |
+| MAR  | *Biased*      | Unbiased/consistent | *Inefficient*   |
+| NI   | *Biased*      | *Biased*            | --              |
 
 :::{.notes}
 Unbiasedness in MAR is because the censoring of the data is based on an irrelevant variable;
@@ -152,19 +235,18 @@ Unbiasedness in MAR is because the censoring of the data is based on an irreleva
 Biasedness in NI is because of the censor with an X within the model
 :::
 
----
 
 ## Dealing with Missing
 
-**Ignore it**: Listwise deletion
+**Ignore it**: Listwise deletion [(*Problem*?)]{.red .fragment}
 
 :::{.notes}
-Even for MAR, droping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often pairwise deletion
+Even for MAR, dropping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) &ne; 0, so often pairwise deletion
 :::
 
 . . .
 
-**Fill it manually**: hot deck method 
+**Fill it manually**: hot deck method [(*Problem*?)]{.red .fragment}
 
 :::{.notes}
 Using neayby approximate values, e.g., mean, the right last-observed observation, The term "hot deck" dates back to the storage of data on punched cards, and indicates that the information donors come from the same dataset as the recipients. The stack of cards was "hot" because it was currently being processed.
@@ -179,29 +261,27 @@ Using neayby approximate values, e.g., mean, the right last-observed observation
 1. Extrapolation
 1. Regression imputation: $M = \boldsymbol{X\gamma} + u$
     + For multidimentional variable use joint distribution and iterative chain.
-    
+
 
 :::{.notes}
-<img src="images/interpolation.png" height = 200 />
-<img src="images/extrapolation.png" height = 200 />
+<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/interpolation.png" height = 200 />
+<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_extrapolation.png" height = 200 />
 :::
 
-:::{.fragment .r-fit-text}
-What's the problem?
-:::
+[(*Problems*?)]{.red .fragment}
 
+## Better solutions
 
-## Better Way: Multiple Imputations (MI)
-
-1. Take multiple guess given estimated distribution (Expectation-Maximization)
-2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
-3. Combine: Rubin's formula
+- Nonparametric modeling: e.g., MICE, KNN Imputation, Missingness Pattern Alternating Lasso, [Miss Forest](https://academic-oup-com.proxy.lib.uiowa.edu/bioinformatics/article/28/1/112/219101?login=true&token=)
+- Multiple Imputations (MI)
+    1. Take multiple guess given estimated distribution (Expectation-Maximization)
+    2. Result $\hat\beta(1), \hat\beta(2), \hat\beta(3)$,... and their variance.
+    3. Combine: Rubin's formula^[[$W = \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2$.]{.fragment}]
 
 :::{.fragment}
 \begin{align}
 \hat\beta =& \frac{\sum^m_{i = 1}\hat\beta_i}{m},\\
-var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W,\\
-\text{where}\ W =& \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2 
+var(\hat\beta) =&  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m}W.
 \end{align}
 :::
 
@@ -211,6 +291,7 @@ $\frac{\sum^m_{i = 1}var(\hat\beta_i)}{m}$ variance within each complete dataset
 $\frac{m + 1}{m}W$ variance across datasets.
 :::
 
+## MI
 
 :::: {.columns}
 
@@ -230,7 +311,7 @@ Misspecification of the model does not affect MI.
 1. Rubin's formula does not always work
     + Esp. for complex models.
 1. Time consuming and times to impute.
-    + Rule of thumb: 10 (...)
+    + Rule of thumb: 10 (err...)
 :::
 
 ::::
@@ -250,22 +331,18 @@ Misspecification of the model does not affect MI.
 :::
 
 :::{.fragment}
-Solution: 
+Solution:
 
-**Likelihood approach**
-
-Estimate distribution and integrate over it (the results are identical no matter how many times doing it).
-
-e.g., SEM
+**Likelihood approach**: Estimate distribution and integrate over it (the results are identical no matter how many times doing it), e.g., SEM.
 :::
 
 
-## Non-Ignorable Missing
+## Some more words about NI
 
 When we know what happened:
 
 :::{.fragment}
-Censored data: 
+Censored data:
 
 Have [some]{.red} information about values of missing data, e.g., all data <0 are
 coded as 0.
@@ -291,30 +368,42 @@ observable when it < 100,000
 + `tobit`, use the right distribution---a combination of P(Y<sub>i</sub><sup>*</sup> < 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).
 
 :::{.notes}
-<img src="images/censorTruncated.png" height = 200 />
+<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/censorTruncated.png" height = 200 />
 :::
 
 
-# Generalized Linear Regression
+# GLM
 
 ## Terminology
 
-+ [Generalized]{.red} linear regression is not [general]{.red} linear regression
-+ Using when the very first assumption of OLS is violated.
++ [Generalized]{.red} linear regression &ne; [general]{.red} linear regression
++ When the very first assumption ("linearity") of OLS is violated.
     + Most common situation: Noncontinuous Y
-+ Basic logic: Transforming non-continuous to continuous
+- What happened if just using OLS
+    1. Unrealistic and nonsensitive predicted outcomes
+    1. Heteroscedasticity
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+[But OLS is so beautiful, efficient, and easy!]{.red .Large}
+:::
+
+::: {.column .fragment width="50%"}
+Solution:
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lm_multiuseTie.jpg){fig-align="center" height=200}
+:::
+
+::::
+
 
 :::{.notes}
 General linear regression is multivariate regression
 :::
 
 
-## Approaches
-
-- OLS
-    1. Unrealistic and nonsensitive predicted outcomes
-    1. Heteroscedasticity
-- Linear Probability Model (LPM)? 
+## Approach: Linear Probability Model (LPM)
 
 :::{.fragment}
 \begin{align}
@@ -349,24 +438,24 @@ Not very reliable transformation
 :::{.notes}
 Rule of thumb: 0.2~0.8
 
-1. When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432), 
+1. When X has different ranges, the slope may be not reliable (http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=483; http://teaching.sociology.ul.ie/bhalpin/wordpress/?p=432),
 
-2. unless restrictions are placed on {\displaystyle \beta }\beta , the estimated coefficients can imply probabilities outside the unit interval {\displaystyle [0,1]}[0,1]. 
+2. unless restrictions are placed on {\displaystyle \beta }\beta , the estimated coefficients can imply probabilities outside the unit interval {\displaystyle [0,1]}[0,1].
 :::
 
 
-- Link Functions Method
-    - $$P(Y = 1|X) = G(\beta_0 + \beta_1X_1 + ... + \beta_kX_k).$$
-    - This G() is the *link* function.
-        - When G() = &Lambda;(X), logit ([log]{.red}istic un[it]{.red})
-        - When G() = &Phi;(X), probit ([pro]{.red}bability un[it]{.red})
+## Approach: Link Function Method
 
+$$P(Y = 1|X) = G(\beta_0 + \beta_1X_1 + ... + \beta_kX_k).$$
 
-## Link Functions
+- This G() is the *link* function.
+    - When G() = &Lambda;(X), logit ([log]{.red}istic un[it]{.red})
+    - When G() = &Phi;(X), probit ([pro]{.red}bability un[it]{.red})
 
-### Logit
+:::: {.columns}
 
-[ASSUMPTION]{.red}:
+::: {.column .Small .fragment width="50%"}
+*Logit*
 
 The outcome of a binary variable Y<sub>i</sub> depends on an unobserved continuous probability Y<sup>*</sup>:
 
@@ -378,7 +467,7 @@ Y^* =& X\beta + u, u\sim \Lambda(0, \frac{\pi^2}{3})
 \end{align}
 
 :::{.notes}
-Given the PDF of a logistic distribution is $\Lambda(x) = \frac{e^x}{1 + e^x}$, 
+Given the PDF of a logistic distribution is $\Lambda(x) = \frac{e^x}{1 + e^x}$,
 
 \begin{align}
 P(Y_i = 1|X) =& P(Y^* > 0|X) = P(X\beta + u\geq 0|X)\\
@@ -393,9 +482,10 @@ P(Y_i = 0|X) =& P(X\beta + u \leq 0 |X) = P(u \leq -X\beta |X)\\
 
 :::
 
+:::
 
-:::{.fragment}
-### Probit
+::: {.column .small .fragment width="50%"}
+*Probit*
 
 \begin{align}
 Y_i =& \begin{cases}
@@ -407,11 +497,13 @@ f(x) =&\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 \end{align}
 :::
 
+::::
+
 
 
 ## Logit vs. Probit
 
-* Probit is a little *more* computationally costly than logit  
+* Probit is a little *more* computationally costly than logit
 ( $\frac{e^x}{1 + e^x}$ vs. $\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}$)
 
 * Logit and probit coefficients are identical but on different scales (var<sub>logit</sub> = &pi;<sup>2</sup>/3, var<sub>probit</sub> = 1)
@@ -439,7 +531,7 @@ $$\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|
 Define: $\hat\theta = argmax_{\theta^*}\mathcal{L}(Y|X, \theta^*)$, the .red[maximum likelihood estimate] of &theta; from among all possible values of &theta;<sup>*</sup>
 
 :::{.notes}
-We cannot minimize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ). 
+We cannot minimize the least square as in OLS, since Y<sup>*</sup> is not observed (unable to calculate $(Y - \bar Y)^2$ ).
 So, one has to use the likelihood approach to inferenceb i.e., the maximum likelihood estimation:
 
 m: a model
@@ -549,13 +641,13 @@ The discrete version of marginal effect.
 
 $$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$
 
-X<sub>-k</sub>: 
+X<sub>-k</sub>:
 
 1. All other independent variables (holding them constant)
 1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
 
 
-X<sub>k</sub><sup>H,L</sup>: 
+X<sub>k</sub><sup>H,L</sup>:
 
 1. Max &rarr; Min
 1. Median/mean &plusmn; &sigma;<sub>X<sub>k</sub></sub>
@@ -604,18 +696,15 @@ $$PRE = \frac{PCP - PMC}{1 - PMC}$$
 ::::
 
 :::{.notes}
-An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D). 
+An advanced version is [ePRE](https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D).
 
 ePRE: expected PRE, Herron 1999, PA
 :::
 
 ## Take-home point
 
-![](images/lm_mindmap.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/lm_mindmap.png){fig-align="center" height=600}
 
+## The Journey
 
-
-## Have a break
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" >}}
-
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ml_fullMindmap.png){fig-align="center" height=600}
