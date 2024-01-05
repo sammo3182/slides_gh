@@ -1,0 +1,388 @@
+---
+title: "新文科人才培养<br>目标、挑战与尝试"
+subtitle: |
+    | 第七届政治学与国际关系教学共同体年会
+date: "2024-01-06"
+date-format: "iso"
+author: "胡悦"
+institute: "清华大学政治系<br>清华计算社会科学平台<br>清华大学数据治理研究中心"
+bibliography: pre_newLiberalArts.bib
+knitr: 
+    opts_chunk: 
+      echo: false
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: false
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    embed-resources: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  icons,
+  tidyverse, 
+  ggalt,
+  lubridate,
+  drhutools
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+## 概述
+
+*新文科学科建设与人才培养*
+
+- 目标
+    - 学科特性 &rarr; 培养目标
+- 挑战
+    - 学生挑战
+    - 教学挑战
+- 尝试
+    - 新文科背景下的基础方法教学
+    - 新文科背景下的编程语言教学
+
+
+# 目标
+
+## 指导思想
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_xijinping.jpg){fig-align="center" height=500}
+
+:::
+
+::: {.column width="50%" style="margin-top: 3em"}
+> [要用好学科交叉融合的“催化剂”，加强基础学科培养能力，打破学科专业壁垒，对现有学科专业体系进行调整升级，瞄准科技前沿和关键领域，推进新工科、新医科、新农科、新文科建设，**加快培养紧缺人才**。]{.red}--- @XiJinPing2021b，《在清华大学考察时讲话》
+:::
+
+::::
+
+## 学科特性
+
+```{r history, dev = "png", dev.args=list(bg="transparent")}
+#| fig-height: 4
+#| fig-pos: center
+
+df_event <- tribble(
+  ~date, ~event, ~type,
+  "2018-10-08", "关于加快建设高水平本科教育\n 全面提高人才培养能力的意见\n 教育部", "concept",
+  "2019-03-21", "高校“新文科”建设：概念与行动\n 中国社会科学报", "concept",
+  "2019-04-29", "六卓越一拔尖计划2.0\n 教育部", "institute",
+  # "2019-05-20", "“新文科”要培养什么样的人才\n 光明日报", "concept",
+  # "2019-05-21", "新文科建设要做到三个“新”\n 北京青年报", "concept",
+  "2019-07-23", "新文科“新”在哪儿？并非“科技+人文”那么简单\n 光明日报", "concept",
+  "2019-09-01", "《治理技术专题：政治数据分析》", "effort",
+  "2019-09-28", "中国计算社会科学校际联盟", "community",
+  "2020-09-01", "Learn R with Dr. Hu and His Friends", "effort",
+  "2020-11-03", "《新文科建设宣言》\n 教育部\n 新文科建设工作会议", "community",
+  "2021-12-01", "清华大学计算社会科学与国家治理实验室\n 教育部", "institute",
+  "2022-06-22", "计算社会科学编程语言学习项目\n 计算社会科学平台", "effort",
+  "2023-06-02", "“面向新文科和交叉学科人才培养的清华探索”\n 政治学一流学科建设论坛", "effort"
+) %>% 
+  mutate(date = as.Date(date))
+
+
+df_event$position <- rep_len(c(0.5, -0.5, 1.0, -1.0, 1.5, -1.5), length.out = nrow(df_event))
+
+df_year <- data.frame(date = seq(
+  from = as.Date('2018-01-01'),
+  to = as.Date('2023-12-31'),
+  by = "1 year"
+)) |>
+  mutate(year = year(date))
+
+
+ggplot(data = df_event) +
+  geom_segment(aes(
+    x = date,
+    y = 0,
+    xend = date,
+    yend = position
+  )) +
+  geom_hline(yintercept = 0,
+             color = "black",
+             linewidth = 1) +
+  geom_label(aes(
+    x = date,
+    y = position,
+    label = event,
+    color = type,
+    size = 16
+  ),
+  show.legend = FALSE) +
+  geom_point(aes(x = date, y = 0, color = type),
+             size = 3,
+             show.legend = FALSE) +
+  geom_text(
+    data = df_year,
+    aes(x = date, y = 0, label = year),
+    size = 3.5,
+    vjust = 2
+  ) +
+  theme_void()  +
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_blank()) +
+  coord_cartesian(xlim = c(as.Date('2018-01-01'), as.Date('2024-06-30')))
+```
+
+适应新时代发展需要、推动高等教育内涵式发展 [@JiaoYuBu2012]:
+
+1. **服务国家战略需求**：为国家战略实施提供有力支撑和智力支持。
+1. **引领社会文化发展**：加强人文社会科学研究和传播，推动社会主义核心价值观
+1. **应对国际竞争挑战**：有助于提升我国高等教育的国际竞争力和影响力
+
+:::{.notes}
+建设新文科是适应新时代发展需要、推动高等教育内涵式发展的重要举措。以下结合权威理论和官方精神，在理解国内外形势的基础上，分点阐释为什么要建设新文科：
+
+1. **适应新时代发展要求**：随着科技的飞速发展和全球化的深入推进，新时代对人才培养提出了更高要求。新文科建设旨在打破传统文科学科间的壁垒，促进跨学科融合，培养具有宽广视野、创新能力和解决实际问题能力的新型人才，以适应新时代的挑战和需求。
+2. **推动高等教育内涵式发展**：新文科建设强调提升学科内涵和质量，注重学科交叉融合和创新性发展。这有助于推动高等教育从规模扩张向内涵式发展转变，提高教育质量和水平，培养更多高素质、复合型的人才。
+3. **服务国家战略需求**：新文科建设紧密围绕国家发展战略和重大需求，如“一带一路”倡议、创新驱动发展战略等。通过加强相关领域的研究和人才培养，为国家战略实施提供有力支撑和智力支持。
+4. **引领社会文化发展**：新文科不仅关注学科自身的发展，还注重引领社会文化的发展方向。通过加强人文社会科学的研究和传播，推动社会主义核心价值观的深入人心，引领社会风尚和文化潮流。
+5. **应对国际竞争挑战**：在全球化的背景下，国际竞争日益激烈。新文科建设有助于提升我国高等教育的国际竞争力和影响力，培养具有国际视野和竞争力的人才，更好地参与国际交流与合作。
+
+综上所述，建设新文科是适应新时代发展要求、推动高等教育内涵式发展、服务国家战略需求、引领社会文化发展以及应对国际竞争挑战的重要举措。
+:::
+
+## 培养目标
+
+- 多元化**能力**：[跨学科]{.red}的知识和能力，能够融合不同学科的理论和方法，解决复杂的现实问题，实现文理融合。
+- 国际**视野**：正确认知[国际水平]{.red}和[国际话语]{.red}，同时具备跨文化适应能力。
+- 创新**思维**：创新思维和批判性思考能力，以及创新实践能力。
+- 终身学习**意识**： 掌握[自主]{.red}学习的方法，善于利用现代信息技术和网络资源进行学习。
+- 社会**责任感**：了解国家发展战略和政策导向，为推动社会进步和发展贡献自己的力量，关注社会热点问题。
+
+:::{.notes}
+
+多元化能力：新文科人才应具备跨学科的知识和能力，能够融合不同学科的理论和方法，解决复杂的现实问题。他们应熟悉文学、历史、哲学、艺术等人文社科领域，同时掌握一定的自然科学和技术知识，形成多元化的知识结构。
+
+创新思维：培养具有创新思维和批判性思考能力的新文科人才是重要目标。他们应能够独立思考，勇于挑战传统观念，提出新的见解和解决方案。同时，应具备创新实践能力，能够将创新理念转化为实际行动和成果。
+
+社会责任感：新文科人才应具备强烈的社会责任感和使命感，关注社会热点问题，积极参与社会公益活动。他们应了解国家发展战略和政策导向，为推动社会进步和发展贡献自己的力量。
+
+国际视野：在全球化背景下，新文科人才应具备国际视野和跨文化沟通能力。他们应熟悉国际规则和国际事务，能够参与国际交流与合作。同时，应具备跨文化适应能力，能够在不同文化背景下工作和生活。
+
+终身学习意识：新文科人才应具备终身学习的意识和能力，不断更新自己的知识和技能。他们应掌握自主学习的方法，善于利用现代信息技术和网络资源进行学习。同时，应具备自我规划和自我管理能力，实现个人持续发展和进步。
+
+:::
+
+:::{.fragment .r-fit-text style="text-align:center; margin-top: 1em"}
+**具有与理工科[对话能力、意识和信心]{.red}的文科人才**
+:::
+
+
+# 挑战
+
+## 双重挑战
+
+
+:::: {.columns}
+
+::: {.column width="35%"}
+
+**学生挑战**
+
+- “实用主义”误导
+    - 会用就行
+    - “老师，代码在哪”
+- “来自未来”的诱惑
+    - Python
+    - GPT
+- 缺乏心理建设
+    - “我数学不好”
+    - “看不懂公式”
+:::
+
+::: {.fragment .column width="25%"}
+
+**教学挑战**
+
+- 有限学时
+    - 缺乏对口专业
+    - 缺乏培养系统
+- 有限基础
+    - 没有数学
+    - 没有激励
+- 有限应用
+    - 研究导向
+    - 应用场景
+
+:::
+
+::: {.fragment .column width="40%"}
+
+**应战方向**
+
+&rArr; 文科生“[能听得懂]{.red}”的基础方法教学
+
+&rArr; 从0到1的[系统]{.red}编程教学
+
+&rArr; 次第进阶的[激励]{.red}系统
+
+:::
+
+::::
+
+
+
+# 尝试
+
+## 基础方法教学
+
+《治理技术专题：政治数据分析》
+
+:::: {.columns}
+
+::: {.column width="40%"}
+- ~~“轻理论、重操作”~~, 以方法论为纲
+    - 梳理脉络，不断回述
+- "三结合"
+    1. 基础与延展性结合
+    1. 案例与学科特性结合
+    1. 学习与实践结合
+- “课上‑课下‑课后”教学法
+    - 课上方法原理
+    - 课下编程实操
+    - 课后自学任务
+:::
+
+::: {.column width="60%"}
+:::{.r-vstack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_2023Fall1.png){fig-align="center" height=300}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_2023Fall3.JPG){fig-align="center" height=250}
+:::
+:::
+
+::::
+
+
+:::{.notes}
+一是注重基础与延展性结合。本课程力求突出数据分析的基础原理
+与科研习惯双向养成。一方面，理解述理原理是正确进行数据分析的前提，却是很多
+国内课程忽视的方面；而良好的科研习惯也是对方法论原理的操作化；另一方面，方
+法论原理通常是基于高中数学即可了解的内容，容易建构学生“学而能会”、“垫垫
+脚够得着”的心理预期和自信心。二是注重案例与学科特性结合。课程利用成熟的政
+治科学数据案例，向学生全面展示对不同种类数据分析的方式方法，同时利用当代政
+治科学与经济学、社会学、心理学、传播学、管理学、历史学等人文社科领域的跨学
+科联系，向学生展示如何将基于政治学案例方法应用到自己学科领域。三是注重学习
+与实践结合。本项目创新地将课堂教学、课下自学与课后编程工作坊有机结合，利用
+授课教师主持的工作坊为课堂学习提供充足的复习资源和实践平台，为实现学生从理
+论到实践的能力转化提供条件，有效弥补课堂教学局限性，形成课上课下层次联动的
+教学系统。
+:::
+
+
+## 编程语言教学
+
+《Learning R with Dr. Hu and His Friends》
+
+- 教学系统
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_rworkshop.png){ fig-align="center" height=500}
+
+---
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+- 支撑系统
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_drhur.png){ fig-align="center" height=400}
+
+:::
+
+::: {.column .fragment width="60%"}
+- 激励系统
+
+:::{.r-stack}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/survivorBadge.jpg){fig-align="center" height=500}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_certificate.jpg){.fragment fig-align="center" height=500}
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/newla_lecture.png){.fragment fig-align="center" height=400}
+:::
+:::
+
+::::
+
+
+:::{.notes}
+- 教学系统
+    - 全年双轨教学：R + Python
+    - 秋9节：筑基；春9节：进阶
+    - 与《政治数据分析》相结合
+    - 线下教学+B站直播
+- 支撑系统
+    - 软件
+    - 教材
+    - 社群
+- 激励系统
+    - Survivor/Expert
+    - Certificate
+    - TA/Lecture
+:::
+
+
+## 经验体会
+
+:::{.large style="text-align:center; margin-top: 2em"}
+- 重视知识传授的[系统性]{.red}
+- 突破能力培养的[边界性]{.red}
+- 贯彻价值塑造的[全面性]{.red}
+:::
+
+
+# 感谢倾听，欢迎交流 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+:::
+
+## Reference
+
+::: {#refs}
+:::
