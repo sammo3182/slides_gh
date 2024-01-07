@@ -1,63 +1,60 @@
 ---
-title: |
-    | Principles of 
-    | Text Analysis
-subtitle: |
-    | Class Advanced Methods School, CityU
-date: "2023-06-13"
-date-format: "iso"
-
+title: "Principles of<br>Text Analysis"
+subtitle: "Class Advanced Methods School, CityU"
+# date: "2023-06-13"
+# date-format: "iso"
 author: "Yue Hu"
-institute: |
-    | Political Science
-    | Tsinghua University
+institute: 
+  - Department of Political Science
+  - Tsinghua University
 
 bibliography: pre_cams.bib
 
-knitr: 
-    opts_chunk: 
-      echo: false
-
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
-    incremental: true
+    incremental: false
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
-    self-contained: false
+    embed-resources: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    history: false # not record slides in browser history
-    progress: false
-    controls: false
-    pointer:
-      pointerSize: 18
-      color: '#32cd32'
-    sc-sb-title: true
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-
-    # spotlight:
-    #   size: 30
-    #   presentingCursor: "default" # showing the cursor on the presentation page
-    #   disablingUserSelect: false
-    
-    # show-slide-number: speaker # `speaker` only print in pdf, `all` shows all the time
+    callout-appearance: simple
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
+    code-fold: true
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-      data-background-size: 250px
+      data-background-size: 250px   
       data-background-position: top 10% right 5%
+    default-image-extension: png
 
-filters:
-  - code-fullscreen
-  - reveal-header
-  - lightbox
+knitr: 
+    opts_chunk: 
+      dev.args:
+        bg: transparent
+
+execute:
+  echo: true
+  message: false
+  warning: false
 
 revealjs-plugins:
-  - pointer # adding q to activate/deactivate a pointer
-  # - spotlight
+  - spotlight
+lightbox:
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+  
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup}
@@ -74,16 +71,21 @@ p_load(
 
 # Functions preload
 set.seed(313)
+
+theme_set(theme_minimal())
 ```
 
+# Outline
 
-
+- Text-As-Data Approach
+- DGP for Text-As-Data
+- Analyzing text data
 
 # Text-As-Data Approach
 
-## When text becomes data
+## When text becomes (big) data
 
-- Yearly: The annual increase of social media users from 2017 to 2018 is 56,530,000.
+- Yearly: Social media users increase 56,530,000 in 2017--18.
 - Daily: 
     + Baidu ("Chinese google") [day]{.red} user search request, it takes [1.7 days]{.red} to scan once;
     + Wechat ("Chinese whatsup") [day]{.red} added data [500TB]{.red}---more than all human books.
@@ -95,7 +97,7 @@ set.seed(313)
 
 :::{.callout-tip collapse="true"}
 By 2020, the size of global data has reached 40ZB (5.2TB/person).^[
-<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB---reference: 1080p HD 2hrs：6GB
+[<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB---reference: 1080p HD 2hrs：6GB]{.fragment}
 ]
 :::
 
@@ -110,16 +112,20 @@ Exa Byte < Zetta Byte < Yotta Byte
 
 ## History of text as data
 
-- Long history
-    - @Coase1960: how the law resolves externality problems
-    - @FriedmanSchwartz2008: Construction of policy surprises via historical documents.
-    - Difficulties:
-        - Data maintaining and update
-        - Text analytic methods
-        - Time-consuming
-        - Low generalization
+- "Ancient" studies
+    - How the law resolves externality problems [@Coase1960]
+    - Construction of policy surprises via historical documents [@FriedmanSchwartz2008]
 
-## Boom of Text Analysis
+:::{.fragment}
+- Difficulties
+    - Maintaining and update
+    - Analytic methods
+    - Time consumption
+    - Generalization
+:::
+
+
+## Boom of Text Analysis in the age of big data
 
 + Text data grows [exponentially]{.red}
 + Large-scale text data [collection]{.red}
@@ -127,17 +133,17 @@ Exa Byte < Zetta Byte < Yotta Byte
 + Extensive [social meaning]{.red} expressed through text
 + Scalable, well-developed and economic [methods]{.red}
 
-## Text-as-data methods
+## Text-as-data perspective
 
 :::: {.columns}
 
-::: {.column width="40%"}
+::: {.column width="20%"}
 *Objective*
 
-~~Text~~ vs. Language [&check;]{.green}
+~~Text~~ Language
 :::
 
-::: {.column width="60%"}
+::: {.column width="80%"}
 *Type*
 
 * Text analysis vs. content analysis
@@ -160,61 +166,61 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 ::::
 
 
-## Illustration: @Grimmer2010
+## Illustration I
+
+@Grimmer2010
 
 - Objective
     - The priorities political actors emphasize in statements
-- Method
-    - Bayesian Hierarchical Topic Model
 - Data
     - An original collection of over 24,000 Senate press releases in 2007
+- Method
+    - Bayesian Hierarchical Topic Model
 
 ## Findings
 
 ::: {.panel-tabset}
 ### Focus
 
-:::: {.columns}
 
-::: {.column width="30%"}
-Committee Leaders Focus on their Committee’s Issues
-:::
-
-::: {.column width="70%"}
-![](images/theory_grimmer1.png){.lightbox fig-align="center" height=450}
-:::
+![Committee leaders focus on their committee's issues](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer1.png){.lightbox fig-align="center" height=500}
 
 :::{.notes}
-Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees’ jurisdiction than other senators. **This figure compares the attention that Senate committee leaders—chairs or ranking members—dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
+Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees' jurisdiction than other senators. **This figure compares the attention that Senate committee leaders---chairs or ranking members---dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
 :::
-
-::::
 
 
 ### Cluster
 
-![](images/theory_grimmer2.png){fig-align="center"}
+![Expressed agendas cluster geographically](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer2.png){fig-align="center" height=500}
 
-Expressed Agendas Cluster Geographically
+
 
 :::{.notes}
-Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators’ expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state’s delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture’s importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicates the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
+Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators' expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state's delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture's importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicates the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
 :::
 
 ### Predict
 
-![](images/theory_grimmer3.png){fig-align="center"}
+![Attention to appropriations predicts opposition to earmark reform](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer3.png){fig-align="center" height=500}
 
-Attention to Appropriations Predicts Opposition to Earmark Reform
+
 
 :::{.notes}
-Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose DemintMcCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator’s posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
+An earmark is a provision inserted into a discretionary spending appropriations bill that directs funds to a specific recipient while bypassing the merit-based or competitive funds allocation process. These provisions are often associated with legislation specifying certain congressional spending priorities or in revenue bills that apply to a limited number of individuals or entities. 
+
+The DeMint-McCain amendment was a significant proposal related to earmark reform. Senator Jim DeMint introduced a one-year earmark moratorium amendment, which was co-sponsored by both Republicans and Democrats. The amendment aimed to end the era of earmarks and was seen as a step towards increased transparency, accountability, and fiscal responsibility in Congress. Despite its support from some senators and advocacy groups, the amendment was defeated in a late-night Senate vote, with a result of 29-71.
+
+Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose Demint-McCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator's posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. 
+
+The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
 :::
 :::
 
 
+## Illustration II
 
-## Illustration: @BenoitEtAl2016
+@BenoitEtAl2016
 
 - Objective
     - Professionals vs. Masses
@@ -229,7 +235,7 @@ Fig. 6 Senators who dedicate more attention to appropriations were more likely t
 ::: {.panel-tabset}
 ### Coding
 
-![](images/theory_crowd-sourced.jpg){fig-align="center" height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
 
 :::{.notes}
 Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.
@@ -237,7 +243,7 @@ Figure 1: Hierarchical coding scheme for two policy domains with ordinal positio
 
 ### Results
 
-![](images/theory_expert-crowd.png){fig-align="center" height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
 
 :::{.notes}
 Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
@@ -247,7 +253,9 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 
 
 
-## Illustration: @DietrichEtAl2019
+## Illustration III
+
+@DietrichEtAl2019
 
 - Objective
     - Speakers' emotional state
@@ -259,17 +267,18 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 ## Operation
 
 :::{.r-stack}
-![](images/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
 
 :::{.fragment}
-![](images/theory_vocalPitch.png){.lightbox fig-align="center" height="500"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch.png){.lightbox fig-align="center" height="600"}
 :::
 
 :::
 
 
+## Illustration IV
 
-## Illustration: @ZhangPan2019
+@ZhangPan2019
 
 - Objective
     - Group activities from social media
@@ -278,18 +287,24 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 - Data
     - A random sample of 20,000 geocoded posts from Weibo, 2010--2017
 
+:::{.notes}
+CNN: Convolutional Neural Network
+
+RNN: Recurrent Neural Network
+:::
+
 ## Operation
 
 :::{.r-stack}
-![](images/theory_casm.png){fig-align="center" width="1000"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_casm.png){fig-align="center" width="1000"}
 
-![](images/theory_runningMan.png){.fragment fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center"}
 
-![](images/theory_banner.png){.fragment fig-align="center" height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
 :::
 
 
-## Challenges of text as data
+## Challenges
 
 :::: {.columns}
 
@@ -326,10 +341,10 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 
 - History of text-as-data
     - Long and short
-- Text-as-data methods
+- Text-as-data perspectives
     - Objective: language
     - Types
-- Illustrations
+- Application
     - Text &rarr; audio, video
 
 # DGP for Text-As-Data
@@ -337,12 +352,15 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 ## Points to cover
 
 1. Where to find text resources?
+    1. First-hand sources
+    1. Second-hand sources
 1. How to get text resources?
 1. How to deal with text information?
 1. What can text data do?
 
 
-## Text source: Original
+
+## First-hand sources
 
 :::{style="text-align:center; margin-top: 2em"}
 *Text from authors*
@@ -360,19 +378,19 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 
 ## Open Platforms
 
-![](images/theory_zhongsheng_index.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_index.png){fig-align="center" height=600}
 
 ## Media database
 
-![](images/theory_renminribao.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_renminribao.png){fig-align="center" height=600}
 
 ## E-Government
 
-![](images/theory_henan-Egovernment.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_henan-Egovernment.png){fig-align="center" height=600}
 
 ## Social Media
 
-![](images/theory_social-media.gif){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_social-media.gif){fig-align="center" height=600}
 
 :::{.notes}
 新浪微博1.4亿，微信用户5.5亿;
@@ -381,7 +399,7 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 
 ## Reddit
 
-![](images/theory_zhihu.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhihu.png){fig-align="center" height=600}
 
 :::{.notes}
 Quora, Stack Overflow
@@ -389,10 +407,10 @@ Quora, Stack Overflow
 
 ## Open question
 
-![](images/theory_survey_openQuestion.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_survey_openQuestion.png){fig-align="center" height=600}
 
 
-## Text source: Second-hand
+## Second-hand sources
 
 :::{style="text-align:center; margin-top: 2em"}
 *Text from archives*
@@ -406,50 +424,51 @@ Quora, Stack Overflow
 
 ## Indicators
 
-![](images/theory_baidu_zhishu.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_baidu_zhishu.png){fig-align="center" height=600}
 
 ## Digitalized documents
 
 :::{.r-stack}
-![](images/theory_hongkong_lib.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=600}
 
-![](images/theory_cbdb.png){.fragment fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=600}
 :::
 
-## Text collection
+## Text data collection
 
-- Second-hand: archive and digital database
 - First-hand: Spider/crawler/scraper
+- Second-hand: archive and digital database
+
 
 :::{.r-stack}
-![](images/theory_bazhuayu.png){.fragment fig-align="center" height=450}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bazhuayu.png){.fragment fig-align="center" height=450}
 
-![](images/theory_huochetou.png){.fragment fig-align="center" height=450}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
 
-![](images/theory_gooseeker.png){.fragment fig-align="center" height=450}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
 :::
 
 ## Scraper operation
 
 :::{.r-stack}
-![](images/theory_gooseekerI.png){.fragment fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
 
-![](images/theory_gooseekerII.png){.fragment fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
 
-![](images/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
 :::
 
 ## Customized Scrapping
 
 `SelectorGadget` (Chrome add-in)
 
-![](images/theory_zhongsheng_page.png){fig-align="center" height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
 
-## Scrapping programming
+## Scrapping with `rvest`
 
-`rvest`(R)
+```{r zhongsheng-eg}
+#| eval: false
 
-```{r zhongsheng-eg, eval = FALSE, echo=TRUE}
 ls_zhongsheng <-
   read_html("http://politics.people.com.cn/GB/8198/426918/index.html") |> # index page
   html_nodes("h5 a") |> # the nodes of the links
@@ -479,28 +498,30 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 
 ## Regular Expression
 
-![](images/theory_regular_expression.png){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_regular_expression.png){fig-align="center" height=600}
 
 ## Structuralization
 
-![](images/theory_zhongsheng_output.png){.lightbox fig-align="center"}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_output.png){fig-align="center" width=1000}
 
 ## Wrap it up
 
 - Source of text data
-    - Original
+    - First-hand
     - Second-hand
-- Scrapping
-    - Foolproof software
-    - Programming
-        - Regular expression
+- Data collection
+    - First-hand: Scrapping
+        - Foolproof software
+        - Programming
+            - Regular expression
+    - Second-hand: Archives
 - Structuralization
 
-# Analyzing text
+# Analyzing text data
 
-## An (Classic) Overview^[@GrimmerStewart2013]
+## An (Classic) Overview [@GrimmerStewart2013]
 
-![](images/theory_analysis-method.png){fig-align="center" height=550}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_analysis-method.png){fig-align="center" height=600}
 
 ## Level of Analysis
 
@@ -508,7 +529,7 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 :::{.fragment .fade-in-then-semi-out}
 *Description*
 
-Frequency, word cloud ([NO!]{.red}), network
+Frequency, word cloud (👎), network
 :::
 
 
@@ -525,7 +546,7 @@ Sentiment analysis, word embedding, word sequence, relationship
 :::
 :::
 
-## Principle of Analysis
+## Tenet of Text-as-data analysis [@GrimmerStewart2013]
 
 :::{style="text-align:center; margin-top: 2em"}
 1. All quantitative models of language are [wrong]{.red}---but some are useful. 
@@ -534,17 +555,7 @@ Sentiment analysis, word embedding, word sequence, relationship
 1. [Validate, Validate, Validate.]{.fragment .highlight-blue}
 :::
 
-## "Fake" Assumption
-
-:::{.callout-important}
-**Bag of word**
-
-A text is represented as the bag (multiset) of its words.
-:::
-
-![](images/theory_bagOfWords.png){.fragment fig-align="center" height=300}
-
-## Words in different names/processing
+## Unit of Analysis
 
 :::: {.columns}
 
@@ -552,10 +563,10 @@ A text is represented as the bag (multiset) of its words.
 - Corpus
     - Document (volumn, chapter, section)
         - Paragraph
-            - Sentence
-                - Clause
-                    - Word (1-gram)
-                        - Token
+            - Sentence [&check;]{.green}
+                - Clause [&check;]{.green}
+                    - **Word (Unigram)** [&check;]{.green}
+                        - **Token** [&check;]{.green}
 :::
 
 ::: {.column .fragment width="50%"}
@@ -573,13 +584,34 @@ Sequence of linguistic features
 
 ::::
 
+## Unrealistic Assumption
+
+> Where the "all models are wrong" starts
+
+:::{.callout-important}
+**Bag of word**
+
+A text is represented as the bag (multiset) of its words.
+:::
+
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords.png){.fragment fig-align="center" height=300}
+
+## From natural language to computational language
+
+![Document-Term Matrix (DTM)](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords2.jpg){fig-align="center" height=600}
+
+
+:::{.notes}
+In linguistics, the opposite of natural language is artificial/constructed language (conlangs),  like Klingon in "Star Trek," Dothraki in "Game of Thrones"
+:::
+
 ## Preprocessing
 
 :::{style="text-align:center; margin-top: 2em"}
 - Segmentation
 - Tokenization
 - Stopwords/function words removing   
-......
+- Other project-oriented wrangling
 :::
 
 
@@ -588,17 +620,22 @@ Sequence of linguistic features
 :::: {.columns}
 
 ::: {.column width="30%"}
-*Synthetic languages* (e.g., English)
+*Scriptio discreta* (e.g., English)
 
 Document &rarr; paragraphs/sentences
+
+:::{.notes}
+discrete script
 :::
 
-::: {.column width="70%"}
-*Analytic/isolating languages* (e.g, CJK)
+:::
 
-> "近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。——“难道非要撞了南墙才回头——意孤行必将失败”,《人民日报》（2019年05月30日02版）
+::: {.column .fragment width="70%"}
+*Scriptio continua* (e.g, CJK) 
 
 ```{r segment}
+#| code-fold: false
+
 library(jiebaR)
 
 zhongsheng <- "近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"
@@ -607,6 +644,13 @@ cutter <- worker() # segment engine
 segment(zhongsheng, cutter)
 ```
 :::
+
+:::{.notes}
+continuous script
+
+《人民日报》（2019年05月30日02版）
+:::
+
 
 ::::
 
@@ -618,9 +662,11 @@ segment(zhongsheng, cutter)
 
 :::{.fragment}
 
-*Stopwords examples*
+Examples of Stopwords*
 
 ```{r stop-words}
+#| echo: false
+
 read_lines(STOPPATH)[883:903]
 read_lines(STOPPATH)[157:177]
 ```
@@ -629,20 +675,21 @@ read_lines(STOPPATH)[157:177]
 
 :::{.fragment}
 :::{.callout-tip}
-## Stopwords sources in Chinese
+## Stopwords sources for Chinese
 
 * 百度停词表
 * 哈工大停词表
-* 网络搜集停词表，如[“最全中文停用词表整理（1893个）”](https://blog.csdn.net/shijiebei2009/article/details/39696571)
+* 网络搜集停词表，如["最全中文停用词表整理（1893个）"](https://blog.csdn.net/shijiebei2009/article/details/39696571)
 :::
 :::
 
 
----
+## Dimension reduction
 
-- Dimension reduction
-    - Lemmatization: (happy, happier, happiness) &rarr; happy
-    - Stemming: (happy, happier, happiness) &rarr; happi
+> Issue: Sparse matrix
+
+- Lemmatization: (happy, happier, happiness) &rarr; happy
+- Stemming: (happy, happier, happiness) &rarr; happi
 
 :::{.fragment}
 :::{.callout-tip}
@@ -653,20 +700,22 @@ read_lines(STOPPATH)[157:177]
 :::
 :::
 
-- Labelling
+:::{.fragment}
+- Labeling
     - Content vs. function
     - Linguistic features: n., v., adj., adv., prep., conj.......
+:::
 
-## Outcomes
+## A comprehensive application
 
-![](images/theory_bagOfWords2.jpg){fig-align="center" height=600}
+![2019-05-14 ~ 05-22: China-US trade war](http://103.238.162.29:10002/webdav/sammo3182/figure/text_zhongsheng.png){fig-align="center" height=600}
 
-## Analysis of Words
+## Data collection
 
-*Original*
+*Raw Data*
 
 ```{r zhongsheng-clean}
-df_zhongsheng <- readRDS("data/zhongsheng.RDS")
+df_zhongsheng <- readRDS(url("http://103.238.162.29:10002/webdav/sammo3182/data/zhongsheng.RDS"))
 
 df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
   segment(content, cutter) |> paste(collapse = " ")
@@ -690,6 +739,8 @@ select(df_token, -phase) |> head()
 *Removing the stopwords*
 
 ```{r zhongsheng-stop}
+#| code-fold: true
+
 # removing the stop words
 df_stopWords <- tibble(word = read_lines(STOPPATH))
 
@@ -798,8 +849,8 @@ Measuring the distance between texts
 > Hamming distance: the distance between two strings of equal length is the number of [positions]{.blue} at which the [corresponding symbols are different]{.red}. 
 
 :::{.r-stack}
-![](images/theory_hammingDis_org.png){fig-align="center" height=num}
-![](images/theory_hammingDis_comp.png){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=num}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_comp.png){fig-align="center" height=num}
 :::
 
 e.g., H(100→011) = 3; H(010→111) = 2.
@@ -843,9 +894,9 @@ distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
     + Unigram: 清华 大学 政治 系
     + Bigram: 清华大学 政治系/清华 大学政治 系
     + Trigram：清华大学政治 系/清华 大学政治系
-- Word weights
 
-## Word Frequency to Weighted Frequency
+
+## Frequency to Weighted Frequency
 
 Cons of DTM
 
@@ -853,39 +904,41 @@ Cons of DTM
 2. Over-emphasize common words
 3. Under-emphasize rare words
 
-- Word weights: e.g., term frequency-inverse document frequency (TF-IDF)
-  - Pros: 
-    1. Identify important words
-    2. Reduces the weight of common words
-    3. Improve the performance of machine learning models
-    
----
+[Solution: Word weights: e.g., term frequency-inverse document frequency (TF-IDF)]{.fragment}
 
+## Word Weight
+
+- Pros: 
+  1. Identify important words
+  2. Reduces the weight of common words
+  3. Improve the performance of machine learning models
+
+:::{.fragment}
 - Cons:
   1. Assume independence of terms (same as DTM)
   2. Give high weight to rare words that is very rare in the corpus but appears a few times in a particular document
   3. Sensitive to the size and diversity of the corpus
+:::
+
 
 
 ## Word embedding: 
 
-`GloVe`, `word2Vec`: Words' meanings depend not just on immediate neighbors
+> Words' meanings depend not just on immediate neighbors
 
-![](images/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
 
 :::{.notes}
-The term "embedding" comes from the neural network literature, in which an “embedding layer” is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
+The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
 
-- The embedding model GloVe (“Global Vectors”) by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
+- The embedding model GloVe ("Global Vectors") by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
 - An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
 :::
 
----
-
-Topic modeling
+## Topic modeling
 
 <video width="1000" height="600" controls preload>
-<source src="images/theory_topicModeling.webm" type="video/webm">
+<source src="http://103.238.162.29:10002/webdav/sammo3182/video/theory_topicModeling.webm" type="video/webm">
 </video>
 
 :::{.notes}
@@ -894,17 +947,22 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 
 ## Attention Function
 
+> Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
+
+:::{.fragment .fade-in-then-semi-out}
+"Attention is all you need" [@VaswaniEtAl2017]
+
 > As a leading firm in the [MASK] sector, we hire highly skilled software engineers.    
 > As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.
 
 What's should be filled into the "[MASK]"? How do you figure out?
+:::
+
 
 :::{.fragment}
+As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.
 
-> As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.   
-> As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
-
-Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
+As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
 
 :::
 
@@ -952,31 +1010,22 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
     - Similarity analysis
     - Semantic analysis
         - Word embedding, sequence
-        - Topic modeling
+            - Topic modeling
 :::
 
 ::::
 
-## Evaluation
 
-![](images/evaluation.png){fig-align="center" height=600}
+# Thank you {background="#43464B"}
 
-
-## {background="#43464B"}
-
-:::{style="text-align: center; margin-top: 1em"}  
-[Thank You]{.Large}
-
-:::{style="margin-top: 2em"}
-[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+:::{style="text-align: right; margin-top: 1em"}  
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 
 [`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
 
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
 [`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
-
-![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){fig-align="center" height=200}
-
-:::
 :::
 
 ## References

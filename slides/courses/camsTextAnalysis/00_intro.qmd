@@ -1,64 +1,55 @@
 ---
-title: |
-    | Unveiling
-    | the Power of Words
-subtitle: |
-    | Quantitative Text Analysis, CAMS
-date: "2023-06-12"
-date-format: "iso"
+title: "Unveiling<br>the Power of Words"
+subtitle: "Quantitative Text Analysis, CAMS"
+    
+# date: "2023-06-12"
+# date-format: "iso"
 
 author: "Yue Hu"
-institute: |
-    | Political Science
-    | Tsinghua University
+institute: 
+  - Department of Political Science
+  - Tsinghua University
 
 bibliography: pre_cams.bib
 
-knitr: 
-    opts_chunk: 
-      echo: false
+execute:
+  echo: true
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
 
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
-    incremental: true
+    incremental: false
     preview-links: true # open an iframe for a link
-    link-external-newwindow: true
-    self-contained: false
+    embed-resources: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    history: false # not record slides in browser history
-    progress: false
-    controls: false
-    pointer:
-      pointerSize: 18
-      color: '#32cd32'
-    sc-sb-title: true
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-
-    # spotlight:
-    #   size: 30
-    #   presentingCursor: "default" # showing the cursor on the presentation page
-    #   disablingUserSelect: false
-    
-    # show-slide-number: speaker # `speaker` only print in pdf, `all` shows all the time
+    callout-appearance: simple
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-      data-background-size: 250px
+      data-background-size: 250px   
       data-background-position: top 10% right 5%
 
-filters:
-  - code-fullscreen
-  - reveal-header
-  - lightbox
-
 revealjs-plugins:
-  - pointer # adding q to activate/deactivate a pointer
-  # - spotlight
-    
+  - spotlight
+  
+lightbox:
+  match: auto
+  effect: fade
+
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
 ```{r setup}
@@ -83,18 +74,18 @@ set.seed(313)
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 *Experience*
 
 - PhD. of Poli. Sci., U of Iowa
   - Grad. Certificate in Informatics
 - Deputy director
-    - Computational Social Science Platform
+    - Computational Social Science Platform, THU
     - Data and Governance Center, THU
 - Founder of *Learning R with Dr. Hu and His Friends*
 :::
 
-::: {.column .fragment width="40%"}
+::: {.column .fragment width="50%"}
 *Interest*: 
 
 > Interdisciplinary
@@ -102,7 +93,7 @@ set.seed(313)
 - W. data science
   - Lab and survey experiments
   - Latent variable, network, spatial
-  - [Text analysis, data visualization]{.red}
+  - *Text analysis, data visualization*
 :::
 
 ::::
@@ -159,14 +150,19 @@ set.seed(313)
 ## Prerequesite
 
 - You'll learn the course a little more easily, if you've known
-  - A little about econometrics
-  - A little about programming
+  - A little bit econometrics
+  - A little bit programming
 
+:::{.fragment style="text-align:right; margin-top: 1em"}
 - Operation environment
-  - R (purely)
+  - [R](https://cran.r-project.org/mirrors.html)
   - [`drhur`](https://sammo3182.github.io/software/drhur/)
+  - [`rvest`](https://rvest.tidyverse.org/)
+  - [`jiebaR`](https://qinwenfeng.com/jiebaR/)/[`TopWORDS`](http://www.stat.tsinghua.edu.cn/kdeng/r-package/)
   - [`quanteda`](http://quanteda.io/)
-  
+:::
+
+
 # Why R
 
 ## What's R
@@ -174,7 +170,7 @@ set.seed(313)
 - A high-level programming language (object-oriented programming)
 
 :::{.fragment}
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/languageLevel.jpg?raw=true){fig-align="center" height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/languageLevel.jpg){fig-align="center" height=500}
 :::
 
 
@@ -253,11 +249,11 @@ Sending emails
 ### Visualization
 :::{.r-stack}
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/ggmap.png){.fragment height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/ggmap.png){.fragment height=500}
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/hillShade.png){.fragment height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/hillShade.png){.fragment height=500}
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/distributionHill.png){.fragment height=500}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/distributionHill.png){.fragment height=500}
 
 :::
 :::
@@ -265,9 +261,9 @@ Sending emails
 ::::
 
 
-## {background-image="https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
+## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/programCompare.jpg){fig-align="center" height=600}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg){fig-align="center" height=600}
 
 
 # Set Up
@@ -279,13 +275,13 @@ Sending emails
 ::: {.column width="50%"}
 *Core*
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/Rlogo.png){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rlogo.png){fig-align="center" height=400}
 :::
 
 ::: {.column width="50%"}
 *Integrated development environment（IDE）*
 
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/rstudio.jpg){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/rstudio.jpg){fig-align="center" height=400}
 :::
 
 ::::
@@ -296,7 +292,7 @@ Sending emails
 :::: {.columns}
 
 ::: {.column width="40%"}
-![](https://raw.githubusercontent.com/sammo3182/slides_gh/master/slides/courses/rWorkshop/images/apps.jpeg){fig-align="center" height=400}
+![](http://103.238.162.29:10002/webdav/sammo3182/figure/apps.jpeg){fig-align="center" height=400}
 :::
 
 ::: {.column width="60%"}
@@ -332,22 +328,29 @@ drhur::drhur("play")
 
 ## `drhur` 
 
-> `drhur(module, language = "en")`
+- Software Installation
+
+```{r install}
+#| eval: false
+
+drhur(module, language = "en")
+```
+
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 - Programming module
     - Released version (1.1.0)
-    - `calculate`
-    - `play`
-    - `wrangle`
-    - `visualization`
+        - `calculate`
+        - `play`
+        - `wrangle`
+        - `visualization`
     - `loop` (CAMS module)
 :::
 
 ::: {.column .fragment width="50%"}
-- Practice (CAMS module)
+- Text analysis (CAMS module)
     1. `scrap`
     1. `regex`
     1. `preprocess`
