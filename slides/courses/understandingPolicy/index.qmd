@@ -1,0 +1,102 @@
+---
+title: "Public Policy Analysis: Perspectives and Methods (30700953)"
+author: "Yue Hu"
+format: html
+
+execute:
+  echo: false
+  message: false
+  warning: false
+  dpi: 300
+---
+
+```{r setup, include=FALSE}
+if (!require(pacman)) install.packages("pacman")
+#if (!require(drhutools)) remotes::install_github("sammo3182/drhutools")
+library(pacman)
+p_load(
+  rio, here, tidyverse, lubridate
+)
+
+set.seed(313)
+
+# Theme setup
+theme_set(theme_minimal())
+```
+
+```{r calendar, include=FALSE}
+# Opening Date
+start <- ymd("2024-02-26")
+
+# Final Week
+end <- start + dweeks(15) 
+
+schedule <-
+  tibble(day = seq(from = start, to = end, by = "days")) %>%
+  mutate(day = ymd(day),
+         weekDay = wday(day, week_start = 1)) %>% # get the relative week number
+  filter(weekDay == 1) # only keep Monday
+
+# Schedule exchange due to Holiday
+
+# schedule$day[schedule$day == ymd(20230501)] <- ymd(20230507)
+
+# Holiday
+tombSweep <- ymd(20240404) %--% ymd(20240406)
+laborDay <- ymd(20240430) %--% ymd(20240505)
+dragonBoat <- ymd(20240610) %--% ymd(20240610)
+
+
+schedule$topic[schedule$day %within% list(tombSweep, laborDay)] <- "[Public Holiday]"
+schedule$translation[schedule$day %within% list(tombSweep, laborDay)] <- "[哗啦啦，休假啦！]"
+
+schedule$lab[schedule$day %within% list(tombSweep, laborDay)] <- 
+  schedule$reference[schedule$day %within% list(tombSweep, laborDay)] <- 
+  schedule$reading[schedule$day %within% list(tombSweep, laborDay)] <- 
+  "Nah~"
+
+schedule <- arrange(schedule, day) %>% 
+  rowid_to_column(var = "weekNum")
+
+content <- import("D:/Seafile/WW_employed/01_Teaching/01_courses/02_Analysis_of_Public_Policy/schedule_editable.xlsx")
+
+schedule$topic[is.na(schedule$topic)] <- content$topic
+schedule$translation[is.na(schedule$translation)] <- content$translation
+schedule$reading[is.na(schedule$reading)] <- content$reading
+schedule$reference[is.na(schedule$reference)] <- content$reference
+schedule$lab[is.na(schedule$lab)] <- content$lab
+
+schedule$caption <- paste0("第", schedule$weekNum, "周 (", schedule$day, "): ", schedule$translation, " (", schedule$topic, ")")
+
+```
+
+Welcome to the lecture sources for the *Understanding Policies*. Learn how to understand public polices with Dr. Hu.
+
+![](https://drhuyue.site:10002/sammo3182/figure/goodluck.gif){fig-align="center"}
+
+### Schedule
+
+```{r slides}
+ls_slides <- list.files(here("slides", "courses", "understandingPolicy"), 
+                        pattern = "^\\d{2}_.*html$")
+dir_slides <- paste0("/slides_gh/slides/courses/understandingPolicy/", ls_slides)
+dir_slides <- dir_slides[-1]
+```
+
+
+- [`r schedule$caption[1]`](`r dir_slides[1]`)
+- [`r schedule$caption[2]`](`r dir_slides[2]`)
+- [`r schedule$caption[3]`](`r dir_slides[3]`)
+- [`r schedule$caption[4]`](`r dir_slides[4]`)
+- [`r schedule$caption[5]`](`r dir_slides[5]`)
+- [`r schedule$caption[6]`](`r dir_slides[6]`)
+- [`r schedule$caption[7]`](`r dir_slides[7]`)
+- [`r schedule$caption[8]`](`r dir_slides[8]`)
+- [`r schedule$caption[9]`](`r dir_slides[9]`)
+- [`r schedule$caption[10]`](`r dir_slides[10]`)
+- [`r schedule$caption[11]`](`r dir_slides[11]`)
+- [`r schedule$caption[12]`](`r dir_slides[12]`)
+- [`r schedule$caption[13]`](`r dir_slides[13]`)
+- [`r schedule$caption[14]`](`r dir_slides[14]`)
+- [`r schedule$caption[15]`](`r dir_slides[15]`)
+- `r schedule$caption[16]`

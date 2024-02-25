@@ -1,0 +1,533 @@
+---
+title: "Introduction & Warmup"
+subtitle: "Understanding Policies (10700193-90))"
+
+author: "Yue Hu"
+institute: "Tsinghua University" 
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+    default-image-extension: png
+
+revealjs-plugins:
+  - spotlight
+
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  here,
+  rio,
+  tidyverse,
+  drhutools
+) 
+
+
+# Functions preload
+set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+## Overview
+
+
+No hardcore knowledge today, just tips that may save your semester😜
+
+- Mutual introduction
+- Does this class fit you?
+- Goals you can achieve
+- Commitment
+
+
+# Who r we & who r u
+
+## Our Turn: Who am I?
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_polisci.webp){.fragment fig-align="left" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_Rprogrammer.webp){.fragment fig-align="right" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_otaku.webp){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_drwho.jpg){.fragment fig-align="center" height=600}
+:::
+
+:::{.notes}
+David Tennant (2005--2010)
+:::
+
+## Your lovely TA
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_yezi.jpg){fig-align="center" height=600}
+
+## Your turn: Being memorable
+
+
+:::: {.columns}
+
+::: {.column width="30%"}
+![Introduce yourself with an elevator pitch](https://drhuyue.site:10002/sammo3182/figure/intro_elevator.jpg){fig-align="center" height=500}
+:::
+
+::: {.column .fragment width="40%"}
+**Why doing this**
+
+1. Key point of public policy analysis ([oft-ignored]{.red}💀)
+1. (One of) the [primary features]{.red} of this class
+
+
+:::{.notes}
+- Not only understanding but also explaining/illustrating/convincing
+- Being practical both on researching but also thinking
+- Key: audience position, What may impress me?
+:::
+
+:::
+
+::: {.column .fragment width="30%"}
+**Tips**
+
+- Smile 
+- Body language
+- Audience view
+    - Question
+    - Fact
+    - Story
+:::
+
+::::
+
+
+## Introduce yourself
+
+
+:::{style="text-align:center; margin-top: 2em"}
+30s preparation
+
+&
+
+30s presentation
+:::
+
+
+:::{style="text-align:center; margin-top: 2em"}
+[*Ready?*]{.fragment .Huge}
+:::
+
+# Scope & goals
+
+## What a course it is
+
+- [Not]{.red} a typical PA course
+- [Not]{.red} a typical GE course
+- [Not]{.red} one you can take through without love
+
+
+
+## An Atypical PA Class
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Typical PA**
+
+1. Policy whisperer
+1. Paradigm of social science
+1. Academic writing/presenting
+
+:::
+
+::: {.column width="50%"}
+**My course**
+
+* Little about policy process
+* Little about statistics
+* Foci: [perspectives and methods]{.red}
+* Bonus: [Professional]{.blue} training
+
+:::
+
+::::
+
+
+:::{.fragment}
+:::{.callout-note}
+## Is a typical PA class boring?
+
+- No, no, no~~ (It is just not for everyone😏)
+- > A PA class is a program that prepares individuals to *serve as managers* in the executive arm of local, state, and federal government and that focuses on the *systematic study* of executive organization and management. --- National Center for Education Statistics (NCES) of the US
+:::
+:::
+
+
+
+:::{.notes}
+Incorporate with organization theories, law management, bureaucrat, budget analyses, etc.
+:::
+
+
+## In a typical PA, you'll learn...
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+:::{.fragment .nonincremental}
+* A lot of [concepts and procedures]{.red}
+    + Structures/systems/branches/sections
+    + Procedures/execution/communication
+    + Outcomes
+    + Evaluation/Issue    
+    ......
+:::
+
+
+:::{.fragment .nonincremental}
+* A lot of [models]{.red}
+    + Smith Model
+    + Mutual Adaptation Model
+    + Communication Model of Intergovernmental Policy Implement   
+    ......
+:::
+
+:::
+
+::: {.column width="40%"}
+
+:::{.fragment .nonincremental}
+* A lot of specific [areas]{.red} 
+    + Bureaucratic system
+    + Social welfare
+    + Environmental, distribution, tax, revenue    
+    ......
+:::
+
+:::
+
+::::
+
+
+
+
+## In my class
+
+:::: {.columns}
+
+::: {.column .fragment width="40%"}
+:::{.nonincremental}
+* ~~Procedures~~
+* ~~History~~
+* ~~Topics~~
+
+* Perspectives
+* Approaches
+* Methods
+:::
+:::
+
+::: {.column .fragment width="60%"}
+
+**Also an epistemology**
+
+- We'll talk about a variety of approaches to help you understand public policies, but...
+    - [No]{.red} math or programming
+
+:::
+
+::::
+
+
+## Course Map
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_design.png){fig-align="center" height=600}
+
+
+## Key point to learn: illustrated by a story
+
+![William Taft & Robert Hutchins ](https://drhuyue.site:10002/sammo3182/figure/intro_TaftHutchins.png){height=400}
+
+:::{.notes}
+William Howard Taft: The 27th president of the United States and the tenth chief justice of the United States
+
+Robert Maynard Hutchins: Dean of Yale Law School (28 yr old), 后president of the U of Chicago
+:::
+
+1927, Yale
+
+
+## Chief Justice vs. Chancellor of the School
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_TAftVSHutchins.webp){fig-align="center" height=500}
+:::
+
+::: {.column width="50%"}
+- [Taft:] Well, I understand that at Yale you teach your students that judges are fools.
+- [Hutchins:] No, Mr. Chief Justice, at Yale we teach our students to [find that out]{.blue} for [themselves]{.red}.
+:::
+
+::::
+
+::: {.fragment .r-fit-text}
+Finding out for yourselves [*how*]{.blue}?
+:::
+
+# Commitment
+
+## Let's meet each other halfway
+
+:::{style="text-align:center; margin-top: 2em"}
+> [Finding out]{.red} [for]{.blue} yourselves
+:::
+
+
+:::{.Large style="text-align:center; margin-top: 2em"}
+You do "finding"💪
+
+I do "for" 💕
+:::
+
+
+
+## My commitment
+
+:::: {.columns}
+
+::: {.column width="65%"}
+- Being *friendly for nonprofessionals* and not boring
+- Being *responsible* for questions, comments, and suggestions
+- Being intersubjectively *fair*
+- Pushing you to be *more sophisticated, more critical, and more rational*
+:::
+
+::: {.column .fragment width="35%"}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_code20.jpg){fig-align="center" height=500}
+:::
+
+::::
+
+
+## Your job
+
+:::{.nonincremental .Large style="text-align:center; margin-top: 1em"}
+1. Reading
+1. Listening
+1. Expressing
+1. Writing
+:::
+
+## Reading
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_weekChunk.png){fig-align="center" height=200}
+:::
+
+::: {.column width="60%"}
+- > "Birkland (2007); 孙昶林(1991)"
+    - Required readings (~~word by word~~, just going through, if you want)
+:::
+
+::::
+
+
+- > "参考文献: Lindblom and Woodhouse (1993); Lindblom (1965); Kingdon (2014)"
+    - References (a.k.a., no need to read immediately)
+- > "Must-read: Hansen (2019)"
+    - You should read this! It's fun 😈
+
+---
+
+:::{.large style="text-align:center; margin-top: 2em"}
+Oh oh, btw, "retail English" all the time...
+:::
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_trump.webp){.fragment fig-align="center" height=400}
+
+## Why you may still want to read
+
+{{< video https://103.238.162.29:10002/webdav/sammo3182/video/intro_takeNotes.mp4 
+    title="Be united, alert, earnest and lively"
+    height="600">}}
+
+
+## Listening and Expressing
+
+- Let me see your pretty 🙃 EVERY TIME
+- 🗣️ gives you a high score
+- Please help the shame peers 😣
+- Please help me also 😘 (point out the typos)~
+- ANNNNNNNNNNNNNNNNNND 🥁🥁🥁🥁🥁🥁🥁🥁🥁
+
+::: {.fragment .r-fit-text style="text-align:center; margin-top: 1em"}
+[The Challenge~~~]{.red}    
+课堂宾主对
+🎆🎇🍾🎈🥳
+:::
+
+
+## The Challenge
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_monkDebate.jpg){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_greeceDebate.jpeg){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_qipashuo.jpg){.fragment fig-align="center" height=600}
+:::
+
+## Ready to be Challenging and Challenged
+
+:::: {.columns}
+
+::: {.column width="50%"}
+### Presenter
+
+1. 10 min
+1. Presenting
+    + Content
+    + Connection
+    + Inspiring
+:::
+
+::: {.column width="50%"}
+### Challenger
+
+1. 10 min
+1. Answering: "I bet you haven't read it!" 
+1. Asking: "I bet you don't get it!"
+
+{{< video https://103.238.162.29:10002/webdav/sammo3182/video/intro_challenge.mp4 
+    title="Be united, alert, earnest and lively"
+    height="300">}}
+
+
+:::{.notes}
+团结、紧张、严肃、活泼
+:::
+
+:::
+
+::::
+
+## Writing in class
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- "Do I in what case look into the notes after the class?"
+- Focus on the logic and framework
+- Relate to your own areas
+:::
+
+::: {.column .fragment width="50%"}
+### The key
+
+![Open mind](https://drhuyue.site:10002/sammo3182/figure/intro_openMinde.jpg){fig-align="center" height=400}
+:::
+
+::::
+
+
+## Writing the final project
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+:::{.nonincremental}
+A *proposal* of public policy analysis
+
+- A term-long project
+    - Topic brief (< Week 5)^[Start to talk~]
+    - Lit review (< Week 9)
+    - Presentation (Week 14, 15)
+    - Full proposal (< Week 16)
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_followHeart.gif){fig-align="center" height=250}
+:::
+
+::::
+
+
+- Learn to be [convincing]{.red}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_trump.webp){.fragment fig-align="center" height=250}
+
+:::{.notes}
+Take the chance to learn how to be convincing. 
+:::
+
+## Extra Credits
+
+![](https://drhuyue.site:10002/sammo3182/figure/aplus.gif){fig-align="center" height=400}
+
+1. Tournament with the course project (5' max)
+1. Voluntary presenter in the Challenge (2' max)
+
+
+## Take-Home Points
+
+- In this class, I want to help you "find out for yourself"
+- It's not a muddling-through GE course
+    - Be prudent if you decide to take it
+- You have a fair amount of work to do in this class, but they'll be fun~
+
+:::{.fragment}
+Will I see you in *next week*? See you there~
+:::
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_notLeaving.gif){.fragment fig-align="center" height=350}
+
