@@ -1,33 +1,41 @@
 ---
 title: "研究设计与数据分析原则"
 subtitle: "Political Research with Big Data (80700673)"
-
-author: "胡悦"
-institute: "清华大学" 
-
+author: "Yue Hu"
+institute: "Tsinghua University" 
 knitr: 
     opts_chunk: 
-      echo: true
-
+      echo: false
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     slide-number: true
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
-    
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+    default-image-extension: png
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup}
@@ -42,12 +50,12 @@ p_load(
   "janitor"
 )
 
-# Functions preload
+theme_set(theme_minimal())
 set.seed(313)
 ```
 
 
-## 学习计划
+## 概述
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -58,19 +66,45 @@ set.seed(313)
 
 ### 数据收集原则
 
-1. 抽样与权重
-1. 变量测量
+- 抽样与权重
+- 变量测量
 :::
 
 :::{.column width="50%"}
 ### 数据分析原则
 
-1. 统计基础
-1. 重复性截面数据分析
-1. 软件与数据资源
+- 统计基础
+- 重复性截面数据分析
+- 软件与数据资源
 :::
 ::::
 
+## Before everything： 三个问题
+
+:::{.large style="text-align:center; margin-top: 2em"}
+1. AI时代为什么还要学统计
+1. 什么样的人才不会被机器取代
+1. 什么时候应该找GPT帮忙（什么时候不）
+:::
+
+:::{.notes}
+1. AI时代为什么还要学统计
+    - Only when you know what's valuable and credible, GPT's answers are valuable
+    - Better understand LLM
+    - Better to achieve interdisciplinary studies
+    - To be unreplaceable
+1. 什么样的人才不会被机器取代
+    - The best: Not enough, 柯洁
+    - The one who know the principles: -> develop
+    - 懂政治学的人: power
+1. 什么时候应该找GPT帮忙（什么时候不）
+    - On its advantages: gathering information; routine jobs
+    - On its disadvantage: 
+        - Up-to-date info
+        - Critical thinking---an attention to do it
+        - Moral judgement
+        - Effective communication
+:::
 
 # 研究设计原则
 
@@ -78,11 +112,11 @@ set.seed(313)
 ## 社会科学从何谈起
 
 :::{.r-fit-text}
-[政]{.blue}务大数据 &sub; [政]{.blue}治[科学]{.red}研究&sub; 社会[科学]{.red}研究
+政务大数据研究 vs. 政治科学研究
 :::
 
 :::{.fragment .fade-in .Large style="text-align:center; margin-top: 1em"}
-何从谈起？
+从何谈起？
 
 :::{.fragment .semi-fade-out}
 信念
@@ -124,97 +158,92 @@ Jim Gray 早在2006 年就发表了题为《第四范式：数据密集型科学
 
 ## 问题来源
 
-![](images/stat_curiosity.jpg){height=850}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_curiosity.jpg){fig-align="center" height=600}
 
 ## 研究步骤
 
-理论（一个想法）&rarr; 假设（几个判断）&rarr; 验证（一坨证据）
+理论（想法）&rarr; 假设（判断）&rarr; 验证（证据）
 
 :::{.fragmewnt}
-**研究形式**
+**呈现形式**
 :::
 
 ::::{.columns}
 :::{.column width="50%" .fragment}
 *描述*
 
-已知 &rArr; 未知
-
 1. 无偏（正确😄）
 1. 高效（准确😅）
 
-![](images/stat_yangQian.gif){height=350}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_yangQian.gif){.fragment height=300}
 :::
 
 :::{.column width="50%" .fragment}
 *机制*
 
-搞清why & how
+Why & how
 
-......
+![](https://drhuyue.site:10002/sammo3182/figure/stat_yuXuanji.jfif){height=350}
 
-but how?
-
-![](images/stat_yuXuanji.jfif){height=350}
+:::{.fragment}
+......but how?
+:::
 
 :::
 ::::
 
-## 关于(因果)机制的几个争议
+## 关于机制的几个争议
 
 ::::{.columns}
 :::{.column width="30%" .fragment}
 **定义**
 
-+ 时间序列
-    + 多重因果？
-+ 条件角度
++ 因果本质
     + 决定论 vs. 概率论
++ 因果路经
+    + 多重因果
+    + “互为因果”
 
-![](images/stat_bookOfWhy.jpg){height=350 style="text-align: center"}
 :::
 
-:::{.column width="20%" .fragment}
+:::{.column width="70%" .fragment}
 **测量**
 
 Y ~ X vs.
 
-Y ~ A     
-&rarr; B  &rarr; C  &rarr; D &rarr; E &rarr; ...    
-&rarr; X
+Y ~ A &rarr; B  &rarr; C  &rarr; D &rarr; E &rarr; ... &rarr; X
 
-:::
-
-:::{.column width="40%" .fragment}
+:::{.fragment style="text-align:center; margin-top: 2em"}
 **观测**
 
-![](images/stat_correlation.png){height=350}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_correlation.png){height=300}
 
 :::
+
 ::::
+
+
+:::
+
 
 :::{.notes}
 correlation doesn't imply causation
 :::
 
 
-## 机制推断工具：
+## Bonus: 因果推断工具
 
 ::::{.columns}
-:::{.column width="30%" .fragment}
-*这些都不（肯定）是*：
-
+:::{.column .nonincremental width="30%" .fragment}
 - 方差分析
 - 非参数检验
-- 相关系数
-- 回归分析
 - Lasso
 - SEM
-- 倾向值匹配   
+- 倾向值匹配
 :::
 
 :::{.column width="70%" .fragment}
-(大概率)是：反事实分析（counterfactual analysis)
+反事实分析（counterfactual analysis)
 
 - 实验
 - 观察数据
@@ -315,23 +344,27 @@ Liu, Licheng, Ye Wang, and Yiqing Xu. 2022. “A Practical Guide to Counterfactu
 
 ::::{.columns}
 :::{.column width="60%" .fragment}
-![](images/stat_stratifiedCluster.png){height=500 style="text-align: center"}
-:::
-
-:::{.column width="40%" .fragment}
-![](images/stat_quota.png){height=500 style="text-align: center"}
-:::
-::::
+![](https://drhuyue.site:10002/sammo3182/figure/stat_stratifiedCluster.png){height=500 style="text-align: center"}
 
 :::{.notes}
 Stratification: 分类，每类中随机抽取，每类成员在总体中配比不变        
 Clustering：直接随机抽取一类        
 Quota：成分配比够就行，不用随机
 :::
+:::
+
+:::{.column width="40%" .fragment}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_quota.png){height=500 style="text-align: center"}
+:::
+::::
+
+## 常见设计
+
+S + W + (FPC)
 
 ::::{.columns}
 :::{.column width="40%" .fragment}
-*常见设计*：S + W + (FPC)
+
 
 - Strata
     - 减少点估计的标准误；
@@ -391,7 +424,7 @@ Post-collection correction &rarr; 把权重纳入分析
 
 
 
-## Correction how?
+## Correct how?
 
 [Behavioral Risk Factor Surveillance System (BRFSS) ](https://www.cdc.gov/brfss/smart/smart_2011.htm) 
 County data by US Centers of Disease Control and Prevention (CDC)
@@ -487,21 +520,31 @@ des <-
   )
 ```
 
+:::{.fragment}
+No weight
 
-## 描述性统计差异
-
-```{r descriptive}
+```{r describe_nw}
 library(questionr)
 
 prop.table(table(brfss_11$badhealth,
                  brfss_11$educ),
            margin = 2)
+```
+:::
 
+
+:::{.fragment}
+Weighed
+
+```{r describe_wt}
 prop.table(wtd.table(brfss_11$badhealth,
                      brfss_11$educ,
                      weights = brfss_11$cntywt),
            margin = 2)
 ```
+:::
+
+
 
 ## 分析差异
 
@@ -514,7 +557,7 @@ surveyW <- svyglm(bmi ~ educ + agec, des, family = gaussian)
 ```{r survey-ols-plot}
 #| echo: false
 #| fig.align: center
-#| out-width: 80%
+#| out-height: 100%
 
 library(dotwhisker)
 
@@ -522,8 +565,8 @@ dwplot(list(
   NoWeight = raw,
   FreqWeight = freqW,
   SurveyWeight = surveyW
-)) +
-  theme_minimal()
+), show_stats = TRUE
+)
 ```
 
 
@@ -575,7 +618,7 @@ Statistics vs. Econometrics
 :::
 
 :::{.column width="70%" .fragment}
-![](images/stat_statProcess.png){height=800}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_statProcess.png){height=600}
 :::
 ::::
 
@@ -588,7 +631,7 @@ Statistics vs. Econometrics
 
 ## 常用概念
 
-![](images/stat_concepts.png){height=800}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_concepts.png){fig-align="center" height=600}
 
 ## 概念辨析
 
@@ -604,8 +647,6 @@ Statistics vs. Econometrics
 - 参数 vs. 系数
 - 期望
 - 不确定性
-
-:::
 
 :::{.notes}
 * 总体：在理论上明确界定的个体全部集合。
@@ -624,6 +665,9 @@ Statistics vs. Econometrics
     + Standard deviation: $\sigma$
 :::
 
+:::
+
+
 :::{.column width="50%" .fragment}
 **材料**
 
@@ -636,8 +680,6 @@ Statistics vs. Econometrics
 - 定序
 - 定距
 - 定比
-:::
-::::
 
 :::{.notes}
 1. 定类：每一种不同的数字或符号代表着不同的类别或标记。定类数据只有类别属性之分， 无大小、程度之分。
@@ -657,19 +699,31 @@ feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代
 在-100-0-100，按10，30 （1：3）取值，放回0-200，110:130, 不是ratio
 :::
 
+:::
+::::
 
-## 练习
+
+
+## 练习 I 
 
 > 研究者想了解全市居民上个月的平均通讯支出是多少元，为此随机抽取了1800个居民进行了访问，得到了这些居民上个月的平均通讯支出。
 
+:::{.large style="text-align:center; margin-top: 2em"}
 问题：总体、样本、参数、系数？
+:::
 
 
-## 练习
+
+## 练习 II
 
 > 调查发现：人们对市政府工作的满意度，在不同年龄、教育水平、收入、职业，以 及不同户口人群中有显著的差异。
 
+
+:::{.large style="text-align:center; margin-top: 2em"}
 问题：上述这段描述中提到了几个变量，分别是什么类型的数据？
+:::
+
+
 
 ## （变量）测量类型
 
@@ -699,7 +753,7 @@ feeling thermometer: 0-200，冷淡到热情, 0是非常极端的情绪，不代
 
 Tidy version
 
-![](images/stat_tidydata.png){height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_tidydata.png){height=600}
 
 
 ## 数据 &rarr; 很多数据
@@ -710,7 +764,7 @@ Tidy version
 
 好
 
-(yysy，成本高，样本局限大🙄)
+(成本高，样本局限大🙄)
 :::
 
 :::{.notes}
@@ -777,13 +831,13 @@ Tidy version
 :::{.column width=50% .fragment}
 *描述分析*
 
-![](images/stat_patrioBase9705.gif){height=750}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_patrioBase9705.gif){height=550}
 :::
 
 :::{.column width=50% .fragment}
 *总体比较分析*
 
-![](images/stat_loyal.png){height=750}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_loyal.png){height=550}
 :::
 ::::
 
