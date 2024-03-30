@@ -1,33 +1,41 @@
 ---
 title: "生存分析"
-subtitle: "Political Research with Big Data (80700673)"
-
+subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
 institute: "清华大学" 
-
 knitr: 
     opts_chunk: 
       echo: false
-
 format: 
   revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
-    
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
+    default-image-extension: png
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -37,34 +45,52 @@ if (!require(pacman))
 library(pacman)
 
 p_load(dotwhisker, # dependency
-       knitr, tidyverse)
+       knitr, 
+       patchwork,
+       drhutools,
+       kableExtra,
+       tidyverse)
 
 # Functions preload
-set.seed(313
+set.seed(313)
+
+# Visualization
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
 )
 ```
 
 ## 概要
 
-:::{.large style="text-align:center; margin-top: 2em"}
+![今天，让我们成为生物学家](https://drhuyue.site:10002/sammo3182/figure/sur_experiment.jpg){ fig-align="center" height=300}
+
+:::{.large .fragment style="text-align:center"}
 - 生存分析[概念]{.red}
 - 生存分析[模型]{.red}
-- 特殊情况与模型选择
+- 特殊情况
 :::
+
 
 # 生存分析
 
 ## 什么是生存数据
 
-::::{.columns style="text-align:center"}
-:::{.column width="50%"}
+::::{.columns}
+:::{.column .nonincremental width="50%"}
 - 生存于数据
     - 什么时候开始/结束
     - 延续（活）了多久？
     - 需要多久才能发生？
     
+:::{.fragment}
 - 生存之于大数据
-    - 一定程度上，[最常见的大数据类型]{.red}
+    - [（某种意义上）最常见的大数据类型]{.red}
     - 社交媒体分析
     - 司法数据分析
     - 体育数据分析
@@ -72,28 +98,34 @@ set.seed(313
     ……
 :::
 
-
-:::{.column width="50%"}
-- 英文常用词汇
-    - Survival analysis
-    - Event history analysis (discrete)
-    - Failure analysis
-    - Duration analysis (continuous)
-    - Frailty (e.g., engineer)
-    - Cure models (e.g., medical)
 :::
+
+
+:::{.column .fragment .nonincremental width="50%"}
+**Terminology**
+
+- Survival analysis
+- Event history analysis (discrete)
+- Failure analysis
+- Duration analysis (continuous)
+- Frailty (e.g., engineer)
+- Cure models (e.g., medical)
 
 :::{.notes}
-Frailty /fr'eɪlti/
+Frailty /fr'eɪlti/ 弱点脆弱
 :::
+:::
+
 ::::
 
 
-## 理解生存数据本质
+## 生存数据本质
 
 :::{style="text-align:center"}
 :::{.fragment}
-- EVs如何影响事件发生？
+**影响建模的基础认知**
+
+- 解释变量对事件的影响方式？
 - 事件是否被视为重复的？
 - 发生周期（duration）是否时完全可见的？
 - 事件分布（event rate）如何在时间维度上变动？
@@ -103,7 +135,7 @@ Frailty /fr'eɪlti/
 :::{.fragment .grow}
 &dArr;
 
-**三种建模策略**
+**三种策略**
 
 1. *Count*：发生了多少次
 1. *Discrete*：年、月、天；0s & 1s.
@@ -112,14 +144,14 @@ Frailty /fr'eɪlti/
 :::
 :::
 
-# Event History
+# 生存分析模型
 
 ## Discrete Modeling
 
-> 关注事件发生点，解释与何因素有关
+> 关注事件发生点，解释与何因素有关^[通常被称作“事件史”（event history)分析。]
 
 ::::{.columns}
-:::{.column width="60%" .fragment}
+:::{.column width="50%" .fragment}
 **主要决定**：
 
 1. 何时开始计时
@@ -129,8 +161,7 @@ Frailty /fr'eɪlti/
 
 1. 建构结果变量：通常该变量在事件发生时记为1，之前均为0
 1. 测量解释变量：在每个时间点均有记录
-1. 估计
-    - **Risk set**： 在给定时间点观测单元触发事件的可能性, $R(t)\equiv \{i, y_{it} = 0 | y_{it} = 1\}.$
+
 :::
 
 :::{.notes}
@@ -139,7 +170,11 @@ Frailty /fr'eɪlti/
 当事件发生后，该观测单元将不再存在于risk set中。
 :::
 
-:::{.column width="40%" .fragment}
+:::{.column width="50%" .fragment}
+3. 估计
+    - **Risk set**： 在给定时间点观测单元触发事件的可能性, $R(t)\equiv \{i, y_{it} = 0 | y_{it} = 1\}.$
+
+:::{.fragment}
 ```{r ehData}
 df_eh <- tibble::tribble(
                       ~unit, ~time, ~event, ~ev, ~risk, 
@@ -153,43 +188,110 @@ df_eh <- tibble::tribble(
                           2,     4,      1, 3.9,     1
                       )
 
-kable(df_eh)
+kable(df_eh) |>
+  kable_classic(c("striped", "hover"), full_width = F) |>
+  kable_styling() |>
+  scroll_box(height = "300px")
 ```
+:::
+
 :::
 ::::
 
+# 前方公式预警
 
-## 结果变量分布
+公式对于理解生存分析[非常之重要]{.red}!🥁🥁🥁
+
+
+## 描绘结果变量分布
 
 :::{.fragment}
-Survival rate: $$S(t|X) = P(T > t | X).$$
+Survival rate: the probability that an event will continue to exist ($T$) beyond a certain period of time ($t$).
+
+$$S(t|X) = P(T > t | X).$$
 :::
 
 :::{.fragment}
-Density: PDF
-
-$$f(t|x) = P(T = t | X).$$
+PDF: $f(t|x) = P(T = t | X).$
 :::
 
 :::{.fragment}
-Cumulative distribution: CDF
-
-$$F(t) = P(T\leq t | X) = 1 - S(t).$$
+CDF: $F(t) = P(T\leq t | X) = 1 - S(t).$
 :::
 
 :::{.fragment .fade-in}
-:::{.fragment .highlight-red}
-Hazard: $$P(T = t|T\geq t, X) = \frac{f(t|X)}{S(t|X)} = \frac{P(T = t | X)}{P(T > t | X)}.$$
+:::{.fragment .grow}
+Hazard: the instantaneous risk at that time of the event happening, given that it hasn't happened yet.
+
+$$P(T = t|T\geq t, X) = \frac{f(t|X)}{S(t|X)} = \frac{P(T \color{red}{=} t | X)}{P(T \color{red}{>} t | X)}.$$
 :::
 :::
 
 :::{.notes}
-Hazard: the probability that the event occurs during a specific time point, given that it hasn’t already occurred.
+Hazard: the probability that the event occurs during a specific time point, given that it hasn't already occurred.
 :::
 
-## Discrete Model分析工具 {auto-animate=true}
+## Hazard, hazard
 
-:::{.large style="text-align:center; margin-top: 2em" auto-animate=true}
+{{< video https://drhuyue.site:10002/sammo3182/video/sur_tightrope.mp4 title="一个轻松的视频" height=600 loading="eager" allowfullscreen>}}
+
+:::{.notes}
+It's like watching a tightrope walker crossing between two skyscrapers. The hazard is the risk of falling at any given moment during the walk, considering the walker hasn't fallen yet.
+
+
+Example of Hazard in Real Life:
+
+Light Bulbs: Suppose we find that the hazard of a particular brand of light bulbs increases significantly after 1,000 hours of use. This means the risk of these bulbs burning out gets much higher beyond this point.
+
+Patients in a Clinical Trial: If we're studying a new medication, the hazard might represent the risk of a patient having a side effect at any given time during the study, assuming they haven't experienced it yet.
+:::
+
+## 数据演示
+
+```{r plot-hazard}
+#| fig-align: center
+
+# Generate simulated survival times using an exponential distribution
+sample_size <- 10000
+scale <- 10
+survival_times <- rexp(sample_size, rate = 1 / scale)
+
+# Calculate survival rates for a range of time points
+time_points <- seq(0, max(survival_times), length.out = 100)
+survival_rates <-
+  sapply(time_points, function(t)
+    mean(survival_times > t))
+
+# Approximate hazard rates
+hazard_rates <- diff(-log(survival_rates)) / diff(time_points)
+time_points_hazard <- head(time_points, -1) + diff(time_points) / 2
+
+# Create a unified data frame for plotting
+survival_data <-
+  data.frame(time = time_points, rate = survival_rates, type = 'Survival Rate')
+hazard_data <-
+  data.frame(time = time_points_hazard, rate = hazard_rates, type = 'Hazard')
+
+# Combining the data frames
+combined_data <- rbind(survival_data, hazard_data)
+
+# Plotting both Survival Rate and Hazard Rate on the same plot
+ggplot(combined_data, aes(x = time, y = rate, color = type)) +
+  geom_line() +
+  scale_y_continuous(name = "Survival Rate", sec.axis = sec_axis( ~ ., name = "Hazard")) +
+  ggtitle("Survival Rate and Hazard over Time") +
+  xlab("Time") + ylab("Survival Probability") +
+  scale_color_gb() + 
+  theme(legend.position = "bottom")
+```
+
+:::{.notes}
+This graph shows the rate at which the event of interest is expected to occur at different times, given that it hasn't occurred yet.
+:::
+
+## 事件史分析工具 {auto-animate=true}
+
+:::{.large .nonincremental style="text-align:center; margin-top: 2em" auto-animate=true}
 - logit/probit
 - c-log-log
 - scobit
@@ -207,14 +309,14 @@ expit: exponential logit
 ## Logit/Probit模型 {auto-animate=true}
 
 ::::{.columns}
-:::{.column width="50%" .nonincremental auto-animate=true}
+:::{.column width="30%" .nonincremental auto-animate=true}
 - [logit/probit]{.red}
 - c-log-log
 - scobit
 - expit
 :::
 
-:::{.column width="50%" .fragment}
+:::{.column width="70%" .fragment}
 令 $Y^*$ 为导致可见事件( $Y_{it}$ )发生的不可见变量：
 
 $$Y_{it} =
@@ -262,9 +364,7 @@ $\beta_{probit} = \frac{\sqrt 3}{\pi}\beta_{logit}.$
 
 ## 应用举例
 
-美国印第安部落与州协调法案（Indian Gaming Compact）在各州的推行情况。
-
-解释变量包括：religion (`religion`), the number of federally recognized tribes (`fedtrib`), total population (`totpop`), real income per capita (`rpcpinc`)等.
+研究美国印第安部落与州协调法案（Indian Gaming Compact）推行情况
 
 ```{r eg_discrete_prepare, include=FALSE, eval=FALSE}
 df_eh <- read_dta("D:/MEGAsync/00_Methods/Courses/Method Courses/306 Time and Space/Computer lab/306comp10discrete-indvars.dta")
@@ -274,19 +374,39 @@ df_iga <- left_join(df_eh, df_ehdv)
 saveRDS(df_iga, file = "data/iga.RDS")
 ```
 
+:::: {.columns}
 
+::: {.column .nonincremental width="40%"}
+解释变量：
+
+- Religion (`religion`), the number of federally recognized tribes (`fedtrib`)
+- Total population (`totpop`)
+- Real income per capita (`rpcpinc`)
+- Ideology score (`ideology`)
+- Federal government recognized tribes (`fedtribe`)
+:::
+
+::: {.column .fragment width="60%"}
 ```{r eg_discrete1}
 # Reading the raw data
-df_iga <- readRDS("data/iga.RDS")
+df_iga <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/iga.RDS"))
 head(df_iga) %>% 
-  kable(caption = "原始数据形态")
+  kable(caption = "原始数据形态") |>
+  kableExtra::kable_classic(c("striped", "hover"), full_width = F)
 ```
+:::
 
----
+::::
 
-::::{.columns}
-:::{.column width="50%"}
-```{r eg_discrete2, echo = TRUE}
+## 建立Risk set
+
+$R(t)\equiv \{i, y_{it} = 0 | y_{it} = 1\}.$
+
+:::{.notes}
+在给定时间点观测单元触发事件的可能性, 对于一个周，没推行是1，推行了则被减去
+:::
+
+```{r eg_discrete2}
 # Creating the event history record
 df_iga$adopt_ig <- NA
 df_iga$adopt_ig[df_iga$year == df_iga$adopt_year] <- 1
@@ -305,67 +425,49 @@ df_igaSum <- group_by(df_iga, year) %>%
   ) %>%
   mutate(hazard = sum_adopt / sum_risk, 
          survival = sum_risk / 50)
-```
-:::
 
-:::{.column width="50%" .fragment}
-```{r eg_discreteTable}
-kable(df_igaSum, digits = 2, caption = "可分析数据形态")
+kable(df_igaSum, digits = 2, caption = "可分析数据形态") |>
+  kable_classic(c("striped", "hover"), full_width = F) |>
+  kable_styling() |>
+  scroll_box(height = "550px")
 ```
-:::
-::::
 
----
+## Kaplan-Meier Curve
+
+A.k.a, *product limit estimator*, often seen in medical research
 
 ```{r eg_discrete3}
-#| echo: true
 #| fig-align: center
-#| fig-height: 7
-#| output-location: fragment
 
 ggplot(df_igaSum, aes(x = year, y = survival)) +
   geom_line() +
   scale_x_continuous(breaks = scales::pretty_breaks()) +
-  ggtitle("Kaplan-Meier Curve of Adoption") + theme_minimal() +
   theme(
     plot.title = element_text(size = 18), axis.title = element_text(size = 22), axis.text = element_text(size = 18)
-  )
+  ) + ylab("Rate")
 ```
 
 :::{.notes}
 Kaplan-Meier curve shows what the probability of an event (for example, survival) is at a certain time interval. 
 :::
----
+
+## Estimation
 
 ```{r eg_discrete4}
 #| echo: true
 #| fig-align: center
-#| code-line-numbers: "|10"
-#| class-source: long_chunk
-#| classes: long_chunk
-#| output-location: column-fragment
-#| fig-height: 10
-
+#| code-line-numbers: "|6"
+#| fig-height: 4
+#| output-location: fragment
 
 library(survival)
 
 m_logit <-
   survreg(
-    Surv(time = year, event = adopt_ig) ~ religion + 
-      fedtribe + 
-      totpop + 
-      rpcpinc,
-    data = df_iga,
-    dist = "logistic"
-  )
+    Surv(time = year, event = adopt_ig) ~ religion + totpop + rpcpinc + fedtribe, data = df_iga, 
+    dist = "logistic")
 
-dwplot(m_logit) + 
-  geom_vline(xintercept = 0, 
-             colour = "grey60", 
-             linetype = 2) +
-  theme_minimal() +
-  theme(text = element_text(size = 25),
-        legend.position = "none")
+dwplot(m_logit, show_stats = TRUE, vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2))
 ```
 
 # Duration Analysis
@@ -392,7 +494,7 @@ df_dur <- select(df_dur, durat, invest, fract, polar, numst2, format, eltime2, c
 saveRDS(df_dur, file = "data/coalcold.RDS")
 ```
 
-:::{.fragment style="margin-top: 2em"}
+:::{.fragment}
 ```{r durData}
 df_dur <- tibble::tribble(
            ~duration, ~opposition, ~polarization, ~Beilgium, ~Canada,
@@ -405,15 +507,21 @@ df_dur <- tibble::tribble(
            )
 
 
-kable(df_dur)
+kable(df_dur, caption = "Duration Data") |>
+  kableExtra::kable_classic(c("striped", "hover"), full_width = F)
 ```
 :::
 
-## Parametric Models
+## Modeling the duration
 
-选定baseline hazard: 参数分布
+- 选择
+    - Parametric models
+    - Semi-parametric models (e.g., cox)
+- 选择本质：选定baseline hazard
 
 :::{.large style="text-align:center; margin-top: 1em"}
+*最常见的四种参数模型*
+
 1. Exponential
 1. Weibull
 1. Log-normal
@@ -422,30 +530,25 @@ kable(df_dur)
 
 ## Exponential model
 
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
-特点：memoryless, hazard constant
-![](images/sur_colonyGrowth.gif){fig-align="center"}
+::::{.columns}
+:::{.column width="50%"}
+![特点：Memoryless, hazard constant](https://drhuyue.site:10002/sammo3182/figure/sur_colonyGrowth.gif){fig-align="center" height=500}
+
 :::
 
 :::{.column width="50%" .fragment}
+$$
 \begin{align}
-h(u) =& 1\\
-F(u) =& 1 - e^{-u}\\
-S(u) =& e^{-u} = f(u)
+S(u) =& e^{-u} = f(u),\\
+F(u) =& 1 - e^{-u},\\
+h(u) =& 1
 \end{align}
-
-:::{.notes}
-exponential: $e^n$
-:::
-:::
-::::
+$$
 
 :::{.fragment}
 ```{r expFun}
-#| echo: false
 #| fig-align: center
-#| fig-height: 5
+#| fig-height: 7
 
 ggplot(data.frame(x = c(0, 5)), aes(x = x)) +
   stat_function(
@@ -465,38 +568,45 @@ ggplot(data.frame(x = c(0, 5)), aes(x = x)) +
   ) +
   ylab("Probability Density") +
   xlab("X") +
-  labs(color = "u") +
-  theme_minimal() +
-  theme(text = element_text(size = 25))
+  labs(color = "u") + 
+  scale_color_gb(palette = "tricol")
 ```
 :::
+
+:::{.notes}
+exponential: $e^n$
+:::
+:::
+::::
+
+
 
 ## Weibull
 
 ::::{.columns}
-:::{.column width="50%" .fragment}
-特点：以p调节baseline hazard方向
+:::{.column width="40%" .fragment}
+特点：用p调节baseline方向
 
 p < 1, 单减   
-p = 1, 与exponential model拟合    
+p = 1, = exponential    
 p > 1, 单增
 :::
 
-:::{.column width="50%" .fragment}
+:::{.column width="60%" .fragment}
+$$
 \begin{align}
-h(u) =& pu^{p - 1}\\
-F(u) =& 1 - e^{-u^p}\\
-f(u) =& pu^{p - 1}e^{-u^p}\\
-S(u) =& e^{-u^p}
+S(u)_{exp} =& e^{-u}\rightarrow S(u)_{weibull} = e^{-u^\color{red}{p}},\\
+F(u) =& 1 - e^{-u^p}; f(u) = pu^{p - 1}e^{-u^p},\\
+h(u) =& pu^{p - 1}
 \end{align}
+$$
 :::
 ::::
 
 :::{.fragment}
 ```{r wbFun}
-#| echo: false
 #| fig-align: center
-#| fig-height: 5
+#| fig-height: 4
 
 ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
   stat_function(
@@ -516,20 +626,16 @@ ggplot(data.frame(x = c(0, 1)), aes(x = x)) +
   ) +
   ylab("Probability Density") +
   xlab("X") +
-  labs(color = "p") +
-  theme_minimal() +
-  theme(text = element_text(size = 25))
+  labs(color = "p") + 
+  scale_color_gb(palette = "tricol")
 ```
 :::
 
 ## Log-normal
 
-特点： 允许非单调hazard
-
-$$ln(u_i)\sim N(\mu, \sigma^2).$$
+特点： 允许非单调hazard, $ln(u_i)\sim N(\mu, \sigma^2).$
 
 ```{r lnFun}
-#| echo: false
 #| fig-align: center
 #| fig-height: 6
 
@@ -551,31 +657,28 @@ ggplot(data.frame(x = c(0, 2.5)), aes(x = x)) +
   ) +
   ylab("Probability Density") +
   xlab("X") +
-  labs(color = expression(mu ~ "," ~ sigma)) +
-  theme_minimal() +
-  theme(text = element_text(size = 25))
+  labs(color = expression(mu ~ "," ~ sigma)) + 
+  scale_color_gb(palette = "tricol")
 ```
 
 
-## &Gamma; {auto-animate=true}
+## Gamma(&Gamma;) {auto-animate=true}
 
 ::::{.columns}
-:::{.column width="50%" .fragment}
+:::{.column width="40%" .fragment}
 p: the scale parameter    
 &kappa;: the shape parameter
 :::
 
-:::{.column width="50%" .fragment}
-$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\Gamma(\kappa)}.$$
+:::{.column width="60%" .fragment}
+$$f(u) = pu^{p - 1}e^{-u^p}\rightarrow f(u) = \frac{pu^{p\color{red}{\kappa} - 1}e^{-u^p}}{\color{red}{\Gamma(\kappa)}}.$$
 :::
 ::::
 
 :::{.fragment}
 ```{r gamma}
-#| echo: false
 #| fig-align: center
-#| fig-height: 6
-
+#| fig-height: 5
 
 ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
   stat_function(
@@ -595,24 +698,23 @@ ggplot(data.frame(x = c(0, 20)), aes(x = x)) +
   ) +
   ylab("Probability Density") +
   xlab("X") +
-  labs(color = expression("p, " ~ kappa)) +
-  theme_minimal() +
-  theme(text = element_text(size = 25))
+  labs(color = expression("p, " ~ kappa)) + 
+  scale_color_gb(palette = "tricol")
 ```
 :::
 
-## Generalized &Gamma; Distribution {auto-animate=true}
+## Bonus: Generalized &Gamma; Distribution {auto-animate=true}
 
-$$f(u) = \frac{pu^{p\kappa - 1}e^{-u^p}}{\color{red}{\beta^{p\kappa}}\Gamma(\kappa)}$$
+$$f(u) = \frac{\color{orange}{p}u^{\color{orange}{p}\color{blue}{\kappa} - 1}e^{-u^\color{orange}{p}}}{\color{red}{\beta}^{\color{orange}{p}\color{blue}{\kappa}}\Gamma(\color{blue}{\kappa})}$$
 
 :::{.fragment style="text-align:center; margin-top: 2em"}
-&beta; = 1 &rArr; Gamma;
+[&beta;]{.red} = 1 &rArr; Gamma;
 
-&kappa; = 0 &rArr; log-normal;
+[&kappa;]{.blue} = 0 &rArr; log-normal;
 
-&kappa; = 1 &rArr; Weibull;
+[&kappa;]{.blue} = 1 &rArr; Weibull;
 
-&kappa; = p = 1 &rArr; Exponential.
+[&kappa;]{.blue} = [p]{.orange} = 1 &rArr; Exponential.
 :::
 
 :::{.notes}
@@ -624,28 +726,28 @@ Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution
 :::
 
 
-## 纳入解释变量
+## 解释Harzard
 
 DGP: $Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
 
 :::{.fragment style="margin-top: 1em"}
-让我们定义$\lambda\equiv e^{-X_i\beta}$, 那么，对于exponential而言
+令$\lambda\equiv e^{-X_i\beta}$, 那么，对于exponential
 
+$$
 \begin{align}
 u_i =& Y_i\lambda_i \\
 F(Y_i|X) =& 1 - e^{-Y_i\lambda_i}\\
 f(Y_i|X) =& \lambda_ie^{-Y_i\lambda_i}\\
 h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
 \end{align}
+$$
 :::
-
-
 
 :::{.fragment}
 同理，对于Weibull, $h(Y_i|X) = p\lambda^pY^{p - 1}.$
 :::
 
-## Interpretation
+## X改变的是什么
 
 **Expected value**
 
@@ -655,27 +757,35 @@ h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
 :::{.fragment}
 **Hazard ratio**
 
+$$
 \begin{align}
 \frac{h(Y_i|X + 1)}{h(Y_i|X)} =& \frac{pexp[-(X_i + 1)\beta]^py_i^{p - 1}}{pexp(-X_i\beta)^py_i^{p - 1}}\\
-=& exp(-\beta)^p = e^{-\beta p}
+=& exp(-\beta)^p = e^{\color{red}{-\beta p}}
 \end{align}
+$$
 
+:::{style="text-align:center; margin-top: 1em"}
 -&beta;p: proportional hazard metric;
 
 &beta;: accumulative failure time metric.
 :::
 
-## Cox model
+:::
 
-Different from the &Gamma; series: [Semi]{.red}-parametric Model
+## Semi-parametric model
+
+Cox model：不对Baseline hazard形状做假设
 
 
-$$h(y|x) = h_0(y)\lambda_i^p$$
+令$\lambda\equiv e^{-X_i\beta}$， 
 
+$$
 \begin{align}
-P(1fails@y_1|someone\ f@y_1) =& \frac{h_0(y_1)\lambda_i^p}{\sum^n_{i = 1}h_0(y_1)\lambda_i^p}\\
-P(2fails@y_2|someone\ f@y_2) =& \frac{h_0(y_2)\lambda_i^p}{\sum^n_{i = 2}h_0(y_1)\lambda_i^p}
+h(t|x) =& \overbrace{h_0(t)}^{Non-parametric}\lambda_i^p,\\
+P(1fails@t_1|someone\ f@t_1) =& \frac{h_0(t_1)\lambda_i^p}{\sum^n_{i = 1}h_0(t_1)\lambda_i^p},\\
+P(2fails@t_2|someone\ f@t_2) =& \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0(t_1)\lambda_i^p}
 \end{align}
+$$
 
 :::{.notes}
 由于不是完全parametric，所以多只进行局部检验，因此不常在早期政治科学研究中出现。
@@ -683,20 +793,19 @@ P(2fails@y_2|someone\ f@y_2) =& \frac{h_0(y_2)\lambda_i^p}{\sum^n_{i = 2}h_0(y_1
 
 ## 应用实例
 
+:::{.r-stack}
+
 ```{r eg_dur1, fig.width=10}
-df_dur <- readRDS("data/coalcold.RDS")
+df_dur <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/coalcold.RDS"))
 
 library(survminer)
 
 survfit(Surv(time = durat) ~ 1, data = df_dur) %>% 
-  ggsurvplot(title = "Kaplan-Meier Curve of Dissolution")
+  ggsurvplot(title = "(Data based) Kaplan-Meier Curve")
 ```
 
----
-
-```{r eg_dur2, echo=TRUE}
-#| code-line-numbers: "|4|5|6|7"
-
+:::{.fragment}
+```{r eg_dur2}
 model_dur <-
   formula(Surv(time = durat) ~ invest + fract + polar + numst2 + format + eltime2 + caretk2)
 
@@ -704,16 +813,6 @@ m_exp <- survreg(model_dur, data = df_dur, dist = "exponential")
 m_wb <- survreg(model_dur, data = df_dur, dist = "weibull")
 m_ln <- survreg(model_dur, data = df_dur, dist = "lognormal")
 m_cox <- coxph(model_dur, data = df_dur)
-```
-
-:::{.notes}
-Random tree for duration: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
-:::
-
-```{r eg_dur3}
-#| echo: false
-#| fig-align: center
-#| fig-height: 6
 
 result_dur <- list(m_exp, m_wb, m_ln)
 
@@ -744,92 +843,57 @@ dwplot(plot_dur)  +
   geom_vline(xintercept = 0, 
              colour = "grey60", 
              linetype = 2) +
-  ggtitle("Duration Model Comparison") +
-  theme_minimal() +
-  drhutools::scale_color_gb() +
-  theme(text = element_text(size = 25))
+  scale_color_gb() 
 ```
 
+:::{.notes}
+Random tree for duration: https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/
+:::
 
-## Want to know more?
+:::
+
+:::
+
+
+## Want to be an *Expert* Expert
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-  ![](images/sur_survivalBook.jpg){height=800 fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sur_survivalBook.jpg){fig-align="center" height=600}
 :::
 
 ::: {.column .fragment width="50%"}
-*Operation in R*
+*Operation*
 
 [Survival Analysis with R](https://rviews.rstudio.com/2017/09/25/survival-analysis-with-r/)
 
 [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
+
+![](https://drhuyue.site:10002/sammo3182/figure/sur_survminer.png){fig-align="center" height=450}
 :::
 
 ::::
 
 
-# 特殊情况与模型选择
+# 特殊情况
 
-## Survival analysis 会作什么妖
+A.k.a., 真实世界😏
 
-:::{style="text-align:center; margin-top: 2em"}
+## 生存分析会作什么妖
 
-  Duration dependency
-  
-  Censored data
-  
-  Time Varying Covariates 
-  
-  Repeated Failure
-  
-  Competing Risk
-  
-  Rare events
-  
-  Ties
-  
-  Split Population
-  
-  Non-proportional Hazard     
+- Duration dependency (e.g., life-stage effects)
+- Censored data (yeah, you can't see it)
+- Time Varying Covariates （Cox does not allow TVC)
+- Repeated Failure (屡战屡败/屡败屡战)
+- Competing Risk (What if the events are not indepdent)
+- Ties (Tie in competition)
+- Split Population (不败 vs. 不败yet)
+- Non-proportional Hazard (每个观测点的basedline hazard function都一样吗？)
+- Rare events (e.g., wars, human traffic, being an genius)       
   ......
-  
-:::
 
-:::{.notes}
-**Tie**
-
-* Evenly divide &lambda; in the nominators of two tied events.
-* The most popular methods: Efron, Preslow.
-
-**Split Population (Cure Models)**
-
-可能有两种意义:
-
-1. Never fail
-1. Right censored
-
-解决方法：
-
-对Cure进行建模，$Z_i$: 1 (cured), 0 (not cured), 其pdf为 $P(Z_i = 1)$ , 那么对于0来说其survial model为 $S(y|x)P(Z = 0)$.
-
-**Non-proportional Hazard**
-
-每个观测点的basedline hazard function都一样吗？
-
-检验:
-
-1. Piecewise regression
-1. Model with interaction
-1. Schoenfeld residual plot
-
-![](images/sur_residualPlot.png){fig-align="center" height=500}
-
-解法
-
-$$y_i = X\beta_1 + Xln(t)\beta_2 + ln(t)\beta_3.$$
-:::
 
 ## Duration Dependency
 
@@ -838,11 +902,88 @@ $$y_i = X\beta_1 + Xln(t)\beta_2 + ln(t)\beta_3.$$
 
 解决方法:
 
-* Fixed effect
-* Spline    
-    ![](images/sur_spline.png){fig-align="center"}
-* Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").^[Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.]
+:::: {.columns}
 
+::: {.column width="40%"}
+* Fixed effect
+* Smooth function: $t, t^2, t^3$("nearly identical substantively [with spline]").^[Carter, David B., and Curtis S. Signorino. 2010. "Back to the Future: Modeling Time Dependence in Binary Data." *Political Analysis* 18(3): 271–92.]
+:::
+
+::: {.column width="60%"}
+* ![Spline](https://drhuyue.site:10002/sammo3182/figure/sur_spline.png){fig-align="center" height=300}
+:::
+
+::::
+
+
+## Rare Event
+
+对于小概率事件（< 5%）&rarr; 使用logit会[高估]{.red}Pr(Y = 1)。
+
+
+解决方法：^[King, Gary, and Langche Zeng. 2001. “Logistic Regression in Rare Events Data.” *Political analysis* 9(2): 137–63.]
+
+> 假定没有其他更好sample
+
+1. Prior correction: 加入基于其他研究或研究者认知的关于总体分布的趋势估计。
+    + 注意：如果模型有误的话，结果也不会稳健。
+1. Post-estimation weighting: $$P(Y_i = 1) \approx \tilde{\pi_i} + C_i,$$ $C_i$输入某些总体分布信息。
+
+
+## Last but not the least
+
+三种将时间纳入事件的方式 (Count, binary, duration)，选哪个？
+
+:::{.fragment}
+
+|          | Pros                                              | Cons                                                                               |
+|----------|---------------------------------------------------|------------------------------------------------------------------------------------|
+| Count    | Aggregative, prevent measurement error            | Lose the ability to record any identified variations over time and the time series |
+| Duration | Record the time and changing moment and sequences | Lose the precision of when within each time unit an event occurs                   |
+| Binary   | Most disaggregate                                 | Lose when the change happens in a time line                                        |
+
+:::
+
+- 三种方法都是对同一现象的反映^[Carstensen, Bendix. 2012. “Who Needs the Cox Model Anyway.” *Stat Med* 31: 1074–88, demonstrating the equivalence of the Cox model to a particular Poisson regression.
+]
+- 三种models实际解释可能不一样，因为都是对现实的[de-]{.red}information
+
+:::{.notes}
+https://rviews.rstudio.com/2022/09/06/deep-survival/
+:::
+
+## Take-Home Points
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+  - 生存分析概念
+    - 事件发生/结束的“点”与“线”
+    - 大数据最基础数据
+  - 生存分析模型
+      - [Count]{.grayLight}
+      - Discrete: logistic
+      - Duration: exponetional, weibull, log-normal, cox
+  - 模型选择：Count, binary, duration---de-information
+:::
+
+::: {.column .nonincremental width="50%"}
+- 特殊情况
+  - Duration dependency
+  - [Censored data]{.grayLight}
+  - [Time Varying Covariates]{.grayLight}
+  - [Repeated Failure]{.grayLight}
+  - [Competing Risk]{.grayLight}
+  - [Ties]{.grayLight}
+  - [Split Population]{.grayLight}
+  - [Non-proportional Hazard]{.grayLight}
+  - Rare events
+:::
+
+::::
+
+
+# 附录 {.appendix visibility="uncounted"}
 
 ## (Right) Censor
 
@@ -913,9 +1054,10 @@ Assumption: intervals between successive duration time does not help to explain 
 * Semi-restricted: 在第K次failure事件中，risk set中只包含经历过k-1次或少于k-1次事件的观测点
 * Restricted: 在第K次failure事件中，risk set中只包含经历过k-1次事件的观测点
 
----
+## 估计方法
 
-![](images/sur_repeatedFailure.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/sur_repeatedFailure.jpg){fig-align="center" height=400}
+
 
 ## Competing Risk
 
@@ -935,75 +1077,46 @@ h(y_2) =& h_0(y)exp(X\beta + v_2)
 用$(v_1, v_2)$ jointed distributed 来纳入非独立性。
 :::
 
-## Rare Event
+## Tie
 
-对于小概率事件（< 5%），使用通常工具会[高估]{.red}Pr(Y = 1)。
+* Evenly divide &lambda; in the nominators of two tied events.
+* The most popular methods: Efron, Preslow.
 
+## Split Population (Cure Models)
 
-解决方法：^[King, Gary, and Langche Zeng. 2001. “Logistic Regression in Rare Events Data.” *Political analysis* 9(2): 137–63.]
+可能有两种意义:
 
-> 假定没有其他更好sample
+1. Never fail
+1. Right censored
 
-1. Prior correction: 加入基于其他研究或研究者认知的关于总体分布的趋势估计。
-    + 注意：如果模型有误的话，结果也不会稳健。
-1. Post-estimation weighting: $P(Y_i = 1) \approx \tilde{\pi_i} + C_i$， $C_i$输入某些总体分布信息。
+解决方法：
 
+对Cure进行建模，$Z_i$: 1 (cured), 0 (not cured), 其pdf为 $P(Z_i = 1)$ , 那么对于0来说其survial model为 $S(y|x)P(Z = 0)$.
 
-## Last but not the least
+## Non-proportional Hazard
 
-三种将时间纳入事件的方式：Count, binary, duration
-
-:::{.fragment style="text-align:center"}
-选哪个？
-:::
-
-:::{.fragment}
-
-|          | Pros                                              | Cons                                                                               |
-|----------|---------------------------------------------------|------------------------------------------------------------------------------------|
-| Count    | Aggregative, prevent measurement error            | Lose the ability to record any identified variations over time and the time series |
-| Duration | Record the time and changing moment and sequences | Lose the precision of when within each time unit an event occurs                   |
-| Binary   | Most disaggregate                                 | Lose when the change happens in a time line                                        |
-
-:::
-
-- 三种方法都是对同一现象的反映^[Carstensen, Bendix. 2012. “Who Needs the Cox Model Anyway.” *Stat Med* 31: 1074–88, demonstrating the equivalence of the Cox model to a particular Poisson regression.
-]
-- 三种models实际解释可能不一样，因为都是对现实的[de-]{.red}information
-
-:::{.notes}
-https://rviews.rstudio.com/2022/09/06/deep-survival/
-:::
-
-## Take-Home Points
+每个观测点的basedline hazard function都一样吗？
 
 :::: {.columns}
 
-::: {.column width="50%"}
-  - 生存分析概念
-    - 事件发生/结束的“点”与“线”
-    - 大数据最基础数据
-  - 生存分析模型
-      - [Count]{.grayLight}
-      - Discrete: logistic
-      - Duration: exponetional, weibull, log-normal, cox
-  - 模型选择：Count, binary, duration---de-information
+::: {.column .nonincremental width="50%"}
+检验:
+
+1. Piecewise regression
+1. Model with interaction
+1. Schoenfeld residual plot
 :::
 
 ::: {.column width="50%"}
-- 特殊情况
-  - Duration dependency
-  - Censored data
-  - Time Varying Covariates
-  - Repeated Failure
-  - Competing Risk
-  - Rare events
-  - [Ties]{.grayLight}
-  - [Split Population]{.grayLight}
-  - [Non-proportional Hazard]{.grayLight}
+![](https://drhuyue.site:10002/sammo3182/figure/sur_residualPlot.png){fig-align="center" height=300}
 :::
 
 ::::
 
+:::{.fragment}
+解法
 
+$$y_i = X\beta_1 + Xln(t)\beta_2 + ln(t)\beta_3.$$
+
+:::
 
