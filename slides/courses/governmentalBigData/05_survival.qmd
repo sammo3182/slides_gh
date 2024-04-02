@@ -132,21 +132,117 @@ Frailty /fr'eɪlti/ 弱点脆弱
 :::
 
 :::{.fragment .fade-in}
-:::{.fragment .grow}
 &dArr;
 
 **三种策略**
 
 1. *Count*：发生了多少次
 1. *Discrete*：年、月、天；0s & 1s.
-1. *Continuous*: 具体时长
-:::
+1. *Duration*: 具体时长
 :::
 :::
 
-# 生存分析模型
+# 生存分析模型: Count model
 
-## Discrete Modeling
+## Count data
+
+就是字面意思，*数*出来得数据。
+
+:::: {.columns}
+
+::: {.column .nonincremental .fragment width="50%"}
+1. 每周网络故障次数
+2. 每小时网站访问者数量
+3. 餐厅到达的顾客数量
+4. 每小时呼叫中心接到的电话数量
+5. 城市平均风暴次数
+6. 医院每分钟接到的紧急呼叫数量
+
+:::{.fragment}
+:::{.callout-important}
+# 与continuos variable不同
+
+1. 离散
+1. 非负（0，+&infin;)
+1. 有有意义的0
+:::
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+
+PMF:
+$Pr(X{=}k)= \frac{\lambda^k e^{-\lambda}}{k!},$
+
+k is the number of occurrences
+
+&mu; = &lambda;; &sigma;<sup>2</sup> = &lambda;.
+
+![](https://drhuyue.site:10002/sammo3182/figure/dist_poisson.gif){.fragment fig-align="center" height=350}
+:::
+
+::::
+
+:::{.notes}
+&lambda is the average rate of occurrence
+:::
+
+## Overdispersion & Zero-Inflation
+
+:::: {.columns}
+
+::: {.column width="40%"}
+```{r overdispersionZero}
+#| fig-height: 15
+
+# 生成符合泊松分布的数据
+poisson_data <- rpois(10000, lambda = 3)
+
+# 生成过度离散数据（负二项分布）
+overdispersed_data <- rnbinom(10000, size = 20, mu = 3)
+
+# 生成零膨胀数据
+zero_inflated_data <- VGAM::rzipois(10000, lambda = 3, pstr = 0.5)
+
+# 将数据转换为 data.frame
+data <- data.frame(
+  Count = c(poisson_data, overdispersed_data, zero_inflated_data),
+  Type = factor(rep(c('Poisson', 'Overdispersed', 'Zero-Inflated'), each = 10000))
+)
+
+# 使用 ggplot2 绘图
+ggplot(data, aes(x = Count)) +
+  geom_histogram(position = 'identity', binwidth = 1) +
+  facet_wrap(~ Type, ncol = 1, scales = 'free_y') +
+  labs(x = "计数",
+       y = "频率")
+
+```
+:::
+
+::: {.column .fragment .nonincremental width="60%"}
+**解法**
+
+1. Negative Binomial $$\Pr(X=k)={\binom {k+r-1}{k}}(1-p)^{k}p^{r},$$
+    - r: number of successes
+    - k: number of failures
+    - p: probability of success on each trial.
+
+2. Zero-Inflated Models/hurdle model
+
+:::{.notes}
+ZIMs are particularly useful when the data include excess zeros but also a meaningful count distribution among the non-zero observations. Hurdle models are more suited for situations where the non-occurrence of an event (zero counts) and the occurrence (positive counts) are thought to arise from different processes
+:::
+:::
+
+::::
+
+
+
+# 生存分析模型: Discrete Model
+
+## 事件史分析
 
 > 关注事件发生点，解释与何因素有关^[通常被称作“事件史”（event history)分析。]
 
@@ -470,7 +566,7 @@ m_logit <-
 dwplot(m_logit, show_stats = TRUE, vline = geom_vline(xintercept = 0, colour = "grey50", linetype = 2))
 ```
 
-# Duration Analysis
+# 生存分析模型: Duration Model
 
 ## Duration: An Alternative
 
@@ -519,7 +615,7 @@ kable(df_dur, caption = "Duration Data") |>
     - Semi-parametric models (e.g., cox)
 - 选择本质：选定baseline hazard
 
-:::{.large style="text-align:center; margin-top: 1em"}
+:::{.fragment .nonincremental style="text-align:center; margin-top: 1em"}
 *最常见的四种参数模型*
 
 1. Exponential
@@ -725,28 +821,6 @@ Exponential，Weibull，Log-normal, Gamma 都是Generalized Gamma的特殊变形
 Ref: http://reliawiki.org/index.php/The_Generalized_Gamma_Distribution
 :::
 
-
-## 解释Harzard
-
-DGP: $Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
-
-:::{.fragment style="margin-top: 1em"}
-令$\lambda\equiv e^{-X_i\beta}$, 那么，对于exponential
-
-$$
-\begin{align}
-u_i =& Y_i\lambda_i \\
-F(Y_i|X) =& 1 - e^{-Y_i\lambda_i}\\
-f(Y_i|X) =& \lambda_ie^{-Y_i\lambda_i}\\
-h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
-\end{align}
-$$
-:::
-
-:::{.fragment}
-同理，对于Weibull, $h(Y_i|X) = p\lambda^pY^{p - 1}.$
-:::
-
 ## X改变的是什么
 
 **Expected value**
@@ -770,6 +844,27 @@ $$
 &beta;: accumulative failure time metric.
 :::
 
+:::
+
+## 解释Harzard
+
+DGP: $Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}$.
+
+:::{.fragment style="margin-top: 1em"}
+令$\lambda\equiv e^{-X_i\beta}$, 那么，对于exponential
+
+$$
+\begin{align}
+u_i =& Y_i\lambda_i \\
+F(Y_i|X) =& 1 - e^{-Y_i\lambda_i}\\
+f(Y_i|X) =& \lambda_ie^{-Y_i\lambda_i}\\
+h(Y_i|X) =& \lambda_i = e^{-Y_i\lambda_i}
+\end{align}
+$$
+:::
+
+:::{.fragment}
+同理，对于Weibull, $h(Y_i|X) = p\lambda^pY^{p - 1}.$
 :::
 
 ## Semi-parametric model
@@ -961,7 +1056,7 @@ https://rviews.rstudio.com/2022/09/06/deep-survival/
     - 事件发生/结束的“点”与“线”
     - 大数据最基础数据
   - 生存分析模型
-      - [Count]{.grayLight}
+      - Count
       - Discrete: logistic
       - Duration: exponetional, weibull, log-normal, cox
   - 模型选择：Count, binary, duration---de-information

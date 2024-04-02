@@ -499,25 +499,125 @@
 </ul>
 </div>
 <div class="fragment fade-in">
-<div class="fragment grow">
 <p>⇓</p>
 <p><strong>三种策略</strong></p>
 <ol type="1">
 <li class="fragment"><em>Count</em>：发生了多少次</li>
 <li class="fragment"><em>Discrete</em>：年、月、天；0s &amp; 1s.</li>
-<li class="fragment"><em>Continuous</em>: 具体时长</li>
+<li class="fragment"><em>Duration</em>: 具体时长</li>
 </ol>
-</div>
 </div>
 </div>
 </section></section>
 <section>
-<section id="生存分析模型" class="title-slide slide level1 center">
-<h1>生存分析模型</h1>
+<section id="生存分析模型-count-model" class="title-slide slide level1 center">
+<h1>生存分析模型: Count model</h1>
 
 </section>
-<section id="discrete-modeling" class="slide level2">
-<h2>Discrete Modeling</h2>
+<section id="count-data" class="slide level2">
+<h2>Count data</h2>
+<p>就是字面意思，<em>数</em>出来得数据。</p>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<ol type="1">
+<li>每周网络故障次数</li>
+<li>每小时网站访问者数量</li>
+<li>餐厅到达的顾客数量</li>
+<li>每小时呼叫中心接到的电话数量</li>
+<li>城市平均风暴次数</li>
+<li>医院每分钟接到的紧急呼叫数量</li>
+</ol>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>与continuos variable不同</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>离散</li>
+<li>非负（0，+∞)</li>
+<li>有有意义的0</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<p>PMF: <span class="math inline">\(Pr(X{=}k)= \frac{\lambda^k e^{-\lambda}}{k!},\)</span></p>
+<p>k is the number of occurrences</p>
+<p>μ = λ; σ<sup>2</sup> = λ.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/dist_poisson.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/dist_poisson.gif" class="fragment quarto-figure quarto-figure-center" height="350"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>&amp;lambda is the average rate of occurrence</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="overdispersion-zero-inflation" class="slide level2">
+<h2>Overdispersion &amp; Zero-Inflation</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="05_survival_files/figure-revealjs/overdispersionZero-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="05_survival_files/figure-revealjs/overdispersionZero-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div><div class="column fragment" style="width:60%;">
+<p><strong>解法</strong></p>
+<ol type="1">
+<li>Negative Binomial <span class="math display">\[\Pr(X=k)={\binom {k+r-1}{k}}(1-p)^{k}p^{r},\]</span>
+<ul>
+<li>r: number of successes</li>
+<li>k: number of failures</li>
+<li>p: probability of success on each trial.</li>
+</ul></li>
+<li>Zero-Inflated Models/hurdle model</li>
+</ol>
+<aside class="notes">
+<p>ZIMs are particularly useful when the data include excess zeros but also a meaningful count distribution among the non-zero observations. Hurdle models are more suited for situations where the non-occurrence of an event (zero counts) and the occurrence (positive counts) are thought to arise from different processes</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</section></section>
+<section>
+<section id="生存分析模型-discrete-model" class="title-slide slide level1 center">
+<h1>生存分析模型: Discrete Model</h1>
+
+</section>
+<section id="事件史分析" class="slide level2">
+<h2>事件史分析</h2>
 <blockquote>
 <p>关注事件发生点，解释与何因素有关<sup>1</sup></p>
 </blockquote>
@@ -697,7 +797,7 @@
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/plot-hazard-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="05_survival_files/figure-revealjs/plot-hazard-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/plot-hazard-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="05_survival_files/figure-revealjs/plot-hazard-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1027,7 +1127,7 @@ P(Y_{it} = 0|X) =&amp; \frac{1}{1 + e^{X\beta}}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/eg_discrete3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="05_survival_files/figure-revealjs/eg_discrete3-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/eg_discrete3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="05_survival_files/figure-revealjs/eg_discrete3-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1062,15 +1162,15 @@ P(Y_{it} = 0|X) =&amp; \frac{1}{1 + e^{X\beta}}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/eg_discrete4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="05_survival_files/figure-revealjs/eg_discrete4-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/eg_discrete4-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="05_survival_files/figure-revealjs/eg_discrete4-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section></section>
 <section>
-<section id="duration-analysis" class="title-slide slide level1 center">
-<h1>Duration Analysis</h1>
+<section id="生存分析模型-duration-model" class="title-slide slide level1 center">
+<h1>生存分析模型: Duration Model</h1>
 
 </section>
 <section id="duration-an-alternative" class="slide level2">
@@ -1155,13 +1255,13 @@ P(Y_{it} = 0|X) =&amp; \frac{1}{1 + e^{X\beta}}
 </ul></li>
 <li class="fragment">选择本质：选定baseline hazard</li>
 </ul>
-<div class="large" style="text-align:center; margin-top: 1em">
+<div class="fragment" style="text-align:center; margin-top: 1em">
 <p><em>最常见的四种参数模型</em></p>
 <ol type="1">
-<li class="fragment">Exponential</li>
-<li class="fragment">Weibull</li>
-<li class="fragment">Log-normal</li>
-<li class="fragment">Gamma</li>
+<li>Exponential</li>
+<li>Weibull</li>
+<li>Log-normal</li>
+<li>Gamma</li>
 </ol>
 </div>
 </section>
@@ -1171,7 +1271,7 @@ P(Y_{it} = 0|X) =&amp; \frac{1}{1 + e^{X\beta}}
 <div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_colonyGrowth.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-5" data-glightbox="description: .lightbox-desc-5" title="特点：Memoryless, hazard constant"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_colonyGrowth.gif" class="quarto-figure quarto-figure-center" height="500" alt="特点：Memoryless, hazard constant"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_colonyGrowth.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-7" data-glightbox="description: .lightbox-desc-7" title="特点：Memoryless, hazard constant"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_colonyGrowth.gif" class="quarto-figure quarto-figure-center" height="500" alt="特点：Memoryless, hazard constant"></a></p>
 <figcaption>特点：Memoryless, hazard constant</figcaption>
 </figure>
 </div>
@@ -1188,7 +1288,7 @@ h(u) =&amp; 1
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/expFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="05_survival_files/figure-revealjs/expFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/expFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="05_survival_files/figure-revealjs/expFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1233,7 +1333,7 @@ h(u) =&amp; pu^{p - 1}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/wbFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="05_survival_files/figure-revealjs/wbFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/wbFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="05_survival_files/figure-revealjs/wbFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1247,7 +1347,7 @@ h(u) =&amp; pu^{p - 1}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/lnFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="05_survival_files/figure-revealjs/lnFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/lnFun-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="05_survival_files/figure-revealjs/lnFun-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1268,7 +1368,7 @@ h(u) =&amp; pu^{p - 1}
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="05_survival_files/figure-revealjs/gamma-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="05_survival_files/figure-revealjs/gamma-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/gamma-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="05_survival_files/figure-revealjs/gamma-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1300,24 +1400,6 @@ h(u) =&amp; pu^{p - 1}
           display:block!important;
       }</style></aside>
 </section>
-<section id="解释harzard" class="slide level2">
-<h2>解释Harzard</h2>
-<p>DGP: <span class="math inline">\(Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}\)</span>.</p>
-<div class="fragment" style="margin-top: 1em">
-<p>令<span class="math inline">\(\lambda\equiv e^{-X_i\beta}\)</span>, 那么，对于exponential</p>
-<p><span class="math display">\[
-\begin{align}
-u_i =&amp; Y_i\lambda_i \\
-F(Y_i|X) =&amp; 1 - e^{-Y_i\lambda_i}\\
-f(Y_i|X) =&amp; \lambda_ie^{-Y_i\lambda_i}\\
-h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
-\end{align}
-\]</span></p>
-</div>
-<div class="fragment">
-<p>同理，对于Weibull, <span class="math inline">\(h(Y_i|X) = p\lambda^pY^{p - 1}.\)</span></p>
-</div>
-</section>
 <section id="x改变的是什么" class="slide level2">
 <h2>X改变的是什么</h2>
 <p><strong>Expected value</strong></p>
@@ -1337,6 +1419,24 @@ h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
 <p>-βp: proportional hazard metric;</p>
 <p>β: accumulative failure time metric.</p>
 </div>
+</div>
+</section>
+<section id="解释harzard" class="slide level2">
+<h2>解释Harzard</h2>
+<p>DGP: <span class="math inline">\(Y_i = e^{X_i\beta}u_i\Rightarrow u_i = \frac{Y_i}{e^{X_i\beta}} = Y_ie^{-X_i\beta}\)</span>.</p>
+<div class="fragment" style="margin-top: 1em">
+<p>令<span class="math inline">\(\lambda\equiv e^{-X_i\beta}\)</span>, 那么，对于exponential</p>
+<p><span class="math display">\[
+\begin{align}
+u_i =&amp; Y_i\lambda_i \\
+F(Y_i|X) =&amp; 1 - e^{-Y_i\lambda_i}\\
+f(Y_i|X) =&amp; \lambda_ie^{-Y_i\lambda_i}\\
+h(Y_i|X) =&amp; \lambda_i = e^{-Y_i\lambda_i}
+\end{align}
+\]</span></p>
+</div>
+<div class="fragment">
+<p>同理，对于Weibull, <span class="math inline">\(h(Y_i|X) = p\lambda^pY^{p - 1}.\)</span></p>
 </div>
 </section>
 <section id="semi-parametric-model" class="slide level2">
@@ -1371,7 +1471,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="05_survival_files/figure-revealjs/eg_dur1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="05_survival_files/figure-revealjs/eg_dur1-1.png" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/eg_dur1-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="05_survival_files/figure-revealjs/eg_dur1-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1381,7 +1481,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="05_survival_files/figure-revealjs/eg_dur2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="05_survival_files/figure-revealjs/eg_dur2-1.png" width="960"></a></p>
+<p><a href="05_survival_files/figure-revealjs/eg_dur2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="05_survival_files/figure-revealjs/eg_dur2-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -1408,7 +1508,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 <div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_survivalBook.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_survivalBook.jpg" class="quarto-figure quarto-figure-center" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_survivalBook.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_survivalBook.jpg" class="quarto-figure quarto-figure-center" height="600"></a></p>
 </figure>
 </div>
 </div><div class="column fragment" style="width:50%;">
@@ -1417,7 +1517,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 <p><a href="https://cran.r-project.org/web/views/Survival.html">Survival Task View</a></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_survminer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_survminer.png" class="quarto-figure quarto-figure-center" height="450"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_survminer.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_survminer.png" class="quarto-figure quarto-figure-center" height="450"></a></p>
 </figure>
 </div>
 </div>
@@ -1459,7 +1559,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 <ul>
 <li class="fragment"><div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_spline.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" data-glightbox="description: .lightbox-desc-14" title="Spline"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_spline.png" class="quarto-figure quarto-figure-center" height="300" alt="Spline"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_spline.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" data-glightbox="description: .lightbox-desc-16" title="Spline"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_spline.png" class="quarto-figure quarto-figure-center" height="300" alt="Spline"></a></p>
 <figcaption>Spline</figcaption>
 </figure>
 </div></li>
@@ -1548,7 +1648,7 @@ P(2fails@t_2|someone\ f@t_2) =&amp; \frac{h_0(t_2)\lambda_i^p}{\sum^n_{i = 2}h_0
 </ul></li>
 <li>生存分析模型
 <ul>
-<li><span class="grayLight">Count</span></li>
+<li>Count</li>
 <li>Discrete: logistic</li>
 <li>Duration: exponetional, weibull, log-normal, cox</li>
 </ul></li>
@@ -1649,7 +1749,7 @@ L_p = \prod^K_{i = 1}[\frac{e^{X_i}\beta}{\sum_{j\in R(t_i)}e^{X_i\beta}}]^{\sig
 <h2>估计方法</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_repeatedFailure.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_repeatedFailure.jpg" class="quarto-figure quarto-figure-center" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_repeatedFailure.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_repeatedFailure.jpg" class="quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 </section>
@@ -1701,7 +1801,7 @@ h(y_2) =&amp; h_0(y)exp(X\beta + v_2)
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_residualPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_residualPlot.png" class="quarto-figure quarto-figure-center" height="300"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/sur_residualPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="https://drhuyue.site:10002/sammo3182/figure/sur_residualPlot.png" class="quarto-figure quarto-figure-center" height="300"></a></p>
 </figure>
 </div>
 </div>
@@ -2140,7 +2240,7 @@ h(y_2) =&amp; h_0(y)exp(X\beta + v_2)
     });
     </script>
     <script>videojs(video_shortcode_videojs_video1);</script>
-    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"fade","loop":false,"selector":".lightbox","closeEffect":"fade"});
+    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"fade","loop":false,"openEffect":"fade","descPosition":"bottom"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
