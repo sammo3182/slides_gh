@@ -1,53 +1,46 @@
 ---
 title: "政务数据的分析价值和基本原则"
-date: "2023-07-10"
+date: today
 date-format: "iso"
-
 author: "胡悦"
 institute: |
     | 清华大学社会科学学院政治学系
+    | 清华大学计算社会科学平台
     | 清华大学数据与治理研究中心
-
 bibliography: pre_css.bib
-
 knitr: 
     opts_chunk: 
       echo: false
-
 format: 
   revealjs:
-    css: style_oldman.css
-    theme: oldMan.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: false
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
+    chalkboard: false # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - reveal-header
-  - lightbox
-
+    default-image-extension: png
 revealjs-plugins:
-  # - pointer # adding q to activate/deactivate a pointer
   - spotlight
-
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
-
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup}
@@ -77,9 +70,9 @@ set.seed(313)
   - 信息学[（Graduated Certificate in Informatics)]{.small}
 - 清华大学计算社会科学平台[(副主任)]{.small}
   - 清华数据与治理中心[(副主任)]{.small}
-- 计算社会科学编程语言证书项目
+  - 计算社会科学编程语言证书项目[（负责人）]{.small}
 
-*研究特点*：*现代性与学科[交叉]{.red}*
+*研究兴趣*：*认知、行为与现代性*
 
 - **W. 数据科学**
   - 实验室和调查实验
@@ -91,12 +84,11 @@ set.seed(313)
 *研究领域*
 
 - **W. 心理学**
-  - 政治[认知]{.red}（参与、公卫）
-  - 政治传播（官媒、青年）
-  - 身份政治（城乡、香港、司法）
+  - 政治[认知与行为]{.red}
+  - 政治传播
+  - 身份政治（城乡、司法）
 - **W. 经济学**
-  - 宏观经济 &rarr; 微观认知 &rarr; 中观行为公共政策
-  - 不平等[感知]{.red}
+  - 社会经济不平等[感知]{.red}
 - **W. 语言学**
   - 语言能力的政治影响
   - 语言政策的[治理功能]{.red}
@@ -118,38 +110,42 @@ set.seed(313)
 
 # 数据性质与价值
 
-## 什么是大数据
+## 大数据 &rarr; 社会科研
+
+:::{style="text-align:center"}
+什么是**大数据**
+:::
 
 :::: {.columns}
 
 ::: {.column width="35%"}
-![](images/css_natureBD.png){fig-align="center" height=500}
+![@Goldston2008](https://drhuyue.site:10002/sammo3182/figure/css_natureBD.png){fig-align="center" height=500}
 :::
 
 ::: {.column width="30%"}
+人类社会的“*快速、大尺度、深层次*”数字化转型
+
 - 社会数字化---[海量]{.red}资源待处理
 - 数据科学---计算机[辅助]{.red}方法
 - 新生现象---[新]{.red}理论、新范式
-
-> 人类社会“快速、大尺度、深层次”数字化转型
 :::
 
 ::: {.column width="35%"}
-![](images/css_scienceBD.jpg){fig-align="center" height=500}
+![@ScienceStaff2011](https://drhuyue.site:10002/sammo3182/figure/css_scienceBD.jpg){fig-align="center" height=500}
 :::
 
 ::::
 
 :::{.notes}
-Nature column: @Goldston2008
-Science special issue: @ScienceStaff2011
+Nature column: 
+Science special issue: 
 
 拍字节或拍它字节（Petabyte、PB）是一种信息计量单位，现今通常在标示网络硬盘总容量，或具有大容量的保存媒介之保存容量时使用。
 
 1PB = 1,000 TB (兆) = 1,000,000 GB (十亿)，所以中文的全称是：1千兆
 :::
 
-## 大数据的来源
+## 政务数据的来源
 
 :::: {.columns}
 
@@ -188,7 +184,7 @@ Science special issue: @ScienceStaff2011
 :::
 
 ::: {.column width="65%"}
-![](images/css_bd6v.png){.lightbox fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/css_bd6v.png){fig-align="center" height=600}
 :::
 
 ::::
@@ -223,8 +219,8 @@ Science special issue: @ScienceStaff2011
 
 :::: {.columns}
 
-::: {.column width="50%"}
-![](images/idea_dataValue.png){fig-align="center" height=num}
+::: {.column width="70%"}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataValue.png){fig-align="center" height=600}
 
 :::{.notes}
 
@@ -246,7 +242,7 @@ Science special issue: @ScienceStaff2011
 
 :::
 
-::: {.column width="50%"}
+::: {.column width="30%"}
 - 估值困境：数据意识
 - 管理困境：数据政策
 - 使用困境：数据方法
@@ -287,7 +283,7 @@ Science special issue: @ScienceStaff2011
 
 ## 数据科学
 
-![](images/idea_dataScience.jpg){.lightbox fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.jpg){fig-align="center" height=600}
 
 
 ## 数据科学发展沿革
@@ -480,11 +476,11 @@ Deep Learning, 2015
 ……
 :::
 
-::: {.column width="60%"}
-![](images/css_ss.png){.lightbox fig-align="center" height=500}
+::: {.column .fragment width="60%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_ss.png){fig-align="center" height=500}
 :::
 
-::: {.column width="20%"}
+::: {.column .fragment width="20%"}
 - 马克思主义理论
 - 法学
 - 历史
@@ -498,9 +494,9 @@ Deep Learning, 2015
 > “计算社会科学”这一研究领域正在兴起，人们将在前所未有的深度和广度上[自动]{.red}地收集和利用数据，为社会科学的研究服务。社会计算是指社会行为和计算系统[交叉融合]{.red}而成的一个研究领域，研究的是如何利用计算技术帮助人们进行沟通与协作，如何[利用计算技术研究社会运行的规律与发展趋势]{.red}。
 
 :::{.r-hstack}
-![](images/css_cssPaper.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/css_cssPaper.png){fig-align="center" height=400}
 
-![](images/css_davidLazer.jpg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/css_davidLazer.jpg){fig-align="center" height=400}
 :::
 
 ## 学科交叉
@@ -513,10 +509,9 @@ Deep Learning, 2015
   - Data-intensive research
 - @King2016: 大数据方法将终结传统的定量、定性方法分野
 
-
 ## 计算·社会科学
 
-![](images/css_css_cn.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_css_cn.png){fig-align="center" height=num}
 
 ## 新交叉学科
 
@@ -583,31 +578,27 @@ Standardized World Income Inequality Database (Solt 2020)
 
 ## 关系分析  {auto-animate=true}
 
-![](images/idea_pd7.png){fig-align="center" height=550}
-
-:::{.notes}
-1997
-:::
+![](https://drhuyue.site:10002/sammo3182/figure/idea_pd7.png){fig-align="center" height=600}
 
 
 ## 模式学习  {auto-animate=true}
 
 :::{.r-hstack}
-![](images/idea_pd7.png){fig-align="center" height=500}
+![1997](https://drhuyue.site:10002/sammo3182/figure/idea_pd7.png){fig-align="center" height=500}
 
-![](images/idea_pd0.png){.fragment fig-align="center" height=500}
+![1990](https://drhuyue.site:10002/sammo3182/figure/idea_pd0.png){.fragment fig-align="center" height=500}
 :::
 
 ## 规律学习
 
-![](images/idea_pdregression.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_pdregression.png){fig-align="center" height=600}
 
 ## 因果推断
 
-![](images/idea_closed.gif){fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_closed.gif){fig-align="center" height=600}
 
 
-## 举例：儒学院关闭的因果效应
+## 举例：孔子学院关闭的因果效应
 
 :::: {.columns}
 
@@ -622,7 +613,7 @@ Jigsaw is a unit within Google that explores threats to open societies, and buil
 :::
 
 ::: {.column width="50%"}
-![](images/idea_gdelt.gif){fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_gdelt.gif){fig-align="center" height=600}
 :::
 
 ::::
@@ -630,14 +621,14 @@ Jigsaw is a unit within Google that explores threats to open societies, and buil
 ## Shutting-down vs. Ice cream
 
 :::{.r-hstack}
-![](images/idea_closeEffect.jpg){.fragment fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_closeEffect.jpg){fig-align="center" height=600}
 
-![](images/idea_iceCreamEffect.gif){.fragment fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_iceCreamEffect.gif){fig-align="center" height=600}
 :::
 
 ## 推断结果
 
-![](images/idea_closeEffect.png){fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_closeEffect.png){fig-align="center" height=600}
 
 ## 小结
 
@@ -676,7 +667,7 @@ Jigsaw is a unit within Google that explores threats to open societies, and buil
 
 - 指通过电子化文本的量化分析研究[人类行为与文化趋势]{.red}的计算词典学方法，以研究人们使用的语言与词汇，进而揭示其中反应出来的文化现象。
 
-![](images/css_googleNgram.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_googleNgram.png){fig-align="center" height=500}
 
 
 :::{.notes}
@@ -693,7 +684,7 @@ Jigsaw is a unit within Google that explores threats to open societies, and buil
 :::: {.columns}
 
 ::: {.column width="50%"}
-![](images/css_ml.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_ml.png){fig-align="center" height=600}
 
 :::{.notes}
 Generative pre-trained transformers; GPT
@@ -715,17 +706,11 @@ Generative pre-trained transformers; GPT
 
 ## 视频/图片分析[@GebruEtAl2017]
 
-:::: {.columns}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_gebru1.png){fig-align="center" height=600}
 
-::: {.column width="60%"}
-![](images/css_gebru1.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/css_gebru2.png){.fragment fig-align="center" height=600}
 :::
-
-::: {.column width="40%"}
-![](images/css_gebru2.png){fig-align="center" height=600}
-:::
-
-::::
 
 
 :::{.notes}
@@ -736,10 +721,12 @@ accurately estimate income, race, education, and voting patterns with single-pre
 
 ## 社会网络分析
 
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_govermentNet.png){fig-align="center" height=600}
 
-![](images/css_govermentNet.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_polarizationParty.jpg){.fragment fig-align="center" height=600}
+:::
 
-## 政党关系 {background-image="images/css_polarizationParty.jpg" background-size="contain"}
 
 :::{.notes}
 美国政党1949-2011
@@ -749,7 +736,7 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 空间分析
 
-![](images/css_12345pursuits.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_12345pursuits.png){fig-align="center" height=600}
 
 :::{.notes}
 总，服务类，管理类，安保类
@@ -757,11 +744,11 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 时间分析
 
-![](images/css_quarantine_wuhan.png){fig-align="center" height=num}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_quarantine_wuhan.png){fig-align="center" height=600}
 
----
-
-![](images/css_quarantine_yunnan.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_quarantine_yunnan.png){.fragment fig-align="center" height=600}
+:::
 
 :::{.notes}
 通过交通量衡量quarantine效果
@@ -770,14 +757,14 @@ Edges between nodes are drawn if each member agrees with another member more oft
 ## 时空比较
 
 :::{.r-hstack}
-![](images/css_wuhanBefore.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_wuhanBefore.png){fig-align="center" height=600}
 
-![](images/css_wuhanAfter){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_wuhanAfter.png){fig-align="center" height=600}
 :::
 
 ## 时空分析
 
-![](images/stat_patrioBase9705.gif){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_patrioBase9705.gif){fig-align="center" height=600}
 
 
 ## 政务大数据分析应用
@@ -812,7 +799,7 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 商情数据驾驶舱
 
-![](images/css_shangqing_platform.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_shangqing_platform.png){fig-align="center" height=400}
 
 [整合司法大数据、网络舆情大数据、政务热线大数据、企业营商大数据等]{.red}数据资源，在此基础上进行大数据分析展示，分析营商热点，挖掘民声民意，以便快速的做出工作的响应。
 
@@ -820,15 +807,15 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 :::: {.columns}
 
-::: {.column width="70%"}
+::: {.column width="60%"}
 - 项目受托方：中国发展研究基金会、广州市发改委。
 - 课题成果：
   - 以广州为中心个案，通过挖掘和说明政府、市场和企业维度下不同指标的营商环境意涵及其变动趋势特征，实现以把脉问诊形式评估2021年度广州营商环境的整体特征。
   - 以商情通的数据分析模块为依托，将时间颗粒度细化到月和日，对广州下辖的不同行政区县进行营商环境测量与评估。
 :::
 
-::: {.column width="30%"}
-![](images/css_shangqing_report.png){fig-align="center" height=num}
+::: {.column width="40%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_shangqing_report.png){fig-align="center" height=600}
 :::
 
 ::::
@@ -861,19 +848,19 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 建成市民诉求驱动的城市治理决策辅助系统，辅助政府[感知社情民情，精准科学决策，促进政府回应效能升级]{.red}。通过统筹规划、分步实施，逐步实现数据整合、业务融合，形成动态化决策辅助体系、开发自动化决策辅助报告平台，全面提升社会治理的数字化与智能化水平，赋能基层敏捷治理改革。
 
-![](images/css_minqing_report.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_report.png){fig-align="center" height=400}
 
 ## 人感闭环
 
-![](images/css_minqing_circle){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_circle.png){fig-align="center" height=600}
 
 ## 治理创新
 
-![](images/css_minqing_connect.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_connect.png){fig-align="center" height=600}
 
 ## 人感城市的探索：北京“接诉即办”改革{.smaller}
 
-![](images/css_minqing_process.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_process.png){fig-align="center" height=300}
 
 十八届三中全会：“全面深化改革的总目标是完善和发展中国特色社会主义制度，[推进国家治理体系和治理能力现代化]{.red}”。
 
@@ -892,7 +879,7 @@ Edges between nodes are drawn if each member agrees with another member more oft
 - 民情诉求多样：市场服务、社会风险、民生服务
 - 群体覆盖广泛：积极市民、用户多样、底线保障
 
-![](images/css_mingqing_connect.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_mingqing_connect.png){fig-align="center" height=300}
 
 ## 市民诉求驱动
 
@@ -905,14 +892,14 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 接诉即办全流程
 
-![](images/css_mingqing_procedure.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_mingqing_procedure.png){fig-align="center" height=600}
 
 ## 人感数据：12345+网格化+社交媒体
 
-:::{.r-hstack}
-![](images/css_minqing_pursuits.jpg){fig-align="center" height=600}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_pursuits.jpg){fig-align="center" height=600}
 
-![](images/css_minqing_satisfied.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_satisfied.jpg){.fragment fig-align="center" height=600}
 :::
 
 ## 城市感知:数据穿透
@@ -925,26 +912,26 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 回应性评估
 
-![](images/css_minqing_evaluationResponse.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_evaluationResponse.png){fig-align="center" height=600}
 
 ## 干预效果评估
 
-![](images/css_minqing_evaluationIntervene.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_evaluationIntervene.png){fig-align="center" height=600}
 
 ## 问题诊断
 
-![](images/css_minqing_evaluationCRR.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_evaluationCRR.png){fig-align="center" height=600}
 
 ## 问题鉴别
 
-![](images/css_minqing_evaluationYoY.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_evaluationYoY.png){fig-align="center" height=600}
 
 ## 风险评估
 
 :::{.r-hstack}
-![](images/css_minqing_riskCall.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_riskCall.png){fig-align="center" height=600}
 
-![](images/css_minqing_riskCall_cat.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/css_minqing_riskCall_cat.png){fig-align="center" height=600}
 :::
 
 
@@ -985,17 +972,16 @@ Edges between nodes are drawn if each member agrees with another member more oft
 
 ## 创新性迷思
 
-:::{style="text-align:center"}
-[<img src="images/idea_alreadyKnow1.png" height = 200 />](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
-[<img src="images/idea_alreadyKnow2.png" height = 200 />](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)
+[![](https://drhuyue.site:10002/sammo3182/figure/idea_alreadyKnow1.png){fig-align="center" height=200}](https://www.computerworld.com/article/3162030/microsofts-big-data-like-study-on-sleep-proves-what-doctors-already-know.html)
+
+[![](https://drhuyue.site:10002/sammo3182/figure/idea_alreadyKnow2.png){fig-align="center" height=200}](https://www.independent.co.uk/voices/gender-pay-gap-worst-offenders-government-targets-diversity-disability-equality-a8788341.html)
 
 问题导向 + 多元整合 + 社会科学思维
-:::
 
 
 ## 伦理性迷思
 
-[<img src="images/idea_illegalCollection.png" height = 550 />](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
+[![](https://drhuyue.site:10002/sammo3182/figure/idea_illegalCollection.png){fig-align="center" height=600}](https://www.ftc.gov/news-events/press-releases/2019/09/google-youtube-will-pay-record-170-million-alleged-violations)
 
 :::{.notes}
 FTC（美国联邦贸易委员会）和纽约州总检察长指控YouTube频道在未经父母同意的情况下收集儿童个人信息用于定向广告。
@@ -1004,8 +990,7 @@ FTC（美国联邦贸易委员会）和纽约州总检察长指控YouTube频道�
 
 ## 歧途：诱导
 
-![](images/idea_ca.jpg){fig-align="center" height=500}
-
+![](https://drhuyue.site:10002/sammo3182/figure/idea_ca.jpg){fig-align="center" height=600}
 
 :::{.notes}
 2018年Facebook数据泄露事件：Facebook在2015年就发现剑桥分析公司非法获取大量用户隐私数据用于政治广告投放，但为何没有及时告知用户，直到今年媒体曝光才承认？
@@ -1016,9 +1001,7 @@ FTC（美国联邦贸易委员会）和纽约州总检察长指控YouTube频道�
 
 ## 歧途：误导
 
-<video width="1000" height="550" controls preload>
-    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xRzR6RzJFWERqbS1BcHZyP2U9eEF5REpX.mp4" type="video/mp4">
-</video>
+{{< video https://drhuyue.site:10002/sammo3182/video/big_opinionHabit.mp4 title="Opinion Habits" height=600 loading="eager" allowfullscreen>}}
 
 
 ## 合理性迷思
@@ -1095,16 +1078,13 @@ FTC（美国联邦贸易委员会）和纽约州总检察长指控YouTube频道�
 
 ## 复杂抽样
 
-::::{.columns}
-:::{.column width="60%" .fragment}
-![](images/stat_stratifiedCluster.png){height=500 style="text-align: center"}
-:::
+:::{.r-hstack}
 
-:::{.column width="40%" .fragment}
-![](images/stat_quota.png){height=500 style="text-align: center"}
-:::
-::::
+![](https://drhuyue.site:10002/sammo3182/figure/stat_stratifiedCluster.png){fig-align="center" height=600}
 
+![](https://drhuyue.site:10002/sammo3182/figure/stat_quota.png){fig-align="center" height=600}
+
+:::
 :::{.notes}
 Stratification: 分类，每类中随机抽取，每类成员在总体中配比不变        
 Clustering：直接随机抽取一类        
@@ -1114,18 +1094,18 @@ Quota：成分配比够就行，不用随机
 
 ## 数据收集合理性
 
-> @KingEtAl2017： 为了系统地描述他们的观点，我们从2010年到2015年的社交媒体帖子中获取了一个随机样本...... 从这些数据中，我们[抽取了]{.red}128个帖子，这些帖子是由人们......
+> @KingEtAl2017a： 为了系统地描述他们的观点，我们从2010年到2015年的社交媒体帖子中获取了一个随机样本...... 从这些数据中，我们[抽取了]{.red}128个帖子，这些帖子是由人们......
 
-> @CironeHobbs2022:  该分析仅限于[随机样本]{.red}的推文，我们收集了手工标注的数据...... --- Cirone和Hobbs 2022年《政治科学研究方法》（PSRM）
+> @CironeHobbs2022:  该分析仅限于[随机样本]{.red}的推文，我们收集了手工标注的数据......
 
 
 - 简单和复杂抽样是否适用于政务大数据？
 - 抽样偏差、数据来源冲突、波动增加、误差率...
 - "Let data talk"?
 
----
+## Data Never Talks
 
-![](images/idea_dataNeverTalk2.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataNeverTalk2.jpg){fig-align="center" height=600}
 
 :::{.notes}
 数据来源冲突：数据源问题
@@ -1136,10 +1116,14 @@ Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Ch
 
 ## 研究设计原则：科学性
 
-:::{style="text-align:center"}
 > [[综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、深入分析论证、**科学把握尺度**。]{.red .large}    
-[——习近平 (《中央政治局的同志必须有很强的看齐意识》, 2015年12月）]{.large}]{.r-fit-text}
 
+:::{style="text-align:right"}
+——习近平 (《中央政治局的同志必须有很强的看齐意识》, 2015年12月）
+:::
+
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
 如何科学？
 
 **信念**
@@ -1147,6 +1131,7 @@ Hansen, Lars Peter. 2019. “Purely Evidence-Based Policy Doesn’t Exist.” Ch
 程序    
 方法
 :::
+
 
 
 ## 研究程序
@@ -1190,7 +1175,7 @@ Jim Gray 早在2006 年就发表了题为《第四范式：数据密集型科学
 1. 无偏（正确😄）
 1. 高效（准确😅）
 
-![](images/stat_yangQian.gif){.fragment height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_yangQian.gif){fig-align="center" height=400}
 :::
 
 :::{.column width="50%" .fragment}
@@ -1202,7 +1187,7 @@ Jim Gray 早在2006 年就发表了题为《第四范式：数据密集型科学
 
 but how?
 
-![](images/stat_yuXuanji.jfif){height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/stat_yuXuanji.jfif){fig-align="center" height=400}
 
 :::
 ::::
@@ -1226,7 +1211,7 @@ but how?
 
 ## 知识基础
 
-![](images/idea_dataScience.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.png){fig-align="center" height=600}
 
 
 ## 硬件基础
@@ -1244,7 +1229,7 @@ but how?
 
 ### 社交媒体
 
-![](images/text_social-media.gif){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_social-media.gif){fig-align="center" height=600}
 
 :::{.notes}
 新浪微博1.4亿，微信用户5.5亿;
@@ -1253,15 +1238,15 @@ but how?
 
 ### 公共开放平台
 
-![](images/text_zhongsheng_index.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng_index.png){fig-align="center" height=600}
 
 ### 网络问政平台
 
-![](images/text_henan-Egovernment.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_henan-Egovernment.png){fig-align="center" height=600}
 
 ### 社会化问答网站
 
-![](images/text_zhihu.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_zhihu.png){fig-align="center" height=600}
 
 :::{.notes}
 Quora, Stack Overflow
@@ -1269,11 +1254,11 @@ Quora, Stack Overflow
 
 ### 媒体数据库
 
-![](images/text_renminribao.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_renminribao.png){fig-align="center" height=600}
 
 ### 问卷开放性问题
 
-![](images/text_survey_openQuestion.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/text_survey_openQuestion.png){fig-align="center" height=600}
 
 ### 档案数据
 
@@ -1311,7 +1296,7 @@ Quora, Stack Overflow
 
 ## 认知基础
 
-![](images/css_dsPyramid.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_dsPyramid.png){fig-align="center" height=600}
 
 
 ## 小结
@@ -1351,12 +1336,11 @@ Quora, Stack Overflow
 # 感谢关注，欢迎交流 {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
-
 [`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
 
 [`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
-[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
 
 ![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 :::
