@@ -1,0 +1,553 @@
+---
+title: "Case Illustration: Process Tracing, Interview, and Other Methods"
+subtitle: "Understanding Policies (10700193-90)"
+author: "Yue Hu"
+institute: "Tsinghua University" 
+knitr: 
+    opts_chunk:
+      echo: false
+format: 
+  revealjs:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    slide-number: true
+    # filters: [appExclusion.lua] # not count appendices into page number
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+    default-image-extension: png
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  icons, knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(313)
+
+# Visualization
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+```
+
+## Guide for Proposal presentation
+
+- Upload the slides to Web Learning [before]{.red} 13:30, 2024-06-03
+- 8 min presentation (randomly ordered)
+- 1 question (randomly assigned)
+- Content:
+    - Objective to study
+    - Puzzle to test
+    - Design for examination
+    - Data and method justification
+
+---
+
+{{< video https://drhuyue.site:10002/sammo3182/video/process_how2defense.mp4 title="How to conduct an oral defense" height=600 preload="auto" controls allowfullscreen>}}
+
+
+## Overview of the class
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+- large N
+- Small N
+  + [Case study]{.grayLight}
+  + Process tracing
+  + Interview
+  + Focus group
+  + Content analysis
+:::
+
+::: {.column width="50%"}
+### Interpretivist approach
+
++ Interview methods
+    + Interview
+    + Focus group
++ Discourse methods
+    + Content analysis
++ Causal inference
+    - Process tracing
+:::
+
+::::
+
+
+
+# Interview Methods
+
+## Why being interpretivist
+
+:::{style="text-align:center; margin-top: 3em"}
+> [要克服自弹 自唱、自娱自乐、隔空喊话、封闭运行的倾向，进万家门、访万家情、结万家亲，经常同群众进行**面对面、手拉手、心贴心**的零距离接触，增进对群众的真挚感情。要克服以主观想象代替群众真实需求的倾向，把握群众所需所急所盼……]{.red}
+:::
+
+
+:::{style="text-align:right"}
+--- 习近平 (《在中央党的群团工作会议上的讲话》, 2015年07月)
+:::
+
+
+## What's an Interview
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_interview.jpg){fig-align="center" height=600}
+
+
+## How to organize an Interview properly
+
+{{< video https://drhuyue.site:10002/sammo3182/video/process_interview.mp4 title="Interviews in 'Brexit: The Uncivil War'" height=500 preload="auto" controls allowfullscreen>}}
+
+
+:::{.notes}
+Brexit: The Uncivil War  
+
+Benedict Cumberbatch as Dominic Cummings, main political strategist for Vote Leave,
+:::
+
+
+## Prepare for an interview
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+
+**Techniques**
+
+:::{.fragment}
++ Structured interview
++ Semi-structured interview
++ Unstructured interview
+:::
+
+
+**Outcome**
+
+:::{.fragment}
++ Open answers
++ Messy details
++ Contradictory points
+:::
+
+:::
+
+::: {.column .nonincremental width="50%"}
+
+**Conditions**
+
+:::{.fragment}
++ Safe environment
++ Design the interview strategy & pilots
++ More listening, less talking
+:::
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_cummings.webp){fig-align="center" height=300}
+
+:::
+
+::::
+
+
+## Pyschological Preparation
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_dontLike.gif){fig-align="center" height=600}
+
+
+## Economy and Societal Version of Interview
+
+{{< video https://drhuyue.site:10002/sammo3182/video/process_focusGroup.mp4 title="Focus group interview in 'Brexit'" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+Brexit: The Uncivil War  
+
+Rory Kinnear as Craig Oliver, the former Director of Politics and Communications for British prime minister David Cameron
+:::
+
+## How to setup a focus group
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_focusGroup.png){fig-align="center" height=300}
+
+
+1. Size: 5--15
+1. Subjects read or watch something.
+1. Researcher ask the questions.
+1. Subjects express the feelings and opinions.
+
+## Focus group vs. interviews
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Pros:**
+
+1. Real-life (conversational) environment
+1. Flexibility
+1. Low cost (< case studies)
+
+**Cons:**
+
+1. Non-privacy-protection
+1. Who lead the talk?
+1. Selection interviewees
+
+:::
+
+::: {.column width="50%"}
+
+![Craig Oliver](https://drhuyue.site:10002/sammo3182/figure/process_olivers.jpg){fig-align="center" height=500}
+
+:::
+
+::::
+
+
+
+# Discourse Methods
+
+## Content analysis
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_closeReading.jpg){fig-align="center" height=600}
+
+
+## Step 1: Content Sampling
+
+* Terminology:
+    + Content analysis: 100 and below
+    + Text analysis: above 100 (usually above 1,000)
+    + Unit of analysis?
+
+* Sampling technique
+    + Convenient sample
+    + Stratification
+    + Clustering
+
+## Step 2: Coding
+
+:::: {.columns}
+
+::: {.column .nonincremental width="20%"}
+* Manifest content
+* Latent content
+* Online assistance: [CATMA](http://catma.de/) or eMargin
+:::
+
+::: {.column .fragment width="80%"}
+![](https://drhuyue.site:10002/sammo3182/figure/process_tag.png){fig-align="center" height=600}
+:::
+
+::::
+
+
+
+## Step 3: Analysis
+
+:::: {.columns}
+
+::: {.column width="60%"}
+![](https://drhuyue.site:10002/sammo3182/figure/process_topictrend.png){fig-align="center" height=600}
+:::
+
+::: {.column width="40%"}
+1. Context
+1. Transparency
+1. Transferability
+:::
+
+::::
+
+
+## Analytic Tools
+
+Coding
+
+:::{.r-hstack}
+![Open coding](https://drhuyue.site:10002/sammo3182/figure/process_openCoding.jpg){.fragment fig-align="center" height=250}
+
+![Axial coding](https://drhuyue.site:10002/sammo3182/figure/process_axialCoding.jpg){.fragment fig-align="center" height=250}
+
+![Selective coding](https://drhuyue.site:10002/sammo3182/figure/process_selectiveCoding.gif){.fragment fig-align="center" height=250}
+:::
+
+:::{.fragment}
+Lab Notes: Keep everything in record!!
+
+* Code notes
+* Theoretical notes
+* Operational notes
+:::
+
+
+## Content analysis vs. text analysis
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_fakeStats.jpg){fig-align="center" height=600}
+
+:::
+
+::: {.column .nonincremental width="50%"}
+:::{.fragment}
+**Pros**;
+
+* Economic
+* Allowing correction
+* Overtime survey
+* Third party
+:::
+
+:::{.fragment}
+**Cons**:
+
+* Limited content
+* Limited scale
+* Subjective consistency
+:::
+
+:::
+
+::::
+
+
+
+# Causal Inference: Process Tracing
+
+
+## What's Process Tracing
+
+![Tenet in a case](https://drhuyue.site:10002/sammo3182/figure/process_tenet.gif){fig-align="center" height=400}
+
+- **Goal**: Theory testing
+- **Hypothesis**: Explanation rivalry
+
+
+## Example
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Why was English recognized as an official language in Singapore?
+
+:::{.callout-warning .fragment}
+[Only 21%]{.red} of the population spoke this language when the country was independent.
+:::
+:::
+
+::: {.column width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/process_singaporeLang.jpg){fig-align="center" height=600}
+:::
+
+::::
+
+## Process tracing procedure
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_routine.gif){fig-align="center" height=600}
+
+
+
+## Step 1: Identify Hypotheses
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/process_singapore.jpg){fig-align="center" height=600}
+:::
+
+::: {.column width="50%" style="text-align:center; margin-top: 3em"}
+
+State (institutional) capacity  
+
+vs.
+
+Prioritization of the education ministry
+
+:::{.notes}
+Goh Keng Swee (吴庆瑞): 财政部长、内政及国防部长、副总理, 奠定了新加坡教育的精英主义政策, 取得伦敦政经学院经济学博士学位。
+
+The Goh Report identified and set out recommendations to address three shortcomings: high education wastage, low literacy, and ineffective bilingualism. English was taught to maximize proficiency
+:::
+
+:::
+
+::::
+
+
+## Step 2: Establish Time Line
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_timelineEnglish.jpg){fig-align="center" height=600}
+
+:::{.notes}
+1. The very second step right after determining the DV
+1. Before the evidence collection
+:::
+
+## Step 3: Construct Causal Graph
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_causalEnglish.jpg){fig-align="center" height=600}
+
+:::{.notes}
+Causal process of X &rarr; Y  
+Used to identify relevant moments and actors that could affect the results.
+:::
+
+
+## Step 4, 5: Identify Alternative Choice and Counterfactual Outcomes
+
+:::{style="text-align:center; margin-top: 2em"}
+*Counterfactual 1*
+
+Weak State &rarr; language of the dominant population.
+
+*Counterfactual 2*
+
+Lee did not assign Goh as the MOE &rarr; the status quo.
+:::
+
+
+:::{.notes}
+A reason that choices might make differences  
+If there's no comparative cases, then conterfactual outcomes.
+:::
+
+:::{.fragment .large style="text-align:center; margin-top: 2em"}
+*How to find evidence? *
+:::
+
+
+## Understanding Evidence
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_necessarySufficient.ppm){fig-align="center" height=400}
+
+- When A is a [sufficient]{.red} condition of B, then once A happens, B must happen.
+- When A is a [necessary]{.red} condition of B, then there must be A for B to happen.
+
+## Practice
+
++ Being 2, 4, 6, or 8 is __ for being an even natural integer.
++ Being 2, 4, 6, or 8 is __ for being an even natural integer <10.
+
+
++ Being highly intelligent is __ for being a student of Tsinghua.
++ Showing up to class is __ for getting an A.
++ Being mortal is __ for being human.
++ Being a rational animal is __ for being human.
+
+
+## Step 6: Find Evidence for Primary Hypothesis^[Evera, Stephen Van. 1997. *Guide to Methods for Students of Political Science*. Ithaca: Cornell University Press.]
+
+<table>
+  <tr>
+    <th style="width: 10%;">N/S</th>
+    <th style="width: 45%;">Yes</th>
+    <th style="width: 45%;">No</th>
+  </tr>
+  <tr>
+    <td>Yes</td>
+    <td>
+      <img src="https://drhuyue.site:10002/sammo3182/figure/process_kenan.jpg" style="display: block; margin-left: auto; margin-right: auto;" height="150">
+      <figcaption style="text-align: center;">Double-Decisive</figcaption>
+    </td>
+    <td>
+      <img src="https://drhuyue.site:10002/sammo3182/figure/process_dingLou.jpg" style="display: block; margin-left: auto; margin-right: auto;" height="150">
+      <figcaption style="text-align: center;">Hoop Test</figcaption>
+    </td>
+  </tr>
+  <tr>
+    <td>No</td>
+    <td>
+      <img src="https://drhuyue.site:10002/sammo3182/figure/process_kuangBiao.jpg" style="display: block; margin-left: auto; margin-right: auto;" height="220">
+      <figcaption style="text-align: center;">Smoking Gun</figcaption>
+    </td>
+    <td>
+      <img src="https://drhuyue.site:10002/sammo3182/figure/process_liuQD.jpg" style="display: block; margin-left: auto; margin-right: auto;" height="230">
+      <figcaption style="text-align: center;">Straw-in-the-Wind</figcaption>
+    </td>
+  </tr>
+</table>
+
+
+:::{.notes}
+柯南：幸级呲 哇 一次摸 hi 拖呲
+
+1. Hoop test: no alibi, the accused in the state when murder happens? If not innocent, but passing does not mean being guilty. 《顶楼》中女孩儿死时最上面女主在现场，但并不代表就是她造成的女孩儿的死亡（虽然其实是）
+1. Smoking-gun test: a smoking gun seen in a suspect's hand moments after a shooting is quite conclusive proof of guilt, but a suspect not seen with a smoking gun is not proven innocent.《狂飙》中高起强是白手套，京海市市长兼市委副书记赵立冬才是幕后保护伞 
+1. Double-decisive test: hoop + smoking-gun, like a camera record 柯南说是就是
+1. Straw-in-the-wind test: Richard Liu seemed friendly with the girl. 之前女主挽着Richard上电梯，并不代表之后不存在sexual harassment或rape
+:::
+
+## In the Singaporean case
+
+![](https://drhuyue.site:10002/sammo3182/figure/process_evidenceEnglish.png){fig-align="center" height=600}
+
+:::{.notes}
+The primary hypothesis failed the hoop test: when recognition happened, the state was not a strong state
+:::
+
+## Take-Home Points
+
+
+:::: {.columns}
+
+::: {.column width="60%"}
+**Interpretivist Toolkit**
+
++ Interview methods
+  + Interview & Focus group
++ Discourse methods: Content analysis
++ Causal inference: Process-tracing
+    1. Hypotheses
+    1. Time line
+    1. Causal graph
+    1. Alternative choice
+    1. Counterfacutal outcomes
+    1. Evidence
+:::
+
+::: {.column width="40%"}
+**Evidence types**
+
+1. Straw-in-the-wind
+1. Hoop
+1. Smoking gun
+1. Double-decisive
+:::
+
+::::
