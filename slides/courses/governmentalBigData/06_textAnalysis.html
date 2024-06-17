@@ -8,6 +8,8 @@
 <link href="06_textAnalysis_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="06_textAnalysis_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="06_textAnalysis_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="06_textAnalysis_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="06_textAnalysis_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script src="06_textAnalysis_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="06_textAnalysis_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="06_textAnalysis_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
@@ -101,6 +103,7 @@
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
+      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -118,12 +121,10 @@
       margin-left: 2em;
     }  </style>
   <link rel="stylesheet" href="06_textAnalysis_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="06_textAnalysis_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="06_textAnalysis_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="06_textAnalysis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
-  <link href="06_textAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
-  <link href="06_textAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
   <link href="06_textAnalysis_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
   <style type="text/css">
 
@@ -417,7 +418,7 @@
 
 <section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">以数知文</h1>
-  <p class="subtitle">计算机辅助内容分析原理与路径</p>
+  <p class="subtitle">深圳大学·当代中国政治发展论坛</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -425,99 +426,412 @@
 胡悦 
 </div>
         <p class="quarto-title-affiliation">
-            清华大学
+            清华大学社会科学学院
+          </p>
+        <p class="quarto-title-affiliation">
+            清华大学计算社会科学与国家治理实验室（计算社会科学平台）
+          </p>
+        <p class="quarto-title-affiliation">
+            清华大学数据治理中心
           </p>
     </div>
 </div>
 
 </section>
-<section id="overview" class="slide level2">
-<h2>Overview</h2>
+<section id="提要" class="slide level2">
+<h2>提要</h2>
+<blockquote>
+<p><span class="citation" data-cites="King2015">King (<a href="#/参考文献" role="doc-biblioref" onclick="">2015</a>)</span>: [The big-data approach is] the <span class="red">end</span> of the quantitative-qualitative divide.</p>
+</blockquote>
+<aside class="notes">
+<p>King talked about this issue in many places including Shanghai Jiaotong University</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 <div class="columns">
-<div class="column" style="width:50%;">
-<h3 id="原则">原则</h3>
+<div class="column fragment" style="width:30%;">
+<!-- -->
+<h3 id="认知">认知</h3>
+<p><span class="red">见字如数</span>：<br>
+文本与文本数据</p>
 <ul>
-<li><p><span class="red">见字如数</span>：文本与文本数据</p></li>
-<li><p>文本→数据</p></li>
-<li><p>文本分析</p></li>
-<li><p>应用案例</p></li>
+<li>文本→数据</li>
+<li>文本分析</li>
+<li>应用案例</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<h3 id="操作">操作</h3>
-<p><span class="red">以数知文</span>: 文本数据化原则</p>
+</div><div class="column fragment" style="width:30%;">
+<!-- -->
+<h3 id="原则">原则</h3>
+<p><span class="red">以数知文</span>:<br>
+文本数据化原理规范</p>
 <ul>
 <li>数据获取</li>
 <li>数据整理</li>
 <li>基本分析</li>
 </ul>
-</div>
-</div>
-</section>
-<section id="基础软件" class="slide level2">
-<h2>基础软件</h2>
+</div><div class="column fragment" style="width:40%;">
+<!-- -->
+<h3 id="操作">操作</h3>
+<p><span class="red">望数生义</span>:<br>
+文本数据分析过程示范（R）</p>
 <ul>
-<li>网络信息爬取：<a href="https://rvest.tidyverse.org/"><code>rvest</code></a><br>
-</li>
-<li>中文处理：<a href="https://qinwenfeng.com/jiebaR/"><code>jiebaR</code></a>/<a href="http://www.stat.tsinghua.edu.cn/kdeng/r-package/"><code>TopWORDS</code></a><br>
-</li>
-<li>文本关系分析：<a href="https://www.tidytextmining.com/"><code>tidytext</code></a></li>
+<li>网络信息爬取（<a href="https://rvest.tidyverse.org/"><code>rvest</code></a>）</li>
+<li>中文处理（<a href="https://qinwenfeng.com/jiebaR/"><code>jiebaR</code></a>/<a href="http://www.stat.tsinghua.edu.cn/kdeng/r-package/"><code>TopWORDS</code></a>）</li>
+<li>文本关系分析（<a href="https://www.tidytextmining.com/"><code>tidytext</code></a>）</li>
 </ul>
+</div>
+</div>
 </section>
 <section>
-<section id="见字如数文本与文本数据化" class="title-slide slide level1 center">
-<h1>见字如数：文本与文本数据化</h1>
+<section id="见字如数建立认知" class="title-slide slide level1 center">
+<h1>见字如数：建立认知</h1>
 
 </section>
-<section id="文本的数据" class="slide level2">
-<h2>文本的数据</h2>
-<p>每年： 社交媒体用户2017–2018年年增量56,530,000人。</p>
-<p>每天： + 百度.blue[日]用户搜索请求，需.blue[1.7天]才能扫描一遍； + 微信.blue[日]增数据.blue[500TB]——比人类所有书籍存量还多。</p>
-<p>每秒：全世界每秒发送290万封电子邮件，一个人需要.blue[5.5年]日以继夜才能读完。</p>
-<p>–</p>
-<p>.center[2019年，数据总量达40ZB，人均5.2TB<sup>1</sup>]</p>
-<p>.footnote[<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB = 1024<sup>4</sup>GB; 1080p HD 2hrs：6GB]</p>
-<p>???</p>
+<section id="文本数据" class="slide level2">
+<h2>文本数据</h2>
+<p><span class="fragment">每年： 2024年初社交媒体用户50.4亿，2023年新增2.66亿首次使用用户 <span class="citation" data-cites="Kemp2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">Kemp 2024</a>)</span></span></p>
+<div class="fragment">
+<p>每日：</p>
+<ul>
+<li>百度日用户搜索请求，需<span class="red">1.7天</span>才能扫描一遍；</li>
+<li>微信日增数据<span class="red">500TB</span>——比人类所有书籍存量还多。</li>
+</ul>
+</div>
+<p><span class="fragment">每秒：全世界每秒发送290万封email，一人需要<span class="red">5.5年</span>日以继夜才能读完。</span></p>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>2023年，全国数据生产总量达32.85ZB,，同比增长22.44%，即人均 22 TB <span class="citation" data-cites="YanZhiHongYanFuJing2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">颜之宏 and 严赋憬 2024</a>)</span><sup>1</sup></p>
+<p>预计2027年，全球<span class="red">非结构化数据</span>将占到数据总量的86.8% <span class="citation" data-cites="IDCFutureScape2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">IDC FutureScape 2024</a>)</span></p>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
 <p>Giga Byte &lt; Tera Byte &lt; Peta Byte &lt; Exa Byte &lt; Zetta Byte &lt; Yotta Byte</p>
-</section>
-<section id="文本之于研究人类" class="slide level2">
-<h2>文本之于研究人类</h2>
-<p>历史悠久而非主流</p>
-<p>↑ 资料难获取；花时间；难推广；难管理；难分析</p>
-<p>–</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB = 1024<sup>4</sup>GB; 1080p HD 2hrs：6GB.</p></li></ol></aside></section>
+<section id="文本研究" class="slide level2">
+<h2>文本研究</h2>
+<p>历史悠久而非主流 ← 资料难获取；花时间；难推广；难管理；难分析</p>
+<ul>
+<li>法律的外部性问题 <span class="citation" data-cites="Coase1960">(<a href="#/参考文献" role="doc-biblioref" onclick="">Coase 1960</a>)</span></li>
+<li>通过历史文件研究“policy surprises” <span class="citation" data-cites="FriedmanSchwartz2008">(<a href="#/参考文献" role="doc-biblioref" onclick="">Friedman and Schwartz 2008</a>)</span></li>
+</ul>
+<div class="fragment" style="text-align:center; margin-top: 2em">
 <p>新兴工具的繁荣：</p>
 <ul>
-<li><p>通过文本表达的社会意义更.blue[广泛];</p></li>
-<li><p>文本.blue[资料]指数级增长；</p></li>
-<li><p>大规模文本数据.blue[采集]；</p></li>
-<li><p>.blue[存储和管理]能力增强；</p></li>
-<li><p>可推广、系统化和.blue[廉价]化；</p></li>
-<li><p>文本分析.blue[方法]蓬勃发展</p></li>
+<li>文本<span class="red">资料</span>指数级增长；</li>
+<li>大规模文本数据<span class="red">采集</span>；</li>
+<li>存储和管理<span class="red">能力</span>增强；</li>
+<li>可推广、系统化和<span class="red">廉价</span>化；</li>
+<li>文本分析<span class="red">方法</span>蓬勃发展</li>
 </ul>
+</div>
 </section>
 <section id="计算机辅助文本分析" class="slide level2">
 <h2>(计算机辅助）文本分析</h2>
-<p>.pull-left[ ## 对象</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>对象</strong></p>
 <p><del>文字</del> 语言</p>
-</section>
-<section id="类型" class="slide level2">
-<h2>类型</h2>
+</div><div class="column" style="width:50%;">
+<p><strong>类型</strong></p>
 <ul>
 <li>Text analysis vs.&nbsp;content analysis</li>
 <li>Representational analysis vs.&nbsp;Instrumental analysis</li>
-<li>Thematic analysis vs.&nbsp;semantic analysis ]</li>
+<li>Thematic analysis vs.&nbsp;semantic analysis</li>
 </ul>
-<p>??? Representational 精确解码，关注外显（manifest）； Instrumental 探索意图，关注隐含（latent） Thematic 概念是否出现及何种关系，基于词频和向量； Semantic 识别主题间的具体关系；考虑语法、逻辑等</p>
+<aside class="notes">
+<p>Representational 精确解码，关注外显（manifest）； Instrumental 探索意图，关注隐含（latent） Thematic 概念是否出现及何种关系，基于词频和向量； Semantic 识别主题间的具体关系；考虑语法、逻辑等</p>
 <p>语法学(syntax, how to say it) 语义学(semantic, what is said) 语用学(pragmatic, what is implicated)</p>
-<p>–</p>
-<p>.pull-right[</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</section>
+<section id="i" class="slide level2">
+<h2>🌰 I</h2>
+<p><span class="citation" data-cites="Grimmer2010">Grimmer (<a href="#/参考文献" role="doc-biblioref" onclick="">2010</a>)</span></p>
+<ul>
+<li>Objective
+<ul>
+<li>The priorities political actors emphasize in statements</li>
+</ul></li>
+<li>Data
+<ul>
+<li>An original collection of over 24,000 Senate press releases in 2007</li>
+</ul></li>
+<li>Method
+<ul>
+<li>Bayesian Hierarchical Topic Model</li>
+</ul></li>
+</ul>
+</section>
+<section id="发现" class="slide level2">
+<h2>发现</h2>
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Focus</a></li><li><a href="#tabset-1-2">Cluster</a></li><li><a href="#tabset-1-3">Predict</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Committee leaders focus on their committee’s issues"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer1.png" class="quarto-figure quarto-figure-center" height="500" alt="Committee leaders focus on their committee’s issues"></a></p>
+<figcaption>Committee leaders focus on their committee’s issues</figcaption>
+</figure>
+</div>
+<aside class="notes">
+<p>Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees’ jurisdiction than other senators. <strong>This figure compares the attention that Senate committee leaders—chairs or ranking members—dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.</strong> The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-1-2">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2" data-glightbox="description: .lightbox-desc-2" title="Expressed agendas cluster geographically"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer2.png" class="quarto-figure quarto-figure-center" height="500" alt="Expressed agendas cluster geographically"></a></p>
+<figcaption>Expressed agendas cluster geographically</figcaption>
+</figure>
+</div>
+<aside class="notes">
+<p>Fig. 5 Attention to issues follows expected geographic patterns. <strong>This figure demonstrates that senators’ expressed agendas are grouped geographically.</strong> The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state’s delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture’s importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicates the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-1-3">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" data-glightbox="description: .lightbox-desc-3" title="Attention to appropriations predicts opposition to earmark reform"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_grimmer3.png" class="quarto-figure quarto-figure-center" height="500" alt="Attention to appropriations predicts opposition to earmark reform"></a></p>
+<figcaption>Attention to appropriations predicts opposition to earmark reform</figcaption>
+</figure>
+</div>
+<aside class="notes">
+<p>An earmark is a provision inserted into a discretionary spending appropriations bill that directs funds to a specific recipient while bypassing the merit-based or competitive funds allocation process. These provisions are often associated with legislation specifying certain congressional spending priorities or in revenue bills that apply to a limited number of individuals or entities.</p>
+<p>The DeMint-McCain amendment was a significant proposal related to earmark reform. Senator Jim DeMint introduced a one-year earmark moratorium amendment, which was co-sponsored by both Republicans and Democrats. The amendment aimed to end the era of earmarks and was seen as a step towards increased transparency, accountability, and fiscal responsibility in Congress. Despite its support from some senators and advocacy groups, the amendment was defeated in a late-night Senate vote, with a result of 29-71.</p>
+<p>Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose Demint-McCain. This figure shows that <strong>senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.</strong> The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator’s posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda.</p>
+<p>The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</div>
+</section>
+<section id="ii" class="slide level2">
+<h2>🌰 II</h2>
+<p><span class="citation" data-cites="BenoitEtAl2016">Benoit et al. (<a href="#/参考文献" role="doc-biblioref" onclick="">2016</a>)</span></p>
+<ul>
+<li>Objective
+<ul>
+<li>Professionals vs.&nbsp;Masses</li>
+</ul></li>
+<li>Method
+<ul>
+<li>Crowd-sourced identification</li>
+</ul></li>
+<li>Data
+<ul>
+<li>18,263 natural sentences from <em>British Conservative, Labour and Liberal Democrat</em> manifestos</li>
+</ul></li>
+</ul>
+</section>
+<section id="操作-1" class="slide level2">
+<h2>操作</h2>
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">编码</a></li><li><a href="#tabset-2-2">结果</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_crowd-sourced.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_crowd-sourced.jpg" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+<div id="tabset-2-2">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_expert-crowd.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_expert-crowd.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</div>
+</section>
+<section id="iii" class="slide level2">
+<h2>🌰 III</h2>
+<p><span class="citation" data-cites="DietrichEtAl2019">Dietrich, Hayes, and O’Brien (<a href="#/参考文献" role="doc-biblioref" onclick="">2019</a>)</span></p>
+<ul>
+<li>Objective
+<ul>
+<li>Speakers’ emotional state</li>
+</ul></li>
+<li>Method
+<ul>
+<li>Analyses of vocal pitch</li>
+</ul></li>
+<li>Data
+<ul>
+<li>74,158 Congressional floor speeches</li>
+</ul></li>
+</ul>
+</section>
+<section id="操作-2" class="slide level2">
+<h2>操作</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch_hcy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch_hcy.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="iv" class="slide level2">
+<h2>🌰 IV</h2>
+<p><span class="citation" data-cites="ZhangPan2019">Zhang and Pan (<a href="#/参考文献" role="doc-biblioref" onclick="">2019</a>)</span></p>
+<ul>
+<li>Objective
+<ul>
+<li>Group activities from social media</li>
+</ul></li>
+<li>Method
+<ul>
+<li>CNN for images; CNN-RNN for texts</li>
+</ul></li>
+<li>Data
+<ul>
+<li>A random sample of 20,000 geocoded posts from Weibo, 2010–2017</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p>CNN: Convolutional Neural Network</p>
+<p>RNN: Recurrent Neural Network</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="操作-3" class="slide level2">
+<h2>操作</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_casm.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_casm.png" class="quarto-figure quarto-figure-center" width="1000"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_runningMan.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_runningMan.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_banner.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_banner.png" class="fragment quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+</div>
 </section>
 <section id="挑战" class="slide level2">
 <h2>挑战</h2>
-<p>.pull-left[ <em>理论</em></p>
-<p>Single causal mechanism</p>
-<p><em>前提</em></p>
-<p>“A bag of word” assumption ]</p>
-<p>.pull-right[ <em>数据</em></p>
+<p><em>理论</em>: Single causal mechanism</p>
+<p><span class="fragment"><em>前提</em>: Bag of words</span></p>
+<p>[<em>数据</em></p>
 <ul>
 <li>DGP
 <ul>
@@ -529,273 +843,42 @@
 </ul></li>
 <li>非结构化</li>
 <li>海量潜在维度</li>
-<li>内容复杂且微妙 ] ]</li>
+<li>内容复杂且微妙]{.fragment}</li>
 </ul>
-<p>???</p>
+<aside class="notes">
 <p>审查已经使用 machine learning</p>
 <p>Su, Y.-S., Y. Ruan, S. Sun, and Y.-T. Chang. 2020. “A Pattern Recognition Framework for Detecting Changes in Chinese Internet Management System.” Journal of Social Computing 1(1): 28–39.</p>
-</section>
-<section id="分析方法实例" class="slide level2">
-<h2>分析方法实例</h2>
-<p>Grimmer 2010.</p>
-<ul>
-<li>目标：美国参议员的政治沟通</li>
-</ul>
-<p>???</p>
-<p>Grimmer, Justin. 2010. “A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.” <em>Political Analysis</em> 18(1): 1–35.</p>
-<p>–</p>
-<ul>
-<li>核心方法：贝叶斯分层主题模型</li>
-</ul>
-<p>–</p>
-<ul>
-<li>数据：美国参议院2007年来发布的24000余份新闻通告</li>
-</ul>
-<p>–</p>
-<ul>
-<li>发现：
-<ul>
-<li>关注重点与其他参议员的关注事件相关；</li>
-<li>关注重点的地域分布具集聚性；</li>
-<li>议员对挪用的关注程度与他们对禁止挪用法案的投票呈现出正相关关系。</li>
-</ul></li>
-</ul>
-</section>
-<section id="benoit-et-al.-2016." class="slide level2">
-<h2>Benoit et al.&nbsp;2016.</h2>
-<ul>
-<li>问题：专家与普通人对政治理解异同</li>
-<li>方法：Crowd-sourced identification</li>
-<li>数据：18,263 natural sentences, 1987~2010
-<ul>
-<li>215,107 群众评判</li>
-<li>123,000 专家评判</li>
-</ul></li>
-</ul>
-<p>???</p>
-<p>Benoit, Kenneth et al.&nbsp;2016. “Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.” <em>American Political Science Review</em> 110(2): 278–95.</p>
-<p>British Conservative, Labour and Liberal Democrat manifesto,</p>
-</section>
-<section class="slide level2">
-
-<p>.center[<img src="images/text_crowd-sourced.jpg" height="600">]</p>
-</section>
-<section class="slide level2">
-
-<p>.center[<img src="images/text_expert-crowd.png" height="600">]</p>
-</section>
-<section id="dietrich-et-al-2019" class="slide level2">
-<h2>Dietrich et al 2019</h2>
-<ul>
-<li>目标： 测量情感强烈度</li>
-<li>数据：74,158 Congressional floor speeches</li>
-<li>方法： 统计音高变化</li>
-</ul>
-<p>???</p>
-<p>Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.</p>
-<p>–</p>
-<p>.center[<img src="images/text_vocalPitch_hcy.png" height="400">]</p>
-</section>
-<section class="slide level2">
-
-<p>.center[<img src="images/text_vocalPitch.png" height="600">]</p>
-<p>???</p>
-<p>female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.</p>
-</section>
-<section id="zhang-pan-2019" class="slide level2">
-<h2>Zhang &amp; Pan 2019</h2>
-<ul>
-<li>目标：从社交媒体中获取集体行动信息</li>
-<li>数据：A random sample of 20,000 geocoded posts from Weibo, 2010–2017</li>
-<li>方法：CNN for images; CNN-RNN for texts</li>
-</ul>
-<p>???</p>
-<p>Zhang, Han, and Jennifer Pan. 2019. “CASM: A Deep-Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media.” Sociological Methodology 49(1): 1–57.</p>
-<p>张涵（普林斯顿）</p>
-<p>convolutional neural network (CNN) for image classification and a combination of convolutional and recurrent neural networks with long short-term memory (CNN-RNN)</p>
-</section>
-<section class="slide level2">
-
-<p>background-image: url(images/text_casm.png) background-position: 50% 50% background-size: 100%</p>
-</section>
-<section class="slide level2">
-
-<p>.center[</p>
-<p>Validation</p>
-<p><img src="images/text_runningMan.png" height="250"> <img src="images/text_banner.png" height="250"></p>
-<p>]</p>
-<!-- --- -->
-<!-- class: inverse, bottom -->
-<!-- # 以字当数：文本分析研究模式 -->
-<!-- --- -->
-<!-- class: center, middle -->
-<!-- ## 文本分析研究思路（以King et al. 2013为例） -->
-<!-- 问题：Censorship -->
-<!-- &vellip;     -->
-<!-- &vellip;     -->
-<!-- &vellip;     -->
-<!-- &vellip;     -->
-<!-- &vellip;     -->
-<!-- &dArr; -->
-<!-- 发现：     -->
-<!-- 批评意见；     -->
-<!-- 集体行动。     -->
-<!-- ??? -->
-<!-- 是阻止/打击批评政府? -->
-<!-- King, Gary, Jennifer Pan, and Margaret E. Roberts. 2013. “How Censorship in China Allows Government Criticism but Silences Collective Expression.” American Political Science Review 107(02): 326–43. -->
-<!-- + 允许新媒体上存在大量批评政府的意见； -->
-<!-- + 批评政府意见之所以存在，其原因不在于审查不完美或遗漏，而在于政府审查制度的目标是阻止集体行动，切割社会联系。 -->
-<!-- --- -->
-<!-- ## Data Collection -->
-<!-- + 2010年上半年，85个议题领域的 3,674,698 社交媒体发帖 -->
-<!-- + 随机抽取:127,283 .center[<img src="images/crimson-hexagon.png" height = 50 />] -->
-<!-- * 对每个网贴，首次出现时下载； -->
-<!-- * 一段时间后再次访问该网贴，识别是否被删帖；  -->
-<!-- * 使用自动文本分析分析海量文本资料。 -->
-<!-- .center[<img src="images/censored.png" height = 300 />] -->
-<!-- ??? -->
-<!-- 2007年Gary King创办，2018年并入英国Brandwatch. -->
-<!-- --- -->
-<!-- background-image: url(images/chinese-media.png) -->
-<!-- background-position: 50% 50% -->
-<!-- background-size: 100% -->
-<!-- --- -->
-<!-- class: center -->
-<!-- ## 研究设计 -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- 识别发帖量爆发点及相关事件     -->
-<!-- &darr;     -->
-<!-- 识别集体行动事件     -->
-<!-- &darr;     -->
-<!-- 判断发帖与行动关联     -->
-<!-- &darr;     -->
-<!-- 判断支持或批评政府     -->
-<!-- ??? -->
-<!-- 识别出87件 -->
-<!-- -- -->
-<!-- ## 观测指标 -->
-<!-- 发帖量    -->
-<!-- 事件类型    -->
-<!-- 贴子内容 -->
-<!-- --- -->
-<!-- ## 发帖量 -->
-<!-- .pull-left[ -->
-<!-- .center[ -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- .red[识别发帖量爆发点及相关事件]     -->
-<!-- ] -->
-<!-- ] -->
-<!-- .pull-right[<img src="images/post-amount.png" height = 500 />] -->
-<!-- --- -->
-<!-- ## 事件类型 -->
-<!-- .pull-left[ -->
-<!-- 1. 情感维度：对政府的负面、正面、或中立意见  -->
-<!-- 1. 主题维度： -->
-<!--     + 集体行动 -->
-<!--     + 对审查者的批评 -->
-<!--     + 色情内容 -->
-<!--     + 新闻 -->
-<!--     + 政府政策 -->
-<!-- ] -->
-<!-- .pull-right[ -->
-<!-- .center[ -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- 识别发帖量爆发点及相关事件     -->
-<!-- &darr;     -->
-<!-- .red[识别集体行动事件]     -->
-<!-- ] -->
-<!-- ] -->
-<!-- ??? -->
-<!-- 网络外抗议或有组织的群体性事件； -->
-<!-- 以往有组织或煽动集体行动的个体； -->
-<!-- 以往煽动抗议或集体行动的民族主义或民族情绪； -->
-<!-- --- -->
-<!-- .pull-left[<img src="images/post-type.png" height = 500 />] -->
-<!-- .pull-right[<img src="images/post-censor.png" height = 500 />] -->
-<!-- --- -->
-<!-- class: middle -->
-<!-- .pull-left[ -->
-<!-- .center[ -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- 识别发帖量爆发点及相关事件     -->
-<!-- &darr;     -->
-<!-- 识别集体行动事件     -->
-<!-- &darr;     -->
-<!-- .red[判断发帖与行动关联]  -->
-<!-- ]  -->
-<!-- ] -->
-<!-- .pull-right[<img src="images/inner-mongolia.png" height = 500 />] -->
-<!-- ??? -->
-<!-- On May 10 an ethnic Mongol herdsman named Mergen (Chinese: 莫日根; Mongols often use one name) was obstructing a mining company, Liaoning Chencheng Industry and Trade Group, from passing onto his pastureland.[1] He was then hit by an ethnic Han coal truck driver named Li Lindong. After the collision, the herdsman's body was dragged for more than 30 meters. -->
-<!-- --- -->
-<!-- ## 帖子内容 -->
-<!-- .pull-left[ -->
-<!-- * 对中文帖子进行结构化编码； -->
-<!-- * 按类别计算被审查掉的词语比例； -->
-<!-- <img src="images/post-content.png" height = 300 /> -->
-<!-- [`Readme`](https://gking.harvard.edu/readme) in R -->
-<!-- ] -->
-<!-- .pull-right[ -->
-<!-- .center[ -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- 识别发帖量爆发点及相关事件     -->
-<!-- &darr;     -->
-<!-- 识别集体行动事件     -->
-<!-- &darr;     -->
-<!-- 判断发帖与行动关联     -->
-<!-- &darr;     -->
-<!-- .red[判断支持或批评政府] -->
-<!-- ]   -->
-<!-- ] -->
-<!-- ??? -->
-<!-- This approach enables one to define a set of mutually exclusive and exhaustive categories, to then code a small number of example posts within each category (known as the labeled “training set”), and to infer the proportion of posts within each category in a potentially much larger “test set” without hand coding their category labels. -->
-<!-- --- -->
-<!-- class: center, middle -->
-<!-- .gold[问题：Censorship]     -->
-<!-- &dArr;     -->
-<!-- 数据收集     -->
-<!-- &darr;     -->
-<!-- 检测各议题领域     -->
-<!-- &darr;     -->
-<!-- 识别发帖量爆发点及相关事件     -->
-<!-- &darr;     -->
-<!-- 识别集体行动事件     -->
-<!-- &darr;     -->
-<!-- 判断发帖与行动关联     -->
-<!-- &darr;     -->
-<!-- 判断支持或批评政府     -->
-<!-- &dArr;     -->
-<!-- .gold[发现]： -->
-<!-- + 批评意见； -->
-<!-- + 集体行动。 -->
-</section>
-<section class="slide level2">
-
-<p>class: inverse, bottom</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<p>:::</p>
+<p>::::</p>
 </section></section>
 <section>
-<section id="以数知文-文本数据化原则" class="title-slide slide level1 center">
-<h1>以数知文: 文本数据化原则</h1>
-
-</section>
-<section class="slide level2">
-
-<p>class: normal,center</p>
+<section id="以数知文-理解原则" class="title-slide slide level1 center">
+<h1>以数知文: 理解原则</h1>
 <p>本节要回答之问题：</p>
+<div style="text-align:center; margin-top: 2em">
 <ol type="1">
-<li>文本资源哪里找？</li>
-<li>文本资源怎么得？</li>
-<li>文本信息如何理？</li>
-<li>文本数据能干啥？</li>
+<li>资源哪里找？</li>
+<li>信息如何用？</li>
+<li>数据能干啥？</li>
+<li><strong><span class="red">红线</span>在哪里</strong>？</li>
 </ol>
+</div>
 </section>
-<section id="文本资源-原生数据" class="slide level2">
-<h2>文本资源: 原生数据</h2>
+<section id="原生数据" class="slide level2">
+<h2>原生数据</h2>
+<div class="columns">
+<div class="column" style="width:20%;">
 <ul>
 <li>Email/短信</li>
 <li>网站HTML</li>
@@ -807,429 +890,616 @@
 <li>网络交易行为<br>
 ……</li>
 </ul>
-</section>
-<section id="社交媒体" class="slide level2">
-<h2>社交媒体</h2>
-<p>.center[<img src="images/text_social-media.gif" height="500">]</p>
-<p>???</p>
+</div><div class="column" style="width:80%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_social-media.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-11" data-glightbox="description: .lightbox-desc-11" title="社交媒体"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_social-media.gif" class="quarto-figure quarto-figure-center" height="500" alt="社交媒体"></a></p>
+<figcaption>社交媒体</figcaption>
+</figure>
+</div>
+<aside class="notes">
 <p>新浪微博1.4亿，微信用户5.5亿; 微信日增数据500TB，QQ日增数据200TB。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
 </section>
 <section id="公共开放平台" class="slide level2">
 <h2>公共开放平台</h2>
-<p>.center[<img src="images/text_zhongsheng_index.png" height="550">]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng_index.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng_index.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
 </section>
 <section id="网络问政平台" class="slide level2">
 <h2>网络问政平台</h2>
-<p>.center[<img src="images/text_henan-Egovernment.png" height="500">]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_henan-Egovernment.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_henan-Egovernment.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
 </section>
 <section id="社会化问答网站" class="slide level2">
 <h2>社会化问答网站</h2>
-<p>.center[<img src="images/text_zhihu.png" height="500">]</p>
-<p>???</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_zhihu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_zhihu.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<aside class="notes">
 <p>Quora, Stack Overflow</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="媒体数据库" class="slide level2">
 <h2>媒体数据库</h2>
-<p>.center[<img src="images/renminribao.png" height="500">]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_renminribao.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_renminribao.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
 </section>
 <section id="问卷开放性问题" class="slide level2">
 <h2>问卷开放性问题</h2>
-<p>.center[<img src="images/text_survey_openQuestion.png" height="500">]</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_survey_openQuestion.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_survey_openQuestion.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
 </section>
-<section id="文本资源-档案数据" class="slide level2">
-<h2>文本资源: 档案数据</h2>
+<section id="二手数据" class="slide level2">
+<h2>二手数据</h2>
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">档案数据</a></li><li><a href="#tabset-3-2">百度指数</a></li><li><a href="#tabset-3-3">文本数字化</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
 <ul>
 <li>中国知网等数据库（期刊、报刊、年鉴等）</li>
 <li>Google Books、百度学术</li>
 <li>Google Trend、百度指数</li>
 <li>JSTOR Data for Research……</li>
 </ul>
-</section>
-<section id="百度指数" class="slide level2">
-<h2>百度指数</h2>
-<p>.center[<img src="images/text_baidu_zhishu.png" height="500">]</p>
-</section>
-<section id="文本数字化" class="slide level2">
-<h2>文本数字化</h2>
-<ul>
-<li>文本扫描 + OCR .center[<img src="images/text_hongkong_lib.png" height="500">]</li>
-</ul>
-</section>
-<section class="slide level2">
-
-<p>.center[<img src="images/text_cbdb.png" height="600">]</p>
+</div>
+<div id="tabset-3-2">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_baidu_zhishu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_baidu_zhishu.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+</div>
+<div id="tabset-3-3">
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png">{.fragment fig-align=“center” height500}</p>
+</div>
+</div>
+</div>
+</div>
 </section>
 <section id="文本获取" class="slide level2">
 <h2>文本获取</h2>
 <ul>
-<li>二手数据：档案数据和数字化数据</li>
 <li>原生数据：Spider/crawler/scraper</li>
+<li>二手数据：档案数据和数字化数据</li>
 </ul>
-<p>Some foolproof scrapers</p>
-<p>.center[<img src="images/text_bazhuayu.png" height="400">]</p>
-</section>
-<section class="slide level2">
-
-<p>.pull-left[<img src="images/text_huochetou.png" height="550">]</p>
-<p>.pull-right[<img src="images/text_gooseeker.png" height="550">]</p>
-</section>
-<section class="slide level2">
-
-<p>class: bottom</p>
-<p>background-image: url(images/text_gooseekerI.png) background-position: 50% 50% background-size: 100%</p>
-</section>
-<section id="使用案例-冰箱信息" class="slide level2">
-<h2>使用案例: 冰箱信息</h2>
-</section>
-<section class="slide level2">
-
-<p>background-image: url(images/text_gooseekerII.png) background-position: 50% 50% background-size: 100%</p>
-</section>
-<section class="slide level2">
-
-<p>background-image: url(images/text_gooseekerIII.png) background-position: 50% 50% background-size: 100%</p>
-</section>
-<section id="用r进行文本抓取" class="slide level2">
-<h2>用R进行文本抓取</h2>
-<p><code>SelectorGadget</code>(Chrome)</p>
-<p>.center[<img src="images/text_zhongsheng_page.png" height="500">]</p>
-</section>
-<section class="slide level2">
-
-<p><code>rvest</code>(R)</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>ls_zhongsheng <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"http://politics.people.com.cn/GB/8198/426918/index.html"</span>) <span class="sc">%&gt;%</span> <span class="co"># index page</span></span>
-<span id="cb1-2"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">"h5 a"</span>) <span class="sc">%&gt;%</span> <span class="co"># the nodes of the links</span></span>
-<span id="cb1-3"><a href=""></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>) <span class="sc">%&gt;%</span> <span class="co"># just the links</span></span>
-<span id="cb1-4"><a href=""></a>  <span class="fu">str_replace</span>(<span class="st">"^/n1"</span>, <span class="st">"http://politics.people.com.cn/n1"</span>)</span>
-<span id="cb1-5"><a href=""></a></span>
-<span id="cb1-6"><a href=""></a>df_zhongsheng <span class="ot">&lt;-</span> <span class="fu">map_df</span>(ls_zhongsheng, <span class="cf">function</span>(link) {</span>
-<span id="cb1-7"><a href=""></a>  zs_article <span class="ot">&lt;-</span> <span class="fu">read_html</span>(link, <span class="at">encoding =</span> <span class="st">"GB18030"</span>) <span class="co"># read the html</span></span>
-<span id="cb1-8"><a href=""></a>  </span>
-<span id="cb1-9"><a href=""></a>  zs_title <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"h1"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-10"><a href=""></a>    html_text</span>
-<span id="cb1-11"><a href=""></a>  </span>
-<span id="cb1-12"><a href=""></a>  zs_time <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">".box01 .fl"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-13"><a href=""></a>    html_text <span class="sc">%&gt;%</span></span>
-<span id="cb1-14"><a href=""></a>    <span class="fu">str_extract</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">d{4}年</span><span class="sc">\\</span><span class="st">d{2}月</span><span class="sc">\\</span><span class="st">d{2}日"</span>)</span>
-<span id="cb1-15"><a href=""></a>  </span>
-<span id="cb1-16"><a href=""></a>  zs_content <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"#rwb_zw p"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-17"><a href=""></a>    html_text <span class="sc">%&gt;%</span></span>
-<span id="cb1-18"><a href=""></a>    <span class="fu">str_c</span>(<span class="at">collapse =</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> <span class="co"># combined the paragraphs</span></span>
-<span id="cb1-19"><a href=""></a>    <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s|</span><span class="sc">\\</span><span class="st">n|</span><span class="sc">\\</span><span class="st">t"</span>) <span class="co"># remove the horizontal spaces</span></span>
-<span id="cb1-20"><a href=""></a>  </span>
-<span id="cb1-21"><a href=""></a>  zs_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">title =</span> zs_title,</span>
-<span id="cb1-22"><a href=""></a>                        <span class="at">time =</span> zs_time,</span>
-<span id="cb1-23"><a href=""></a>                        <span class="at">content =</span> zs_content) </span>
-<span id="cb1-24"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_bazhuayu.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_bazhuayu.png" class="quarto-figure quarto-figure-center" height="450"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_huochetou.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_huochetou.png" class="fragment quarto-figure quarto-figure-center" height="450"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_gooseeker.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_gooseeker.png" class="fragment quarto-figure quarto-figure-center" height="450"></a></p>
+</figure>
+</div>
 </div>
 </section>
-<section id="抓取特定形式regular-expression" class="slide level2">
-<h2>抓取特定形式：Regular Expression</h2>
-<p>.center[<img src="images/text_regular_expression.png" height="550">]</p>
+<section id="操作演示" class="slide level2">
+<h2>操作演示</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerI.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerI.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerII.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerII.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerIII.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerIII.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
 </section>
-<section id="结果结构化文本数据" class="slide level2">
-<h2>结果·结构化文本数据</h2>
-<p>.center[<img src="images/text_zhongsheng_output.png" height="450" width="900">]</p>
+<section id="编程抓取" class="slide level2">
+<h2>编程抓取</h2>
+<p><code>SelectorGadget</code> (Chrome add-in)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
 </section>
-<section id="文本分析方法概览" class="slide level2">
-<h2>文本分析方法概览</h2>
-<p>.center[<img src="images/text_analysis-method.png" height="550">]</p>
-<p>???</p>
-<p>Grimmer, Justin (Stanford), and Brandon M. Stewart (Princeton). 2013. “Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts.” Political Analysis 21(3): 267–97.</p>
+<section id="scrapping-with-rvest" class="slide level2">
+<h2>Scrapping with <code>rvest</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>ls_zhongsheng <span class="ot">&lt;-</span></span>
+<span id="cb1-2"><a href=""></a>  <span class="fu">read_html</span>(<span class="st">"http://politics.people.com.cn/GB/8198/426918/index.html"</span>) <span class="sc">|&gt;</span> <span class="co"># index page</span></span>
+<span id="cb1-3"><a href=""></a>  <span class="fu">html_nodes</span>(<span class="st">"h5 a"</span>) <span class="sc">|&gt;</span> <span class="co"># the nodes of the links</span></span>
+<span id="cb1-4"><a href=""></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>) <span class="sc">|&gt;</span> <span class="co"># just the links</span></span>
+<span id="cb1-5"><a href=""></a>  <span class="fu">str_replace</span>(<span class="st">"^/n1"</span>, <span class="st">"http://politics.people.com.cn/n1"</span>)</span>
+<span id="cb1-6"><a href=""></a></span>
+<span id="cb1-7"><a href=""></a>df_zhongsheng <span class="ot">&lt;-</span> <span class="fu">map_df</span>(ls_zhongsheng, <span class="cf">function</span>(link) {</span>
+<span id="cb1-8"><a href=""></a>  zs_article <span class="ot">&lt;-</span> <span class="fu">read_html</span>(link, <span class="at">encoding =</span> <span class="st">"GB18030"</span>) <span class="co"># read the html</span></span>
+<span id="cb1-9"><a href=""></a>  </span>
+<span id="cb1-10"><a href=""></a>  zs_title <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"h1"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-11"><a href=""></a>    html_text</span>
+<span id="cb1-12"><a href=""></a>  </span>
+<span id="cb1-13"><a href=""></a>  zs_time <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">".box01 .fl"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-14"><a href=""></a>    html_text <span class="sc">|&gt;</span></span>
+<span id="cb1-15"><a href=""></a>    <span class="fu">str_extract</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">d{4}年</span><span class="sc">\\</span><span class="st">d{2}月</span><span class="sc">\\</span><span class="st">d{2}日"</span>)</span>
+<span id="cb1-16"><a href=""></a>  </span>
+<span id="cb1-17"><a href=""></a>  zs_content <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"#rwb_zw p"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb1-18"><a href=""></a>    html_text <span class="sc">|&gt;</span></span>
+<span id="cb1-19"><a href=""></a>    <span class="fu">str_c</span>(<span class="at">collapse =</span> <span class="st">""</span>) <span class="sc">|&gt;</span> <span class="co"># combined the paragraphs</span></span>
+<span id="cb1-20"><a href=""></a>    <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s|</span><span class="sc">\\</span><span class="st">n|</span><span class="sc">\\</span><span class="st">t"</span>) <span class="co"># remove the horizontal spaces</span></span>
+<span id="cb1-21"><a href=""></a>  </span>
+<span id="cb1-22"><a href=""></a>  zs_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">title =</span> zs_title,</span>
+<span id="cb1-23"><a href=""></a>                        <span class="at">time =</span> zs_time,</span>
+<span id="cb1-24"><a href=""></a>                        <span class="at">content =</span> zs_content)</span>
+<span id="cb1-25"><a href=""></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
-<section id="常见文本分析层次" class="slide level2">
-<h2>常见文本分析层次</h2>
+<section id="正则表达式" class="slide level2">
+<h2>正则表达式</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_regular_expression.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_regular_expression.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</section>
+<section id="文本数据结构化" class="slide level2">
+<h2>文本数据结构化</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_output.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_output.png" class="quarto-figure quarto-figure-center" width="1000"></a></p>
+</figure>
+</div>
+</section>
+<section id="文本分析的基础原则红线-grimmerstewart2013" class="slide level2">
+<h2>文本分析的基础原则（<span class="red">红线</span>） <span class="citation" data-cites="GrimmerStewart2013">(<a href="#/参考文献" role="doc-biblioref" onclick="">Grimmer and Stewart 2013</a>)</span></h2>
+<div class="large" style="text-align:center; margin-top: 1em">
+<ol type="1">
+<li class="fragment">All quantitative models of language are <span class="red">wrong</span>—but some are useful.</li>
+<li class="fragment">Quantitative methods for text amplify resources and <span class="red">augment humans</span>.</li>
+<li class="fragment">There is <span class="red">no globally best</span> method for automated text analysis.</li>
+<li class="fragment"><span class="fragment highlight-blue">Validate, Validate, Validate.</span></li>
+</ol>
+</div>
+</section></section>
+<section>
+<section id="望数生义" class="title-slide slide level1 center">
+<h1>望数生义</h1>
+
+</section>
+<section id="文本分析传统方法概览" class="slide level2">
+<h2>文本分析（传统）方法概览</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_analysis-method.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28" data-glightbox="description: .lightbox-desc-28" title="@GrimmerStewart2013"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_analysis-method.png" class="quarto-figure quarto-figure-center" height="550" alt="Grimmer and Stewart (2013)"></a></p>
+<figcaption><span class="citation" data-cites="GrimmerStewart2013">Grimmer and Stewart (<a href="#/参考文献" role="doc-biblioref" onclick="">2013</a>)</span></figcaption>
+</figure>
+</div>
+</section>
+<section id="研究层次" class="slide level2">
+<h2>研究层次</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>数据层次</strong></p>
+<ul>
+<li>Corpus
+<ul>
+<li>Document (volumn, chapter, section)
+<ul>
+<li>Paragraph <span class="orange">✓</span>
+<ul>
+<li>Sentence <span class="green">✓</span>
+<ul>
+<li>Clause <span class="green">✓</span>
+<ul>
+<li><strong>Word (Unigram)</strong> <span class="green">✓</span>
+<ul>
+<li><strong>Token</strong> <span class="green">✓</span></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>“Token”：语言特征单元</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Token in a document: term</li>
+<li>Token in a group: N-gram
+<ul>
+<li>A word = a Unigram</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>分析层次</strong></p>
 <h3 id="描述">描述</h3>
-<p>词云(word-cloud)、网络</p>
-<p>.center[ ### 聚类</p>
-<p>知类分文、知文分类 ]</p>
-<p>.pull-right[ .center[ ### 语义</p>
-<p>情感分析(sentiment analysis) ] ]</p>
+<p>词频、词云(👎)、网络</p>
+<h3 id="聚类">聚类</h3>
+<p>知类分文、知文分类</p>
+<h3 id="语义">语义</h3>
+<p>情感分析(sentiment analysis)</p>
+</div>
+</div>
 </section>
-<section id="基本原则" class="slide level2">
-<h2>基本原则</h2>
-<p>(Grimmer &amp; Stewart 2013)</p>
-<p>–</p>
-<ol type="1">
-<li>所有现存关于语言的定量模型都是有.blue[偏误]的——但不乏能提供有用的信息。</li>
-</ol>
-<p>–</p>
-<ol type="1">
-<li>文本定量模型旨在.blue[增强人]（作为主体）的辨识范围和能力。</li>
-</ol>
-<p>–</p>
-<ol type="1">
-<li>.blue[不存在]通行的文本分析最优模型。</li>
-</ol>
-<p>–</p>
-<ol type="1">
-<li>.blue[Validation! Validation! Validation!]</li>
-</ol>
-</section>
-<section id="偏误的假定-a-bag-of-words" class="slide level2">
-<h2>“偏误“的假定： A Bag of Words</h2>
+<section id="a-bag-of-words" class="slide level2">
+<h2>A Bag of Words</h2>
+<p><span class="fragment">&gt; All quantitative models of language are <span class="red">wrong</span>—but some are useful <span class="citation" data-cites="GrimmerStewart2013">(<a href="#/参考文献" role="doc-biblioref" onclick="">Grimmer and Stewart 2013</a>)</span>.</span></p>
+<div class="fragment">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Bag of words (BoW)</strong></p>
+</div>
+<div class="callout-content">
 <p>A text is represented as the bag (multiset) of its words.</p>
-<p>–</p>
-<p>.center[ <img src="images/text_bagOfWords.png" width="700">]</p>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_bagOfWords.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_bagOfWords.png" class="fragment quarto-figure quarto-figure-center" height="300"></a></p>
+</figure>
+</div>
 </section>
-<section id="操作化-tokenization" class="slide level2">
-<h2>操作化: Tokenization</h2>
-<ol type="1">
-<li><p>文章打散</p></li>
-<li><p>洗去Syntax</p>
+<section id="从自然语言到计算机语言" class="slide level2">
+<h2>从自然语言到计算机语言</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-30" data-glightbox="description: .lightbox-desc-30" title="Document-Term Matrix (DTM)"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords2.jpg" class="quarto-figure quarto-figure-center" height="600" alt="Document-Term Matrix (DTM)"></a></p>
+<figcaption>Document-Term Matrix (DTM)</figcaption>
+</figure>
+</div>
+<aside class="notes">
+<p>In linguistics, the opposite of natural language is artificial/constructed language (conlangs), like Klingon in “Star Trek,” Dothraki in “Game of Thrones”</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="预处理" class="slide level2">
+<h2>预处理</h2>
+<div style="text-align:center; margin-top: 2em">
+<ul>
+<li>Segmentation</li>
+<li>Tokenization</li>
+<li>Stopwords (停词）/function words removing<br>
+</li>
+<li>其他根据研究目的的删减</li>
+</ul>
+</div>
+</section>
+<section id="segmentation" class="slide level2">
+<h2>Segmentation</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><em>Scriptio discreta</em> (e.g., English)</p>
+<p>Document → paragraphs/sentences</p>
+<aside class="notes">
+<p>discrete script</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column fragment" style="width:70%;">
+<p><em>Scriptio continua</em> (e.g, CJK)</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "近年来"   "美国"     "一些"     "政客"     "被"       "美国"    
+ [7] "优先"     "遮住"     "了"       "双眼"     "大"       "搞"      
+[13] "贸易"     "保护主义" "单边主义" "肆意"     "挥舞"     "关税"    
+[19] "大棒"     "全然不顾" "中美"     "两国人民" "和"       "全世界"  
+[25] "人民"     "的"       "强烈"     "反对"    </code></pre>
+</div>
+</div>
+</div><aside class="notes">
+<p>continuous script</p>
+<p>《人民日报》（2019年05月30日02版）</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="tokenization" class="slide level2">
+<h2>Tokenization</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>目标：去除Syntax
 <ul>
 <li>大小写</li>
-<li>stemming (e.g., 美国式、美式)</li>
 <li>标点</li>
 <li>非字符（@#￥%……&amp;*）</li>
+<li>停词</li>
 </ul></li>
-<li><p>区别词性</p>
-<ul>
-<li>Content vs.&nbsp;function</li>
-<li>名、动、形、副、介、代……</li>
-</ul></li>
-</ol>
-</section>
-<section class="slide level2">
-
-<h3 id="stop-words">Stop words</h3>
+</ul>
+</div><div class="column fragment" style="width:50%;">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "to"            "can"           "could"         "dare"         
- [5] "do"            "did"           "does"          "may"          
- [9] "might"         "would"         "should"        "must"         
-[13] "will"          "ought"         "shall"         "need"         
-[17] "is"            "a"             "am"            "are"          
-[21] "about"         "according"     "after"         "against"      
-[25] "all"           "almost"        "also"          "although"     
-[29] "among"         "an"            "and"           "another"      
-[33] "any"           "anything"      "approximately" "as"           
-[37] "asked"         "at"            "back"          "because"      
-[41] "before"        "besides"       "between"       "both"         
-[45] "but"           "by"            "call"          "called"       
-[49] "currently"     "despite"       "did"          </code></pre>
+<pre><code> [1] "to"     "can"    "could"  "dare"   "do"     "did"    "does"   "may"   
+ [9] "might"  "would"  "should" "must"   "will"   "ought"  "shall"  "need"  
+[17] "is"     "a"      "am"     "are"    "about" </code></pre>
 </div>
-</div>
-<p>–</p>
-<div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "一些"     "一何"     "一切"     "一则"     "一方面"   "一旦"    
- [7] "一来"     "一样"     "一般"     "一转眼"   "万一"     "上"      
-[13] "上下"     "下"       "不"       "不仅"     "不但"     "不光"    
-[19] "不单"     "不只"     "不外乎"   "不如"     "不妨"     "不尽"    
-[25] "不尽然"   "不得"     "不怕"     "不惟"     "不成"     "不拘"    
-[31] "不料"     "不是"     "不比"     "不然"     "不特"     "不独"    
-[37] "不管"     "不至于"   "不若"     "不论"     "不过"     "不问"    
-[43] "与"       "与其"     "与其说"   "与否"     "与此同时" "且"      
-[49] "且不说"   "且说"     "两者"    </code></pre>
+<pre><code> [1] "一些"   "一何"   "一切"   "一则"   "一方面" "一旦"   "一来"   "一样"  
+ [9] "一般"   "一转眼" "万一"   "上"     "上下"   "下"     "不"     "不仅"  
+[17] "不但"   "不光"   "不单"   "不只"   "不外乎"</code></pre>
 </div>
 </div>
-</section>
-<section class="slide level2">
-
-<p>常见中文stop words资源</p>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>中文停词表</strong></p>
+</div>
+<div class="callout-content">
 <ul>
 <li>百度停词表</li>
 <li>哈工大停词表</li>
 <li>网络搜集停词表，如<a href="https://blog.csdn.net/shijiebei2009/article/details/39696571">“最全中文停用词表整理（1893个）”</a></li>
-<li>自定义</li>
 </ul>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="转化结果" class="slide level2">
-<h2>转化结果</h2>
-<p>.center[<img src="images/text_bagOfWords2.jpg" height="550">]</p>
+<section id="scriptio-discreta-special" class="slide level2">
+<h2>Scriptio discreta special</h2>
+<ul>
+<li>Lemmatization: (happy, happier, happiness) → happy</li>
+<li>Stemming: (happy, happier, happiness) → happi</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>More Examples</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Lemmization: (went, leaves, geese, unhappy) → (go, leaf, goose, unhappy)</li>
+<li>Stemming: (went, leaves, geese, unhappy) → (went, leav, geese , unhappi)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" style="text-align:center; margin-top: 1em">
+<p><em>为什么要这么做？</em></p>
+<div class="fragment">
+<p>还能做什么</p>
+<ul>
+<li>Labeling
+<ul>
+<li>Content vs.&nbsp;function</li>
+<li>Linguistic features: n., v., adj., adv., prep., conj…….</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<aside class="notes">
+<p>Issue: Sparse matrix</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section class="slide level2">
-
-<p>class: small</p>
+<section id="综合的" class="slide level2">
+<h2>综合的🌰</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31" data-glightbox="description: .lightbox-desc-31" title="2019-05-14 ~ 05-22: 中美贸易战"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng.png" class="quarto-figure quarto-figure-center" height="550" alt="2019-05-14 ~ 05-22: 中美贸易战"></a></p>
+<figcaption>2019-05-14 ~ 05-22: 中美贸易战</figcaption>
+</figure>
+</div>
 </section>
-<section id="亚洲特色segment" class="slide level2">
-<h2>亚洲特色：Segment</h2>
-<p>“一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。“——”难道非要撞了南墙才回头——意孤行必将失败”, 《人民日报》（2019年05月30日02版）</p>
+<section id="数据清理" class="slide level2">
+<h2>数据清理</h2>
+<p><em>原始数据</em></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">library</span>(jiebaR)</span>
-<span id="cb4-2"><a href=""></a></span>
-<span id="cb4-3"><a href=""></a>zhongsheng <span class="ot">&lt;-</span> <span class="st">"一场经贸摩擦，让世界看到了一个有担当负责任的中国和一个一意孤行的美国。”埃及《金字塔报》资深记者萨米·卡姆哈维的话意味深长。近年来，美国一些政客被“美国优先”遮住了双眼，大搞贸易保护主义、单边主义，肆意挥舞关税大棒，全然不顾中美两国人民和全世界人民的强烈反对。"</span></span>
-<span id="cb4-4"><a href=""></a>cutter <span class="ot">&lt;-</span> <span class="fu">worker</span>() <span class="co"># segment engine</span></span>
-<span id="cb4-5"><a href=""></a><span class="fu">new_user_word</span>(cutter, <span class="st">"萨米·卡姆哈维"</span>, <span class="st">"nr"</span>) <span class="co"># customize segmentation</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] TRUE</code></pre>
+<pre><code>                                           title       time word
+1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   一
+2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
+3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
+4 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
+5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   让
+6 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">segment</span>(zhongsheng, cutter)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p><em>去掉停词</em></p>
+<div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "一场"          "经贸"          "摩擦"          "让"           
- [5] "世界"          "看到"          "了"            "一个"         
- [9] "有"            "担当"          "负责"          "任"           
-[13] "的"            "中国"          "和"            "一个"         
-[17] "一意孤行"      "的"            "美国"          "埃及"         
-[21] "金字塔"        "报"            "资深"          "记者"         
-[25] "萨米·卡姆哈维" "的话"          "意味深长"      "近年来"       
-[29] "美国"          "一些"          "政客"          "被"           
-[33] "美国"          "优先"          "遮住"          "了"           
-[37] "双眼"          "大"            "搞"            "贸易"         
-[41] "保护主义"      "单边主义"      "肆意"          "挥舞"         
-[45] "关税"          "大棒"          "全然不顾"      "中美"         
-[49] "两国人民"      "和"            "全世界"        "人民"         
-[53] "的"            "强烈"          "反对"         </code></pre>
+<pre><code>                                           title       time word
+1 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30   场
+2 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 经贸
+3 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 摩擦
+4 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 世界
+5 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 看到
+6 难道非要撞了南墙才回头——意孤行必将失败（钟声） 2019-05-30 一个</code></pre>
+</div>
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-<p>“壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！”</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a>tx_huangGai <span class="ot">&lt;-</span> <span class="st">"壮志凌云白虹贯、壮哉都督赠离言。六十年来尘扑面，今日才得洗汗颜。说什么开基业[转二六]经百战，说什么鲸鲵阵里骋雕鞍。大丈夫岂能够老死床第间，学一个丹心报国马革裹尸还。[转快板]我把长江当匹练，信手舒卷履平川。东风起、烧战船，应笑我白发苍苍着先鞭。烈火更助英雄胆，我管叫那八十三万灰飞烟灭火冲天。收拾起风雷供调遣，百万一藐谈笑间。[西皮散板]大丈夫能把乾坤变，何惜萧萧易水寒，斗酒奉赠壮虎胆。[西皮散板]这斗酒酹东风扫荡云天！"</span></span>
-<span id="cb8-2"><a href=""></a></span>
-<span id="cb8-3"><a href=""></a><span class="fu">library</span>(TopWORDS) <span class="co"># Made by Ke Deng</span></span>
-<span id="cb8-4"><a href=""></a></span>
-<span id="cb8-5"><a href=""></a><span class="fu">topwords</span>(tx_huangGai)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section class="slide level2">
-
-<p>class: small</p>
-</section>
-<section id="词频与词性分析" class="slide level2">
-<h2>词频与词性分析</h2>
-<div class="cell">
-<div class="cell-output-display">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">title</th>
-<th style="text-align: left;">time</th>
-<th style="text-align: left;">word</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">一</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">场</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">经贸</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">摩擦</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">让</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">世界</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>–</p>
-<p>去掉停词</p>
-<div class="cell">
-<div class="cell-output-display">
-<table>
-<thead>
-<tr class="header">
-<th style="text-align: left;">title</th>
-<th style="text-align: left;">time</th>
-<th style="text-align: left;">word</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">场</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">经贸</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">摩擦</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">世界</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">看到</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">难道非要撞了南墙才回头——意孤行必将失败（钟声）</td>
-<td style="text-align: left;">2019-05-30</td>
-<td style="text-align: left;">一个</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section class="slide level2">
-
+<section id="词频分析" class="slide level2">
+<h2>词频分析</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-frequency-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-frequency-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-frequency-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-frequency-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-<p>.pull-left[</p>
+<section id="词频异质性" class="slide level2">
+<h2>词频异质性</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-phase-freq-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-phase-freq-1.png" style="width:100.0%"></a></p>
+<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-phase-freq-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-33"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-phase-freq-1.png" data-fig-pos="center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
-<p>]</p>
-<p>???</p>
+<aside class="notes">
 <p>The Economist journalist Simon Rabinovitch</p>
-<p>–</p>
-<p>.pull-right[</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="相关性分析" class="slide level2">
+<h2>相关性分析</h2>
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-fre-compare-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-fre-compare-1.png" style="width:100.0%"></a></p>
+<p><a href="06_textAnalysis_files/figure-revealjs/zhongsheng-fre-compare-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-34"><img data-src="06_textAnalysis_files/figure-revealjs/zhongsheng-fre-compare-1.png" data-fig-pos="center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
-<p>]</p>
-<p>???</p>
+<aside class="notes">
 <p>x = proportion, y = <code>US_fail</code></p>
 <p>proportion = n / sum(n)</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="keyword-analysis" class="slide level2">
-<h2>Keyword Analysis</h2>
+<section id="关键词识别与分析" class="slide level2">
+<h2>关键词识别与分析</h2>
+<p>2019-05-07 关键词</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$simhash
+[1] "4937328317770165287"
+
+$keyword
+ 101.845  62.3717   58.696  57.5996  53.6127 
+  "增长"   "韧性"    "GDP" "一季度"   "经济" </code></pre>
+</div>
+</div>
+<div class="fragment">
+<p>2019-05-30 关键词</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$simhash
@@ -1240,18 +1510,39 @@ $keyword
  "美国"  "政客"  "别国"  "国际"  "世界" </code></pre>
 </div>
 </div>
+</div>
 </section>
-<section class="slide level2">
-
-<p>class: small</p>
-<p>Hamming Distance</p>
-<p>.pull-left[ <img src="images/text_hammingDis_org.png" height="250"> <img src="images/text_hammingDis_comp.png" height="250">]</p>
-<p>???</p>
-<p>the Hamming distance between two strings of equal length is the number of .blue[positions] at which the .red[corresponding symbols are different].</p>
+<section id="相似度分析" class="slide level2">
+<h2>相似度分析</h2>
+<p>通过“距离”测量相似度</p>
+<blockquote>
+<p>Hamming distance: the distance between two strings of equal length is the number of <span class="blue">positions</span> at which the <span class="red">corresponding symbols are different</span>.</p>
+</blockquote>
+<div class="r-stack">
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_org.png" class="quarto-figure quarto-figure-center"> <img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_comp.png" class="quarto-figure quarto-figure-center"></p>
+</div>
+<div style="text-align:center; margin-top: 1em">
+<p>e.g., H(100→011) = 3; H(010→111) = 2.</p>
+</div>
+<aside class="notes">
 <p>It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.</p>
-<p>Two example distances: 100→011 has distance 3; 010→111 has distance 2</p>
-<p>–</p>
-<p>.pull-right[ 05-30 vs.&nbsp;05-22</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="相似度能告诉你什么" class="slide level2">
+<h2>相似度能告诉你什么</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>05-30 vs.&nbsp;05-<span class="red">22</span></em></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$distance
@@ -1266,7 +1557,8 @@ $rhs
  "磋商"  "美方"  "中方"  "背弃"  "倒退" </code></pre>
 </div>
 </div>
-<p>05-30 vs.&nbsp;05-23</p>
+</div><div class="column" style="width:50%;">
+<p><em>05-30 vs.&nbsp;05-<span class="red">23</span></em></p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>$distance
@@ -1281,132 +1573,245 @@ $rhs
     "规则"     "美国"     "美方"     "国际" "世贸组织" </code></pre>
 </div>
 </div>
-<p>]</p>
+</div>
+</div>
 </section>
-<section id="topic-modeling" class="slide level2">
-<h2>Topic Modeling</h2>
-<p>.center[ <video width="500" height="500" controls=""> <source src="images/text_topicModeling.webm" type="video/webm"> </video>]</p>
+<section id="bow之上加权" class="slide level2">
+<h2>BOW之上：加权</h2>
+<p>DTM的问题：</p>
+<ol type="1">
+<li>未将词的重要性纳入考量</li>
+<li>过度体现常见词</li>
+<li>轻视少见词</li>
+</ol>
+<p><span class="fragment">解法: 词频加权 e.g., term frequency-inverse document frequency (TF-IDF)</span></p>
 </section>
-<section id="超越a-bag-of-words" class="slide level2">
-<h2>超越A Bag of Words</h2>
+<section id="加权带来什么" class="slide level2">
+<h2>加权带来什么</h2>
 <ul>
-<li>Stop words</li>
-<li>词性分析</li>
+<li>优点：
+<ol type="1">
+<li>识别重要词汇</li>
+<li>减少常见词汇的权重</li>
+<li>提高机器学习性能</li>
+</ol></li>
 </ul>
-<p>–</p>
+<div class="fragment">
 <ul>
-<li>Word order: Markov Model of Order N
+<li>缺点：
+<ol type="1">
+<li>假定词汇独立（与DTM相同）</li>
+<li>对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重</li>
+<li>对语料库的大小和多样性敏感</li>
+</ol></li>
+</ul>
+</div>
+</section>
+<section id="加权之上bring-the-context-back" class="slide level2">
+<h2>加权之上：Bring the context back</h2>
+<ul>
+<li>临近词分析: Markov Model of Order N
 <ul>
 <li>Unigram: 清华 大学 政治 系</li>
 <li>Bigram: 清华大学 政治系/清华 大学政治 系</li>
 <li>Trigram：清华大学政治 系/清华 大学政治系</li>
+<li><em>Keyness</em></li>
 </ul></li>
 </ul>
-<p>–</p>
+<div class="fragment">
 <ul>
-<li>Weighted words: TF-IDF</li>
+<li>功能词分析</li>
 </ul>
-<p>???</p>
-<p>term frequency-inverse document frequency</p>
-<p>–</p>
-<ul>
-<li>Word vector: word2vec; text2vec; doc2vec</li>
-</ul>
-<p>???</p>
-<p>word embeddings</p>
-</section>
-<section id="文本比较" class="slide level2">
-<h2>文本比较</h2>
-<p>.pull-left[ 文本特征： + 长度 + 用词 + 词频 + 关键词<br>
-……</p>
-<p>]</p>
-<p>.pull-right[ 语义特征 + 政治立场 + 文化 + 主张 + 价值 + 意义 ……]</p>
-</section>
-<section id="bonus-文本分析的黑话" class="slide level2">
-<h2>Bonus: 文本分析的“黑话”</h2>
-<ul>
-<li>Corpus
-<ul>
-<li>Document</li>
-<li>DTM/TDM</li>
-</ul></li>
-</ul>
-<p>??? Document-term matrix</p>
-<p>–</p>
-<ul>
-<li>Classification
-<ul>
-<li>Dictionary</li>
-<li>Machine learning</li>
-</ul></li>
-</ul>
-<p>–</p>
-<ul>
-<li>Clustering
-<ul>
-<li>Membership</li>
-<li>Topic modeling
-<ul>
-<li>LDA</li>
-<li>STM</li>
-</ul></li>
-</ul></li>
-</ul>
-<p>??? Latent Dirichlet Allocation</p>
-</section>
-<section id="take-home-points" class="slide level2">
-<h2>Take Home Points</h2>
-<p>.pull-left[ <em>What You Already Know</em></p>
-<ol type="1">
-<li>文本之于研究
-<ul>
-<li>丰富资源</li>
-<li>分析门槛</li>
-</ul></li>
-<li>文本分析路径
-<ul>
-<li>词 ⟿ 图</li>
-</ul></li>
-<li>文本分析步骤
-<ul>
-<li>打散</li>
-<li>聚合</li>
-</ul></li>
-</ol>
-
-<img src="images/text_indirect_phone.gif" width="300" class="r-stretch"><p>]</p>
-<p>–</p>
-<p>.pull-right[</p>
-<p><em>Prospect</em></p>
-<p>文字分析</p>
-<ul>
-<li>词频分析</li>
-<li>信息提取</li>
-<li>情感标记</li>
-<li>语义网络</li>
-</ul>
-<p>文本分析</p>
-<ul>
-<li>文本分类</li>
-<li>主题分析</li>
-<li>语义联系</li>
-</ul>
-<p>]</p>
-</section></section>
-<section>
-<section id="感谢倾听欢迎交流" class="title-slide slide level1 center" data-background="#43464B">
-<h1>感谢倾听，欢迎交流</h1>
-<div style="text-align: right; margin-top: 1em">
-<p><a href="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" height="250"></a></p>
-<p><a href="https://github.com/sammo3182"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>&nbsp; sammo3182</a></p>
-<p><a href="mailto:yuehu@tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn</a></p>
-<p><a href="https://sammo3182.github.io/"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <circle cx="12" cy="12" r="10"></circle> <line x1="2" y1="12" x2="22" y2="12"></line> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>&nbsp; https://sammo3182.github.io/</a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png" class="lightbox" data-gallery="quarto-lightbox-gallery-35"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png" class="quarto-figure quarto-figure-center" height="300"></a></p>
+</figure>
+</div>
 </div>
 </section>
-<section id="reference" class="slide level2 smaller scrollable">
-<h2>Reference</h2>
-<div id="refs" role="list">
-
+<section id="给词义建模词嵌入word-embedding" class="slide level2">
+<h2>给词义建模：词嵌入(Word embedding)</h2>
+<blockquote>
+<p>Words’ meanings depend not just on immediate neighbors</p>
+</blockquote>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png" class="lightbox" data-gallery="quarto-lightbox-gallery-36"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png" class="quarto-figure quarto-figure-center" height="550"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<p>The term “embedding” comes from the neural network literature, in which an “embedding layer” is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.</p>
+<ul>
+<li>The embedding model GloVe (“Global Vectors”) by <span class="citation" data-cites="PenningtonEtAl2014">Pennington, Socher, and Manning (<a href="#/参考文献" role="doc-biblioref" onclick="">2014</a>)</span> is explicitly designed to construct word vectors encoding local co-occurrence.</li>
+<li>An equally influential word embedding model is Word2Vec <span class="citation" data-cites="BengioEtAl2000">(<a href="#/参考文献" role="doc-biblioref" onclick="">Bengio, Ducharme, and Vincent 2000</a>)</span>, which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="主题模型topic-modeling" class="slide level2">
+<h2>主题模型(Topic modeling)</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="What happened in topic modeling"><source src="https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm"></video>
+<aside class="notes">
+<p>LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="注意力机制attention-mechanism" class="slide level2">
+<h2>注意力机制(Attention Mechanism)</h2>
+<blockquote>
+<p>Word embedding 认为所有词和词之间关系都同等重要<span class="large">🤦‍♂️</span></p>
+</blockquote>
+<div class="fragment fade-in-then-semi-out">
+<p>“Attention is all you need” <span class="citation" data-cites="VaswaniEtAl2017">(<a href="#/参考文献" role="doc-biblioref" onclick="">Vaswani et al. 2017</a>)</span></p>
+<p>以下是关于大型语言模型中注意力机制的示例翻译：</p>
+<blockquote>
+<p>作为在_____领域的头部企业，我们雇佣了大量高水平的软件工程师。<br>
+作为在_____领域的头部企业，我们雇佣了大量高水平的太阳能工程师。</p>
+</blockquote>
+<p>应该在 “_____” 填入什么词？你是如何得出这个结论的？</p>
+</div>
+<div class="fragment">
+<p>作为在<em>信息技术</em>领域的头部企业，我们雇佣了大量高水平的<span class="red">软件</span>工程师。<br>
+作为在<em>绿色能源</em>领域的头部企业，我们雇佣了大量高水平的<span class="red">太阳能</span>工程师。</p>
+</div>
+</section>
+<section id="词嵌入-词序列word-sequence" class="slide level2">
+<h2>词嵌入 → 词序列（Word Sequence）</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>自注意力机制</strong></p>
+</div>
+<div class="callout-content">
+<p>输入一个初始词元嵌入序列，并输出一个新的词元嵌入序列，<span class="red">使初始嵌入能够相互作用</span>。</p>
+</div>
+</div>
+</div>
+<ul>
+<li>由堆叠的注意力机制和前馈神经网络层组成的大型神经网络可以使用专用处理器高效并行训练，即 <span class="red">Transformer</span></li>
+<li>常见的 Transformer 模型
+<ul>
+<li>BERT
+<ul>
+<li>RoBERTa, PALM</li>
+</ul></li>
+<li><span class="red large">GPT</span> 系列</li>
+</ul></li>
+</ul>
+</section>
+<section id="总结" class="slide level2">
+<h2>总结</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li>认知
+<ul>
+<li>丰富资源</li>
+<li>技术门槛</li>
+</ul></li>
+<li>原则
+<ul>
+<li>在“错误”的前提下寻找价值</li>
+</ul></li>
+</ol>
+</div><div class="column" style="width:50%;">
+<ol start="3" type="1">
+<li>操作
+<ul>
+<li>打散：预处理与结构化</li>
+<li>聚合：
+<ul>
+<li>词频</li>
+<li>相关性/相似度</li>
+<li>BOW之上（语境与联系）</li>
+</ul></li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_indirect_phone.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-37" data-glightbox="description: .lightbox-desc-37" title="Distant reading"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_indirect_phone.gif" class="fragment quarto-figure quarto-figure-center" height="300" alt="Distant reading"></a></p>
+<figcaption>Distant reading</figcaption>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="感谢倾听敬请指正" class="title-slide slide level1 center" data-background="#43464B">
+<h1>感谢倾听，敬请指正</h1>
+<div style="text-align: right; margin-top: 1em">
+<p><a href="https://github.com/sammo3182"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>&nbsp; sammo3182</a></p>
+<p><a href="mailto:yuehu@tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn</a></p>
+<p><a href="https://www.drhuyue.site"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <circle cx="12" cy="12" r="10"></circle> <line x1="2" y1="12" x2="22" y2="12"></line> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>&nbsp; https://www.drhuyue.site</a></p>
+<p><a href="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-38"><img data-src="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" height="250"></a></p>
+</div>
+</section>
+<section id="参考文献" class="slide level2 smaller scrollable">
+<h2>参考文献</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-BengioEtAl2000" class="csl-entry" role="listitem">
+Bengio, Yoshua, Réjean Ducharme, and Pascal Vincent. 2000. <span>“A neural probabilistic language model.”</span> In <em>Advances in Neural Information Processing Systems</em>. Vol. 13. MIT Press. <a href="https://proceedings.neurips.cc/paper/2000/hash/728f206c2a01bf572b5940d7d9a8fa4c-Abstract.html">https://proceedings.neurips.cc/paper/2000/hash/728f206c2a01bf572b5940d7d9a8fa4c-Abstract.html</a>.
+</div>
+<div id="ref-BenoitEtAl2016" class="csl-entry" role="listitem">
+Benoit, Kenneth, Drew Conway, Benjamin E. Lauderdale, Michael Laver, and Slava Mikhaylov. 2016. <span>“Crowd-Sourced Text Analysis: Reproducible and Agile Production of Political Data.”</span> <em>American Political Science Review</em> 110 (2): 278–95. <a href="https://doi.org/10.1017/S0003055416000058">https://doi.org/10.1017/S0003055416000058</a>.
+</div>
+<div id="ref-Coase1960" class="csl-entry" role="listitem">
+Coase, R. H. 1960. <span>“The Problem of Social Cost.”</span> <em>The Journal of Law &amp; Economics</em> 56 (4): 837–77. <a href="https://doi.org/10.1086/674872">https://doi.org/10.1086/674872</a>.
+</div>
+<div id="ref-DietrichEtAl2019" class="csl-entry" role="listitem">
+Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. <span>“Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.”</span> <em>American Political Science Review</em>, Forthcoming. <a href="http://www.brycejdietrich.com/files/working_papers/DietrichHayesOBrien.pdf">http://www.brycejdietrich.com/files/working_papers/DietrichHayesOBrien.pdf</a>.
+</div>
+<div id="ref-FriedmanSchwartz2008" class="csl-entry" role="listitem">
+Friedman, Milton, and Anna Jacobson Schwartz. 2008. <em>A Monetary History of the United States, 1867-1960</em>. Princeton University Press. <a href="https://books.google.com?id=Q7J_EUM3RfoC">https://books.google.com?id=Q7J_EUM3RfoC</a>.
+</div>
+<div id="ref-Grimmer2010" class="csl-entry" role="listitem">
+Grimmer, Justin. 2010. <span>“A Bayesian Hierarchical Topic Model for Political Texts: Measuring Expressed Agendas in Senate Press Releases.”</span> <em>Political Analysis</em> 18 (1): 1–35. <a href="https://doi.org/10.1093/pan/mpp034">https://doi.org/10.1093/pan/mpp034</a>.
+</div>
+<div id="ref-GrimmerStewart2013" class="csl-entry" role="listitem">
+Grimmer, Justin, and Brandon M. Stewart. 2013. <span>“Text as Data: The Promise and Pitfalls of Automatic Content Analysis Methods for Political Texts.”</span> <em>Political Analysis</em> 21 (3): 267–97.
+</div>
+<div id="ref-IDCFutureScape2024" class="csl-entry" role="listitem">
+IDC FutureScape. 2024. <span>“2024年中国数据和分析市场十大预测.”</span> IDC Media Center. <a href="https://www.idc.com/getdoc.jsp?containerId=prCHC51814824">https://www.idc.com/getdoc.jsp?containerId=prCHC51814824</a>.
+</div>
+<div id="ref-Kemp2024" class="csl-entry" role="listitem">
+Kemp, Simon. 2024. <span>“Digital 2024: Global Overview Report.”</span> Meltwater. <a href="https://runwise.oss-accelerate.aliyuncs.com/sites/15/2024/04/2024%E5%B9%B4%E5%85%A8%E7%90%83%E6%95%B0%E5%AD%97%E5%8C%96%E8%90%A5%E9%94%80%E6%B4%9E%E5%AF%9F%E6%8A%A5%E5%91%8A-50%E4%BA%BF%E7%A4%BE%E4%BA%A4%E5%AA%92%E4%BD%93%E7%94%A8%E6%88%B7_Meltwater%E8%9E%8D%E6%96%87_2024.pdf">https://runwise.oss-accelerate.aliyuncs.com/sites/15/2024/04/2024%E5%B9%B4%E5%85%A8%E7%90%83%E6%95%B0%E5%AD%97%E5%8C%96%E8%90%A5%E9%94%80%E6%B4%9E%E5%AF%9F%E6%8A%A5%E5%91%8A-50%E4%BA%BF%E7%A4%BE%E4%BA%A4%E5%AA%92%E4%BD%93%E7%94%A8%E6%88%B7_Meltwater%E8%9E%8D%E6%96%87_2024.pdf</a>.
+</div>
+<div id="ref-King2015" class="csl-entry" role="listitem">
+King, Gary. 2015. <span>“Big Data Is Not about the Data!”</span> Guest talk presented at the Talk at the capital markets cooperative research centre, Sydney, Australia, November 11. <a href="https://gking.harvard.edu/files/gking/files/evbase-cmcrc.pdf">https://gking.harvard.edu/files/gking/files/evbase-cmcrc.pdf</a>.
+</div>
+<div id="ref-PenningtonEtAl2014" class="csl-entry" role="listitem">
+Pennington, Jeffrey, Richard Socher, and Christopher Manning. 2014. <span>“GloVe: Global Vectors for Word Representation.”</span> In <em>Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 1532–43. Doha, Qatar: Association for Computational Linguistics. <a href="https://doi.org/10.3115/v1/D14-1162">https://doi.org/10.3115/v1/D14-1162</a>.
+</div>
+<div id="ref-VaswaniEtAl2017" class="csl-entry" role="listitem">
+Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017. <span>“Attention Is All You Need.”</span> In <em>Advances in Neural Information Processing Systems</em>. Vol. 30. Curran Associates, Inc. <a href="https://proceedings.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html">https://proceedings.neurips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html</a>.
+</div>
+<div id="ref-ZhangPan2019" class="csl-entry" role="listitem">
+Zhang, Han, and Jennifer Pan. 2019. <span>“CASM: A Deep-Learning Approach for Identifying Collective Action Events with Text and Image Data from Social Media.”</span> <em>Sociological Methodology</em> 49 (1): 1–57. <a href="https://doi.org/10.1177/0081175019860244">https://doi.org/10.1177/0081175019860244</a>.
+</div>
+<div id="ref-YanZhiHongYanFuJing2024" class="csl-entry" role="listitem">
+颜之宏, and 严赋憬. 2024. <span>“最新报告出炉！2023年我国数据生产总量达32.85ZB.”</span> 新华网. May 24, 2024. <a href="http://www.news.cn/20240524/a1b191e10fa84fa0af52ba88b6dcb1b7/c.html">http://www.news.cn/20240524/a1b191e10fa84fa0af52ba88b6dcb1b7/c.html</a>.
+</div>
 </div>
 
 </section><div class="quarto-auto-generated-content">
@@ -1414,6 +1819,7 @@ $rhs
 
 </div>
 </div></section>
+
     </div>
   </div>
 
@@ -1424,7 +1830,6 @@ $rhs
   <script src="06_textAnalysis_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="06_textAnalysis_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="06_textAnalysis_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="06_textAnalysis_files/libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
   <script src="06_textAnalysis_files/libs/revealjs/plugin/reveal-spotlight/spotlight.js"></script>
   <script src="06_textAnalysis_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
@@ -1446,8 +1851,7 @@ $rhs
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'chalkboard': {"buttons":true},
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
  
@@ -1619,7 +2023,7 @@ $rhs
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, RevealSpotlight, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealSpotlight, QuartoSupport,
 
           RevealMath,
           RevealNotes,
@@ -1742,6 +2146,24 @@ $rhs
         // clear code selection
         e.clearSelection();
       });
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
       function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
@@ -1820,7 +2242,8 @@ $rhs
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"fade","openEffect":"fade"});
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"fade","descPosition":"bottom","openEffect":"fade","loop":false});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;

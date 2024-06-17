@@ -1,49 +1,40 @@
 ---
-title: "Principles of<br>Text Analysis"
-subtitle: "Class Advanced Methods School, CityU"
-# date: "2023-06-13"
-# date-format: "iso"
-author: "Yue Hu"
+title: "以数知文"
+subtitle: "深圳大学·当代中国政治发展论坛"
+author: "胡悦"
 institute: 
-  - Department of Political Science
-  - Tsinghua University
-bibliography: pre_cams.bib
+  - 清华大学社会科学学院
+  - 清华大学计算社会科学与国家治理实验室（计算社会科学平台）
+  - 清华大学数据治理中心
+  
+bibliography: ../camsTextAnalysis/pre_cams.bib
+knitr: 
+    opts_chunk:
+      echo: false
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: false
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
-    embed-resources: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
+    self-contained: false
+    chalkboard: false # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
-    code-fold: true
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
     default-image-extension: png
-knitr: 
-    opts_chunk: 
-      dev.args:
-        bg: transparent
-execute:
-  echo: true
-  message: false
-  warning: false
 revealjs-plugins:
   - spotlight
-lightbox:
+lightbox: 
   match: auto
   effect: fade
 spotlight:
-  
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
@@ -52,94 +43,150 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r setup}
-#| include = FALSE
-
+```{r setup, include = FALSE}
+if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
+  tidyverse,
+  drhutools, 
   icons,
-  tidyverse, 
-  flextable, gridExtra,
-  rvest, stringr, broom, jiebaR, tidytext, tidyverse
-)
+  flextable, 
+  gridExtra,
+  knitr, # dependency
+  rvest, 
+  stringr, 
+  broom, jiebaR, 
+  tidytext, 
+  tidyverse
+) 
+
 
 # Functions preload
 set.seed(313)
 
-theme_set(theme_minimal())
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
 ```
 
-# Outline
-
-- Text-As-Data Approach
-- DGP for Text-As-Data
-- Analyzing text data
-
-# Text-As-Data Approach
-
-## When text becomes (big) data
-
-- Yearly: Social media users increase 56,530,000 in 2017--18.
-- Daily: 
-    + Baidu ("Chinese google") [day]{.red} user search request, it takes [1.7 days]{.red} to scan once;
-    + Wechat ("Chinese whatsup") [day]{.red} added data [500TB]{.red}---more than all human books.
-- Timely: 2.9 million emails around the world [every second]{.red}
-    - A person's [5.5 years]{.red} of day and night to read them all.
 
 
-:::{.fragment}
+## 提要
 
-:::{.callout-tip collapse="true"}
-By 2020, the size of global data has reached 40ZB (5.2TB/person).^[
-[<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB---reference: 1080p HD 2hrs：6GB]{.fragment}
-]
-:::
-
-:::
+> @King2015: [The big-data approach is] the [end]{.red} of the quantitative-qualitative divide.
 
 :::{.notes}
-http://pdf.dfcfw.com/pdf/H3_AP201903111304577789_1.pdf
-
-Giga Byte < Tera Byte < Peta Byte < 
-Exa Byte < Zetta Byte < Yotta Byte
+King talked about this issue in many places including Shanghai Jiaotong University
 :::
-
-## History of text as data
-
-- "Ancient" studies
-    - How the law resolves externality problems [@Coase1960]
-    - Construction of policy surprises via historical documents [@FriedmanSchwartz2008]
-
-:::{.fragment}
-- Difficulties
-    - Maintaining and update
-    - Analytic methods
-    - Time consumption
-    - Generalization
-:::
-
-
-## Boom of Text Analysis in the age of big data
-
-+ Text data grows [exponentially]{.red}
-+ Large-scale text data [collection]{.red}
-+ Enhanced [storage and management]{.red} capabilities
-+ Extensive [social meaning]{.red} expressed through text
-+ Scalable, well-developed and economic [methods]{.red}
-
-## Text-as-data perspective
 
 :::: {.columns}
 
-::: {.column width="20%"}
-*Objective*
+::: {.column .fragment width="30%"}
+### 认知
 
-~~Text~~ Language
+[见字如数]{.red}：    
+文本与文本数据
+
+- 文本&rarr;数据
+- 文本分析
+- 应用案例
 :::
 
-::: {.column width="80%"}
-*Type*
+::: {.column .fragment width="30%"}
+### 原则
+
+[以数知文]{.red}:     
+文本数据化原理规范
+
+* 数据获取
+* 数据整理
+* 基本分析
+
+:::
+
+::: {.column .fragment width="40%"}
+### 操作
+
+[望数生义]{.red}:     
+文本数据分析过程示范（R）
+
+- 网络信息爬取（[`rvest`](https://rvest.tidyverse.org/)）
+- 中文处理（[`jiebaR`](https://qinwenfeng.com/jiebaR/)/[`TopWORDS`](http://www.stat.tsinghua.edu.cn/kdeng/r-package/)）
+- 文本关系分析（[`tidytext`](https://www.tidytextmining.com/)）
+
+:::
+
+::::
+
+
+
+# 见字如数：建立认知
+
+## 文本数据
+
+[每年： 2024年初社交媒体用户50.4亿，2023年新增2.66亿首次使用用户 [@Kemp2024]]{.fragment}
+
+:::{.fragment}
+每日：
+
++ 百度日用户搜索请求，需[1.7天]{.red}才能扫描一遍；
++ 微信日增数据[500TB]{.red}——比人类所有书籍存量还多。
+:::
+
+[每秒：全世界每秒发送290万封email，一人需要[5.5年]{.red}日以继夜才能读完。]{.fragment}
+
+:::{.fragment .callout-tip}
+2023年，全国数据生产总量达32.85ZB,，同比增长22.44%，即人均 `r round(32.85 * (1024^3) / (1.6 * 10^9))` TB [@YanZhiHongYanFuJing2024]^[1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB; 1080p HD 2hrs：6GB.]
+
+
+预计2027年，全球[非结构化数据]{.red}将占到数据总量的86.8% [@IDCFutureScape2024]
+:::
+
+
+:::{.notes}
+Giga Byte < Tera Byte < Peta Byte < Exa Byte < Zetta Byte < Yotta Byte
+:::
+
+
+## 文本研究
+
+历史悠久而非主流 &larr; 资料难获取；花时间；难推广；难管理；难分析
+
+- 法律的外部性问题 [@Coase1960]
+- 通过历史文件研究“policy surprises” [@FriedmanSchwartz2008]
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+新兴工具的繁荣：
+
++ 文本[资料]{.red}指数级增长；
++ 大规模文本数据[采集]{.red}；
++ 存储和管理[能力]{.red}增强；
++ 可推广、系统化和[廉价]{.red}化；
++ 文本分析[方法]{.red}蓬勃发展
+:::
+
+
+
+## (计算机辅助）文本分析
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**对象**
+
+~~文字~~ 语言
+:::
+
+::: {.column width="50%"}
+**类型**
 
 * Text analysis vs. content analysis
 * Representational analysis vs. Instrumental analysis
@@ -155,13 +202,13 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 语义学(semantic, what is said)
 语用学(pragmatic, what is implicated)
 :::
-:::
 
+:::
 
 ::::
 
 
-## Illustration I
+## 🌰 I
 
 @Grimmer2010
 
@@ -172,13 +219,12 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 - Method
     - Bayesian Hierarchical Topic Model
 
-## Findings
+## 发现
 
 ::: {.panel-tabset}
 ### Focus
 
-
-![Committee leaders focus on their committee's issues](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer1.png){.lightbox fig-align="center" height=500}
+![Committee leaders focus on their committee's issues](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer1.png){fig-align="center" height=500}
 
 :::{.notes}
 Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees' jurisdiction than other senators. **This figure compares the attention that Senate committee leaders---chairs or ranking members---dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
@@ -187,8 +233,7 @@ Fig. 4 Chairman and ranking members of committees allocate more attention to iss
 
 ### Cluster
 
-![Expressed agendas cluster geographically](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer2.png){fig-align="center" height=500}
-
+![Expressed agendas cluster geographically](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer2.png){fig-align="center" height=500}
 
 
 :::{.notes}
@@ -197,9 +242,7 @@ Fig. 5 Attention to issues follows expected geographic patterns. **This figure d
 
 ### Predict
 
-![Attention to appropriations predicts opposition to earmark reform](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer3.png){fig-align="center" height=500}
-
-
+![Attention to appropriations predicts opposition to earmark reform](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer3.png){fig-align="center" height=500}
 
 :::{.notes}
 An earmark is a provision inserted into a discretionary spending appropriations bill that directs funds to a specific recipient while bypassing the merit-based or competitive funds allocation process. These provisions are often associated with legislation specifying certain congressional spending priorities or in revenue bills that apply to a limited number of individuals or entities. 
@@ -212,8 +255,7 @@ The left-hand figure shows that senators who discuss fire department grants more
 :::
 :::
 
-
-## Illustration II
+## 🌰 II
 
 @BenoitEtAl2016
 
@@ -225,20 +267,20 @@ The left-hand figure shows that senators who discuss fire department grants more
     - 18,263 natural sentences from *British Conservative, Labour and Liberal Democrat* manifestos
     
 
-## Operation
+## 操作
 
 ::: {.panel-tabset}
-### Coding
+### 编码
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
 
 :::{.notes}
 Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.
 :::
 
-### Results
+### 结果
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
 
 :::{.notes}
 Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
@@ -248,7 +290,7 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 
 
 
-## Illustration III
+## 🌰 III
 
 @DietrichEtAl2019
 
@@ -259,19 +301,18 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 - Data
     - 74,158 Congressional floor speeches
 
-## Operation
+## 操作
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
 
-:::{.fragment}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch.png){.lightbox fig-align="center" height="600"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch.png){.fragment fig-align="center" height=600}
+
 :::
 
-:::
 
-
-## Illustration IV
+## 🌰 IV
 
 @ZhangPan2019
 
@@ -288,181 +329,182 @@ CNN: Convolutional Neural Network
 RNN: Recurrent Neural Network
 :::
 
-## Operation
+## 操作
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_casm.png){fig-align="center" width="1000"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_casm.png){fig-align="center" width=1000}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center" height=400}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
+
 :::
 
 
-## Challenges
 
-:::: {.columns}
+## 挑战
 
-::: {.column width="50%"}
-*Theory*
 
-- Single causal mechanism?
-    - Intentional writing vs. measurement errors
+*理论*: Single causal mechanism 
 
-*Assumption*
+[*前提*: Bag of words]{.fragment}
 
-- A bag of words (elaborated later)
-:::
+[*数据*
 
-::: {.column width="50%"}
-*Data*
+* DGP
+    + 随机抽取    
+    + Only posted   
+    + One-time censor
+* 非结构化
+* 海量潜在维度
+* 内容复杂且微妙]{.fragment}
 
-- Unstructuralized data
-- Manifest and latent dimension reduction
-- Concept relations and context ignorance
-- DGP
-    - Only posted
-    - One-time censor?
-    - Random sampling?
-:::
 
 :::{.notes}
-审查已经使用 machine learning @SuEtAl2020
+
+审查已经使用 machine learning
+
+Su, Y.-S., Y. Ruan, S. Sun, and Y.-T. Chang. 2020. “A Pattern Recognition Framework for Detecting Changes in Chinese Internet Management System.” Journal of Social Computing 1(1): 28–39.
+:::
+
 :::
 
 ::::
 
-## Wrap it up
 
-- History of text-as-data
-    - Long and short
-- Text-as-data perspectives
-    - Objective: language
-    - Types
-- Application
-    - Text &rarr; audio, video
-
-# DGP for Text-As-Data
-
-## Points to cover
-
-1. Where to find text resources?
-    1. First-hand sources
-    1. Second-hand sources
-1. How to get text resources?
-1. How to deal with text information?
-1. What can text data do?
+# 以数知文: 理解原则
 
 
-
-## First-hand sources
+本节要回答之问题：
 
 :::{style="text-align:center; margin-top: 2em"}
-*Text from authors*
-
-* Email/SMS
-* Website HTML
-* RSS feeds
-* Internet social media
-* Internet Forum
-* Network question and answer platform
-* Media database
-* Internet transaction behavior       
-......
+1. 资源哪里找？
+1. 信息如何用？
+1. 数据能干啥？
+1. **[红线]{.red}在哪里**？
 :::
 
-## Open Platforms
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_index.png){fig-align="center" height=600}
+## 原生数据
 
-## Media database
+:::: {.columns}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_renminribao.png){fig-align="center" height=600}
+::: {.column width="20%"}
+* Email/短信
+* 网站HTML
+* RSS feeds
+* 网络社交媒体
+* 网络论坛
+* 网络问答平台
+* 媒体数据库
+* 网络交易行为    
+……
+:::
 
-## E-Government
+::: {.column width="80%"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_henan-Egovernment.png){fig-align="center" height=600}
-
-## Social Media
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_social-media.gif){fig-align="center" height=600}
+![社交媒体](https://drhuyue.site:10002/sammo3182/figure/text_social-media.gif){fig-align="center" height=500}
 
 :::{.notes}
 新浪微博1.4亿，微信用户5.5亿;
 微信日增数据500TB，QQ日增数据200TB。
 :::
+:::
 
-## Reddit
+::::
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhihu.png){fig-align="center" height=600}
+
+## 公共开放平台
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng_index.png){fig-align="center" height=600}
+
+## 网络问政平台
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_henan-Egovernment.png){fig-align="center" height=600}
+
+
+## 社会化问答网站
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_zhihu.png){fig-align="center" height=600}
 
 :::{.notes}
 Quora, Stack Overflow
 :::
 
-## Open question
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_survey_openQuestion.png){fig-align="center" height=600}
+## 媒体数据库
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_renminribao.png){fig-align="center" height=600}
 
 
-## Second-hand sources
+## 问卷开放性问题
 
-:::{style="text-align:center; margin-top: 2em"}
-*Text from archives*
+![](https://drhuyue.site:10002/sammo3182/figure/text_survey_openQuestion.png){fig-align="center" height=600}
 
-* CNKI and other databases (journals, newspapers, yearbooks, etc.)
-* Google Books, Baidu Scholar
-* Google Trend, Baidu Index
-* JSTOR Data for Research   
-......
-:::
 
-## Indicators
+## 二手数据
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_baidu_zhishu.png){fig-align="center" height=600}
+::: {.panel-tabset}
+### 档案数据
 
-## Digitalized documents
+* 中国知网等数据库（期刊、报刊、年鉴等）
+* Google Books、百度学术
+* Google Trend、百度指数
+* JSTOR Data for Research……
 
-:::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=600}
+### 百度指数
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=600}
-:::
+![](https://drhuyue.site:10002/sammo3182/figure/text_baidu_zhishu.png){fig-align="center" height=500}
 
-## Text data collection
-
-- First-hand: Spider/crawler/scraper
-- Second-hand: archive and digital database
-
+### 文本数字化
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bazhuayu.png){.fragment fig-align="center" height=450}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=500}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height500}
 :::
 
-## Scraper operation
+:::
+
+
+## 文本获取
+
+* 原生数据：Spider/crawler/scraper
+* 二手数据：档案数据和数字化数据
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_bazhuayu.png){fig-align="center" height=450}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
 :::
 
-## Customized Scrapping
+## 操作演示
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+:::
+
+## 编程抓取
 
 `SelectorGadget` (Chrome add-in)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
 
 ## Scrapping with `rvest`
 
+
 ```{r zhongsheng-eg}
 #| eval: false
+#| echo: true
 
 ls_zhongsheng <-
   read_html("http://politics.people.com.cn/GB/8198/426918/index.html") |> # index page
@@ -491,122 +533,108 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 })
 ```
 
-## Regular Expression
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_regular_expression.png){fig-align="center" height=600}
+## 正则表达式
 
-## Structuralization
+![](https://drhuyue.site:10002/sammo3182/figure/theory_regular_expression.png){fig-align="center" height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_output.png){fig-align="center" width=1000}
+## 文本数据结构化
 
-## Wrap it up
-
-- Source of text data
-    - First-hand
-    - Second-hand
-- Data collection
-    - First-hand: Scrapping
-        - Foolproof software
-        - Programming
-            - Regular expression
-    - Second-hand: Archives
-- Structuralization
-
-# Analyzing text data
-
-## An (Classic) Overview [@GrimmerStewart2013]
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_analysis-method.png){fig-align="center" height=600}
-
-## Level of Analysis
-
-:::{style="text-align:center; margin-top: 2em"}
-:::{.fragment .fade-in-then-semi-out}
-*Description*
-
-Frequency, word cloud (👎), network
-:::
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_output.png){fig-align="center" width=1000}
 
 
-:::{.fragment .fade-in-then-semi-out}
-*Classification*
+## 文本分析的基础原则（[红线]{.red}） [@GrimmerStewart2013]
 
-Supervised, unsupervised, self-supervised
-:::
-
-:::{.fragment}
-*Semantics*
-
-Sentiment analysis, word embedding, word sequence, relationship
-:::
-:::
-
-## Tenet of Text-as-data analysis [@GrimmerStewart2013]
-
-:::{style="text-align:center; margin-top: 2em"}
+:::{.incremental .large style="text-align:center; margin-top: 1em"}
 1. All quantitative models of language are [wrong]{.red}---but some are useful. 
 1. Quantitative methods for text amplify resources and [augment humans]{.red}. 
 1. There is [no globally best]{.red} method for automated text analysis. 
 1. [Validate, Validate, Validate.]{.fragment .highlight-blue}
 :::
 
-## Unit of Analysis
+# 望数生义
+
+## 文本分析（传统）方法概览
+
+![@GrimmerStewart2013](https://drhuyue.site:10002/sammo3182/figure/text_analysis-method.png){fig-align="center" height=550}
+
+## 研究层次
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+
+**数据层次**
+
 - Corpus
     - Document (volumn, chapter, section)
-        - Paragraph
+        - Paragraph [&check;]{.orange}
             - Sentence [&check;]{.green}
                 - Clause [&check;]{.green}
                     - **Word (Unigram)** [&check;]{.green}
                         - **Token** [&check;]{.green}
-:::
+                        
 
-::: {.column .fragment width="50%"}
-:::{.callout-tip}
-## Token
-
-Sequence of linguistic features
-:::
+:::{.fragment .callout-tip}
+## "Token"：语言特征单元
 
 - Token in a document: term
 - Token in a group: N-gram 
     - A word = a Unigram
+    
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+
+**分析层次**
+
+### 描述
+
+词频、词云(👎)、网络
+
+### 聚类
+
+知类分文、知文分类
+
+### 语义
+
+情感分析(sentiment analysis)
 
 :::
 
 ::::
 
-## Unrealistic Assumption
 
-> Where the "all models are wrong" starts
+## A Bag of Words
 
-:::{.callout-important}
-**Bag of words** (BoW)
+[> All quantitative models of language are [wrong]{.red}---but some are useful [@GrimmerStewart2013].]{.fragment}
+
+:::{.fragment .callout-warning}
+## Bag of words (BoW)
 
 A text is represented as the bag (multiset) of its words.
 :::
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords.png){.fragment fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/text_bagOfWords.png){.fragment fig-align="center" height=300}
 
-## From natural language to computational language
 
-![Document-Term Matrix (DTM)](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords2.jpg){fig-align="center" height=600}
+## 从自然语言到计算机语言
 
+![Document-Term Matrix (DTM)](https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords2.jpg){fig-align="center" height=600}
 
 :::{.notes}
 In linguistics, the opposite of natural language is artificial/constructed language (conlangs),  like Klingon in "Star Trek," Dothraki in "Game of Thrones"
 :::
 
-## Preprocessing
+## 预处理
 
 :::{style="text-align:center; margin-top: 2em"}
 - Segmentation
 - Tokenization
-- Stopwords/function words removing   
-- Other project-oriented wrangling
+- Stopwords (停词）/function words removing   
+- 其他根据研究目的的删减
 :::
 
 
@@ -628,7 +656,8 @@ discrete script
 ::: {.column .fragment width="70%"}
 *Scriptio continua* (e.g, CJK) 
 
-```{r segment}
+
+```{r segment-eg}
 #| code-fold: false
 
 library(jiebaR)
@@ -638,6 +667,7 @@ cutter <- worker() # segment engine
 
 segment(zhongsheng, cutter)
 ```
+
 :::
 
 :::{.notes}
@@ -649,15 +679,19 @@ continuous script
 
 ::::
 
-
 ## Tokenization
 
-- Goal: Removing syntax
-- Removing: capitalization, punctuation, non-alphanumeric characters (@#$%……&*), stop words
+:::: {.columns}
 
-:::{.fragment}
+::: {.column width="50%"}
+- 目标：去除Syntax
+    + 大小写
+    + 标点
+    + 非字符（@#￥%……&*）
+    - 停词
+:::
 
-Examples of Stopwords*
+::: {.column .fragment width="50%"}
 
 ```{r stop-words}
 #| echo: false
@@ -665,52 +699,64 @@ Examples of Stopwords*
 read_lines(STOPPATH)[883:903]
 read_lines(STOPPATH)[157:177]
 ```
+
 :::
 
+::::
 
-:::{.fragment}
-:::{.callout-tip}
-## Stopwords sources for Chinese
+
+:::{.fragment .callout-tip}
+## 中文停词表
 
 * 百度停词表
 * 哈工大停词表
 * 网络搜集停词表，如["最全中文停用词表整理（1893个）"](https://blog.csdn.net/shijiebei2009/article/details/39696571)
 :::
-:::
 
-
-## Dimension reduction
-
-> Issue: Sparse matrix
+## Scriptio discreta special
 
 - Lemmatization: (happy, happier, happiness) &rarr; happy
 - Stemming: (happy, happier, happiness) &rarr; happi
 
-:::{.fragment}
-:::{.callout-tip}
+:::{.fragment .callout-tip}
 ## More Examples
 
 - Lemmization: (went, leaves, geese, unhappy) &rarr; (go, leaf, goose, unhappy)
 - Stemming: (went, leaves, geese, unhappy) &rarr; (went, leav, geese , unhappi)
 :::
-:::
+
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+*为什么要这么做？*
 
 :::{.fragment}
+还能做什么
+
 - Labeling
     - Content vs. function
     - Linguistic features: n., v., adj., adv., prep., conj.......
 :::
 
-## A comprehensive application
 
-![2019-05-14 ~ 05-22: China-US trade war](http://103.238.162.29:10002/webdav/sammo3182/figure/text_zhongsheng.png){fig-align="center" height=600}
+:::
 
-## Data collection
 
-*Raw Data*
+:::{.notes}
+Issue: Sparse matrix
+:::
+
+
+## 综合的🌰
+
+![2019-05-14 ~ 05-22: 中美贸易战](https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng.png){fig-align="center" height=550}
+
+## 数据清理
+
+*原始数据*
+
 
 ```{r zhongsheng-clean}
-df_zhongsheng <- readRDS(url("http://103.238.162.29:10002/webdav/sammo3182/data/zhongsheng.RDS"))
+df_zhongsheng <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"))
 
 df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
   segment(content, cutter) |> paste(collapse = " ")
@@ -730,8 +776,10 @@ df_token <- df_zhongsheng |>
 select(df_token, -phase) |> head()
 ```
 
+
 :::{.fragment}
-*Removing the stopwords*
+*去掉停词*
+
 
 ```{r zhongsheng-stop}
 #| code-fold: true
@@ -745,9 +793,11 @@ df_token <- df_token |>
 select(df_token, -phase) |> head()
 ```
 
+
 :::
 
-## Frequency Analysis
+## 词频分析
+
 
 ```{r zhongsheng-frequency, fig.align='center'}
 df_plot <- df_token |> count(word, sort = TRUE) |> 
@@ -756,38 +806,50 @@ df_plot <- df_token |> count(word, sort = TRUE) |>
 
 ggplot(df_plot) +
   geom_col(aes(word, n)) +
-  ylab("Word Frequency") + 
+  xlab("高频词") +
+  ylab("词频") + 
   theme(axis.text = element_text(size = 20)) +
   coord_flip()
 ```
 
-## Frequency Dynamics
 
-```{r zhongsheng-phase-freq, out.width="100%"}
+## 词频异质性
+
+
+```{r zhongsheng-phase-freq}
+#| fig-height: 6
+#| fig-pos: center
+
 df_plot <- df_token |> 
   group_by(phase) |> 
   count(word, sort = TRUE) |> 
   top_n(10) |>
   ungroup() |> 
   mutate(word = reorder(word, n),
-         word = factor(word, levels = rev(unique(word))))
+         word = factor(word, levels = rev(unique(word))),
+         phase = factor(phase, labels = c("乐观观望", "重新评估", "理论检验", "美国必败")))
 
 ggplot(df_plot, aes(word, n)) +
   geom_col() +
   xlab(NULL) +
   coord_flip() +
-  ylab("Word FRequency") + 
+  ylab("词频") + 
   theme(axis.text = element_text(size = 12)) +
   facet_wrap(~ phase, scales = "free")
 ```
+
 
 :::{.notes}
 The Economist journalist Simon Rabinovitch
 :::
 
-## Frequency Correlations
+## 相关性分析
 
-```{r zhongsheng-fre-compare, out.width="100%"}
+
+```{r zhongsheng-fre-compare}
+#| fig-height: 7
+#| fig-pos: center
+
 frequency <- df_token |> 
   count(phase, word) |>
   group_by(phase) |>
@@ -808,9 +870,10 @@ ggplot(frequency, aes(x = proportion, y = `US_fail`, color = abs(`US_fail` - pro
   scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
   facet_wrap(~phase, ncol = 2) +
   theme(legend.position="none") +
-  labs(y = "US Inevitable Failure", x = NULL) +
+  labs(y = "美国必败", x = NULL) +
   theme(text = element_text(family = "WenQuanYi Micro Hei"))
 ```
+
 
 :::{.notes}
 x = proportion, y = `US_fail`
@@ -818,110 +881,126 @@ x = proportion, y = `US_fail`
 proportion = n / sum(n)
 :::
 
-## Keyword analysis
+## 关键词识别与分析
 
-Keywords for articles published on 2019-05-07
+2019-05-07 关键词
 
-```{r keyword}
+
+```{r keyword1}
 extractor_keyword <- worker("simhash", topn = 5)
 
 simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-07"], extractor_keyword)
 ```
 
-. . .
 
-Keywords for articles published on 2019-05-30
+
+:::{.fragment}
+2019-05-30 关键词
+
 
 ```{r keword2}
 simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"], extractor_keyword)
 ```
 
+:::
 
-## Similarity analysis
 
-Measuring the distance between texts
+
+## 相似度分析
+
+通过“距离”测量相似度
 
 > Hamming distance: the distance between two strings of equal length is the number of [positions]{.blue} at which the [corresponding symbols are different]{.red}. 
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=num}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_comp.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_comp.png){fig-align="center" height=num}
 :::
 
+:::{style="text-align:center; margin-top: 1em"}
 e.g., H(100→011) = 3; H(010→111) = 2.
+:::
+
 
 :::{.notes}
 It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
 :::
 
-## Application
+## 相似度能告诉你什么
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 *05-30 vs. 05-[22]{.red}*
 
+
 ```{r keyword-distnace}
 distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
          df_zhongsheng$content[df_zhongsheng$time == "2019-05-22"],
          extractor_keyword)
 ```
+
 :::
 
 ::: {.column width="50%"}
 *05-30 vs. 05-[23]{.red}*
+
 
 ```{r keyword-distance2}
 distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
          df_zhongsheng$content[df_zhongsheng$time == "2019-05-23"][1],
          extractor_keyword)
 ```
+
 :::
 
 ::::
 
-## Beyond "Bag of Words"
+## BOW之上：加权
 
-> Bring the context back
+DTM的问题：
 
-- Analysis of function words (stopwords, parts of speech)
-- Neighbor words:  Markov Model of Order N
-    + Unigram: 清华 大学 政治 系
-    + Bigram: 清华大学 政治系/清华 大学政治 系
-    + Trigram：清华大学政治 系/清华 大学政治系
+1. 未将词的重要性纳入考量
+2. 过度体现常见词
+3. 轻视少见词
 
+[解法: 词频加权 e.g., term frequency-inverse document frequency (TF-IDF)]{.fragment}
 
-## Frequency to Weighted Frequency
+## 加权带来什么
 
-Cons of DTM
-
-1. Not distinguish important words
-2. Over-emphasize common words
-3. Under-emphasize rare words
-
-[Solution: Word weights: e.g., term frequency-inverse document frequency (TF-IDF)]{.fragment}
-
-## Word Weight
-
-- Pros: 
-  1. Identify important words
-  2. Reduces the weight of common words
-  3. Improve the performance of machine learning models
+- 优点：
+  1. 识别重要词汇
+  2. 减少常见词汇的权重
+  3. 提高机器学习性能
 
 :::{.fragment}
-- Cons:
-  1. Assume independence of terms (same as DTM)
-  2. Give high weight to rare words that is very rare in the corpus but appears a few times in a particular document
-  3. Sensitive to the size and diversity of the corpus
+- 缺点：
+  1. 假定词汇独立（与DTM相同）
+  2. 对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重
+  3. 对语料库的大小和多样性敏感
 :::
 
 
+## 加权之上：Bring the context back
 
-## Word embedding: 
+- 临近词分析:  Markov Model of Order N
+    + Unigram: 清华 大学 政治 系
+    + Bigram: 清华大学 政治系/清华 大学政治 系
+    + Trigram：清华大学政治 系/清华 大学政治系
+    - *Keyness*
+
+:::{.fragment}
+- 功能词分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png){fig-align="center" height=300}
+:::
+
+
+## 给词义建模：词嵌入(Word embedding)
 
 > Words' meanings depend not just on immediate neighbors
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png){fig-align="center" height=550}
 
 :::{.notes}
 The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
@@ -930,97 +1009,94 @@ The term "embedding" comes from the neural network literature, in which an "embe
 - An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
 :::
 
-## Topic modeling
+## 主题模型(Topic modeling)
 
-<video width="1000" height="600" controls preload>
-<source src="http://103.238.162.29:10002/webdav/sammo3182/video/theory_topicModeling.webm" type="video/webm">
-</video>
+{{< video https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm title="What happened in topic modeling" height=600 loading="eager" allowfullscreen>}}
 
 :::{.notes}
 LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.
 :::
 
-## Attention Function
+## 注意力机制(Attention Mechanism)
 
-> Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
+> Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.large}
 
 :::{.fragment .fade-in-then-semi-out}
 "Attention is all you need" [@VaswaniEtAl2017]
 
-> As a leading firm in the [MASK] sector, we hire highly skilled software engineers.    
-> As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.
+以下是关于大型语言模型中注意力机制的示例翻译：
 
-What should be filled into the "[MASK]"? How do you figure out?
+> 作为在_____领域的头部企业，我们雇佣了大量高水平的软件工程师。    
+> 作为在_____领域的头部企业，我们雇佣了大量高水平的太阳能工程师。
+
+应该在 "_____" 填入什么词？你是如何得出这个结论的？
+
 :::
 
 
 :::{.fragment}
-As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.
-
-As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
+作为在*信息技术*领域的头部企业，我们雇佣了大量高水平的[软件]{.red}工程师。    
+作为在*绿色能源*领域的头部企业，我们雇佣了大量高水平的[太阳能]{.red}工程师。
 
 :::
 
 
-## Word Sequence
+## 词嵌入 &rarr; 词序列（Word Sequence）
 
 :::{.callout-note}
-## Self-attention function
+## 自注意力机制
 
-Take as input a sequence of initial token embeddings and outputs a sequence of new token embeddings that [allow the initial embeddings to interact]{.red}.
+输入一个初始词元嵌入序列，并输出一个新的词元嵌入序列，[使初始嵌入能够相互作用]{.red}。
 :::
 
-- Massive neural networks composed of stacked attention and feed forward neural network layerscan be efficiently parallelized for training using specialized processors.
-    - A.k.a., the [Transformer]{.red}
-- Common transformer models
+- 由堆叠的注意力机制和前馈神经网络层组成的大型神经网络可以使用专用处理器高效并行训练，即 [Transformer]{.red}
+- 常见的 Transformer 模型
     - BERT
         - RoBERTa, PALM
-    - The [GPT]{.red .large} family
+    - [GPT]{.red .large} 系列
 
 
-## Wrap it up
+## 总结
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-- Principles
-    1. All models are wrong
-    1. Aim for assist human
-    1. No best method
-    1. Validation, validation, validation
-- Levels of analysis
-    - Description
-    - Classification
-    - Semantics
+1. 认知
+    + 丰富资源
+    + 技术门槛
+1. 原则
+    + 在“错误”的前提下寻找价值
 :::
 
 ::: {.column width="50%"}
-- Procedure
-    - Preprocessing
-        - Segmentation
-        - Tokenization
-    - Frequency analysis
-        - Frequency, dynamics, correlation
-        - Keyword
-    - Similarity analysis
-    - Semantic analysis
-        - Word embedding, sequence
-            - Topic modeling
+3. 操作
+    - 打散：预处理与结构化
+    - 聚合：
+        - 词频
+        - 相关性/相似度
+        - BOW之上（语境与联系）
 :::
-
 ::::
 
+![Distant reading](https://drhuyue.site:10002/sammo3182/figure/text_indirect_phone.gif){.fragment fig-align="center" height=300}
 
-# Thank you {background="#43464B"}
+
+
+# 感谢倾听，敬请指正 {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
-![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 
 [`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
 
 [`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
-[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 :::
 
-## References
+## 参考文献
+
+::: {#refs}
+:::
+
