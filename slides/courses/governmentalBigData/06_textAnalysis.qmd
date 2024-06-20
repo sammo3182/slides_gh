@@ -329,6 +329,8 @@ Figure 1: Hierarchical coding scheme for two policy domains with ordinal positio
 
 :::{.notes}
 Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
+
+(Labour red, Conservatives blue, Liberal Democrats yellow, labeled by last two digits of year)
 :::
 
 :::
@@ -395,7 +397,8 @@ RNN: Recurrent Neural Network
 
 [*前提*: Bag of words]{.fragment}
 
-[*数据*
+:::{.fragment}
+*数据*
 
 * DGP
     + 随机抽取    
@@ -403,7 +406,9 @@ RNN: Recurrent Neural Network
     + One-time censor
 * 非结构化
 * 海量潜在维度
-* 内容复杂且微妙]{.fragment}
+* 内容复杂且微妙
+:::
+
 
 
 :::{.notes}
@@ -413,17 +418,14 @@ RNN: Recurrent Neural Network
 Su, Y.-S., Y. Ruan, S. Sun, and Y.-T. Chang. 2020. “A Pattern Recognition Framework for Detecting Changes in Chinese Internet Management System.” Journal of Social Computing 1(1): 28–39.
 :::
 
-:::
-
-::::
 
 
 # 以数知文: 理解原则
 
 
-本节要回答之问题：
+## 本节要回答之问题
 
-:::{style="text-align:center; margin-top: 2em"}
+:::{.large style="text-align:center; margin-top: 2em"}
 1. 资源哪里找？
 1. 信息如何用？
 1. 数据能干啥？
@@ -508,7 +510,7 @@ Quora, Stack Overflow
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=500}
 
-![](https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=500}
 :::
 
 :::
@@ -622,9 +624,7 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 ## "Token"：语言特征单元
 
 - Token in a document: term
-- Token in a group: N-gram 
-    - A word = a Unigram
-    
+- Token in a group: N-gram, e.g., a word = a Unigram
 :::
 
 :::
@@ -652,7 +652,7 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 
 ## A Bag of Words
 
-[> All quantitative models of language are [wrong]{.red}---but some are useful [@GrimmerStewart2013].]{.fragment}
+> All quantitative models of language are [wrong]{.red}---but some are useful [@GrimmerStewart2013].
 
 :::{.fragment .callout-warning}
 ## Bag of words (BoW)
@@ -989,13 +989,13 @@ DTM的问题：
 
 ## 加权带来什么
 
-- 优点：
+- 好处：
   1. 识别重要词汇
   2. 减少常见词汇的权重
   3. 提高机器学习性能
 
 :::{.fragment}
-- 缺点：
+- 副作用：
   1. 假定词汇独立（与DTM相同）
   2. 对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重
   3. 对语料库的大小和多样性敏感
@@ -1040,7 +1040,7 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 
 ## 注意力机制(Attention Mechanism)
 
-> Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.large}
+Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.large}
 
 :::{.fragment .fade-in-then-semi-out}
 "Attention is all you need" [@VaswaniEtAl2017]
@@ -1071,10 +1071,14 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 :::
 
 - 由堆叠的注意力机制和前馈神经网络层组成的大型神经网络可以使用专用处理器高效并行训练，即 [Transformer]{.red}
+
+:::{.fragment}
 - 常见的 Transformer 模型
     - BERT
         - RoBERTa, PALM
     - [GPT]{.red .large} 系列
+:::
+
 
 
 ## 总结
