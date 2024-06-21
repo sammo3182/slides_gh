@@ -8,7 +8,7 @@
 <link href="macrointerest_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="macrointerest_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="macrointerest_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.533">
+  <meta name="generator" content="quarto-1.4.552">
 
   <meta name="author" content="Yue Hu">
   <meta name="dcterms.date" content="2024-06-21">
@@ -528,7 +528,7 @@ Yue Hu
 <h2>Empirical Obstacle and Solution</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/sparsingData.png" class="quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/sparsingData.png" height="300"></p>
 <figcaption>Data Obstacle</figcaption>
 </figure>
 </div>
@@ -698,7 +698,7 @@ Zhong, Yang, and Junghyoun Kim. 2005. <span>“Political Interest in Rural South
 </div>
 </section></section>
 <section>
-<section id="appendix" class="title-slide slide level1 center">
+<section id="appendix" class="title-slide slide level1 appendix center" data-visibility="uncounted">
 <h1>Appendix</h1>
 
 </section>
@@ -746,12 +746,12 @@ Zhong, Yang, and Junghyoun Kim. 2005. <span>“Political Interest in Rural South
 </figure>
 </div>
 </div>
-
-</section><div class="quarto-auto-generated-content">
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</div></section>
+</div>
+</section></section>
     </div>
   </div>
 
@@ -967,42 +967,80 @@ Zhong, Yang, and Junghyoun Kim. 2005. <span>“Political Interest in Rural South
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1091,6 +1129,11 @@ Zhong, Yang, and Junghyoun Kim. 2005. <span>“Political Interest in Rural South
         for (var i=0; i<links.length; i++) {
           const link = links[i];
           if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
               // target, if specified
               link.setAttribute("target", "_blank");
               if (link.getAttribute("rel") === null) {
@@ -1134,7 +1177,11 @@ Zhong, Yang, and Junghyoun Kim. 2005. <span>“Political Interest in Rural South
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
