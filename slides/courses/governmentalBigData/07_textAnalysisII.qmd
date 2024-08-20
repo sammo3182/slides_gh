@@ -1,0 +1,776 @@
+---
+title: "文本的数据分析进阶"
+subtitle: "政务大数据应用与分析 (80700673)"
+author: "胡悦"
+institute: "清华大学社会科学学院" 
+bibliography: ../camsTextAnalysis/pre_cams.bib
+knitr: 
+    opts_chunk:
+      echo: false
+format: 
+  revealjs:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
+    incremental: false
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+    default-image-extension: png
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include = FALSE}
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  tidyverse,
+  drhutools, 
+  icons,
+  gridExtra,
+  knitr, # dependency
+  stringr, 
+  tidytext, 
+  tidyverse,
+  lubridate,
+  quanteda,
+  quanteda.textstats,
+  quanteda.textplots,
+  quanteda.corpora,
+  text2vec,
+  LSX,
+  seededlda,
+  newsmap,
+  keyATM,
+  stm,
+  tinytable
+) 
+
+
+# Functions preload
+set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+
+# 总统就职数据语料库（Corpus of presidential inaugural data）
+
+dfmat_inaug <- tokens(data_corpus_inaugural) |>
+  dfm() |> 
+  dfm_remove(stopwords("en"))
+
+```
+
+
+
+## 个人简介{.Small}
+
+:::: {.columns}
+
+::: {.column width="60%"}
+*个人经历*
+
+- 政治学博士[（University of Iowa)]{.small}
+  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 清华大学计算社会科学平台[(副主任)]{.small}
+  - 清华数据与治理中心[(副主任)]{.small}
+  - 计算社会科学编程语言证书项目[（负责人）]{.small}
+  - Learning R with Dr. Hu & Friends 工作坊[（创始人）]{.small}
+
+:::{.fragment}
+*研究兴趣：认知、行为与现代性*
+
+- **方法路径：计算政治学**
+  - 实验室和调查实验
+  - 潜变量分析、网络分析、空间分析
+  - 文本大数据分析、数据可视化
+:::
+
+:::
+
+::: {.column .fragment width="40%"}
+*研究领域：比较政治、国家治理*
+
+- **W. 心理学**
+  - 政治[认知]{.red}治理
+  - 行为公共[政策]{.red}
+  - 政治传播
+
+- **W. 经济学**
+  - 经济不平等[感知]{.red}
+  - 公共设施、服务均等化
+
+- **W. 语言学**
+  - 权力背书的[语言效果]{.red}与机制
+  - 语言政策的治理功能
+
+:::
+
+::::
+
+## 复习
+
+> @King2015: [The big-data approach is] the [end]{.red} of the quantitative-qualitative divide.
+
+:::{.notes}
+King talked about this issue in many places including Shanghai Jiaotong University
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+你应该已经知道……
+
+- 你能用文本数据做什么
+    - 你分析的是文字还是语言？
+    - Close reading or distant reading？
+    - 文本/音频/视频分析的理论基础是什么？
+- 如何获取数据
+    - 文本数据的获取渠道有哪些？
+    - 网络爬取与正则表达式
+
+:::
+
+::: {.column .fragment width="50%"}
+
+- 如何处理数据
+    - 如何结构化文本数据？
+    - 文本预处理的步骤有哪些
+    - Tokenization的两种含义是什么？
+- 如何分析数据
+    - 通词频品能分析出什么？
+    - 如何鉴别关键词？
+    - 什么是相似度分析？
+    - 主题模型在干什么？
+        - Bag of Words (BOW)?
+
+:::
+
+::::
+
+## 提要
+
+学完本课，你将了解:
+
+:::{ style="text-align:center; margin-top: 2em"}
+
+- 如何在*词汇层级*纳入更多信息
+- 如何增加*主题模型*的质量
+- 如何将*语义信息*纳入考量
+
+[本讲的核心议题：[突破词基限制，找回有用信息]{.red}]{.fragment .large}
+:::
+
+:::{.fragment .callout-warning .incremental}
+- 学习本课内容你不需要编程知识😱
+- 应用本课内容你需要一种编程知识😜
+    - [如果你想学……](https://www.drhuyue.site/course/method-series/04-r-workshop/)
+:::
+
+# 问题源头
+
+## 让计算机读懂人言的代价
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/text_bagOfWords.png){fig-align="center" height=400}
+
+![Document-Term Matrix (DTM)](https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords2.jpg){.fragment fig-align="center" height=600}
+:::
+
+
+:::{.notes}
+In linguistics, the opposite of natural language is artificial/constructed language (conlangs),  like Klingon in "Star Trek," Dothraki in "Game of Thrones"
+:::
+
+## 丢失了什么
+
+:::{.fragment .large style="text-align:center; margin-top: 2em"}
+- 词的重要性
+- 语序/位置
+- 虚词
+- 语法
+- Meta data
+:::
+
+
+
+# 词汇层级信息汇入
+
+## 加权
+
+DTM的问题：
+
+1. 未将词的重要性纳入考量
+2. 过度体现常见词
+3. 轻视少见词
+
+:::{.fragment}
+举例：Term frequency-inverse document frequency (TF-IDF)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+$$\displaystyle \mathrm {tf} (t,d)={\frac {f_{t,d}}{\sum _{t'\in d}{f_{t',d}}}},$$ where $f_{t,d}$ is the number of times that term t occurs in document d. 
+:::
+
+::: {.column width="50%"}
+$$\displaystyle \mathrm {idf} (t,D)=\log {\frac {N}{|\{d:d\in D{\text{ and }}t\in d\}|}},$$ 
+
+- $N$: total number of documents; D.
+- $|\{d\in D:t\in d\}|$ : number of documents where the term $t$ appears.
+
+:::
+
+::::
+
+:::
+
+:::{.notes}
+TF： Importance of a term in a document
+IDF： Frequency a term appear across documents
+:::
+
+
+## 加权带来什么
+
+- 好处：
+  1. 识别重要词汇
+  2. 减少常见词汇的权重
+  3. 提高机器学习性能 (why?)
+
+:::{.fragment}
+- 副作用：
+  1. 假定词汇独立（与DTM相同）
+  2. 对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重
+  3. 对语料库的大小和多样性敏感
+:::
+
+
+## N-gram分析
+
+- Markov Model of Order N
+    + Unigram: 清华 大学 社会 科学 学院
+    + Bigram: 清华大学 大学社会 社会科学 科学 学院
+    + Trigram：清华大学社会 大学社会科学 社会科学学院
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_ngram.png){.fragment fig-align="center" height=400}
+
+## 搭配分析
+
+- 连续搭配（Contiguous collocations）：在文本中直接相邻出现。
+- 揭示语言使用中的模式，这些模式从查看单个单词时并不立即明显。
+
+示例数据：2012年到2016年的6,000篇《卫报》新闻文章
+
+```{r guardianData, cache=TRUE}
+# 2016年卫报新闻语料库（Corpus of Guardian news in 2016 from those from 2012--2015）
+
+corp_news <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/data_corpus_guardian.rds", open = "rb"))
+
+toks_news_guardian <- tokens(corp_news, remove_punct = TRUE)
+
+corp_news
+```
+
+## Collocation 示例
+
+- 最常见的词对（pairs of words）
+- 最常见的三词模式（three-word patterns）
+
+```{r collocation, message=FALSE}
+toks_select <- tokens_select(
+  toks_news_guardian,
+  pattern = "^[A-Z]",
+  valuetype = "regex",
+  case_insensitive = FALSE,
+  padding = TRUE
+) 
+
+tstat_col_caps <- textstat_collocations(toks_select, min_count = 100)
+head(tstat_col_caps, 10)
+
+tstat_col_caps3 <- textstat_collocations(toks_select, min_count = 80, size = 3)
+head(tstat_col_caps3, 10)
+```
+
+## “靶向”分析
+
+- 关键性(Keyness)：识别在目标语料库中比在参照语料库中**统计上更频繁**出现的词语的度量方法。
+
+示例1：对比《卫报》新闻2016年与2012—2015年之间的新闻
+
+```{r keyness, eval=FALSE}
+dfmat_news <- tokens(corp_news, remove_punct = TRUE) |> 
+  dfm()
+ 
+tstat_key <- textstat_keyness(dfmat_news,
+                              target = lubridate::year(dfmat_news$date) >= 2016)
+
+saveRDS(tstat_key, file = here::here("slides", "courses", "governmentalBigData", "data", "text_keyness.rds"))
+```
+
+```{r keyness-out}
+readRDS(url("https://drhuyue.site:10002/sammo3182/data/text_keyness.rds", open = "rb")) %>% textplot_keyness(n = 10)
+```
+
+
+## Keyness 示例2
+
+在2012年到2016年的6,000篇《卫报》新闻文章中与欧盟（"EU", "europ*", "european union"）相关的词汇
+
+```{r relevantKey}
+eu <- c("EU", "europ*", "european union")
+
+toks_inside <- tokens_keep(toks_news_guardian, pattern = eu, window = 10) |> 
+  tokens_remove(pattern = eu) # remove the keywords
+toks_outside <- tokens_remove(toks_news_guardian, pattern = eu, window = 10)
+
+dfmat_inside <- dfm(toks_inside)
+dfmat_outside <- dfm(toks_outside)
+
+tstat_key_inside <-
+  textstat_keyness(rbind(dfmat_inside, dfmat_outside),
+                   target = seq_len(ndoc(dfmat_inside)))
+
+textplot_keyness(tstat_key_inside, n = 10)
+```
+
+
+## “入木三分”分析
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png){fig-align="center" height=400}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_liwcTree.png){.fragment fig-align="center" height=600}
+:::
+
+
+## 小结
+
+:::{style="text-align:center; margin-top: 2em"}
+- Weighing &larr; 从[词频]{.red}攫取信息
+- N-gram &larr; 从[邻居]{.red}攫取信息
+- Collocation &larr; 从[共现]{.red}攫取信息
+- Keyness &larr; 从[关键词定位]{.red}攫取信息
+- Functional words &larr; 从[社会心理]{.red}攫取信息
+:::
+
+
+# 主题模型扩展
+
+## 主题模型能干什么
+
+{{< video https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm title="What happened in topic modeling" height=600 loading="eager" allowfullscreen>}}
+
+:::{.notes}
+基于词频与共线的unsupervised降维，是一种frequency-based的降维
+:::
+
+## 主题模型缺什么
+
+> “他的脸突然被魔杖的光照亮了。这是一张因痛苦、恐惧和愤怒而变得生动的脸。红色的眼睛向那个看不见的男孩站着的地方射去，他的隐形斗篷遮住了他。他的声音，当他发出声音时，就像一个冬天的夜晚一样冷。他说，“我回来了，比以前更强大了。”
+
+:::{.notes}
+哈利波特与火焰杯
+:::
+
+:::{.large .fragment style="text-align:center"}
+- 主题之间的联系
+- 篇章之间的联系
+- 内容背景知识（外部信息）
+:::
+
+:::{.large .fragment style="text-align:center"}
+&darr;    
+STM/SeedLDA/keyATM
+:::
+
+## Correlated Topic Model (CTM)
+
+主题之间彼此关联被纳入考量
+
+:::{.r-vstack}
+![LDA](https://drhuyue.site:10002/sammo3182/figure/cluster_ldaDiagram.png){fig-align="center" height=150}
+
+![CTM](https://drhuyue.site:10002/sammo3182/figure/cluster_ctmDiagram.png){fig-align="center" height=150}
+:::
+
+ $$\{\mu,\Sigma\}\sim N(\mu,\Sigma).$$
+
+:::{.notes}
+CTM模型（correlated topic model）的进步之处在于哪里呢？
+
+最初人们做LDA模型的时候，人们认为不同的主题之间是不存在什么联系的，但这是不可能的。
+想象一下，我们可以从《人民日报》提炼出关于经济发展、民生工程等主题，但是我们绝对不可能从中抽取出关于妇科广告的主题，因为这是这份报纸的性质决定的。
+所以我们从语料中抽取出来的主题，彼此之间肯定是具有高度的相关性的。
+
+CTM的名字中之所以有一个correlated，就是因为这个模型可以把所有的主题放在一起，放在一个结构（structure）里面去理解每一个主题。
+因此CTM是一种层次化主题模型，它明确抓取了主题间的潜在相关性。
+
+相比于LDA，CTM模型多了两个参数μ & Σ：一个K维的均值和协方差矩阵 $\{\mu,\Sigma\}\sim N(\mu,\Sigma)$。
+:::
+
+## Sparse Additive Generative Model (SAGE)
+
+每个主题都被赋予一个模型，能够描述给予恒定背景分布对数频率的偏差。
+
+![SAGE](https://drhuyue.site:10002/sammo3182/figure/cluster_sageDiagram.png){fig-align="center" height=400}
+
+
+## Structure Topic Model (STM)
+
+CTM + SAGE + covariants
+
+![STM](https://drhuyue.site:10002/sammo3182/figure/cluster_stmDiagram.png){fig-align="center" height=500}
+
+
+## 操作
+
+示例：美国总统就职演说数据
+
+1. 设定主题数目
+
+```{r stm-searchKresult, cache=TRUE}
+#对于上述每一个结果，计算连贯性和排他性
+stm_searchK <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/stm_searchK.rds", open = "rb"))
+
+fit_searchK <- map2(stm_searchK, names(stm_searchK), \(result, gName){
+  tibble(group = gName,
+         exclusivity = exclusivity(result),
+         coherence = semanticCoherence(result, dfmat_inaug))
+}) |> 
+  list_rbind()
+
+#求出每组的平均值
+fit_searchK_agg <- group_by(fit_searchK, group) |> 
+  summarise(coherence = mean(coherence),
+            exclusivity = mean(exclusivity))
+
+#作图
+ggplot(fit_searchK_agg, aes(coherence, exclusivity, color = group, size = 3)) +
+  geom_point() +
+  scale_color_gb(palette = "full")
+
+#选择主题数为8的stm模型，将其保存在stm_selected中
+stm_selected <- stm_searchK$n8
+```
+
+## 2. 主题归类
+
+$$Topic \sim Party + s(Year).$$
+
+```{r topicDist, exercise = TRUE, exercise.setup = "stm-searchKresult"}
+#查看词语在主题中的分布
+labelTopics(stm_selected, topics = c(1:3), n = 5)
+```
+
+- Highest Prob：高频词
+- FREX：主题高频词
+- lift：通过词语在其他主题中的频率相除来加权词语
+- score：将词语在主题中的对数频率除以词语在其他主题中的对数频率
+
+:::{.notes}
+这行代码为我们返回了每个主题下面的一些词语。
+
+- “Highest Prob”指的是这个*语料库*中频率最高的词语，我们可以看到出现了逗号和句号，还有“america”等。
+
+- FREX矩阵（FREX matrix）中的词语依然是高频词，但是它是仅在这个主题中的高频词，也就是能够区分这一主题和其他主题之间特殊性的高频词。
+它的算法是通过词语的整体频率及其对主题的专有程度来加权词语。
+
+- 提升（lift）：与FREX相同，但是算法不一样，它通过词语在其他主题中的频率相除来加权词语，因此给在其他主题中较少出现的词语赋予更高的权重。
+
+- 赋分（score）：与FREX相同，但是算法是将词语在主题中的对数频率除以词语在其他主题中的对数频率。
+
+所以我们通常建议大家，当你去对于每个主题的含义进行解释的时候，可以基于FREX，lift和score来解读，而不是只看高频词去解释它的含义，也就是说我们讲的这三个测量这是帮助我们去解读主题用的。
+:::
+
+## 主题相关性
+
+以余弦相似度来计算相关性，越接近于1表示两个主题越相关，越接近于0表示两个主题越不相关。
+
+```{r topicCorrelation}
+#计算STM模型中所有主题之间的相关性
+corr_stm8 <- topicCorr(stm_selected)
+
+library(GGally)
+library(network)
+
+#计算 STM 模型中主题之间的相关性矩阵，并取其绝对值
+net_stm8 <- corr_stm8$cor |> abs() |> as.matrix()
+#将相关性矩阵中的值乘以10，以增加差异的可视化效果。
+net_stm8 <- net_stm8 * 10 
+#将矩阵的对角线元素设置为1，因为每个主题与自身的相关性总是1。
+diag(net_stm8) <- 1
+
+#创建一个网络对象，表示主题之间的相关性
+graph_stm8 <- network(net_stm8,
+    matrix.type = "adjacency",
+    ignore.eval = FALSE,
+    names.eval = "weights",
+    directed = FALSE
+  )
+
+#绘制网络图  
+ggnet2(graph_stm8, label = TRUE, edge.size = "weights")
+```
+
+
+## 协变量的影响：党派
+
+```{r covariateParty}
+#| fig-height: 6.5
+
+#模型建构
+result_stm8 <- estimateEffect(formula = 1:8 ~ Party + s(Year), 
+              #要分析的stm模型
+               stmobj = stm_selected,
+              #元数据来源
+               metadata = docvars(dfmat_inaug))
+
+
+#绘制党派（Party）对主题的影响的森林图
+plot(result_stm8, 
+     covariate = "Party",
+     model = stm_selected,
+     method = "difference",
+     cov.value1 = "Democratic",
+     cov.value2 = "Republican",
+     xlim = c(-1, 1), 
+     xlab = "Democratic <-> Republican")
+
+```
+
+## 协变量的影响：时间
+
+```{r covariateTime}
+#绘制主题3和主题7在年份上的连续效应图
+plot(
+  result_stm8,
+  "Year",
+  method = "continuous",
+  model = stm_selected,
+  topics = c(3, 7)
+)
+```
+
+
+## SeedLDA
+
+以种子词（seeds）引领主题分类。
+
+示例数据：《卫报》2016
+
+种子词：经济、政治、社会、外交和军事，基于对该类新闻的认知获取
+
+```{r seeds, exercise = TRUE}
+# 预处理 ###
+## 读取数据
+corp_news_2016 <- corpus_subset(corp_news, year(date) == 2016)
+
+#标记化与清洗
+toks_news_guardian <-
+  tokens(
+    corp_news_2016,
+    remove_punct = TRUE,
+    remove_numbers = TRUE,
+    remove_symbol = TRUE
+  ) |>
+  tokens_remove(pattern = c(stopwords("en"), "*-time", "updated-*", "gmt", "bst"))
+
+#矩阵化与清洗
+dfmat_news_guardian <- dfm(toks_news_guardian) |>
+  dfm_trim(
+    min_termfreq = 0.8,
+    termfreq_type = "quantile",
+    max_docfreq = 0.1,
+    docfreq_type = "prop"
+  )
+
+## 读取词典数据
+dict_topic <- dictionary(file = system.file("extdata", "topics.yml", package = "drhurText"))
+dict_topic
+```
+
+## 效果比较：LDA
+
+```{r seedLda, eval=FALSE}
+# 分析 ####
+
+#使用lda模型
+tmod_lda <- textmodel_lda(dfmat_news_guardian, k = 5)
+#使用seeded lda模型
+tmod_slda <- textmodel_seededlda(dfmat_news_guardian, dictionary = dict_topic)
+
+save(tmod_lda, tmod_slda, file = here::here("slides", "courses", "governmentalBigData", "data", "text_seedLDA.rda"))
+```
+
+```{r lda-out}
+load(url("https://drhuyue.site:10002/sammo3182/data/text_seedLDA.rda", open = "rb"))
+
+#添加一个新的文档级别的变量以存储seededLDA 模型为每篇文章分配的主题。
+dfmat_news_guardian$topic_seeded <- topics(tmod_slda) 
+
+# 比较
+
+seededlda::terms(tmod_lda, 8) %>% 
+  as.data.frame() %>% 
+  tt()
+```
+
+## 效果比较：SeedLDA
+
+```{r seededlda-out}
+seededlda::terms(tmod_slda, 8) %>% 
+  as.data.frame() |> 
+  tt()
+```
+
+
+:::{.notes}
+而比较LDA与seeded LDA做出的主题分类结果，我们很容易发现，在LDA分成的主题3下面，不仅有“climate”和"water"，还有"apple"和"education"，它分类的效果很明显是不太好的。
+但是在seeded LDA中，每个主题下面的词语大体上符合我们的认知。
+:::
+
+
+## keyATM
+
+
+
+
+
+# 纳入语义信息
+
+## 给词义建模：词嵌入(Word embedding)
+
+> Words' meanings depend not just on immediate neighbors
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png){fig-align="center" height=550}
+
+:::{.notes}
+The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
+
+- The embedding model GloVe ("Global Vectors") by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
+- An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
+:::
+
+## 主题模型(Topic modeling)
+
+{{< video https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm title="What happened in topic modeling" height=600 loading="eager" allowfullscreen>}}
+
+:::{.notes}
+LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.
+:::
+
+## 注意力机制(Attention Mechanism)
+
+Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.large}
+
+:::{.fragment .fade-in-then-semi-out}
+"Attention is all you need" [@VaswaniEtAl2017]
+
+以下是关于大型语言模型中注意力机制的示例翻译：
+
+> 作为在_____领域的头部企业，我们雇佣了大量高水平的软件工程师。    
+> 作为在_____领域的头部企业，我们雇佣了大量高水平的太阳能工程师。
+
+应该在 "_____" 填入什么词？你是如何得出这个结论的？
+
+:::
+
+
+:::{.fragment}
+作为在*信息技术*领域的头部企业，我们雇佣了大量高水平的[软件]{.red}工程师。    
+作为在*绿色能源*领域的头部企业，我们雇佣了大量高水平的[太阳能]{.red}工程师。
+
+:::
+
+
+## 词嵌入 &rarr; 词序列（Word Sequence）
+
+:::{.callout-note}
+## 自注意力机制
+
+输入一个初始词元嵌入序列，并输出一个新的词元嵌入序列，[使初始嵌入能够相互作用]{.red}。
+:::
+
+- 由堆叠的注意力机制和前馈神经网络层组成的大型神经网络可以使用专用处理器高效并行训练，即 [Transformer]{.red}
+
+:::{.fragment}
+- 常见的 Transformer 模型
+    - BERT
+        - RoBERTa, PALM
+    - [GPT]{.red .large} 系列
+:::
+
+
+
+## 总结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+1. 认知
+    + 丰富资源
+    + 技术门槛
+1. 原则
+    + 在“错误”的前提下寻找价值
+:::
+
+::: {.column width="50%"}
+3. 操作
+    - 打散：预处理与结构化
+    - 聚合：
+        - 词频
+        - 相关性/相似度
+        - BOW之上（语境与联系）
+:::
+::::
+
+![Distant reading](https://drhuyue.site:10002/sammo3182/figure/text_indirect_phone.gif){.fragment fig-align="center" height=300}
+
+
+
+# 感谢倾听，敬请指正 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+## 参考文献
+
+::: {#refs}
+:::

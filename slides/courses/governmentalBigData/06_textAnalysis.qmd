@@ -1,12 +1,8 @@
 ---
-title: "远读：<br>文本的数据分析原则与应用"
-subtitle: "兰州大学·鹿鸣讲堂"
+title: "文本的数据分析原则"
+subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
-institute: 
-  - 清华大学社会科学学院
-  - 清华大学计算社会科学平台
-  - 清华大学数据治理中心
-date: "2024-07-17"
+institute: "清华大学社会科学学院" 
 bibliography: ../camsTextAnalysis/pre_cams.bib
 knitr: 
     opts_chunk:
@@ -975,59 +971,6 @@ distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
 
 ::::
 
-## BOW之上：加权
-
-DTM的问题：
-
-1. 未将词的重要性纳入考量
-2. 过度体现常见词
-3. 轻视少见词
-
-[解法: 词频加权 e.g., term frequency-inverse document frequency (TF-IDF)]{.fragment}
-
-## 加权带来什么
-
-- 好处：
-  1. 识别重要词汇
-  2. 减少常见词汇的权重
-  3. 提高机器学习性能
-
-:::{.fragment}
-- 副作用：
-  1. 假定词汇独立（与DTM相同）
-  2. 对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重
-  3. 对语料库的大小和多样性敏感
-:::
-
-
-## 加权之上：Bring the context back
-
-- 临近词分析:  Markov Model of Order N
-    + Unigram: 清华 大学 政治 系
-    + Bigram: 清华大学 政治系/清华 大学政治 系
-    + Trigram：清华大学政治 系/清华 大学政治系
-    - *Keyness*
-
-:::{.fragment}
-- 功能词分析
-
-![](https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png){fig-align="center" height=300}
-:::
-
-
-## 给词义建模：词嵌入(Word embedding)
-
-> Words' meanings depend not just on immediate neighbors
-
-![](https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png){fig-align="center" height=550}
-
-:::{.notes}
-The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
-
-- The embedding model GloVe ("Global Vectors") by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
-- An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
-:::
-
 ## 主题模型(Topic modeling)
 
 {{< video https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm title="What happened in topic modeling" height=600 loading="eager" allowfullscreen>}}
@@ -1035,48 +978,6 @@ The term "embedding" comes from the neural network literature, in which an "embe
 :::{.notes}
 LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.
 :::
-
-## 注意力机制(Attention Mechanism)
-
-Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.large}
-
-:::{.fragment .fade-in-then-semi-out}
-"Attention is all you need" [@VaswaniEtAl2017]
-
-以下是关于大型语言模型中注意力机制的示例翻译：
-
-> 作为在_____领域的头部企业，我们雇佣了大量高水平的软件工程师。    
-> 作为在_____领域的头部企业，我们雇佣了大量高水平的太阳能工程师。
-
-应该在 "_____" 填入什么词？你是如何得出这个结论的？
-
-:::
-
-
-:::{.fragment}
-作为在*信息技术*领域的头部企业，我们雇佣了大量高水平的[软件]{.red}工程师。    
-作为在*绿色能源*领域的头部企业，我们雇佣了大量高水平的[太阳能]{.red}工程师。
-
-:::
-
-
-## 词嵌入 &rarr; 词序列（Word Sequence）
-
-:::{.callout-note}
-## 自注意力机制
-
-输入一个初始词元嵌入序列，并输出一个新的词元嵌入序列，[使初始嵌入能够相互作用]{.red}。
-:::
-
-- 由堆叠的注意力机制和前馈神经网络层组成的大型神经网络可以使用专用处理器高效并行训练，即 [Transformer]{.red}
-
-:::{.fragment}
-- 常见的 Transformer 模型
-    - BERT
-        - RoBERTa, PALM
-    - [GPT]{.red .large} 系列
-:::
-
 
 
 ## 总结
@@ -1097,7 +998,7 @@ Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.
     - 聚合：
         - 词频
         - 相关性/相似度
-        - BOW之上（语境与联系）
+        - 主题模型
 :::
 ::::
 
@@ -1105,7 +1006,7 @@ Word embedding 认为所有词和词之间关系都同等重要[🤦‍♂️]{.
 
 
 
-# 感谢倾听，敬请指正 {background="#43464B"}
+# 感谢倾听，欢迎交流 {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
 
