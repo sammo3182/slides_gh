@@ -85,6 +85,7 @@ theme_update(
 
 
 
+
 ## 个人简介{.Small}
 
 :::: {.columns}
@@ -283,6 +284,7 @@ IDF： Frequency a term appear across documents
 
 示例数据：2012年到2016年的6,000篇《卫报》新闻文章
 
+
 ```{r guardianData, cache=TRUE}
 # 2016年卫报新闻语料库（Corpus of Guardian news in 2016 from those from 2012--2015）
 
@@ -293,10 +295,12 @@ toks_news_guardian <- tokens(corp_news, remove_punct = TRUE)
 corp_news
 ```
 
+
 ## Collocation 示例
 
 - 最常见的词对（pairs of words）
 - 最常见的三词模式（three-word patterns）
+
 
 ```{r collocation, message=FALSE}
 toks_select <- tokens_select(
@@ -314,11 +318,13 @@ tstat_col_caps3 <- textstat_collocations(toks_select, min_count = 80, size = 3)
 head(tstat_col_caps3, 10)
 ```
 
+
 ## “靶向”分析
 
 - 关键性(Keyness)：识别在目标语料库中比在参照语料库中**统计上更频繁**出现的词语的度量方法 [@Gabrielatos2018]。
 
 示例1：对比《卫报》新闻2016年与2012—2015年之间的新闻
+
 
 ```{r keyness, eval=FALSE}
 dfmat_news <- tokens(corp_news, remove_punct = TRUE) |> 
@@ -335,9 +341,11 @@ readRDS(url("https://drhuyue.site:10002/sammo3182/data/text_keyness.rds", open =
 ```
 
 
+
 ## Keyness 示例2
 
 在2012年到2016年的6,000篇《卫报》新闻文章中与欧盟（"EU", "europ*", "european union"）相关的词汇
+
 
 ```{r relevantKey}
 eu <- c("EU", "europ*", "european union")
@@ -355,6 +363,7 @@ tstat_key_inside <-
 
 textplot_keyness(tstat_key_inside, n = 10)
 ```
+
 
 
 ## “入木三分”分析 [@Liu2022]
@@ -451,6 +460,7 @@ CTM + SAGE
 
 1. 设定主题数目
 
+
 ```{r stm-searchKresult, cache=TRUE}
 #对于上述每一个结果，计算连贯性和排他性
 stm_searchK <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/stm_searchK.rds", open = "rb"))
@@ -476,14 +486,17 @@ ggplot(fit_searchK_agg, aes(coherence, exclusivity, color = group, size = 3)) +
 stm_selected <- stm_searchK$n8
 ```
 
+
 ## 2. 主题归类
 
 $$Topic \sim Party + s(Year).$$
+
 
 ```{r topicDist, exercise = TRUE, exercise.setup = "stm-searchKresult"}
 #查看词语在主题中的分布
 labelTopics(stm_selected, topics = c(1:3), n = 5)
 ```
+
 
 - Highest Prob：高频词
 - FREX：主题高频词
@@ -508,6 +521,7 @@ labelTopics(stm_selected, topics = c(1:3), n = 5)
 ## 3. 主题相关性
 
 以余弦相似度来计算相关性，越接近于1表示两个主题越相关，越接近于0表示两个主题越不相关。
+
 
 ```{r topicCorrelation}
 #计算STM模型中所有主题之间的相关性
@@ -536,7 +550,9 @@ ggnet2(graph_stm8, label = TRUE, edge.size = "weights")
 ```
 
 
+
 ## 协变量的影响：党派
+
 
 ```{r covariateParty}
 #| fig-height: 6.5
@@ -572,7 +588,9 @@ plot(result_stm8,
 
 ```
 
+
 ## 协变量的影响：时间
+
 
 ```{r covariateTime}
 #绘制主题3和主题7在年份上的连续效应图
@@ -586,6 +604,7 @@ plot(
 ```
 
 
+
 ## Seed LDA
 
 以种子词（seeds）引领主题分类。
@@ -593,6 +612,7 @@ plot(
 示例数据：《卫报》2016
 
 种子词：经济、政治、社会、外交和军事，基于对该类新闻的认知获取
+
 
 ```{r seeds}
 # 预处理 ###
@@ -623,7 +643,9 @@ dict_topic <- dictionary(file = system.file("extdata", "topics.yml", package = "
 dict_topic
 ```
 
+
 ## 效果比较：LDA
+
 
 ```{r seedLda, eval=FALSE}
 # 分析 ####
@@ -649,13 +671,16 @@ seededlda::terms(tmod_lda, 8) %>%
   tt()
 ```
 
+
 ## 效果比较：Seed LDA
+
 
 ```{r seededlda-out}
 seededlda::terms(tmod_slda, 8) %>% 
   as.data.frame() |> 
   tt()
 ```
+
 
 
 :::{.notes}
@@ -676,6 +701,7 @@ seededlda::terms(tmod_slda, 8) %>%
 - 当种子词[质量高]{.red}时，性能优于加权LDA和STM
 
 :::{.fragment}
+
 ```{r atm-input}
 keyATM_docs <- keyATM_read(texts = dfmat_inaug)
 
@@ -692,12 +718,14 @@ keywords_inaug <- list(
 visualize_keywords(docs = keyATM_docs, keywords = keywords_inaug)
 
 ```
+
 :::
 
 :::
 
 
 ## Model Fit
+
 
 ```{r atm-fit, eval=FALSE}
 # Fit ####
@@ -771,7 +799,9 @@ load(url("https://drhuyue.site:10002/sammo3182/data/text_atm.rda", open = "rb"))
 plot_modelfit(atm_inaug)
 ```
 
+
 ## Base Model Result
+
 
 ```{r atm-result}
 # Interpret ####
@@ -779,7 +809,9 @@ plot_modelfit(atm_inaug)
 plot_topicprop(atm_inaug, show_topic = 1:10)
 ```
 
+
 ## Covariate Effect
+
 
 ```{r atmCov}
 # Interpretation ####
@@ -793,7 +825,9 @@ strata_period <- by_strata_DocTopic(atm_inaugX,
 plot(strata_period, var_name = "cent20", by = "covariate")
 ```
 
+
 ## Topic Dynamics
+
 
 ```{r atmDyn}
 plot_timetrend(atm_inaugD, 
@@ -801,6 +835,7 @@ plot_timetrend(atm_inaugD,
                xlab = "Year", 
                ci = 0.95)
 ```
+
 
 
 ## 小结
@@ -893,6 +928,7 @@ Comparison in Semantic Scaling:
 
 ## 应用：判断《卫报》新闻的情感走向
 
+
 ```{r lss, eval=FALSE}
 # Preprocessing ####
 # tokenize text corpus and remove various features
@@ -950,17 +986,22 @@ save(tmod_lss_svd, tmod_lss_glove, dfmat_sent, file = here::here("slides", "cour
 
 ```
 
+
 :::{.r-stack}
+
 ```{r lss-result-svd}
 load(url("https://drhuyue.site:10002/sammo3182/data/text_embedding.rda", open = "rb"))
 
 textplot_terms(tmod_lss_svd, highlighted = data_dictionary_LSD2015["negative"]) # many of the words (but not all of them) have negative meanings in the corpus.
 ```
 
+
 :::{.fragment}
+
 ```{r lss-result-glove}
 textplot_terms(tmod_lss_glove, highlighted = data_dictionary_LSD2015["negative"])
 ```
+
 :::
 
 :::
@@ -970,6 +1011,7 @@ textplot_terms(tmod_lss_glove, highlighted = data_dictionary_LSD2015["negative"]
 :::
 
 ## 趋势分析
+
 
 ```{r glovePrediction}
 # Prediction ####
@@ -999,6 +1041,7 @@ plot_glove <- ggplot(smo_glove, aes(x = date, y = fit)) +
     
 plot_svd / plot_glove
 ```
+
 
 :::{.notes}
 2016年以后波动比较大
@@ -1196,3 +1239,4 @@ The improvement in the quality of answers you receive during the conversation is
 
 ::: {#refs}
 :::
+
