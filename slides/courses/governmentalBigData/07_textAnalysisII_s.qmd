@@ -1,6 +1,6 @@
 ---
 title: "文本的数据分析进阶"
-subtitle: "政务大数据应用与分析 (80700673)"
+subtitle: "上海交通大学暑期社会科学方法班"
 author: "胡悦"
 institute: "清华大学社会科学学院" 
 bibliography: ../camsTextAnalysis/pre_cams.bib
@@ -242,7 +242,12 @@ readRDS(url("https://drhuyue.site:10002/sammo3182/data/text_keyness.rds", open =
 
 在2012年到2016年的6,000篇《卫报》新闻文章中与欧盟（"EU", "europ*", "european union"）相关的词汇
 
-```{r relevantKey}
+```{r relevantKey,cache=TRUE}
+#读入数据
+corp_news <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/data_corpus_guardian.rds", open = "rb"))
+#标记化
+toks_news_guardian <- tokens(corp_news, remove_punct = TRUE)
+
 eu <- c("EU", "europ*", "european union")
 
 toks_inside <- tokens_keep(toks_news_guardian, pattern = eu, window = 10) |> 
@@ -312,6 +317,12 @@ STM/SeedLDA/keyATM
 
 :::{.fragment}
 ```{r atm-input}
+
+#数据
+dfmat_inaug <- tokens(data_corpus_inaugural) |>
+  dfm() |> 
+  dfm_remove(stopwords("en"))
+
 keyATM_docs <- keyATM_read(texts = dfmat_inaug)
 
 # Keywords ####

@@ -8,6 +8,8 @@
 <link href="07_textAnalysisII_s_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="07_textAnalysisII_s_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="07_textAnalysisII_s_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="07_textAnalysisII_s_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="07_textAnalysisII_s_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script src="07_textAnalysisII_s_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="07_textAnalysisII_s_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="07_textAnalysisII_s_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
@@ -351,7 +353,7 @@
 
 <section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">文本的数据分析进阶</h1>
-  <p class="subtitle">第一届计算政治学讲习班</p>
+  <p class="subtitle">上海交通大学暑期社会科学方法班</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -556,142 +558,6 @@
 <h1>词汇层级信息汇入</h1>
 
 </section>
-<section id="加权" class="slide level2">
-<h2>加权</h2>
-<p>DTM的问题：</p>
-<ol type="1">
-<li>未将词的重要性纳入考量</li>
-<li>过度体现常见词</li>
-<li>轻视少见词</li>
-</ol>
-<div class="fragment">
-<p>举例：Term frequency-inverse document frequency (TF-IDF)</p>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><span class="math display">\[\displaystyle \mathrm {tf} (t,d)={\frac {f_{t,d}}{\sum _{t'\in d}{f_{t',d}}}},\]</span> where <span class="math inline">\(f_{t,d}\)</span> is the number of times that term t occurs in document d.&nbsp;</p>
-</div><div class="column" style="width:50%;">
-<p><span class="math display">\[\displaystyle \mathrm {idf} (t,D)=\log {\frac {N}{|\{d:d\in D{\text{ and }}t\in d\}|}},\]</span></p>
-<ul>
-<li><span class="math inline">\(N\)</span>: total number of documents; D.</li>
-<li><span class="math inline">\(|\{d\in D:t\in d\}|\)</span> : number of documents where the term <span class="math inline">\(t\)</span> appears.</li>
-</ul>
-</div>
-</div>
-</div>
-<aside class="notes">
-<p>TF： Importance of a term in a document IDF： Frequency a term appear across documents</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="加权带来什么" class="slide level2">
-<h2>加权带来什么</h2>
-<ul>
-<li>好处：
-<ol type="1">
-<li>识别重要词汇</li>
-<li>减少常见词汇的权重</li>
-<li>提高机器学习性能 (why?)</li>
-</ol></li>
-</ul>
-<div class="fragment">
-<ul>
-<li>副作用：
-<ol type="1">
-<li>假定词汇独立（与DTM相同）</li>
-<li>对在语料库中非常罕见但在特定文档中出现过几次的罕见词汇给予高权重</li>
-<li>对语料库的大小和多样性敏感</li>
-</ol></li>
-</ul>
-</div>
-</section>
-<section id="n-gram分析" class="slide level2">
-<h2>N-gram分析</h2>
-<ul>
-<li>Markov Model of Order N
-<ul>
-<li>Unigram: 清华 大学 社会 科学 学院</li>
-<li>Bigram: 清华大学 大学社会 社会科学 科学 学院</li>
-<li>Trigram：清华大学社会 大学社会科学 社会科学学院</li>
-</ul></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_ngram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_ngram.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
-</figure>
-</div>
-</section>
-<section id="搭配分析" class="slide level2">
-<h2>搭配分析</h2>
-<ul>
-<li>连续搭配（Contiguous collocations）：在文本中直接相邻出现。</li>
-<li>揭示语言使用中的模式，这些模式从查看单个单词时并不立即明显。</li>
-</ul>
-<p>示例数据：2012年到2016年的6,000篇《卫报》新闻文章</p>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Corpus consisting of 6,000 documents and 9 docvars.
-text136751 :
-"London masterclass on climate change | Do you want to unders..."
-
-text118588 :
-"As colourful fish were swimming past him off the Greek coast..."
-
-text45146 :
-"FTSE 100 | -101.35 | 6708.35 | FTSE All Share | -58.11 | 360..."
-
-text93623 :
-"Australia's education minister, Christopher Pyne, has vowed ..."
-
-text136585 :
-"block-time published-time 3.05pm GMT | The former leader of ..."
-
-text65682 :
-"Darren Wilson will be unable to return to work as a police o..."
-
-[ reached max_ndoc ... 5,994 more documents ]</code></pre>
-</div>
-</div>
-</section>
-<section id="collocation-示例" class="slide level2">
-<h2>Collocation 示例</h2>
-<ul>
-<li>最常见的词对（pairs of words）</li>
-<li>最常见的三词模式（three-word patterns）</li>
-</ul>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>       collocation count count_nested length    lambda         z
-1    david cameron   861            0      2  8.186347 147.76683
-2     donald trump   774            0      2  8.353969 123.09383
-3   george osborne   364            0      2  8.687785 107.95642
-4  hillary clinton   526            0      2  9.125811 102.77388
-5         new york  1016            0      2 10.474860 100.52567
-6    islamic state   330            0      2  9.829185  98.41582
-7      white house   478            0      2  9.938355  96.56095
-8   european union   351            0      2  8.288569  95.07175
-9    jeremy corbyn   244            0      2  8.756533  91.07510
-10   boris johnson   245            0      2  9.691163  85.00475</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  collocation count count_nested length     lambda          z
-1             new south wales    85            0      3  8.9133533  4.3907828
-2       european central bank    95            0      3  4.4049316  4.3095051
-3 international monetary fund   101            0      3  2.2155907  1.0661709
-4               new york city    96            0      3  1.0061265  0.6134988
-5      photograph mike bowers    90            0      3  0.5209553  0.3473888
-6              new york times   128            0      3 -0.5342360 -0.3516073</code></pre>
-</div>
-</div>
-</section>
 <section id="靶向分析" class="slide level2">
 <h2>“靶向”分析</h2>
 <ul>
@@ -702,7 +568,7 @@ text65682 :
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="07_textAnalysisII_s_files/figure-revealjs/keyness-out-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="07_textAnalysisII_s_files/figure-revealjs/keyness-out-1.png" width="960"></a></p>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/keyness-out-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="07_textAnalysisII_s_files/figure-revealjs/keyness-out-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -715,24 +581,9 @@ text65682 :
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="07_textAnalysisII_s_files/figure-revealjs/relevantKey-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="07_textAnalysisII_s_files/figure-revealjs/relevantKey-1.png" width="960"></a></p>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/relevantKey-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="07_textAnalysisII_s_files/figure-revealjs/relevantKey-1.png" width="960"></a></p>
 </figure>
 </div>
-</div>
-</div>
-</section>
-<section id="入木三分分析-liu2022" class="slide level2">
-<h2>“入木三分”分析 <span class="citation" data-cites="Liu2022">(<a href="#/参考文献" role="doc-biblioref" onclick="">Liu 2022</a>)</span></h2>
-<div class="r-stack">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_pronoun.png" class="quarto-figure quarto-figure-center" height="400"></a></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/css_liwcTree.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/css_liwcTree.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
-</figure>
 </div>
 </div>
 </section>
@@ -752,6 +603,23 @@ text65682 :
 <section id="概念层级信息汇入" class="title-slide slide level1 center">
 <h1>概念层级信息汇入</h1>
 
+</section>
+<section id="主题模型能干什么" class="slide level2">
+<h2>主题模型能干什么</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="What happened in topic modeling"><source src="https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm"></video>
+<aside class="notes">
+<p>基于词频与共线的unsupervised降维，是一种frequency-based的降维</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="主题模型缺什么" class="slide level2">
 <h2>主题模型缺什么</h2>
@@ -783,29 +651,103 @@ text65682 :
 STM/SeedLDA/keyATM</p>
 </div>
 </section>
-<section id="correlated-topic-model-ctm" class="slide level2">
-<h2>Correlated Topic Model (CTM)</h2>
-<p>主题之间彼此关联被纳入考量</p>
-<div class="r-vstack">
-<div class="quarto-figure quarto-figure-center">
+<section id="keyword-assisted-topic-models-keyatm-eshimaetal2023" class="slide level2">
+<h2>Keyword-Assisted Topic Models <span class="citation" data-cites="EshimaEtAl2023">(keyATM, <a href="#/参考文献" role="doc-biblioref" onclick="">Eshima, Imai, and Sasaki 2023</a>)</span></h2>
+<div class="r-stack">
+<ul>
+<li>针对概念测量而设计，而非探索主题</li>
+<li>基于关键词（种子词） （类似于seedLDA）</li>
+<li>允许没有关键词的主题 （不同于seedLDA）</li>
+<li>对词频加权防止“词频主导”现象（类似于 weightedLDA）</li>
+<li>允许文档向量、元信息的动态变化 （类似于STM）</li>
+<li>贝叶斯方法</li>
+<li>当种子词<span class="red">质量高</span>时，性能优于加权LDA和STM</li>
+</ul>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/cluster_ldaDiagram.png" class="lightbox" data-glightbox="description: .lightbox-desc-8" data-gallery="quarto-lightbox-gallery-8" title="LDA"><img data-src="https://drhuyue.site:10002/sammo3182/figure/cluster_ldaDiagram.png" class="quarto-figure quarto-figure-center" height="150" alt="LDA"></a></p>
-<figcaption>LDA</figcaption>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/atm-input-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="07_textAnalysisII_s_files/figure-revealjs/atm-input-1.png" width="960"></a></p>
 </figure>
 </div>
-<div class="quarto-figure quarto-figure-center">
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="model-fit" class="slide level2">
+<h2>Model Fit</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/cluster_ctmDiagram.png" class="lightbox" data-glightbox="description: .lightbox-desc-9" data-gallery="quarto-lightbox-gallery-9" title="CTM"><img data-src="https://drhuyue.site:10002/sammo3182/figure/cluster_ctmDiagram.png" class="quarto-figure quarto-figure-center" height="150" alt="CTM"></a></p>
-<figcaption>CTM</figcaption>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/atm-fitness-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="07_textAnalysisII_s_files/figure-revealjs/atm-fitness-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
-<p><span class="math display">\[\{\mu,\Sigma\}\sim N(\mu,\Sigma).\]</span></p>
+</div>
+</section>
+<section id="base-model-result" class="slide level2">
+<h2>Base Model Result</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/atm-result-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="07_textAnalysisII_s_files/figure-revealjs/atm-result-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="covariate-effect" class="slide level2">
+<h2>Covariate Effect</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/atmCov-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="07_textAnalysisII_s_files/figure-revealjs/atmCov-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="topic-dynamics" class="slide level2">
+<h2>Topic Dynamics</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/atmDyn-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="07_textAnalysisII_s_files/figure-revealjs/atmDyn-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="小结-1" class="slide level2">
+<h2>小结</h2>
+<div style="text-align:center; margin-top: 1em">
+<div class="semi-fade-out">
+<ul>
+<li>Keyness ← 从<span class="red">关键词定位</span>攫取信息</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>keyATM ← 纳入研究<span class="red">意图</span></li>
+</ul>
+</div>
+</div>
+</section></section>
+<section>
+<section id="语义层级信息汇入" class="title-slide slide level1 center">
+<h1>语义层级信息汇入</h1>
 <aside class="notes">
-<p>CTM模型（correlated topic model）的进步之处在于哪里呢？</p>
-<p>最初人们做LDA模型的时候，人们认为不同的主题之间是不存在什么联系的，但这是不可能的。 想象一下，我们可以从《人民日报》提炼出关于经济发展、民生工程等主题，但是我们绝对不可能从中抽取出关于妇科广告的主题，因为这是这份报纸的性质决定的。 所以我们从语料中抽取出来的主题，彼此之间肯定是具有高度的相关性的。</p>
-<p>CTM的名字中之所以有一个correlated，就是因为这个模型可以把所有的主题放在一起，放在一个结构（structure）里面去理解每一个主题。 因此CTM是一种层次化主题模型，它明确抓取了主题间的潜在相关性。</p>
-<p>相比于LDA，CTM模型多了两个参数μ &amp; Σ：一个K维的均值和协方差矩阵 <span class="math inline">\(\{\mu,\Sigma\}\sim N(\mu,\Sigma)\)</span>。</p>
+<ul>
+<li>语法：Grammar</li>
+<li>语义: Semantic</li>
+<li>语用: Pragmatic</li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -818,67 +760,23 @@ STM/SeedLDA/keyATM</p>
           display:block!important;
       }</style></aside>
 </section>
-<section id="sparse-additive-generative-model-sage" class="slide level2">
-<h2>Sparse Additive Generative Model (SAGE)</h2>
-<p>每个主题都被赋予一个模型，能够描述给予恒定背景分布对数频率的偏差。</p>
+<section id="给词义建模词嵌入word-embedding" class="slide level2">
+<h2>给词义建模：词嵌入(Word embedding)</h2>
+<blockquote>
+<p>Words’ meanings depend not just on immediate neighbors</p>
+</blockquote>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/cluster_sageDiagram.png" class="lightbox" data-glightbox="description: .lightbox-desc-10" data-gallery="quarto-lightbox-gallery-10" title="SAGE"><img data-src="https://drhuyue.site:10002/sammo3182/figure/cluster_sageDiagram.png" class="quarto-figure quarto-figure-center" height="400" alt="SAGE"></a></p>
-<figcaption>SAGE</figcaption>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png" class="quarto-figure quarto-figure-center" height="550"></a></p>
 </figure>
 </div>
-</section>
-<section id="structure-topic-model-stm-robertsetal2013" class="slide level2">
-<h2>Structure Topic Model <span class="citation" data-cites="RobertsEtAl2013">(STM, <a href="#/参考文献" role="doc-biblioref" onclick="">Roberts et al. 2013</a>)</span></h2>
-<p>CTM + SAGE</p>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/cluster_stmDiagram.png" class="lightbox" data-glightbox="description: .lightbox-desc-11" data-gallery="quarto-lightbox-gallery-11" title="STM"><img data-src="https://drhuyue.site:10002/sammo3182/figure/cluster_stmDiagram.png" class="quarto-figure quarto-figure-center" height="500" alt="STM"></a></p>
-<figcaption>STM</figcaption>
-</figure>
-</div>
-</section>
-<section id="操作" class="slide level2">
-<h2>操作</h2>
-<p>示例：美国总统就职演说数据</p>
-<ol type="1">
-<li>设定主题数目</li>
-</ol>
-<p><span class="math display">\[Topic \sim Party + s(Year).\]</span></p>
-<div class="cell" data-exercise="true" data-exercise.setup="stm-searchKresult">
-<div class="cell-output cell-output-stdout">
-<pre><code>Topic 1 Top Words:
-     Highest Prob: ,, ., us, world, america 
-     FREX: story, thank, americans, :, moment 
-     Lift: —, 1980, 30, 50th, adventure 
-     Score: story, americans, thank, –, senator 
-Topic 2 Top Words:
-     Highest Prob: ,, ., ;, government, people 
-     FREX: case, parties, measures, former, circumstances 
-     Lift: 120,000,000, 14th, 1774, 1778, 1801 
-     Score: fellow-citizens, case, revenue, roman, academies 
-Topic 3 Top Words:
-     Highest Prob: ,, ., people, government, upon 
-     FREX: partisan, ballot, citizenship, patriotic, commercial 
-     Lift: 1780, 1790, 1880, 1886, 1890 
-     Score: revenue, ballot, arrive, policy, patriotic </code></pre>
-</div>
-</div>
-<ul>
-<li>Highest Prob：高频词</li>
-<li>FREX：主题高频词</li>
-<li>lift：通过词语在其他主题中的频率相除来加权词语</li>
-<li>score：将词语在主题中的对数频率除以词语在其他主题中的对数频率</li>
-</ul>
 <aside class="notes">
-<p>这行代码为我们返回了每个主题下面的一些词语。</p>
+<p>The term “embedding” comes from the neural network literature, in which an “embedding layer” is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.</p>
 <ul>
-<li><p>“Highest Prob”指的是这个<em>语料库</em>中频率最高的词语，我们可以看到出现了逗号和句号，还有“america”等。</p></li>
-<li><p>FREX矩阵（FREX matrix）中的词语依然是高频词，但是它是仅在这个主题中的高频词，也就是能够区分这一主题和其他主题之间特殊性的高频词。 它的算法是通过词语的整体频率及其对主题的专有程度来加权词语。</p></li>
-<li><p>提升（lift）：与FREX相同，但是算法不一样，它通过词语在其他主题中的频率相除来加权词语，因此给在其他主题中较少出现的词语赋予更高的权重。</p></li>
-<li><p>赋分（score）：与FREX相同，但是算法是将词语在主题中的对数频率除以词语在其他主题中的对数频率。</p></li>
+<li>The embedding model GloVe (“Global Vectors”) by <span class="citation" data-cites="PenningtonEtAl2014">Pennington, Socher, and Manning (<a href="#/参考文献" role="doc-biblioref" onclick="">2014</a>)</span> is explicitly designed to construct word vectors encoding local co-occurrence.</li>
+<li>An equally influential word embedding model is Word2Vec <span class="citation" data-cites="BengioEtAl2000">(<a href="#/参考文献" role="doc-biblioref" onclick="">Bengio, Ducharme, and Vincent 2000</a>)</span>, which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.</li>
 </ul>
-<p>所以我们通常建议大家，当你去对于每个主题的含义进行解释的时候，可以基于FREX，lift和score来解读，而不是只看高频词去解释它的含义，也就是说我们讲的这三个测量这是帮助我们去解读主题用的。</p>
+<p>LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -891,42 +789,143 @@ Topic 3 Top Words:
           display:block!important;
       }</style></aside>
 </section>
-<section id="主题相关性" class="slide level2">
-<h2>3. 主题相关性</h2>
-<p>以余弦相似度来计算相关性，越接近于1表示两个主题越相关，越接近于0表示两个主题越不相关。</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure>
-<p><a href="07_textAnalysisII_s_files/figure-revealjs/topicCorrelation-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="07_textAnalysisII_s_files/figure-revealjs/topicCorrelation-1.png" width="960"></a></p>
-</figure>
+<section id="能做什么" class="slide level2">
+<h2>能做什么</h2>
+<ul>
+<li>纳入词语意义的表达
+<ul>
+<li>哪个最接近<code>paris - france + germany</code>（柏林）？</li>
+<li>哪个最接近<code>berlin - germany + uk + england</code>（伦敦）？</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>与分类和聚类相比: Document-feature matrix → context-feature matrix (FCM)
+<ul>
+<li>分类：不关注单个词语间的关系，而是关注词语在文档中的分布。</li>
+<li>聚类：提供对文档集合内容的更高级，而不是专注于单个词语的含义。</li>
+</ul></li>
+</ul>
+<aside class="notes">
+<p><strong>context-feature matrix (FCM)</strong> 是<code>quantada</code>中另一个重要的矩阵形式，它用来测量在用户定义的上下文语境中，一些特征的共现性，也就是利用上下文信息来捕捉词汇之间的语义关系。 具体来说，FCM 使用了一个上下文窗口，对每个词汇建模时考虑其周围的上下文。 这使得 FCM 能够更好地捕捉词汇之间的语义相似性，因为它不仅考虑了词汇本身的信息，还考虑了它们在语境中的使用情况。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </div>
-</div>
+<div class="fragment">
+<ul>
+<li>应用
+<ul>
+<li>词条表征（term representation）</li>
+<li>情感分析（sentiment analysis）</li>
+</ul></li>
+</ul>
 </div>
 </section>
-<section id="协变量的影响党派" class="slide level2">
-<h2>协变量的影响：党派</h2>
-<div class="cell">
-<div class="cell-output-display">
-<div>
+<section id="应用举例latent-semantic-scaling-watanabe2021" class="slide level2">
+<h2>应用举例：Latent Semantic Scaling <span class="citation" data-cites="Watanabe2021">(<a href="#/参考文献" role="doc-biblioref" onclick="">Watanabe 2021</a>)</span></h2>
+<ul>
+<li>专门用于区分<span class="red">对立的立场</span></li>
+<li>基于词嵌入技术的，在构建模型之前将文档和特征转换为高维度向量空间
+<ul>
+<li>GloVe</li>
+<li>Singular Value Decomposition (SVD)</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="07_textAnalysisII_s_files/figure-revealjs/covariateParty-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="07_textAnalysisII_s_files/figure-revealjs/covariateParty-1.png" width="960"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/text_svd.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="https://drhuyue.site:10002/sammo3182/figure/text_svd.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
-</div>
-</div>
+<aside class="notes">
+<p>SVD is a math tool that helps us break down a big matrix (which you can think of like a giant table of numbers) into smaller parts. SVD, a matrix is decomposed into three other matrices: U, Σ, and V . The columns of U and V are called left and right singular vectors, respectively.</p>
+<p>Comparison in Semantic Scaling:</p>
+<ul>
+<li>SVD: Better for general-purpose dimensionality reduction and identifying broad patterns in text. It’s more of a tool for finding overall structure and relationships, but it may miss finer semantic distinctions.</li>
+<li>GloVe: Superior for scaling semantics in a more nuanced way, capturing both local (nearby words) and global (overall context) word meanings. This makes GloVe more effective for specific tasks like word similarity and analogy.</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="协变量的影响时间" class="slide level2">
-<h2>协变量的影响：时间</h2>
+<section id="应用判断卫报新闻的情感走向" class="slide level2">
+<h2>应用：判断《卫报》新闻的情感走向</h2>
+<div class="r-stack">
 <div class="cell">
 <div class="cell-output-display">
 <div>
 <figure>
-<p><a href="07_textAnalysisII_s_files/figure-revealjs/covariateTime-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="07_textAnalysisII_s_files/figure-revealjs/covariateTime-1.png" width="960"></a></p>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/lss-result-svd-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="07_textAnalysisII_s_files/figure-revealjs/lss-result-svd-1.png" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/lss-result-glove-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="07_textAnalysisII_s_files/figure-revealjs/lss-result-glove-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>高亮的为词典中的词汇, 注意SVD结果，有一些词落在了0右面，而glove都落在了0左边</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="趋势分析" class="slide level2">
+<h2>趋势分析</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="07_textAnalysisII_s_files/figure-revealjs/glovePrediction-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="07_textAnalysisII_s_files/figure-revealjs/glovePrediction-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>2016年以后波动比较大</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="总结" class="slide level2">
 <h2>总结</h2>
@@ -938,16 +937,20 @@ Topic 3 Top Words:
 <p><strong>词汇层级的信息汇入</strong></p>
 <div class="fragment">
 <ul>
-<li>Weighing ← 从<span class="red">词频</span>攫取信息</li>
-<li>N-gram &amp; Collocation ← 从<span class="red">邻居/共现</span>攫取信息</li>
-<li>Functional words ← 从<span class="red">心理</span>攫取信息</li>
+<li>Keyness ← 从<span class="red">关键词定位</span>攫取信息</li>
 </ul>
 </div>
-</div><div class="column" style="width:50%;">
 <p><strong>概念层级的信息汇入</strong></p>
 <div class="fragment">
 <ul>
-<li>STM ← 纳入概念<span class="red">关系</span>与<span class="red">外部</span>信息</li>
+<li>keyATM ← 纳入研究<span class="red">意图</span></li>
+</ul>
+</div>
+</div><div class="column" style="width:50%;">
+<p><strong>语义层级的信息汇入</strong></p>
+<div class="fragment">
+<ul>
+<li>Word embedding ← 词汇之间的<span class="red">语义</span>关联</li>
 </ul>
 </div>
 </div>
@@ -966,17 +969,23 @@ Topic 3 Top Words:
 <section id="参考文献" class="slide level2 smaller scrollable">
 <h2>参考文献</h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-BengioEtAl2000" class="csl-entry" role="listitem">
+Bengio, Yoshua, Réjean Ducharme, and Pascal Vincent. 2000. <span>“A neural probabilistic language model.”</span> In <em>Advances in Neural Information Processing Systems</em>. Vol. 13. MIT Press.
+</div>
+<div id="ref-EshimaEtAl2023" class="csl-entry" role="listitem">
+Eshima, Shusei, Kosuke Imai, and Tomoya Sasaki. 2023. <span>“Keyword-Assisted Topic Models.”</span> <em>American Journal of Political Science</em>, Early View. <a href="https://doi.org/10.1111/ajps.12779">https://doi.org/10.1111/ajps.12779</a>.
+</div>
 <div id="ref-Gabrielatos2018" class="csl-entry" role="listitem">
 Gabrielatos, Costas. 2018. <span>“Keyness Analysis: Nature, Metrics and Techniques.”</span> In <em>Corpus Approaches to Discourse</em>, edited by Charlotte Taylor and Anna Marchi, 34–65. Routledge.
 </div>
 <div id="ref-King2015" class="csl-entry" role="listitem">
 King, Gary. 2015. <span>“Big Data Is Not about the Data!”</span> Guest talk presented at the Talk at the capital markets cooperative research centre, Sydney, Australia, November 11.
 </div>
-<div id="ref-Liu2022" class="csl-entry" role="listitem">
-Liu, Amy H. 2022. <span>“Pronoun Usage as a Measure of Power Personalization: A General Theory with Evidence from the Chinese-Speaking World.”</span> <em>British Journal of Political Science</em> 52 (3, 3): 1258–75. <a href="https://doi.org/10.1017/S0007123421000181">https://doi.org/10.1017/S0007123421000181</a>.
+<div id="ref-PenningtonEtAl2014" class="csl-entry" role="listitem">
+Pennington, Jeffrey, Richard Socher, and Christopher Manning. 2014. <span>“GloVe: Global Vectors for Word Representation.”</span> In <em>Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 1532–43. Doha, Qatar: Association for Computational Linguistics. <a href="https://doi.org/10.3115/v1/D14-1162">https://doi.org/10.3115/v1/D14-1162</a>.
 </div>
-<div id="ref-RobertsEtAl2013" class="csl-entry" role="listitem">
-Roberts, Margaret E., Brandon M. Stewart, Dustin Tingley, and Edoardo M. Airoldi. 2013. <span>“The Structural Topic Model and Applied Social Science.”</span> <em>Advances in Neural Information Processing Systems Workshop on Topic Models: Computation, Application, and Evaluation</em> 1737: 1–4.
+<div id="ref-Watanabe2021" class="csl-entry" role="listitem">
+Watanabe, Kohei. 2021. <span>“Latent Semantic Scaling: A Semisupervised Text Analysis Technique for New Domains and Languages.”</span> <em>Communication Methods and Measures</em> 15 (2): 81–102. <a href="https://doi.org/10.1080/19312458.2020.1832976">https://doi.org/10.1080/19312458.2020.1832976</a>.
 </div>
 </div>
 
@@ -1407,7 +1416,8 @@ Roberts, Margaret E., Brandon M. Stewart, Dustin Tingley, and Edoardo M. Airoldi
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"fade","openEffect":"fade","loop":false,"descPosition":"bottom"});
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"fade","selector":".lightbox","loop":false,"closeEffect":"fade"});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
