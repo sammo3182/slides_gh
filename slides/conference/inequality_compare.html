@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="inequality_compare_files/libs/clipboard/clipboard.min.js"></script>
+<script src="inequality_compare_files/libs/quarto-html/tabby.min.js"></script>
+<script src="inequality_compare_files/libs/quarto-html/popper.min.js"></script>
+<script src="inequality_compare_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="inequality_compare_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="inequality_compare_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="inequality_compare_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="inequality_compare_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="inequality_compare_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="inequality_compare_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="inequality_compare_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.533">
+
+  <meta name="author" content="Yue Hu">
+  <meta name="author" content="Xinyi Ye">
+  <title>Microfoundation of Redistribution</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="inequality_compare_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="inequality_compare_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="inequality_compare_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
+  <link href="inequality_compare_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="inequality_compare_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="inequality_compare_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="inequality_compare_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title">Microfoundation of Redistribution</h1>
+  <p class="subtitle">Experimental Evidence from China</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Xinyi Ye 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="inequality-and-stability-in-china" class="slide level2">
+<h2>Inequality and Stability in China</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/nationalGini.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" data-glightbox="description: .lightbox-desc-1" title="Source: SWIID (1978–2015); China’s Official Records (2016–2022)"><img data-src="https://drhuyue.site:10002/sammo3182/figure/nationalGini.png" class="quarto-figure quarto-figure-center" height="400" alt="Source: SWIID (1978–2015); China’s Official Records (2016–2022)"></a></p>
+<figcaption>Source: SWIID (1978–2015); China’s Official Records (2016–2022)</figcaption>
+</figure>
+</div>
+<div class="r-hstack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_fourWorlds.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_fourWorlds.webp" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_wallCollapse.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_wallCollapse.webp" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>China’s gini has been above 0.4 since 2000, and largely remain stable after layoffs in state-owned enterprises, natural diseases, global finaicial crisis, and COVID-19.</p>
+<p>The social volcano <span class="citation" data-cites="He2003">(<a href="#/reference" role="doc-biblioref" onclick="">He 2003</a>)</span> has not erupted yet. Why?</p>
+<p>Made by DALL·E 3, OpenAI</p>
+<p>The four worlds theory: people don’t compare</p>
+<p>The urbanization and social media make people compare, what may happen?</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="inequality-perception-microfoundation-of-redistribution" class="slide level2">
+<h2>Inequality perception: Microfoundation of Redistribution</h2>
+<p><em>Social volcano</em>: Escalating economic inequality → social unrest → shaking regime stability <span class="citation" data-cites="He2003">(<a href="#/reference" role="doc-biblioref" onclick="">He 2003</a>)</span></p>
+<ul>
+<li>Expected ways to “erupt”: <em>Connect the macro with the micro</em>
+<ul>
+<li>Relative deprivation <span class="citation" data-cites="Gurr1971">(<a href="#/reference" role="doc-biblioref" onclick="">Gurr 1971</a>)</span></li>
+<li>Worsen social relationships <span class="citation" data-cites="ReardonBischoff2011 NishiEtAl2015 SzewczykCrowder-Meyer2022">(<a href="#/reference" role="doc-biblioref" onclick="">Reardon and Bischoff 2011</a>; <a href="#/reference" role="doc-biblioref" onclick="">Nishi et al. 2015</a>; <a href="#/reference" role="doc-biblioref" onclick="">Szewczyk and Crowder-Meyer 2022</a>)</span></li>
+<li>Ideological deficit <span class="citation" data-cites="PikettyEtAl2019">(<a href="#/reference" role="doc-biblioref" onclick="">Piketty, Yang, and Zucman 2019</a>)</span></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Puzzle
+<ul>
+<li>Actual inequality seems not matter <span class="citation" data-cites="Choi2019">(<a href="#/reference" role="doc-biblioref" onclick="">Choi 2019</a>)</span></li>
+<li>Inaccurate perception of inequality <span class="citation" data-cites="DuKing2022">(<a href="#/reference" role="doc-biblioref" onclick="">Du and King 2022</a>)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment large" style="text-align:center">
+<p>⇒ <em><del>Individual</del> social context</em></p>
+</div>
+<aside class="notes">
+<p>Income inequality leads to increased social discontent, suppresses people’s willingness to cooperate<span class="citation" data-cites="NishiEtAl2015">(<a href="#/reference" role="doc-biblioref" onclick="">Nishi et al. 2015</a>)</span>, widens the Political participation gap between the poor and the rich<span class="citation" data-cites="SzewczykCrowder-Meyer2022">(<a href="#/reference" role="doc-biblioref" onclick="">Szewczyk and Crowder-Meyer 2022</a>)</span>, and intensifies social conflicts<span class="citation" data-cites="Gurr1971">(<a href="#/reference" role="doc-biblioref" onclick="">Gurr 1971</a>)</span>. The “social volcano” theory is based on such social facts, suggesting that income inequality in China can lead to social unrest and threaten political stability<span class="citation" data-cites="GimpelsonTreisman2018 Cramer2003 ZhouJin2018a">(<a href="#/reference" role="doc-biblioref" onclick="">Gimpelson and Treisman 2018</a>; <a href="#/reference" role="doc-biblioref" onclick="">Cramer 2003</a>; <a href="#/reference" role="doc-biblioref" onclick="">Zhou and Jin 2018</a>)</span>. The issue of inequality has become a pressing social problem that needs to be addressed urgently.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="social-comparison-and-inequality-perception" class="slide level2">
+<h2>Social Comparison and Inequality Perception</h2>
+<blockquote>
+<p>There exists, in the human organism, a drive to evaluate his opinions and abilities. The person will do this by <span class="red">comparing himself with others</span>. <span class="citation" data-cites="Festinger1954">(<a href="#/reference" role="doc-biblioref" onclick="">Festinger 1954, 117</a>)</span></p>
+</blockquote>
+<div class="r-stack">
+<ul>
+<li>↑ comparison → discontent <span class="citation" data-cites="Crosby1976 Gurr1971">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>Crosby1976?</strong></a>; <a href="#/reference" role="doc-biblioref" onclick="">Gurr 1971</a>)</span></li>
+<li>↓ comparison → self-esteem <span class="citation" data-cites="Wills1981 HopkinsBilimoria2008 GibbonsGerrard1989">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>Wills1981?</strong></a>; <a href="#/reference" role="doc-biblioref" onclick=""><strong>HopkinsBilimoria2008?</strong></a>; <a href="#/reference" role="doc-biblioref" onclick="">Gibbons and Gerrard 1989</a>)</span></li>
+<li>Reference: self-interest <span class="citation" data-cites="MeltzerRichard1981">(<a href="#/reference" role="doc-biblioref" onclick="">Meltzer and Richard 1981</a>)</span>; class <span class="citation" data-cites="DimickEtAl2017 KulinSvallfors2013">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>DimickEtAl2017?</strong></a>; <a href="#/reference" role="doc-biblioref" onclick="">Kulin and Svallfors 2013</a>)</span>; economic security <span class="citation" data-cites="HanKwon2020 CondonWichowsky2020">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>HanKwon2020?</strong></a>; <a href="#/reference" role="doc-biblioref" onclick="">Condon and Wichowsky 2020</a>)</span></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_riceBowl.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_riceBowl.webp" class="fragment quarto-figure quarto-figure-center" height="350"></a></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>According to the Meltzer-Richard Model, is primarily determined by voters’ income levels relative to the median. Individuals with incomes below the median are generally in favor of such policies, as they stand to gain from higher taxes on the wealthy and increased redistribution. They support these measures to improve their own economic conditions. In contrast, those with incomes above the median tend to oppose redistribution policies, as they are concerned that higher taxes and reduced redistribution could diminish their wealth. Therefore, the model suggests that the demand for redistribution is driven by self-interest, with those disadvantaged by income inequality more likely to support policies that aim to address it<span class="citation" data-cites="MeltzerRichard1981">(<a href="#/reference" role="doc-biblioref" onclick="">Meltzer and Richard 1981</a>)</span>.</p>
+<p>While wealthier individuals generally show less support for redistribution as their income increases, they are more likely to support such policies in countries with high levels of inequality compared to more equal societies<span class="citation" data-cites="DimickEtAl2017">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>DimickEtAl2017?</strong></a>)</span>.In more privileged classes, where individuals encounter fewer market-based risks, there is a stronger alignment between values and attitudes towards redistribution. In contrast, among lower classes, immediate material concerns may overshadow value-based considerations unless mitigated by strong redistribution policies<span class="citation" data-cites="KulinSvallfors2013">(<a href="#/reference" role="doc-biblioref" onclick="">Kulin and Svallfors 2013</a>)</span>.</p>
+<p>Research has shown that individuals exposed to greater labor market risks are generally more supportive of social insurance programs<span class="citation" data-cites="HanKwon2020">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>HanKwon2020?</strong></a>)</span>. Occupational risk, including unemployment<span class="citation" data-cites="Margalit2013">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>Margalit2013?</strong></a>)</span>, and uncertainty about future income <span class="citation" data-cites="RehmEtAl2012">(<a href="#/reference" role="doc-biblioref" onclick=""><strong>RehmEtAl2012?</strong></a>)</span>also tend to increase support for downward redistribution. For those with lower socioeconomic status, local exposure to inequality tends to increase support for wealth redistribution<span class="citation" data-cites="Sands2017a">(<a href="#/reference" role="doc-biblioref" onclick="">Sands 2017</a>)</span>. Moreover, both upward and downward social comparisons can be anxiety-inducing, further exacerbating their sense of insecurity<span class="citation" data-cites="CondonWichowsky2020">(<a href="#/reference" role="doc-biblioref" onclick="">Condon and Wichowsky 2020</a>)</span>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="hypotheses" class="slide level2">
+<h2>Hypotheses</h2>
+<p><strong>Comparison</strong>:</p>
+<div class="fragment">
+<p><span class="math inline">\(H_{1.1}\)</span>: ↑ comparison → perceived inequality <span class="red">↑</span> → redistribution support <span class="red">↑</span></p>
+<p><span class="math inline">\(H_{1.2}\)</span>: ↓ comparison → perceived inequality <span class="green">↓</span> → redistribution support <span class="green">↓</span></p>
+</div>
+<p><strong>Class</strong>:</p>
+<div class="fragment">
+<p><span class="math inline">\(H_{2.1}\)</span>: ↑ <span class="math inline">\(\text{comparison}_{high\ income}\)</span> → redistribution support <span class="green">↓</span></p>
+<p><span class="math inline">\(H_{2.2}\)</span>: ↓ <span class="math inline">\(\text{comparison}_{low\ income}\)</span> → redistribution support <span class="red">↑</span></p>
+</div>
+<p><strong>Co-optation</strong>:</p>
+<div class="fragment">
+<p><span class="math inline">\(H_{3}\)</span>: Public sector employees → redistribution support <span class="green">↓</span></p>
+</div>
+<aside class="notes">
+<p>H1: Social comparisons influence perceptions of inequality and preferences for redistribution. Specifically, individuals who engage in upward (downward) social comparisons, comparing themselves to those who are better (worse) off, are more likely to perceive greater (less) income inequality and express stronger (weaker) support for redistribution policies.*</p>
+<p>H2: Income levels significantly affect how individuals are influenced by social comparisons. People with higher incomes tend to experience more positive effects from upward comparisons, receiving optimistic signals that lead them to believe less redistribution is necessary. In contrast, those with lower incomes are more likely to experience negative effects from upward comparisons, feeling a sense of deprivation that increases their demand for greater redistribution.</p>
+<p>H3: Public sector employment influences individuals’ welfare and job stability, thereby affecting the intensity of social comparison. Public sector employees, due to their greater job security and benefits, may perceive less risk from social comparisons and, as a result, may be less supportive of redistribution policies compared to non-public sector employees.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="experimental-design" class="slide level2">
+<h2>Experimental Design</h2>
+<p>Pre-registered and highly inspired by <span class="citation" data-cites="CondonWichowsky2020">Condon and Wichowsky (<a href="#/reference" role="doc-biblioref" onclick="">2020</a>)</span> 😘</p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<blockquote>
+<p>[In Chinese] Please imagine the individuals in Chinese society who are the <span class="red">(worst/best) off</span>—those who have the (least/most) wealth, (lowest/highest) education level, and (least respected/most respected) jobs. Specifically, <span class="red">consider how you differ from these individuals</span> in terms of your own income, educational background, and job status. How might these differences influence your interaction with them?</p>
+</blockquote>
+</div><div class="column" style="width:30%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/macArthorLadder.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/macArthorLadder.jpg" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Participants in the control group will be asked to imagine conversing with individuals who have similar income, education levels, and social status as themselves, and to reflect on what topics might arise in such a conversation.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="measurement-and-collection" class="slide level2">
+<h2>Measurement and collection</h2>
+<div class="r-stack">
+<ul>
+<li>Outcome
+<ul>
+<li>Inequality perception: income fairness (1–4)</li>
+<li>Preference in redistribution policies
+<ul>
+<li>Minimum subsistence allowance (<em>dibao</em>) ← benefit the <span class="green">poor</span></li>
+<li>Unemployment insurance ← benefit the <span class="green">poor</span></li>
+<li>Educaiton loans ← benefit the <span class="blue">middel</span>/<span class="green">poor</span></li>
+<li>Pension ← benefit the <span class="blue">middel</span>/<span class="red">rich</span></li>
+</ul></li>
+</ul></li>
+<li>Income: Low-middle-high (<a href="https://www.stats.gov.cn/english/PressRelease/202102/t20210228_1814177.html">official categorization</a>)</li>
+<li>Co-optation: governmental or SOE employed</li>
+<li>Control:
+<ul>
+<li>Gender, age, education, urban/rural, party member</li>
+<li>GDP, GDP growth rate, population, city-level Gini</li>
+</ul></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_incomeGroups.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_incomeGroups.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>the per capita disposable income of low-income group reached 7,869 yuan, the lower-middle-income group 16,443 yuan, the middle-income group 26,249 yuan, the upper-middle-income group 41,172 yuan and the high-income group 80,294 yuan.&nbsp;</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="social-comparisons-produced-no-effect" class="slide level2">
+<h2>Social comparisons produced “no” effect</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_atePerception.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_atePerception.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_atePolicy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_atePolicy.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="heterogeneous-impacts-across-classes" class="slide level2">
+<h2>Heterogeneous impacts across classes</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_perception_income.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_perception_income.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_policy_income.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_policy_income.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>Middle and high income earners are mostly affected</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="for-those-being-co-opted-1" class="slide level2">
+<h2>For those being co-opted (=1)</h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Perceptions_of_Inequality.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11" data-glightbox="description: .lightbox-desc-11" title="Low"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Perceptions_of_Inequality.png" class="quarto-figure quarto-figure-center" height="250" alt="Low"></a></p>
+<figcaption>Low</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Perceptions_of_Inequality.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" data-glightbox="description: .lightbox-desc-12" title="Middle"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Perceptions_of_Inequality.png" class="quarto-figure quarto-figure-center" height="250" alt="Middle"></a></p>
+<figcaption>Middle</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Perceptions_of_Inequality.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" data-glightbox="description: .lightbox-desc-13" title="High"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Perceptions_of_Inequality.png" class="quarto-figure quarto-figure-center" height="250" alt="High"></a></p>
+<figcaption>High</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Being in Danwei makes low-income people more aware of inequality, middle-income people less aware of inequality, and has no effect of high-income earners</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="policy-preference" class="slide level2">
+<h2>Policy Preference</h2>
+<div class="quarto-layout-panel" data-layout="[[1, 1], [1,1,1]]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" data-glightbox="description: .lightbox-desc-14" title="Low-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="Low-Dibao"></a></p>
+<figcaption>Low-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Unemployment_Insurance.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15" data-glightbox="description: .lightbox-desc-15" title="Low-Unemployment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Unemployment_Insurance.png" class="quarto-figure quarto-figure-center" height="250" alt="Low-Unemployment"></a></p>
+<figcaption>Low-Unemployment</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16" data-glightbox="description: .lightbox-desc-16" title="Middle-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="Middle-Dibao"></a></p>
+<figcaption>Middle-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" data-glightbox="description: .lightbox-desc-17" title="High-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="High-Dibao"></a></p>
+<figcaption>High-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 33.3%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Retirement_Pension.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" data-glightbox="description: .lightbox-desc-18" title="High-Pension"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Retirement_Pension.png" class="quarto-figure quarto-figure-center" height="250" alt="High-Pension"></a></p>
+<figcaption>High-Pension</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Being in danwei reduce low-income people’s support of dibao and pension (?) in upward comparison, increase their support of unemployment insurance when downard comparison</p>
+<p>Being in the danwei, upward and downward comparison increase the support of dibao of middle class;</p>
+<p>Being in the danwei, reducing high-income earners’ support of dibao; increase their support of pension</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="take-home-points" class="slide level2">
+<h2>Take-home points</h2>
+<ul>
+<li>Social comparisons do not alter Chinese citizen’s inequality perception saliently, but do <span class="red">shape</span> their redistribution preferences—<span class="red">conditioned</span> on their classes</li>
+<li>Co-optation provides a different <span class="red">reference point</span> for perceiving inequality and making redistribution preferences</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/inequality_intlGini.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="https://drhuyue.site:10002/sammo3182/figure/inequality_intlGini.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+</section>
+<section>
+<section id="thank-you" class="title-slide slide level1 center" data-background="#43464B">
+<h1>Thank you</h1>
+<div style="text-align: right; margin-top: 1em">
+<p><a href="https://github.com/sammo3182"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>&nbsp; sammo3182</a></p>
+<p><a href="mailto:yuehu@tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn</a></p>
+<p><a href="mailto:yexy23@mail.tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yexy23@mail.tsinghua.edu.cn</a></p>
+<p><a href="https://www.drhuyue.site"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <circle cx="12" cy="12" r="10"></circle> <line x1="2" y1="12" x2="22" y2="12"></line> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>&nbsp; https://www.drhuyue.site</a></p>
+<p><a href="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" height="250"></a></p>
+</div>
+</section>
+<section id="reference" class="slide level2 smaller scrollable">
+<h2>Reference</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Choi2019" class="csl-entry" role="listitem">
+Choi, Gwangeun. 2019. <span>“Revisiting the <span>Redistribution Hypothesis</span> with <span>Perceived Inequality</span> and <span>Redistributive Preferences</span>.”</span> <em>European Journal of Political Economy</em> 58 (June): 220–44. <a href="https://doi.org/10.1016/j.ejpoleco.2018.12.004">https://doi.org/10.1016/j.ejpoleco.2018.12.004</a>.
+</div>
+<div id="ref-CondonWichowsky2020" class="csl-entry" role="listitem">
+Condon, Meghan, and Amber Wichowsky. 2020. <span>“Inequality in the <span>Social Mind</span>: <span>Social Comparison</span> and <span>Support</span> for <span>Redistribution</span>.”</span> <em>The Journal of Politics</em> 82 (1): 149–61. <a href="https://doi.org/10.1086/705686">https://doi.org/10.1086/705686</a>.
+</div>
+<div id="ref-Cramer2003" class="csl-entry" role="listitem">
+Cramer, Christopher. 2003. <span>“Does <span>Inequality Cause Conflict</span>?”</span> <em>Journal of International Development</em> 15 (4): 397–412. <a href="https://doi.org/10.1002/jid.992">https://doi.org/10.1002/jid.992</a>.
+</div>
+<div id="ref-DuKing2022" class="csl-entry" role="listitem">
+Du, Hongfei, and Ronnel B. King. 2022. <span>“What <span>Predicts Perceived Economic Inequality</span>? <span>The Roles</span> of <span>Actual Inequality</span>, <span>System Justification</span>, and <span>Fairness Considerations</span>.”</span> <em>British Journal of Social Psychology</em> 61 (1): 19–36. <a href="https://doi.org/10.1111/bjso.12468">https://doi.org/10.1111/bjso.12468</a>.
+</div>
+<div id="ref-Festinger1954" class="csl-entry" role="listitem">
+Festinger, Leon. 1954. <span>“A <span>Theory</span> of <span>Social Comparison Processes</span>.”</span> <em>Human Relations</em> 7 (2): 117–40. <a href="https://doi.org/10.1177/001872675400700202">https://doi.org/10.1177/001872675400700202</a>.
+</div>
+<div id="ref-GibbonsGerrard1989" class="csl-entry" role="listitem">
+Gibbons, Frederick X., and Meg Gerrard. 1989. <span>“Effects of Upward and Downward Social Comparison on Mood States.”</span> <em>Journal of Social and Clinical Psychology</em> 8 (1): 14–31. <a href="https://doi.org/10.1521/jscp.1989.8.1.14">https://doi.org/10.1521/jscp.1989.8.1.14</a>.
+</div>
+<div id="ref-GimpelsonTreisman2018" class="csl-entry" role="listitem">
+Gimpelson, Vladimir, and Daniel Treisman. 2018. <span>“Misperceiving Inequality.”</span> <em>Economics &amp; Politics</em> 30 (1): 27–54. <a href="https://doi.org/10.1111/ecpo.12103">https://doi.org/10.1111/ecpo.12103</a>.
+</div>
+<div id="ref-Gurr1971" class="csl-entry" role="listitem">
+Gurr, Ted Robert. 1971. <em>Why <span>Men Rebel</span></em>. Princeton University Press.
+</div>
+<div id="ref-He2003" class="csl-entry" role="listitem">
+He, Qinglian. 2003. <span>“China’s <span>Changing</span> of the <span>Guard</span>: <span>A Volcanic Stability</span>.”</span> <em>Journal of Democracy</em> 14 (1): 66–72. <a href="https://muse.jhu.edu/pub/1/article/38537">https://muse.jhu.edu/pub/1/article/38537</a>.
+</div>
+<div id="ref-KulinSvallfors2013" class="csl-entry" role="listitem">
+Kulin, J., and S. Svallfors. 2013. <span>“Class, <span>Values</span>, and <span>Attitudes Towards Redistribution</span>: <span>A European Comparison</span>.”</span> <em>European Sociological Review</em> 29 (2): 155–67. <a href="https://doi.org/10.1093/esr/jcr046">https://doi.org/10.1093/esr/jcr046</a>.
+</div>
+<div id="ref-MeltzerRichard1981" class="csl-entry" role="listitem">
+Meltzer, Allan H., and Scott F. Richard. 1981. <span>“A <span>Rational Theory</span> of the <span>Size</span> of <span>Government</span>.”</span> <em>Journal of Political Economy</em> 89 (5): 914–27. <a href="http://www.jstor.org/stable/1830813">http://www.jstor.org/stable/1830813</a>.
+</div>
+<div id="ref-NishiEtAl2015" class="csl-entry" role="listitem">
+Nishi, Akihiro, Hirokazu Shirado, David G. Rand, and Nicholas A. Christakis. 2015. <span>“Inequality and <span>Visibility</span> of <span>Wealth</span> in <span>Experimental Social Networks</span>.”</span> <em>Nature</em> 526 (7573): 426–29. <a href="https://doi.org/10.1038/nature15392">https://doi.org/10.1038/nature15392</a>.
+</div>
+<div id="ref-PikettyEtAl2019" class="csl-entry" role="listitem">
+Piketty, Thomas, Li Yang, and Gabriel Zucman. 2019. <span>“Capital <span>Accumulation</span>, <span>Private Property</span>, and <span>Rising Inequality</span> in <span>China</span>, 1978–2015.”</span> <em>American Economic Review</em> 109 (7): 2469–96. <a href="https://doi.org/10.1257/aer.20170973">https://doi.org/10.1257/aer.20170973</a>.
+</div>
+<div id="ref-ReardonBischoff2011" class="csl-entry" role="listitem">
+Reardon, Sean F., and Kendra Bischoff. 2011. <span>“Income <span>Inequality</span> and <span>Income Segregation</span>.”</span> <em>American Journal of Sociology</em> 116 (4): 1092–1153. <a href="https://doi.org/10.1086/657114">https://doi.org/10.1086/657114</a>.
+</div>
+<div id="ref-Sands2017a" class="csl-entry" role="listitem">
+Sands, Melissa L. 2017. <span>“Exposure to Inequality Affects Support for Redistribution.”</span> <em>Proceedings of the National Academy of Sciences</em> 114 (4): 663–68. <a href="https://doi.org/10.1073/pnas.1615010113">https://doi.org/10.1073/pnas.1615010113</a>.
+</div>
+<div id="ref-SzewczykCrowder-Meyer2022" class="csl-entry" role="listitem">
+Szewczyk, James, and Melody Crowder-Meyer. 2022. <span>“Community <span>Income Inequality</span> and the <span>Economic Gap</span> in <span>Participation</span>.”</span> <em>Political Behavior</em> 44 (2): 479–504. <a href="https://doi.org/10.1007/s11109-020-09621-6">https://doi.org/10.1007/s11109-020-09621-6</a>.
+</div>
+<div id="ref-ZhouJin2018a" class="csl-entry" role="listitem">
+Zhou, Yingnan Joseph, and Shuai Jin. 2018. <span>“Inequality and <span>Political Trust</span> in <span>China</span>: <span class="nocase">The Social Volcano Thesis Re-examined</span>.”</span> <em>The China Quarterly</em> 236 (December): 1033–62. <a href="https://doi.org/10.1017/S0305741018001297">https://doi.org/10.1017/S0305741018001297</a>.
+</div>
+</div>
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix center" data-visibility="uncounted">
+<h1>Appendix</h1>
+
+</section>
+<section id="policy-preference-low" class="slide level2" data-visibility="uncounted">
+<h2>Policy Preference (Low)</h2>
+<div class="quarto-layout-panel" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" data-glightbox="description: .lightbox-desc-21" title="Low-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="Low-Dibao"></a></p>
+<figcaption>Low-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Unemployment_Insurance.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22" data-glightbox="description: .lightbox-desc-22" title="Unemployment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Unemployment_Insurance.png" class="quarto-figure quarto-figure-center" height="250" alt="Unemployment"></a></p>
+<figcaption>Unemployment</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Education_Loan.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23" data-glightbox="description: .lightbox-desc-23" title="Edu Loan"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Education_Loan.png" class="quarto-figure quarto-figure-center" height="250" alt="Edu Loan"></a></p>
+<figcaption>Edu Loan</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Retirement_Pension.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24" data-glightbox="description: .lightbox-desc-24" title="Pension"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Lowincome_Retirement_Pension.png" class="quarto-figure quarto-figure-center" height="250" alt="Pension"></a></p>
+<figcaption>Pension</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Being in danwei reduce low-income people’s support of dibao and pension (?) in upward comparison, increase their support of unemployment insurance when downard comparison</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="policy-preference-high-low" class="slide level2" data-visibility="uncounted">
+<h2>Policy Preference (High-Low)</h2>
+<div class="quarto-layout-panel" data-layout-ncol="4">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25" data-glightbox="description: .lightbox-desc-25" title="Middle-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="Middle-Dibao"></a></p>
+<figcaption>Middle-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Unemployment_Insurance.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26" data-glightbox="description: .lightbox-desc-26" title="Unemployment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Unemployment_Insurance.png" class="quarto-figure quarto-figure-center" height="250" alt="Unemployment"></a></p>
+<figcaption>Unemployment</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Education_Loan.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27" data-glightbox="description: .lightbox-desc-27" title="Edu Loan"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Education_Loan.png" class="quarto-figure quarto-figure-center" height="250" alt="Edu Loan"></a></p>
+<figcaption>Edu Loan</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Retirement_Pension.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28" data-glightbox="description: .lightbox-desc-28" title="Pension"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Middleincome_Retirement_Pension.png" class="quarto-figure quarto-figure-center" height="250" alt="Pension"></a></p>
+<figcaption>Pension</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Dibao_Policy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29" data-glightbox="description: .lightbox-desc-29" title="High-Dibao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Dibao_Policy.png" class="quarto-figure quarto-figure-center" height="250" alt="High-Dibao"></a></p>
+<figcaption>High-Dibao</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Unemployment_Insurance.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30" data-glightbox="description: .lightbox-desc-30" title="Unemployement"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Unemployment_Insurance.png" class="quarto-figure quarto-figure-center" height="250" alt="Unemployement"></a></p>
+<figcaption>Unemployement</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Education_Loan.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31" data-glightbox="description: .lightbox-desc-31" title="Edu Loan"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Education_Loan.png" class="quarto-figure quarto-figure-center" height="250" alt="Edu Loan"></a></p>
+<figcaption>Edu Loan</figcaption>
+</figure>
+</div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/Highincome_Retirement_Pension.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32" data-glightbox="description: .lightbox-desc-32" title="Pension"><img data-src="https://drhuyue.site:10002/sammo3182/figure/Highincome_Retirement_Pension.png" class="quarto-figure quarto-figure-center" height="250" alt="Pension"></a></p>
+<figcaption>Pension</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Being in the danwei, upward and downward comparison increase the support of dibao of middle class;</p>
+<p>Being in the danwei, reducing high-income earners’ support of dibao; increase their support of pension</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section><div class="quarto-auto-generated-content">
+<div class="footer footer-default">
+
+</div>
+</div></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="inequality_compare_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="inequality_compare_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/reveal-spotlight/spotlight.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="inequality_compare_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="inequality_compare_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealSpotlight, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    <script>var lightboxQuarto = GLightbox({"openEffect":"fade","loop":false,"closeEffect":"fade","descPosition":"bottom","selector":".lightbox"});
+    window.onload = () => {
+      lightboxQuarto.on('slide_before_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        const href = trigger.getAttribute('href');
+        if (href !== null) {
+          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+          if (imgEl !== null) {
+            const srcAttr = imgEl.getAttribute("src");
+            if (srcAttr && srcAttr.startsWith("data:")) {
+              slideConfig.href = srcAttr;
+            }
+          }
+        } 
+      });
+
+      lightboxQuarto.on('slide_after_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(slideNode);
+        }
+      });
+
+    };
+              </script>
+    
+
+</body></html>
