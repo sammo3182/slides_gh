@@ -1,44 +1,40 @@
 ---
 title: "Analysis of Political Data"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
 knitr: 
     opts_chunk: 
       echo: false
-
 format: 
   revealjs:
     css: https://sammo3182.github.io/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
-    incremental: true
-    preview-links: false # open an iframe for a link
+    filters: [appExclusion.lua] # not count appendices into page number
+    incremental: false
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
+    chalkboard: false # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
-
+    default-image-extension: png
 revealjs-plugins:
   - spotlight
-
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -67,39 +63,36 @@ set.seed(313)
 
 ## Who am I
 
-(And why [not] learning with me)
+(And what you should [not] learn with me)
 
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column width="50%"}
 *Experience*
 
-- PhD. of political science [（University of Iowa)]{.small}
-  - Informatics[（Graduated Certificate in Informatics)]{.small}
+- PhD. of political science
+  - Informatics
 - Computational Social Science Platform
-  - Data & Governance Center
 
-*Research*：*Modernization from a interdisciplinary view*
+*Research*：*Microfoundations of Modernization*
 
 - W. Economics & CSS
   - Lab & survey experiment
-  - Latent variable, network, spatical
+  - Latent variable
   - Text analysis, visualization
 :::
 
-::: {.column width="40%"}
+::: {.column width="50%"}
 *Area*
 
 - W. Psychology
   - Micro-foundation
   - Traits &rarr; behavior
 - W. Economy
-  - Macro-econ &rarr; micro-cognition &rarr; meso policies
-  - Economic [inequality]{.red}
+  - Perceptive [inequality]{.red}
 - W. Linguistics
   - Political influence of [language proficiency]{.red}
-  - Language policy/plan
 
 :::
 
@@ -111,29 +104,55 @@ set.seed(313)
 ## What a class
 
 ::::{.columns}
-:::{.column width="40%" .fragment}
-- Very basic
-    - (1 + 2 + 3 + 4 + 5) / 5
-    - OLS
+:::{.column width="40%"}
 - Not (that) methodologistic
     - Equations, though
     - Statistics, though
     - Operations, though
 :::
 
-:::{.column width="60%" .fragment}
-![](images/intro_assignmentDesign.png){ height="260" }
+:::{.column width="30%" .fragment}
 
+- Considerable load
+- Unmuddlable tasks (assignments, project, interactions)
+
+:::
+
+:::{.column width="30%" .fragment}
 - Considerable load
 - Unmuddlable tasks (assignments, project, interactions)
 
 :::
 ::::
 
+![](https://drhuyue.site:10002/sammo3182/figure/intro_assignmentDesign.png){.fragment height="260" }
+
+## OLS, that's it
+
+Association modeling > Generalized linear model > **OLS**
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_simpleComplex.png){.fragment fig-align="center" height=550}
+
+![](https://drhuyue.site:10002/sammo3182/figure/intro_modelComplexity.png){.fragment fig-align="center" height=550}
+:::
+
+:::{.notes}
+Morucci, Marco, and Arthur Spirling. 2024. “Model Complexity for Supervised Learning: Why Simple Models Almost Always Work Best, And Why It Matters for Applied Research.”
+
+
+we start with a “full size” model, and then move  through eight smaller ones for dimensions d = 50, 100, 250, 500, 1000, 2000, 3000, 5000. As we do so, we  record several performance statistics (Accuracy, Precision, Recall, AUC) on the test set for each intrinsic  dimension.
+
+the horizontal black solid line records the “90%” solution—i.e. when we obtain 90%  of the best possible accuracy/precision/recall and AUC achieved under any number of parameters for this  problem.
+
+But this pattern is not nearly so starkly the case for Montgomery, Goldstone, Beck et al and Colaresi  data. We do see some improvements as intrinsic dimension increases, but the lines are basically flat after  an (log) intrinsic dimension number of 8 or so.
+:::
+
+
 ## Map of the Class
 
 ::: {style="text-align: center"}
-![](images/intro_mindmap.png){ height="600" }
+![](https://drhuyue.site:10002/sammo3182/figure/intro_mindmap.png){ height="600" }
 :::
 
 ## The Leeuwenhoek
@@ -161,8 +180,8 @@ $$
 ## Structure
 
 ::: {style="text-align: center"}
-### Lecture: 2/3
-### R Lab: 1/3
+### Lecture > 2/3
+### R Lab < 1/3
 :::
 
 ::::{.columns}
@@ -172,7 +191,7 @@ $$
     - Munging
     - Basic Visualization
     - Lecture related skills    
-    ![2.0](images/intro_drhur.png){ height="300" }
+    ![2.0](https://drhuyue.site:10002/sammo3182/figure/intro_drhur.png){ height="250" }
 :::
 
 :::{.column width="50%" .fragment}
@@ -182,7 +201,7 @@ $$
     - Regular expression
     - Rstudio addin
     - Version control
-    - Rmarkdown and academic writing
+    - Academic writing
     - Slides
     - Poster
 :::
@@ -191,7 +210,7 @@ $$
 
 ## Assignments
 
-![](images/intro_assignmentDesign.png)
+![](https://drhuyue.site:10002/sammo3182/figure/intro_assignmentDesign.png)
 
 ::: {.fragment style="text-align: center"}
 - Assignments
@@ -220,16 +239,18 @@ $$
 ## Goal
 
 ::::{.columns}
-:::{.column width="40%" .fragment }
-Someone like this
+:::{.column width="40%"}
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGY3d09LeFNwZzNVaVRnP2U9SzFkUjJz.mp4" height="500" >}}
+{{< video https://drhuyue.site:10002/sammo3182/video/intro_olsAfterMyCourse.mp4 title="Someone like this" height=550 preload="auto" controls allowfullscreen>}}
+
+Something like this
+
 :::
 
 :::{.column width="60%" .fragment style="text-align: center"}
 Like this
 
-![](images/intro_busters.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_busters.png){fig-align="center" height=400}
 :::
 ::::
 
@@ -238,17 +259,14 @@ Like this
 
 ## Criterion 1: What a Researcher You Want to Be
 
-::::{.columns}
-:::{.column .fragment width="30%" }
-This?
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xSGJfZWUzMmV0eWZJUDhaP2U9d2VlR2Nm.mp4" height="500" >}}
+:::{.r-stack}
+{{< video https://drhuyue.site:10002/sammo3182/video/intro_NotUsingMethod.mp4 title="This?" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.fragment}
+{{< video https://drhuyue.site:10002/sammo3182/video/catchUp.mp4 title="Or this?" height=600 preload="auto" controls allowfullscreen>}}
 :::
 
-:::{.column .fragment width="70%" }
-Or this?
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xSGhiZy1wcVZOWV9SeHpUP2U9eFhqZVZP.mp4" height="500" >}}
 :::
-::::
 
 
 ## Criterion 2: Do you believe these people
@@ -257,26 +275,26 @@ Or this?
 :::{.column .fragment width="70%" style="text-align: center"}
 
 :::{.r-vstack}
-![](images/intro_eval2.png){.fragment height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_eval2.png)
 
-![](images/intro_eval3.png){.fragment height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_eval3.png){.fragment}
 
-![](images/intro_eval4.png){.fragment height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/intro_eval4.png){.fragment}
 :::
 :::
 
 :::{.column .fragment width="30%" style="text-align: center"}
-![](images/intro_eval1.jpg)
+![](https://drhuyue.site:10002/sammo3182/figure/intro_eval1.jpg)
 :::
 ::::
 
-## Criterion 3: Do you have a "right" mindset
+## Criterion 3: Who don't need it
 
 ::: {.r-fit-text .fragment .fade-in}
 - **Muddling** in for grades
 - Super **anti-English**;
-- [Taking econometrics **already**;]{.red}
-- Considering yourself **conservative**.
+- Taking econometrics **already**;
+- Strong **ego**.
 
 ::: {.fragment .highlight-red}
 - Not required for Poli Sci students.
