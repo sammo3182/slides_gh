@@ -15,7 +15,7 @@ format:
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
-    incremental: false
+    incremental: true
     preview-links: false # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
@@ -49,15 +49,17 @@ library(pacman)
 
 p_load(
   "knitr",
-  "tidyverse"
+  "tidyverse",
+  "drhutools"
 )
 
 # Functions preload
+theme_set(theme_minimal())
 set.seed(313)
 ```
 
 
-## Overview {.no-number}
+## Overview {.unnumbered}
 
 :::: {.columns}
 
@@ -116,7 +118,7 @@ Etymology
 from "a piece of info, something to give" to now
 :::
 
-## Nature
+## Think deeper
 
 ::: {.r-fit-text}
 - Is data a product?
@@ -135,7 +137,7 @@ from "a piece of info, something to give" to now
 :::
 
 
-## {.no-number}
+## {.unnumbered}
 
 :::{.r-fit-text style="text-align:center; margin-top: 2em"}
 > If you can't measure it, you can't manage it
@@ -174,10 +176,6 @@ you can't well measure it.
 A concept?      
 A variable?     
 A measurement?
-:::
-
-:::{.fragment style="text-align:center; margin-top: 0.5em"}
-How about...**GDP**
 :::
 
 
@@ -341,14 +339,13 @@ Information decay
 
 :::
 
-## Quick thought
+## Think deeper
 
 > I rated the applicant among the top 10-15% students taking BSc-courses at Manchester; and now I know for sure that she is among the best...
 
 ::: {.fragment .r-fit-text}
 What's the relationship between percentile and mean?
 :::
-
 
 
 :::{.notes}
@@ -360,10 +357,45 @@ percentile is  mean of a binary variable
 :::
 
 
+:::{.fragment}
+
+```{r percentile}
+#| fig-height: 4
+
+# Create data for a normal distribution
+data <- data.frame(x = seq(-4, 4, length = 1000))
+data$y <- dnorm(data$x)
+
+# Calculate the 95% quantile for the one-tail (right tail)
+quantile_95 <- qnorm(0.95)
+
+# Add an id variable to classify points based on the 95% quantile
+data$id <- ifelse(data$x > quantile_95, "Above 95%", "Below 95%")
+
+# Plot the normal distribution and fill according to the id variable
+ggplot(data, aes(x = x, y = y, fill = id)) +
+    geom_area() +
+    geom_vline(
+        xintercept = quantile_95,
+        color = "grey",
+        linetype = "dashed",
+        size = 1
+    ) +
+    scale_fill_gb() +
+    labs(title = "Normal Distribution with Area Above and Below 95% Quantile", x = "x", y = "Density") +
+    theme(legend.position = "none")
+```
+
+:::
+
+
+:::{.notes}
+The percentage is the 95% above is 1 and 95% off is 0 and get the mean
+:::
 
 ## When to use what
 
-:::{.callout-tipe}
+:::{.callout-tip}
 ## Hint
 
 What's the "point" estimate for?
@@ -406,7 +438,7 @@ utils::browseURL(gif_file)
 
 ![](https://drhuyue.site:10002/sammo3182/figure/desc_barbie.jpeg){fig-align="center" height=num}
 
-## Describing a Variable: Dispersion
+## Moment: Dispersion
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -495,7 +527,7 @@ In statistical testing applications, often one isn't directly interested in the 
 ## Two Formats of Variance
 
 ::::{.columns}
-:::{.column width="40%"}
+:::{.column width="30%"}
 
 Definition：
 
@@ -507,7 +539,7 @@ s^2 =& \sum(X - \bar X)^2p(x), \\
 
 :::
 
-:::{.column .small width="60%" .fragment}
+:::{.column width="70%" .fragment}
 Given &mu; = &sum;Xp(x), &sum;p(x) = 1,
 
 \begin{aligned}
@@ -556,5 +588,6 @@ Starting from math {{< fa solid skull >}}
 
 ## Hey, no fear
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSGtFZ0F0ZVZzTElHNjdxP2U9U3Fpb0do.mp4" height="550" >}}
+{{< video https://drhuyue.site:10002/sammo3182/video/desc_pepTalk.mp4 title="peptalk" height=450 preload="auto" controls allowfullscreen>}}
 
+[*Launch (the Rstudio)!*](http://103.238.162.29:8787/auth-sign-in?appUri=%2F){.r-fit-text .fragment}
