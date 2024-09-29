@@ -1,0 +1,144 @@
+---
+title: "Population and Distribution"
+subtitle: "Quiz Keys"
+
+author: "Yue Hu"
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    number-sections: false
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: false
+    preview-links: false # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+# Quiz 1
+
+## Q1
+
+在一次政治选举中，地区A和地区B的选民分别占总选民的60%和40%。已知在地区A中，有5%的选票被判定为无效票；而在地区B中，有8%的选票被判定为无效票。现在，随机抽取一张被判定为无效的选票，求这张无效票来自地区B的概率是多少？
+
+:::{.callout-tip  appearance="minimal"}
+$$
+P(B|\text{无效票}) = \frac{P(\text{无效票}|B)P(B)}{P(\text{无效票}|A)P(A) + P(\text{无效票}|B)P(B)}
+$$
+:::
+
+## 计算相关概率（2 分）
+
+- **已知条件：**
+  - 地区 A 的选民比例：$P(A) = 60\% = 0.6$
+  - 地区 B 的选民比例：$P(B) = 40\% = 0.4$
+  - 地区 A 的无效票概率：$P(\text{无效票}|A) = 5\% = 0.05$
+  - 地区 B 的无效票概率：$P(\text{无效票}|B) = 8\% = 0.08$
+
+## 计算总的无效票概率
+
+$$
+\begin{aligned}
+P(\text{无效票}) &= P(\text{无效票}|A)P(A) + P(\text{无效票}|B)P(B) \\
+&= (0.05 \times 0.6) + (0.08 \times 0.4) \\
+&= 0.03 + 0.032 \\
+&= 0.062
+\end{aligned}
+$$
+
+## 应用贝叶斯定理计算（2 分）
+
+- **计算无效票来自地区 B 的概率：**
+
+$$
+\begin{aligned}
+P(B|\text{无效票}) &= \frac{P(\text{无效票}|B)P(B)}{P(\text{无效票})} \\
+&= \frac{0.08 \times 0.4}{0.062} \\
+&= \frac{0.032}{0.062} \\
+&\approx 0.5161
+\end{aligned}
+$$
+
+## 解释结果的实质意义（1 分）
+
+尽管地区 B 的选民人数较少，但其无效票率较高，因此在所有无效票中，无效票来自地区 B 的概率超过了 50%。这表明在选举分析中，需要重点关注不同地区的投票行为差异，以准确评估选举结果。
+
+## Q2
+
+在一项政策支持度调查中，已知男性和女性对某项新政策的支持率分别为40%和50%，且总体的支持率为45%。请问，你能否判断性别与对该政策的支持是否为独立事件？
+
+:::{.callout-tip appearance="minimal"}
+$$
+P(A \cap B) = P(A) \times P(B)
+$$
+
+其中，A表示“支持该政策”，B表示“性别为男性”。
+:::
+
+
+## 计算男性比例和相关概率（2 分）{.smaller}
+
+- **设定变量：**
+  -$P(\text{支持}| \text{男性}) = 0.4$
+  -$P(\text{支持}| \text{女性}) = 0.5$
+  - 总体支持率：$P(\text{支持}) = 0.45$
+  - 设$P(\text{男性}) = p$，则$P(\text{女性}) = 1 - p$
+
+- **计算男性比例：**
+
+$$
+\begin{aligned}
+P(\text{支持}) &= P(\text{支持}| \text{男性})P(\text{男性}) + P(\text{支持}| \text{女性})P(\text{女性}) \\
+0.45 &= 0.4p + 0.5(1 - p) \\
+0.45 &= 0.4p + 0.5 - 0.5p \\
+0.45 &= 0.5 - 0.1p \\
+0.1p &= 0.5 - 0.45 \\
+p &= \frac{0.05}{0.1} = 0.5
+\end{aligned}
+$$
+
+- **计算$P(\text{支持} \cap \text{男性})$：**
+
+$$
+P(\text{支持} \cap \text{男性}) = P(\text{支持}| \text{男性})P(\text{男性}) = 0.4 \times 0.5 = 0.20
+$$
+
+## 检验独立性（2 分）
+
+- **计算$P(\text{支持}) \times P(\text{男性})$：**
+
+$$
+P(\text{支持}) \times P(\text{男性}) = 0.45 \times 0.5 = 0.225
+$$
+
+- **比较结果：**
+
+因为$P(\text{支持} \cap \text{男性}) = 0.20 \neq 0.225 = P(\text{支持}) \times P(\text{男性})$，所以事件“支持该政策”和“性别为男性”不是独立事件。
+
+## 解释结果的实质意义（1 分）
+
+性别对政策支持度有显著影响。男性的支持率低于总体支持率，而女性的支持率高于总体支持率。因此，在制定政策宣传策略时，需要考虑性别因素，以提高政策的接受度。
