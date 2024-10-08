@@ -1,0 +1,650 @@
+---
+title: "Understanding Democratic Support"
+subtitle: "From a Comparative View"
+author: "Yue Hu"
+institute: "Department of Political Science, Tsinghua University"
+bibliography: pre_dcpo.bib
+
+knitr: 
+    opts_chunk: 
+      echo: false
+
+format: 
+  revealjs:
+    number-sections: true
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+
+revealjs-plugins:
+  - spotlight
+
+# lightbox: auto
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+```{r setup}
+#| include = FALSE
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse",
+  "gt",
+  "drhutools"
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(theme_minimal())
+```
+
+## Overview {.unnumbered}
+
+1. Know **what**'s Democratic support, and why matters
+1. Learn **how** to compare supports: Challenges and solutions
+1. Understand **where** the variance of democratic support roots
+    - A China view
+
+# Know Democratic support
+
+## What's democratic support
+
+> The way in which a person evaluatively *orients himself to some object* through either his attitudes or his behavior^["Specific support" [@Easton1975, p. 436].]......Some types of evaluations are closely related to what the political authorities do and how they do it. Others are [*more fundamental in character*]{.red}^["Diffuse support" [@Easton1975, p. 436].] because they are directed to basic aspects of the system.   
+  ---@Easton1975
+
+:::{.large style="text-align:center; margin-top: 1em"}
+- General
+- Aggregated
+- Profound
+:::
+
+
+:::{.notes}
+- General: general trait in modern society
+- Aggregated: care more about the group not individual
+- Profound: deeply related with the characteristics of the society
+:::
+
+## Democratic Crisis
+
+:::{.r-hstack}
+![@CrozierEtAl1975](https://drhuyue.site:10002/sammo3182/figure/demo_crisis1975.jpg){fig-align="center" height=450 width=275}
+
+![@Przeworski2019](https://drhuyue.site:10002/sammo3182/figure/demo_crisis2018.jpg){.fragment fig-align="center" height=550 width=275}
+
+![@JODEditorial2024](https://drhuyue.site:10002/sammo3182/figure/demo_crisis2024.jpeg){.fragment fig-align="center" height=550 width=450}
+
+:::
+
+## Researchers' Efforts
+
+:::{.callout-important}
+## The mission for social scientists
+
+[Social scientists aim for [consistent patterns]{.red} in human societies.]{.normal}
+:::
+
+:::{.fragment style="text-align:center;"}
+[Common issues]{.large}       
+Development, culture, democracy...
+
+\+ 
+
+[Rich data]{.large}    
+
+
+[&dArr;]{.large}
+
+[~~General patterns~~]{.large}        
+[Three puzzles]{.large}
+
+:::
+
+## Puzzle 1: Support &rarr; Institutions
+
+- Explicit support for democracy [@InglehartWelzel2005]
+    - Support for democracy is the **foundation** of regime sustainability [@Easton1965; @Lipset1959].
+    - "Fading allure"  &rarr; 
+        - Support for populist parties [@Plattner2017]
+        - Discontent with democratic norms [@FoaMounk2016; @FoaMounk2017]
+        - A crisis of institutional trust [@WikeFetterolf2018].
+- Is support for democracy really the "foundation"?
+    1. **Diffuse** support *vs* **specific** support [@Easton1975;@Norris2011].
+    2. Democratic **enlightenment** [@AcemogluEtAl2009] *vs*    
+      Democratic **consolidation** [@Boix2011; @PrzeworskiLimongi1997].
+
+:::{.notes}
+The Lipset-Easton theory of democratic support provides a comprehensive explanation of the link between public sentiment and regime dynamics.
+
+The concept of the "fading allure of liberal democracy" refers to the increasing disillusionment with democratic norms and institutions worldwide.
+
+Diffuse support vs. specific support:
+    - The former is more crucial for the endurance of democracy.
+:::
+
+## Puzzle 2: Support &larr; Institutions
+
+- Democratic institutions *automatically* generate demand for themselves, and this demand fosters support [@Dalton2004; @MishlerRose2007].
+    1. Democratic socialization
+    2. Lifelong learning theory
+- **Thermostatic** model [@Wlezien1995; @Claassen2020a].
+    1. Authoritarian nostalgia &rarr; (majority) electoral democracy.
+    2. Minority discrimination &rarr; (protective) minoritarian democracy.
+
+:::{.notes}
+Authoritarian nostalgia plays a role in shaping attitudes towards democracy.
+:::
+
+## Puzzle 3:  Data Proliferation vs. Pattern Consensus
+
+```{r instMeasure}
+tibble(
+  "Dataset" = c("Polity V", "Freedom House", "V-Dem"),
+  "Years" = c("1800-2018", "1973-2022", "1789-2022"),
+  "Countries" = c("168", "210", "202"),
+  "Indicators" = c("Regime type, competition, and participation",
+                   "Political and civil rights",
+                   "50+ macro indicators, 450+ micro indicators"),
+  "Features" = c("Covers both democracy and authoritarianism",
+                 "Focuses on individual rights and freedoms, not government institutions or performance",
+                 "Bayesian IRT, confidence intervals, and open-source data")
+) |> 
+  gt() |> 
+  tab_style(
+    style = list(
+      cell_fill(color = gb_cols("gold"))
+    ),
+    locations = cells_body(rows = 3)
+  ) |>
+  opt_stylize(style = 5, color = "gray") |>
+  tab_options(table.font.size = px(30))
+```
+
+- Democratic support: WVS, Global Barometers, GSS, Pew, etc.
+
+:::{.notes}
+```{r instMeasure-full}
+tibble(
+  "Dataset" = c("Polity V", "Freedom House", "V-Dem Polyarchy"),
+  "Theoretical Basis" = c("Gurr’s (1974) and Eckstein and Gurr’s (1975)", 
+                          "The 1948 Universal Declaration of Human Rights",
+                          "Dahl’s (1971) theory of democracy, measuring polyarchy as a combination of freedom of association, suffrage, clean elections, elected executive, and freedom of expression"),
+  "Years" = c("1800-2018", "1973-2022", "1789-2022"),
+  "Number of Countries" = c(168, 210, 202),
+  "Score Range" = c("0-100", "0-1", "-10 to 10"),
+  "Components" = c("Regime type, political institutions, political competition, and participation",
+                   "Two parts: Political rights (e.g., electoral process, political pluralism and participation, government functioning) and civil rights (e.g., freedom of expression, associational rights, rule of law, personal autonomy, and individual rights)",
+                   "50 macro indicators, 450 micro indicators measuring political participation, executive recruitment, and constraints on executive powers"),
+  "Unique Features" = c("Includes multiple rounds of internal consistency checks; distinct conceptual framework viewing democracy and authoritarianism not as mutually exclusive but as part of a continuum from full authoritarianism to mixed authority (anocracy) to full democracy.",
+                        "Assesses individual rights and freedoms rather than the government's performance; data prepared by a team of internal and external analysts and consultants from academic, think tank, and human rights sectors.",
+                        "Uses independent coders for each question; includes a custom-designed Bayesian IRT measurement model for inter-coder reliability tests; provides point estimates and confidence intervals for all expert-coded questions; fully transparent aggregation procedures; all data, including raw coder-level judgments, are freely available, except for personally identifiable information."),
+  "Coding Method" = c("Coded and analyzed by teams of experts in political science and international relations", 
+                      "128 analysts and approximately 40 advisors (for the 2023 edition)", 
+                      "Over 3,200 global scholars and experts involved in coding")
+) |> 
+  gt() |> 
+  opt_stylize(style = 5, color = "red") |>
+  tab_options(table.font.size = px(22))
+```
+:::
+
+
+## Myth 3: Data Proliferation vs. Pattern Consensus
+
+1. Democracy  &rarr; Public Opinion: Stable democratic institutions [weaken]{.red} democratic support (thermostatic effect).
+    - Democracy [&uarr;]{.green}  &rarr; Support [&uarr;]{.green} [@WuttkeEtAl2020a]
+    - Democracy [&uarr;]{.green}  &rarr; Support [&darr;]{.red} [@FoaMounk2017]
+        - Weakening of *electoral* and *minoritarian* institutions.
+1. Public Opinion  &rarr; Democracy: Democratic support correlates [positively]{.green} with the development of democratic institutions
+    - Support [&uarr;]{.green}  &rarr; Democracy [&uarr;]{.green} [@InglehartWelzel2005]
+    - Support [&uarr;]{.green}  &rarr; Democracy [&#8675;]{.red} [@FailsPierce2010]
+      - Strengthens in *established democracies* and in *non-democratic regimes*.
+
+:::{.notes}
+
+Inglehart, Ronald, and Christian Welzel (2005): Countries with greater democratic support tend to become more stable and robust democracies.
+
+Fails, Matthew D., and Heather Nicole Pierce (2010): Insignificant positive with one-year survey, and insig negative with multiple years
+
+Thermostatic effect theory suggests that stable democracies experience declining public support.
+
+:::
+
+
+## Wrap Up
+
+- Democratic support: Focusing on the diffuse kind
+- Democracy in crisis
+- Researchers' effort
+    - Enduring theoretical development
+    - Enriching data collection
+    - &rArr; puzzles ~~patterns~~
+
+
+# Why? {.unnumbered background="#43464B"}
+
+:::{.fragment}
+Data generation process (DGP)
+
+- People were asked about democracy w.o. clear definition
+- People were asked with Churchill-style questions
+
+Cognition
+
+- People understand democracy based on different roots
+:::
+
+
+:::{.notes}
+"Democracy is the worst form of government, except for all the others that have been tried."---Churchill
+
+Churchill-style: which force respondents to place themselves on a scale between complete support and full opposition. 
+:::
+
+# Learn Democratic support
+
+## Illustration of DGP Issues
+
+:::{.r-stack}
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/demo_leaving.gif){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/demo_enter.gif){.fragment fig-align="center" height="600"}
+:::
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_sparsingData.png){.fragment fig-align="center" height="600"}
+
+:::
+
+
+:::{.notes}
+- United Kindom, lawmakers leave. 
+- Swarming Capital defending democracy.  
+  - [January 6, 2021 United States Capitol attack](https://en.wikipedia.org/wiki/January_6_United_States_Capitol_attack)
+
+The challenges of data availability and comparability across countries and time:
+
+- Difficulties in conducting [longitudinal]{.red} research: Existing institutions affect democratic support.
+- Difficulties in [cross-national]{.red} comparison: Country-specific factors (e.g., culture, history).
+- Difficulties in drawing [general]{.red} conclusions: Data is uneven across countries and time periods.
+:::
+
+## The Problem{.large}
+
+:::{style="text-align:center"}
+[Different]{.blue} questions   
+[Different]{.blue} people   
+&dArr;    
+[Incomparable]{.red} data   
+
+:::{.fragment style="margin-top: 2em"}
+*Solution*
+
+[Latent variable analysis (e.g., IRT)]{.green}
+:::
+
+
+
+:::
+
+
+## A Methodlogical Introduction
+
+What's a latent variable
+
+:::{.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_angry.jpg){fig-align="center" height=500}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_happy.jpg){.fragment fig-align="center" height=500}
+
+:::
+
+## Item Response Theory (IRT)
+
+:::: {.columns}
+
+::: {.column width="30%"}
+Rasch Model (1PL)  
+
+:::{.notes}
+Pronounced /resh/
+:::
+:::
+
+::: {.column .fragment width="70%"}
+&rarr; Two-Parameter Logistic Model (2PL)     
+&rarr; Three-Parameter Logistic Model (3PL)     
+&rarr; Four-Parameter Logistic Model (4PL)
+:::
+
+::::
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+&darr;
+
+Multidimensional IRT        
+Ordinal IRT       
+**Group IRT**
+:::
+
+
+## Rasch Model
+
++ y<sub>iq</sub>&isin;{0,1}: Response, where `i` refers to the respondent and `q` refers to the item
++ &theta;<sub>i</sub>&isin;{-&infin;, +&infin;}: Latent trait, representing the respondent's ability (unbounded)
++ &sigma;<sub>q</sub>: Difficulty of the item, typically represented as z-scores
+
+:::{.fragment .nonincremental}
+🌰 Items with varying difficulty:
+    
++ Should the government respond promptly and decisively to major public health threats?
++ Is it acceptable for the government to sacrifice the rights of a minority to ensure the public health safety of the majority?
+:::
+
+## Formal Expression
+
+:::{.fragment}
+$$
+\text{1PL: }\color{red}{P(Y_{iq} = 1)} = \color{blue}{logist^{-1}(\theta_i - \sigma_q)}.
+$$
+:::
+
+:::{.fragment}
+$$
+\color{red}{Item Response} = \color{blue}{Latent Trait Theory}.
+$$
+:::
+
+:::{.fragment}
+Two-Parameter Item Response Theory (2PL-IRT)
+
+$$
+\text{2PL: } P(Y_{iq} = 1) = logist^{-1}(\color{green}{\kappa_q}\theta_i - \sigma_q).
+$$
+:::
+
+:::{.notes}
+[D]{.red}ynamic [C]{.red}omparative [P]{.red}ublic [O]{.red}pinion
+
+$$Pr(y_{ktqr} = 1) = logist^{-1}[\frac{\bar{\theta}'_{kt} - {(\beta_{qr} + \color{orange}{\delta_{kq}})}}{\sqrt{\alpha^2_q + (1.7\times \color{red}{\sigma_{kt}})^2}}]$$
+:::
+
+
+:::{.notes}
+Difficulty/discrimination: how well a question can different people from below to above
+
+Dispersion: magnitude of the measurement error
+
+- $\bar{\theta}$: Mean public opinion    
+- &beta;: Question difficulty   
+- &alpha;: Question dispersion
+- [&delta;]{.orange}: Country-specific item bias   
+- [&sigma;:]{.red} Polarization in public opinion
+
+[Random walk priors]{.green} for opinion mean and sd
+
+$$\bar{\theta}_{ktqr}\sim N(\bar{\theta}'_{k, \color{green}{t-1}}, \sigma^2_{\bar{\theta}'}),\sigma_{kt}\sim LN(\sigma_{k, \color{green}{t-1}}, \sigma^2_{\sigma})$$
+
+
+D(dynamic)C(comparative)PO
+model country specific-item to address equivalence. 
+aggregate level public opinion 
+polarizaiton 
+ordinal scaled answers. 
+The sophisticated measurement models ignite the hope on the studies of relationship between democratic development and public support. 
+:::
+
+## Newest Development for Understand Democratic Support [@TaiEtAl2024]
+
+- Application of the advanced method:
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_irtCompare.png){.fragment fig-align="center" height="400"}
+
+:::{.notes}
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_data.png){fig-align="center" height="500"}
+:::
+- Largest-scale data: Global public opinion survey database on democratic support ([144]{.red} countries, 1989–2022).
+
+:::{.notes}
+193 membership in the UN
+:::
+
+## Democratic Support in a Comparative View
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_support_top.png){fig-align="center" height="250" width=800}
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_support_bottom.png){fig-align="center" height="250" width=800}
+
+
+:::{.notes}
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_support.png){fig-align="center" height=600}
+:::
+
+
+## So, support &rarr; institution
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_support2dem_full.png){fig-align="center" height="600"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/plot_fullAJPS.png){.fragment fig-align="center" height="600"}
+:::
+
+## Institution &rarr; support
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_dem2support_full.png){fig-align="center" height="600"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/plot_fullAPSR.png){.fragment fig-align="center" height="600"}
+:::
+
+## Wrap up
+
+What the latest empirics tell
+
+- No evidence for the *direct* connections between support and institution
+
+What the advanced methodology solves
+
+:::{.fragment .nonincremental}
+- People were asked about democracy w.o. clear definition ([&check;]{.large .green})
+- People were asked with Churchill-style questions ([&check;]{.large .green})
+:::
+
+
+What left
+
+- People understand democracy based on different roots ([Do they?]{.large .red})
+
+# Understand Democratic Support
+
+<!-- ## Support vs. polyarchy -->
+
+<!-- ![](https://drhuyue.site:10002/sammo3182/figure/dcpo_supportVSpolyarchy.png){fig-align="center" height="600"} -->
+
+<!-- :::{.notes} -->
+<!-- Differences in the perception of democracy and common core values: Are Chinese and Americans even talking about the same concept of democracy? -->
+
+<!-- - Support vs. polyarchy (inclusive political participation and elections) -->
+<!-- ::: -->
+
+
+## Support vs. institutions
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_supportVSinstitution.png){fig-align="center" height="600"}
+
+:::{.notes}
+- Support vs. institutions (institutional guarantees)
+:::
+
+
+<!-- ## Support vs. liberty -->
+
+<!-- ![](https://drhuyue.site:10002/sammo3182/figure/dcpo_supportVSliberty.png){fig-align="center" height="600"} -->
+
+<!-- :::{.notes} -->
+<!-- - Support vs. liberty (values of freedom) -->
+<!-- ::: -->
+
+
+## Support vs. prioritization
+
+![](https://drhuyue.site:10002/sammo3182/figure/dcpo_supportVSprioritization.png){fig-align="center" height="600"}
+
+
+:::{.notes}
+- Support vs. prioritization (priorities: economic, justice, or value-oriented)
+:::
+
+## A Case Study of China [@Hu2020a]
+
+Source: Discourse of democracy in Chinese political language
+
+:::{.fragment}
+```{r demDiscourse-theory}
+library(tidyverse)
+library(gt)
+
+tibble::tribble(
+            ~Theory,                    ~"Within-Discourse",                            ~"Cross-Discourse",
+  "Universal-Value",      "Define with democratic values",      "Connect to democratic values",
+    "Justification", "Define with regime characteristics", "Connect to regime characteristics",
+       "Refocusing",    "Define with public priorities",      "Connect to democratic values"
+  ) %>% gt() |> 
+  tab_style(
+    style = list(
+      cell_fill(color = gb_cols("gold"))
+    ),
+    locations = cells_body(rows = 3)
+  ) |>
+  opt_stylize(style = 5, color = "gray") |>
+  tab_options(table.font.size = px(30))
+
+```
+:::
+
+
+Method
+
+* Full-discourse scrutiny
+* Distant reading
+
+:::{.notes}
+- Democratic values: Freedom, equality, fairness
+- Public priorities: Economy, stability, security
+:::
+
+## Design
+
+:::{.columns}
+
+::: {.column width="50%"}
+**Within-discourse**
+
+* Target: Conceptualization
+* Strategy:    
+Unsupervised + Supervised
+* Structural topic modeling
+    + 40 topics (data-driven decision)
+    + Context adjustment (concept network, time, international environment)
+:::
+
+::: {.column width="50%"}
+**Cross-discourse**
+
+* Target: Discourse association
+* Strategy: Supervised, explaining key-word counts
+
+:::{.fragment .nonincremental}
+**Data**: 
+
+- *People's Daily*
+- 58 years (1946--2003)   
+- 1,371,607 articles (cross-discourse)    
+    - Democracy discourse: 11.2% 
+:::
+
+:::
+
+:::
+
+
+## "Democracy" in discourse
+
+![](https://drhuyue.site:10002/sammo3182/figure/yr_netGraph1991.png){fig-align="center" height=600}
+
+## Findings
+
+![](https://drhuyue.site:10002/sammo3182/figure/yr_freqwithin.png){fig-align="center" height=600}
+
+## Latest Development 
+
+Whole-process people's democracy [@Xinhua2024a]
+
+> [W]hole-process democracy involves more than just a matter of voting, rather, it is forged into every single link in the running of state power. This breaks from a solitary focus on voting and ensures the people's rights to democratic elections, consultations, decision-making, management, and oversight.
+
+:::{.fragment}
+> [**Xi said that to measure whether a country is democratic, a key element is to see whether the rules and procedures for the exercise of power are democratic, and more importantly, whether the exercise of power is *genuinely subject to public oversight and checks*.**]{.red}
+:::
+
+
+## Wrap up
+
+:::: {.columns}
+
+::: {.column width="40%"}
+* Refocusing strategy wins.
+* Outcome? 
+
+![@LuChu2022](https://drhuyue.site:10002/sammo3182/figure/demo_luChu.jpg){.fragment fig-align="center" height=400}
+:::
+
+::: {.column .fragment width="60%"}
+**Take-home points**
+
+- *Understand* democratic support &rarr; democratization/democratic crisis
+- *Advanced means* to learn and compare democratic support from the level of human society
+- Diverse understanding &rarr;        
+  *diverse practices*
+    - "[Genuinely subject to public oversight and checks]{.red}"
+:::
+
+::::
+
+# Thank you {.unnumbered background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+## Reference {.unnumbered}
