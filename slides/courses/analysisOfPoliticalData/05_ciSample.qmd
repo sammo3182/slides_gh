@@ -10,12 +10,13 @@ knitr:
 
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
@@ -26,10 +27,6 @@ format:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-    callout-appearance: simple
-      
-filters:
-  - lightbox
 
 revealjs-plugins:
   - spotlight
@@ -41,8 +38,6 @@ spotlight:
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
-
-## Overview
 
 ```{r setup, include = FALSE}
 
@@ -59,27 +54,45 @@ p_load(
 # Functions preload
 set.seed(313)
 
-theme_set(theme_minimal())
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
 ```
 
+## Overview {.unnumbered}
 
 1. Sample properties
 1. Confidence interval
 1. Application
 
 
+:::{.callout-tip .fragment}
+## Connection with previous lectures
+
+1. Still one single variable
+1. Distribution in the last lecture is the distribution of a *random variable*
+    - &rarr; the reference to calculate the confidence intervals
+1. Also relating with prediction ("expectation")
+:::
+
 # Sample property
 
-## Random Variable (Formally Introduced)
+## Random Variable
 
-> A random variable (stochastic variable) is a type of variable in statistics whose possible values depend on the outcomes of a certain random phenomenon. 
+- A random variable is a [mathematical function]{.red} that assigns numerical values to each possible outcome from a random experiment or process in the population.
+    - > Technically, a random (stochastic) variable is a type of variable in statistics whose possible values depend on the *outcomes* of a certain random phenomenon.
 
-- A [mapping or function]{.red} from possible outcomes in a sample space to a measurable space, often the real numbers.
+:::{.callout-note .fragment}
+## Different "variables" ![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=20}
 
-:::{.fragment}
-:::{.callout-tip}
-- Different from variable in algebra: $Y = log((\sqrt{X})^{\frac{1}{e}}) - 15.$
-- Different from variable in data collection: "I asked about the respondents' gender, age, and education."
+- Variable in algebra: $Y = log((\sqrt{X})^{\frac{1}{e}}) - 15.$
+- Variable in data analysis: "I asked about the respondents' gender, age, and education."
 
 :::{.notes}
 Not 1 map 1 or 1 map all, but there is a chance
@@ -88,26 +101,113 @@ Not fixed but may change
 :::
 
 :::
+
+
+- Distribution for a random variable: The description of [how likely]{.red} a random variable takes one of its possible states.
+
+## Distribution and random variable
+
+- Remember what's the definition of a probability distribution?
+    - The [mathematical function]{.red} that gives the probabilities of occurrence of different possible outcomes for an experiment.
+
+:::{.fragment .r-fit-text style="text-align:center; margin-top: 1em"}
+*Which is a function,    
+the random variable or the distribution?*
 :::
 
-- Distribution for a random variable
-    - [The math function that gives the probabilities of occurrence of different possible outcomes for an experiment.]{.gray .small}
-    - The description of [how likely]{.red} a random variable takes one of its possible states.
-
-## Explore random variable
-
-
-:::{style="text-align:center"}
-  Parameter &lArr; sample
+:::{.notes}
+- Both
+    - Random variable: Outcomes &rarr; values. 
+    - Probability distribution: Probabilities &rarr; values.
 :::
 
-Sample Properties
+:::{.fragment style="text-align:right; margin-top: 2em"}
+Next step: Random variable (distribution) &rarr; population
+:::
 
-::: {.panel-tabset}
-### Finite random sample
 
-+ **Unbiasedness**: Produce the [right]{.red} answer on coverage, E(p) = &pi;
-    - Assuming independent and identical distribution (i.i.d) [w. or w.o., rep?]{.small .fragment}
+
+## Populaiton {auto-animate=true}
+
+::::{.overlay-container}
+
+:::{.overlay-text}
+- A random variable is a [function]{.red} that assigns numerical values to each possible outcome from a random process [in the population]{.green}.
+- Population is the [collection]{.red} of [all possible]{.green} outcomes of a random variables
+- The probability distribution is a [function]{.red} defining how these outcomes occur/exist in the population.
+:::
+
+:::{.overlay-image .fragment data-id="sex"}
+
+```{r sex_population}
+
+# Create datasets for population and sample
+df_tsuSex <- data.frame(
+  Sex = rep(c("Male", "Female"), 2),
+  Count = c(2.42, 1, 7, 9),
+  Group = rep(c("Population", "Sample"), each = 2)
+) %>% 
+  group_by(Group) %>%
+  mutate(Percentage = Count / sum(Count) * 100)
+
+df_tsuSex |>
+  filter(Group == "Population") |>
+  ggplot(aes(x = Sex, y = Percentage)) +
+  geom_bar(stat = "identity", alpha = 0.4, fill = gb_cols("gold")) +
+  ggtitle("Population Distribution")
+```
+
+:::
+
+
+::::
+
+:::{.notes}
+2024
+
+- Official news is "略超 2:1"https://www.tsinghua.edu.cn/info/1182/113140.htm
+- 网易：男女比例是2.42：1（https://m.163.com/dy/article/JAI5076G0549R6EJ.html?clickfrom=subscribe&spss=adap_pc）(which means about 29% are females)
+:::
+
+
+## Random Sample {auto-animate=true}
+
+A sample: 2024 students in our class
+
+::: {data-id="sex"}
+
+```{r sex_compare}
+ggplot(df_tsuSex, aes(x = Sex, y = Percentage, fill = Group)) +
+  geom_bar(stat = "identity", position = "identity", alpha = 0.4) +
+  labs(title = "Population vs Sample", y = "Percentage") +
+  theme(legend.position = c(0.1,0.9)) +
+  scale_fill_gb()
+```
+:::
+
+:::{.fragment style="text-align:center"}
+*Is this a good sample?*
+:::
+
+
+
+## A random sample
+
+> A subset of individuals or observations selected from a larger population in such a way that each observation has an [equal probability]{.red} of being chosen.
+
+
+:::{style="text-align:center; margin-top: 1em"}
+- Why is this good? 
+    - Random sample proerties
+        - Finite ~ 
+        - Large ~
+:::
+
+
+## Finite random sample properties
+
++ **Unbiasedness**: Produce the right [expectation]{.red} on coverage, E(p) = &pi;
+    - Assuming independent and identical distribution (i.i.d)^[*W. or w.o., rep?*]
 
 :::{.notes}
 - Unbiasedness: the expectation is the true value
@@ -118,10 +218,13 @@ Sample Properties
     1. Post-dgp: weight(post), manually collect, 老将出马
 :::
 
-+ **Efficiency**: [Smaller]{.red} variance of an unbiased estimator
-    - Focusing on the variance of an **unbiased** estimator
-        - [$Var(\bar{X}) = Var(\frac{1}{n}(X_1 + X_2 + ... + X_n)) = \frac{1}{n^2} \cdot Var(X_1 + X_2 + ... + X_n) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}$]{.small}^[$\text{Var}(aX) = a^2 \cdot \text{Var}(X).$]
-        - $SE = \frac{\sigma}{\sqrt{n}}$, how far $\bar X$ [disperse]{.red} from &mu;.
++ **Efficiency**: [Smaller]{.red} variance of an [unbiased]{.green} estimator^[$\text{Var}(aX) = a^2 \cdot \text{Var}(X).$]
+    - \begin{align}
+      Var(\bar{X}) =& \frac{\sigma^2}{n}, \\
+                 =& Var(\frac{1}{n}(X_1 + X_2 + ... + X_n)), \\
+                 =& \frac{1}{n^2} \cdot Var(X_1 + X_2 + ... + X_n) = \frac{1}{n^2} \cdot n\sigma^2.
+      \end{align}
+    - $SE = \frac{\sigma}{\sqrt{n}}$, that is, how far $\bar X$ [disperse]{.red} from &mu;.
 
 :::{.notes}
 - [The median will generally be better than the mean if there are heavy tails, while the mean will be best with light tails.](https://stats.stackexchange.com/questions/136671/for-what-symmetric-distributions-is-sample-mean-a-more-efficient-estimator-tha)
@@ -133,15 +236,14 @@ Sample Properties
 :::
 
 
-
-### Large random sample
+## Large random sample properties
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 + **Convergence**:  $p\lim_{n \to \infty}X_n = a, a\in R.$
 
-![](images/ci_convergence.gif){.fragment fig-align="center" height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_convergence.gif){.fragment fig-align="center" height=400}
 
 :::{.notes}
 - When a sequence of random variables stabilizes to a certain probabilistic behavior as n &rarr; &infin; , the sequence is said to show stochastic convergence.
@@ -153,9 +255,10 @@ Sample Properties
 :::
 
 ::: {.column width="50%"}
-+ **Consistency**: $p\lim_{n \to \infty}\hat{\theta}_n = \theta.$
++ **Consistency**:        
+  $p\lim_{n \to \infty}\hat{\theta}_n = \theta.$
 
-![](images/ci_consistency.gif){.fragment fig-align="center" height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_consistency.gif){.fragment fig-align="center" height=400}
 
 :::{.notes}
 An estimator q<sub>n</sub> is consistent if the sequence q<sub>1</sub>...q<sub>n</sub> converges in probability to the true parameter value &theta; as sample size n grows to infinity
@@ -165,15 +268,13 @@ An estimator q<sub>n</sub> is consistent if the sequence q<sub>1</sub>...q<sub>n
 
 ::::
 
-:::
-
 ## About Consistency
 
 - [Minimal]{.red} requirement for estimators
 - May perform [badly]{.red} in small samples
 
 :::{.fragment}
-> Only if a sequence of estimators is [unbiased and converges to a value]{.red}, then it is consistent, as it must converge to the correct value.
+> Only if a sequence of estimators is [unbiased and converges to a value]{.red}, then it is consistent, as it must converge to the *true* value.
 :::
 
 
@@ -184,7 +285,7 @@ An estimator q<sub>n</sub> is consistent if the sequence q<sub>1</sub>...q<sub>n
 
 
 :::{.notes}
-- e.g., Let's estimate the mean height of our university. To do so, we randomly draw a sample from the student population and measure their height. Then what estimator should we use? (Appendix C of Introductory Econometrics by Jeffrey Wooldridge)
+- e.g., Let's estimate the mean height of our class. To do so, we randomly draw a sample from the student population and measure their height. Then what estimator should we use? (Appendix C of Introductory Econometrics by Jeffrey Wooldridge)
     - Options: Both estimator are **unbiased** (😱!!!)
         1. The mean height of the sample;
         1. The height of the student we draw first.
@@ -206,66 +307,61 @@ The additional information of an increasing sample size is simply not accounted 
 
 # Confidence Interval
 
-## Learning the population from the sample
+## Learning the population from a sample
 
-:::{.fragment .fade-semi-out}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_ringToss.gif){.fragment fig-align="center" height=200}
 
-[Let X be a random sample from a probability distribution with parameter &theta;. 
-A [confidence interval]{.red} for the parameter &theta;, with confidence level &gamma; is an interval determined by random variables u(X) and v(X) with the property: ]{.small}
+- X: a random sample from a probability distribution with parameter &theta;.
+- *Confidence interval* (CI) for the parameter &theta;, with confidence level &gamma;: An interval determined by random variables u(X) and v(X) with the property: $Pr\{u(X)<\theta <v(X)\}\ =\ \gamma = 1 - \alpha, \quad \forall\theta.$
 
-$$Pr\{u(X)<\theta <v(X)\}\ =\ \gamma = 1 - \alpha, \quad {\text{ for every }}\theta.$$
-
-:::
-
-![](images/ci_ringToss.gif){.fragment fig-align="center" height=300}
-
-- In a [repeatedly]{.red} sampling, the percentage of the samples that could contain &theta;
+- Human language: In a [repeatedly]{.red} sampling, the percentage of the samples that could contain &theta;
 
 
-## Toss the Ring (Two-tailed)^[Explained in the next lecture.]
+## Calculated CI (Two-tailed)^[Explained in the next lecture.]
 
 :::: {.columns}
 
 ::: {.column width="60%"}
-+ Mean: $\mu = \bar X \pm Z_{\alpha/2}SE$
+
++ $\bar X \pm Z_{\alpha/2}SE$
     - &alpha;: 1 - Confident level;
-    - Z-score: $Z = \frac{X - \mu}{\sigma}$
-    
+    - Z-score: $Z = \frac{X - \mu}{\sigma}$ [*Learned*]{.fragment}
++ Proportion: $\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}$
+
 :::{.notes}
 s is the sample standard distribution, $SE(\bar{X}) = \sqrt{\frac{s^2}{n}}$
 :::
-    
+
+:::{.callout-important .fragment}
+## Interpretation
+
+In 100 times sampling of ..., there are ... samples (... of the chance) that the [CI could contain the true value]{.red}.
 :::
 
-::: {.column width="40%"}
-+ Proportion: $\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}$
+:::
+
+::: {.column .fragment width="40%"}
+
+*How can you get smaller CI?*
+
+![](https://drhuyue.site:10002/sammo3182/figure/ci_hardCI.jpeg){fig-align="center" height=400}
+:::
+
+:::{.notes}
+
+1. Large N
+1. Large &alpha;
+    - &alpha; = 0.05, Z = `r qnorm(0.975)`
+    - &alpha; = 0.1, Z = `r qnorm(0.95)`
+
 :::
 
 ::::
 
 
-:::{.fragment}
-:::{.callout-important}
-In 100 times sampling of ..., there are ... samples (... of the chance) that the CI could contain the true value.
-:::
-:::
-
-:::{.fragment style="text-align:center; margin-top: 2em"}
-*How can you get smaller CI?*
-
-![](images/ci_hardCI.jpeg){fig-align="center" height=200}
-:::
-
-:::{.notes}
-1. Large N
-1. Large &alpha;
-    - &alpha; = 0.05, Z = `r qnorm(0.975)`
-    - &alpha; = 0.1, Z = `r qnorm(0.95)`
-:::
-
 ## When N is not that large
 
-![](images/ci_largeNumber.gif){fig-align="center" height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_largeNumber.gif){fig-align="center" height=250}
 
 :::{.fragment}
 
@@ -296,12 +392,12 @@ ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
 
 :::
 
-## T/Student's distribution ![](images/ci_fsmrof.png){fig-align="center" height=30}
+## T/Student's distribution ![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){fig-align="center" height=30}
 
-:::{.r-vstack}
-![](images/ci_student.png){fig-align="center" height=300}
+:::{layout-ncol}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_student_en.png){.fragment fig-align="center" height=250}
 
-![](images/ci_student_en.png){.fragment fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_student.png){fig-align="center" height=300}
 :::
 
 :::{.notes}
@@ -312,7 +408,7 @@ A researcher at Guinness had previously published a paper containing trade secre
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
 + For mean
     + &sigma; known, $\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}$
     + &sigma; unknown
@@ -320,7 +416,7 @@ A researcher at Guinness had previously published a paper containing trade secre
         + N < 100ish, then $\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}.$
 :::
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
 + For proportion
     + &pi; known, $\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$;
     + &pi; unknown, $\Pi = P \pm t_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}$.
@@ -329,53 +425,44 @@ A researcher at Guinness had previously published a paper containing trade secre
 ::::
 
 
-- *Degree of Freedom*: Student's T critical points are relative to the d.f.
-  + For CI: n - 1
-  + For regression: n - k - 1
-- *Procedure*: Define measurement &rarr; set up &alpha; &rarr; calculate the d.f. and z/t scores &rarr; calculate the lower and upper bounds
+- **Degree of Freedom**: Student's T critical points are relative to the d.f.
+  + For CI: n - 1; for regression: n - k - 1
+- **Procedure**: Define measurement &rarr; set up &alpha; &rarr; calculate the d.f. and z/t scores &rarr; calculate the lower and upper bounds
 
 
 
 
 # Application
 
-## What can CIs do
+## What can CI do
 
 :::{style="text-align:center"}
 
-+ Is a sampled a random result (or not)?
++ Does an event just happen by chance?
 + Is Sample A different from Sample B?
 
 :::
 
-![](images/ci_gpa.png){.fragment fig-align="center" height=400}
+:::: {.columns .fragment }
+
+::: {.column width="70%"}
+🌰 Your friend, who is  the accountant for "Dr. Hu's Amazing Team," was asked by the organizer to help set a budget for a thank-you lunch after the team’s successful conference organization. 
+The organizer, though unwilling to spend much, didn't want to seem too stingy either. 
+After calculating the average cost of lunch for a random sample of [nine]{.red} team members, your friend found it to be ¥29, with a ¥3 deviation, and proposed a budget of ¥31 per person. 
+The organizer, however, criticized her, claiming "¥26 is enough" and accusing her of not understanding statistics.
+[*Is the organizer PUA your friend?*]{.fragment}
+:::
+
+::: {.column width="30%"}
+![Created by [DALL·E.](https://openai.com/dall-e)](https://drhuyue.site:10002/sammo3182/figure/ci_drhu1.png){fig-align="center" height=300}
+:::
+
+::::
+
 
 :::{.notes}
 The ruler: Standard Normal distribution (Z-score)
 :::
-
-## Application I: Random or Not
-
-:::: {.columns}
-
-::: {.column width="50%"}
-[
-Your friend is a team member and also the accountant for "Dr. Hu's Amazing Team."
-The team organizer planned a lunch to express appreciation for the members' outstanding work in organizing a recent academic conference. 
-However, the organizer turned out to be a Scrooge, hesitant to spend generously to convey gratitude, yet also wanting to avoid appearing overly frugal. 
-In this context, he sought your friend's assistance in establishing a budget.
-After researching the lunch cost from nine team members, your friend found that **the average lunch expense was ¥29 with a ¥3 deviation**. 
-So, she proposed a budget of ¥31 per person. 
-The organizer accused your friend not doing her job well and know nothing about statistics.
-"**A ￥26 is enough** according to the data" he claimed.
-]{.small}
-:::
-
-::: {.column width="50%"}
-![](images/ci_drhu1.png){fig-align="center" height=num}
-:::
-
-::::
 
 
 ## PUA or not
@@ -387,11 +474,9 @@ N =9, (X&#772; 29, s 3) vs. 26
 :::: {.columns}
 
 ::: {.column width="70%"}
-*Solution*: 
-
 > PUA = Blaming someone for something they did nothing wrong.
 
-&rArr; The organizer blamed your friend for a reasonable suggestion of her. &rArr; The guess was in the CI of the data.
+The organizer blamed your friend for a unreasonable budget &rArr; "Unreasonable" means a guess out of the 95% CI of the sample
 
 1. Set &alpha; = 0.05;
 1. N = 9, t distribution, d.f. = 9 - 1 = 8;
@@ -400,13 +485,13 @@ N =9, (X&#772; 29, s 3) vs. 26
 :::
 
 ::: {.column width="30%"}
-![](images/ci_drhu2.png){fig-align="center" height=num}
+![Created by [DALL·E.](https://openai.com/dall-e) ](https://drhuyue.site:10002/sammo3182/figure/ci_drhu2.png){fig-align="center" height=num}
 :::
 
 ::::
 
 :::{.fragment style="text-align:center"}
-**Job done?**
+**What's the interpretation?**
 :::
 
 
@@ -416,7 +501,7 @@ Therefore, an estimation of 31 sounds [fine]{.red}.
 Your friend was treated unjustly.
 :::
 
-## Application II: Comparing Samples
+## Comparing Samples
 
 Assuming X<sub>1</sub> and X<sub>2</sub> are i.i.d,
 
@@ -429,33 +514,37 @@ Assuming X<sub>1</sub> and X<sub>2</sub> are i.i.d,
 A.k.a., Difference in Means
 :::
 
-## An example {auto-animate=true}
+## 🌰
 
-![](images/ci_modules.png){fig-align="center" height=num}
+:::: {.columns}
 
-Two module series have been designed for the "Learning R with Dr. Hu and His Friends" workshop: "R survivor" (basic) and "R expert" (advanced).
-"R survivor" consists of five workshops.
-Each received 932, 586, 796, 501, and 351 downloads after one round of the workshops.
-"R expert" also comprises five workshops, with download counts of 771, 917, 326, 825, and 399, respectively.
-
-## An example {auto-animate=true}
-
-:::{.small}
-Two module series have been designed for the "Learning R with Dr. Hu and His Friends" workshop: "R survivor" (basic) and "R expert" (advanced).
-"R survivor" consists of five workshops.
-Each received 932, 586, 796, 501, and 351 downloads after one round of the workshops.
-"R expert" also comprises five workshops, with download counts of 771, 917, 326, 825, and 399, respectively.
-Which series is more popular? 
+::: {.column width="60%"}
+![Created by [DALL·E.](https://openai.com/dall-e)](https://drhuyue.site:10002/sammo3182/figure/ci_modules.webp){fig-align="center" height=550}
 :::
+
+::: {.column width="40%"}
+The "Learning R with Dr. Hu and His Friends" workshop includes two series: "R Survivor" (basic) and "R Expert" (advanced). 
+The five "R Survivor" workshops received 932, 586, 796, 501, and 351 downloads, while the "R Expert" workshops had 771, 917, 326, 825, and 399 downloads.  
+[*Which series is more popular?*]{.fragment}
+:::
+
+::::
+
+
+## Solution
+
 
 ```{r eg-compare}
 vec_survivor <- c(932, 586, 796, 501, 351)
 vec_expert <- c(771, 917, 326, 825, 399)
 ```
 
+:::{.nonincremental}
+- R Survivor: 932, 586, 796, 501, and 351 downloads
+- R Expert: 771, 917, 326, 825, and 399 downloads
+:::
 
-:::{.fragment}
-Solution: Set &alpha; = 0.05; small N &rarr; t.
+Set &alpha; = 0.05; small N &rarr; t.
 
 \begin{align}
 \bar X_1 =& (932 + 586 + 796 + 501 + 351)/5 = `r mean(vec_survivor)`; \bar X_2 = `r mean(vec_expert)` \\
@@ -463,7 +552,7 @@ S_p^2 =& \frac{`r sum((vec_survivor - mean(vec_survivor))^2)` + `r sum((vec_expe
 \mu_1 - \mu_2 =& (`r mean(vec_survivor)` - `r mean(vec_expert)`) \pm `r round(qt(.975, df = 7), digits = 4)` (\sqrt{`r (sum((vec_survivor - mean(vec_survivor))^2) + sum((vec_expert - mean(vec_expert))^2)) / (4 + 4)`}\sqrt{1/5 + 1/5}), \\
 =& `r mean(vec_survivor) - mean(vec_expert)` \pm `r round(qt(.975, df = 8) * sqrt((sum((vec_survivor - mean(vec_survivor))^2) + sum((vec_expert - mean(vec_expert))^2)) / (4 + 4) * 2/5), digits = 4)`.
 \end{align}
-:::
+
 
 :::{.fragment}
 [Inference:]{.red} If we make repeated sampling from the audience size of these lectures, there are 95% of the samples in which the interval between -378.8763 and 350.0763 contains the true mean. 
@@ -471,14 +560,14 @@ S_p^2 =& \frac{`r sum((vec_survivor - mean(vec_survivor))^2)` + `r sum((vec_expe
 :::
 
 
-## IID vs. NON-IID
+## When Not IID
 
 :::: {.columns}
 
 ::: {.column width="50%" .fragment .fade-in-then-semi-out}
 **IID**
 
-![Observations are selected [without regard to]{.red} who is in the other condition, a.k.a., **independent and identical distributed** (IID).](images/ci_independentSample.gif){fig-align="center" height=400}
+![Observations are selected [without regard to]{.red} who is in the other condition, a.k.a., **independent and identical distributed** (IID).](https://drhuyue.site:10002/sammo3182/figure/ci_independentSample.gif){fig-align="center" height=400}
 
 
 
@@ -487,7 +576,7 @@ S_p^2 =& \frac{`r sum((vec_survivor - mean(vec_survivor))^2)` + `r sum((vec_expe
 ::: {.column .fragment width="50%"}
 **Matched**
 
-![Observations are [matched to]{.red} someone in the other condition.](images/ci_matchedSample.jpg){fig-align="center" height=400}
+![Observations are [matched to]{.red} someone in the other condition.](https://drhuyue.site:10002/sammo3182/figure/ci_matchedSample.jpg){fig-align="center" height=400}
 
 :::
 
@@ -530,42 +619,40 @@ Why using a different method for matched samples? Not IID for individuals, but m
 
 ::: {.column width="40%"}
 
-![](images/ci_hsk.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_hsk.png){fig-align="center" height=num}
 
 :::
 
 ::: {.column width="60%"}
-Four students are required to attain an HSK-4 to apply Chinese universities (fantasy).
-To apply to higher-tier universities, they must achieve even higher scores (fantasy, again).
-Upon assessing their initial examination scores, they engaged in preparatory training. The subsequent tables display their performance in two subsequent examinations.
+Four students must achieve HSK-4 to apply to Chinese universities (fantasy). 
+For higher-tier universities, they need even higher scores (fictional). 
+After reviewing their initial exam results, they underwent preparatory training. 
+The tables below show their performance in two subsequent exams.
 
-Was the preparatory training helpful?
+[*Was the preparatory training helpful?*]{.fragment}
 
 
-| Student 	| Tim 	| Frank 	| Emily 	| Anthony 	|
+| Student 	| Tim 	| Frank 	| Emily 	| Elise 	|
 |---------	|-----	|------	|-------	|------	|
-| HSK      	| 57  	| 57   	| 73    	| 65   	|
-| HSK      	| 64  	| 66   	| 89    	| 71   	|
+| Before 	| 57  	| 57   	| 73    	| 65   	|
+| After 	| 64  	| 66   	| 89    	| 71   	|
 :::
 
 ::::
 
 
-## An example {auto-animate=true}
+## Solution
 
-| Student 	| Tim 	| Frank 	| Emily 	| Anthony 	|
+| Student 	| Tim 	| Frank 	| Emily 	| Elise 	|
 |---------	|-----	|------	|-------	|------	|
-| HSK      	| 57  	| 57   	| 73    	| 65   	|
-| HSK      	| 64  	| 66   	| 89    	| 71   	|
+| Before 	| 57  	| 57   	| 73    	| 65   	|
+| After 	| 64  	| 66   	| 89    	| 71   	|
 
-
-:::{.fragment}
-Solution: Let &alpha; = 0.05,
+Set &alpha; = 0.05,
 \begin{align}
 D =& X_1 - X_2 \Rightarrow \bar D = \sum D / n = (7 + 9 + 16 + 6) / 4 = 12\\
 S_D^2 =& 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18\times \frac{39}{4} = 11 \pm 6
 \end{align}
-:::
 
 
 :::{.fragment}
@@ -575,7 +662,7 @@ S_D^2 =& 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18\tim
 
 
 
-## Another Example
+## Another 🌰
 
 :::: {.columns}
 
@@ -594,7 +681,7 @@ Solution: Let &alpha; = 0.05,
 :::
 
 ::: {.column width="20%"}
-![](images/ci_gallop.png){fig-align="center" height=200}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_gallop.png){fig-align="center" height=200}
 :::
 
 ::::
@@ -607,7 +694,7 @@ If we make repeated sampling from the Amercian population, there are 95% of the 
 :::
 
 
-## BFF: Different Views 
+## BFF: Different Views ![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=20}
 
 :::: {.columns}
 
@@ -617,7 +704,7 @@ If we make repeated sampling from the Amercian population, there are 95% of the 
 - [Credible]{.red} interval
 - $\theta_\text{prior-based r.v.} \in [a, b]_{fixed}$
 
-![There are ...% of the chance that the true value lies in the CI.](images/ci_dart.gif){ fig-align="center" height=300}
+![There are ...% of the chance that the true value lies in the CI.](https://drhuyue.site:10002/sammo3182/figure/ci_dart.gif){ fig-align="center" height=300}
 
 :::{.notes}
 Some percentage of the [posterior]{.red} distribution lies within an particular region.
@@ -631,7 +718,7 @@ Some percentage of the [posterior]{.red} distribution lies within an particular 
 - [Confidence]{.red} interval
 - $\theta_{fixed} \in [a, b]_{r.v.}$ 
 
-![There is 95% chance the CI could contain the true value (before any data is collected).](images/ci_ringToss.webp){fig-align="center" height=300}
+![There is 95% chance the CI could contain the true value (before any data is collected).](https://drhuyue.site:10002/sammo3182/figure/ci_ringToss.webp){fig-align="center" height=300}
 
 :::
 
@@ -642,7 +729,7 @@ Some percentage of the [posterior]{.red} distribution lies within an particular 
 - (Fiducial) Conf interval
 - $\theta_{r.v.} \in [a, b]_{fixed}$
 
-![There is 95% chance the CI could contain the true value ~~(before any data is collected)~~.](images/ci_swan.jpg){fig-align="center" height=300}
+![There is 95% chance the CI could contain the true value ~~(before any data is collected)~~.](https://drhuyue.site:10002/sammo3182/figure/ci_swan.jpg){fig-align="center" height=300}
 
 :::
 
@@ -653,20 +740,33 @@ Fisher used it /fɪˈduʃəl/, 邓琬璐 intro to causal inference, lec 3, https
 ::::
 
 
-## Take-home point {auto-animate=true}
+## Take-home point
 
-::: {style="text-align: center"}
-![](images/ci_mindmap.png){height="600"}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/ci_mindMap.png){fig-align="center" height=500}
+
+![](https://drhuyue.site:10002/sammo3182/figure/ci_mindMap_structure.png){.fragment fig-align="center" height=600}
 :::
 
----
+# Appendix {.unnumbered}
 
-## {auto-animate=true}
+## Stretch {.unnumbered}
 
-::: {style="text-align: center"}
-![](images/ci_fullmap.png){.lightbox height="600"}
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
 :::
 
-## Have a break
+## Meditation {.unnumbered}
 
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4" height="600" >}}
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::

@@ -9,10 +9,7 @@
 <link href="05_ciSample_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="05_ciSample_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="05_ciSample_files/libs/quarto-contrib/videojs/video.min.js"></script>
-<link href="05_ciSample_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
-<script src="05_ciSample_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
-<link href="05_ciSample_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
-<link href="05_ciSample_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+<link href="05_ciSample_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="Yue Hu">
@@ -36,7 +33,7 @@
     }
   </style>
   <link rel="stylesheet" href="05_ciSample_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="05_ciSample_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="05_ciSample_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="05_ciSample_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -346,37 +343,64 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
 <ol type="1">
 <li class="fragment">Sample properties</li>
 <li class="fragment">Confidence interval</li>
 <li class="fragment">Application</li>
 </ol>
-</section>
-<section>
-<section id="sample-property" class="title-slide slide level1 center">
-<h1>Sample property</h1>
-
-</section>
-<section id="random-variable-formally-introduced" class="slide level2">
-<h2>Random Variable (Formally Introduced)</h2>
-<blockquote>
-<p>A random variable (stochastic variable) is a type of variable in statistics whose possible values depend on the outcomes of a certain random phenomenon.</p>
-</blockquote>
-<ul>
-<li class="fragment">A <span class="red">mapping or function</span> from possible outcomes in a sample space to a measurable space, often the real numbers.</li>
-</ul>
 <div class="fragment">
-<div class="callout callout-tip callout-style-simple">
+<div class="callout callout-tip callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Connection with previous lectures</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li class="fragment">Still one single variable</li>
+<li class="fragment">Distribution in the last lecture is the distribution of a <em>random variable</em>
+<ul>
+<li class="fragment">→ the reference to calculate the confidence intervals</li>
+</ul></li>
+<li class="fragment">Also relating with prediction (“expectation”)</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section>
+<section id="sample-property" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Sample property</h1>
+
+</section>
+<section id="random-variable" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Random Variable</h2>
+<ul>
+<li class="fragment">A random variable is a <span class="red">mathematical function</span> that assigns numerical values to each possible outcome from a random experiment or process in the population.
+<ul>
+<li class="fragment"><blockquote>
+<p>Technically, a random (stochastic) variable is a type of variable in statistics whose possible values depend on the <em>outcomes</em> of a certain random phenomenon.</p>
+</blockquote></li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Different “variables” <img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="20"></strong></p>
+</div>
 <div class="callout-content">
 <ul>
-<li class="fragment">Different from variable in algebra: <span class="math inline">\(Y = log((\sqrt{X})^{\frac{1}{e}}) - 15.\)</span></li>
-<li class="fragment">Different from variable in data collection: “I asked about the respondents’ gender, age, and education.”</li>
+<li class="fragment">Variable in algebra: <span class="math inline">\(Y = log((\sqrt{X})^{\frac{1}{e}}) - 15.\)</span></li>
+<li class="fragment">Variable in data analysis: “I asked about the respondents’ gender, age, and education.”</li>
 </ul>
 <aside class="notes">
 <p>Not 1 map 1 or 1 map all, but there is a chance</p>
@@ -397,27 +421,126 @@ Yue Hu
 </div>
 </div>
 <ul>
-<li class="fragment">Distribution for a random variable
-<ul>
-<li class="fragment"><span class="gray small">The math function that gives the probabilities of occurrence of different possible outcomes for an experiment.</span></li>
-<li class="fragment">The description of <span class="red">how likely</span> a random variable takes one of its possible states.</li>
-</ul></li>
+<li class="fragment">Distribution for a random variable: The description of <span class="red">how likely</span> a random variable takes one of its possible states.</li>
 </ul>
 </section>
-<section id="explore-random-variable" class="slide level2">
-<h2>Explore random variable</h2>
-<div style="text-align:center">
-<p>Parameter ⇐ sample</p>
+<section id="distribution-and-random-variable" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Distribution and random variable</h2>
+<ul>
+<li class="fragment">Remember what’s the definition of a probability distribution?
+<ul>
+<li class="fragment">The <span class="red">mathematical function</span> that gives the probabilities of occurrence of different possible outcomes for an experiment.</li>
+</ul></li>
+</ul>
+<div class="fragment r-fit-text" style="text-align:center; margin-top: 1em">
+<p><em>Which is a function,<br>
+the random variable or the distribution?</em></p>
 </div>
-<p>Sample Properties</p>
-<div class="panel-tabset">
-<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Finite random sample</a></li><li><a href="#tabset-1-2">Large random sample</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1">
+<aside class="notes">
 <ul>
-<li class="fragment"><strong>Unbiasedness</strong>: Produce the <span class="red">right</span> answer on coverage, E(p) = π
+<li>Both
 <ul>
-<li class="fragment">Assuming independent and identical distribution (i.i.d) <span class="small fragment">w. or w.o., rep?</span></li>
+<li>Random variable: Outcomes → values.</li>
+<li>Probability distribution: Probabilities → values.</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment" style="text-align:right; margin-top: 2em">
+<p>Next step: Random variable (distribution) → population</p>
+</div>
+</section>
+<section id="populaiton" class="slide level2" data-auto-animate="true" data-number="1.3">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">1.3</span> Populaiton</h2>
+<div class="overlay-container">
+<div class="overlay-text">
+<ul>
+<li class="fragment">A random variable is a <span class="red">function</span> that assigns numerical values to each possible outcome from a random process <span class="green">in the population</span>.</li>
+<li class="fragment">Population is the <span class="red">collection</span> of <span class="green">all possible</span> outcomes of a random variables</li>
+<li class="fragment">The probability distribution is a <span class="red">function</span> defining how these outcomes occur/exist in the population.</li>
+</ul>
+</div>
+<div class="overlay-image fragment" data-id="sex">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="05_ciSample_files/figure-revealjs/sex_population-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>2024</p>
+<ul>
+<li>Official news is “略超 2:1”https://www.tsinghua.edu.cn/info/1182/113140.htm</li>
+<li>网易：男女比例是2.42：1（https://m.163.com/dy/article/JAI5076G0549R6EJ.html?clickfrom=subscribe&amp;spss=adap_pc）(which means about 29% are females)</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="random-sample" class="slide level2" data-auto-animate="true" data-number="1.4">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">1.4</span> Random Sample</h2>
+<p>A sample: 2024 students in our class</p>
+<div data-id="sex">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><img data-src="05_ciSample_files/figure-revealjs/sex_compare-1.png" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" style="text-align:center">
+<p><em>Is this a good sample?</em></p>
+</div>
+</section>
+<section id="a-random-sample" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> A random sample</h2>
+<blockquote>
+<p>A subset of individuals or observations selected from a larger population in such a way that each observation has an <span class="red">equal probability</span> of being chosen.</p>
+</blockquote>
+<div style="text-align:center; margin-top: 1em">
+<ul>
+<li class="fragment">Why is this good?
+<ul>
+<li class="fragment">Random sample proerties
+<ul>
+<li class="fragment">Finite ~</li>
+<li class="fragment">Large ~</li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="finite-random-sample-properties" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> Finite random sample properties</h2>
+<ul>
+<li class="fragment"><strong>Unbiasedness</strong>: Produce the right <span class="red">expectation</span> on coverage, E(p) = π
+<ul>
+<li class="fragment">Assuming independent and identical distribution (i.i.d)<sup>1</sup></li>
 </ul></li>
 </ul>
 <aside class="notes">
@@ -445,13 +568,14 @@ Yue Hu
           display:block!important;
       }</style></aside>
 <ul>
-<li class="fragment"><strong>Efficiency</strong>: <span class="red">Smaller</span> variance of an unbiased estimator
+<li class="fragment"><strong>Efficiency</strong>: <span class="red">Smaller</span> variance of an <span class="green">unbiased</span> estimator<sup>2</sup>
 <ul>
-<li class="fragment">Focusing on the variance of an <strong>unbiased</strong> estimator
-<ul>
-<li class="fragment"><span class="small"><span class="math inline">\(Var(\bar{X}) = Var(\frac{1}{n}(X_1 + X_2 + ... + X_n)) = \frac{1}{n^2} \cdot Var(X_1 + X_2 + ... + X_n) = \frac{1}{n^2} \cdot n\sigma^2 = \frac{\sigma^2}{n}\)</span></span><sup>1</sup></li>
-<li class="fragment"><span class="math inline">\(SE = \frac{\sigma}{\sqrt{n}}\)</span>, how far <span class="math inline">\(\bar X\)</span> <span class="red">disperse</span> from μ.</li>
-</ul></li>
+<li class="fragment"><span class="math display">\[\begin{align}
+Var(\bar{X}) =&amp; \frac{\sigma^2}{n}, \\
+           =&amp; Var(\frac{1}{n}(X_1 + X_2 + ... + X_n)), \\
+           =&amp; \frac{1}{n^2} \cdot Var(X_1 + X_2 + ... + X_n) = \frac{1}{n^2} \cdot n\sigma^2.
+\end{align}\]</span></li>
+<li class="fragment"><span class="math inline">\(SE = \frac{\sigma}{\sqrt{n}}\)</span>, that is, how far <span class="math inline">\(\bar X\)</span> <span class="red">disperse</span> from μ.</li>
 </ul></li>
 </ul>
 <aside class="notes">
@@ -473,8 +597,9 @@ Yue Hu
 <div class="fragment" style="text-align:center">
 <p><em>How can you increase the efficiency?</em></p>
 </div>
-</div>
-<div id="tabset-1-2">
+<aside><ol class="aside-footnotes"><li id="fn1"><p><em>W. or w.o., rep?</em></p></li><li id="fn2"><p><span class="math inline">\(\text{Var}(aX) = a^2 \cdot \text{Var}(X).\)</span></p></li></ol></aside></section>
+<section id="large-random-sample-properties" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> Large random sample properties</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
 <ul>
@@ -482,7 +607,7 @@ Yue Hu
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_convergence.gif" class="fragment quarto-figure quarto-figure-center" height="250"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_convergence.gif" class="fragment quarto-figure quarto-figure-center" height="400"></p>
 </figure>
 </div>
 <aside class="notes">
@@ -507,11 +632,12 @@ Yue Hu
       }</style></aside>
 </div><div class="column" style="width:50%;">
 <ul>
-<li class="fragment"><strong>Consistency</strong>: <span class="math inline">\(p\lim_{n \to \infty}\hat{\theta}_n = \theta.\)</span></li>
+<li class="fragment"><strong>Consistency</strong>:<br>
+<span class="math inline">\(p\lim_{n \to \infty}\hat{\theta}_n = \theta.\)</span></li>
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_consistency.gif" class="fragment quarto-figure quarto-figure-center" height="250"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_consistency.gif" class="fragment quarto-figure quarto-figure-center" height="400"></p>
 </figure>
 </div>
 <aside class="notes">
@@ -529,19 +655,16 @@ Yue Hu
       }</style></aside>
 </div>
 </div>
-</div>
-</div>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="math inline">\(\text{Var}(aX) = a^2 \cdot \text{Var}(X).\)</span></p></li></ol></aside></section>
-<section id="about-consistency" class="slide level2">
-<h2>About Consistency</h2>
+</section>
+<section id="about-consistency" class="slide level2" data-number="1.8">
+<h2><span class="header-section-number">1.8</span> About Consistency</h2>
 <ul>
 <li class="fragment"><span class="red">Minimal</span> requirement for estimators</li>
 <li class="fragment">May perform <span class="red">badly</span> in small samples</li>
 </ul>
 <div class="fragment">
 <blockquote>
-<p>Only if a sequence of estimators is <span class="red">unbiased and converges to a value</span>, then it is consistent, as it must converge to the correct value.</p>
+<p>Only if a sequence of estimators is <span class="red">unbiased and converges to a value</span>, then it is consistent, as it must converge to the <em>true</em> value.</p>
 </blockquote>
 </div>
 <ul>
@@ -556,7 +679,7 @@ Yue Hu
 </ul>
 <aside class="notes">
 <ul>
-<li>e.g., Let’s estimate the mean height of our university. To do so, we randomly draw a sample from the student population and measure their height. Then what estimator should we use? (Appendix C of Introductory Econometrics by Jeffrey Wooldridge)
+<li>e.g., Let’s estimate the mean height of our class. To do so, we randomly draw a sample from the student population and measure their height. Then what estimator should we use? (Appendix C of Introductory Econometrics by Jeffrey Wooldridge)
 <ul>
 <li>Options: Both estimator are <strong>unbiased</strong> (😱!!!)
 <ol type="1">
@@ -589,35 +712,34 @@ Yue Hu
       }</style></aside>
 </section></section>
 <section>
-<section id="confidence-interval" class="title-slide slide level1 center">
-<h1>Confidence Interval</h1>
+<section id="confidence-interval" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Confidence Interval</h1>
 
 </section>
-<section id="learning-the-population-from-the-sample" class="slide level2">
-<h2>Learning the population from the sample</h2>
-<div class="fragment fade-semi-out">
-<p><span class="small">Let X be a random sample from a probability distribution with parameter θ. A <span class="red">confidence interval</span> for the parameter θ, with confidence level γ is an interval determined by random variables u(X) and v(X) with the property:</span></p>
-<p><span class="math display">\[Pr\{u(X)&lt;\theta &lt;v(X)\}\ =\ \gamma = 1 - \alpha, \quad {\text{ for every }}\theta.\]</span></p>
-</div>
+<section id="learning-the-population-from-a-sample" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Learning the population from a sample</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_ringToss.gif" class="fragment quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_ringToss.gif" class="fragment quarto-figure quarto-figure-center" height="200"></p>
 </figure>
 </div>
 <ul>
-<li class="fragment">In a <span class="red">repeatedly</span> sampling, the percentage of the samples that could contain θ</li>
+<li class="fragment"><p>X: a random sample from a probability distribution with parameter θ.</p></li>
+<li class="fragment"><p><em>Confidence interval</em> (CI) for the parameter θ, with confidence level γ: An interval determined by random variables u(X) and v(X) with the property: <span class="math inline">\(Pr\{u(X)&lt;\theta &lt;v(X)\}\ =\ \gamma = 1 - \alpha, \quad \forall\theta.\)</span></p></li>
+<li class="fragment"><p>Human language: In a <span class="red">repeatedly</span> sampling, the percentage of the samples that could contain θ</p></li>
 </ul>
 </section>
-<section id="toss-the-ring-two-tailed" class="slide level2">
-<h2>Toss the Ring (Two-tailed)<sup>1</sup></h2>
+<section id="calculated-ci-two-tailed" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Calculated CI (Two-tailed)<sup>1</sup></h2>
 <div class="columns">
 <div class="column" style="width:60%;">
 <ul>
-<li class="fragment">Mean: <span class="math inline">\(\mu = \bar X \pm Z_{\alpha/2}SE\)</span>
+<li class="fragment"><span class="math inline">\(\bar X \pm Z_{\alpha/2}SE\)</span>
 <ul>
 <li class="fragment">α: 1 - Confident level;</li>
-<li class="fragment">Z-score: <span class="math inline">\(Z = \frac{X - \mu}{\sigma}\)</span></li>
+<li class="fragment">Z-score: <span class="math inline">\(Z = \frac{X - \mu}{\sigma}\)</span> <span class="fragment"><em>Learned</em></span></li>
 </ul></li>
+<li class="fragment">Proportion: <span class="math inline">\(\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}\)</span></li>
 </ul>
 <aside class="notes">
 <p>s is the sample standard distribution, <span class="math inline">\(SE(\bar{X}) = \sqrt{\frac{s^2}{n}}\)</span></p>
@@ -632,33 +754,29 @@ Yue Hu
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div><div class="column" style="width:40%;">
-<ul>
-<li class="fragment">Proportion: <span class="math inline">\(\pi = P \pm Z_{\alpha/2}\sqrt{\frac{P(1 - P)}{n}}\)</span></li>
-</ul>
-</div>
-</div>
 <div class="fragment">
-<div class="callout callout-important callout-style-simple">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Interpretation</strong></p>
+</div>
 <div class="callout-content">
-<p>In 100 times sampling of …, there are … samples (… of the chance) that the CI could contain the true value.</p>
+<p>In 100 times sampling of …, there are … samples (… of the chance) that the <span class="red">CI could contain the true value</span>.</p>
 </div>
 </div>
 </div>
 </div>
-<div class="fragment" style="text-align:center; margin-top: 2em">
+</div><div class="column fragment" style="width:40%;">
 <p><em>How can you get smaller CI?</em></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_hardCI.jpeg" class="quarto-figure quarto-figure-center" height="200"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_hardCI.jpeg" class="quarto-figure quarto-figure-center" height="400"></p>
 </figure>
 </div>
-</div>
-<aside class="notes">
+</div><aside class="notes">
 <ol type="1">
 <li>Large N</li>
 <li>Large α
@@ -678,12 +796,13 @@ Yue Hu
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside><ol class="aside-footnotes"><li id="fn2"><p>Explained in the next lecture.</p></li></ol></aside></section>
-<section id="when-n-is-not-that-large" class="slide level2">
-<h2>When N is not that large</h2>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Explained in the next lecture.</p></li></ol></aside></section>
+<section id="when-n-is-not-that-large" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> When N is not that large</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_largeNumber.gif" class="quarto-figure quarto-figure-center" height="250"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_largeNumber.gif" class="quarto-figure quarto-figure-center" height="250"></p>
 </figure>
 </div>
 <div class="fragment">
@@ -722,17 +841,17 @@ Yue Hu
       }</style></aside>
 </div>
 </section>
-<section id="tstudents-distribution" class="slide level2">
-<h2>T/Student’s distribution <img data-src="images/ci_fsmrof.png" class="quarto-figure quarto-figure-center" height="30"></h2>
-<div class="r-vstack">
+<section id="tstudents-distribution" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> T/Student’s distribution <img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" class="quarto-figure quarto-figure-center" height="30"></h2>
+<div class="{layout-ncol}">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_student.png" class="quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_student_en.png" class="fragment quarto-figure quarto-figure-center" height="250"></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_student_en.png" class="fragment quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_student.png" class="quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
 </div>
@@ -750,57 +869,63 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </section>
-<section id="estimating-method" class="slide level2">
-<h2>Estimating Method</h2>
+<section id="estimating-method" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Estimating Method</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li class="fragment">For mean
+<li>For mean
 <ul>
-<li class="fragment">σ known, <span class="math inline">\(\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}\)</span></li>
-<li class="fragment">σ unknown
+<li>σ known, <span class="math inline">\(\mu = \bar X \pm Z_{\alpha/2}\frac{\sigma}{\sqrt n}\)</span></li>
+<li>σ unknown
 <ul>
-<li class="fragment">N ≥ 100ish, then <span class="math inline">\(\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}\)</span>;</li>
-<li class="fragment">N &lt; 100ish, then <span class="math inline">\(\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}.\)</span></li>
+<li>N ≥ 100ish, then <span class="math inline">\(\bar X \pm Z_{\alpha/2}\frac{s}{\sqrt n}\)</span>;</li>
+<li>N &lt; 100ish, then <span class="math inline">\(\bar X \pm t_{\alpha/2}\frac{s}{\sqrt n}.\)</span></li>
 </ul></li>
 </ul></li>
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li class="fragment">For proportion
+<li>For proportion
 <ul>
-<li class="fragment">π known, <span class="math inline">\(\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}\)</span>;</li>
-<li class="fragment">π unknown, <span class="math inline">\(\Pi = P \pm t_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}\)</span>.</li>
+<li>π known, <span class="math inline">\(\Pi = P \pm Z_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}\)</span>;</li>
+<li>π unknown, <span class="math inline">\(\Pi = P \pm t_{\alpha/2}\sqrt{\frac{\pi(1 - \pi)}{n}}\)</span>.</li>
 </ul></li>
 </ul>
 </div>
 </div>
 <ul>
-<li class="fragment"><em>Degree of Freedom</em>: Student’s T critical points are relative to the d.f.
+<li class="fragment"><strong>Degree of Freedom</strong>: Student’s T critical points are relative to the d.f.
 <ul>
-<li class="fragment">For CI: n - 1</li>
-<li class="fragment">For regression: n - k - 1</li>
+<li class="fragment">For CI: n - 1; for regression: n - k - 1</li>
 </ul></li>
-<li class="fragment"><em>Procedure</em>: Define measurement → set up α → calculate the d.f. and z/t scores → calculate the lower and upper bounds</li>
+<li class="fragment"><strong>Procedure</strong>: Define measurement → set up α → calculate the d.f. and z/t scores → calculate the lower and upper bounds</li>
 </ul>
 </section></section>
 <section>
-<section id="application" class="title-slide slide level1 center">
-<h1>Application</h1>
+<section id="application" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Application</h1>
 
 </section>
-<section id="what-can-cis-do" class="slide level2">
-<h2>What can CIs do</h2>
+<section id="what-can-ci-do" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> What can CI do</h2>
 <div style="text-align:center">
 <ul>
-<li class="fragment">Is a sampled a random result (or not)?</li>
+<li class="fragment">Does an event just happen by chance?</li>
 <li class="fragment">Is Sample A different from Sample B?</li>
 </ul>
 </div>
+<div class="columns fragment">
+<div class="column" style="width:70%;">
+<p>🌰 Your friend, who is the accountant for “Dr.&nbsp;Hu’s Amazing Team,” was asked by the organizer to help set a budget for a thank-you lunch after the team’s successful conference organization. The organizer, though unwilling to spend much, didn’t want to seem too stingy either. After calculating the average cost of lunch for a random sample of <span class="red">nine</span> team members, your friend found it to be ¥29, with a ¥3 deviation, and proposed a budget of ¥31 per person. The organizer, however, criticized her, claiming “¥26 is enough” and accusing her of not understanding statistics. <span class="fragment"><em>Is the organizer PUA your friend?</em></span></p>
+</div><div class="column" style="width:30%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_gpa.png" class="fragment quarto-figure quarto-figure-center" height="400"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_drhu1.png" class="quarto-figure quarto-figure-center" height="300"></p>
+<figcaption>Created by <a href="https://openai.com/dall-e">DALL·E.</a></figcaption>
 </figure>
+</div>
+</div>
 </div>
 <aside class="notes">
 <p>The ruler: Standard Normal distribution (Z-score)</p>
@@ -816,32 +941,17 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </section>
-<section id="application-i-random-or-not" class="slide level2">
-<h2>Application I: Random or Not</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
-<p><span class="small">Your friend is a team member and also the accountant for “Dr.&nbsp;Hu’s Amazing Team.” The team organizer planned a lunch to express appreciation for the members’ outstanding work in organizing a recent academic conference. However, the organizer turned out to be a Scrooge, hesitant to spend generously to convey gratitude, yet also wanting to avoid appearing overly frugal. In this context, he sought your friend’s assistance in establishing a budget. After researching the lunch cost from nine team members, your friend found that <strong>the average lunch expense was ¥29 with a ¥3 deviation</strong>. So, she proposed a budget of ¥31 per person. The organizer accused your friend not doing her job well and know nothing about statistics. “<strong>A ￥26 is enough</strong> according to the data” he claimed.</span></p>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/ci_drhu1.png" class="quarto-figure quarto-figure-center"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="pua-or-not" class="slide level2">
-<h2>PUA or not</h2>
+<section id="pua-or-not" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> PUA or not</h2>
 <div style="text-align:center">
 <p>N =9, (X̄ 29, s 3) vs.&nbsp;26</p>
 </div>
 <div class="columns">
 <div class="column" style="width:70%;">
-<p><em>Solution</em>:</p>
 <blockquote>
 <p>PUA = Blaming someone for something they did nothing wrong.</p>
 </blockquote>
-<p>⇒ The organizer blamed your friend for a reasonable suggestion of her. ⇒ The guess was in the CI of the data.</p>
+<p>The organizer blamed your friend for a unreasonable budget ⇒ “Unreasonable” means a guess out of the 95% CI of the sample</p>
 <ol type="1">
 <li class="fragment">Set α = 0.05;</li>
 <li class="fragment">N = 9, t distribution, d.f. = 9 - 1 = 8;</li>
@@ -851,13 +961,14 @@ Yue Hu
 </div><div class="column" style="width:30%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_drhu2.png" class="quarto-figure quarto-figure-center"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_drhu2.png" class="quarto-figure quarto-figure-center"></p>
+<figcaption>Created by <a href="https://openai.com/dall-e">DALL·E.</a></figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div class="fragment" style="text-align:center">
-<p><strong>Job done?</strong></p>
+<p><strong>What’s the interpretation?</strong></p>
 </div>
 <aside class="notes">
 <p><span class="blue">Inference</span>: If we make repeated sampling from the lunch expenses, there are 95% of the samples in which the interval between 27.5 and 31.8 contains the true mean. Therefore, an estimation of 31 sounds <span class="red">fine</span>. Your friend was treated unjustly.</p>
@@ -873,8 +984,8 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </section>
-<section id="application-ii-comparing-samples" class="slide level2">
-<h2>Application II: Comparing Samples</h2>
+<section id="comparing-samples" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Comparing Samples</h2>
 <p>Assuming X<sub>1</sub> and X<sub>2</sub> are i.i.d,</p>
 <ul>
 <li class="fragment">σ is known, <span class="math inline">\(\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}\)</span>.</li>
@@ -887,37 +998,49 @@ Yue Hu
 <p>A.k.a., Difference in Means</p>
 </div>
 </section>
-<section id="an-example" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">An example</h2>
-
-<img data-src="images/ci_modules.png" class="quarto-figure quarto-figure-center r-stretch"><p>Two module series have been designed for the “Learning R with Dr.&nbsp;Hu and His Friends” workshop: “R survivor” (basic) and “R expert” (advanced). “R survivor” consists of five workshops. Each received 932, 586, 796, 501, and 351 downloads after one round of the workshops. “R expert” also comprises five workshops, with download counts of 771, 917, 326, 825, and 399, respectively.</p>
-</section>
-<section id="an-example-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">An example</h2>
-<div class="small">
-<p>Two module series have been designed for the “Learning R with Dr.&nbsp;Hu and His Friends” workshop: “R survivor” (basic) and “R expert” (advanced). “R survivor” consists of five workshops. Each received 932, 586, 796, 501, and 351 downloads after one round of the workshops. “R expert” also comprises five workshops, with download counts of 771, 917, 326, 825, and 399, respectively. Which series is more popular?</p>
+<section id="section" class="slide level2" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> 🌰</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_modules.webp" class="quarto-figure quarto-figure-center" height="550"></p>
+<figcaption>Created by <a href="https://openai.com/dall-e">DALL·E.</a></figcaption>
+</figure>
 </div>
-<div class="fragment">
-<p>Solution: Set α = 0.05; small N → t.</p>
+</div><div class="column" style="width:40%;">
+<p>The “Learning R with Dr.&nbsp;Hu and His Friends” workshop includes two series: “R Survivor” (basic) and “R Expert” (advanced). The five “R Survivor” workshops received 932, 586, 796, 501, and 351 downloads, while the “R Expert” workshops had 771, 917, 326, 825, and 399 downloads.<br>
+<span class="fragment"><em>Which series is more popular?</em></span></p>
+</div>
+</div>
+</section>
+<section id="solution" class="slide level2" data-number="3.5">
+<h2><span class="header-section-number">3.5</span> Solution</h2>
+<div>
+<ul>
+<li>R Survivor: 932, 586, 796, 501, and 351 downloads</li>
+<li>R Expert: 771, 917, 326, 825, and 399 downloads</li>
+</ul>
+</div>
+<p>Set α = 0.05; small N → t.</p>
 <p><span class="math display">\[\begin{align}
 \bar X_1 =&amp; (932 + 586 + 796 + 501 + 351)/5 = 633.2; \bar X_2 = 647.6 \\
 S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 - 1)} = 6.245375\times 10^{4};\\
 \mu_1 - \mu_2 =&amp; (633.2 - 647.6) \pm 2.3646 (\sqrt{6.245375\times 10^{4}}\sqrt{1/5 + 1/5}), \\
 =&amp; -14.4 \pm 364.4763.
 \end{align}\]</span></p>
-</div>
 <div class="fragment">
 <p><span class="red">Inference:</span> If we make repeated sampling from the audience size of these lectures, there are 95% of the samples in which the interval between -378.8763 and 350.0763 contains the true mean. <em>The CI covers 0</em>. <span class="fragment">That is, the difference is <span class="red">no different</span> from zero statistically.</span></p>
 </div>
 </section>
-<section id="iid-vs.-non-iid" class="slide level2">
-<h2>IID vs.&nbsp;NON-IID</h2>
+<section id="when-not-iid" class="slide level2" data-number="3.6">
+<h2><span class="header-section-number">3.6</span> When Not IID</h2>
 <div class="columns">
 <div class="column fragment fade-in-then-semi-out" style="width:50%;">
 <p><strong>IID</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_independentSample.gif" class="quarto-figure quarto-figure-center" height="400"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_independentSample.gif" class="quarto-figure quarto-figure-center" height="400"></p>
 <figcaption>Observations are selected <span class="red">without regard to</span> who is in the other condition, a.k.a., <strong>independent and identical distributed</strong> (IID).</figcaption>
 </figure>
 </div>
@@ -925,15 +1048,15 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
 <p><strong>Matched</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_matchedSample.jpg" class="quarto-figure quarto-figure-center" height="400"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_matchedSample.jpg" class="quarto-figure quarto-figure-center" height="400"></p>
 <figcaption>Observations are <span class="red">matched to</span> someone in the other condition.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="difference-in-difference-in-means" class="slide level2">
-<h2>Difference in Difference in Means</h2>
+<section id="difference-in-difference-in-means" class="slide level2" data-number="3.7">
+<h2><span class="header-section-number">3.7</span> Difference in Difference in Means</h2>
 <div class="fragment">
 <p><em>Independent sample</em></p>
 <p><span class="math display">\[\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}\]</span></p>
@@ -963,18 +1086,18 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
           display:block!important;
       }</style></aside>
 </section>
-<section id="an-example-2" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">An example</h2>
+<section id="an-example" class="slide level2" data-auto-animate="true" data-number="3.8">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">3.8</span> An example</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_hsk.png" class="quarto-figure quarto-figure-center"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_hsk.png" class="quarto-figure quarto-figure-center"></p>
 </figure>
 </div>
 </div><div class="column" style="width:60%;">
-<p>Four students are required to attain an HSK-4 to apply Chinese universities (fantasy). To apply to higher-tier universities, they must achieve even higher scores (fantasy, again). Upon assessing their initial examination scores, they engaged in preparatory training. The subsequent tables display their performance in two subsequent examinations.</p>
-<p>Was the preparatory training helpful?</p>
+<p>Four students must achieve HSK-4 to apply to Chinese universities (fantasy). For higher-tier universities, they need even higher scores (fictional). After reviewing their initial exam results, they underwent preparatory training. The tables below show their performance in two subsequent exams.</p>
+<p><span class="fragment"><em>Was the preparatory training helpful?</em></span></p>
 <table>
 <thead>
 <tr class="header">
@@ -982,19 +1105,19 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
 <th>Tim</th>
 <th>Frank</th>
 <th>Emily</th>
-<th>Anthony</th>
+<th>Elise</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>HSK</td>
+<td>Before</td>
 <td>57</td>
 <td>57</td>
 <td>73</td>
 <td>65</td>
 </tr>
 <tr class="even">
-<td>HSK</td>
+<td>After</td>
 <td>64</td>
 <td>66</td>
 <td>89</td>
@@ -1005,8 +1128,8 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
 </div>
 </div>
 </section>
-<section id="an-example-3" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">An example</h2>
+<section id="solution-1" class="slide level2" data-number="3.9">
+<h2><span class="header-section-number">3.9</span> Solution</h2>
 <table>
 <thead>
 <tr class="header">
@@ -1014,19 +1137,19 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
 <th>Tim</th>
 <th>Frank</th>
 <th>Emily</th>
-<th>Anthony</th>
+<th>Elise</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>HSK</td>
+<td>Before</td>
 <td>57</td>
 <td>57</td>
 <td>73</td>
 <td>65</td>
 </tr>
 <tr class="even">
-<td>HSK</td>
+<td>After</td>
 <td>64</td>
 <td>66</td>
 <td>89</td>
@@ -1034,18 +1157,16 @@ S_p^2 =&amp; \frac{2.151268\times 10^{5} + 2.845032\times 10^{5}}{(5 - 1) + (5 -
 </tr>
 </tbody>
 </table>
-<div class="fragment">
-<p>Solution: Let α = 0.05, <span class="math display">\[\begin{align}
+<p>Set α = 0.05, <span class="math display">\[\begin{align}
 D =&amp; X_1 - X_2 \Rightarrow \bar D = \sum D / n = (7 + 9 + 16 + 6) / 4 = 12\\
 S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18\times \frac{39}{4} = 11 \pm 6
 \end{align}\]</span></p>
-</div>
 <div class="fragment">
 <p><span class="red">Inference</span>: If we make repeated sampling from these students, there are 95% of the samples in which the interval between 5 and 17 contains the true mean of the difference. <strong>The CI is above 0, that is, students did get better.</strong></p>
 </div>
 </section>
-<section id="another-example" class="slide level2">
-<h2>Another Example</h2>
+<section id="another" class="slide level2" data-number="3.10">
+<h2><span class="header-section-number">3.10</span> Another 🌰</h2>
 <div class="columns">
 <div class="column" style="width:80%;">
 <p>Gallop drew a pair of 1500 samples from the American population. In the sample of 1980, there are 52% Democrats, and 46% in the 1985 sample. Were the Democrats the same for two years, given the 95% CI?</p>
@@ -1059,7 +1180,7 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
 </div><div class="column" style="width:20%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_gallop.png" class="quarto-figure quarto-figure-center" height="200"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_gallop.png" class="quarto-figure quarto-figure-center" height="200"></p>
 </figure>
 </div>
 </div>
@@ -1068,8 +1189,8 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
 <p><span class="red">Inference</span>: If we make repeated sampling from the Amercian population, there are 95% of the samples in which the interval between -0.042 and 0.03 contains the true mean. <strong>The CI contains 0. Thus, the proportion of Democrats in 1980 was not different from that in 1985 statistically at the 0.05 level.</strong></p>
 </div>
 </section>
-<section id="bff-different-views" class="slide level2">
-<h2>BFF: Different Views</h2>
+<section id="bff-different-views" class="slide level2" data-number="3.11">
+<h2><span class="header-section-number">3.11</span> BFF: Different Views <img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="20"></h2>
 <div class="columns">
 <div class="column fragment" style="width:40%;">
 <p><em>Bayesian</em></p>
@@ -1079,7 +1200,7 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_dart.gif" class="quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_dart.gif" class="quarto-figure quarto-figure-center" height="300"></p>
 <figcaption>There are …% of the chance that the true value lies in the CI.</figcaption>
 </figure>
 </div>
@@ -1104,7 +1225,7 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_ringToss.webp" class="quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_ringToss.webp" class="quarto-figure quarto-figure-center" height="300"></p>
 <figcaption>There is 95% chance the CI could contain the true value (before any data is collected).</figcaption>
 </figure>
 </div>
@@ -1116,7 +1237,7 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/ci_swan.jpg" class="quarto-figure quarto-figure-center" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_swan.jpg" class="quarto-figure quarto-figure-center" height="300"></p>
 <figcaption>There is 95% chance the CI could contain the true value <del>(before any data is collected)</del>.</figcaption>
 </figure>
 </div>
@@ -1135,21 +1256,68 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
       }</style></aside>
 </div>
 </section>
-<section id="take-home-point" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Take-home point</h2>
-<div style="text-align: center">
-<p><img data-src="images/ci_mindmap.png" height="600"></p>
+<section id="take-home-point" class="slide level2" data-number="3.12">
+<h2><span class="header-section-number">3.12</span> Take-home point</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_mindMap.png" class="quarto-figure quarto-figure-center" height="500"></p>
+</figure>
 </div>
-</section>
-<section id="section" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
-<div style="text-align: center">
-<p><a href="images/ci_fullmap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="images/ci_fullmap.png" height="600"></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_mindMap_structure.png" class="fragment quarto-figure quarto-figure-center" height="600"></p>
+</figure>
 </div>
+</div>
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 unnumbered center">
+<h1>Appendix</h1>
+
 </section>
-<section id="have-a-break" class="slide level2">
-<h2>Have a break</h2>
-<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xSDM3UzNHdnNiNExETzJUP2U9SmIxVGFw.mp4"></video>
+<section id="stretch" class="slide level2 unnumbered">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2 unnumbered">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400"></p>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 
 </section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
@@ -1314,7 +1482,7 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -1582,31 +1750,6 @@ S_D^2 =&amp; 46 / 3 = 15.3 \Rightarrow S_D = 3.9 \therefore \Delta = 12 \pm 3.18
     });
     </script>
     <script>videojs(video_shortcode_videojs_video1);</script>
-    <script>var lightboxQuarto = GLightbox({"loop":false,"openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","descPosition":"bottom"});
-    window.onload = () => {
-      lightboxQuarto.on('slide_before_load', (data) => {
-        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-        const href = trigger.getAttribute('href');
-        if (href !== null) {
-          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-          if (imgEl !== null) {
-            const srcAttr = imgEl.getAttribute("src");
-            if (srcAttr && srcAttr.startsWith("data:")) {
-              slideConfig.href = srcAttr;
-            }
-          }
-        } 
-      });
-
-      lightboxQuarto.on('slide_after_load', (data) => {
-        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(slideNode);
-        }
-      });
-
-    };
-              </script>
     
 
 </body></html>
