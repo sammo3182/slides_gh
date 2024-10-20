@@ -202,7 +202,7 @@ s - s\pi &= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
 :::{.callout-important .fragment}
 ## Hypothesis framing ABC
 
-- Assertion ~normative statement~
+- Assertion ~~normative statement~~
 - Observable 
 - Clear direction
 :::
@@ -343,22 +343,21 @@ Lindeberg-Feller CLT extend CLT to non-iid random variables, which does not requ
 
 ## About alpha
 
+:::{.overlay-container} 
 
-
-:::: {.columns}
-
-::: {.column .fragment width="50%"}
-![](https://drhuyue.site:10002/sammo3182/figure/hyp_errorType.png){fig-align="center" height=num}
-:::
-
-::: {.column .fragment width="50%"}
+:::{.overlay-text}
 | Decision 	| H<sub>0</sub> T                   	| H<sub>0</sub> F                   	|
 |----------	|--------------------------	|--------------------------	|
 | Reject  	| Type I error (Pr = &alpha;)            	| Pr = 1 - &beta; 	|
 | [Fail to]{.red} Reject 	| Pr = 1 - &alpha; 	|  Type II error (Pr = &beta;)            	|
 :::
 
-::::
+:::{.overlay-image .fragment}
+![](https://drhuyue.site:10002/sammo3182/figure/hyp_errorType.png){fig-align="center" height=600}
+:::
+
+:::
+
 
 :::{.notes}
 Type I: 无中生有
@@ -394,11 +393,13 @@ ggplot(data = data.frame(x = c(-4, 4)), aes(x = x)) +
     fill = gb_cols("gold"),
     alpha = 0.2
   ) +
-  ylab("") + xlab("")
+  theme(
+    axis.title = element_blank()
+  )
 ```
 
 :::{.fragment .r-fit-text}
-Well...it's actually [**arbitrary**]{.red} ANNNNNNNNNND [qualitative]{.red}.
+Well...it's actually [**arbitrary**]{.red} annnnnnnnnnd [qualitative]{.red}.
 :::
 
 :::{.notes}
@@ -409,18 +410,18 @@ Not calculate the p-value and set the significance but set the confidence level 
 
 ![](https://drhuyue.site:10002/sammo3182/figure/hyp_phacking.jpg){.fragment fig-align="center" height=300}
 
-:::{.fragment}
 
-:::{.callout-important}
+:::{.notes}
+You don't pursue p
+:::
+
+:::{.callout-important .fragment}
+## 习近平在中央党校（国家行政学院）中青年干部培训班开班式上的讲话(2022年3月1日)
+
 > [守住拒腐防变防线，最紧要的是守住内心，从小事小节上守起，正心明道、怀德自重，勤掸“思想尘”、多思“贪欲害”、常破“心中贼”，以内无妄思保证外无妄动。]{.red}    
-[—— 2022年3月1日，习近平在中央党校（国家行政学院）中青年干部培训班开班式上的讲话]{.golden}
-:::
 
 :::
 
-:::{.fragment .large style="text-align:center"}
-You [DON'T]{.red}!
-:::
 
 
 ## Deploy Hypothesis testing {auto-animate=true}
@@ -456,22 +457,24 @@ E(\bar X) =& \mu = 69; \sigma = 3.2, \\
 ## Correct SE ![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30}
 
 :::{.callout-warning}
+## Finite population correction
+
 For small **population**, not small sample.
 :::
 
-- Finite population correction, FPC: Without replacement, SE of X&#772; [&uarr;]{.red}  
-    - &rArr; uncertainty overestimated &rArr; correction: $\sqrt{\frac{N - n}{N - 1}}$
-    - n = 1 (sampling only one sample), Then $SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N    - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}$, no changes; 
+- FPC: Without replacement, SE of X&#772; [&uarr;]{.red} &rArr; uncertainty overestimated &rArr; correction: $\sqrt{\frac{N - n}{N - 1}}$
+    - n = 1 (sampling only one sample), Then $SE = \frac{\sigma}{\sqrt{n}}\sqrt{\frac{N    - n}{N - 1}} = \frac{\sigma}{\sqrt{n}}$; 
     - n = N (sampling all), SE = 0. 
     - n = 1000, N = 100,000,000 (large sample of a large population), $FPC = \sqrt{\frac{100000000 - 1000}{100000000 - 1}}\approx .999$, little changes.
     - n = 100, N = 108 (large sample of a [small]{.red} population), $FPC = \sqrt{\frac{108 - 100}{108 - 1}}\approx 0.075$, some changes.
 
 ## What does the FPC correct
 
-![](https://drhuyue.site:10002/sammo3182/figure/20231022160554.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/20231022160554.png){fig-align="center" height=600}
 
 
-## Statistical Test 
+## Statistical Test: Individual Level
+
 :::: {.columns}
 
 ::: {.column width="50%"}
@@ -482,8 +485,6 @@ For small **population**, not small sample.
 
 ::: {.column .fragment width="50%"}
 $$Z = \frac{\bar X - \mu}{SE}= \frac{\bar X - \mu}{\sigma/\sqrt n}.$$
-
-$$Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}.$$
 
 :::{.notes}
 
@@ -502,8 +503,6 @@ Then, $Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}$, the confidence interv
 ::::
 
 
-::: {.panel-tabset .fragment}
-## Individual-level Data
 
 :::{.fragment}
 E.g. Given $\mu$ = 72 and $\sigma$ = 9, and a random sample of 10. Calculate the probabilities of P(X > 80) and P(X&#772; > 80)
@@ -514,7 +513,28 @@ $Z = \frac{80 - 72}{9/\sqrt{10}} = 2.81\Rightarrow P(Z > 2.81) =$ `r round(1 - p
 
 :::
 
-## Aggregate Data
+
+
+## Statistical Test: Aggregated Level
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- SE &rarr; Z(t)-score &rarr;
+    1. Critical values (z/t), or
+    1. Confidence intervals
+:::
+
+::: {.column .fragment width="50%"}
+
+$$Z = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}}.$$
+
+:::
+
+::::
+
+
+
 
 :::{.fragment}
 E.g., Given the Republican are 60% of the U.S. population, what's the probability that the Republican are the minority in a random sample of 100 people from the national population?
@@ -525,7 +545,7 @@ Then, $Z = \frac{0.5 - 0.6}{\sqrt{\frac{0.6(1 - 0.6)}{100}}} =$ `r round(-0.1/(s
 
 :::
 
-:::
+
 
 
 ## Full Process Illustration
@@ -534,21 +554,29 @@ Given a virus can influence 10% of the population.
 Now there's a sample of senior people, n = 527, within which there are 14% infected.
 Are senior people more likely to be victimized?
 
+:::{.overlay-container} 
 
+:::{.overlay-text}
 - Assuming the sample is IID sampled and $H_0: \pi \leq 10; H_1: \pi > 10.$ 
 - &alpha; = 0.05
 - Confidence-interval method:
   - $\pi = 0.14 \pm 1.96 * \sqrt{\frac{0.14 * (1 - 0.14)}{527}} = 0.14 \pm 0.03,$ that is [0.11, 0.17] > 0.1. $H_0.$ rejected.
 - Critical value method
-  - $Z_{obs} = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.$ Given the level of $\alpha = 0.05$, $Z_{critical}$ = `r round(qnorm(0.975), digits = 4)` < $Z_{obs}$,^[[In r, `qnorm(0.975)`. 0.975, huh?]{.fragment}] therefore reject the $H_0.$
+  - $Z_{obs} = \frac{P - \pi}{\sqrt{\frac{\pi(1 - \pi)}{n}}} = \frac{14 - 10}{\sqrt{\frac{0.1 * 0.9}{527}}} = 3.06.$ Given the level of $\alpha = 0.05$, $Z_{critical}$ = `r round(qnorm(0.975), digits = 4)` < $Z_{obs}$,^[In r, `qnorm(0.975)`. 0.975, huh?] therefore reject the $H_0.$
+:::
+
+:::{.overlay-image .fragment}
+![](https://drhuyue.site:10002/sammo3182/figure/hyp_tailed.png){fig-align="center" height=350}
+:::
 
 
-## One or Two Tailed Test
+:::
 
-![](https://drhuyue.site:10002/sammo3182/figure/hyp_tailed.png){fig-align="center" height=400}
 
+:::{.notes}
 - Most applications are one-tail tests, while most software gives two-tail results.
 - One-tailed test more often apply the critical value than confidence interval method.
+:::
 
 ## Take-home point
 
