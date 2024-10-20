@@ -10,12 +10,13 @@ knitr:
 
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
@@ -26,9 +27,6 @@ format:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
 
 revealjs-plugins:
   - spotlight
@@ -42,7 +40,7 @@ spotlight:
 ---
 
 
-## Overview
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 
@@ -58,7 +56,7 @@ p_load(
 
 
 # Functions preload
-set.seed(114)
+set.seed(313)
 
 theme_set(
   theme_minimal(base_size = 18)
@@ -73,88 +71,42 @@ theme_update(
 ```
 
 - Understand hypothesis testing
-    - Substantive concept
-    - Operational concept
-- Process a hypothesis test
+- Test hypotheses
 
 # Understand hypothesis testing
 
-## Substantive definition
+## Function of Hypothesis
 
 :::{style="text-align:center"}
-Theory (logic) &larr; real world
-:::
-
-:::: {.columns}
-
-::: {.column width="30%"}
-:::{.r-vstack}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_checkBalance_ideal.jpg){.fragment fig-align="center" height=250}
+[**Theory (logic) &rarr; real world**]{.red} (conceptually)
 
 
-[&darr;]{.fragment style="text-align:center}
-
-
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_checkBalance_real.png){.fragment fig-align="center" height=250}
-
-:::
-
-:::{.notes}
-In June 2022, the Supreme Court overruled Roe vs. Wade by 6:3
-:::
-:::
-
-::: {.column width="70%"}
-
-:::{.r-hstack}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_ChinaCollapse.jpg){.fragment height=400}
-
-[&rarr;]{.fragment style="text-align:center}
-
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hpy_ChinaNotCollapse.png){.fragment height=400}
-
-:::
-:::
-
-:::{.notes}
-Gordon Guthrie Chang (born July 5, 1951) is a columnist, author, and lawyer., In 2010, Chang wrote in The Christian Science Monitor that "China could fail soon" and predicted an economic crash.[8] In an article, "The Coming Collapse of China: 2012 Edition," published by the Foreign Policy magazine website, Gordon G. Chang admitted that his prediction was wrong but arguing that he was off only by one year: "Instead of 2011, the mighty communist party of China will fall in 2012. Bet on it."[9] On May 21, 2016, The National Interest published another article by Chang, "China's Coming Revolution." In it, he argued that the ruling class in China is divided and that it cannot deal with its economic problems. Chang claimed that would lead to a revolution, which would overthrow the Communist Party. Unlike for his other predictions, he did not give the exact year that those events would take place
-:::
-
-::::
-
-
-
-## Operational definition
-
-:::{style="text-align:center"}
-Theory (logic) &rarr; real world (conceptual)
-:::
-
-:::{style="text-align:center"}
+:::{.fragment}
 &darr;
 
-Ideal world vs. real world
+Ideal world [*(?)*]{.fragment} vs. real world (theoretically)
 :::
 
-:::{style="text-align:center"}
+:::{.fragment}
 &darr;
 
-Ideal world &ne; real world:  Really? 
-
-Random distribution vs. empirical distribution
+Random distribution vs. empirical distribution (statistically)
 :::
 
-:::{style="text-align:center"}
+:::{.fragment}
 &darr;
 
-Ideal world &ne; real world:  How? 
-
-1. Identification
-1. Correlation analysis + Causal inference
+- Identification &rArr; Statement (**hypothetically**)
 
 &darr;
 
-Estimates (coefficients + [uncertainty]{.red})
+Inferences (coefficients + confidence)
+
+&darr;
+
+Implications
+:::
+
 :::
 
 ## How to get the coefficients
@@ -231,27 +183,32 @@ s - s\pi &= n\pi - s\pi \Rightarrow\pi = \frac{s}{n}.
 
 :::
 
-## How to get uncertainty
+## How to get confidence
 
-- Parametric: CI estimation
-    - ![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_parametric.webp){height=200}
+:::{.r-stack}
+![Parametric](https://drhuyue.site:10002/sammo3182/figure/hyp_parametric.webp){height=500}
 
-- Nonparametric: Bootstrap
-    - ![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_nonparametric.webp){height=300}
+![Nonparametric](https://drhuyue.site:10002/sammo3182/figure/hyp_nonparametric.webp){.fragment height=600}
+:::
 
 
 ## Format
 
 :::{style="text-align:center; margin-top: 1em"}
-- Null (Random distribution): &Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon;
-- Theoretical (Your thought): &Lscr;(theory): Y = &beta;<sub>0</sub> + [&beta;<sub>1</sub>X]{.red} + &epsilon;
-- Testing (Hypothesis testing): &Lscr;(null) vs. &Lscr;(theory)
+- Null: &Lscr;(null): Y = &beta;<sub>0</sub> + &epsilon; (Random distribution)
+- Theoretical: &Lscr;(theory): Y = &beta;<sub>0</sub> + [&beta;<sub>1</sub>X]{.red} + &epsilon; (Your thought)
 :::
 
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/20231023120149.png){.fragment fig-align="center" height=400}
+:::{.callout-important .fragment}
+## Hypothesis framing ABC
+
+- Assertion ~normative statement~
+- Observable 
+- Clear direction
+:::
 
 
-# Process a hypothesis test
+# Test hypotheses
 
 ## Statistical Foundations
 
@@ -273,7 +230,7 @@ Proof: https://blog.csdn.net/a19990412/article/details/85283729
 :::
 :::
 
-::: {.column width="50%"}
+::: {.column .fragment width="50%"}
 Central limit theorem (**CLT**): For a random sample of n, X&#772; fluctuate around &mu; with an uncertainty,
 
 $$When\ n \rightarrow \infty, Pr(\bar X) \sim \mathcal{N(\mu, \sigma)}. $$
@@ -297,7 +254,7 @@ When n gets larger...
 
 
 :::{.fragment style="text-align:center; margin-top: 2em"}
-Contradictory?
+*Contradictory?*
 
 :::{.notes}
 Becoming a value or becoming a distribution?
@@ -384,12 +341,14 @@ Lindeberg-Feller CLT extend CLT to non-iid random variables, which does not requ
 :::
 
 
-## Let's talk about alpha
+## About alpha
+
+
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_errorType.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/hyp_errorType.png){fig-align="center" height=num}
 :::
 
 ::: {.column .fragment width="50%"}
@@ -448,7 +407,7 @@ Not calculate the p-value and set the significance but set the confidence level 
 
 ## How to get p < 0.05
 
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_phacking.jpg){.fragment fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/hyp_phacking.jpg){.fragment fig-align="center" height=300}
 
 :::{.fragment}
 
@@ -494,7 +453,7 @@ E(\bar X) =& \mu = 69; \sigma = 3.2, \\
 
 :::
 
-## Correct SE ![](https://raw.githubusercontent.com/sammo3182/backup/master/images/ci_fsmrof.png){height=30}
+## Correct SE ![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30}
 
 :::{.callout-warning}
 For small **population**, not small sample.
@@ -509,7 +468,7 @@ For small **population**, not small sample.
 
 ## What does the FPC correct
 
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/20231022160554.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/20231022160554.png){fig-align="center" height=num}
 
 
 ## Statistical Test 
@@ -586,7 +545,7 @@ Are senior people more likely to be victimized?
 
 ## One or Two Tailed Test
 
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/hyp_tailed.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/hyp_tailed.png){fig-align="center" height=400}
 
 - Most applications are one-tail tests, while most software gives two-tail results.
 - One-tailed test more often apply the critical value than confidence interval method.
@@ -594,5 +553,5 @@ Are senior people more likely to be victimized?
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](https://raw.githubusercontent.com/sammo3182/backup/master/images/20231022141302.png){height="600"}
+![](https://drhuyue.site:10002/sammo3182/figure/20231022141302.png){height="600"}
 :::

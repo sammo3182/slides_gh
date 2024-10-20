@@ -52,12 +52,25 @@ library(pacman)
 p_load(
   "icons",
   "knitr",
+  "drhutools",
   "tidyverse",
   "purrr"
 )
 
 # Functions preload
 set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 30), 
+  axis.text = element_text(size = 20),
+  strip.text = element_text(size = 20)
+)
+
 ```
 
 
@@ -104,7 +117,73 @@ set.seed(313)
 - 论文30篇（近五年22篇，准聘后增幅[340%]{.red}）    
   - 国际顶刊[2]{.red}篇，JCR Q1区[10]{.red}篇（近五年8篇）
 
-:::{.fragment layout-nrow=1}
+```{r publicationTrend}
+#| fig-align: center
+#| fig-height: 5
+
+# Assuming your data is in a dataframe named `data`
+data <- data.frame(
+  发表年 = c(2024, 2023, 2022, 2021, 2020, 2019),
+  发表数 = c(3, 5, 9, 1, 3, 1),
+  A_plus发表数 = c(3, 2, 3, 0, 2, 0),
+  准聘 = c(1, 1, 1, 0, 0, 0)
+)
+
+# Preparing data to calculate cumulative sums
+cumulative_data <- data |>
+  arrange(发表年) |>
+  mutate(发表总量 = cumsum(发表数),
+         `A+发表量` = cumsum(A_plus发表数)) |>
+  select(发表年, 发表总量, `A+发表量`) |>
+  pivot_longer(
+    cols = c(发表总量, `A+发表量`),
+    names_to = "类型",
+    values_to = "累积数量"
+  ) |>
+  mutate(类型 = factor(类型, levels = unique(类型)))
+
+# Plotting the cumulative sums of both 发表数 and A+发表数 in two facets
+
+cumulative_data |>
+  ggplot(aes(x = 发表年, y = 累积数量, color = 类型)) +
+  geom_line(linewidth = 1.5) +
+  geom_point(size = 3) +
+  theme_minimal() +
+  facet_wrap( ~ 类型, scales = "free_y") +
+  scale_color_gb(reverse = TRUE) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +  # Ensure y-axis is displayed in integers
+  geom_vline(xintercept = 2021,
+             linetype = "dashed",
+             color = gb_cols("red")) +  # Add red dashed vertical line at 2021
+  annotate(
+    "text",
+    x = 2021,
+    y = Inf,
+    label = "准聘",
+    vjust = 4,
+    hjust = 1.2,
+    color = gb_cols("red"),
+    size = 6
+  ) +  # Annotate the vertical line as "准聘"
+  theme(
+    axis.title.x = element_blank(),
+    legend.position = "none",
+    plot.title = element_text(size = 18),
+    axis.title = element_text(size = 20),
+    axis.text = element_text(size = 20),
+    strip.text = element_text(size = 20)
+  )
+
+```
+
+
+## 研究概况
+
+- 论文30篇（近五年22篇，准聘后增幅[340%]{.red}）    
+  - 国际顶刊[2]{.red}篇，JCR Q1区[10]{.red}篇（近五年8篇）
+
+
+:::{layout-nrow=1}
 ![Tai, Hu, Solt[-@TaiEtAl2024] (共一+通讯)，政治学国际**“三大顶刊”之首**；五年平均影响因子：7.9](https://drhuyue.site:10002/sammo3182/figure/tenure_apsr.jpg){height=300}
 
 ![Jin, Hu, Meng[-@JinEtAl2024] (共一+通讯)，舆论研究引用率最高的期刊之一，五年平均影响因子：4.5](https://drhuyue.site:10002/sammo3182/figure/tenure_poq.jpeg){height=300}
@@ -115,7 +194,6 @@ set.seed(313)
 
 ![@HuYueZhuMeng2022，《中国学术期刊影响因子年报》（2023）中国政治类排名6/179，复合影响因子：7.2](https://drhuyue.site:10002/sammo3182/figure/tenure_gr.png){height=300}
 :::
-
 
 :::{.notes}
 - 2019--2021: 4 + 1
@@ -210,7 +288,7 @@ Mediator-evaluation model
 :::{layout-nrow=1}
 ![@JiChengYuanHuYue2022（通讯），公共管理权威期刊，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jpa.jpg){fig-align="center" height=330 width=250}
 
-![@HuYueLiRuiZhe2023，**《新华文摘》转载**](https://drhuyue.site:10002/sammo3182/figure/tenure_njxb.jpg){fig-align="center" height=330 width=250}
+![@HuYueLiRuiZhe2023，**《新华文摘》全文转载**](https://drhuyue.site:10002/sammo3182/figure/tenure_njxb.jpg){fig-align="center" height=330 width=250}
 
 ![@TangHu2023（通讯），学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jcc.png){fig-align="center" height=330 width=250}
 
@@ -438,19 +516,19 @@ imap(url_badge,
 :::: {.columns}
 
 ::: {.column width="40%"}
-### [实现经典议题前沿推进]{.red}
+### [经典议题前沿推进]{.red}
 
-- 民众理解支持（*贡献点1*）是制度存续心理前提，语言（*贡献点2*）是建构理解根本途径，而对它们的精准度量比较（*贡献点3*）又是对政治认知进行科学研究的基石，三个学术贡献点**相互支撑、有机融合**
+- 民众理解支持[（贡献点1）]{.small}是制度存续心理前提，语言[（贡献点2）]{.small}是建构理解根本途径，而对它们的精准度量比较[（贡献点3）]{.small}又是对政治认知进行科学研究的基石，三个学术贡献点**相互支撑、有机融合**
 - 聚焦“民主发展多样性”、 “结构权力与个体能动性”、 “现代化与现代性”等基础性议题
 :::
 
 ::: {.column width="60%"}
-### [进行有质量的国际对话]{.red}
+### [高水平国际对话]{.red}
 
 - 产出**国际水平成果**，在学术层面参与国际对话
 - 聚焦语言思维关系、经济不平等、多元治理等社会科学共同关注问题，展现政治学逻辑贡献
 
-### [寻求方法论层面突破]{.red}
+### [方法论层面突破]{.red}
 
 - 通过方法迭代和融合，为解决实际研究问题提供更坚实的实证基础
 - **不止步于应用**，更致力于对新方法研发和方法论层面研究，为社会科学工作者提供更为便捷、高效、科学的研究技法和工具
@@ -770,8 +848,7 @@ imap(url_badge,
 **跨时空“大比较”[方法]{.red}研究**
 
 - 政治兴趣趋势与成因的“大比较”分析（*BJPS*, R&R)
-- 民主认知测量合法性研究（*R & P*, R&R    
-……
+- 民主认知测量合法性研究（*Research & Politics*, R&R）……
 :::
 
 ::::
@@ -797,7 +874,7 @@ imap(url_badge,
 
 - 继续组织“政治心理”研讨会，推广**政治心理学**领域和**清华政治学**品牌
 - 推动计算社会科学平台、数据治理中心工作 参与**计算政治学**学科建设
-- 推动清华智库中心工作，打造**国际一流智库**，加强学术成果解决国家难点、瘀点、堵点问题能力
+- 推动清华智库中心工作，积极参与**国际一流智库**，加强学术成果解决国家难点、瘀点、堵点问题能力
 :::
 
 ::::
