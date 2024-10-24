@@ -109,12 +109,12 @@ theme_update(
 
 ## 研究概况
 
-- 论文30篇（近五年22篇，准聘后增幅[340%]{.red}）    
-  - JCR Q1区[10]{.red}篇（近五年8篇）
+- 近五年22篇（准聘后增幅[340%]{.red}）    
+  - 包括***American Political Science Review***, *Political Science Research and Methods*, *Political Psychology* 等学科和领域顶刊在内的JCR Q1区[8]{.red}篇
 
 ```{r publicationTrend}
 #| fig-align: center
-#| fig-height: 5
+#| fig-height: 4.8
 
 # Assuming your data is in a dataframe named `data`
 data <- data.frame(
@@ -176,17 +176,83 @@ cumulative_data |>
 
 ![](https://drhuyue.site:10002/sammo3182/figure/diagram_area.png){fig-align="center" height=600}
 
+## 学术贡献点1: 认知能动性与制度运行
 
-## 学术贡献点1: 认知塑造能动性与制度运行的认知基础
+```{r thermostatic, eval=FALSE}
+# Number of time points
+time_points <- 1:24
+
+# Create data with added noise to make it more realistic
+Public_Demand_Base <- c(70, 68, 65, 63, 60, 58, 55, 53, 55, 57, 60, 63, 65, 67, 65, 63, 61, 58, 56, 53, 50, 48, 50, 53)
+Institutional_Performance_Base <- c(40, 42, 45, 47, 50, 52, 55, 58, 56, 54, 51, 48, 45, 43, 45, 47, 49, 52, 54, 57, 60, 62, 60, 57)
+
+# Adding random noise
+Public_Demand <- Public_Demand_Base + rnorm(24, mean = 0, sd = 3)
+Institutional_Performance <- Institutional_Performance_Base + rnorm(24, mean = 0, sd = 3)
+
+# Create data frame
+data <- data.frame(
+  Time_Point = time_points,
+  Public_Demand = Public_Demand,
+  Institutional_Performance = Institutional_Performance
+)
+
+# Create the line plot
+ggplot(data, aes(x = Time_Point)) +
+  geom_line(aes(y = Public_Demand),
+            color = gb_cols("gold"),
+            size = 1.2) +
+  geom_line(
+    aes(y = Institutional_Performance),
+    color = "black",
+    size = 1.2
+  ) +
+  annotate(
+    "text",
+    x = 12,
+    y = Public_Demand[12] + 4,
+    label = "民主支持",
+    color = gb_cols("gold"),
+    hjust = 0.5,
+    size = 12
+  ) +
+  annotate(
+    "text",
+    x = 12,
+    y = Institutional_Performance[12] - 4,
+    label = "民主制度",
+    color = "black",
+    hjust = 0.5,
+    size = 12
+  ) +
+  labs(title = "Thermostatic Model of Public Opinion in Democratic Institutions", x = "时间点", y = "Value")
+
+
+```
 
 :::{.callout-important appearance="simple" .large}
-提供民主认知能动性证据，挑战经典理论，理解**政治发展多样性成因**。
+以认知能动视角，为理性主义-制度主义理论融合**两大难题**提出应对之法。
+:::
+
+:::{.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_issues.png){fig-align="center" height=500}
+
+![](https://drhuyue.site:10002/sammo3182/figure/theory_contribution.png){.fragment fig-align="center" height=500}
+
+:::
+
+
+## 学术贡献点1: 认知能动性与制度运行
+
+:::{.callout-important appearance="simple" .large}
+挑战恒温计理论，提供民主认知能动性证据，理解**政治发展多样性成因**。
 :::
 
 :::: {.columns}
 
 ::: {.column width="30%"}
-![Tai, Hu (通讯/共一), Solt[-@TaiEtAl2024] ，政治学国际**“三大刊”之首**；五年平均影响因子：7.9](https://drhuyue.site:10002/sammo3182/figure/tenure_apsr.jpg){height=380}
+![Tai, Hu (通讯/共一), Solt[-@TaiEtAl2024] ，政治学**“三大刊”之首**；五年平均影响因子：7.9](https://drhuyue.site:10002/sammo3182/figure/tenure_apsr.jpg){height=380}
 
 :::{.notes}
 - 2019--2021: 4 + 1
@@ -204,8 +270,8 @@ cumulative_data |>
 ![](https://drhuyue.site:10002/sammo3182/figure/plot_fullAPSR.png){fig-align="center" height=250 width=450}
 
 
-- 以30余年中全球144个国家1889项公共调查中民主支和制度变化数据，检验**认知能动性**理论
-- 民主支持**并不推动**制度变化；同时制度变化也**不会影响**民主支持，后者只对经济、腐败等积累性治理产生影响
+- 提取全球144个国家三十余年1889项公共调查中民主支持数据的**可比性度量**，检验与制度变化关系
+- 民众支持不影响制度变化，也不受制度变化影响（**认知能动性**）；只响应经济、腐败等结果性政策
 
 :::{.notes}
 UN 193个成员国
@@ -215,9 +281,12 @@ UN 193个成员国
 
 ::::
 
-## 学术贡献点1: 认知塑造能动性与制度运行的认知基础
+## 学术贡献点1: 认知能动性与制度运行
 
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_tweets_gray.png){fig-align="center" height=620}
+- 文章获得Devin Caughey (MIT)、 Chris Warshaw (GWU)、 Alexander Wuttke (Munich) 等民主问题专家在社交媒体上[积极评价和传播]{.red}
+- 在高水平学术平台上的[引发学术争论]{.red}
+
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_claassenCorrection.png){fig-align="center" height=400}
 
 
 
@@ -229,10 +298,10 @@ among others and books such as Research Handbook on Authoritarianism.
 :::
 
 
-## 学术贡献点1: 认知塑造能动性与制度运行的认知基础
+## 学术贡献点1: 认知能动性与制度运行
 
 :::{.callout-important appearance="simple" .large}
-对话理性主义-制度主义融合趋势，探索**结构影响行为的认知路径**。
+解构经济不平等影响政治合法性机制，理解**结构影响行为的认知路径**。
 :::
 
 :::: {.columns}
@@ -245,11 +314,15 @@ among others and books such as Research Handbook on Authoritarianism.
 
 ![](https://drhuyue.site:10002/sammo3182/figure/inequality2efficacyPlots-1.png){fig-align="center" height=200}
 
-- 提炼MEM理论模型，指出宏观不平等经济结构**不需要被直接感知**，就可影响政治信任。
-- 基于中国数据和机制分析，揭示不平等**削弱中央和地方政治信任的机制路径**，为在高经济不平等状况下维持社会政治稳定提供借鉴。
+- 提出“Mediator-Evaluation Model”理论模型，识别经济不平等经济影响政治合法性**治理感知路径**
+- 发现不平等**削弱中央和地方政治信任的机制差异**，为在高经济不平等状况下维持社会政治稳定提供借鉴。
 
 :::{.notes}
 Mediator-evaluation model
+
+- 腐败占一半
+- 中央：judicial justice 30%, governance responsiveness 15%
+- 地方：judicial justice 18%, governance responsiveness 23%
 :::
 
 :::
@@ -257,53 +330,50 @@ Mediator-evaluation model
 ::::
 
 
-## 学术贡献点1: 认知塑造能动性与制度运行的认知基础
+## 学术贡献点1: 认知能动性与制度运行
 
 :::{.callout-important appearance="simple" .large}
-考察关键领域制度运行与民意反应，理解**认知治理的效用机制**。
+考察多领域认知能动性与治理关系，挖掘**治理工具的认知塑造效用**。
 :::
 
 :::{layout-nrow=1}
-![@JiChengYuanHuYue2022（通讯），公共管理权威期刊，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jpa.jpg){fig-align="center" height=330 width=250}
+![不平等对**阶级认知**影响：Solt, Hu et al.[-@SoltEtAl2017]，**“三大刊”之一**，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jop.png){fig-align="center" height=320 width=250}
 
-![Solt, Hu, Hudson, Song, Yu[-@SoltEtAl2017]，政治学**“三大刊”之一**，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jop.png){fig-align="center" height=330 width=250}
+![经济发展对**不平等认知**影响：@JiChengYuanHuYue2022（通讯），学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jpa.jpg){fig-align="center" height=320 width=250}
 
-![@TangHu2023（通讯），区域研究JCR排名全球6/176，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jcc.png){fig-align="center" height=330 width=250}
+![**政治宣传**中认知能动性：@HuShao2022，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jcps.png){fig-align="center" height=330 width=250}
 
-![@HuShao2022，区域研究JCR排名全球2/176，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jcps.png){fig-align="center" height=330 width=250}
+![**腐败认知**差异性来源：@TangHu2023（通讯），学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jcc.png){fig-align="center" height=320 width=250}
 
-![@HuYueLiRuiZhe2023，**《新华文摘》全文转载**](https://drhuyue.site:10002/sammo3182/figure/tenure_njxb.jpg){fig-align="center" height=330 width=250}
+![治理中的**时间认知**：@HuYueLiRuiZhe2023，**《新华文摘》全文转载**](https://drhuyue.site:10002/sammo3182/figure/tenure_njxb.jpg){fig-align="center" height=320 width=250}
 
 :::
 
 :::{.notes}
 从治理效度角度加深对认知机制重要性理解，揭示纪检监察、民情疏导、城市管理等重要领域治理过程中的潜藏问题，并提供破解思路。
 
-The meritocracy studywas published in Research & Politics and has remained one of the “most read articles” since 2022.4
-:::
-
-## 学术贡献点2：语言对大众政治思维的塑造效果与机制
-
-:::{.r-stack}
-![](https://drhuyue.site:10002/sammo3182/figure/speak_litTree_existing.png){fig-align="center" height=200}
-
-![](https://drhuyue.site:10002/sammo3182/figure/speak_litTree.png){.fragment fig-align="center" height=500}
-
-![](https://drhuyue.site:10002/sammo3182/figure/speak_olf.jpg){.fragment fig-align="center" height=500}
-:::
-
-:::{.fragment style="text-align:center"}
-构建**“官方语言场域”**理论，为理解语言与政治关系提供系统的政治心理解释。
-:::
-
-:::{.notes}
-a landmark study that will have a lasting impact on our understanding of the intersection between language and politics. 
+The meritocracy study was published in Research & Politics and has remained one of the “most read articles” since 2022.4
 :::
 
 ## 学术贡献点2：语言对大众政治思维的塑造效果与机制
 
 :::{.callout-important appearance="simple" .large}
-通过语言与心理交叉视角和实验方法，揭示**语言与权力的认知连结**。
+由**认知路径**探索语言效果生成机制，提供理解**语政关系**政治心理学解释。
+:::
+
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_languagePath.png){fig-align="center" height=490}
+
+
+
+
+:::{.notes}
+a landmark study that will have a lasting impact on our understanding of the intersection between language and politics. 
+:::
+
+## 学术贡献点2：语言对大众政治思维的塑造作用与机制
+
+:::{.callout-important appearance="simple" .large}
+以语言学与政治学交叉视角，揭示语言的**权威效应增强器**作用。
 :::
 
 :::: {.columns}
@@ -314,21 +384,21 @@ a landmark study that will have a lasting impact on our understanding of the int
 
 ::: {.column width="70%"}
 
-![](https://drhuyue.site:10002/sammo3182/figure/matchedGuiseAdj.png){height=250}
-![](https://drhuyue.site:10002/sammo3182/figure/speak_iso.png){fig-align="center" height=250 width=450}
+![](https://drhuyue.site:10002/sammo3182/figure/matchedGuiseAdj.png){height=240}
+![](https://drhuyue.site:10002/sammo3182/figure/speak_iso.png){fig-align="center" height=240 width=450}
 
-- 融合因果推断和语言学方法，剥离内容、形式、途径等因素，检验**语言本身对政治偏好影响**。
-- 官方语言具有“权威标记”作用，在政民互动中该作用**超越语言的文化属性**，改变民众对政府代表的态度。
+- 以因果推断逻辑改造语言学方法，检验语言对**过程性政治信任**的影响
+- 发现被权威认定为官方语言具有认知层面的“权威标记”作用，为政治身份提供**权威加持**
 
 :::
 
 ::::
 
 
-## 学术贡献点2：语言对大众政治思维的塑造效果与机制
+## 学术贡献点2：语言对大众政治思维的塑造作用与机制
 
 :::{.callout-important appearance="simple" .large}
-基于因果机制分析，理解**外语学习的政治影响**。
+分析语言对个体政治生活影响的因果机制，揭示语言**现代性助推器**作用。
 :::
 
 :::: {.columns}
@@ -339,10 +409,10 @@ a landmark study that will have a lasting impact on our understanding of the int
 
 ::: {.column width="70%"}
 
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_english.png){fig-align="center" height=270}
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_english.png){fig-align="center" height=300}
 
-- 基于全国代表性数据的因果中介分析，发现英语能力提升增强民众政治效能感。
-- 英语学习政治能力塑造功能**更偏向素质性,而非价值性**。
+- 提出**英语学习影响个人政治现代性**的四条认知路径。
+- 基于全国数据，发现英语从**素质性而非价值性路径**提升民众政治效能感。
 
 :::{.notes}
 在机制上,通过信息获取进路上提升内部政治效能感作用最明显,而语言竞争优势则是影响外部效能感的主导路径。
@@ -355,19 +425,20 @@ a landmark study that will have a lasting impact on our understanding of the int
 ## 学术贡献点2：语言对大众政治思维的塑造效果与机制
 
 :::{.callout-important appearance="simple" .large}
-语言对民主认知、历史观塑造、社会决策等方面的塑造作用。
+揭示语言对政治概念认知、历史观塑造、决策偏好塑造等方面广泛作用。
 :::
 
 :::{layout-nrow=1}
-![@Hu2020a，民主研究权威期刊，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_demo.png){fig-align="center" height=350 width=300}
+![语言而非教育造成**民族差异**：Tang, Hu, Jin [-@TangEtAl2016]，学院**A**类](https://drhuyue.site:10002/sammo3182/figure/tenure_csr.png){fig-align="center" height=340 width=250}
 
-![@HuLiu2020](https://drhuyue.site:10002/sammo3182/figure/tenure_jeas.png){fig-align="center" height=350 width=250}
+![英语能力对**前侵略国态度**影响：@HuLiu2020](https://drhuyue.site:10002/sammo3182/figure/tenure_jeas.png){fig-align="center" height=340 width=250}
 
-![@HuPizzi2022](https://drhuyue.site:10002/sammo3182/figure/tenure_cij.png){fig-align="center" height=350 width=250}
+![政治语言塑造中国特色**民主观**：@Hu2020a，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_demo.png){fig-align="center" height=340 width=300}
 
-![@Hu2022a](https://drhuyue.site:10002/sammo3182/figure/tenure_jco.png){fig-align="center" height=350 width=250}
+![普通话和方言能力共同影响**迁移决策**：@HuPizzi2022](https://drhuyue.site:10002/sammo3182/figure/tenure_cij.png){fig-align="center" height=340 width=250}
 
-![Tang, Hu, Jin [-@TangEtAl2016]，学院**A**类](https://drhuyue.site:10002/sammo3182/figure/tenure_csr.png){fig-align="center" height=350 width=250}
+![语言对**东南亚移民政治融入**影响：@Hu2022a](https://drhuyue.site:10002/sammo3182/figure/tenure_jco.png){fig-align="center" height=340 width=250}
+
 :::
 
 
@@ -375,35 +446,7 @@ a landmark study that will have a lasting impact on our understanding of the int
 ## 学术贡献点3：比较政治学与计算政治学方法创新
 
 :::{.callout-important appearance="simple" .large}
-研发跨时空“大比较”新方法，破解破解民意“难测、难比”困境
-:::
-
-
-:::: {.columns}
-
-::: {.column width="30%"}
-![@HuEtAl2024a，唯二的两本政治方法论期刊之一，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_psrm.jpg){fig-align="center" height=400}
-:::
-
-::: {.column width="40%"}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_psrm_sim.png){fig-align="center" height=500}
-:::
-
-::: {.column width="30%"}
-- Dynamic Comparative Political Opinions (DCPO)，实现**跨越国家、跨越发展阶段**民意调查数据比较。
-- 厘定从数据收集、编码到变量提取分析的规范流程。
-
-:::{.notes}
-Data Analytics that are Robust and Trusted, https://dartproject.org/
-:::
-:::
-
-::::
-
-## 学术贡献点3：比较政治学与计算政治学方法创新
-
-:::{.callout-important appearance="simple" .large}
-以新方法引入新视角，推进理论前沿
+**超越应用**，发展民意测量和比较的前沿方法。
 :::
 
 
@@ -413,12 +456,13 @@ Data Analytics that are Robust and Trusted, https://dartproject.org/
 ![@HuYueOuYangRui2023，国内**政治学顶刊**，复合影响因子：6.3。本文为该期**封面首文**](https://drhuyue.site:10002/sammo3182/figure/tenure_sjz.png){fig-align="center" height=380}
 :::
 
-::: {.column width="70%"}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_sjz_plot1.png){height=300 width=450}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_sjz_plot2.png){fig-align="center" height=300 width=400}
+::: {.column width="40%"}
+- 测量方法创新：基于网络分析方法，发展软实力新测量，推动软硬实力关系理论发展
+- 比较方法创新：贝叶斯统计+潜变量分析+极化测量，Dynamic Comparative Political Opinions (DCPO)，实现跨越国家与发展阶段的民意比较
+:::
 
-- 基于网络分析方法，**优化软实力测度和跨国比较**。
-- 揭示软硬实力关系，**推动权力理论**深化发展。
+::: {.column width="30%"}
+![@HuEtAl2024a，唯二两本**政治方法论期刊**之一，五年平均影响因子：4.5，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_psrm.jpg){fig-align="center" height=380}
 :::
 
 ::::
@@ -428,24 +472,33 @@ Data Analytics that are Robust and Trusted, https://dartproject.org/
 
 
 :::{.callout-important appearance="simple" .large}
-推动计算政治学方法论建设，以前沿方法推动实际问题研究。
+参与政治学方法论建设，扩展计算政治学方法应用领域。
 :::
 
 :::{layout-nrow=1}
-![@Hu2022a，学院**A**类，**《中国社会科学文摘》《人大复印报刊资料》**共同转载](https://drhuyue.site:10002/sammo3182/figure/tenure_gwlldt.png){fig-align="center" height=350}
+![厘定实验室实验方法在政治学的**应用范畴和评价标准**：@Hu2022a，学院**A**类，**《中国社会科学文摘》《人大复印报刊资料》**共同转载](https://drhuyue.site:10002/sammo3182/figure/tenure_gwlldt.png){fig-align="center" height=350}
 
-![@HuEtAl2022，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_cjip.png){fig-align="center" height=350}
+![以Multi-shock DID方法研究**关闭孔子学院对国家形象影响**：@HuEtAl2022，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_cjip.png){fig-align="center" height=350}
 
-![@Hu2019](https://drhuyue.site:10002/sammo3182/figure/tenure_ssq.png){fig-align="center" height=350}
+![以Distant-Decay-Neighbor方法检验**爱国主义教育基地**的政治认知塑造作用：@Hu2019](https://drhuyue.site:10002/sammo3182/figure/tenure_ssq.png){fig-align="center" height=350}
 
-![](https://drhuyue.site:10002/sammo3182/figure/css_fandom.png){fig-align="center" height=200}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_soccer.png){fig-align="center" height=200}
 :::
 
 
 ## 学术贡献点3：比较政治学与计算政治学方法创新
 
 ```{r badge, include=FALSE}
+# Load necessary libraries
+library(cranlogs)
+
+# List of packages to analyze
+packages <- c("dotwhisker", "interplot", "regioncode", "drhur", "drhutools", "pewdata")
+
+# Fetch download counts for each package
+total_downloads <- packages |>
+  map_dfr(~ cran_downloads(packages = .x, from = "2012-01-01")) |>
+  summarize(total_downloads = round(sum(count)/10000, digits = 2)) 
+  
 # Load the necessary library
 library(magick)
 
@@ -465,16 +518,17 @@ imap(url_badge,
 ```
 
 :::{.callout-important appearance="simple" .large}
-自主研发开源软件，推广科学研究范式和规范。
+通过**研发开源软件**，在**全球范围**内推广科学研究范式。
 :::
 
 :::: {.columns}
 
 ::: {.column width="70%"}
-`dotwhisker` ![](images/total_dw.svg){height=30}![](images/month_dw.svg){height=30}        
-`interplot` ![](images/total_in.svg){height=30}![](images/month_in.svg){height=30}
+全球累计下载量：[**`r total_downloads`万**]{.red}
 
-- 政治学：APSR, JOP, CPS, POQ, PSRM, PSJ, SSQ....
+`dotwhisker` ![](images/month_dw.svg){height=30}; `interplot` ![](images/month_in.svg){height=30}
+
+- 政治学：*APSR*, *JOP*, *CPS*, *POQ*, *PSRM*, *PSJ*, *SSQ*......
 - 社科：经济学、心理学、法学、教育学、语言学......
 - 自科：生态学、环境科学、神经科学、医学......
 - 各种语言：*Zeitschrift für Vergleichende*， *Politikwissenschaft*， *Соціологічністудії*，*커뮤니케이션이론*......
@@ -492,18 +546,16 @@ imap(url_badge,
 
 :::: {.columns}
 
-::: {.column width="70%"}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited.png){fig-align="center" height=250 width=400}![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited_trend.png){fig-align="center" height=250 width=450}
+::: {.column width="60%"}
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited.png){fig-align="center" height=250 width=350}![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited_trend.png){fig-align="center" height=250 width=400}
 
-- 五年内科研项目主持人[6]{.red}项，主要参与人12项
-    - **国家自然科学基金&times;2**、北京社会科学基金    
-    - 北京规自委专项、智库重点专项、人口福利基金会等
-- 《党政研究》 青年编委, 北京青年政治学论坛常委
-- *APSR*、*JOP*、*CPS*、*PB*《世界经济与政治》《经济制度比较》等匿名审稿人
+- 主持**2项国自科基金**、1项北京社科基金在内[6项]{.red}科研项目，支持项目11项
+- 《党政研究》青年编委，北京青年政治学论坛常委
+- *APSR*、*JOP*、*CPS*、*PB*《世界经济与政治》等匿名审稿人
 
 :::
 
-::: {.column width="30%"}
+::: {.column width="40%"}
 :::{.r-vstack}
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_certificate_yxcg.png)
 
