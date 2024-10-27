@@ -1,39 +1,34 @@
 ---
 title: "Association Analysis"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
 knitr: 
     opts_chunk: 
       echo: false
-
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
-
 revealjs-plugins:
   - spotlight
-
 # lightbox: auto
 spotlight:
   size: 50
@@ -43,7 +38,7 @@ spotlight:
 ---
 
 
-## Overview
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 
@@ -80,77 +75,66 @@ theme_update(
 - Monotonic correlation
 - Non-monotonic correlation
 
-
 # Linear Correlation
 
 ## Etymoloy
 
-:::{.r-vstack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_etymology_association.png){.fragment fig-align="center" height=250}
+:::{layout="[[50,50], [-25,50,-25]]"}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_etymology_association.png){fig-align="center" height=300}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_etymology_correlation.png){.fragment fig-align="center" height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_etymology_correlation.png){.fragment fig-align="center" height=300}
+
+![](https://drhuyue.site:10002/sammo3182/figure/cor_etymology_covariate.png){.fragment fig-align="center" height=300}
 
 :::
 
 ## Covariance
 
-> When a variable (X) changes, how is the other (Y)?
+> When one (X) changes, how much does the other (Y) respond?
+
+Remember Variance?
+
+\begin{align}
+\sigma^2_X =& \sum(X - \mu_X)^2p(X),\\
+=& \sum(X - \mu_X)(X - \mu_X)p(X, X);
+\end{align}
 
 :::{.fragment}
 $$\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).$$
 :::
 
-
-
-:::{.fragment}
-Remember Variance?
-
-\begin{align}
-\sigma^2_X =& \sum(X - \mu_X)^2p(X),\\
-=& \sum(X - \mu_X)\color{red}{(X - \mu_X)}p(X, \color{red}{X}).
-\end{align}
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Covariance is literally the [co]{.red}-variance.
 :::
 
-:::{.fragment}
-Covariance is literally [co]{.red}-variance.
-:::
 
 
 ## Correlation
 
-> If one variable (X) is high, how about the other (Y)?
+> When one (X) changes, how much % does the other (Y) respond?
 
-:::{.fragment style="text-align:center"}
-:::{.callout-note}
-Covariate vs. Correlation
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_covariance.gif){.fragment fig-align="center" height=300}
 
-:::{.r-hstack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_covariance.gif){fig-align="center" height=200}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_correlation.webp){fig-align="center" height=200}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_correlation.webp){.fragment fig-align="center" height=300}
 :::
-
-:::
-:::
-
-
-- Common Types: 
-    + Karl Pearson's r (Linear); 
-    + Maurice Kendall's &tau; (Monotonic);
-    + Charles Spearman's &rho;  (Monotonic).
-
 
 :::{.notes}
-- Karl Pearson was an English mathematician and biostatistician. 
-  - Establishing the discipline of mathematical statistics.
-  - Founded the world's first university statistics department at University College, London in 1911
-  - Proponent of social Darwinism, eugenics and scientific racism. 
 
-- Sir Maurice George Kendall was a prominent British statistician. 
-  -  The second chair of statistics at the London School of Economics, University of London
-  
-- Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
-  - Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.
+1. **Interpretability**: Correlation is easier to interpret due to its standardization, while covariance values are often more complex to interpret due to their dependence on the units of the variables.
+2. **Scale**: Covariance can take on any value, depending on the scale of the variables, while correlation always ranges from -1 to 1.
+3. **Standardization**: Correlation is derived from covariance by dividing by the standard deviations of the variables, which standardizes the value.
+
+:::
+
+
+:::{.fragment .nonincremental}
+Common Types: 
+
++ Karl Pearson's r (Linear); 
++ Charles Spearman's &rho;  (Monotonic);
++ Maurice Kendall's &tau; (Monotonic).
+
 :::
 
 
@@ -159,7 +143,7 @@ Covariate vs. Correlation
 
 :::{.callout-important}
 
-## Assumption
+## Assumptions
 
 :::{.nonincremental style="text-align:center"}
 1. Continuous data   
@@ -182,46 +166,30 @@ $$r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\
 :::
 
 :::{.notes}
+- Karl Pearson was an English mathematician and biostatistician. 
+  - Establishing the discipline of mathematical statistics.
+  - Founded the world's first university statistics department at University College, London in 1911
+  - Proponent of social Darwinism, eugenics and scientific racism. 
+
 Multiple regressions: $partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}$, a.k.a., partial correlation.
 :::
-
 
 ## Properties 
 
 1. &rho;&in; [-1, 1], 0 independent.
 1. Greater value indicates stronger [linear]{.red} relationship.
-1. Parametric test^[[Which means assuming normal distribution, linearity, and homoscedasticity.]{.fragment}]
+1. Parametric test^[Which means assuming normal distribution, linearity, and homoscedasticity.]
 1. [Not robust]{.red} to skewed data and outliers.
 
 :::{.fragment}
 **Limitation**
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_linearity.webp){fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_linearity.webp){fig-align="center" height=300}
 :::
 
 # Monotonic Correlation
 
 ## Ranking
-
-Solving problem: Assumptions of linear correlation + non-parametric estimation
-
-[$$\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.$$]{.fragment}
-
-:::{.fragment}
-For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i < j,
-:::
-
-+ Concordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub>;
-
-+ Discordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub>;
-
-+ Tied pairs: x<sub>i</sub> = x<sub>j</sub> & y<sub>i</sub> = y<sub>j</sub>;
-
-:::{.notes}
-tie on x or tie on y are also not concordant or discordant
-:::
-
-## Ranking in practice^[["Pairs" haven't been used yet so far.]{.fragment}]
 
 :::: {.columns}
 
@@ -234,7 +202,7 @@ df_toy <- tibble(
   y = c(14, 25, 20, 35, 45, 30, 60, 95)
 )
 
-kable(df_toy)
+kable(df_toy[sample(nrow(df_toy)),])
 ```
 :::
 
@@ -264,9 +232,9 @@ kable(df_toyR)
 
 ::::
 
-## What does ranking do
+## What does ranking change
 
-```{r}
+```{r rankPair}
 select(df_toyR, x = x_rank, y = y_rank) %>%
   mutate(type = "ranked") %>% 
   bind_rows(mutate(df_toy, type = "raw")) %>% 
@@ -276,51 +244,31 @@ select(df_toyR, x = x_rank, y = y_rank) %>%
   facet_wrap(vars(type), scales = "free")
 ```
 
-## Spearman's rho: Ranking version of Pearson's R
 
-:::{.callout-important appearance="simple"}
+## Pairing
 
-## Assumption
+*Define Pair*
 
-:::{.nonincremental}
-~~1\. Continuous~~ Ordinal/norminal;   
-~~2\. Linear~~ Monotonic
+For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i < j,
+
++ Concordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub>;
+
++ Discordant pairs: x<sub>i</sub> [>]{.blue}x<sub>j</sub> & y<sub>i</sub> [<]{.red}y<sub>j</sub> | x<sub>i</sub> [<]{.red}x<sub>j</sub> & y<sub>i</sub> [>]{.blue}y<sub>j</sub>;
+
++ Tied pairs: x<sub>i</sub> = x<sub>j</sub> & y<sub>i</sub> = y<sub>j</sub>
+
+
+:::{.callout-important .fragment .large}
+## Solution for the monotonic yet non-linear variables
+
+[$$\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.$$]{.fragment}
 :::
 
-:::
-
-$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}},$ where $rg$: The rank of the variables.
-
-- When all n ranks are distinct integers (no tie): $\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},$ where $d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).$
-- Properties:
-    - Independent, &rho; = 0.
-    - Not necessarily non-parametric
-        - Option 1: Permutation (non-parametric)
-        - Option 2: Fisher transformation (parametric), [$z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$]{.small}
 
 :::{.notes}
-https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
-
-https://www.youtube.com/watch?v=XV_W1w4Nwoc
-
-Still based on population parameters, so one can do significant test by $z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$.
-
+tie on x or tie on y are also not concordant or discordant
 :::
 
-
-## Calculate the pairs {auto-animate=true}
-
-```{r pairs}
-df_toyR %>% 
-  select(x_rank, y_rank) %>% 
-  mutate(p1 = c(" ", "+", "+", "+", "+", "+", "+", "+"),
-         p2 = c(" ", " ", "-", "+", "+", "+", "+", "+"),
-         p3 = c(" ", " ", " ", "+", "+", "+", "+", "+"),
-         p4 = c(" ", " ", " ", " ", "+", "-", "+", "+"),
-         p5 = c(" ", " ", " ", " ", " ", "-", "+", "+"),
-         p6 = c(" ", " ", " ", " ", " ", " ", "+ ", "+"),
-         p7 = c(" ", " ", " ", " ", " ", " ", " ", "+"))
-```
 
 ## Count the pairs
 
@@ -341,37 +289,94 @@ kable(df_toyP) %>%
   column_spec(10:11, bold = TRUE, color = "white", background = "darkred")
 ```
 
-## Tau: Monotonic Correlation {.smaller}
+:::{.notes}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_ranking.JPG){fig-align="center" height=400}
+:::
 
-:::: {.columns}
+## Spearman's rho: Ranking version of Pearson's R
 
-::: {.column .fragment width="35%"}
+:::{.callout-important appearance="simple"}
+
+## Assumptions
+
+:::{.nonincremental}
+~~1\. Continuous~~ Ordinal/norminal;   
+~~2\. Linear~~ Monotonic
+:::
+
+:::
+
+$\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}},$ where $rg$: the rank of the variables.
+
+- When all n ranks are distinct integers (no tie): $\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},$ where $d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).$
+- Properties:
+    - Independent, &rho; = 0.
+    - Calculation
+        - Option 1: Fisher transformation (parametric), [$z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$]{.small}
+        - Option 2: Permutation (nonparametric)
+
+:::{.notes}
+- Sir Maurice /MOR-iss/ George Kendall was a prominent British statistician. 
+  -  The second chair of statistics at the London School of Economics, University of London
+
+https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php
+
+https://www.youtube.com/watch?v=XV_W1w4Nwoc
+
+Still based on population parameters, so one can do significant test by $z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}$.
+
+:::
+
+
+:::{.notes}
+- Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
+  - Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.
+:::
+
+## Tau: Robust Mnontonic Correlation
+
+
 Kendall's &tau;<sub>A</sub>
 
 $$\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},$$
 
 - n<sub>c</sub>: Number of concordant pairs
 - n<sub>d</sub>: Number of discordant pairs
-- Remind problems:
-    - Ties? 
-    - N(X) &ne; N(Y)
 
+
+
+
+:::{.fragment}
+In the previous example, n<sub>c</sub> = &Sigma;c = `r sum(df_toyP$c)`, n<sub>c</sub> = &Sigma;d = `r sum(df_toyP$d)`, t<sub>x</sub> = u<sub>j</sub> = 0.
+
+$$\tau = \frac{25 - 3}{25 + 3} \approx 0.7857.$$
 :::
 
-::: {.column .fragment width="30%"}
+:::{style="text-align:center"}
+*Remind problems: Ties? N(X) &ne; N(Y)?*
+:::
+
+
+
+
+## Tau: Improved Versions
+
+:::: {.columns}
+
+::: {.column .fragment width="60%"}
 Kendall's  &tau;<sub>B</sub>: Ties
 
 $$\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}},$$
 where
 
-:::{.small}
+
 \begin{aligned}
 n_{0}&=n(n-1)/2\\n_{1}&=\sum _{i}t_{i}(t_{i}-1)/2\\
 n_{2}&=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&={\text{Number of concordant pairs}}\\
 n_{d}&={\text{Number of discordant pairs}}\\
-t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity, a.k.a., ties in x}}\\u_{j}&={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity, a.k.a., ties in y}}
+t_{i}&={\text{Number of tied values in the }}i^{\text{th}}{\text{ group in X}}\\u_{j}&={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties in Y}}
 \end{aligned}
-:::
+
 
 :::{.notes}
 Dealing with ties
@@ -379,13 +384,12 @@ Dealing with ties
 
 :::
 
-::: {.column .fragment width="35%"}
+::: {.column .fragment width="40%"}
 Stuart's &tau;<sub>C</sub>: Diff scales
 
 $$\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}},$$
 where
 
-:::{.small}
 
 \begin{aligned}
 n_{c}&={\text{Number of concordant pairs}},\\
@@ -395,7 +399,6 @@ r&={\text{Number of rows}},\\
 c&={\text{Number of columns}}.
 \end{aligned}
 
-:::
 
 :::{.notes}
 Dealing with retangle (nx != ny)
@@ -405,20 +408,16 @@ Dealing with retangle (nx != ny)
 
 ::::
 
-:::{.fragment}
-In the previous example, n<sub>c</sub> = &Sigma;c = `r sum(df_toyP$c)`, n<sub>c</sub> = &Sigma;d = `r sum(df_toyP$d)`, t<sub>x</sub> = u<sub>j</sub> = 0.
-
-$$\tau = \frac{25 - 3}{25 + 3} \approx 0.7857.$$
-:::
 
 :::{.notes}
 Ref: https://www.youtube.com/watch?v=Pm8KV5f3JM0
-:::
 
 - Hypothesis testing: pure non-parametric
     - P-value is given through extensive simulation, such as Monte Carlo simulations
+:::
 
-## Difference and which to use
+
+## When to use which
 
 ```{r comparison}
 ls_corr <- list(
@@ -429,6 +428,7 @@ ls_corr <- list(
 
 map_dfr(ls_corr, broom::tidy, .id = "type") %>% 
   select(type, estimate, statistic, p.value) %>% 
+  mutate(across(where(is.numeric), \(x) round(x, digits = 4))) %>% 
   kable()
 ```
 
@@ -458,8 +458,13 @@ r vs. &tau; & &rho;:
 
 ::::
 
+:::{.fragment style="text-align:center"}
+*What about categorical variables?*
+:::
 
-## &chi;<sup>2</sup>: Categorical/Nominal Variables
+
+
+## Correlations among Categorical/Nominal Variables: &chi;<sup>2</sup>
 
 $$\chi^2 = \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected} = \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}$$
 
@@ -495,8 +500,7 @@ E(D<sub>f</sub>, D<sub>s</sub>) = 50/100 &times; 60/100 &times; 100 = 30.
 
 
 :::{.fragment}
-$\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`< $\chi^2_{observed}$.    
-H<sub>0</sub> is rejected.
+$\chi^2_{critical} = \chi^2_{0.05, 4} =$ `r round(qchisq(.975, df = 4), digits = 4)`< $\chi^2_{observed}$. Thus, H<sub>0</sub> is rejected.
 :::
 
 :::
@@ -506,11 +510,13 @@ H<sub>0</sub> is rejected.
 
 ## Adjustment of &chi;<sup>2</sup>
 
+*Why adjusting*
+
 1. When sample is too small and/or having too many missing data, the distribution might be different from $\chi^2$
 2. When N gets large, $\chi^2$ also increase (esp. over 100,000)
 
 :::{.fragment}
-Adjustment: &Phi; and Cramer's V
+&rarr; &Phi; and Cramer's V
 :::
 
 :::: {.columns}
@@ -535,13 +541,9 @@ phi
 ::::
 
 
-## Mean &rightarrow; Variance
+## ANOVA: If detecting the difference is enough
 
 Analysis of variance (ANOVA): A systematic way of variable comparison in the context of [experiment]{.red}.^[[Equivalent to t-test.]{.fragment}]
-
-:::{.fragment}
-When there are [more than one]{.red} treatment group, ANOVA is more useful to reduce the risk of Type I ("Hey grandpa, you are pregnant").
-:::
 
 
 :::{.fragment}
@@ -556,12 +558,14 @@ When there are [more than one]{.red} treatment group, ANOVA is more useful to re
 :::
 :::
 
-
+:::{.fragment}
+When there are [more than one]{.red} treatment group, ANOVA is more useful to reduce the risk of Type I ("Hey grandpa, you are pregnant").
+:::
 
 ## One-Way ANOVA
 
-+ $\overline X$, sample mean; the grant mean $\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}$, where K is column number.^[[ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci).]{.fragment}]
-+ SST: Variance between the samples; SSE: Variance within the samples.^[[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png){height=20} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*]{.fragment}]
++ $\overline X$, sample mean; the grant mean $\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}$, where K is column number.^[ANOVA is usually used when $K \in [2, 3]$; for larger K, often use [MANOVA](https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance) (rarely used in Poli Sci).]
++ SST: Variance between the samples; SSE: Variance within the samples.^[![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=20} &Chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*]
 
 :::{.fragment}
 | Source    	| Sum Square                         | d.o.f.  | Mean Square                      	|
@@ -647,7 +651,7 @@ $F_{0.05, 2, 15}$ = `r qf(.975, 2, 15)` $F_obs$, so fail to reject $H_0$
 ## [Two-Way ANOVA](#sec-anovaExt)
 
 + Randomized block design (i blocks, j groups)
-  + Equivalent to matched sample in t-test^[[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png){height=30}Ranking version of ANOVA: Kruskal-Wallis test, Friedman test.]{.fragment}]
+  + Equivalent to matched sample in t-test^[[![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30}Ranking version of ANOVA: Kruskal-Wallis test, Friedman test.]{.fragment}]
 
 :::{.small .fragment}
 | Source    	| Sum Square                                                             	| d.o.freedom           	| Mean Square                                    	|
@@ -706,7 +710,7 @@ Then, $F_{(3 - 1), (3 - 1)(6 -1)} = MS_A/MSE = \frac{109.5/(3 -1)}{52.2/(3 - 1)(
 
 ## [Complete the correlation census (Chatterjee 2021)](#sec-ranking)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_linearity.webp){fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_linearity.webp){fig-align="center" height=300}
 
 :::{.fragment}
 A solution: $\xi$ correlation
@@ -757,37 +761,63 @@ ggplot(df_base, aes(x = x, y = y)) +
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_mindmap.png){height="600"}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_mindMap.png){height="600"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/cor_mindMap_levelUp.png){.fragment fig-align="center" height=400}
 :::
 
-## [Greek Letters](http://www.ilearngreek.com/Lessons/alphabet.L1.asp)
-
-```{r greek}
-vec_greek <- greek[1:48] %>% unlist
-vec_greek[1:24]
-vec_greek[25:48]
-```
-
+## [Greek Letters](https://www.youtube.com/watch?v=rbKLztzdjhE)![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=20}
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 - &beta;, "veta"
-- &gamma;, "gjyamma"
-- &eta;, "eeta"
+- &gamma;, "hramma"
+- &delta;/&Delta; "thzeita"
+- &epsilon;
+- &theta; 
+- &lambda; "lamza"
+- &mu; "mi"
 :::
 
 ::: {.column width="50%"}
-- &iota;, "yota"
+- &rho; "alorr"
+- &sigma;: "xigma"
+- &tau; "tough"
+- &pi; "pi"
 - &xi;, "ksee"
 - &phi;, "fi"
 - &chi;, "he"
+- &omega;/&Omega;, "omeha"
 :::
 
 ::::
 
 
-# Appendix: ANOVA Extension {#sec-anovaExt}
+# Appendix {#sec-anovaExt .appendix visibility="uncounted"}
+
+## Stretch
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::
+
 
 ## Ranking version of ANOVA
 
@@ -852,8 +882,6 @@ friedman.test(y = df_drug$score,
 ```
 
 &rArr; Different type of drugs lead to different type of outcomes.
-
-# Appendix: Ranking Test {#sec-ranking}
 
 ## Association for Matched Samples: Ranking
 
@@ -1084,7 +1112,7 @@ Runs test means to test whether an item comes from population 1 and population 2
 |---|---|---|----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 1 | 0 | 1  | 0  | 0  | 1  | 0  | 0  | 0  | 1  | 1  | 1  | 1  | 0  |
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/cor_runs.png){fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/cor_runs.png){fig-align="center"}
 
 ## Example
 

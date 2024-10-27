@@ -7,8 +7,10 @@
 <link href="07_association_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="07_association_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="07_association_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="07_association_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="07_association_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="07_association_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="07_association_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="Yue Hu">
   <title>Association Analysis</title>
@@ -31,7 +33,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -95,8 +97,8 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="07_association_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="07_association_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="07_association_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="07_association_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="07_association_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -224,7 +226,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -387,7 +390,6 @@
       margin-right: 0; 
     }
   </style>
-  
   <script src="07_association_files/libs/kePrint-0.0.1/kePrint.js"></script>
   <link href="07_association_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
@@ -408,7 +410,7 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
 <ul>
 <li class="fragment">Linear correlation</li>
@@ -417,98 +419,86 @@ Yue Hu
 </ul>
 </section>
 <section>
-<section id="linear-correlation" class="title-slide slide level1 center">
-<h1>Linear Correlation</h1>
+<section id="linear-correlation" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Linear Correlation</h1>
 
 </section>
-<section id="etymoloy" class="slide level2">
-<h2>Etymoloy</h2>
-<div class="r-vstack">
+<section id="etymoloy" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Etymoloy</h2>
+<div class="quarto-layout-panel" data-layout="[[50,50], [-25,50,-25]]">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_etymology_association.png" class="fragment" height="250"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_etymology_association.png" class="quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_etymology_correlation.png" class="fragment" height="250"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_etymology_correlation.png" class="fragment quarto-figure quarto-figure-center" height="300"></p>
 </figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_etymology_covariate.png" class="fragment quarto-figure quarto-figure-center" height="300"></p>
+</figure>
+</div>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 25.0%;justify-content: flex-start;display: flex;">
+<p>&nbsp;</p>
+</div>
 </div>
 </div>
 </section>
-<section id="covariance" class="slide level2">
-<h2>Covariance</h2>
+<section id="covariance" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Covariance</h2>
 <blockquote>
-<p>When a variable (X) changes, how is the other (Y)?</p>
+<p>When one (X) changes, how much does the other (Y) respond?</p>
 </blockquote>
-<div class="fragment">
-<p><span class="math display">\[\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).\]</span></p>
-</div>
-<div class="fragment">
 <p>Remember Variance?</p>
 <p><span class="math display">\[\begin{align}
 \sigma^2_X =&amp; \sum(X - \mu_X)^2p(X),\\
-=&amp; \sum(X - \mu_X)\color{red}{(X - \mu_X)}p(X, \color{red}{X}).
+=&amp; \sum(X - \mu_X)(X - \mu_X)p(X, X);
 \end{align}\]</span></p>
-</div>
 <div class="fragment">
-<p>Covariance is literally <span class="red">co</span>-variance.</p>
+<p><span class="math display">\[\sigma_{X, Y} = \sum(X - \mu_X)\color{red}{(Y - \mu_Y)}p(X, \color{red}{Y}).\]</span></p>
+</div>
+<div class="fragment" style="text-align:center; margin-top: 1em">
+<p>Covariance is literally the <span class="red">co</span>-variance.</p>
 </div>
 </section>
-<section id="correlation" class="slide level2">
-<h2>Correlation</h2>
+<section id="correlation" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Correlation</h2>
 <blockquote>
-<p>If one variable (X) is high, how about the other (Y)?</p>
+<p>When one (X) changes, how much % does the other (Y) respond?</p>
 </blockquote>
-<div class="fragment" style="text-align:center">
-<div class="callout callout-note callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>Covariate vs.&nbsp;Correlation</p>
-<div class="r-hstack">
+<div class="r-stack">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_covariance.gif" height="200"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_covariance.gif" class="fragment quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_correlation.webp" height="200"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_correlation.webp" class="fragment quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<ul>
-<li class="fragment">Common Types:
-<ul>
-<li class="fragment">Karl Pearson’s r (Linear);</li>
-<li class="fragment">Maurice Kendall’s τ (Monotonic);</li>
-<li class="fragment">Charles Spearman’s ρ (Monotonic).</li>
-</ul></li>
-</ul>
 <aside class="notes">
-<ul>
-<li>Karl Pearson was an English mathematician and biostatistician.
-<ul>
-<li>Establishing the discipline of mathematical statistics.</li>
-<li>Founded the world’s first university statistics department at University College, London in 1911</li>
-<li>Proponent of social Darwinism, eugenics and scientific racism.</li>
-</ul></li>
-<li>Sir Maurice George Kendall was a prominent British statistician.
-<ul>
-<li>The second chair of statistics at the London School of Economics, University of London</li>
-</ul></li>
-<li>Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
-<ul>
-<li>Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.</li>
-</ul></li>
-</ul>
+<ol type="1">
+<li><strong>Interpretability</strong>: Correlation is easier to interpret due to its standardization, while covariance values are often more complex to interpret due to their dependence on the units of the variables.</li>
+<li><strong>Scale</strong>: Covariance can take on any value, depending on the scale of the variables, while correlation always ranges from -1 to 1.</li>
+<li><strong>Standardization</strong>: Correlation is derived from covariance by dividing by the standard deviations of the variables, which standardizes the value.</li>
+</ol>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -520,16 +510,24 @@ Yue Hu
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<div class="fragment">
+<p>Common Types:</p>
+<ul>
+<li>Karl Pearson’s r (Linear);</li>
+<li>Charles Spearman’s ρ (Monotonic);</li>
+<li>Maurice Kendall’s τ (Monotonic).</li>
+</ul>
+</div>
 </section>
-<section id="pearsons-r" class="slide level2">
-<h2>Pearson’s r</h2>
-<div class="callout callout-important callout-titled callout-style-simple">
+<section id="pearsons-r" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> Pearson’s r</h2>
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<p><strong>Assumption</strong></p>
+<p><strong>Assumptions</strong></p>
 </div>
 <div class="callout-content">
 <div style="text-align:center">
@@ -551,6 +549,14 @@ Yue Hu
 <p><span class="math display">\[r_{XY}=\frac{\sum_{i=1}^n (x_i-\bar{x})(y_i-\bar{y})}{\sqrt{\sum_{i=1}^n(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^n(y_i-\bar{y})^2}}.\]</span></p>
 </div>
 <aside class="notes">
+<ul>
+<li>Karl Pearson was an English mathematician and biostatistician.
+<ul>
+<li>Establishing the discipline of mathematical statistics.</li>
+<li>Founded the world’s first university statistics department at University College, London in 1911</li>
+<li>Proponent of social Darwinism, eugenics and scientific racism.</li>
+</ul></li>
+</ul>
 <p>Multiple regressions: <span class="math inline">\(partial\ r = \frac{b/SE}{\sqrt{(b/SE)^2 + (n - k -1)}}\)</span>, a.k.a., partial correlation.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -564,8 +570,8 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </section>
-<section id="properties" class="slide level2">
-<h2>Properties</h2>
+<section id="properties" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Properties</h2>
 <ol type="1">
 <li class="fragment">ρ∈ [-1, 1], 0 independent.</li>
 <li class="fragment">Greater value indicates stronger <span class="red">linear</span> relationship.</li>
@@ -576,28 +582,212 @@ Yue Hu
 <p><strong>Limitation</strong></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_linearity.webp" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_linearity.webp" class="quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">Which means assuming normal distribution, linearity, and homoscedasticity.</span></p></li></ol></aside></section></section>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Which means assuming normal distribution, linearity, and homoscedasticity.</p></li></ol></aside></section></section>
 <section>
-<section id="monotonic-correlation" class="title-slide slide level1 center">
-<h1>Monotonic Correlation</h1>
+<section id="monotonic-correlation" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Monotonic Correlation</h1>
 
 </section>
-<section id="ranking" class="slide level2">
-<h2>Ranking</h2>
-<p>Solving problem: Assumptions of linear correlation + non-parametric estimation</p>
-<p><span class="fragment"><span class="math display">\[\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.\]</span></span></p>
-<div class="fragment">
-<p>For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i &lt; j,</p>
+<section id="ranking" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Ranking</h2>
+<div class="columns">
+<div class="column" style="width:20%;">
+<p><em>Raw</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">95</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">60</td>
+</tr>
+</tbody>
+</table>
 </div>
+</div>
+</div><div class="column fragment" style="width:20%;">
+<p>→ <em>Ordered</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">45</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">95</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="column fragment" style="width:60%;">
+<p>→ <em>Ranked</em></p>
+<div class="cell">
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">x_rank</th>
+<th style="text-align: right;">y</th>
+<th style="text-align: right;">y_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">60</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">8</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="what-does-ranking-change" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> What does ranking change</h2>
+
+<img data-src="07_association_files/figure-revealjs/rankPair-1.png" width="960" class="r-stretch"></section>
+<section id="pairing" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Pairing</h2>
+<p><em>Define Pair</em></p>
+<p>For any pair of observations x<sub>i</sub>, y<sub>i</sub> and x<sub>j</sub>, y<sub>j</sub>, i &lt; j,</p>
 <ul>
 <li class="fragment"><p>Concordant pairs: x<sub>i</sub> <span class="blue">&gt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="blue">&gt;</span>y<sub>j</sub> | x<sub>i</sub> <span class="red">&lt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="red">&lt;</span>y<sub>j</sub>;</p></li>
 <li class="fragment"><p>Discordant pairs: x<sub>i</sub> <span class="blue">&gt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="red">&lt;</span>y<sub>j</sub> | x<sub>i</sub> <span class="red">&lt;</span>x<sub>j</sub> &amp; y<sub>i</sub> <span class="blue">&gt;</span>y<sub>j</sub>;</p></li>
-<li class="fragment"><p>Tied pairs: x<sub>i</sub> = x<sub>j</sub> &amp; y<sub>i</sub> = y<sub>j</sub>;</p></li>
+<li class="fragment"><p>Tied pairs: x<sub>i</sub> = x<sub>j</sub> &amp; y<sub>i</sub> = y<sub>j</sub></p></li>
 </ul>
+<div class="fragment large">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Solution for the monotonic yet non-linear variables</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="fragment"><span class="math display">\[\text{Diff}_{quantity} \rightarrow \text{Diff}_{relation}.\]</span></span></p>
+</div>
+</div>
+</div>
+</div>
 <aside class="notes">
 <p>tie on x or tie on y are also not concordant or discordant</p>
 <style type="text/css">
@@ -612,251 +802,8 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </section>
-<section id="ranking-in-practice" class="slide level2">
-<h2>Ranking in practice<sup>1</sup></h2>
-<div class="columns">
-<div class="column" style="width:20%;">
-<p><em>Raw</em></p>
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">14</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">25</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">35</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">45</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">21</td>
-<td style="text-align: right;">30</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">60</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">26</td>
-<td style="text-align: right;">95</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-</div><div class="column fragment" style="width:20%;">
-<p>→ <em>Ordered</em></p>
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">14</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">25</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">20</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">35</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">45</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">21</td>
-<td style="text-align: right;">30</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">60</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">26</td>
-<td style="text-align: right;">95</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-</div><div class="column fragment" style="width:60%;">
-<p>→ <em>Ranked</em></p>
-<div class="cell">
-<div class="cell-output-display">
-<table data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th style="text-align: right;" data-quarto-table-cell-role="th">x</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">x_rank</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">y</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">y_rank</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">3</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">2</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">35</td>
-<td style="text-align: right;">5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">20</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">45</td>
-<td style="text-align: right;">6</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">21</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">7</td>
-<td style="text-align: right;">60</td>
-<td style="text-align: right;">7</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">26</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">95</td>
-<td style="text-align: right;">8</td>
-</tr>
-</tbody>
-</table>
-
-
-</div>
-</div>
-</div>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment">“Pairs” haven’t been used yet so far.</span></p></li></ol></aside></section>
-<section id="what-does-ranking-do" class="slide level2">
-<h2>What does ranking do</h2>
-
-<img data-src="07_association_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
-<section id="spearmans-rho-ranking-version-of-pearsons-r" class="slide level2">
-<h2>Spearman’s rho: Ranking version of Pearson’s R</h2>
-<div class="callout callout-important callout-titled callout-style-simple">
-<div class="callout-body">
-<div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<p><strong>Assumption</strong></p>
-</div>
-<div class="callout-content">
-<div>
-<p><del>1. Continuous</del> Ordinal/norminal;<br>
-<del>2. Linear</del> Monotonic</p>
-</div>
-</div>
-</div>
-</div>
-<p><span class="math inline">\(\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}},\)</span> where <span class="math inline">\(rg\)</span>: The rank of the variables.</p>
-<ul>
-<li class="fragment">When all n ranks are distinct integers (no tie): <span class="math inline">\(\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},\)</span> where <span class="math inline">\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).\)</span></li>
-<li class="fragment">Properties:
-<ul>
-<li class="fragment">Independent, ρ = 0.</li>
-<li class="fragment">Not necessarily non-parametric
-<ul>
-<li class="fragment">Option 1: Permutation (non-parametric)</li>
-<li class="fragment">Option 2: Fisher transformation (parametric), <span class="small"><span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span></span></li>
-</ul></li>
-</ul></li>
-</ul>
-<aside class="notes">
-<p>https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php</p>
-<p>https://www.youtube.com/watch?v=XV_W1w4Nwoc</p>
-<p>Still based on population parameters, so one can do significant test by <span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span>.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="calculate-the-pairs" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Calculate the pairs</h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 8 × 9
-  x_rank y_rank p1    p2    p3    p4    p5    p6    p7   
-   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;
-1      1      1 " "   " "   " "   " "   " "   " "   " "  
-2      2      3 "+"   " "   " "   " "   " "   " "   " "  
-3      3      2 "+"   "-"   " "   " "   " "   " "   " "  
-4      4      5 "+"   "+"   "+"   " "   " "   " "   " "  
-5      5      6 "+"   "+"   "+"   "+"   " "   " "   " "  
-6      6      4 "+"   "+"   "+"   "-"   "-"   " "   " "  
-7      7      7 "+"   "+"   "+"   "+"   "+"   "+ "  " "  
-8      8      8 "+"   "+"   "+"   "+"   "+"   "+"   "+"  </code></pre>
-</div>
-</div>
-</section>
-<section id="count-the-pairs" class="slide level2">
-<h2>Count the pairs</h2>
+<section id="count-the-pairs" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Count the pairs</h2>
 <div class="cell">
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
@@ -986,33 +933,123 @@ Yue Hu
 
 </div>
 </div>
+<aside class="notes">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_ranking.JPG" class="quarto-figure quarto-figure-center" height="400"></p>
+</figure>
+</div>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="tau-monotonic-correlation" class="slide level2 smaller">
-<h2>Tau: Monotonic Correlation</h2>
-<div class="columns">
-<div class="column fragment" style="width:35%;">
+<section id="spearmans-rho-ranking-version-of-pearsons-r" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Spearman’s rho: Ranking version of Pearson’s R</h2>
+<div class="callout callout-important callout-titled callout-style-simple">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Assumptions</strong></p>
+</div>
+<div class="callout-content">
+<div>
+<p><del>1. Continuous</del> Ordinal/norminal;<br>
+<del>2. Linear</del> Monotonic</p>
+</div>
+</div>
+</div>
+</div>
+<p><span class="math inline">\(\rho _{\operatorname {rg} _{X},\operatorname {rg} _{Y}}={\frac {\operatorname {cov} (\operatorname {rg} _{X},\operatorname {rg} _{Y})}{\sigma _{\operatorname {rg} _{X}}\sigma _{\operatorname {rg} _{Y}}}},\)</span> where <span class="math inline">\(rg\)</span>: the rank of the variables.</p>
+<ul>
+<li class="fragment">When all n ranks are distinct integers (no tie): <span class="math inline">\(\rho_{s}={1-{\frac {6\sum d_{i}^{2}}{n(n^{2}-1)}}},\)</span> where <span class="math inline">\(d_{i}=\operatorname {rg} (X_{i})-\operatorname {rg} (Y_{i}).\)</span></li>
+<li class="fragment">Properties:
+<ul>
+<li class="fragment">Independent, ρ = 0.</li>
+<li class="fragment">Calculation
+<ul>
+<li class="fragment">Option 1: Fisher transformation (parametric), <span class="small"><span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span></span></li>
+<li class="fragment">Option 2: Permutation (nonparametric)</li>
+</ul></li>
+</ul></li>
+</ul>
+<aside class="notes">
+<ul>
+<li>Sir Maurice /MOR-iss/ George Kendall was a prominent British statistician.
+<ul>
+<li>The second chair of statistics at the London School of Economics, University of London</li>
+</ul></li>
+</ul>
+<p>https://statistics.laerd.com/statistical-guides/spearmans-rank-order-correlation-statistical-guide.php</p>
+<p>https://www.youtube.com/watch?v=XV_W1w4Nwoc</p>
+<p>Still based on population parameters, so one can do significant test by <span class="math inline">\(z={3(n_{c}-n_{d}) \over {\sqrt {n(n-1)(2n+5)/2}}}\)</span>.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside class="notes">
+<ul>
+<li>Charles Edward Spearman was an English psychologist known for work in statistics, as a pioneer of factor analysis.
+<ul>
+<li>Models for human intelligence, including his theory that disparate cognitive test scores reflect a single General intelligence factor and coining the term g factor.</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="tau-robust-mnontonic-correlation" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Tau: Robust Mnontonic Correlation</h2>
 <p>Kendall’s τ<sub>A</sub></p>
 <p><span class="math display">\[\tau_{A}=\frac{n_c-n_d}{n_c+n_d}=\frac{n_c-n_d}{\binom{n}{2}},\]</span></p>
 <ul>
 <li class="fragment">n<sub>c</sub>: Number of concordant pairs</li>
 <li class="fragment">n<sub>d</sub>: Number of discordant pairs</li>
-<li class="fragment">Remind problems:
-<ul>
-<li class="fragment">Ties?</li>
-<li class="fragment">N(X) ≠ N(Y)</li>
-</ul></li>
 </ul>
-</div><div class="column fragment" style="width:30%;">
+<div class="fragment">
+<p>In the previous example, n<sub>c</sub> = Σc = 25, n<sub>c</sub> = Σd = 3, t<sub>x</sub> = u<sub>j</sub> = 0.</p>
+<p><span class="math display">\[\tau = \frac{25 - 3}{25 + 3} \approx 0.7857.\]</span></p>
+</div>
+<div style="text-align:center">
+<p><em>Remind problems: Ties? N(X) ≠ N(Y)?</em></p>
+</div>
+</section>
+<section id="tau-improved-versions" class="slide level2" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> Tau: Improved Versions</h2>
+<div class="columns">
+<div class="column fragment" style="width:60%;">
 <p>Kendall’s τ<sub>B</sub>: Ties</p>
 <p><span class="math display">\[\tau_{B}={\frac {n_{c}-n_{d}}{\sqrt {(n_{0}-n_{1})(n_{0}-n_{2})}}},\]</span> where</p>
-<div class="small">
 <span class="math display">\[\begin{aligned}
 n_{0}&amp;=n(n-1)/2\\n_{1}&amp;=\sum _{i}t_{i}(t_{i}-1)/2\\
 n_{2}&amp;=\sum _{j}u_{j}(u_{j}-1)/2\\n_{c}&amp;={\text{Number of concordant pairs}}\\
 n_{d}&amp;={\text{Number of discordant pairs}}\\
-t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of ties for the first quantity, a.k.a., ties in x}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties for the second quantity, a.k.a., ties in y}}
+t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group in X}}\\u_{j}&amp;={\text{Number of tied values in the }}j^{\text{th}}{\text{ group of ties in Y}}
 \end{aligned}\]</span>
-</div>
 <aside class="notes">
 <p>Dealing with ties</p>
 <style type="text/css">
@@ -1026,10 +1063,9 @@ t_{i}&amp;={\text{Number of tied values in the }}i^{\text{th}}{\text{ group of t
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div><div class="column fragment" style="width:35%;">
+</div><div class="column fragment" style="width:40%;">
 <p>Stuart’s τ<sub>C</sub>: Diff scales</p>
 <p><span class="math display">\[\tau _{C}={\frac {2(n_{c}-n_{d})}{n^{2}{\frac {(m-1)}{m}}}},\]</span> where</p>
-<div class="small">
 <span class="math display">\[\begin{aligned}
 n_{c}&amp;={\text{Number of concordant pairs}},\\
 n_{d}&amp;={\text{Number of discordant pairs}},\\
@@ -1037,7 +1073,6 @@ m&amp;=\min(r,c),\\
 r&amp;={\text{Number of rows}},\\
 c&amp;={\text{Number of columns}}.
 \end{aligned}\]</span>
-</div>
 <aside class="notes">
 <p>Dealing with retangle (nx != ny)</p>
 <style type="text/css">
@@ -1053,12 +1088,14 @@ c&amp;={\text{Number of columns}}.
       }</style></aside>
 </div>
 </div>
-<div class="fragment">
-<p>In the previous example, n<sub>c</sub> = Σc = 25, n<sub>c</sub> = Σd = 3, t<sub>x</sub> = u<sub>j</sub> = 0.</p>
-<p><span class="math display">\[\tau = \frac{25 - 3}{25 + 3} \approx 0.7857.\]</span></p>
-</div>
 <aside class="notes">
 <p>Ref: https://www.youtube.com/watch?v=Pm8KV5f3JM0</p>
+<ul>
+<li>Hypothesis testing: pure non-parametric
+<ul>
+<li>P-value is given through extensive simulation, such as Monte Carlo simulations</li>
+</ul></li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1070,49 +1107,41 @@ c&amp;={\text{Number of columns}}.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<ul>
-<li class="fragment">Hypothesis testing: pure non-parametric
-<ul>
-<li class="fragment">P-value is given through extensive simulation, such as Monte Carlo simulations</li>
-</ul></li>
-</ul>
 </section>
-<section id="difference-and-which-to-use" class="slide level2">
-<h2>Difference and which to use</h2>
+<section id="when-to-use-which" class="slide level2" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> When to use which</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true">
+<table>
 <thead>
 <tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">type</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">estimate</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">statistic</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">p.value</th>
+<th style="text-align: left;">type</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">r</td>
-<td style="text-align: right;">0.8915742</td>
-<td style="text-align: right;">4.822311</td>
-<td style="text-align: right;">0.0029332</td>
+<td style="text-align: right;">0.8916</td>
+<td style="text-align: right;">4.8223</td>
+<td style="text-align: right;">0.0029</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">rho</td>
-<td style="text-align: right;">0.9047619</td>
-<td style="text-align: right;">8.000000</td>
-<td style="text-align: right;">0.0045635</td>
+<td style="text-align: right;">0.9048</td>
+<td style="text-align: right;">8.0000</td>
+<td style="text-align: right;">0.0046</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">tau</td>
-<td style="text-align: right;">0.7857143</td>
-<td style="text-align: right;">25.000000</td>
-<td style="text-align: right;">0.0055060</td>
+<td style="text-align: right;">0.7857</td>
+<td style="text-align: right;">25.0000</td>
+<td style="text-align: right;">0.0055</td>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <div class="columns">
@@ -1137,9 +1166,12 @@ c&amp;={\text{Number of columns}}.
 </div>
 </div>
 </div>
+<div class="fragment" style="text-align:center">
+<p><em>What about categorical variables?</em></p>
+</div>
 </section>
-<section id="χ2-categoricalnominal-variables" class="slide level2">
-<h2>χ<sup>2</sup>: Categorical/Nominal Variables</h2>
+<section id="correlations-among-categoricalnominal-variables-χ2" class="slide level2" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> Correlations among Categorical/Nominal Variables: χ<sup>2</sup></h2>
 <p><span class="math display">\[\chi^2 = \sum_i\sum_j \frac{(Observed - Expected)^2}{Expected} = \sum_{i,j}\frac{(n_{i,j}-\frac{n_{i\cdot}n_{\cdot j}}{n})^{2}}{\frac{n_{i\cdot}n_{\cdot j}}{n}}\]</span></p>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
@@ -1197,20 +1229,20 @@ c&amp;={\text{Number of columns}}.
 \end{align}\]</span></p>
 </div>
 <div class="fragment">
-<p><span class="math inline">\(\chi^2_{critical} = \chi^2_{0.05, 4} =\)</span> 11.1433&lt; <span class="math inline">\(\chi^2_{observed}\)</span>.<br>
-H<sub>0</sub> is rejected.</p>
+<p><span class="math inline">\(\chi^2_{critical} = \chi^2_{0.05, 4} =\)</span> 11.1433&lt; <span class="math inline">\(\chi^2_{observed}\)</span>. Thus, H<sub>0</sub> is rejected.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="adjustment-of-χ2" class="slide level2">
-<h2>Adjustment of χ<sup>2</sup></h2>
+<section id="adjustment-of-χ2" class="slide level2" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> Adjustment of χ<sup>2</sup></h2>
+<p><em>Why adjusting</em></p>
 <ol type="1">
 <li class="fragment">When sample is too small and/or having too many missing data, the distribution might be different from <span class="math inline">\(\chi^2\)</span></li>
 <li class="fragment">When N gets large, <span class="math inline">\(\chi^2\)</span> also increase (esp.&nbsp;over 100,000)</li>
 </ol>
 <div class="fragment">
-<p>Adjustment: Φ and Cramer’s V</p>
+<p>→ Φ and Cramer’s V</p>
 </div>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
@@ -1245,14 +1277,11 @@ H<sub>0</sub> is rejected.</p>
 </div>
 </div>
 </section>
-<section id="mean-variance" class="slide level2">
-<h2>Mean → Variance</h2>
+<section id="anova-if-detecting-the-difference-is-enough" class="slide level2" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> ANOVA: If detecting the difference is enough</h2>
 <p>Analysis of variance (ANOVA): A systematic way of variable comparison in the context of <span class="red">experiment</span>.<sup>1</sup></p>
 <div class="fragment">
-<p>When there are <span class="red">more than one</span> treatment group, ANOVA is more useful to reduce the risk of Type I (“Hey grandpa, you are pregnant”).</p>
-</div>
-<div class="fragment">
-<div class="callout callout-important callout-titled callout-style-simple">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
@@ -1272,9 +1301,12 @@ H<sub>0</sub> is rejected.</p>
 </div>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="fragment">Equivalent to t-test.</span></p></li></ol></aside></section>
-<section id="one-way-anova" class="slide level2">
-<h2>One-Way ANOVA</h2>
+<div class="fragment">
+<p>When there are <span class="red">more than one</span> treatment group, ANOVA is more useful to reduce the risk of Type I (“Hey grandpa, you are pregnant”).</p>
+</div>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment">Equivalent to t-test.</span></p></li></ol></aside></section>
+<section id="one-way-anova" class="slide level2" data-number="2.12">
+<h2><span class="header-section-number">2.12</span> One-Way ANOVA</h2>
 <ul>
 <li class="fragment"><span class="math inline">\(\overline X\)</span>, sample mean; the grant mean <span class="math inline">\(\overline{\overline{X}} = \frac{\sum \overline{X_i}}{K}\)</span>, where K is column number.<sup>1</sup></li>
 <li class="fragment">SST: Variance between the samples; SSE: Variance within the samples.<sup>2</sup></li>
@@ -1320,9 +1352,9 @@ H<sub>0</sub> is rejected.</p>
 <div class="fragment">
 <p><span class="math display">\[F_{\alpha, K-1, N-1} = \frac{MST}{MSE} = \frac{\text{Ratio of Explained Variance}}{\text{Ratio of Unexplained Variance}}.\]</span></p>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn4"><p><span class="fragment">ANOVA is usually used when <span class="math inline">\(K \in [2, 3]\)</span>; for larger K, often use <a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance">MANOVA</a> (rarely used in Poli Sci).</span></p></li><li id="fn5"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="20"> Χ<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two χ<sup>2</sup>s. <em>In other words, they are consistent with t-test and OLS.</em></span></p></li></ol></aside></section>
-<section id="example" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Example</h2>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>ANOVA is usually used when <span class="math inline">\(K \in [2, 3]\)</span>; for larger K, often use <a href="https://www.sciencedirect.com/topics/medicine-and-dentistry/multivariate-analysis-of-variance">MANOVA</a> (rarely used in Poli Sci).</p></li><li id="fn4"><p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="20"> Χ<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two χ<sup>2</sup>s. <em>In other words, they are consistent with t-test and OLS.</em></p></li></ol></aside></section>
+<section id="example" class="slide level2" data-auto-animate="true" data-number="2.13">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">2.13</span> Example</h2>
 <p>The following table shows the funding applications of six faculty members of Xavier Institution. Does mutants willingness of application relate to the funding type?</p>
 <div class="columns">
 <div class="column" style="width:30%;">
@@ -1378,8 +1410,8 @@ H<sub>0</sub> is rejected.</p>
 </div>
 </div>
 </section>
-<section id="section" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title"></h2>
+<section id="section" class="slide level2" data-auto-animate="true" data-number="2.14">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">2.14</span> </h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><span class="math inline">\(H_0: \mu_1 = \mu_2 = \mu_3,\)</span><br>
@@ -1433,8 +1465,8 @@ H<sub>0</sub> is rejected.</p>
 </tbody>
 </table>
 </section>
-<section id="two-way-anova" class="slide level2">
-<h2><a href="#/sec-anovaExt">Two-Way ANOVA</a></h2>
+<section id="two-way-anova" class="slide level2" data-number="2.15">
+<h2><span class="header-section-number">2.15</span> <a href="#/sec-anovaExt">Two-Way ANOVA</a></h2>
 <ul>
 <li class="fragment">Randomized block design (i blocks, j groups)
 <ul>
@@ -1485,9 +1517,9 @@ H<sub>0</sub> is rejected.</p>
 </tbody>
 </table>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn6"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30">Ranking version of ANOVA: Kruskal-Wallis test, Friedman test.</span></p></li></ol></aside></section>
-<section id="example-1" class="slide level2">
-<h2>Example</h2>
+<aside><ol class="aside-footnotes"><li id="fn5"><p><span class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="30">Ranking version of ANOVA: Kruskal-Wallis test, Friedman test.</span></p></li></ol></aside></section>
+<section id="example-1" class="slide level2" data-number="2.16">
+<h2><span class="header-section-number">2.16</span> Example</h2>
 <p>Students’ final scores in three majors were recorded in the following table. Does the scores associate with majors?</p>
 <table>
 <thead>
@@ -1559,15 +1591,15 @@ H<sub>0</sub> is rejected.</p>
 </div>
 </section></section>
 <section>
-<section id="beyond-monotonic" class="title-slide slide level1 center">
-<h1>Beyond Monotonic</h1>
+<section id="beyond-monotonic" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Beyond Monotonic</h1>
 
 </section>
-<section id="complete-the-correlation-census-chatterjee-2021" class="slide level2">
-<h2><a href="#/sec-ranking">Complete the correlation census (Chatterjee 2021)</a></h2>
+<section id="complete-the-correlation-census-chatterjee-2021" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> <a href="#/sec-ranking">Complete the correlation census (Chatterjee 2021)</a></h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_linearity.webp" height="300"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_linearity.webp" class="quarto-figure quarto-figure-center" height="300"></p>
 </figure>
 </div>
 <div class="fragment">
@@ -1592,8 +1624,8 @@ H<sub>0</sub> is rejected.</p>
 <li class="fragment">Consistently estimates simple and interpretable measure of the degree of dependence between the variables (0, independent; 1 associated)</li>
 </ol>
 </section>
-<section id="property-of-xi" class="slide level2">
-<h2>Property of <span class="math inline">\(\xi\)</span></h2>
+<section id="property-of-xi" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> Property of <span class="math inline">\(\xi\)</span></h2>
 <p>Asymptotic estimate: As <span class="math inline">\(n\)</span> goes to Infinity…</p>
 <ul>
 <li class="fragment">If <span class="math inline">\(y\)</span> is a function of <span class="math inline">\(x\)</span>, then <span class="math inline">\(\xi\)</span> goes to 1 asymptotically as <span class="math inline">\(n\)</span> (the number of data points, or the length of the vectors <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>) goes to infinity.</li>
@@ -1605,67 +1637,105 @@ H<sub>0</sub> is rejected.</p>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="07_association_files/figure-revealjs/xi-1.png" width="960"></p>
+<p><img data-src="07_association_files/figure-revealjs/xi-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
+<section id="take-home-point" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Take-home point</h2>
 <div style="text-align: center">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_mindmap.png" height="600"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_mindMap.png" height="600"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_mindMap_levelUp.png" class="fragment quarto-figure quarto-figure-center" height="400"></p>
+</figure>
+</div>
 </div>
 </section>
-<section id="greek-letters" class="slide level2">
-<h2><a href="http://www.ilearngreek.com/Lessons/alphabet.L1.asp">Greek Letters</a></h2>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>  alpha    beta   gamma   delta epsilon    zeta     eta   theta    iota   kappa 
-    "α"     "β"     "γ"     "δ"     "ε"     "ζ"     "η"     "θ"     "ι"     "κ" 
- lambda      mu      nu      xi omicron      pi     rho   sigma     tau upsilon 
-    "λ"     "μ"     "ν"     "ξ"     "ο"     "π"     "ρ"     "σ"     "τ"     "υ" 
-    phi     chi     psi   omega 
-    "φ"     "χ"     "ψ"     "ω" </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  Alpha    Beta   Gamma   Delta Epsilon    Zeta     Eta   Theta    Iota   Kappa 
-    "Α"     "Β"     "Γ"     "Δ"     "Ε"     "Ζ"     "Η"     "Θ"     "Ι"     "Κ" 
- Lambda      Mu      Nu      Xi Omicron      Pi     Rho   Sigma     Tau Upsilon 
-    "Λ"     "Μ"     "Ν"     "Ξ"     "Ο"     "Π"     "Ρ"     "Σ"     "Τ"     "Υ" 
-    Phi     Chi     Psi   Omega 
-    "Φ"     "Χ"     "Ψ"     "Ω" </code></pre>
-</div>
-</div>
+<section id="greek-letters" class="slide level2" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> <a href="https://www.youtube.com/watch?v=rbKLztzdjhE">Greek Letters</a><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="20"></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
 <li class="fragment">β, “veta”</li>
-<li class="fragment">γ, “gjyamma”</li>
-<li class="fragment">η, “eeta”</li>
+<li class="fragment">γ, “hramma”</li>
+<li class="fragment">δ/Δ “thzeita”</li>
+<li class="fragment">ε</li>
+<li class="fragment">θ</li>
+<li class="fragment">λ “lamza”</li>
+<li class="fragment">μ “mi”</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <ul>
-<li class="fragment">ι, “yota”</li>
+<li class="fragment">ρ “alorr”</li>
+<li class="fragment">σ: “xigma”</li>
+<li class="fragment">τ “tough”</li>
+<li class="fragment">π “pi”</li>
 <li class="fragment">ξ, “ksee”</li>
 <li class="fragment">φ, “fi”</li>
 <li class="fragment">χ, “he”</li>
+<li class="fragment">ω/Ω, “omeha”</li>
 </ul>
 </div>
 </div>
 </section></section>
 <section>
-<section id="sec-anovaExt" class="title-slide slide level1 center">
-<h1>Appendix: ANOVA Extension</h1>
+<section id="sec-anovaExt" class="title-slide slide level1 appendix center" data-visibility="uncounted" data-number="4">
+<h1><span class="header-section-number">4</span> Appendix</h1>
 
 </section>
-<section id="ranking-version-of-anova" class="slide level2">
-<h2>Ranking version of ANOVA</h2>
+<section id="stretch" class="slide level2" data-visibility="uncounted" data-number="4.1">
+<h2><span class="header-section-number">4.1</span> Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2" data-visibility="uncounted" data-number="4.2">
+<h2><span class="header-section-number">4.2</span> Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400"></p>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="ranking-version-of-anova" class="slide level2" data-visibility="uncounted" data-number="4.3">
+<h2><span class="header-section-number">4.3</span> Ranking version of ANOVA</h2>
 <p>Analysis of variance<span class="red">-rank</span> + Kruskal-Wallis test; + Friedman test.</p>
 </section>
-<section id="one-way-variance-rank-kruskal-wallis-test" class="slide level2">
-<h2>One-Way Variance-Rank: Kruskal-Wallis Test</h2>
+<section id="one-way-variance-rank-kruskal-wallis-test" class="slide level2" data-visibility="uncounted" data-number="4.4">
+<h2><span class="header-section-number">4.4</span> One-Way Variance-Rank: Kruskal-Wallis Test</h2>
 <p>An extension of the two-sample Wilcoxon test</p>
 <p>Procedure:</p>
 <ul>
@@ -1678,20 +1748,20 @@ H<sub>0</sub> is rejected.</p>
 <li class="fragment"><span class="math inline">\(H = \frac{12}{n(n + 1)}\sum^k_{i = 1}\frac{R^2_i}{n_i} - 3(n + 1) \sim \chi^2(k - 1).\)</span></li>
 </ul>
 </section>
-<section id="example-2" class="slide level2">
-<h2>Example</h2>
+<section id="example-2" class="slide level2" data-visibility="uncounted" data-number="4.5">
+<h2><span class="header-section-number">4.5</span> Example</h2>
 <p>Botanists conducted an experiment of plant growth. The data records the results obtained under a control and two different treatment conditions (as measured by dried weight of plants).</p>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true">
+<table>
 <thead>
 <tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th">group</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">count</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">mean</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">sd</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">median</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">IQR</th>
+<th style="text-align: left;">group</th>
+<th style="text-align: right;">count</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">IQR</th>
 </tr>
 </thead>
 <tbody>
@@ -1721,12 +1791,10 @@ H<sub>0</sub> is rejected.</p>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">kruskal.test</span>(weight <span class="sc">~</span> group, <span class="at">data =</span> PlantGrowth)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Kruskal-Wallis rank sum test
@@ -1736,8 +1804,8 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 </div>
 </div>
 </section>
-<section id="two-way-variance-rank-friedman-test" class="slide level2">
-<h2>Two-Way Variance-Rank: Friedman Test</h2>
+<section id="two-way-variance-rank-friedman-test" class="slide level2" data-visibility="uncounted" data-number="4.6">
+<h2><span class="header-section-number">4.6</span> Two-Way Variance-Rank: Friedman Test</h2>
 <p>An extension of the sign test, and also a special case of Durbin test.</p>
 <p>E.g., Person’s recovery score after taking four types of drugs. The type 1 is the placebo.</p>
 <div class="cell">
@@ -1746,13 +1814,13 @@ Kruskal-Wallis chi-squared = 7.9882, df = 2, p-value = 0.01842</code></pre>
 Columns: 3
 $ person &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5
 $ drug   &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4
-$ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20, 18, 30, 38, 34, 20, 44,…</code></pre>
+$ score  &lt;dbl&gt; 30, 28, 16, 34, 14, 18, 10, 22, 24, 20, 18, 30, 38, 34, 20, 44, 26, 28, …</code></pre>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">friedman.test</span>(<span class="at">y =</span> df_drug<span class="sc">$</span>score,</span>
-<span id="cb7-2"><a href="#cb7-2"></a>              <span class="at">groups =</span> df_drug<span class="sc">$</span>drug,</span>
-<span id="cb7-3"><a href="#cb7-3"></a>              <span class="at">blocks =</span> df_drug<span class="sc">$</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">friedman.test</span>(<span class="at">y =</span> df_drug<span class="sc">$</span>score,</span>
+<span id="cb4-2"><a href=""></a>              <span class="at">groups =</span> df_drug<span class="sc">$</span>drug,</span>
+<span id="cb4-3"><a href=""></a>              <span class="at">blocks =</span> df_drug<span class="sc">$</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Friedman rank sum test
@@ -1762,14 +1830,9 @@ Friedman chi-squared = 13.56, df = 3, p-value = 0.00357</code></pre>
 </div>
 </div>
 <p>⇒ Different type of drugs lead to different type of outcomes.</p>
-</section></section>
-<section>
-<section id="sec-ranking" class="title-slide slide level1 center">
-<h1>Appendix: Ranking Test</h1>
-
 </section>
-<section id="association-for-matched-samples-ranking" class="slide level2">
-<h2>Association for Matched Samples: Ranking</h2>
+<section id="association-for-matched-samples-ranking" class="slide level2" data-visibility="uncounted" data-number="4.7">
+<h2><span class="header-section-number">4.7</span> Association for Matched Samples: Ranking</h2>
 <table>
 <colgroup>
 <col style="width: 17%">
@@ -1814,8 +1877,8 @@ Friedman chi-squared = 13.56, df = 3, p-value = 0.00357</code></pre>
 </ul>
 <p><em>Expectation</em>: if test 1 and 2 are identically distributed, the probability of Δ to be + or - should follow the binomial distribution. That is, <em>H<sub>0</sub>: Pr(+) = Pr(-) = 0.5</em>.</p>
 </section>
-<section id="sign-test" class="slide level2">
-<h2>Sign Test</h2>
+<section id="sign-test" class="slide level2" data-visibility="uncounted" data-number="4.8">
+<h2><span class="header-section-number">4.8</span> Sign Test</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <table>
@@ -1901,8 +1964,8 @@ Pr(n_-\geq 7) =&amp; Pr(n_- = 7) + Pr(n_- = 8)\\
 </div>
 </div>
 </section>
-<section id="procedure-of-sign-test" class="slide level2">
-<h2>Procedure of Sign Test</h2>
+<section id="procedure-of-sign-test" class="slide level2" data-visibility="uncounted" data-number="4.9">
+<h2><span class="header-section-number">4.9</span> Procedure of Sign Test</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ol type="1">
@@ -1942,8 +2005,8 @@ probability of success
 </div>
 </div>
 </section>
-<section id="normal-approximation-of-sign-test" class="slide level2">
-<h2>Normal Approximation of Sign Test</h2>
+<section id="normal-approximation-of-sign-test" class="slide level2" data-visibility="uncounted" data-number="4.10">
+<h2><span class="header-section-number">4.10</span> Normal Approximation of Sign Test</h2>
 <p>(Often used when n &gt; 10, why? Well…)</p>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -1964,9 +2027,9 @@ Z =&amp; \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
 <p>Then, Pr(Z ≥ 1.77) ≈ 0.038 &lt; 0.05.</p>
 </div>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn7"><p>±0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.</p></li></ol></aside></section>
-<section id="advanced-version-of-sign-test" class="slide level2">
-<h2>Advanced Version of Sign Test</h2>
+<aside><ol class="aside-footnotes"><li id="fn6"><p>±0.5 approximate to a continuous variable as an expedient, a.k.a., normal approximation.</p></li></ol></aside></section>
+<section id="advanced-version-of-sign-test" class="slide level2" data-visibility="uncounted" data-number="4.11">
+<h2><span class="header-section-number">4.11</span> Advanced Version of Sign Test</h2>
 <p>Problems of sign test?</p>
 <p>⇒ Wilcoxon signed-rank test</p>
 <p>Sign test ony identify the sign but not the magnitude, insufficiently using the data.</p>
@@ -2056,10 +2119,10 @@ Z =&amp; \frac{x' - \mu}{\sigma} = \frac{2x' - n}{\sqrt{n}},\\
 </table>
 </div><div class="column" style="width:50%;">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">wilcox.test</span>(tb_sr<span class="sc">$</span>Test_1, tb_sr<span class="sc">$</span>Test_2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">wilcox.test</span>(tb_sr<span class="sc">$</span>Test_1, tb_sr<span class="sc">$</span>Test_2, <span class="at">paired =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning in wilcox.test.default(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE):
-cannot compute exact p-value with ties</code></pre>
+<pre><code>Warning in wilcox.test.default(tb_sr$Test_1, tb_sr$Test_2, paired = TRUE): cannot
+compute exact p-value with ties</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -2077,8 +2140,8 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <li class="fragment">When n &gt; 25, a normal approximation can be also conducted.</li>
 </ul>
 </section>
-<section id="ranking-test-for-nonmatched-samples" class="slide level2">
-<h2>Ranking Test for Nonmatched Samples</h2>
+<section id="ranking-test-for-nonmatched-samples" class="slide level2" data-visibility="uncounted" data-number="4.12">
+<h2><span class="header-section-number">4.12</span> Ranking Test for Nonmatched Samples</h2>
 <p>Given samples S1 and S2,</p>
 <div class="panel-tabset">
 <ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">Rank-sum test</a></li><li><a href="#tabset-1-2">Wald-Wolfowitz Runs Test</a></li></ul>
@@ -2105,8 +2168,8 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <p>Runs test means to test whether an item comes from population 1 and population 2 is random or not</p>
 </section>
-<section id="runs" class="slide level2">
-<h2>Runs</h2>
+<section id="runs" class="slide level2" data-visibility="uncounted" data-number="4.13">
+<h2><span class="header-section-number">4.13</span> Runs</h2>
 <table>
 <thead>
 <tr class="header">
@@ -2207,23 +2270,23 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 </tbody>
 </table>
 
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/cor_runs.png" class="r-stretch quarto-figure-center"></section>
-<section id="example-3" class="slide level2">
-<h2>Example</h2>
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/cor_runs.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="example-3" class="slide level2" data-visibility="uncounted" data-number="4.14">
+<h2><span class="header-section-number">4.14</span> Example</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>vec_runs1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">times =</span> <span class="dv">5</span>)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>vec_runs2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
-<span id="cb13-3"><a href="#cb13-3"></a>vec_runs3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
-<span id="cb13-4"><a href="#cb13-4"></a></span>
-<span id="cb13-5"><a href="#cb13-5"></a>vec_runs1 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>vec_runs1 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">times =</span> <span class="dv">5</span>)</span>
+<span id="cb10-2"><a href=""></a>vec_runs2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each =</span> <span class="dv">5</span>)</span>
+<span id="cb10-3"><a href=""></a>vec_runs3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb10-4"><a href=""></a></span>
+<span id="cb10-5"><a href=""></a>vec_runs1 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0 1 0 1 0 1 0 1 0 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>vec_runs2 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>vec_runs2 <span class="co"># nonrandom</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 0 0 0 0 0 1 1 1 1 1</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>vec_runs3 <span class="co"># random</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a>vec_runs3 <span class="co"># random</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] 1 0 0 1 1 1 1 0 0 0</code></pre>
 </div>
@@ -2232,29 +2295,27 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 <section class="slide level2">
 
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">library</span>(randtests)</span>
-<span id="cb19-2"><a href="#cb19-2"></a></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="fu">runs.test</span>(vec_runs1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a><span class="fu">library</span>(randtests)</span>
+<span id="cb16-2"><a href=""></a></span>
+<span id="cb16-3"><a href=""></a><span class="fu">runs.test</span>(vec_runs1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
 
 data:  vec_runs1
-statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n = 10, p-value =
-0.00729
+statistic = 2.6833, runs = 10, n1 = 5, n2 = 5, n = 10, p-value = 0.00729
 alternative hypothesis: nonrandomness</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">runs.test</span>(vec_runs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a><span class="fu">runs.test</span>(vec_runs2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
 
 data:  vec_runs2
-statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n = 10, p-value =
-0.00729
+statistic = -2.6833, runs = 2, n1 = 5, n2 = 5, n = 10, p-value = 0.00729
 alternative hypothesis: nonrandomness</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="fu">runs.test</span>(vec_runs3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">runs.test</span>(vec_runs3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Runs Test
@@ -2264,10 +2325,12 @@ statistic = -1.3416, runs = 4, n1 = 5, n2 = 5, n = 10, p-value = 0.1797
 alternative hypothesis: nonrandomness</code></pre>
 </div>
 </div>
+
+</section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</div></section>
 
     </div>
   </div>
@@ -2297,7 +2360,6 @@ alternative hypothesis: nonrandomness</code></pre>
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -2427,7 +2489,7 @@ alternative hypothesis: nonrandomness</code></pre>
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -2598,10 +2660,27 @@ alternative hypothesis: nonrandomness</code></pre>
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -2611,8 +2690,17 @@ alternative hypothesis: nonrandomness</code></pre>
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -2666,22 +2754,9 @@ alternative hypothesis: nonrandomness</code></pre>
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
     
 
 </body></html>
