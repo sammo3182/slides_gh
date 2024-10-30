@@ -507,12 +507,9 @@ Assuming X<sub>1</sub> and X<sub>2</sub> are i.i.d,
 
 * &sigma; is known, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm Z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}$.
 * &sigma; is unknown, $\mu_1 - \mu_2 = (\bar X_1 - \bar X_2) \pm t_{\alpha/2}\sqrt{\frac{S_1^2}{n_1} + \frac{S_2^2}{n_2}}$
-   + $(\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ when the population of the samples are identical, i.e., $\sigma_1 = \sigma_2$, where $S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 + \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}$, d.f.: $(n_1 - 1) + (n_2 - 1)$.
-   
+   + $(\bar X_1 - \bar X_2) \pm t_{\alpha/2}S_p\sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$ when the population of the samples are identical, i.e., $\sigma_1 = \sigma_2$, where $S_p^2 = \frac{\sum(X_1 - \bar X_1)^2 + \sum(X_2 - \bar X_2)^2}{(n_1 - 1) + (n_2 - 1)}$, d.f.: $(n_1 - 1) + (n_2 - 1)$, [a.k.a., the "Difference in Means".]{.fragment}
+- Aggregated (propotional) data: $\Pi_1 - \Pi_2 \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$
 
-:::{.fragment style="text-align:center; margin-top: 2em"}
-A.k.a., Difference in Means
-:::
 
 ## 🌰
 
@@ -602,14 +599,15 @@ $D = X_1 - X_2$, then $\Delta = \bar D \pm t_{\alpha/2}\frac{S_D}{\sqrt{n}}$, wh
 :::{.fragment}
 *Matched proportions (Aggregate data)*
 
-$D = \Pi_1 - \Pi_2$ ,then $\Delta = D \pm Z_{\alpha/2}\sqrt{\frac{P_1(1 - P_1)}{n_1} + \frac{P_2(1 - P_2)}{n_2}}$
+$\hat{P}_D = \frac{n_{10} - n_{01}}{n}$, then $\Delta = \hat{P}_D \pm Z_{\alpha/2} \cdot \sqrt{\frac{n_{10} + n_{01}}{n^2}},$ where $n$ = Number of matched pairs, $n_{10}$ = Number of pairs where the first observation is a success and the second is not, $n_{01}$ = Number of pairs where the first observation is a failure and the second is a success.
+
 :::
 
-:::{.fragment .r-fit-text}
-How are the two methods different?
-:::
 
 :::{.notes}
+This formula uses the discordant pairs ($n_{10}$ and $n_{01}$) to calculate the confidence interval for the difference in proportions in matched samples.
+
+
 Why using a different method for matched samples? Not IID for individuals, but might for the difference
 :::
 
