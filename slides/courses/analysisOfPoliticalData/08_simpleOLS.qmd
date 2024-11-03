@@ -1,39 +1,34 @@
 ---
 title: "Simple OLS and Properties of Estimators"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
 knitr: 
     opts_chunk: 
       echo: false
-
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
-
 revealjs-plugins:
   - spotlight
-
 # lightbox: auto
 spotlight:
   size: 50
@@ -42,6 +37,8 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
+
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 
@@ -72,8 +69,6 @@ theme_update(
 
 ```
 
-## Overview
-
 
 1. Road to OLS
 1. OLS Components
@@ -89,27 +84,22 @@ Goal: Understanding data patterns in terms of [random variable]{.red}
 ::: {.column width="50%"}
 *Path through*
 
-Description
-
-- Single: Moments
-- Relation: Correlation
-
-Distribution
-
-- Probability theory
-- PDF/CDF
+1. Probability theory
+    - PDF/CDF
     - Confidence intervals/p-values
-
-Hypothesis testing
-
-- Significance
+1. Description
+    - Single: Moments
+    - Relation: Association
+1. Hypothesis testing
+    - Hypothesis setup
+    - Statistical inference
 
 :::
 
 ::: {.column width="50%" style="text-align:center"}
 
 :::{.fragment}
-*Path forward* [&star;]{.golden}
+*Path forward* 
 
 Linear (OLS)
 
@@ -131,7 +121,7 @@ Generalized linear
 
 Nonlinear
 
-- Marginal effects & Moderation
+- Moderation (& mediation)
 :::
 
 :::
@@ -144,10 +134,11 @@ Nonlinear
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="37%"}
 \begin{align}
-E(X)_{discrete} =& \sum^n_{i = 1} X_if(X_i).\\
-E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
+E(X)_{disc.} =& \sum^n_{i = 1} X_if(X_i).\\
+E(X)_{cont.} =& \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
+    =& \mu.\\
 \sigma^2 =& E[X - E(X)]^2, \\
 =& E[(X - \mu)^2],\\
 =& E(X^2 - 2X\mu + \mu^2),\\
@@ -156,10 +147,11 @@ E(X)_{continuous} =& \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
 \end{align}
 :::
 
-::: {.column .fragment width="50%"}
+::: {.column .fragment width="63%"}
 
 \begin{align}
-cov(X, Y) =& E[X - E(X)][Y - E(Y)],\\
+cov(X, Y) =& \sum(X - \mu_X)(Y - \mu_Y)p(X, Y),\\
+          =& E[X - E(X)][Y - E(Y)],\\
           =& E[XY - X\cdot E(Y) -\\
           &Y\cdot E(X) + E(X)E(Y)],\\
           =& E(XY) - E(Y)E(X) -\\
@@ -186,7 +178,7 @@ $$var(aX_1 + bX_2+ c) = a^2var(X_1) + b^2var(X_2) + 2ab\cdot cov(X_1, X_2).$$
 :::
 
 :::{.fragment}
-When X<sub>1</sub> is i.i.d., 
+When X<sub>i</sub> is i.i.d., 
 $$var(a_1X_1 + a_2X_2 + ... + a_nXn) = var(\sum a_iX_i) = \sum a_i^2var(X_i).$$
 :::
 
@@ -195,11 +187,27 @@ $$var(a_1X_1 + a_2X_2 + ... + a_nXn) = var(\sum a_iX_i) = \sum a_i^2var(X_i).$$
 $$var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$$
 :::
 
-## Review (Continued): Property of Estimator $\hat \theta$
 
-* Unbiased: On average, the estimator gives the right answer, formally, $E(\hat\sigma) = \sigma.$
+:::{.callout-note .fragment}
+## Comparison of deviation measurements
+
+Pop: $\sigma^2 = \frac{\sum (X_i - \mu)^2}{N}$; Sample: $s^2 = \frac{\sum (X_i - \bar{X})^2}{\color{darkred}{n - 1}}$; Sample means: $\text{Var}(\bar{X}) = \frac{\sigma^2}{n}$; $\text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}.$
+:::
+
+:::{.notes}
+1. When calculating the population mean, &mu;, we have the full information. The mean is merely the mean; so does it when calculating the sample mean.
+1. When calculating the sample variance, however, our goal is to estimate the population, with the sample mean as a reference.
+1. However, the sample mean introduces bias because $\bar{X}$ tends to be closer to the individual data points than the true population mean ($\mu$).
+1. We use $n - 1$ to reduce the influence of this bias. The method is called Bessel's correction, which compensates for the underestimation of variability due to using $\bar{X}$. This adjustment gives a more accurate estimate of the population variance.
+1. When calculating the variances of means of a linear combination of random variables ($var(a_1X_1 + a_2X_2 + ... + a_nXn)$), we do not estimate the population but being interested in how the mean of a sample varies, which is inherently different from measuring the variance within the sample data itself.
+1. In SE calculation, we include the correciton in &sigma; as the nominator, the $\sqrt{n}$ reflects merely the number of independent observations in the sample. It uses $n$ in the denominator because it reflects the precision of the sample mean estimate, considering the combined information from all $n$ observations.
+:::
+
+## Review (Continued): Property of a good estimator $\hat \theta$
+
+* Unbiased: On average, the estimator gives the right answer, formally, $E(\hat\theta) = \theta.$
 * Consistent: As the sample size increases, the variance decreases.
-* Efficiency: Smallest variance among *unbiased* estimators^[[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png){height=30} RMES: Root mean square error, $\sqrt{bias^2 + var}$.]{.fragment}]
+* Efficiency: Smallest variance among *unbiased* estimators^[[![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30} RMES: Root mean square error, $\sqrt{bias^2 + var}$.]{.fragment}]
 
 :::{.fragment}
 ```{r efficiency}
@@ -216,9 +224,45 @@ ggplot(data.frame(x = c(-7, 7)), aes(x = x)) +
 ```
 :::
 
-
 :::{.notes}
 Sometimes, one may want to trade off a little bias against variance.
+
+**Root Mean Square Error (RMSE)** is widely used across various fields, especially in statistics, machine learning, and predictive modeling, where accuracy of estimates or predictions is critical. Here are some key scenarios where RMSE is commonly used or referred to:
+
+### 1. **Model Evaluation in Machine Learning and Regression Analysis**
+   - **Predictive Accuracy**: RMSE is frequently used to assess the accuracy of models by measuring the average difference between predicted and observed values. For example, in linear regression, it shows how well the regression line fits the data.
+   - **Comparing Models**: RMSE is used to compare the performance of multiple models on the same data. Lower RMSE values indicate better predictive accuracy, making it a convenient metric for model selection.
+   - **Cross-Validation and Hyperparameter Tuning**: During cross-validation or tuning of model hyperparameters, RMSE is used as a scoring metric to optimize the model.
+
+### 2. **Forecasting and Time Series Analysis**
+   - **Evaluating Forecast Accuracy**: In forecasting, such as demand prediction or stock price forecasting, RMSE measures how close predicted values are to actual outcomes. It is one of the primary metrics to evaluate models like ARIMA, exponential smoothing, or other time series models.
+   - **Measuring Seasonal Adjustments**: RMSE can be used to check the accuracy of seasonal adjustments and trend components in time series data.
+
+### 3. **Statistical Estimation**
+   - **Assessing Estimator Quality**: RMSE is valuable for evaluating estimators in cases where both bias and variance are of concern. It provides a comprehensive measure of estimation error, especially when working with biased estimators.
+   - **Choosing Between Biased and Unbiased Estimators**: RMSE allows for comparing biased and unbiased estimators on an equal footing by quantifying the total error (bias + variance) of each estimator. 
+
+### 4. **Quality Control and Engineering**
+   - **Process Control**: In manufacturing or engineering, RMSE can measure deviations of observed measurements from target values, providing insight into the precision and accuracy of processes.
+   - **Signal Processing**: RMSE is often used in signal processing to quantify the error between processed signals and the original signal, particularly when reducing noise.
+
+### 5. **Environmental and Climate Science**
+   - **Model Validation**: Climate models, weather forecasts, and environmental simulations often rely on RMSE to assess the accuracy of predicted temperatures, precipitation levels, or pollution concentrations.
+   - **Spatial Accuracy**: In geographic and environmental studies, RMSE can evaluate the spatial accuracy of geospatial models and remote sensing measurements.
+
+### 6. **Econometrics and Financial Modeling**
+   - **Evaluating Financial Models**: RMSE is used to assess the accuracy of econometric models in forecasting economic indicators, like GDP growth or inflation rates, by comparing predictions to actual outcomes.
+   - **Risk Assessment**: In finance, RMSE helps quantify the accuracy of risk models by showing the average deviation between predicted and actual returns or risk measures.
+
+### 7. **Deep Learning and Neural Networks**
+   - **Loss Function**: RMSE (or mean squared error, MSE) is often used as a loss function in regression-based neural networks to minimize the difference between predicted and target values.
+   - **Evaluation Metric**: For neural network models performing regression tasks, RMSE is used as an evaluation metric to interpret prediction accuracy on test data.
+
+### Why RMSE is Preferred in Many Applications
+- **Sensitivity to Large Errors**: RMSE penalizes larger errors more than smaller errors (due to squaring), making it particularly useful when large errors are more detrimental in the application.
+- **Interpretability**: Since RMSE is in the same units as the data, it’s easy to interpret and communicate results.
+
+In summary, RMSE is a versatile metric used in any situation where quantifying the total error (combining bias and variance) in predictions or estimates is essential, providing a clear, interpretable measure of model accuracy.
 :::
 
 ## Ordinary Least Squares (OLS)
@@ -228,15 +272,17 @@ One type of [simulation]{.red} of the reality among many others (unnecessarily t
 :::
 
 :::{.r-hstack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_leastSquare_correct.gif){.fragment height=400}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_leastSquare.gif){.fragment height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/ols_leastSquare_correct.gif){.fragment height=350}
+![](https://drhuyue.site:10002/sammo3182/figure/ols_leastSquare.gif){.fragment height=350}
 :::
 
-[Substantively: how does some outcome variable Y change [when]{.red} some explanatory variable X changes? ]{.fragment}
+:::{.callout-important .fragment}
+Interpretation: How does variable Y change on average [when]{.red} some explanatory variable X changes (while the others don't)? 
+:::
 
 :::{.notes}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_illustrateSimpleOLS.png)
+![](https://drhuyue.site:10002/sammo3182/figure/ols_illustrateSimpleOLS.png)
 
 :::
 
@@ -245,12 +291,9 @@ One type of [simulation]{.red} of the reality among many others (unnecessarily t
 ## Linearity
 
 :::{style="text-align:center"}
-Which X has the linear relationship with Y?
+*Which X has the linear relationship with Y?*
 :::
 
-:::: {.columns}
-
-::: {.column width="40%"}
 \begin{align}
 Y_i =& \beta_0 + \beta_1X_i + \epsilon_i;\\
 Y_i =& \frac{1}{\beta_0} + \frac{X_i}{\beta_1} + \epsilon_i;\\
@@ -258,34 +301,24 @@ Y_i =& \beta_0 + \beta_1ln(X_i) + \epsilon_i;\\
 Y_i =& \beta_0 + \frac{\beta_1}{X_i} + \epsilon_i;\\
 Y_i =& \beta_0 + X_i^{\beta_1} + \epsilon_i.\\
 \end{align}
-:::
-
-::: {.column width="60%"}
-Given &beta;<sub>0</sub> = 0.6, &beta;<sub>1</sub> = 0.5.
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_linearity.png)
-:::
-
-::::
-
-
 
 
 
 :::{.notes}
 - First two are linear.
-- the second one isn't.
-- The last one isn't linear until redefining.
+
+![](https://drhuyue.site:10002/sammo3182/figure/ols_linearity.png)
+
 :::
 
 
-## OLS Formally^[[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png){height=30} &beta;: Estimand/parameter, function: estimator, result: estimate]{.fragment}]
+## OLS Formally^[[![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30} &beta;: Estimand/parameter, function: estimator, result: estimate]{.fragment}]
 
 \begin{align}
-Y_i =& \beta_0 + \beta_1X_1 + u_i.\\
-E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
-           =& E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i),\\
-           =& \beta_0 + \beta_1X_i + E(u_i|X_i).
+Y_i =& \beta_0 + \beta_1X_1 + \epsilon_i.\\
+E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + \epsilon_i|X_i),\\
+           =& E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(\epsilon_i|X_i),\\
+           =& \beta_0 + \beta_1X_i + E(\epsilon_i|X_i).
 \end{align}
 
 
@@ -297,41 +330,44 @@ E(Y_i|X_i) =& E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
 
 
 :::{.fragment}
-u<sub>i</sub>: Things we don't know (or human errors) but [hope]{.red} to be zero.
+&epsilon<sub>i</sub>: Things we can't explain but [hope]{.red} to be zero.
 :::
 
 :::{.notes}
 $\beta_1X_i$ consistent
 
-E(u_i|X_i) assumed 0
+E(\epsilon_i|X_i) assumed 0
 :::
 
 :::{.fragment}
 **Sample Regression Function (SRF)**
 
 \begin{align}
-Y_i =& (\hat\beta_0 + \hat\beta_1X_i) + \hat u_i,\\
-    =& \hat Y_i + \hat u_i.\\
-    =& E(Y_i|X_i) + u_i,\\
-\Leftrightarrow u_i =& Y_i - E(Y_i|X_i).
+Y_i =& (\hat\beta_0 + \hat\beta_1X_i) + \hat \epsilon_i,\\
+    =& \hat Y_i + \hat \epsilon_i.\\
+    =& E(Y_i|X_i) + \epsilon_i,\\
+\Leftrightarrow \epsilon_i =& Y_i - E(Y_i|X_i).
 \end{align}
 :::
 
+## Minimizing Sum of Squares
 
+![](https://drhuyue.site:10002/sammo3182/figure/ols_minimizeSS.gif){fig-align="center" height=600}
 
-## A Good Estimator &rarr; Minimizing Expected u<sub>i</sub> {.smaller}
+## A Good Estimator &rarr; Minimizing Expected $\epsilon$ {.smaller}
 
 &beta;<sub>0</sub> and &beta;<sub>1</sub> that make $\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0$
 
 
 \begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} = -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) =& 0\\
-\Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =& 0\\
-(\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2)\\
-\sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =& 0\\
-\sum X_iY_i - \sum X_i\bar Y + \sum X_i\hat\beta_1\bar X - \sum\hat\beta_1 X_1^2 =& 0\\
-\sum X_i(Y_i - \bar Y) + \hat\beta_1\sum X_i(\bar X - X_i) =& 0\\
-\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X)
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} = -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) =& 0;\\
+\Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =& 0;\\
+(\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2);\\
+\sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =& 0;\\
+\sum X_iY_i - \sum X_i\bar Y + \sum X_i\hat\beta_1\bar X - \sum\hat\beta_1 X_1^2 =& 0;\\
+\sum X_i(Y_i - \bar Y) + \hat\beta_1\sum X_i(\bar X - X_i) =& 0;\\
+\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X);\\
+\hat\beta_1 =& \frac{\sum X_i(Y_i - \bar Y)}{\sum X_i(X_i - \bar X)}.
 \end{align}
 
 ---
@@ -351,26 +387,27 @@ A transformation gadget:
 
 :::{.fragment}
 \begin{align}
-\sum X_i(Y_i - \bar Y) =& \hat\beta_1\sum X_i(X_i - \bar X), \text{using the above}\\
-\sum (X_i - \bar X)(Y_i - \bar Y) =& \hat\beta_1\sum (X_i - \bar X)(X_i - \bar X)\\
+\hat\beta_1 =& \frac{\sum X_i(Y_i - \bar Y)}{\sum X_i(X_i - \bar X)}, \text{using the above}\\
 \hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}.
 \end{align}
 :::
 
-## &beta;<sub>1</sub>
+## $\beta_1$
 
 :::{.fragment}
 \begin{align}
-\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
-        =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2}\sqrt{\sum (Y_i - \bar Y)^2}}\cdot\frac{\sqrt{\sum (Y_i - \bar Y)^2}}{\sqrt{\sum (X_i - \bar X)^2}}\\
-        =& r_{X, Y}\frac{s_Y}{s_X}
+\hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2},\\
+        =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2}\color{darkred}{\sqrt{\sum (Y_i - \bar Y)^2}}}\cdot\frac{\color{darkred}{\sqrt{\sum (Y_i - \bar Y)^2}}}{\sqrt{\sum (X_i - \bar X)^2}},\\
+        =& r_{X, Y}\frac{s_Y}{s_X}.
 \end{align}
 :::
 
-:::{.fragment}
-So when the variance of Y(s<sub>Y</sub>) increases, &beta;<sub>1</sub> increases.
+:::{.callout-tip .fragment}
+So, when the variance of Y(s<sub>Y</sub>) increases, &beta;<sub>1</sub> increases.
+:::
 
-Special case: Standardized X and Y, i.e., $s_Y, s_X$ are 1s, then,
+:::{.fragment}
+A special case: Standardized X and Y, i.e., $s_Y, s_X$ are 1s, then,
 
 $$\beta_1 = r_{X, Y}\frac{s_Y}{s_X} = r_{X,Y}.$$
 
@@ -381,149 +418,118 @@ $$\beta_1 = r_{X, Y}\frac{s_Y}{s_X} = r_{X,Y}.$$
 &beta;<sub>0</sub> is efficient (minimizng the u) depending on &beta;<sub>1</sub>
 :::
 
-
-## &beta;<sub>0</sub>^[[$\hat\beta_0, \hat\beta_1$ are called [co]{.red}efficients.]{.fragment}]
-
-\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
-\Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =& 0\\
-\sum Y_i =& \sum\hat\beta_0 + \sum\hat\beta_1X_i\\
-                         =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
-\hat\beta_0 =& \frac{\sum Y_i}{n} - \hat\beta_1\frac{\sum X_i}{n}\\
-                        =& \bar Y - \hat\beta_1\bar X
-\end{align}
-
-
-:::{.fragment}
-\begin{align}
-\text{Normal equations:} \sum Y_i =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
-\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
-\end{align}
-:::
-
-## Linear nature of the OLS coefficient
-
-:::{.callout-tip}
-$\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$
-:::
-
+## Linear nature of the OLS coefficient^[$\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).$]
 :::: {.columns}
 
 ::: {.column width="50%"}
 \begin{align}
 \hat\beta_1 =& \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2},\\
             =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)Y_i,\\
-            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + u_i),\\
-            =& \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)u_i],\\
-            =& \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}.
+            =& \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + \epsilon_i),\\
+            =& \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)\epsilon_i],\\
+            =& \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)\epsilon_i}{\sum (X_i - \bar X)^2}.
 \end{align}
 :::
 
 ::: {.column .fragment width="50%"}
-Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_iu_i.$ 
+Let $k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},$ then $\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_i\epsilon_i.$ 
 
-+ A [linear]{.red} combination with errors^[[A special case: $\hat\beta_1 = \beta_1 + \sum k_iu_i$.]{.fragment}]
++ A [linear]{.red} combination with errors
 + Min/max(X) influences a lot.
 
 :::{.notes}
 $\sum(X_i - \bar X) = 0.$
 
 β1=constant+β1constant+variation due to error
+
+A special case: $\hat\beta_1 = \beta_1 + \sum k_i\epsilon_i$.
 :::
 :::
 
 ::::
 
-## Characteristics of OLS Coefficients
 
-:::: {.columns}
-
-::: {.column width="55%"}
-1. Calculated using [observed]{.red} data
-1. Unique point estimates
-1. SRF passes through $(\bar X, \bar Y)$
-1. $\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})$, $\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}$
-1. $\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0$
-
-:::{.fragment .small}
-\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& 0\\ -2\sum[Y_i - (\hat{\beta_0} + \hat{\beta_1}X_i)] =& 0\\
-\sum (Y_i-\hat Y_i) = \sum{\hat u_i} =& 0\\
-\Rightarrow \frac{\sum{\hat u_i}}{n} = \bar{\hat u_i} =& 0 \blacksquare
-\end{align}
-:::
-
-:::
-
-::: {.column width="45%"}
-
-:::{.fragment}
-6\. $\sum X_i\hat u_i = 0$
-
-\begin{align}
-cov(X_i, u_i) =& 0,\\
-\frac{\sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})}{n-1} =& 0,\\
-\frac{\sum X_i\hat u_i}{n-1} =& 0. \blacksquare
-\end{align}
-:::
-
-:::
-
-::::
-
----
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_minimizeSS.gif){fig-align="center" height=600}
-
-
-## Var(&beta;<sub>1</sub>){.smaller}
+## Var($\beta_1$){.smaller}
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
+$\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_i\epsilon_i.$ 
+
+:::{.fragment}
 \begin{align}
-\sigma^2 =& var(u_i|X),\\
+\sigma^2 =& var(\epsilon_i|X),\\
          =& var(Y_i - \hat\beta_0 - \hat\beta_1X|X),\\
-         =& \frac{\sum(\hat u_i^2)}{n - 2},\\
+         =& \frac{\sum(\hat \epsilon_i^2)}{n - 2},\\
          =& \hat\sigma^2.
 \end{align}
 :::
 
 :::{.notes}
-n - 2: $\hat\beta_0, \hat\beta_1$
+β1=constant+β1constant+variation due to error
+
+n - 2: $\hat\beta_0, \hat\beta_1$, also the extension of Bessel's correction in regression
+:::
+
 :::
 
 
-::: {.column width="70%"}
+
+
+::: {.column .fragment width="70%"}
 \begin{align}
 var(\hat \beta_1|X) =& var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
-                  =& var(\beta_1 + \sum k_iu_i|X)\\
-                  =& var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
-                  =& \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
-                  =& \sum k_i^2 var(u_i|X)\\
+                  =& var(\beta_1 + \sum k_i\epsilon_i|X)\\
+                  =& var(\sum k_i\epsilon_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
+                  =& \sum var(k_i\epsilon_i|X), \text{assuming}\ \epsilon_i\ \text{independent}\\
+                  =& \sum k_i^2 var(\epsilon_i|X)\\
                   =& \sum[\frac{X_i - \bar X}{\sum (X_i - \bar X)^2}]^2\sigma^2\\
                   =& \frac{\sum(X_i - \bar X)^2}{[\sum (X_i - \bar X)^2]^2}\sigma^2 = \frac{\sigma^2}{\sum (X_i - \bar X)^2}
 \end{align}
 :::
-
-:::{.notes}
-If u<sub>i</sub> is not independent, then cov(k, u) > 0, and this estimator is underestimated.
-
-(That is, the assumption is .large[.red[IMPORTANT]])
-
-:::
-
 ::::
 
+:::{.callout-important .fragment .large}
+## Assumption is IMPORTANT!!!
 
-## Var(&beta;<sub>0</sub>){.smaller}
+If &epsilon;<sub>i</sub> is not independent, then cov(k, &epsilon;) > 0, and this estimator is underestimated.
+:::
+
+
+## $\beta_0$
+
+\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
+\Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =& 0\\
+\sum Y_i =& \sum\hat\beta_0 + \sum\hat\beta_1X_i\\
+                         =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\hat\beta_0 =& \frac{\sum Y_i}{n} - \hat\beta_1\frac{\sum X_i}{n} = \bar Y - \hat\beta_1\bar X
+\end{align}
+
+
+:::{.callout-note .fragment}
+## Normal equations
+
+\begin{align}
+\sum Y_i =& n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\sum X_iY_i =& \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
+\end{align}
+:::
+
+:::{.notes}
+$\hat\beta_0, \hat\beta_1$ are called [co]{.red}efficients.
+:::
+
+
+## Var($\beta_0$){.smaller}
 
 \begin{align}
 var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X),\\
-                   =& var[\frac{\sum(\beta_0 + \beta_1X_i + u_i)}{n} - \hat\beta_1\bar X|X],\\
+                   =& var[\frac{\sum(\beta_0 + \beta_1X_i + \epsilon_i)}{n} - \hat\beta_1\bar X|X],\\
                   \because \beta_0 +& \beta_1X_i\text{ is constant & independent},\\
-                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X), \\
-                  =& var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X) = \frac{var(\sum u_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X),\\
+                  =& var(\frac{\sum \epsilon_i}{n}|X) + var(\hat\beta_1\bar X|X), \\
+                  =& var(\frac{\sum \epsilon_i}{n}|X) + var(\hat\beta_1\bar X|X) = \frac{var(\sum \epsilon_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X),\\
                   =& \frac{n\sigma^2}{n^2} + \frac{\bar X^2\sigma^2}{\sum (X_i - \bar X)^2} = \sigma^2[\frac{1}{n} + \frac{\bar X^2}{\sum (X_i - \bar X)^2}],\\
                   =& \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}],\\
                   =& \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}.
@@ -531,8 +537,44 @@ var(\hat \beta_0|X) =& var(\bar Y - \hat\beta_1\bar X|X),\\
 
 
 
+## Characteristics of OLS Coefficients
+
+:::: {.columns}
+
+::: {.column width="50%"}
+1. Calculated using [observed]{.red} data
+1. Unique point estimates
+1. SRF passes through $(\bar X, \bar Y)$
+1. $\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})$, $\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}$
+1. $\bar{\hat \epsilon_i} = \frac{\sum{\hat \epsilon_i}}{n} = 0$
+1. $\sum X_i\hat \epsilon_i = 0$
+:::
+
+
+::: {.column .fragment width="50%"}
+
+\begin{align}
+cov(X_i, \epsilon_i) =& 0,\\
+\frac{\sum(X_i - \bar X)(\hat \epsilon_i - \bar{\hat \epsilon_i})}{n-1} =& 0,\\
+\frac{\sum X_i\hat \epsilon_i}{n-1} =& 0. \blacksquare
+\end{align}
+
+
+:::{.notes}
+\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =& 0\\ -2\sum[Y_i - (\hat{\beta_0} + \hat{\beta_1}X_i)] =& 0\\
+\sum (Y_i-\hat Y_i) = \sum{\hat \epsilon_i} =& 0\\
+\Rightarrow \frac{\sum{\hat \epsilon_i}}{n} = \bar{\hat \epsilon_i} =& 0 \blacksquare
+\end{align}
+:::
+
+:::
+::::
+
+
+
 ## Take-home point
 
 ::: {style="text-align: center"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ols_mindmap.png){height="600"}
+![](https://drhuyue.site:10002/sammo3182/figure/ols_mindmap.png){height="600"}
 :::

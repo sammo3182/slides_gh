@@ -6,9 +6,8 @@
 <script src="08_simpleOLS_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="08_simpleOLS_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="08_simpleOLS_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="08_simpleOLS_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="08_simpleOLS_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="08_simpleOLS_files/libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.32">
 
   <meta name="author" content="Yue Hu">
   <title>Simple OLS and Properties of Estimators</title>
@@ -30,8 +29,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="08_simpleOLS_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="08_simpleOLS_files/libs/revealjs/dist/theme/quarto-48f225a532854478bb6de5675fa5c081.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="08_simpleOLS_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="08_simpleOLS_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="08_simpleOLS_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -159,7 +158,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -340,7 +340,7 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
 <ol type="1">
 <li class="fragment">Road to OLS</li>
@@ -348,36 +348,36 @@ Yue Hu
 </ol>
 </section>
 <section>
-<section id="road-to-ols" class="title-slide slide level1 center">
-<h1>Road to OLS</h1>
+<section id="road-to-ols" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Road to OLS</h1>
 
 </section>
-<section id="where-are-we" class="slide level2">
-<h2>Where are We</h2>
+<section id="where-are-we" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Where are We</h2>
 <p>Goal: Understanding data patterns in terms of <span class="red">random variable</span></p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><em>Path through</em></p>
-<p>Description</p>
+<ol type="1">
+<li class="fragment">Probability theory
 <ul>
-<li class="fragment">Single: Moments</li>
-<li class="fragment">Relation: Correlation</li>
-</ul>
-<p>Distribution</p>
-<ul>
-<li class="fragment">Probability theory</li>
-<li class="fragment">PDF/CDF
-<ul>
+<li class="fragment">PDF/CDF</li>
 <li class="fragment">Confidence intervals/p-values</li>
 </ul></li>
-</ul>
-<p>Hypothesis testing</p>
+<li class="fragment">Description
 <ul>
-<li class="fragment">Significance</li>
-</ul>
+<li class="fragment">Single: Moments</li>
+<li class="fragment">Relation: Association</li>
+</ul></li>
+<li class="fragment">Hypothesis testing
+<ul>
+<li class="fragment">Hypothesis setup</li>
+<li class="fragment">Statistical inference</li>
+</ul></li>
+</ol>
 </div><div class="column" style="text-align:center">
 <div class="fragment">
-<p><em>Path forward</em> <span class="golden">☆</span></p>
+<p><em>Path forward</em></p>
 <p>Linear (OLS)</p>
 <ul>
 <li class="fragment">Simple linear regression</li>
@@ -395,39 +395,39 @@ Yue Hu
 <p>↓</p>
 <p>Nonlinear</p>
 <ul>
-<li class="fragment">Marginal effects &amp; Moderation</li>
+<li class="fragment">Moderation (&amp; mediation)</li>
 </ul>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="review-expectation" class="slide level2">
-<h2>Review: Expectation</h2>
+<section id="review-expectation" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Review: Expectation</h2>
 <div class="columns">
-<div class="column" style="width:50%;">
+<div class="column" style="width:37%;">
 <p><span class="math display">\[\begin{align}
-E(X)_{discrete} =&amp; \sum^n_{i = 1} X_if(X_i).\\
-E(X)_{continuous} =&amp; \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
+E(X)_{disc.} =&amp; \sum^n_{i = 1} X_if(X_i).\\
+E(X)_{cont.} =&amp; \int^{+\infty}_{-\infty}X_if(X_i)dX,\\
+    =&amp; \mu.\\
 \sigma^2 =&amp; E[X - E(X)]^2, \\
 =&amp; E[(X - \mu)^2],\\
 =&amp; E(X^2 - 2X\mu + \mu^2),\\
 =&amp; E(X^2) - 2\mu E(X) + \mu^2,\\
 =&amp; E(X^2) - \mu^2.
 \end{align}\]</span></p>
-</div><div class="column fragment" style="width:50%;">
+</div><div class="column fragment" style="width:63%;">
 <p><span class="math display">\[\begin{align}
-cov(X, Y) =&amp; E[X - E(X)][Y - E(Y)],\\
+cov(X, Y) =&amp; \sum(X - \mu_X)(Y - \mu_Y)p(X, Y),\\
+          =&amp; E[X - E(X)][Y - E(Y)],\\
           =&amp; E[XY - X\cdot E(Y) -\\
           &amp;Y\cdot E(X) + E(X)E(Y)],\\
           =&amp; E(XY) - E(Y)E(X) -\\
           &amp;E(X)E(Y) + E(X)E(Y),\\
           =&amp; E(XY) - E(X)E(Y).
 \end{align}\]</span></p>
-</div>
-</div>
+</div></div>
 </section>
-<section id="review-continued-variance" class="slide level2">
-<h2>Review (Continued): Variance</h2>
+<section id="review-continued-variance" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Review (Continued): Variance</h2>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
 var(aX + b) =&amp; E[(aX + b) - E(aX + b)]^2 = E[aX - aE(X)]^2, \\
@@ -438,32 +438,35 @@ var(aX + b) =&amp; E[(aX + b) - E(aX + b)]^2 = E[aX - aE(X)]^2, \\
 <p><span class="math display">\[var(aX_1 + bX_2+ c) = a^2var(X_1) + b^2var(X_2) + 2ab\cdot cov(X_1, X_2).\]</span></p>
 </div>
 <div class="fragment">
-<p>When X<sub>1</sub> is i.i.d., <span class="math display">\[var(a_1X_1 + a_2X_2 + ... + a_nXn) = var(\sum a_iX_i) = \sum a_i^2var(X_i).\]</span></p>
+<p>When X<sub>i</sub> is i.i.d., <span class="math display">\[var(a_1X_1 + a_2X_2 + ... + a_nXn) = var(\sum a_iX_i) = \sum a_i^2var(X_i).\]</span></p>
 </div>
 <div class="fragment">
 <p><span class="math display">\[var(\bar X) = var(\frac{\sum X_i}{n}) = \sum^n_{i = 1}\frac{var(X_i)}{n^2} = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}\]</span></p>
 </div>
-</section>
-<section id="review-continued-property-of-estimator-hat-theta" class="slide level2">
-<h2>Review (Continued): Property of Estimator <span class="math inline">\(\hat \theta\)</span></h2>
-<ul>
-<li class="fragment">Unbiased: On average, the estimator gives the right answer, formally, <span class="math inline">\(E(\hat\sigma) = \sigma.\)</span></li>
-<li class="fragment">Consistent: As the sample size increases, the variance decreases.</li>
-<li class="fragment">Efficiency: Smallest variance among <em>unbiased</em> estimators<sup>1</sup></li>
-</ul>
 <div class="fragment">
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="08_simpleOLS_files/figure-revealjs/efficiency-1.png" width="960"></p>
-</figure>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Comparison of deviation measurements</strong></p>
+</div>
+<div class="callout-content">
+<p>Pop: <span class="math inline">\(\sigma^2 = \frac{\sum (X_i - \mu)^2}{N}\)</span>; Sample: <span class="math inline">\(s^2 = \frac{\sum (X_i - \bar{X})^2}{\color{darkred}{n - 1}}\)</span>; Sample means: <span class="math inline">\(\text{Var}(\bar{X}) = \frac{\sigma^2}{n}\)</span>; <span class="math inline">\(\text{SE}(\bar{X}) = \frac{\sigma}{\sqrt{n}}.\)</span></p>
 </div>
 </div>
 </div>
 </div>
 <aside class="notes">
-<p>Sometimes, one may want to trade off a little bias against variance.</p>
+<ol type="1">
+<li>When calculating the population mean, μ, we have the full information. The mean is merely the mean; so does it when calculating the sample mean.</li>
+<li>When calculating the sample variance, however, our goal is to estimate the population, with the sample mean as a reference.</li>
+<li>However, the sample mean introduces bias because <span class="math inline">\(\bar{X}\)</span> tends to be closer to the individual data points than the true population mean (<span class="math inline">\(\mu\)</span>).</li>
+<li>We use <span class="math inline">\(n - 1\)</span> to reduce the influence of this bias. The method is called Bessel’s correction, which compensates for the underestimation of variability due to using <span class="math inline">\(\bar{X}\)</span>. This adjustment gives a more accurate estimate of the population variance.</li>
+<li>When calculating the variances of means of a linear combination of random variables (<span class="math inline">\(var(a_1X_1 + a_2X_2 + ... + a_nXn)\)</span>), we do not estimate the population but being interested in how the mean of a sample varies, which is inherently different from measuring the variance within the sample data itself.</li>
+<li>In SE calculation, we include the correciton in σ as the nominator, the <span class="math inline">\(\sqrt{n}\)</span> reflects merely the number of independent observations in the sample. It uses <span class="math inline">\(n\)</span> in the denominator because it reflects the precision of the sample mean estimate, considering the combined information from all <span class="math inline">\(n\)</span> observations.</li>
+</ol>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -475,18 +478,107 @@ var(aX + b) =&amp; E[(aX + b) - E(aX + b)]^2 = E[aX - aE(X)]^2, \\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30"> RMES: Root mean square error, <span class="math inline">\(\sqrt{bias^2 + var}\)</span>.</span></p></li></ol></aside></section>
-<section id="ordinary-least-squares-ols" class="slide level2">
-<h2>Ordinary Least Squares (OLS)</h2>
+</section>
+<section id="review-continued-property-of-a-good-estimator-hat-theta" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> Review (Continued): Property of a good estimator <span class="math inline">\(\hat \theta\)</span></h2>
+<ul>
+<li class="fragment">Unbiased: On average, the estimator gives the right answer, formally, <span class="math inline">\(E(\hat\theta) = \theta.\)</span></li>
+<li class="fragment">Consistent: As the sample size increases, the variance decreases.</li>
+<li class="fragment">Efficiency: Smallest variance among <em>unbiased</em> estimators<sup>1</sup></li>
+</ul>
+<div class="fragment">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="08_simpleOLS_files/figure-revealjs/efficiency-1.png" class="quarto-figure quarto-figure-center" width="960"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p>Sometimes, one may want to trade off a little bias against variance.</p>
+<p><strong>Root Mean Square Error (RMSE)</strong> is widely used across various fields, especially in statistics, machine learning, and predictive modeling, where accuracy of estimates or predictions is critical. Here are some key scenarios where RMSE is commonly used or referred to:</p>
+<h3 data-number="1.4.1" id="model-evaluation-in-machine-learning-and-regression-analysis"><span class="header-section-number">1.4.1</span> 1. <strong>Model Evaluation in Machine Learning and Regression Analysis</strong></h3>
+<ul>
+<li><strong>Predictive Accuracy</strong>: RMSE is frequently used to assess the accuracy of models by measuring the average difference between predicted and observed values. For example, in linear regression, it shows how well the regression line fits the data.</li>
+<li><strong>Comparing Models</strong>: RMSE is used to compare the performance of multiple models on the same data. Lower RMSE values indicate better predictive accuracy, making it a convenient metric for model selection.</li>
+<li><strong>Cross-Validation and Hyperparameter Tuning</strong>: During cross-validation or tuning of model hyperparameters, RMSE is used as a scoring metric to optimize the model.</li>
+</ul>
+<h3 data-number="1.4.2" id="forecasting-and-time-series-analysis"><span class="header-section-number">1.4.2</span> 2. <strong>Forecasting and Time Series Analysis</strong></h3>
+<ul>
+<li><strong>Evaluating Forecast Accuracy</strong>: In forecasting, such as demand prediction or stock price forecasting, RMSE measures how close predicted values are to actual outcomes. It is one of the primary metrics to evaluate models like ARIMA, exponential smoothing, or other time series models.</li>
+<li><strong>Measuring Seasonal Adjustments</strong>: RMSE can be used to check the accuracy of seasonal adjustments and trend components in time series data.</li>
+</ul>
+<h3 data-number="1.4.3" id="statistical-estimation"><span class="header-section-number">1.4.3</span> 3. <strong>Statistical Estimation</strong></h3>
+<ul>
+<li><strong>Assessing Estimator Quality</strong>: RMSE is valuable for evaluating estimators in cases where both bias and variance are of concern. It provides a comprehensive measure of estimation error, especially when working with biased estimators.</li>
+<li><strong>Choosing Between Biased and Unbiased Estimators</strong>: RMSE allows for comparing biased and unbiased estimators on an equal footing by quantifying the total error (bias + variance) of each estimator.</li>
+</ul>
+<h3 data-number="1.4.4" id="quality-control-and-engineering"><span class="header-section-number">1.4.4</span> 4. <strong>Quality Control and Engineering</strong></h3>
+<ul>
+<li><strong>Process Control</strong>: In manufacturing or engineering, RMSE can measure deviations of observed measurements from target values, providing insight into the precision and accuracy of processes.</li>
+<li><strong>Signal Processing</strong>: RMSE is often used in signal processing to quantify the error between processed signals and the original signal, particularly when reducing noise.</li>
+</ul>
+<h3 data-number="1.4.5" id="environmental-and-climate-science"><span class="header-section-number">1.4.5</span> 5. <strong>Environmental and Climate Science</strong></h3>
+<ul>
+<li><strong>Model Validation</strong>: Climate models, weather forecasts, and environmental simulations often rely on RMSE to assess the accuracy of predicted temperatures, precipitation levels, or pollution concentrations.</li>
+<li><strong>Spatial Accuracy</strong>: In geographic and environmental studies, RMSE can evaluate the spatial accuracy of geospatial models and remote sensing measurements.</li>
+</ul>
+<h3 data-number="1.4.6" id="econometrics-and-financial-modeling"><span class="header-section-number">1.4.6</span> 6. <strong>Econometrics and Financial Modeling</strong></h3>
+<ul>
+<li><strong>Evaluating Financial Models</strong>: RMSE is used to assess the accuracy of econometric models in forecasting economic indicators, like GDP growth or inflation rates, by comparing predictions to actual outcomes.</li>
+<li><strong>Risk Assessment</strong>: In finance, RMSE helps quantify the accuracy of risk models by showing the average deviation between predicted and actual returns or risk measures.</li>
+</ul>
+<h3 data-number="1.4.7" id="deep-learning-and-neural-networks"><span class="header-section-number">1.4.7</span> 7. <strong>Deep Learning and Neural Networks</strong></h3>
+<ul>
+<li><strong>Loss Function</strong>: RMSE (or mean squared error, MSE) is often used as a loss function in regression-based neural networks to minimize the difference between predicted and target values.</li>
+<li><strong>Evaluation Metric</strong>: For neural network models performing regression tasks, RMSE is used as an evaluation metric to interpret prediction accuracy on test data.</li>
+</ul>
+<h3 data-number="1.4.8" id="why-rmse-is-preferred-in-many-applications"><span class="header-section-number">1.4.8</span> Why RMSE is Preferred in Many Applications</h3>
+<ul>
+<li><strong>Sensitivity to Large Errors</strong>: RMSE penalizes larger errors more than smaller errors (due to squaring), making it particularly useful when large errors are more detrimental in the application.</li>
+<li><strong>Interpretability</strong>: Since RMSE is in the same units as the data, it’s easy to interpret and communicate results.</li>
+</ul>
+<p>In summary, RMSE is a versatile metric used in any situation where quantifying the total error (combining bias and variance) in predictions or estimates is essential, providing a clear, interpretable measure of model accuracy.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="30"> RMES: Root mean square error, <span class="math inline">\(\sqrt{bias^2 + var}\)</span>.</span></p></li></ol></aside></section>
+<section id="ordinary-least-squares-ols" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Ordinary Least Squares (OLS)</h2>
 <div class="fragment">
 <p>One type of <span class="red">simulation</span> of the reality among many others (unnecessarily the best one).</p>
 </div>
 <div class="r-hstack">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_leastSquare_correct.gif" class="fragment" height="400"> <img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_leastSquare.gif" class="fragment" height="400"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_leastSquare_correct.gif" class="fragment" height="350"> <img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_leastSquare.gif" class="fragment" height="350"></p>
 </div>
-<p><span class="fragment">Substantively: how does some outcome variable Y change <span class="red">when</span> some explanatory variable X changes?</span></p>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Interpretation: How does variable Y change on average <span class="red">when</span> some explanatory variable X changes (while the others don’t)?</p>
+</div>
+</div>
+</div>
+</div>
 <aside class="notes">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_illustrateSimpleOLS.png"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_illustrateSimpleOLS.png"></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -500,17 +592,15 @@ var(aX + b) =&amp; E[(aX + b) - E(aX + b)]^2 = E[aX - aE(X)]^2, \\
       }</style></aside>
 </section></section>
 <section>
-<section id="ols-component" class="title-slide slide level1 center">
-<h1>OLS Component</h1>
+<section id="ols-component" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> OLS Component</h1>
 
 </section>
-<section id="linearity" class="slide level2">
-<h2>Linearity</h2>
+<section id="linearity" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Linearity</h2>
 <div style="text-align:center">
-<p>Which X has the linear relationship with Y?</p>
+<p><em>Which X has the linear relationship with Y?</em></p>
 </div>
-<div class="columns">
-<div class="column" style="width:40%;">
 <p><span class="math display">\[\begin{align}
 Y_i =&amp; \beta_0 + \beta_1X_i + \epsilon_i;\\
 Y_i =&amp; \frac{1}{\beta_0} + \frac{X_i}{\beta_1} + \epsilon_i;\\
@@ -518,17 +608,11 @@ Y_i =&amp; \beta_0 + \beta_1ln(X_i) + \epsilon_i;\\
 Y_i =&amp; \beta_0 + \frac{\beta_1}{X_i} + \epsilon_i;\\
 Y_i =&amp; \beta_0 + X_i^{\beta_1} + \epsilon_i.\\
 \end{align}\]</span></p>
-</div><div class="column" style="width:60%;">
-<p>Given β<sub>0</sub> = 0.6, β<sub>1</sub> = 0.5.</p>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_linearity.png"></p>
-</div>
-</div>
 <aside class="notes">
 <ul>
 <li>First two are linear.</li>
-<li>the second one isn’t.</li>
-<li>The last one isn’t linear until redefining.</li>
 </ul>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_linearity.png"></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -541,13 +625,13 @@ Y_i =&amp; \beta_0 + X_i^{\beta_1} + \epsilon_i.\\
           display:block!important;
       }</style></aside>
 </section>
-<section id="ols-formally" class="slide level2">
-<h2>OLS Formally<sup>1</sup></h2>
+<section id="ols-formally" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> OLS Formally<sup>1</sup></h2>
 <p><span class="math display">\[\begin{align}
-Y_i =&amp; \beta_0 + \beta_1X_1 + u_i.\\
-E(Y_i|X_i) =&amp; E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
-           =&amp; E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(u_i|X_i),\\
-           =&amp; \beta_0 + \beta_1X_i + E(u_i|X_i).
+Y_i =&amp; \beta_0 + \beta_1X_1 + \epsilon_i.\\
+E(Y_i|X_i) =&amp; E(\beta_0 + \beta_1X_1 + \epsilon_i|X_i),\\
+           =&amp; E(\beta_0|X_i) + E(\beta_1X_1|X_i) + E(\epsilon_i|X_i),\\
+           =&amp; \beta_0 + \beta_1X_i + E(\epsilon_i|X_i).
 \end{align}\]</span></p>
 <aside class="notes">
 <ul>
@@ -567,11 +651,11 @@ E(Y_i|X_i) =&amp; E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
           display:block!important;
       }</style></aside>
 <div class="fragment">
-<p>u<sub>i</sub>: Things we don’t know (or human errors) but <span class="red">hope</span> to be zero.</p>
+<p>&amp;epsilon<sub>i</sub>: Things we can’t explain but <span class="red">hope</span> to be zero.</p>
 </div>
 <aside class="notes">
 <p><span class="math inline">\(\beta_1X_i\)</span> consistent</p>
-<p>E(u_i|X_i) assumed 0</p>
+<p>E(_i|X_i) assumed 0</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -586,24 +670,33 @@ E(Y_i|X_i) =&amp; E(\beta_0 + \beta_1X_1 + u_i|X_i),\\
 <div class="fragment">
 <p><strong>Sample Regression Function (SRF)</strong></p>
 <p><span class="math display">\[\begin{align}
-Y_i =&amp; (\hat\beta_0 + \hat\beta_1X_i) + \hat u_i,\\
-    =&amp; \hat Y_i + \hat u_i.\\
-    =&amp; E(Y_i|X_i) + u_i,\\
-\Leftrightarrow u_i =&amp; Y_i - E(Y_i|X_i).
+Y_i =&amp; (\hat\beta_0 + \hat\beta_1X_i) + \hat \epsilon_i,\\
+    =&amp; \hat Y_i + \hat \epsilon_i.\\
+    =&amp; E(Y_i|X_i) + \epsilon_i,\\
+\Leftrightarrow \epsilon_i =&amp; Y_i - E(Y_i|X_i).
 \end{align}\]</span></p>
 </div>
-<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30"> β: Estimand/parameter, function: estimator, result: estimate</span></p></li></ol></aside></section>
-<section id="a-good-estimator-minimizing-expected-ui" class="slide level2 smaller">
-<h2>A Good Estimator → Minimizing Expected u<sub>i</sub></h2>
+<aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="30"> β: Estimand/parameter, function: estimator, result: estimate</span></p></li></ol></aside></section>
+<section id="minimizing-sum-of-squares" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Minimizing Sum of Squares</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_minimizeSS.gif" class="quarto-figure quarto-figure-center" height="600"></p>
+</figure>
+</div>
+</section>
+<section id="a-good-estimator-minimizing-expected-epsilon" class="slide level2 smaller" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> A Good Estimator → Minimizing Expected <span class="math inline">\(\epsilon\)</span></h2>
 <p>β<sub>0</sub> and β<sub>1</sub> that make <span class="math inline">\(\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2 = 0\)</span></p>
 <p><span class="math display">\[\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} = -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) =&amp; 0\\
-\Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =&amp; 0\\
-(\sum X_iY_i =&amp; \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2)\\
-\sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =&amp; 0\\
-\sum X_iY_i - \sum X_i\bar Y + \sum X_i\hat\beta_1\bar X - \sum\hat\beta_1 X_1^2 =&amp; 0\\
-\sum X_i(Y_i - \bar Y) + \hat\beta_1\sum X_i(\bar X - X_i) =&amp; 0\\
-\sum X_i(Y_i - \bar Y) =&amp; \hat\beta_1\sum X_i(X_i - \bar X)
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_1} = -\sum 2X_i(Y_i - \hat\beta_0 - \hat\beta_1X_i) =&amp; 0;\\
+\Leftrightarrow \sum X_iY_i - \sum X_i\hat\beta_0 - \sum\hat\beta_1 X_1^2 =&amp; 0;\\
+(\sum X_iY_i =&amp; \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2);\\
+\sum X_iY_i - \sum X_i(\bar Y - \hat\beta_1\bar X) - \sum\hat\beta_1 X_1^2 =&amp; 0;\\
+\sum X_iY_i - \sum X_i\bar Y + \sum X_i\hat\beta_1\bar X - \sum\hat\beta_1 X_1^2 =&amp; 0;\\
+\sum X_i(Y_i - \bar Y) + \hat\beta_1\sum X_i(\bar X - X_i) =&amp; 0;\\
+\sum X_i(Y_i - \bar Y) =&amp; \hat\beta_1\sum X_i(X_i - \bar X);\\
+\hat\beta_1 =&amp; \frac{\sum X_i(Y_i - \bar Y)}{\sum X_i(X_i - \bar X)}.
 \end{align}\]</span></p>
 </section>
 <section class="slide level2">
@@ -630,24 +723,37 @@ Y_i =&amp; (\hat\beta_0 + \hat\beta_1X_i) + \hat u_i,\\
       }</style></aside>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
-\sum X_i(Y_i - \bar Y) =&amp; \hat\beta_1\sum X_i(X_i - \bar X), \text{using the above}\\
-\sum (X_i - \bar X)(Y_i - \bar Y) =&amp; \hat\beta_1\sum (X_i - \bar X)(X_i - \bar X)\\
+\hat\beta_1 =&amp; \frac{\sum X_i(Y_i - \bar Y)}{\sum X_i(X_i - \bar X)}, \text{using the above}\\
 \hat\beta_1 =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}.
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="β1" class="slide level2">
-<h2>β<sub>1</sub></h2>
+<section id="beta_1" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> <span class="math inline">\(\beta_1\)</span></h2>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
-\hat\beta_1 =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2}\\
-        =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2}\sqrt{\sum (Y_i - \bar Y)^2}}\cdot\frac{\sqrt{\sum (Y_i - \bar Y)^2}}{\sqrt{\sum (X_i - \bar X)^2}}\\
-        =&amp; r_{X, Y}\frac{s_Y}{s_X}
+\hat\beta_1 =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2},\\
+        =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sqrt{\sum (X_i - \bar X)^2}\color{darkred}{\sqrt{\sum (Y_i - \bar Y)^2}}}\cdot\frac{\color{darkred}{\sqrt{\sum (Y_i - \bar Y)^2}}}{\sqrt{\sum (X_i - \bar X)^2}},\\
+        =&amp; r_{X, Y}\frac{s_Y}{s_X}.
 \end{align}\]</span></p>
 </div>
 <div class="fragment">
-<p>So when the variance of Y(s<sub>Y</sub>) increases, β<sub>1</sub> increases.</p>
-<p>Special case: Standardized X and Y, i.e., <span class="math inline">\(s_Y, s_X\)</span> are 1s, then,</p>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>So, when the variance of Y(s<sub>Y</sub>) increases, β<sub>1</sub> increases.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>A special case: Standardized X and Y, i.e., <span class="math inline">\(s_Y, s_X\)</span> are 1s, then,</p>
 <p><span class="math display">\[\beta_1 = r_{X, Y}\frac{s_Y}{s_X} = r_{X,Y}.\]</span></p>
 </div>
 <aside class="notes">
@@ -664,53 +770,27 @@ Y_i =&amp; (\hat\beta_0 + \hat\beta_1X_i) + \hat u_i,\\
           display:block!important;
       }</style></aside>
 </section>
-<section id="β0" class="slide level2">
-<h2>β<sub>0</sub><sup>1</sup></h2>
-<p><span class="math display">\[\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =&amp; -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
-\Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =&amp; 0\\
-\sum Y_i =&amp; \sum\hat\beta_0 + \sum\hat\beta_1X_i\\
-                         =&amp; n\hat\beta_0 + \hat\beta_1\sum X_i\\
-\hat\beta_0 =&amp; \frac{\sum Y_i}{n} - \hat\beta_1\frac{\sum X_i}{n}\\
-                        =&amp; \bar Y - \hat\beta_1\bar X
-\end{align}\]</span></p>
-<div class="fragment">
-<p><span class="math display">\[\begin{align}
-\text{Normal equations:} \sum Y_i =&amp; n\hat\beta_0 + \hat\beta_1\sum X_i\\
-\sum X_iY_i =&amp; \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
-\end{align}\]</span></p>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="fragment"><span class="math inline">\(\hat\beta_0, \hat\beta_1\)</span> are called <span class="red">co</span>efficients.</span></p></li></ol></aside></section>
-<section id="linear-nature-of-the-ols-coefficient" class="slide level2">
-<h2>Linear nature of the OLS coefficient</h2>
-<div class="callout callout-tip callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p><span class="math inline">\(\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).\)</span></p>
-</div>
-</div>
-</div>
+<section id="linear-nature-of-the-ols-coefficient" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Linear nature of the OLS coefficient<sup>1</sup></h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><span class="math display">\[\begin{align}
 \hat\beta_1 =&amp; \frac{\sum (X_i - \bar X)(Y_i - \bar Y)}{\sum (X_i - \bar X)^2},\\
             =&amp; \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)Y_i,\\
-            =&amp; \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + u_i),\\
-            =&amp; \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)u_i],\\
-            =&amp; \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)u_i}{\sum (X_i - \bar X)^2}.
+            =&amp; \frac{1}{\sum (X_i - \bar X)^2}\sum (X_i - \bar X)(\beta_0 + \beta_1X_i + \epsilon_i),\\
+            =&amp; \frac{1}{\sum (X_i - \bar X)^2}[\sum (X_i - \bar X)(\beta_0 + \beta_1X_i) + \sum (X_i - \bar X)\epsilon_i],\\
+            =&amp; \frac{\sum (X_i - \bar X)(\beta_0 + \beta_1X_i)}{\sum (X_i - \bar X)^2} + \frac{\sum (X_i - \bar X)\epsilon_i}{\sum (X_i - \bar X)^2}.
 \end{align}\]</span></p>
 </div><div class="column fragment" style="width:50%;">
-<p>Let <span class="math inline">\(k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},\)</span> then <span class="math inline">\(\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_iu_i.\)</span></p>
+<p>Let <span class="math inline">\(k_i=\frac{X_i - \bar X}{\sum (X_i - \bar X)^2},\)</span> then <span class="math inline">\(\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_i\epsilon_i.\)</span></p>
 <ul>
-<li class="fragment">A <span class="red">linear</span> combination with errors<sup>1</sup></li>
+<li class="fragment">A <span class="red">linear</span> combination with errors</li>
 <li class="fragment">Min/max(X) influences a lot.</li>
 </ul>
 <aside class="notes">
 <p><span class="math inline">\(\sum(X_i - \bar X) = 0.\)</span></p>
 <p>β1=constant+β1constant+variation due to error</p>
+<p>A special case: <span class="math inline">\(\hat\beta_1 = \beta_1 + \sum k_i\epsilon_i\)</span>.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -722,59 +802,24 @@ Y_i =&amp; (\hat\beta_0 + \hat\beta_1X_i) + \hat u_i,\\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
-</div>
-<aside><ol class="aside-footnotes"><li id="fn4"><p><span class="fragment">A special case: <span class="math inline">\(\hat\beta_1 = \beta_1 + \sum k_iu_i\)</span>.</span></p></li></ol></aside></section>
-<section id="characteristics-of-ols-coefficients" class="slide level2">
-<h2>Characteristics of OLS Coefficients</h2>
-<div class="columns">
-<div class="column" style="width:55%;">
-<ol type="1">
-<li class="fragment">Calculated using <span class="red">observed</span> data</li>
-<li class="fragment">Unique point estimates</li>
-<li class="fragment">SRF passes through <span class="math inline">\((\bar X, \bar Y)\)</span></li>
-<li class="fragment"><span class="math inline">\(\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})\)</span>, <span class="math inline">\(\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}\)</span></li>
-<li class="fragment"><span class="math inline">\(\bar{\hat u_i} = \frac{\sum{\hat u_i}}{n} = 0\)</span></li>
-</ol>
-<div class="fragment small">
-<p><span class="math display">\[\begin{align}
-\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =&amp; 0\\ -2\sum[Y_i - (\hat{\beta_0} + \hat{\beta_1}X_i)] =&amp; 0\\
-\sum (Y_i-\hat Y_i) = \sum{\hat u_i} =&amp; 0\\
-\Rightarrow \frac{\sum{\hat u_i}}{n} = \bar{\hat u_i} =&amp; 0 \blacksquare
-\end{align}\]</span></p>
-</div>
-</div><div class="column" style="width:45%;">
-<div class="fragment">
-<p>6. <span class="math inline">\(\sum X_i\hat u_i = 0\)</span></p>
-<p><span class="math display">\[\begin{align}
-cov(X_i, u_i) =&amp; 0,\\
-\frac{\sum(X_i - \bar X)(\hat u_i - \bar{\hat u_i})}{n-1} =&amp; 0,\\
-\frac{\sum X_i\hat u_i}{n-1} =&amp; 0. \blacksquare
-\end{align}\]</span></p>
-</div>
-</div>
-</div>
-</section>
-<section class="slide level2">
-
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_minimizeSS.gif" height="600"></p>
-</figure>
-</div>
-</section>
-<section id="varβ1" class="slide level2 smaller">
-<h2>Var(β<sub>1</sub>)</h2>
+</div></div>
+<aside><ol class="aside-footnotes"><li id="fn3"><p><span class="math inline">\(\sum X_i(Y_i - \bar Y) = \sum(X_i - \bar X)(Y_i - \bar Y).\)</span></p></li></ol></aside></section>
+<section id="varbeta_1" class="slide level2 smaller" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> Var(<span class="math inline">\(\beta_1\)</span>)</h2>
 <div class="columns">
 <div class="column" style="width:30%;">
+<p><span class="math inline">\(\hat\beta_1 = \sum k_i\beta_0 + \sum k_i X_i\beta_1 + \sum k_i\epsilon_i.\)</span></p>
+<div class="fragment">
 <p><span class="math display">\[\begin{align}
-\sigma^2 =&amp; var(u_i|X),\\
+\sigma^2 =&amp; var(\epsilon_i|X),\\
          =&amp; var(Y_i - \hat\beta_0 - \hat\beta_1X|X),\\
-         =&amp; \frac{\sum(\hat u_i^2)}{n - 2},\\
+         =&amp; \frac{\sum(\hat \epsilon_i^2)}{n - 2},\\
          =&amp; \hat\sigma^2.
 \end{align}\]</span></p>
-</div><aside class="notes">
-<p>n - 2: <span class="math inline">\(\hat\beta_0, \hat\beta_1\)</span></p>
+</div>
+<aside class="notes">
+<p>β1=constant+β1constant+variation due to error</p>
+<p>n - 2: <span class="math inline">\(\hat\beta_0, \hat\beta_1\)</span>, also the extension of Bessel’s correction in regression</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -785,19 +830,63 @@ cov(X_i, u_i) =&amp; 0,\\
           width: 1px!important;
           overflow: hidden!important;
           display:block!important;
-      }</style></aside><div class="column" style="width:70%;">
+      }</style></aside>
+</div><div class="column fragment" style="width:70%;">
 <p><span class="math display">\[\begin{align}
 var(\hat \beta_1|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i - \bar X)^2}|X)\\
-                  =&amp; var(\beta_1 + \sum k_iu_i|X)\\
-                  =&amp; var(\sum k_iu_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
-                  =&amp; \sum var(k_iu_i|X), \text{assuming}\ u_i\ \text{independent}\\
-                  =&amp; \sum k_i^2 var(u_i|X)\\
+                  =&amp; var(\beta_1 + \sum k_i\epsilon_i|X)\\
+                  =&amp; var(\sum k_i\epsilon_i|X), \text{given}\ \beta_1\sum k_iX_i \text{constant}\\
+                  =&amp; \sum var(k_i\epsilon_i|X), \text{assuming}\ \epsilon_i\ \text{independent}\\
+                  =&amp; \sum k_i^2 var(\epsilon_i|X)\\
                   =&amp; \sum[\frac{X_i - \bar X}{\sum (X_i - \bar X)^2}]^2\sigma^2\\
                   =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum (X_i - \bar X)^2]^2}\sigma^2 = \frac{\sigma^2}{\sum (X_i - \bar X)^2}
 \end{align}\]</span></p>
-</div><aside class="notes">
-<p>If u<sub>i</sub> is not independent, then cov(k, u) &gt; 0, and this estimator is underestimated.</p>
-<p>(That is, the assumption is .large[.red[IMPORTANT]])</p>
+</div></div>
+<div class="fragment large">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Assumption is IMPORTANT!!!</strong></p>
+</div>
+<div class="callout-content">
+<p>If ε<sub>i</sub> is not independent, then cov(k, ε) &gt; 0, and this estimator is underestimated.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="beta_0" class="slide level2" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> <span class="math inline">\(\beta_0\)</span></h2>
+<p><span class="math display">\[\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =&amp; -\sum 2(Y_i - \hat\beta_0 - \hat\beta_1X_i) = 0\\
+\Leftrightarrow\sum Y_i - \sum\hat\beta_0 - \sum\hat\beta_1X_i =&amp; 0\\
+\sum Y_i =&amp; \sum\hat\beta_0 + \sum\hat\beta_1X_i\\
+                         =&amp; n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\hat\beta_0 =&amp; \frac{\sum Y_i}{n} - \hat\beta_1\frac{\sum X_i}{n} = \bar Y - \hat\beta_1\bar X
+\end{align}\]</span></p>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Normal equations</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math display">\[\begin{align}
+\sum Y_i =&amp; n\hat\beta_0 + \hat\beta_1\sum X_i\\
+\sum X_iY_i =&amp; \sum X_i\hat\beta_0 + \sum\hat\beta_1 X_1^2
+\end{align}\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p><span class="math inline">\(\hat\beta_0, \hat\beta_1\)</span> are called <span class="red">co</span>efficients.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -809,33 +898,71 @@ var(\hat \beta_1|X) =&amp; var(\frac{\sum(X_i - \bar X)(Y_i - \bar Y)}{\sum(X_i 
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section>
-<section id="varβ0" class="slide level2 smaller">
-<h2>Var(β<sub>0</sub>)</h2>
+<section id="varbeta_0" class="slide level2 smaller" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> Var(<span class="math inline">\(\beta_0\)</span>)</h2>
 <p><span class="math display">\[\begin{align}
 var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
-                   =&amp; var[\frac{\sum(\beta_0 + \beta_1X_i + u_i)}{n} - \hat\beta_1\bar X|X],\\
+                   =&amp; var[\frac{\sum(\beta_0 + \beta_1X_i + \epsilon_i)}{n} - \hat\beta_1\bar X|X],\\
                   \because \beta_0 +&amp; \beta_1X_i\text{ is constant &amp; independent},\\
-                  =&amp; var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X), \\
-                  =&amp; var(\frac{\sum u_i}{n}|X) + var(\hat\beta_1\bar X|X) = \frac{var(\sum u_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X),\\
+                  =&amp; var(\frac{\sum \epsilon_i}{n}|X) + var(\hat\beta_1\bar X|X), \\
+                  =&amp; var(\frac{\sum \epsilon_i}{n}|X) + var(\hat\beta_1\bar X|X) = \frac{var(\sum \epsilon_i|X)}{n^2} + \bar X^2var(\hat\beta_1|X),\\
                   =&amp; \frac{n\sigma^2}{n^2} + \frac{\bar X^2\sigma^2}{\sum (X_i - \bar X)^2} = \sigma^2[\frac{1}{n} + \frac{\bar X^2}{\sum (X_i - \bar X)^2}],\\
                   =&amp; \sigma^2[\frac{\sum (X_i - \bar X)^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}] = \sigma^2[\frac{\sum X_i^2 - \sum\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}],\\
                   =&amp; \sigma^2[\frac{\sum X_i^2 - n\bar X^2 + n\bar X^2}{n\sum (X_i - \bar X)^2}]= \sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}.
 \end{align}\]</span></p>
 </section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
+<section id="characteristics-of-ols-coefficients" class="slide level2" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> Characteristics of OLS Coefficients</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li class="fragment">Calculated using <span class="red">observed</span> data</li>
+<li class="fragment">Unique point estimates</li>
+<li class="fragment">SRF passes through <span class="math inline">\((\bar X, \bar Y)\)</span></li>
+<li class="fragment"><span class="math inline">\(\bar{\hat Y} (\text{predicted}) = \hat Y (\text{observed})\)</span>, <span class="math inline">\(\frac{\sum\hat Y_i}{n} = \frac{\sum Y_i}{n}\)</span></li>
+<li class="fragment"><span class="math inline">\(\bar{\hat \epsilon_i} = \frac{\sum{\hat \epsilon_i}}{n} = 0\)</span></li>
+<li class="fragment"><span class="math inline">\(\sum X_i\hat \epsilon_i = 0\)</span></li>
+</ol>
+</div><div class="column fragment" style="width:50%;">
+<p><span class="math display">\[\begin{align}
+cov(X_i, \epsilon_i) =&amp; 0,\\
+\frac{\sum(X_i - \bar X)(\hat \epsilon_i - \bar{\hat \epsilon_i})}{n-1} =&amp; 0,\\
+\frac{\sum X_i\hat \epsilon_i}{n-1} =&amp; 0. \blacksquare
+\end{align}\]</span></p>
+<aside class="notes">
+<p><span class="math display">\[\begin{align}
+\frac{\partial\sum[Y_i - (\hat\beta_0 + \hat\beta_1X_i)]^2}{\partial\hat\beta_0} =&amp; 0\\ -2\sum[Y_i - (\hat{\beta_0} + \hat{\beta_1}X_i)] =&amp; 0\\
+\sum (Y_i-\hat Y_i) = \sum{\hat \epsilon_i} =&amp; 0\\
+\Rightarrow \frac{\sum{\hat \epsilon_i}}{n} = \bar{\hat \epsilon_i} =&amp; 0 \blacksquare
+\end{align}\]</span></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div></div>
+</section>
+<section id="take-home-point" class="slide level2" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> Take-home point</h2>
 <div style="text-align: center">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ols_mindmap.png" height="600"></p>
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/ols_mindmap.png" height="600"></p>
 </div>
-<div class="footer footer-default">
 
-</div>
 </section></section>
 
     </div>
-  </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="08_simpleOLS_files/libs/revealjs/dist/reveal.js"></script>
@@ -862,12 +989,12 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
 'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
@@ -992,7 +1119,7 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -1023,7 +1150,7 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1050,42 +1177,80 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1119,18 +1284,7 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1162,11 +1316,55 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1176,8 +1374,17 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1191,7 +1398,11 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
@@ -1231,20 +1442,6 @@ var(\hat \beta_0|X) =&amp; var(\bar Y - \hat\beta_1\bar X|X),\\
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
     
