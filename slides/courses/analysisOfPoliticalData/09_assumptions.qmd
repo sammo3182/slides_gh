@@ -29,7 +29,11 @@ format:
       data-background-position: top 10% right 5%
 revealjs-plugins:
   - spotlight
-# lightbox: auto
+
+lightbox: 
+  match: auto
+  effect: fade
+
 spotlight:
   size: 50
   presentingCursor: default
@@ -62,45 +66,39 @@ theme_update(
 )
 ```
 
-## Overview
 
 $$Y_i = \beta_0 + \beta_1X + \epsilon.$$
 
+:::{style="text-align:center; margin-top: 2em"}
 1. BLUE (Best Linear Unbiased Estimator)
-1. Parameter Distributions
-1. OLS vis-&aacute;-vis ANOVA
-
+1. OLS vs. association
+1. OLS in linear algebra
+:::
 
 
 # BLUE
 
-## What does BLUE mean
-
-:::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.png){.fragment height=600}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_blue.gif){.fragment height=600}
-
-:::
+## How is OLS superior to other simulations
 
 
-## How can computer do it
+![](https://drhuyue.site:10002/sammo3182/figure/clrm_blue.png){.fragment height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_ols.gif){fig-align="center" height=600}
+## Best linear simulation
+
+![](https://drhuyue.site:10002/sammo3182/figure/clrm_blue.gif){.fragment height=600}
 
 
-[What's the problem here?]{.fragment .r-fit-text}
+## Conventional ways to find the best
 
+![](https://drhuyue.site:10002/sammo3182/figure/clrm_ols.gif){fig-align="center" height=600}
 
 :::{.notes}
 Wasting computing power, slow ending with large data
 :::
 
-## Solution: Better Algorithm by Statistics{.smaller}
+## Smarter solution based on Statistics{.smaller}
 
-:::{.fragment style="text-align:center"}
-Statistically, *unbiased* and *consistent*
-:::
+*Is the statistical solution (given by last lecture) **unbiased** and **consistent**?*
 
 :::{.fragment}
 **Unbiasedness**
@@ -114,7 +112,7 @@ E(\hat\beta_1|X) =& E[\frac{\sum(X - \bar X)(Y - \bar Y)}{\sum(X - \bar X)^2}|X]
                  =& \frac{1}{\sum(X - \bar X)^2}E[\sum(X - \bar X)Y|X] = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}E(Y|X),\\
                  =& \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X + \color{red}{\epsilon}) = \frac{\sum(X - \bar X)}{\sum(X - \bar X)^2}(\beta_0 + \beta_1X),\\
                  =& \frac{1}{\sum(X - \bar X)^2}[\beta_0\sum(X - \bar X) + \beta_1X\sum(X - \bar X)],\\
-                 =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given} \sum(X - \bar X) = \sum X - \sum\bar X = 0,\\
+                 =& \frac{\beta_1\sum(X - \bar X)X}{\sum(X - \bar X)^2}, \text{given the "transformation gadget"} \sum X_i(X_i - \bar X) = \sum (X_i - \bar X)(X_i - \bar X),\\
                  =& \frac{\beta_1\sum(X - \bar X)(X - \bar X)}{\sum(X - \bar X)^2} =\beta_1.\blacksquare
 \end{align}
 
@@ -126,16 +124,58 @@ $\epsilon$ went away by assuming
 
 ## Consistency
 
-1. $var(\beta_1|X) = \frac{\sigma^2}{\sum (X_i - \bar X)^2}$. 
+1. $var(\hat{\beta_1}|X) = \frac{\sigma^2}{\sum (X_i - \bar X)^2}$. 
     - So when N increases, $\sum (X_i - \bar X)^2$ increases &rarr; var(&beta;<sub>1</sub>) decreasing.
         + $\displaystyle{\lim_{n\to\infty}} var(\beta_1) = 0.$
-1. $var(\hat \beta_0|X) =\sigma^2\frac{\sum X_i^2}{n\sum (X_i - \bar X)^2}=\sigma^2\frac{\sum X_i^2}{n\sum X_i^2 - n\bar X^2}$
-    + When there's a X<sub>n + 1</sub>,
-      - Nominator $\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2)$;
-      - Denominator $(n + 1)\displaystyle{\sum^n_{i = 1}}(X_i^2 + X_{n + 1}^2) - (n + 1)\bar X^2$
-    + The denominator increases quicker than the nominator.
+1. $var(\hat{\beta_1}|X) = \sigma^2 \frac{\sum X_i^2}{n \sum (X_i - \bar X)^2}$, the denominator increases faster than the nominator. (The proof is omitted.)
 
-## "Ten Commandments"{.smaller}
+:::{.notes}
+
+The variance of \( \hat \beta_0 \) is:
+
+\[
+\text{var}(\hat \beta_0 | X) = \sigma^2 \frac{\sum X_i^2}{n \sum (X_i - \bar X)^2}
+\]
+
+where:
+
+1. The **numerator** is \( \sum X_i^2 \),
+2. The **denominator** is \( n \sum (X_i - \bar X)^2 \).
+
+### Step 1: Impact of Adding \( X_{n+1} \) on \( \sum X_i^2 \) (Numerator)
+
+When adding \( X_{n+1} \), the new numerator becomes:
+
+\[
+\sum_{i=1}^{n+1} X_i^2 = \sum_{i=1}^n X_i^2 + X_{n+1}^2
+\]
+
+This increases by \( X_{n+1}^2 \), so the numerator grows linearly with each added term \( X_i^2 \).
+
+### Step 2: Impact of Adding \( X_{n+1} \) on \( \sum (X_i - \bar X)^2 \) (Denominator)
+
+The denominator involves \( \sum (X_i - \bar X)^2 \), which represents the total variability of \( X_i \) around its mean. When we add \( X_{n+1} \), both \( \bar{X} \) and \( \sum (X_i - \bar X)^2 \) change:
+
+1. The new mean \( \bar X_{\text{new}} \) with \( n+1 \) observations is:
+
+   \[
+   \bar X_{\text{new}} = \frac{n \bar X + X_{n+1}}{n+1}
+   \]
+
+2. The new sum of squares around the mean becomes:
+
+   \[
+   \sum_{i=1}^{n+1} (X_i - \bar X_{\text{new}})^2 = \sum_{i=1}^n (X_i - \bar X_{\text{new}})^2 + (X_{n+1} - \bar X_{\text{new}})^2
+   \]
+
+This increases by more than a linear term because the spread around the new mean incorporates variability from all \( X_i \) observations. Therefore, \( \sum (X_i - \bar X)^2 \) tends to grow faster as it captures both the variability of previous points and the new data point’s deviation from the updated mean.
+
+### Step 3: Comparing Growth Rates
+
+Thus, while the numerator \( \sum X_i^2 \) increases by \( X_{n+1}^2 \) (a linear increase), the denominator \( n \sum (X_i - \bar X)^2 \) increases more than linearly due to the compounded effect on the sum of squares. Hence, the denominator grows faster than the numerator when \( X_{n+1} \) is added.
+:::
+
+## "Ten Commandments"
 
 :::: {.columns}
 
@@ -149,52 +189,53 @@ $\epsilon$ went away by assuming
     - E(&epsilon;<sub>i</sub>|X<sub>i</sub>) = 0;
 1. [Exogeneity]{.red}: No covariance between X<sub>i</sub> and &epsilon;<sub>i</sub>
     - E(X<sub>i</sub>&epsilon;<sub>i</sub>) = cov(x<sub>i</sub>, &epsilon;<sub>i</sub>) =0;
-1. [No autocorrelation/serial correlation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
+:::
+
+::: {.column width="50%"}
+7. [No autocorrelation/serial correlation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
 1. [Normality]{.red}: $U|X \sim N(0, \sigma^2I).$
 1. [Homoskedasticity/Spherical disturbances]{.green}: constant variance of &epsilon;<sub>i</sub>,  var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
 1. No perfect [collinearity]{.green}: there are more than one X,  &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum;<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>
 
-:::{.notes}
-- Spherical disturbances: the assumption of homoscedasticity,
-    - Disturbance: the variance of error term
-:::
-
-:::
-
-::: {.column width="50%"}
 :::{.fragment}
 &rarr; Classic Linear Regression Model (CLRM, esp. 4~9)
 :::
-
-:::{.fragment}
-:::{.callout-note}
-## Gauss-Markov Theorem
-
-In a linear regression model in which *the errors are uncorrelated, have equal variances, and expectation value of zero*, the [best linear unbiased estimator (BLUE)]{.blue} of the coefficients is given by the ordinary least squares (OLS) estimator, provided it exists.
-:::
-:::
-
-
-
-:::{.fragment}
-{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/clrm_commandments.mp4" width="500" >}}
-
-:::
-
-:::
-
-:::{.notes}
-https://www.youtube.com/watch?v=nXeTsWGPT0w
 :::
 
 ::::
 
 
 :::{.notes}
-s.t. such that
-
-homoskedasticity: residual randomly distributed in the same variance across the values of x
+- Spherical disturbances: the assumption of homoscedasticity,
+    - Disturbance: the variance of error term
+- s.t. such that
+- homoskedasticity: residual randomly distributed in the same variance across the values of x
 :::
+
+
+## Gauss-Markov Theorem
+
+In a linear regression model in which *the errors are uncorrelated, have equal variances, and expectation value of zero*, the [best linear unbiased estimator]{.blue} of the coefficients is given by the ordinary least squares (OLS) estimator, provided it exists.
+
+
+{{< video src="https://drhuyue.site:10002/sammo3182/video/clrm_commandments.mp4" width="1000" >}}
+
+
+
+:::{.notes}
+https://www.youtube.com/watch?v=nXeTsWGPT0w
+
+In **Ordinary Least Squares (OLS)**, the term "ordinary" refers to the **standard approach** of minimizing the sum of squared residuals (errors) in a linear regression model.
+
+To break it down:
+
+1. **Ordinary**: This implies a straightforward, basic approach without special weighting or transformations. The method treats all observations equally, giving no special preference to any particular data points.
+
+2. **Least Squares**: This part means that OLS estimates the parameters by minimizing the **sum of the squared differences** between the observed values and the values predicted by the linear model. Specifically, it finds the line (or hyperplane in multiple dimensions) that results in the smallest total squared error across all data points.
+
+In contrast, **Generalized Least Squares (GLS)** or **Weighted Least Squares (WLS)** introduce adjustments, such as weighting observations differently, often to account for issues like heteroskedasticity or autocorrelation. In OLS, however, we assume constant variance (homoscedasticity) and independence across observations.
+:::
+
 
 
 ## Distribution of OLS Paramenters
@@ -220,9 +261,11 @@ u_i|X \sim& \text{i.i.d.} N(0, \sigma^2)\\
 ::::
 
 
-# From Association to OLS
+# OLS vs. Association
 
-## &rho;, &Chi;<sup>2</sup>, and F
+## $\rho$, &Chi;<sup>2</sup>, and F
+
+&chi;<sup>2</sup> is adding-up of n square normals representing variances; F is the ratio of two &chi;<sup>2</sup>s. 
 
 :::{.r-hstack}
 
@@ -256,33 +299,22 @@ ggplot(data.frame(x = c(0, 5)), aes(x = x)) +
 
 :::
 
-:::{.fragment}
-&chi;<sup>2</sup> is adding-up of n square normals representing variances; 
-
-F is the ratio of two &chi;<sup>2</sup>s. *In other words, they are consistent with t-test and OLS.*
+:::{.fragment style="text-align:center"}
+In other words, they are [consistent]{.red} with t-test and OLS.
 :::
 
 
-## ANOVA  vis-&aacute;-vis OLS{.smaller}
 
-:::: {.columns}
+## ANOVA vis-&aacute;-vis OLS{.smaller}
 
-::: {.column .fragment width="80%"}
 | Source    	| Sum Square                                    	| d.f.  	| Mean Square                      	|
 |-----------	|-----------------------------------------------	|-------	|----------------------------------	|
 | Treat 	| $SST = \sum n_i (\bar X_i - \bar{\bar{X}})^2$ 	| K - 1 	| MST = SST/(K - 1)                	|
 | Error     	| $SSE = \sum \sum (X_{ik} - \bar{X_i})^2$      	| N - K 	| MSE = SSE/(N - K)                	|
 | Total     	| $SS = SST + SSE$                              	| N - 1 	| $F_{\alpha, K-1, N-1} = MST/MSE$ 	|
 
-:::
 
-::: {.column .fragment width="20%"}
 
-F<sub>&alpha;, K-1, N-1</sub> = MST/MSE.
-
-:::
-
-::::
 
 :::: {.columns}
 
@@ -292,24 +324,6 @@ F<sub>&alpha;, K-1, N-1</sub> = MST/MSE.
 |      	| SST                                  	| SSE                                        	| SSR                            	|
 | d.f. 	| n - 1                                	| 1                                          	| n - 2                          	|
 | MSS  	| $\frac{\sum(Y_i - \bar Y)^2}{n - 1}$ 	| $\frac{\hat\beta_1^2\sum(X_i - \bar X)}{1}$ 	| $\frac{\sum\hat u_i^2}{n - 2}$ 	|
-
-:::
-
-::: {.column .fragment width="40%"}
-$\frac{MSE}{MSR} = \frac{\hat\beta_1^2(X_i - \bar X)^2\sim\chi^2}{\sigma^2\sim\chi^2}\sim F_{1, n - 2}$
-
-\begin{align}
-F_{1, n - 2}\sim& \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}\\
-=& \frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = (\frac{\bar X - \mu}{\hat\sigma_X})^2.
-\end{align}
-
-
-As known, $\frac{\bar X - \mu}{\hat\sigma_X}\sim t$, therefore, F provides identical information as t.
-:::
-
-::::
-
-
 
 :::{.notes}
 
@@ -354,7 +368,34 @@ $[\beta_1\sum(X_i - \bar X)]^2$, constant
 
 :::
 
-# OLS in Linear Algebra
+:::
+
+::: {.column .fragment width="40%"}
+$\frac{MSE}{MSR} = \frac{\hat\beta_1^2(X_i - \bar X)^2\sim\chi^2}{\sigma^2\sim\chi^2}\sim F_{1, n - 2}$
+
+\begin{align}
+F_{1, n - 2}\sim& \frac{\beta_1^2\sum(X_i - \bar X)^2}{\sigma^2}\\
+=& \frac{\beta_1^2}{\frac{\sigma^2}{\sum(X_i - \bar X)^2}} = (\frac{\bar X - \mu}{\hat\sigma_X})^2.
+\end{align}
+
+:::
+
+::::
+
+:::{.callout-tip .fragment .large}
+## F and t
+
+We know $\frac{\bar X - \mu}{\hat\sigma_X}\sim t$. Therefore, F provides identical information as t.
+
+- ANOVA and OLS should yield [identical]{.red} inferences.
+:::
+
+
+## Take-home point
+
+![](https://drhuyue.site:10002/sammo3182/figure/clrm_mindMap.png){height="600" fig-position="center"}
+
+# Appendix: OLS in Linear Algebra {.appendix .unnumbered}
 
 ## Elementary to Linear Algebra
 
@@ -415,7 +456,7 @@ var(\beta) =& \sigma^2(\boldsymbol{X'X})^{-1}, \text{where}\ \sigma^2 = \frac{\b
 :::
 
 :::{.fragment}
-According to the [homoscedasiticity]{.red} assumption of OLS, the covariance matrix of the error is:
+According to the [homoscedasiticity]{.red},
 
 $$\sigma^2\{\epsilon\}_{n\times n} = \sigma^2\boldsymbol{I}_{n\times n} = \sigma^2\{\boldsymbol{Y}\}_{n\times n}.$$
 
@@ -521,7 +562,23 @@ Two properties of **H**:
 Idempotent: 幂等
 :::
 
+## Stretch {.unnumbered}
 
-## Take-home point
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/clrm_mindmap.png){height="600" fig-position="center"}
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::
