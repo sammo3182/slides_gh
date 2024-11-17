@@ -1,46 +1,49 @@
 ---
 title: "Multiple Regression"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
 knitr: 
     opts_chunk: 
       echo: false
-
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
-
 revealjs-plugins:
   - spotlight
 
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
+
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
+
+
+## Overview {.unnumbered }
+
 
 ```{r setup, include = FALSE}
 if (!require(pacman)) install.packages("pacman")
@@ -68,16 +71,14 @@ theme_update(
 
 ```
 
-## Overview
 
-+ Multiple regression
-    + Goodness of fit: R<sup>2</sup>
-+ Post-estimation inferences
-
+:::{.nonincremental}
+1. Multiple regression
+1. Goodness of fit: R<sup>2</sup>
+1. Post-estimation inferences
+:::
 
 # Multiple regression
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_fit.gif){.r-stretch fig-align="center"}
 
 ## Expression
 
@@ -104,12 +105,15 @@ Sample Regression Function (SRF): $$Y_i = \hat\beta_0 + \hat\beta_1X_{1i} + \hat
 :::
 
 ::: {.column width="50%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_2x.png){.fragment fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/mr_2x.png){.fragment fig-align="center" height=500}
 :::
 
 ::::
 
 
+## How multiple regressions work intuitively
+
+![](https://drhuyue.site:10002/sammo3182/figure/mr_fit.gif){.r-stretch fig-align="center"}
 
 
 
@@ -123,94 +127,105 @@ To be [BLUE]{.blue},
 $min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat \epsilon_i^2$
 
 \begin{align}
-\Rightarrow\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_0}\to& 0\\
-\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_1}\to& 0\\
-\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_2}\to& 0
+\Rightarrow\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_0}\to& \color{darkred}{0}\\
+\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_1}\to& \color{darkred}{0}\\
+\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_2}\to& \color{darkred}{0}
 \end{align}
 :::
 
 ::: {.column .fragment width="80%"}
-When [BLUE]{.blue}:
+When being [BLUE]{.blue}:
 
 \begin{align}
 \hat\beta_0 =& \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
 \hat\beta_1 =& \frac{[\sum(Y_i - \bar Y)(X_{1i} - \bar X_1)][\sum(X_{2i} - \bar X_2)^2-\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
             =& \frac{\sum\hat r_{1i}(Y_i - \bar Y)}{\hat r_{1i}^2},
-\end{align}
-
-where $\hat r_{1i}$ are the errors from the regression of $X_{1i}$ on $X_{2i}$ (i.e., $X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$), **the proportion that $X_2$cannot explain.**
+\end{align} where the $\hat r_{1i}$ are the errors from the regression of $X_{1i}$ on $X_{2i}$ (i.e., $X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}$), **the proportion that $X_2$cannot explain.**
 
 $\hat\sigma^2 = \frac{\sum\hat \epsilon_i^2}{n - 3}.$
 :::
 
 ::::
 
-:::{.fragment}
-:::{.callout-important}
-[**Interpretation**: Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y [on average]{.red}, [ceteris paribus/holding everything else constant]{.red}.]{.large}
-:::
+
+:::{.callout-important .fragment .large}
+## Interpretation
+
+Every unit change in X<sub>1</sub> leads to &beta;<sub>1</sub> changes in Y [on average]{.red}, [ceteris paribus/holding everything else constant]{.red}.
 :::
 
+:::{.fragment style="text-align:center"}
+*Constant how? Sufficient or necessary condition of the variance of Y?* 
+:::
 
-- Change the same amount?
-- Constant how?
 
 
 :::{.notes}
-On average
+changed the same amount on average
 hold on mean or median
 :::
 
 
 # Goodness of Fit
-## R<sup>2</sup>: Multiple Coefficient of Determination{.smaller}
 
-:::: {.columns}
-
-::: {.column width="30%"}
-$$R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}$$
-
-SST: Sum of Squares Total
-
-SSR: Sum of Squares Regression
-
-SSE: Sum of Squares Error.
-:::
-
-::: {.column .fragment width="70%"}
-From the SRF, 
+## R<sup>2</sup>: Multiple Coefficient of Determination
 
 \begin{align}
-Y_i =& \hat Y_i + \hat \epsilon_i\\
-Y_i - \bar Y =& \hat Y_i  - \bar Y + \hat \epsilon_i\\
-\Rightarrow (Y_i - \bar Y)^2 =& (\hat Y_i  - \bar Y + \hat \epsilon_i)^2\\
-                         =& (\hat Y_i  - \bar Y)^2 + \hat \epsilon_i^2 + 2\hat\epsilon_i(\hat Y_i  - \bar Y)\\
-\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y)^2 =& \sum(\hat Y_i  - \bar Y)^2 + \sum\hat\epsilon_i^2\\
-SST =& SSR + SSE\\
-1 =& \frac{SSR}{SST} + \frac{SSE}{SST}\\
-\text{In which, } R^2 =& \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
-                      =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+Y_i =& \hat Y_i + \hat \epsilon_i;\\
+Y_i - \bar Y =& \hat Y_i  - \bar Y + \hat \epsilon_i;\\
+\Rightarrow (Y_i - \bar Y)^2 =& (\hat Y_i  - \bar Y + \hat \epsilon_i)^2,\\
+                         =& (\hat Y_i  - \bar Y)^2 + \hat \epsilon_i^2 +, 2\hat\epsilon_i(\hat Y_i  - \bar Y).\\
+\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y)^2 =& \sum(\hat Y_i  - \bar Y)^2 + \sum\hat\epsilon_i^2.\\
+SST =& SSR + SSE;\\
+1 =& \frac{SSR}{SST} + \frac{SSE}{SST}.\\
+\text{In which, } R^2 =& \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2} = \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST},\\
+                      =& \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}.
 \end{align}
 
+:::{.notes}
+- SST: Sum of Squares Total
+- SSR: Sum of Squares Regression
+- SSE: Sum of Squares Error.
+
+Different from ANOVA:
+
+- SST: Sum of square treatment
+- SSE: Sum of square error
+- SS: Sum of square
 :::
 
-::::
+---
 
-## My Attitude towards R<sup>2</sup>
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_bad4ya.jpg){.r-stretch fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/mr_bad4ya.jpg){.r-stretch fig-align="center" height=600}
 
 
 ## Why Is R<sup>2</sup> Bad? 
 
-> Can be very [low]{.red} for a correct model
+> Reason 1: Can be very [low]{.red} for a correct model
 
-$$R^2 = \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST} = \frac{\sum[(Y_i - \epsilon_i) - \bar Y]^2}{SST}.$$
+:::: {.columns}
 
-When the residual (thus &sigma;, estimated by &epsilon;<sub>i</sub> in sample estimations) is large enough, R<sup>2</sup> could approach a very low score towards zero.
+::: {.column width="50%"}
+
+\begin{align}
+R^2 =& \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}, \\
+    =& \frac{\sum[(Y_i - \color{darkred}{\epsilon_i}) - \bar Y]^2}{SST}.
+\end{align}
+
+:::
+
+::: {.column width="50%"}
+When the residual (thus &sigma;, estimated by &epsilon;<sub>i</sub> in a sample) is large enough, R<sup>2</sup> could approach a very low score towards zero.
+:::
+
+::::
 
 
-```{r rsmall, fig.align='center'}
+```{r rsmall}
+#| fig-height: 3
+#| fig-align: "center"
+
+
 r2 <- function(sig){
   x <- seq(1,10,length.out = 1000)        # our predictor
   y <- 2 + 1.2*x + rnorm(1000,0,sd = sig) # our response; a function of x plus some random noise
@@ -233,7 +248,7 @@ ggplot(data = df_r, aes(x = sigma, y = rout)) +
 
 ## Why Is R<sup>2</sup> Bad? 
 
-> Can be very [high]{.red} for a misspecified model
+> Reason 2: Can be very [high]{.red} for a misspecified model
 
 ```{r rlarge, fig.align='center'}
 df_rLarge <-
@@ -263,9 +278,9 @@ ggplot(data = df_rLarge, aes(x, y)) +
     )
 ```
 
-## Why Is R<sup>2</sup> Bad? {auto-animate=true}
+## Why Is R<sup>2</sup> Bad?
 
-> Can be very [high]{.red} for a redundant model
+> Reason 3: Can be very [high]{.red} for a redundant model
 
 $$R^2 = \frac{\sum(\hat Y_i - \bar Y)^2}{SST} = \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}.$$
 
@@ -276,12 +291,13 @@ $\hat Y_i  - \bar Y = 0$
 :::
 
 :::{.fragment}
-**Revision**
+**Revised statistics:**
 
 $$\text{Adj. } R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 :::
 
-## Is Adj. R<sup>2</sup> still bad? {auto-animate=true}
+## So, is Adj. R<sup>2</sup> good?
+
 
 $$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 
@@ -293,7 +309,7 @@ $$\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.$$
 X booming
 :::
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
 **Not adjusted**
 
 * Goodness of fit;
@@ -304,7 +320,10 @@ X booming
 
 ::::
 
-[*When can R<sup>2</sup> be useful then?*]{.fragment .r-fit-text}
+:::{style="text-align:center; margin-top: 2em"}
+*When can R<sup>2</sup> be useful then?*
+:::
+
 
 :::{.notes}
 Model comparison
@@ -319,10 +338,10 @@ Model comparison
 
 1. Forecast
 1. Interpretation: 
-    + How the model is close to the reality?
-    + What substantive changes can Xs make?
+    + How is the model close to the reality?
+    + What extent of *substantive* changes can Xs make?
 
-:::{.fragment}
+:::{.fragment style="text-align:right"}
 **Approach**
 
 1. Expected value (average) of $\hat Y$
@@ -333,8 +352,7 @@ Model comparison
 
 ## Forecasting: Expected Value
 
-Let X<sub>0</sub> be the values at which we want to predict. 
-Then the expected value of Y is:
+Let X<sub>0</sub> be the values of interest, and then calculate the $\hat{Y}$:
 
 \begin{align}
 E(\hat Y_0|X_0) =& E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
@@ -343,17 +361,24 @@ var(\hat Y_0|X_0) =& var(\hat\beta_0) + var(\hat\beta_1)X_0^2 + 2cov(\hat\beta_0
 \end{align}
 
 ```{r predicted, fig.align='center'}
+#| fig-height: 3
+
 ggplot(mtcars, aes(x = mpg, y = wt)) +
     geom_smooth(method = lm, se = TRUE) +
     ylab(bquote(hat(Y[0]))) +
     xlab(bquote(hat(X[0]))) +
-    labs(caption = "The ribbon represents the standard error. Why is it wider at the two ends?") +
+    labs(caption = "The ribbon represents the standard error.") +
     theme(
         plot.title = element_text(size = 28),
         axis.text = element_text(size = 20),
         axis.title = element_text(size = 20, face = "bold")
     )
 ```
+
+:::{.fragment style="text-align:center"}
+Why is the ribbon wider at the two ends?
+:::
+
 
 
 :::{.notes}
@@ -364,16 +389,12 @@ Fewer observations at two terminals, thus wider rainbow.
 
 \begin{align}
 \hat Y_0 =& \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
-var(\hat Y_0|X_0) =& \sigma^2[\color{red}{1} + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+var(\hat Y_0|X_0) =& \sigma^2[\color{darkred}{1} + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}
 
 :::{.fragment}
-There is an error term to account for.
-
-In other words, single prediction is [more uncertain]{.red} than the average prediction.
+There is an extra error term to account for. In other words, single prediction is [more uncertain]{.red} than the average prediction.
 :::
-
-
 
 ## Hypothesis Test: Coefficient and variance
 
@@ -383,7 +404,7 @@ Let &alpha; = 0.05.
 
 ::: {.column width="50%"}
 
-**On the coefficient**
+*1. On the coefficient*
 
 Hypothesis:
 
@@ -400,7 +421,7 @@ $$\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\s
 :::
 
 ::: {.column .fragment width="50%"}
-**On the variance**
+*2. On the variance*
 
 Hypothesis:
 
@@ -418,24 +439,23 @@ $$(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.$$
 ::::
 
 
-## Hypothesis Test: Restricted Model{.smaller}
+## {.smaller .unnumbered}
 
-Let's set &alpha; = 0.05.
+[3. Model structure: Restricted Model]{.nonincremental}
 
-$$H_0: \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2; H_1: \beta_1 + 2\beta_2 \neq 3.$$
+Let's set &alpha; = 0.05, $H_0: \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2; H_1: \beta_1 + 2\beta_2 \neq 3.$
 
 :::{.fragment}
 Then, 
 
 \begin{align}
-Y =& \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)}\\
-  =& \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u\\
-\Leftrightarrow Y - 3X_1 =& \beta_0 + \beta_2(X_2 - 2X_1) + u\\
-Y^* =& \beta_0' + \beta_2'Z + u, \text{(restricted)}
-\end{align}
-where $Y^*=Y - 3X_1; Z = X_2 - 2X_1.$
+Y =& \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)},\\
+  =& \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u;\\
+\Leftrightarrow Y - 3X_1 =& \beta_0 + \beta_2(X_2 - 2X_1) + u;\\
+Y^* =& \beta_0' + \beta_2'Z + u, \text{(restricted)},
+\end{align} where $Y^*=Y - 3X_1; Z = X_2 - 2X_1.$
 
-The test is thus transformed to $H_0: \beta_2' = \beta_2; \beta_0' = \beta_0$
+The test is thus transformed to $H_0: \beta_2' = \beta_2; \beta_0' = \beta_0$.
 :::
 
 
@@ -446,10 +466,10 @@ $$\frac{\frac{SSR_R - SSR_U}{\Delta k}}{\frac{SSR_U}{n - k_U - 1}} = \frac{\frac
 :::
 
 
-
-:::{.fragment}
-If the hypothesis is rejected, the unrestricted model is better.
+:::{.callout-important .fragment}
+If the hypothesis is rejected, the unrestricted model is [better]{.red}.
 :::
+
 
 :::{.notes}
 Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R<sup>2</sup> to deduct the F test, because $SST_U \neq SST_R$ in this case.
@@ -459,15 +479,16 @@ Hint: When testing general linear restrictions, that is, comparing the pair of n
 
 ## "When" to use OLS
 
-:::{.r-stretch}
-Just kidding~~😂
-
-{{< video src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xbUxzbHZTc01NeGF2Sm54P2U9MWViYjIx.mp4" >}}
-
-:::
+{{< video https://drhuyue.site:10002/sammo3182/video/mr_linearRegression.mp4 title="Just kidding" height=600 preload="auto" controls allowfullscreen>}}
 
 
-## Latin Terms <img src = "http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height = 30>
+## Take-home point
+
+![](https://drhuyue.site:10002/sammo3182/figure/mr_mindmap.png){.r-stretch}
+
+# Appendix: Latin phrases {.appendix .unnumbered}
+
+## Common Latin Phrases <img src = "https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height = 30>{.unnumbered}
 
 - *a fortiori*: Not even saying.    
 - *ad hoc*: To this, immediate purpose.   
@@ -481,7 +502,3 @@ Just kidding~~😂
 - *per se*: By/of/for/in itself.    
 - [*QED*]{.red}: $\blacksquare$ "quod erat demonstrandum," that which was to have been shown.    
 
-
-## Take-home point
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mr_mindmap.png){.r-stretch}

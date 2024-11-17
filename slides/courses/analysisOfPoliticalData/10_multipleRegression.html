@@ -6,11 +6,13 @@
 <script src="10_multipleRegression_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="10_multipleRegression_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="10_multipleRegression_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="10_multipleRegression_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="10_multipleRegression_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="10_multipleRegression_files/libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="10_multipleRegression_files/libs/quarto-contrib/videojs/video.min.js"></script>
-<link href="10_multipleRegression_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="10_multipleRegression_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="10_multipleRegression_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="10_multipleRegression_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="10_multipleRegression_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.32">
 
   <meta name="author" content="Yue Hu">
   <title>Multiple Regression</title>
@@ -32,8 +34,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="10_multipleRegression_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="10_multipleRegression_files/libs/revealjs/dist/theme/quarto-48f225a532854478bb6de5675fa5c081.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="10_multipleRegression_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="10_multipleRegression_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="10_multipleRegression_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -161,7 +163,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -342,23 +345,23 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
-<ul>
-<li class="fragment">Multiple regression
-<ul>
-<li class="fragment">Goodness of fit: R<sup>2</sup></li>
-</ul></li>
-<li class="fragment">Post-estimation inferences</li>
-</ul>
+<div>
+<ol type="1">
+<li>Multiple regression</li>
+<li>Goodness of fit: R<sup>2</sup></li>
+<li>Post-estimation inferences</li>
+</ol>
+</div>
 </section>
 <section>
-<section id="multiple-regression" class="title-slide slide level1 center">
-<h1>Multiple regression</h1>
+<section id="multiple-regression" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Multiple regression</h1>
 
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mr_fit.gif" class="r-stretch quarto-figure-center"></section>
-<section id="expression" class="slide level2">
-<h2>Expression</h2>
+</section>
+<section id="expression" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Expression</h2>
 <div style="text-align:center">
 <p>Terminology: Multivariate vs.&nbsp;Multiple</p>
 </div>
@@ -376,52 +379,55 @@ Yue Hu
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mr_2x.png" class="fragment" height="500"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mr_2x.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mr_2x.png" class="fragment quarto-figure quarto-figure-center" height="500"></a></p>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="meaning-of-β1" class="slide level2 smaller">
-<h2>Meaning of β<sub>1</sub></h2>
+<section id="how-multiple-regressions-work-intuitively" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> How multiple regressions work intuitively</h2>
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/mr_fit.gif" class="r-stretch quarto-figure quarto-figure-center"></section>
+<section id="meaning-of-β1" class="slide level2 smaller" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Meaning of β<sub>1</sub></h2>
 <div class="columns">
 <div class="column fragment" style="width:20%;">
 <p>To be <span class="blue">BLUE</span>,</p>
 <p><span class="math inline">\(min_{\hat\beta_0,\hat\beta_1,\hat\beta_2}\sum \hat \epsilon_i^2\)</span></p>
 <p><span class="math display">\[\begin{align}
-\Rightarrow\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_0}\to&amp; 0\\
-\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_1}\to&amp; 0\\
-\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_2}\to&amp; 0
+\Rightarrow\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_0}\to&amp; \color{darkred}{0}\\
+\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_1}\to&amp; \color{darkred}{0}\\
+\frac{\partial \sum \hat \epsilon_i^2}{\partial\hat\beta_2}\to&amp; \color{darkred}{0}
 \end{align}\]</span></p>
 </div><div class="column fragment" style="width:80%;">
-<p>When <span class="blue">BLUE</span>:</p>
+<p>When being <span class="blue">BLUE</span>:</p>
 <p><span class="math display">\[\begin{align}
 \hat\beta_0 =&amp; \bar Y - (\bar\beta_1X_{1i} + \bar\beta_2X_{2i}),\\
 \hat\beta_1 =&amp; \frac{[\sum(Y_i - \bar Y)(X_{1i} - \bar X_1)][\sum(X_{2i} - \bar X_2)^2-\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]}{\sum(X_{1i} - \bar X_1)^2\sum(X_{2i} - \bar X_2)^2 - [\sum(X_{1i} - \bar X_1)(X_{2i} - \bar X_2)]^2}\\
             =&amp; \frac{\sum\hat r_{1i}(Y_i - \bar Y)}{\hat r_{1i}^2},
-\end{align}\]</span></p>
-<p>where <span class="math inline">\(\hat r_{1i}\)</span> are the errors from the regression of <span class="math inline">\(X_{1i}\)</span> on <span class="math inline">\(X_{2i}\)</span> (i.e., <span class="math inline">\(X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}\)</span>), <strong>the proportion that <span class="math inline">\(X_2\)</span>cannot explain.</strong></p>
+\end{align}\]</span> where the <span class="math inline">\(\hat r_{1i}\)</span> are the errors from the regression of <span class="math inline">\(X_{1i}\)</span> on <span class="math inline">\(X_{2i}\)</span> (i.e., <span class="math inline">\(X_{1i} = \hat\delta_0 + \hat\delta_1X_{2i} + \hat r_{1i}\)</span>), <strong>the proportion that <span class="math inline">\(X_2\)</span>cannot explain.</strong></p>
 <p><span class="math inline">\(\hat\sigma^2 = \frac{\sum\hat \epsilon_i^2}{n - 3}.\)</span></p>
-</div>
-</div>
-<div class="fragment">
-<div class="callout callout-important callout-style-simple">
+</div></div>
+<div class="fragment large">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Interpretation</strong></p>
+</div>
 <div class="callout-content">
-<p><span class="large"><strong>Interpretation</strong>: Every unit change in X<sub>1</sub> leads to β<sub>1</sub> changes in Y <span class="red">on average</span>, <span class="red">ceteris paribus/holding everything else constant</span>.</span></p>
+<p>Every unit change in X<sub>1</sub> leads to β<sub>1</sub> changes in Y <span class="red">on average</span>, <span class="red">ceteris paribus/holding everything else constant</span>.</p>
 </div>
 </div>
 </div>
 </div>
-<ul>
-<li class="fragment">Change the same amount?</li>
-<li class="fragment">Constant how?</li>
-</ul>
+<div class="fragment" style="text-align:center">
+<p><em>Constant how? Sufficient or necessary condition of the variance of Y?</em></p>
+</div>
 <aside class="notes">
-<p>On average hold on mean or median</p>
+<p>changed the same amount on average hold on mean or median</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -435,63 +441,99 @@ Yue Hu
       }</style></aside>
 </section></section>
 <section>
-<section id="goodness-of-fit" class="title-slide slide level1 center">
-<h1>Goodness of Fit</h1>
+<section id="goodness-of-fit" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Goodness of Fit</h1>
 
 </section>
-<section id="r2-multiple-coefficient-of-determination" class="slide level2 smaller">
-<h2>R<sup>2</sup>: Multiple Coefficient of Determination</h2>
-<div class="columns">
-<div class="column" style="width:30%;">
-<p><span class="math display">\[R^2 = \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2}\]</span></p>
-<p>SST: Sum of Squares Total</p>
-<p>SSR: Sum of Squares Regression</p>
-<p>SSE: Sum of Squares Error.</p>
-</div><div class="column fragment" style="width:70%;">
-<p>From the SRF,</p>
+<section id="r2-multiple-coefficient-of-determination" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> R<sup>2</sup>: Multiple Coefficient of Determination</h2>
 <p><span class="math display">\[\begin{align}
-Y_i =&amp; \hat Y_i + \hat \epsilon_i\\
-Y_i - \bar Y =&amp; \hat Y_i  - \bar Y + \hat \epsilon_i\\
-\Rightarrow (Y_i - \bar Y)^2 =&amp; (\hat Y_i  - \bar Y + \hat \epsilon_i)^2\\
-                         =&amp; (\hat Y_i  - \bar Y)^2 + \hat \epsilon_i^2 + 2\hat\epsilon_i(\hat Y_i  - \bar Y)\\
-\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y)^2 =&amp; \sum(\hat Y_i  - \bar Y)^2 + \sum\hat\epsilon_i^2\\
-SST =&amp; SSR + SSE\\
-1 =&amp; \frac{SSR}{SST} + \frac{SSE}{SST}\\
-\text{In which, } R^2 =&amp; \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}\\
-                      =&amp; \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}
+Y_i =&amp; \hat Y_i + \hat \epsilon_i;\\
+Y_i - \bar Y =&amp; \hat Y_i  - \bar Y + \hat \epsilon_i;\\
+\Rightarrow (Y_i - \bar Y)^2 =&amp; (\hat Y_i  - \bar Y + \hat \epsilon_i)^2,\\
+                         =&amp; (\hat Y_i  - \bar Y)^2 + \hat \epsilon_i^2 +, 2\hat\epsilon_i(\hat Y_i  - \bar Y).\\
+\text{Sum up, } \Rightarrow \sum(Y_i - \bar Y)^2 =&amp; \sum(\hat Y_i  - \bar Y)^2 + \sum\hat\epsilon_i^2.\\
+SST =&amp; SSR + SSE;\\
+1 =&amp; \frac{SSR}{SST} + \frac{SSE}{SST}.\\
+\text{In which, } R^2 =&amp; \frac{\sum(\hat{Y} - \bar Y)^2}{\sum(Y - \bar Y)^2} = \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST},\\
+                      =&amp; \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n)  - \bar Y]^2}{SST}.
 \end{align}\]</span></p>
+<aside class="notes">
+<ul>
+<li>SST: Sum of Squares Total</li>
+<li>SSR: Sum of Squares Regression</li>
+<li>SSE: Sum of Squares Error.</li>
+</ul>
+<p>Different from ANOVA:</p>
+<ul>
+<li>SST: Sum of square treatment</li>
+<li>SSE: Sum of square error</li>
+<li>SS: Sum of square</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section class="slide level2">
+
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/mr_bad4ya.jpg" class="r-stretch quarto-figure quarto-figure-center" height="600"></section>
+<section id="why-is-r2-bad" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Why Is R<sup>2</sup> Bad?</h2>
+<blockquote>
+<p>Reason 1: Can be very <span class="red">low</span> for a correct model</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><span class="math display">\[\begin{align}
+R^2 =&amp; \frac{\sum(\hat Y_i  - \bar Y)^2}{SST}, \\
+    =&amp; \frac{\sum[(Y_i - \color{darkred}{\epsilon_i}) - \bar Y]^2}{SST}.
+\end{align}\]</span></p>
+</div><div class="column" style="width:50%;">
+<p>When the residual (thus σ, estimated by ε<sub>i</sub> in a sample) is large enough, R<sup>2</sup> could approach a very low score towards zero.</p>
+</div></div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="10_multipleRegression_files/figure-revealjs/rsmall-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="10_multipleRegression_files/figure-revealjs/rsmall-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
-<section id="my-attitude-towards-r2" class="slide level2">
-<h2>My Attitude towards R<sup>2</sup></h2>
-
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mr_bad4ya.jpg" class="r-stretch quarto-figure-center"></section>
-<section id="why-is-r2-bad" class="slide level2">
-<h2>Why Is R<sup>2</sup> Bad?</h2>
+<section id="why-is-r2-bad-1" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Why Is R<sup>2</sup> Bad?</h2>
 <blockquote>
-<p>Can be very <span class="red">low</span> for a correct model</p>
+<p>Reason 2: Can be very <span class="red">high</span> for a misspecified model</p>
 </blockquote>
-<p><span class="math display">\[R^2 = \frac{SSR}{SST} = \frac{\sum(\hat Y_i  - \bar Y)^2}{SST} = \frac{\sum[(Y_i - \epsilon_i) - \bar Y]^2}{SST}.\]</span></p>
-<p>When the residual (thus σ, estimated by ε<sub>i</sub> in sample estimations) is large enough, R<sup>2</sup> could approach a very low score towards zero.</p>
-
-<img data-src="10_multipleRegression_files/figure-revealjs/rsmall-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="why-is-r2-bad-1" class="slide level2">
-<h2>Why Is R<sup>2</sup> Bad?</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="10_multipleRegression_files/figure-revealjs/rlarge-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="10_multipleRegression_files/figure-revealjs/rlarge-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="why-is-r2-bad-2" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Why Is R<sup>2</sup> Bad?</h2>
 <blockquote>
-<p>Can be very <span class="red">high</span> for a misspecified model</p>
-</blockquote>
-
-<img data-src="10_multipleRegression_files/figure-revealjs/rlarge-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section id="why-is-r2-bad-2" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Why Is R<sup>2</sup> Bad?</h2>
-<blockquote>
-<p>Can be very <span class="red">high</span> for a redundant model</p>
+<p>Reason 3: Can be very <span class="red">high</span> for a redundant model</p>
 </blockquote>
 <p><span class="math display">\[R^2 = \frac{\sum(\hat Y_i - \bar Y)^2}{SST} = \frac{\sum[\hat\beta_0 + (\hat\beta_1X_1 +\cdots +\hat\beta_nX_n) - \bar Y]^2}{SST}.\]</span></p>
 <p>Therefore, the more Xs are added, the larger SSR (and thus R<sup>2</sup>) is, a.k.a., the “trash-can” model.</p>
 <aside class="notes">
-<p><span class="math inline">\(\hat Y_i - \bar Y = 0\)</span></p>
+<p><span class="math inline">\(\hat Y_i  - \bar Y = 0\)</span></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -504,12 +546,12 @@ SST =&amp; SSR + SSE\\
           display:block!important;
       }</style></aside>
 <div class="fragment">
-<p><strong>Revision</strong></p>
+<p><strong>Revised statistics:</strong></p>
 <p><span class="math display">\[\text{Adj. } R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.\]</span></p>
 </div>
 </section>
-<section id="is-adj.-r2-still-bad" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Is Adj. R<sup>2</sup> still bad?</h2>
+<section id="so-is-adj.-r2-good" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> So, is Adj. R<sup>2</sup> good?</h2>
 <p><span class="math display">\[\text{Adj.} R^2 = 1 - (1 - R^2)\frac{n - 1}{n - k - 1}.\]</span></p>
 <div class="columns">
 <div class="column" style="width:50%;">
@@ -518,14 +560,15 @@ SST =&amp; SSR + SSE\\
 </div><div class="column" style="width:50%;">
 <p><strong>Not adjusted</strong></p>
 <ul>
-<li class="fragment">Goodness of fit;</li>
-<li class="fragment">Predictive error;</li>
-<li class="fragment">Model comparison;</li>
-<li class="fragment">X’s explanatory power.</li>
+<li>Goodness of fit;</li>
+<li>Predictive error;</li>
+<li>Model comparison;</li>
+<li>X’s explanatory power.</li>
 </ul>
+</div></div>
+<div style="text-align:center; margin-top: 2em">
+<p><em>When can R<sup>2</sup> be useful then?</em></p>
 </div>
-</div>
-<p><span class="fragment r-fit-text"><em>When can R<sup>2</sup> be useful then?</em></span></p>
 <aside class="notes">
 <p>Model comparison</p>
 <style type="text/css">
@@ -541,22 +584,22 @@ SST =&amp; SSR + SSE\\
       }</style></aside>
 </section></section>
 <section>
-<section id="post-estimation-inferences" class="title-slide slide level1 center">
-<h1>Post-Estimation Inferences</h1>
+<section id="post-estimation-inferences" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Post-Estimation Inferences</h1>
 
 </section>
-<section id="predicted-value" class="slide level2">
-<h2>Predicted Value</h2>
+<section id="predicted-value" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> Predicted Value</h2>
 <p><strong>Goal</strong></p>
 <ol type="1">
 <li class="fragment">Forecast</li>
 <li class="fragment">Interpretation:
 <ul>
-<li class="fragment">How the model is close to the reality?</li>
-<li class="fragment">What substantive changes can Xs make?</li>
+<li class="fragment">How is the model close to the reality?</li>
+<li class="fragment">What extent of <em>substantive</em> changes can Xs make?</li>
 </ul></li>
 </ol>
-<div class="fragment">
+<div class="fragment" style="text-align:right">
 <p><strong>Approach</strong></p>
 <ol type="1">
 <li class="fragment">Expected value (average) of <span class="math inline">\(\hat Y\)</span></li>
@@ -565,16 +608,27 @@ SST =&amp; SSR + SSE\\
 </ol>
 </div>
 </section>
-<section id="forecasting-expected-value" class="slide level2">
-<h2>Forecasting: Expected Value</h2>
-<p>Let X<sub>0</sub> be the values at which we want to predict. Then the expected value of Y is:</p>
+<section id="forecasting-expected-value" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> Forecasting: Expected Value</h2>
+<p>Let X<sub>0</sub> be the values of interest, and then calculate the <span class="math inline">\(\hat{Y}\)</span>:</p>
 <p><span class="math display">\[\begin{align}
 E(\hat Y_0|X_0) =&amp; E(\hat Y_0|X = X_0) = \boldsymbol{X_0\beta}\\
 var(\hat Y_0|X_0) =&amp; var(\hat\beta_0) + var(\hat\beta_1)X_0^2 + 2cov(\hat\beta_0, \hat\beta_1)X_0\\
                   =&amp; \sigma^2[\frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}\]</span></p>
-
-<img data-src="10_multipleRegression_files/figure-revealjs/predicted-1.png" width="960" class="r-stretch quarto-figure-center"><aside class="notes">
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="10_multipleRegression_files/figure-revealjs/predicted-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="10_multipleRegression_files/figure-revealjs/predicted-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="fragment" style="text-align:center">
+<p>Why is the ribbon wider at the two ends?</p>
+</div>
+<aside class="notes">
 <p>Fewer observations at two terminals, thus wider rainbow.</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -588,23 +642,22 @@ var(\hat Y_0|X_0) =&amp; var(\hat\beta_0) + var(\hat\beta_1)X_0^2 + 2cov(\hat\be
           display:block!important;
       }</style></aside>
 </section>
-<section id="forcasting-single-point-forecast" class="slide level2">
-<h2>Forcasting: Single-Point Forecast</h2>
+<section id="forcasting-single-point-forecast" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Forcasting: Single-Point Forecast</h2>
 <p><span class="math display">\[\begin{align}
 \hat Y_0 =&amp; \hat\beta_0 + \hat\beta_1X_0 + \hat u\\
-var(\hat Y_0|X_0) =&amp; \sigma^2[\color{red}{1} + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
+var(\hat Y_0|X_0) =&amp; \sigma^2[\color{darkred}{1} + \frac{1}{n} + \frac{(X_0 - \bar X)^2}{\sum(X_i - \bar X)^2}].
 \end{align}\]</span></p>
 <div class="fragment">
-<p>There is an error term to account for.</p>
-<p>In other words, single prediction is <span class="red">more uncertain</span> than the average prediction.</p>
+<p>There is an extra error term to account for. In other words, single prediction is <span class="red">more uncertain</span> than the average prediction.</p>
 </div>
 </section>
-<section id="hypothesis-test-coefficient-and-variance" class="slide level2">
-<h2>Hypothesis Test: Coefficient and variance</h2>
+<section id="hypothesis-test-coefficient-and-variance" class="slide level2" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> Hypothesis Test: Coefficient and variance</h2>
 <p>Let α = 0.05.</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<p><strong>On the coefficient</strong></p>
+<p><em>1. On the coefficient</em></p>
 <p>Hypothesis:</p>
 <p><span class="math display">\[\begin{align}
 H_0: \beta =&amp; \beta^*;\\
@@ -613,7 +666,7 @@ H_1: \beta \neq&amp; \beta^*.
 <p>Statistics:</p>
 <p><span class="math display">\[\frac{\hat\beta - \beta^*}{\sqrt{\frac{\hat\sigma^2}{\sum(X_i - \bar X)^2}}}\sim t_{n-k}.\]</span></p>
 </div><div class="column fragment" style="width:50%;">
-<p><strong>On the variance</strong></p>
+<p><em>2. On the variance</em></p>
 <p>Hypothesis:</p>
 <p><span class="math display">\[\begin{align}
 H_0: \sigma =&amp; \sigma^*;\\
@@ -621,29 +674,40 @@ H_1: \sigma \neq&amp; \sigma^*.
 \end{align}\]</span></p>
 <p>Statistics:</p>
 <p><span class="math display">\[(n - k)\frac{\hat\sigma^2}{\sigma^2}\sim\chi^2.\]</span></p>
-</div>
-</div>
+</div></div>
 </section>
-<section id="hypothesis-test-restricted-model" class="slide level2 smaller">
-<h2>Hypothesis Test: Restricted Model</h2>
-<p>Let’s set α = 0.05.</p>
-<p><span class="math display">\[H_0: \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2; H_1: \beta_1 + 2\beta_2 \neq 3.\]</span></p>
+<section id="section" class="slide level2 smaller unnumbered">
+<h2></h2>
+<p><span class="nonincremental">3. Model structure: Restricted Model</span></p>
+<p>Let’s set α = 0.05, <span class="math inline">\(H_0: \beta_1 + 2\beta_2 = 3\Rightarrow \beta_1 = 3 - 2\beta_2; H_1: \beta_1 + 2\beta_2 \neq 3.\)</span></p>
 <div class="fragment">
 <p>Then,</p>
 <p><span class="math display">\[\begin{align}
-Y =&amp; \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)}\\
-  =&amp; \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u\\
-\Leftrightarrow Y - 3X_1 =&amp; \beta_0 + \beta_2(X_2 - 2X_1) + u\\
-Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
+Y =&amp; \beta_0 + \beta_1X_1 + \beta_2X_2 + u, \text{(unrestricted)},\\
+  =&amp; \beta_0 + 3X_1 + \beta_2(X_2 - 2X_1) + u;\\
+\Leftrightarrow Y - 3X_1 =&amp; \beta_0 + \beta_2(X_2 - 2X_1) + u;\\
+Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)},
 \end{align}\]</span> where <span class="math inline">\(Y^*=Y - 3X_1; Z = X_2 - 2X_1.\)</span></p>
-<p>The test is thus transformed to <span class="math inline">\(H_0: \beta_2' = \beta_2; \beta_0' = \beta_0\)</span></p>
+<p>The test is thus transformed to <span class="math inline">\(H_0: \beta_2' = \beta_2; \beta_0' = \beta_0\)</span>.</p>
 </div>
 <div class="fragment">
 <p>Statistics:</p>
 <p><span class="math display">\[\frac{\frac{SSR_R - SSR_U}{\Delta k}}{\frac{SSR_U}{n - k_U - 1}} = \frac{\frac{R_U^2 - R_R^2}{\Delta k}}{\frac{1 - R_U^2}{n - k_U - 1}}\sim F_{\Delta k, n - k - 1}\]</span></p>
 </div>
 <div class="fragment">
-<p>If the hypothesis is rejected, the unrestricted model is better.</p>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>If the hypothesis is rejected, the unrestricted model is <span class="red">better</span>.</p>
+</div>
+</div>
+</div>
 </div>
 <aside class="notes">
 <p>Hint: When testing general linear restrictions, that is, comparing the pair of nested models with different Ys, one should not use R<sup>2</sup> to deduct the F test, because <span class="math inline">\(SST_U \neq SST_R\)</span> in this case.</p>
@@ -659,15 +723,21 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
           display:block!important;
       }</style></aside>
 </section>
-<section id="when-to-use-ols" class="slide level2">
-<h2>“When” to use OLS</h2>
-<div class="r-stretch">
-<p>Just kidding~~😂</p>
-<video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3UvcyFBcnR0dk83MHdLSU8xbUxzbHZTc01NeGF2Sm54P2U9MWViYjIx.mp4"></video>
-</div>
+<section id="when-to-use-ols" class="slide level2" data-number="3.5">
+<h2><span class="header-section-number">3.5</span> “When” to use OLS</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Just kidding"><source src="https://drhuyue.site:10002/sammo3182/video/mr_linearRegression.mp4"></video>
 </section>
-<section id="latin-terms" class="slide level2">
-<h2>Latin Terms <img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ci_fsmrof.png" height="30"></h2>
+<section id="take-home-point" class="slide level2" data-number="3.6">
+<h2><span class="header-section-number">3.6</span> Take-home point</h2>
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/mr_mindmap.png" class="r-stretch"></section></section>
+<section>
+<section id="appendix-latin-phrases" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix: Latin phrases</h1>
+
+</section>
+<section id="common-latin-phrases" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Common Latin Phrases <img src="https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png" height="30"></h2>
 <ul>
 <li class="fragment"><em>a fortiori</em>: Not even saying.<br>
 </li>
@@ -691,16 +761,14 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
 </li>
 <li class="fragment"><span class="red"><em>QED</em></span>: <span class="math inline">\(\blacksquare\)</span> “quod erat demonstrandum,” that which was to have been shown.</li>
 </ul>
-</section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mr_mindmap.png" class="r-stretch">
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
-</section></section>
-    </div>
-  </div>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="10_multipleRegression_files/libs/revealjs/dist/reveal.js"></script>
@@ -727,12 +795,12 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
 'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
@@ -857,7 +925,7 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -888,7 +956,7 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -915,42 +983,80 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -984,18 +1090,7 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1027,11 +1122,55 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1041,8 +1180,17 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1056,7 +1204,11 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
@@ -1096,23 +1248,41 @@ Y^* =&amp; \beta_0' + \beta_2'Z + u, \text{(restricted)}
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
-    
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","loop":false,"openEffect":"fade","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
     
 
 </body></html>
