@@ -1,46 +1,46 @@
 ---
 title: "Model Specification"
 subtitle: "Large N & Leeuwenhoek (70700173)"
-
 author: "Yue Hu"
-
 knitr: 
     opts_chunk: 
       echo: false
-
+editor_options: 
+  chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
-    
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-      
-filters:
-  - lightbox
-
 revealjs-plugins:
   - spotlight
-
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
+
+
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 if (!require(pacman)) install.packages("pacman")
@@ -70,22 +70,39 @@ theme_update(
 
 ```
 
-## Overview
+:::: {.columns}
 
-:::{style="text-align:center"}
-How can you get things wrong in *model specificiation*?
+::: {.column .nonincremental width="50%"}
+1. [Nonstochastic X]{.golden} ("X is fixed"), and X has positive [noninfinite variance]{.golden} (&sigma;<sub>X</sub> > 0);
+1. Correct [specification]{.golden};
+1. [Linearity]{.red} in the parameter;
+1. [Full rank/identification]{.red}
+    - N > K; K = 2 for a simple OLS);
+1. [Mean zero errors]{.red}
+    - E(&epsilon;<sub>i</sub>|X<sub>i</sub>) = 0;
+1. [Exogeneity]{.red}: No covariance between X<sub>i</sub> and &epsilon;<sub>i</sub>
+    - E(X<sub>i</sub>&epsilon;<sub>i</sub>) = cov(x<sub>i</sub>, &epsilon;<sub>i</sub>) =0;
 :::
 
-:::{.fragment style="text-align:center; margin-top: 2em; margin-bottom: 1em"}
-
-Like...many ways!
+::: {.column .nonincremental width="50%"}
+7. [No autocorrelation/serial correlation]{.red}:  E(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(&epsilon;<sub>i</sub>, &epsilon;<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, &forall; i, j);
+1. [Normality]{.red}: $U|X \sim N(0, \sigma^2I).$
+1. [Homoskedasticity/Spherical disturbances]{.green}: constant variance of &epsilon;<sub>i</sub>,  var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>;
+1. No perfect [collinearity]{.green}: there are more than one X,  &nexists; X<sub>i</sub> s.t., X<sub>i</sub> = a + b&sum;<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub>
 
 :::
 
+::::
+
+## Specification Issues {.unnumbered}
+
+:::{style="text-align:center; margin-bottom: 2em"}
+How can you *specify* things wrong?
+:::
 
 :::: {.columns}
 
-::: {.column .fragment width="40%"}
+::: {.column width="50%"}
 **[Measurement]{.red} Issues**
 
 - Proxy variable
@@ -93,17 +110,16 @@ Like...many ways!
 - Variable type
 :::
 
-::: {.column .fragment width="30%"}
+::: {.column width="50%"}
 **[Specification]{.red} Issues**
 
 - Functional form
 - Omitted variable
-:::
 
-::: {.column .fragment width="30%"}
 **[Interpretation]{.red} Issues**
 
 - Nonlinear model
+
 :::
 
 ::::
@@ -111,7 +127,19 @@ Like...many ways!
 
 # Measurement Issues
 
-## Proxy Variable
+## Why proxy variables?
+
+:::{.nonincremental style="text-align:center"}
+- Human capital &larr; years of education
+- GDP &larr; economic well-being
+- Voter turnout &larr; democratic health
+- Partisaship &larr; ideology
+:::
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/spec_proxy.png){.fragment fig-align="center" height=400}
+
+## Proxy Variable in Statistics
 
 True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>[X<sub>1</sub>]{.red} + &beta;<sub>2</sub>[X<sub>2</sub>]{.red} + &beta;<sub>3</sub>X<sub>3</sub><sup>*</sup> + [&epsilon;]{.red}, &epsilon; ~ &Phi;(0, &sigma;<sub>&epsilon;</sub><sup>2</sup>).
 
@@ -126,39 +154,51 @@ True model: Y = &beta;<sub>0</sub>  + &beta;<sub>1</sub>[X<sub>1</sub>]{.red} + 
 cov(u,v) = 0: u, v independent
 :::
 
-:::{.fragment}
-:::{.callout-important}
+
+:::{.callout-important .fragment}
+## Outcome of proxy variable
+
 Only when cov([&epsilon;]{.red}, [X<sub>3</sub>]{.blue}) = cov([&nu;]{.blue}, [X<sub>1</sub>]{.red}) = cov([&nu;]{.blue}, [X<sub>2</sub>]{.red}) = 0, can the model produce *unbiased* estimates.
 :::
 
-:::
 
 ## Measurement Error
 
-- Nonrandom error &rarr; bias
-- Random error in Y: Y = Y<sup>*</sup> + &epsilon;.
+:::{.callout-note}
+## Relation with proxy variable
+
+Proxy variable is a *source* of measurement error (random error, specifically).
+:::
+
+- Nonrandom error &rarr; systematic bias
+- Random error in the outcome variable: Y = Y<sup>*</sup> + &epsilon;.
     - \begin{align}
 &Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + \epsilon;\\
 &Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (\nu + \epsilon)
 \end{align}
-- *Consequence*
-    + &beta; Unbiased 
-    + var(&beta;) &uarr;
+    - *Consequence*
+        + &beta; Unbiased 
+        + var(&beta;) &uarr;
+
 
 ## Measurement Error
 
-- Random error in X: X = X<sup>*</sup> + &nu;. If E(&nu;X) = 0, then \begin{align}
+- Random error in the explanatory: X = X<sup>*</sup> + &nu;. If E(&nu;X) = 0, then \begin{align}
 Y =& \beta_0 + \beta_1(X_1 - \nu) + \epsilon,\\
   =& \beta_0 + \beta_1X_1 + (\epsilon - \beta_1\nu).
 \end{align}
-- \begin{align}
+
+:::{.fragment}
+\begin{align}
 cov(\epsilon, X_1) =& E(\epsilon X_1) - E(\epsilon)E(X_1) = E(\epsilon X_1), \\
-          =& E[\epsilon (X_1^* + \epsilon)] = E(\epsilon X_1^*) + E(\epsilon^2) = \sigma_\epsilon^2\neq0.\\
+          =& E[\epsilon (X_1^* + v)] = E(\epsilon X_1^*) + E(\epsilon v) = \sigma_\epsilon^2\neq0.\\
 cov(\epsilon - \beta_1\nu, X_1) =& cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, X_1) = -\beta_1\sigma_\nu^2.\\
 \Rightarrow\ plim(\hat\beta_1) =& \beta_1 + \frac{cov(\epsilon - \beta_1\nu, X_1)}{var(X_1)},\\
                                =& \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^2}
                                = \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^{*2} + \sigma^2_\epsilon} = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.
 \end{align}
+:::
+
 
 :::{.notes}
 plim: probability limit operation, convergence in probability
@@ -169,18 +209,18 @@ plim: probability limit operation, convergence in probability
 $$plim(\hat\beta_1) = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.$$
 
 - Unbiased [only]{.red} when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>\*</sup> + &nu;), i.e., &sigma;<sup>2</sup><sub>X<sub>1</sub></sub> = &sigma;X<sub>1</sub><sup>\*2</sup>+ &sigma;<sub>&nu;</sub><sup>2</sup>
-- Consequence: $|\hat\beta_1| < \beta_1$, a.k.a., [attenuation]{.red} bias. 
-    + &beta;<sub>1</sub>: underestimated;
+- Consequence: $|\hat\beta_1| < \beta_1$, a.k.a., the *attenuation* bias. 
+    + &beta;<sub>1</sub>: [underestimated]{.red};
     + Affecting the estimations of others in unknown ways .
 
-## Concerns caused by variable type
+## Bonus: Concerns of the variable type
 
-:::{.callout-tip}
-In OLS, there is no requirement (assumption) for Xs to be linear. 
+:::{.callout-warning}
+In OLS, there is [no requirement]{.red} (assumption) for Xs (but the *parameter*) to be linear. 
 :::
 
 * Indicator variable (binary)
-    + $Y = \beta_0 + \beta_1X_i + u_i,$ where X is either male (0) or female(1)
+    + $Y = \beta_0 + \beta_1X_i + \epsilon_i,$ where X is either male (0) or female(1)
         + &beta;<sub>0</sub>: E(Y|X = male);
         + &beta;<sub>1</sub>: E(Y|X = female) - E(Y|X = male).
 
@@ -190,16 +230,14 @@ In OLS, there is no requirement (assumption) for Xs to be linear.
         + H<sub>0</sub>: &beta;<sub>black</sub> = 0, testing the difference between black and white
         + H<sub>0</sub>: &beta;<sub>black</sub> = &beta;<sub>native</sub> = 0, testing if the race has any effect.
 
-- How about variable transition, e.g., log(x)?
-
 :::{.notes}
 In a regression, the information of the baseline is captured by the intercept
 :::
 
 
-## Logarithm Transformation
+## If no linearity requirement for Xs, why transformation
 
-What does a [logarithm transformation]{.red} on some variables for? 
+You saw log(GDP) or log(income), right? What does the [logarithm transformation]{.red} do? 
 
 :::{.notes}
 Some may say making X more linear? However, no assumption on X
@@ -261,7 +299,10 @@ ggplot(data = mammals, aes(x = body, y = brain)) +
 ```
 :::
 
+:::
 
+:::{.fragment style="text-align:center"}
+The problem to solve: Violation of A3 ("[Linearity]{.red} in the parameter")
 :::
 
 ## Model Fit with Logarithm Transformation
@@ -300,9 +341,7 @@ ggplot(df_residual, aes(x = residual)) +
 :::
 
 
-## When Using Logrithm Transformation
-
-Problem to solve: Assumption violation (linearity)
+## So, when to use Logrithm Transformation
 
 :::{.fragment}
 Critical criterion: Skewness
@@ -334,57 +373,54 @@ map(mammals, e1071::skewness)
 1. Functional form
 1. Omitted variable
 
-## Functional Form
+## Misspecification in the Functional Form
 
-Q: When there are two ways to specify the model:
+When there are two ways to specify the model:
 
 \begin{align}
-Y =& f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
-Y =& f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
+Y =& f_1(X_1, X_2, X_3) =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + \epsilon, \\
+Y =& f_2(X_1, X_2, X_3) =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + \epsilon.
 \end{align}
 
-Which specification is [correct]{.red}?
+[*Which specification is correct?*]{style="text-align:center"}
+
+
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
 :::{.fragment}
-**How to figure out?**
+**Test out**: 
 
-Test &beta;<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?
-
-Probably not. [Hint: How many [true]{.red} models are there?]{.small}
-:::
-
-:::{.notes}
-Only one true model 
-:::
+&beta;<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + &epsilon;
 
 :::{.fragment}
-Let's assume f<sub>1</sub> is the true model:
-
-$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$
-
-&rho;<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when &rho;<sub>12</sub> &uarr;......
-:::
-
-:::{.notes}
-Variance is inflated when &rho;<sub>12</sub> &uarr;
-:::
-:::
-
-::: {.column .fragment width="50%"}
-**Joint test**
+*Conduct a joint test*:
 
 H<sub>0</sub>: &beta;<sub>1</sub> = &beta;<sub>2</sub> = &beta;<sub>3</sub> = 0 or 
 
 &beta;<sub>4</sub> = &beta;<sub>5</sub> = &beta;<sub>6</sub> = 0
+:::
 
+:::
+
+:::{.notes}
+Only one true model!
+
+Let's assume f<sub>1</sub> is the true model:
+
+$$var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.$$
+
+&rho;<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when &rho;<sub>12</sub> &uarr; variance is inflated when &rho;<sub>12</sub> &uarr;
+:::
+:::
+
+::: {.column .fragment width="50%"}
 Statistics: Davidson-Mackinnon test
 
-1. Run $Y = f_2(X) + u$ and calculate the expected value $\hat Y = E[Y|f_2(X)]$
-1. Run $Y = f_1(X) + \theta\hat Y + u$, and test if &theta; = 0.
+1. Run $Y = f_2(X) + \epsilon$ and calculate the expected value $\hat Y = E[Y|f_2(X)]$
+1. Run $Y = f_1(X) + \theta\hat Y + \epsilon$, and test if &theta; = 0.
 :::
 
 ::::
@@ -393,31 +429,31 @@ Statistics: Davidson-Mackinnon test
 ## Omitted Variable{.smaller}
 
 \begin{align}
-True: Y_i =& \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
-Specified: Y_i =& \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i
+True: Y_i =& \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + \epsilon_i;\\
+Specified: Y_i =& \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde \epsilon_i,
 \end{align}
 
 How does $\tilde\beta_1$ compare to $\beta_1$?
 
 :::{.fragment}
 \begin{align}
-Y_i =& \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i,\\
-Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u),\\
+Y_i =& \beta_0 + \beta_1X_{1} + \beta_2X_{2} + \epsilon_i,\\
+Y_i -\bar Y =& \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (\epsilon_i - \bar \epsilon),\\
 (Y_i -\bar Y)(X_1 - \bar X_1) =& \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1)\\ 
-            &+ (u_i - \bar u)(X_1 - \bar X_1),\\
-\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =& \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}.\\
-\text{That is, } \tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
-\Rightarrow E(\tilde\beta_1|X_1) =& E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1],\\
-                     =& \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1),\\
+            &+ (\epsilon_i - \bar \epsilon)(X_1 - \bar X_1),\\
+\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =& \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}.\\
+\text{That is, } \tilde\beta_1 =& \beta_1 + \beta_2\hat\delta_1 + \frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
+\Rightarrow E(\tilde\beta_1|X_1) =& E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1],\\
+                     =& \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(\epsilon_i|X_1),\\
                      =& \hat\beta_1 + \hat\beta_2\delta_1.
 \end{align}
 
 :::
 
 
-## Biased or Not
+## Biased how
 
-$E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,$ in which $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
+$$E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,$$ in which $\hat\delta_1$ is the regression coefficient of $X_2$ on $X_1$ ( $X_1 = \delta_0 + \delta_1X_2 + r$).
 
 - $\tilde\beta_1$: [Biased]{.red}, unless X<sub>2</sub> is an irrelevant variable.
     - Even if &delta;<sub>1</sub> = 0, $X_1 = \delta_0 + r$, the model may increase the risk of Type I error
@@ -432,15 +468,15 @@ How About the Residual?
 
 $$Y_i = \beta_0 + \beta_1X_{1} + \epsilon,$$
 
-$$\epsilon = \beta_2X_{2} + u_i.$$
+$$\epsilon = \beta_2X_{2} + \epsilon_i.$$
 
 
-$E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0$
+$E(\epsilon|X_1) = E(\beta_2X_{2} + \epsilon_i) = \beta\mu_2\neq0$
 
 + Against the assumption.
   
 
-$var(\epsilon|X_1) = var(\beta_2X_{2} + u_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2$
+$var(\epsilon|X_1) = var(\beta_2X_{2} + \epsilon_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2$
 
 + All values are fixed, that is, still homoscedasitic.  
 
@@ -451,8 +487,8 @@ $E(X_1\epsilon) = \beta_2[cov(X_1,X_2) - \mu_{X_1}\mu_{X_2}],$
 $E(\epsilon_i\epsilon_j|X_i)\neq 0$
 
 \begin{align}
-E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =& E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)] - \beta_2^2\mu^2_{X_2},\\
-=& E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j) - \beta_2^2\mu^2_{X_2},\\
+E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =& E[(\beta_2X_{2i} + \epsilon_i)(\beta_2X_{2j} + \epsilon_j)] - \beta_2^2\mu^2_{X_2},\\
+=& E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + \epsilon_i\epsilon_j) - \beta_2^2\mu^2_{X_2},\\
 =& \beta_2^2E(X_{2i}X_{2j}) - \beta_2^2\mu^2_{X_2},\\
 =& \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2},\\
 =& \beta_2^2cov(X_{2i}, X_{2j}).
@@ -470,11 +506,20 @@ E(X_1\epsilon) =& E[X_1(\beta_2X_2 + u)], \\
 
 :::
 
+:::{.fragment}
+Examples: 
+
+- Economic development and democracy
+- Election and democracy
+- Media freedom and political accountability
+:::
+
 # Misinterpretation
 
-## Nonlinear Modeling
+## Linear modeling of nonlinear relationship
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/nonlinearity.jpg){fig-align="center" height=300}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/spec_nonlinearity.jpg){fig-align="center" height=500}
 
 :::{.fragment}
 ```{r nonlinear}
@@ -508,16 +553,23 @@ ggplot(data = df_nl2, aes(x, y)) +
   )
 ```
 :::
-
-
-:::{notes}
-
-[Unbiased & efficient]{.red} linear estimates, 
-
-but what does &beta;<sub>1</sub> mean? 
 :::
 
-## Marginal Effects
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Believe or not, still unbiased & efficient [linear]{.red} estimates, but what does &beta;<sub>1</sub> mean? 
+:::
+
+
+:::{.notes}
+Linear combination means adding together
+:::
+
+## One way out
+
+:::{style="text-align:center"}
+Marginal Effects💫
+:::
+
 
 Discrete:
 
@@ -551,11 +603,11 @@ Calculate the marginal effect of each variable x for [each's mean value]{.red}.
 
 ::: {.column .fragment width="40%"}
 
-*Marginal Effect at Representative Values (MER)*
+*Marginal Effect at Representative Values (MER)* 🌟
 
 Calculate the marginal effect of each variable x for [value(s) of interest]{.red}.
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg){fig-align="center" height=350}
+![](https://drhuyue.site:10002/sammo3182/figure/spec_interaction2.jpg){fig-align="center" height=350}
 
 :::
 
@@ -588,24 +640,43 @@ Statistics:
 
 \begin{align}
 \frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim& t_{n - 3}.\\
-SE(\beta_1 + 2\beta_2X) =& \sqrt{var(\beta_1 + 2\beta_2X)}, \\
-=& \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}.
 \end{align}
 
-:::{.fragment}
+:::{.callout-warning .fragment}
+## Interpretation issue
 
-:::{.callout-warning}
-Can't simply say whether the null hypothesis is rejected, because it may [not be a coherent conclusion]{.red} in the entire domain of X, due to the nonlinearity. 
+Can't simply say whether the null hypothesis is rejected, because there may [not be a coherent effect]{.red} over the entire domain of X due to the nonlinearity. 
 :::
 
-:::
 
-- "In the range from a to b, the hypothesis can be rejected."
+- Way-out: "In the range from a to b, the hypothesis can be rejected."
     * Max - min/First difference
     * Marginal effects across values
-    * Just plot it. (Do this, cool kids!)
+    * Just plot it. ([Do this, cool kids!]{.green})
 
-## Take-home point
+## Take-home point {.unnumbered}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_mindmap.png){.r-stretch}
+![](https://drhuyue.site:10002/sammo3182/figure/spec_mindmap.png){.r-stretch}
 
+# Appendix {.appendix .unnumbered}
+
+## Stretch {.unnumbered}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::

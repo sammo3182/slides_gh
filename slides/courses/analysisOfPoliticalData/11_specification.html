@@ -7,8 +7,13 @@
 <link href="11_specification_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="11_specification_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="11_specification_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="11_specification_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="11_specification_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="11_specification_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="11_specification_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="11_specification_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="11_specification_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="11_specification_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="Yue Hu">
   <title>Model Specification</title>
@@ -30,8 +35,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="11_specification_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="11_specification_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="11_specification_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="11_specification_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="11_specification_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -159,7 +164,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -340,29 +346,56 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
-<div style="text-align:center">
-<p>How can you get things wrong in <em>model specificiation</em>?</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li><span class="golden">Nonstochastic X</span> (“X is fixed”), and X has positive <span class="golden">noninfinite variance</span> (σ<sub>X</sub> &gt; 0);</li>
+<li>Correct <span class="golden">specification</span>;</li>
+<li><span class="red">Linearity</span> in the parameter;</li>
+<li><span class="red">Full rank/identification</span>
+<ul>
+<li>N &gt; K; K = 2 for a simple OLS);</li>
+</ul></li>
+<li><span class="red">Mean zero errors</span>
+<ul>
+<li>E(ε<sub>i</sub>|X<sub>i</sub>) = 0;</li>
+</ul></li>
+<li><span class="red">Exogeneity</span>: No covariance between X<sub>i</sub> and ε<sub>i</sub>
+<ul>
+<li>E(X<sub>i</sub>ε<sub>i</sub>) = cov(x<sub>i</sub>, ε<sub>i</sub>) =0;</li>
+</ul></li>
+</ol>
+</div><div class="column" style="width:50%;">
+<ol start="7" type="1">
+<li><span class="red">No autocorrelation/serial correlation</span>: E(ε<sub>i</sub>, ε<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = cov(ε<sub>i</sub>, ε<sub>J</sub>|X<sub>i</sub>, X<sub>j</sub>) = 0, ∀ i, j);</li>
+<li><span class="red">Normality</span>: <span class="math inline">\(U|X \sim N(0, \sigma^2I).\)</span></li>
+<li><span class="green">Homoskedasticity/Spherical disturbances</span>: constant variance of ε<sub>i</sub>, var(ε<sub>i</sub>|X) = σ<sup>2</sup>;</li>
+<li>No perfect <span class="green">collinearity</span>: there are more than one X, ∄ X<sub>i</sub> s.t., X<sub>i</sub> = a + b∑<sub>j = 1</sub>b<sub>j</sub>X<sub>j</sub></li>
+</ol>
 </div>
-<div class="fragment" style="text-align:center; margin-top: 2em; margin-bottom: 1em">
-<p>Like…many ways!</p>
+</div>
+</section>
+<section id="specification-issues" class="slide level2 unnumbered">
+<h2>Specification Issues</h2>
+<div style="text-align:center; margin-bottom: 2em">
+<p>How can you <em>specify</em> things wrong?</p>
 </div>
 <div class="columns">
-<div class="column fragment" style="width:40%;">
+<div class="column" style="width:50%;">
 <p><strong><span class="red">Measurement</span> Issues</strong></p>
 <ul>
 <li class="fragment">Proxy variable</li>
 <li class="fragment">Measurement error</li>
 <li class="fragment">Variable type</li>
 </ul>
-</div><div class="column fragment" style="width:30%;">
+</div><div class="column" style="width:50%;">
 <p><strong><span class="red">Specification</span> Issues</strong></p>
 <ul>
 <li class="fragment">Functional form</li>
 <li class="fragment">Omitted variable</li>
 </ul>
-</div><div class="column fragment" style="width:30%;">
 <p><strong><span class="red">Interpretation</span> Issues</strong></p>
 <ul>
 <li class="fragment">Nonlinear model</li>
@@ -371,12 +404,28 @@ Yue Hu
 </div>
 </section>
 <section>
-<section id="measurement-issues" class="title-slide slide level1 center">
-<h1>Measurement Issues</h1>
+<section id="measurement-issues" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Measurement Issues</h1>
 
 </section>
-<section id="proxy-variable" class="slide level2">
-<h2>Proxy Variable</h2>
+<section id="why-proxy-variables" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Why proxy variables?</h2>
+<div style="text-align:center">
+<ul>
+<li>Human capital ← years of education</li>
+<li>GDP ← economic well-being</li>
+<li>Voter turnout ← democratic health</li>
+<li>Partisaship ← ideology</li>
+</ul>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/spec_proxy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/spec_proxy.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+</section>
+<section id="proxy-variable-in-statistics" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Proxy Variable in Statistics</h2>
 <p>True model: Y = β<sub>0</sub> + β<sub>1</sub><span class="red">X<sub>1</sub></span> + β<sub>2</sub><span class="red">X<sub>2</sub></span> + β<sub>3</sub>X<sub>3</sub><sup>*</sup> + <span class="red">ε</span>, ε ~ Φ(0, σ<sub>ε</sub><sup>2</sup>).</p>
 <ul>
 <li class="fragment">Unobservable: X<sub>3</sub><sup>*</sup>.
@@ -406,10 +455,13 @@ Yue Hu
           display:block!important;
       }</style></aside>
 <div class="fragment">
-<div class="callout callout-important callout-style-simple">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
+</div>
+<p><strong>Outcome of proxy variable</strong></p>
 </div>
 <div class="callout-content">
 <p>Only when cov(<span class="red">ε</span>, <span class="blue">X<sub>3</sub></span>) = cov(<span class="blue">ν</span>, <span class="red">X<sub>1</sub></span>) = cov(<span class="blue">ν</span>, <span class="red">X<sub>2</sub></span>) = 0, can the model produce <em>unbiased</em> estimates.</p>
@@ -418,40 +470,55 @@ Yue Hu
 </div>
 </div>
 </section>
-<section id="measurement-error" class="slide level2">
-<h2>Measurement Error</h2>
+<section id="measurement-error" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Measurement Error</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Relation with proxy variable</strong></p>
+</div>
+<div class="callout-content">
+<p>Proxy variable is a <em>source</em> of measurement error (random error, specifically).</p>
+</div>
+</div>
+</div>
 <ul>
-<li class="fragment">Nonrandom error → bias</li>
-<li class="fragment">Random error in Y: Y = Y<sup>*</sup> + ε.
+<li class="fragment">Nonrandom error → systematic bias</li>
+<li class="fragment">Random error in the outcome variable: Y = Y<sup>*</sup> + ε.
 <ul>
 <li class="fragment"><span class="math display">\[\begin{align}
 &amp;Y^* = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + \epsilon;\\
 &amp;Y = \beta_0 + \beta_1X_1 +\cdots+ \beta_kX_k + (\nu + \epsilon)
 \end{align}\]</span></li>
-</ul></li>
 <li class="fragment"><em>Consequence</em>
 <ul>
 <li class="fragment">β Unbiased</li>
 <li class="fragment">var(β) ↑</li>
 </ul></li>
+</ul></li>
 </ul>
 </section>
-<section id="measurement-error-1" class="slide level2">
-<h2>Measurement Error</h2>
+<section id="measurement-error-1" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> Measurement Error</h2>
 <ul>
-<li class="fragment">Random error in X: X = X<sup>*</sup> + ν. If E(νX) = 0, then <span class="math display">\[\begin{align}
+<li class="fragment">Random error in the explanatory: X = X<sup>*</sup> + ν. If E(νX) = 0, then <span class="math display">\[\begin{align}
 Y =&amp; \beta_0 + \beta_1(X_1 - \nu) + \epsilon,\\
 =&amp; \beta_0 + \beta_1X_1 + (\epsilon - \beta_1\nu).
 \end{align}\]</span></li>
-<li class="fragment"><span class="math display">\[\begin{align}
+</ul>
+<div class="fragment">
+<p><span class="math display">\[\begin{align}
 cov(\epsilon, X_1) =&amp; E(\epsilon X_1) - E(\epsilon)E(X_1) = E(\epsilon X_1), \\
-        =&amp; E[\epsilon (X_1^* + \epsilon)] = E(\epsilon X_1^*) + E(\epsilon^2) = \sigma_\epsilon^2\neq0.\\
+          =&amp; E[\epsilon (X_1^* + v)] = E(\epsilon X_1^*) + E(\epsilon v) = \sigma_\epsilon^2\neq0.\\
 cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, X_1) = -\beta_1\sigma_\nu^2.\\
 \Rightarrow\ plim(\hat\beta_1) =&amp; \beta_1 + \frac{cov(\epsilon - \beta_1\nu, X_1)}{var(X_1)},\\
-                             =&amp; \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^2}
-                             = \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^{*2} + \sigma^2_\epsilon} = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.
-\end{align}\]</span></li>
-</ul>
+                               =&amp; \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^2}
+                               = \beta_1 + \frac{-\beta_1\sigma_\nu^2}{\sigma_{X_1}^{*2} + \sigma^2_\epsilon} = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.
+\end{align}\]</span></p>
+</div>
 <aside class="notes">
 <p>plim: probability limit operation, convergence in probability</p>
 <style type="text/css">
@@ -466,34 +533,37 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
           display:block!important;
       }</style></aside>
 </section>
-<section id="measurement-error-2" class="slide level2">
-<h2>Measurement Error</h2>
+<section id="measurement-error-2" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Measurement Error</h2>
 <p><span class="math display">\[plim(\hat\beta_1) = \frac{\sigma_{X_1}^{*2}}{\sigma_{X_1}^{*2} + \sigma^2_\nu}\beta_1.\]</span></p>
 <ul>
 <li class="fragment">Unbiased <span class="red">only</span> when var(X<sub>1</sub>) = var(X<sub>1</sub><sup>*</sup> + ν), i.e., σ<sup>2</sup><sub>X<sub>1</sub></sub> = σX<sub>1</sub><sup>*2</sup>+ σ<sub>ν</sub><sup>2</sup></li>
-<li class="fragment">Consequence: <span class="math inline">\(|\hat\beta_1| &lt; \beta_1\)</span>, a.k.a., <span class="red">attenuation</span> bias.
+<li class="fragment">Consequence: <span class="math inline">\(|\hat\beta_1| &lt; \beta_1\)</span>, a.k.a., the <em>attenuation</em> bias.
 <ul>
-<li class="fragment">β<sub>1</sub>: underestimated;</li>
+<li class="fragment">β<sub>1</sub>: <span class="red">underestimated</span>;</li>
 <li class="fragment">Affecting the estimations of others in unknown ways .</li>
 </ul></li>
 </ul>
 </section>
-<section id="concerns-caused-by-variable-type" class="slide level2">
-<h2>Concerns caused by variable type</h2>
-<div class="callout callout-tip callout-style-simple">
+<section id="bonus-concerns-of-the-variable-type" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> Bonus: Concerns of the variable type</h2>
+<div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Warning</strong></p>
+</div>
 <div class="callout-content">
-<p>In OLS, there is no requirement (assumption) for Xs to be linear.</p>
+<p>In OLS, there is <span class="red">no requirement</span> (assumption) for Xs (but the <em>parameter</em>) to be linear.</p>
 </div>
 </div>
 </div>
 <ul>
 <li class="fragment">Indicator variable (binary)
 <ul>
-<li class="fragment"><span class="math inline">\(Y = \beta_0 + \beta_1X_i + u_i,\)</span> where X is either male (0) or female(1)
+<li class="fragment"><span class="math inline">\(Y = \beta_0 + \beta_1X_i + \epsilon_i,\)</span> where X is either male (0) or female(1)
 <ul>
 <li class="fragment">β<sub>0</sub>: E(Y|X = male);</li>
 <li class="fragment">β<sub>1</sub>: E(Y|X = female) - E(Y|X = male).</li>
@@ -508,7 +578,6 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
 <li class="fragment">H<sub>0</sub>: β<sub>black</sub> = β<sub>native</sub> = 0, testing if the race has any effect.</li>
 </ul></li>
 </ul></li>
-<li class="fragment">How about variable transition, e.g., log(x)?</li>
 </ul>
 <aside class="notes">
 <p>In a regression, the information of the baseline is captured by the intercept</p>
@@ -524,9 +593,9 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
           display:block!important;
       }</style></aside>
 </section>
-<section id="logarithm-transformation" class="slide level2">
-<h2>Logarithm Transformation</h2>
-<p>What does a <span class="red">logarithm transformation</span> on some variables for?</p>
+<section id="if-no-linearity-requirement-for-xs-why-transformation" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> If no linearity requirement for Xs, why transformation</h2>
+<p>You saw log(GDP) or log(income), right? What does the <span class="red">logarithm transformation</span> do?</p>
 <aside class="notes">
 <p>Some may say making X more linear? However, no assumption on X</p>
 <style type="text/css">
@@ -544,62 +613,92 @@ cov(\epsilon - \beta_1\nu, X_1) =&amp; cov(-\beta_1\nu, X_1) = -\beta_1cov(\nu, 
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/hist-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/hist-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="11_specification_files/figure-revealjs/hist-1.png" width="960"></a></p>
+</figure>
 </div>
-</div>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/bodyBrain-1.png" width="960"></p>
 </div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/bodyLBrain-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/bodyBrain-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="11_specification_files/figure-revealjs/bodyBrain-1.png" width="960"></a></p>
+</figure>
 </div>
-</div>
-</div>
-<div class="fragment">
-<div class="cell">
-<div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/bodyBrainL-1.png" width="960"></p>
 </div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/bodyLBrainL-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/bodyLBrain-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="11_specification_files/figure-revealjs/bodyLBrain-1.png" width="960"></a></p>
+</figure>
 </div>
 </div>
 </div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/bodyBrainL-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="11_specification_files/figure-revealjs/bodyBrainL-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/bodyLBrainL-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="11_specification_files/figure-revealjs/bodyLBrainL-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment" style="text-align:center">
+<p>The problem to solve: Violation of A3 (“<span class="red">Linearity</span> in the parameter”)</p>
 </div>
 </section>
-<section id="model-fit-with-logarithm-transformation" class="slide level2">
-<h2>Model Fit with Logarithm Transformation</h2>
+<section id="model-fit-with-logarithm-transformation" class="slide level2" data-number="1.8">
+<h2><span class="header-section-number">1.8</span> Model Fit with Logarithm Transformation</h2>
 <div class="r-vstack">
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/fit-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/fit-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="11_specification_files/figure-revealjs/fit-1.png" width="960"></a></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="11_specification_files/figure-revealjs/residual-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="11_specification_files/figure-revealjs/residual-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="11_specification_files/figure-revealjs/residual-1.png" width="960"></a></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="when-using-logrithm-transformation" class="slide level2">
-<h2>When Using Logrithm Transformation</h2>
-<p>Problem to solve: Assumption violation (linearity)</p>
+<section id="so-when-to-use-logrithm-transformation" class="slide level2" data-number="1.9">
+<h2><span class="header-section-number">1.9</span> So, when to use Logrithm Transformation</h2>
 <div class="fragment">
 <p>Critical criterion: Skewness</p>
 </div>
@@ -625,52 +724,41 @@ $brain
 </div>
 </section></section>
 <section>
-<section id="misspecification" class="title-slide slide level1 center">
-<h1>Misspecification</h1>
+<section id="misspecification" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Misspecification</h1>
 
 </section>
-<section id="problem-types" class="slide level2">
-<h2>Problem Types</h2>
+<section id="problem-types" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Problem Types</h2>
 <ol type="1">
 <li class="fragment">Functional form</li>
 <li class="fragment">Omitted variable</li>
 </ol>
 </section>
-<section id="functional-form" class="slide level2">
-<h2>Functional Form</h2>
-<p>Q: When there are two ways to specify the model:</p>
+<section id="misspecification-in-the-functional-form" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Misspecification in the Functional Form</h2>
+<p>When there are two ways to specify the model:</p>
 <p><span class="math display">\[\begin{align}
-Y =&amp; f_1(X_1, X_2, X_3) + u =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + u \\
-Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
+Y =&amp; f_1(X_1, X_2, X_3) =\beta_1X_1 + \beta_2X_2 + \beta_3X_3 + \epsilon, \\
+Y =&amp; f_2(X_1, X_2, X_3) =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + \epsilon.
 \end{align}\]</span></p>
-<p>Which specification is <span class="red">correct</span>?</p>
+<p><span style="text-align:center"><em>Which specification is correct?</em></span></p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="fragment">
-<p><strong>How to figure out?</strong></p>
-<p>Test β<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + u?</p>
-<p>Probably not. <span class="small">Hint: How many <span class="red">true</span> models are there?</span></p>
+<p><strong>Test out</strong>:</p>
+<p>β<sub>1</sub> in Y = f<sub>1</sub>(X) + f<sub>2</sub>(X) + ε</p>
+<div class="fragment">
+<p><em>Conduct a joint test</em>:</p>
+<p>H<sub>0</sub>: β<sub>1</sub> = β<sub>2</sub> = β<sub>3</sub> = 0 or</p>
+<p>β<sub>4</sub> = β<sub>5</sub> = β<sub>6</sub> = 0</p>
+</div>
 </div>
 <aside class="notes">
-<p>Only one true model</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-<div class="fragment">
+<p>Only one true model!</p>
 <p>Let’s assume f<sub>1</sub> is the true model:</p>
 <p><span class="math display">\[var(\hat\beta_1) = \frac{\sigma^2}{(X_1 - \bar X_1)^2(1 - \rho_{12})}.\]</span></p>
-<p>ρ<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when ρ<sub>12</sub> ↑……</p>
-</div>
-<aside class="notes">
-<p>Variance is inflated when ρ<sub>12</sub> ↑</p>
+<p>ρ<sub>12</sub>: Correlations between X<sub>1</sub> and X<sub>2</sub>, such as between X and X<sup>2</sup>. So, when ρ<sub>12</sub> ↑ variance is inflated when ρ<sub>12</sub> ↑</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -683,41 +771,38 @@ Y =&amp; f_2(X_1, X_2, X_3) + u =\beta_4X_1^2 + \beta_5X_2^3 + \beta_6X_3^4 + u
           display:block!important;
       }</style></aside>
 </div><div class="column fragment" style="width:50%;">
-<p><strong>Joint test</strong></p>
-<p>H<sub>0</sub>: β<sub>1</sub> = β<sub>2</sub> = β<sub>3</sub> = 0 or</p>
-<p>β<sub>4</sub> = β<sub>5</sub> = β<sub>6</sub> = 0</p>
 <p>Statistics: Davidson-Mackinnon test</p>
 <ol type="1">
-<li class="fragment">Run <span class="math inline">\(Y = f_2(X) + u\)</span> and calculate the expected value <span class="math inline">\(\hat Y = E[Y|f_2(X)]\)</span></li>
-<li class="fragment">Run <span class="math inline">\(Y = f_1(X) + \theta\hat Y + u\)</span>, and test if θ = 0.</li>
+<li class="fragment">Run <span class="math inline">\(Y = f_2(X) + \epsilon\)</span> and calculate the expected value <span class="math inline">\(\hat Y = E[Y|f_2(X)]\)</span></li>
+<li class="fragment">Run <span class="math inline">\(Y = f_1(X) + \theta\hat Y + \epsilon\)</span>, and test if θ = 0.</li>
 </ol>
 </div>
 </div>
 </section>
-<section id="omitted-variable" class="slide level2 smaller">
-<h2>Omitted Variable</h2>
+<section id="omitted-variable" class="slide level2 smaller" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Omitted Variable</h2>
 <p><span class="math display">\[\begin{align}
-True: Y_i =&amp; \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + u_i\\
-Specified: Y_i =&amp; \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde u_i
+True: Y_i =&amp; \beta_0 + \beta_1X_{1i} + \beta_2X_{2i} + \epsilon_i;\\
+Specified: Y_i =&amp; \tilde\beta_0 + \tilde\beta_1X_{1i} + \tilde \epsilon_i,
 \end{align}\]</span></p>
 <p>How does <span class="math inline">\(\tilde\beta_1\)</span> compare to <span class="math inline">\(\beta_1\)</span>?</p>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
-Y_i =&amp; \beta_0 + \beta_1X_{1} + \beta_2X_{2} + u_i,\\
-Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i - \bar u),\\
+Y_i =&amp; \beta_0 + \beta_1X_{1} + \beta_2X_{2} + \epsilon_i,\\
+Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (\epsilon_i - \bar \epsilon),\\
 (Y_i -\bar Y)(X_1 - \bar X_1) =&amp; \beta_1(X_{1} - \bar X_1)^2 + \beta_2(X_{2} - \bar X_2)(X_1 - \bar X_1)\\
-            &amp;+ (u_i - \bar u)(X_1 - \bar X_1),\\
-\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =&amp; \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}.\\
-\text{That is, } \tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
-\Rightarrow E(\tilde\beta_1|X_1) =&amp; E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum u_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1],\\
-                     =&amp; \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(u_i|X_1),\\
+            &amp;+ (\epsilon_i - \bar \epsilon)(X_1 - \bar X_1),\\
+\frac{(Y_i -\bar Y)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} =&amp; \beta_1\frac{\sum(X_{1} - \bar X_1)^2}{\sum(X_1 - \bar X_1)^2} + \beta_2\frac{\sum(X_{2} - \bar X_2)(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2} + \frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}.\\
+\text{That is, } \tilde\beta_1 =&amp; \beta_1 + \beta_2\hat\delta_1 + \frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2},\\
+\Rightarrow E(\tilde\beta_1|X_1) =&amp; E(\beta_1|X_1) + E(\beta_2\hat\delta_1|X_1) + E[\frac{\sum \epsilon_i(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}|X_1],\\
+                     =&amp; \hat\beta_1 + \hat\beta_2E(\hat\delta_1|X_1) + \frac{\sum(X_1 - \bar X_1)}{\sum(X_1 - \bar X_1)^2}E(\epsilon_i|X_1),\\
                      =&amp; \hat\beta_1 + \hat\beta_2\delta_1.
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="biased-or-not" class="slide level2">
-<h2>Biased or Not</h2>
-<p><span class="math inline">\(E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,\)</span> in which <span class="math inline">\(\hat\delta_1\)</span> is the regression coefficient of <span class="math inline">\(X_2\)</span> on <span class="math inline">\(X_1\)</span> ( <span class="math inline">\(X_1 = \delta_0 + \delta_1X_2 + r\)</span>).</p>
+<section id="biased-how" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Biased how</h2>
+<p><span class="math display">\[E(\tilde\beta_1|X_1) = \hat\beta_1 + \hat\beta_2\delta_1,\]</span> in which <span class="math inline">\(\hat\delta_1\)</span> is the regression coefficient of <span class="math inline">\(X_2\)</span> on <span class="math inline">\(X_1\)</span> ( <span class="math inline">\(X_1 = \delta_0 + \delta_1X_2 + r\)</span>).</p>
 <ul>
 <li class="fragment"><span class="math inline">\(\tilde\beta_1\)</span>: <span class="red">Biased</span>, unless X<sub>2</sub> is an irrelevant variable.
 <ul>
@@ -740,12 +825,12 @@ Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i 
 <aside class="notes">
 <p>How About the Residual?</p>
 <p><span class="math display">\[Y_i = \beta_0 + \beta_1X_{1} + \epsilon,\]</span></p>
-<p><span class="math display">\[\epsilon = \beta_2X_{2} + u_i.\]</span></p>
-<p><span class="math inline">\(E(\epsilon|X_1) = E(\beta_2X_{2} + u_i) = \beta\mu_2\neq0\)</span></p>
+<p><span class="math display">\[\epsilon = \beta_2X_{2} + \epsilon_i.\]</span></p>
+<p><span class="math inline">\(E(\epsilon|X_1) = E(\beta_2X_{2} + \epsilon_i) = \beta\mu_2\neq0\)</span></p>
 <ul>
 <li>Against the assumption.</li>
 </ul>
-<p><span class="math inline">\(var(\epsilon|X_1) = var(\beta_2X_{2} + u_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2\)</span></p>
+<p><span class="math inline">\(var(\epsilon|X_1) = var(\beta_2X_{2} + \epsilon_i|X_1)= \beta_2^2\sigma_2^2 + \sigma_u^2 + 2\beta_2cov(X2, u) = \beta_2^2\sigma_2^2 + \sigma_u^2\)</span></p>
 <ul>
 <li>All values are fixed, that is, still homoscedasitic.</li>
 </ul>
@@ -755,8 +840,8 @@ Y_i -\bar Y =&amp; \beta_1(X_{1} - \bar X_1) + \beta_2(X_{2} - \bar X_2) + (u_i 
 </ul>
 <p><span class="math inline">\(E(\epsilon_i\epsilon_j|X_i)\neq 0\)</span></p>
 <p><span class="math display">\[\begin{align}
-E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =&amp; E[(\beta_2X_{2i} + u_i)(\beta_2X_{2j} + u_j)] - \beta_2^2\mu^2_{X_2},\\
-=&amp; E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + u_iu_j) - \beta_2^2\mu^2_{X_2},\\
+E(\epsilon_i\epsilon_j) - E(\epsilon_i)E(\epsilon_j) =&amp; E[(\beta_2X_{2i} + \epsilon_i)(\beta_2X_{2j} + \epsilon_j)] - \beta_2^2\mu^2_{X_2},\\
+=&amp; E(\beta_2^2X_{2i}X_{2j} + \beta_2^2X_{2i}u_{j} + \beta_2^2X_{2j}u_{i} + \epsilon_i\epsilon_j) - \beta_2^2\mu^2_{X_2},\\
 =&amp; \beta_2^2E(X_{2i}X_{2j}) - \beta_2^2\mu^2_{X_2},\\
 =&amp; \beta_2^2cov(X_{2i}, X_{2j}) - \beta_2^2\mu^2_{X_2} + \beta_2^2\mu^2_{X_2},\\
 =&amp; \beta_2^2cov(X_{2i}, X_{2j}).
@@ -781,38 +866,63 @@ E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)], \\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+<div class="fragment">
+<p>Examples:</p>
+<ul>
+<li class="fragment">Economic development and democracy</li>
+<li class="fragment">Election and democracy</li>
+<li class="fragment">Media freedom and political accountability</li>
+</ul>
+</div>
 </section></section>
 <section>
-<section id="misinterpretation" class="title-slide slide level1 center">
-<h1>Misinterpretation</h1>
+<section id="misinterpretation" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Misinterpretation</h1>
 
 </section>
-<section id="nonlinear-modeling" class="slide level2">
-<h2>Nonlinear Modeling</h2>
+<section id="linear-modeling-of-nonlinear-relationship" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> Linear modeling of nonlinear relationship</h2>
+<div class="r-stack">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/nonlinearity.jpg" height="300"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/spec_nonlinearity.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/spec_nonlinearity.jpg" class="quarto-figure quarto-figure-center" height="500"></a></p>
 </figure>
 </div>
 <div class="fragment">
-<div class="cell quarto-layout-panel">
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="11_specification_files/figure-revealjs/nonlinear-1.png" width="960"></p>
+<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
+<p><a href="11_specification_files/figure-revealjs/nonlinear-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="11_specification_files/figure-revealjs/nonlinear-1.png" width="960"></a></p>
 </div>
-<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
-<p><img data-src="11_specification_files/figure-revealjs/nonlinear-2.png" width="960"></p>
-</div>
-</div>
+<div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
+<p><a href="11_specification_files/figure-revealjs/nonlinear-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="11_specification_files/figure-revealjs/nonlinear-2.png" width="960"></a></p>
 </div>
 </div>
-<div class="{notes}">
-<p><span class="red">Unbiased &amp; efficient</span> linear estimates,</p>
-<p>but what does β<sub>1</sub> mean?</p>
 </div>
+</div>
+</div>
+<div class="fragment" style="text-align:center; margin-top: 1em">
+<p>Believe or not, still unbiased &amp; efficient <span class="red">linear</span> estimates, but what does β<sub>1</sub> mean?</p>
+</div>
+<aside class="notes">
+<p>Linear combination means adding together</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
-<section id="marginal-effects" class="slide level2">
-<h2>Marginal Effects</h2>
+<section id="one-way-out" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> One way out</h2>
+<div style="text-align:center">
+<p>Marginal Effects💫</p>
+</div>
 <p>Discrete:</p>
 <p><span class="math display">\[Pr(Y|x = X_{n + 1}) - Pr(Y|x = X_n)\]</span></p>
 <p>Continuous:</p>
@@ -821,8 +931,8 @@ E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)], \\
 <p>That’s to say, every value in X (n &gt; 1) has a marginal effect (Δ<sub>x</sub>). Which one should we use?</p>
 </div>
 </section>
-<section id="marginal-effects-in-types" class="slide level2">
-<h2>Marginal Effects in Types</h2>
+<section id="marginal-effects-in-types" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Marginal Effects in Types</h2>
 <div class="columns">
 <div class="column fragment" style="width:30%;">
 <p><em>Average Marginal Effect (AME)</em></p>
@@ -834,18 +944,18 @@ E(X_1\epsilon) =&amp; E[X_1(\beta_2X_2 + u)], \\
 <p><em>Marginal Effect at the Mean (MEM)</em></p>
 <p>Calculate the marginal effect of each variable x for <span class="red">each’s mean value</span>.</p>
 </div><div class="column fragment" style="width:40%;">
-<p><em>Marginal Effect at Representative Values (MER)</em></p>
+<p><em>Marginal Effect at Representative Values (MER)</em> 🌟</p>
 <p>Calculate the marginal effect of each variable x for <span class="red">value(s) of interest</span>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg" height="350"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/spec_interaction2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="https://drhuyue.site:10002/sammo3182/figure/spec_interaction2.jpg" class="quarto-figure quarto-figure-center" height="350"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="hypothesis-testing-of-a-nonlinear-model" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Hypothesis Testing of A Nonlinear Model</h2>
+<section id="hypothesis-testing-of-a-nonlinear-model" class="slide level2" data-auto-animate="true" data-number="3.4">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">3.4</span> Hypothesis Testing of A Nonlinear Model</h2>
 <p><span class="math display">\[e.g., Y = \beta_0 + \beta_1X + \beta_2X^2 + u.\]</span></p>
 <ul>
 <li class="fragment">Margins: <span class="math inline">\(\frac{\partial Y}{\partial X} = \beta_1 + 2\beta_2X\)</span></li>
@@ -863,42 +973,93 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="interpretation" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Interpretation</h2>
+<section id="interpretation" class="slide level2" data-auto-animate="true" data-number="3.5">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">3.5</span> Interpretation</h2>
 <p>Statistics:</p>
 <p><span class="math display">\[\begin{align}
 \frac{\beta_1 + 2\beta_2X - 0}{SE(\beta_1 + 2\beta_2X)}\sim&amp; t_{n - 3}.\\
-SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
-=&amp; \sqrt{var(\beta_1) + 4X^2var(\beta_2) + 4Xcov(\hat\beta_1,\hat\beta_2)}.
 \end{align}\]</span></p>
 <div class="fragment">
-<div class="callout callout-warning callout-style-simple">
+<div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Interpretation issue</strong></p>
+</div>
 <div class="callout-content">
-<p>Can’t simply say whether the null hypothesis is rejected, because it may <span class="red">not be a coherent conclusion</span> in the entire domain of X, due to the nonlinearity.</p>
+<p>Can’t simply say whether the null hypothesis is rejected, because there may <span class="red">not be a coherent effect</span> over the entire domain of X due to the nonlinearity.</p>
 </div>
 </div>
 </div>
 </div>
 <ul>
-<li class="fragment">“In the range from a to b, the hypothesis can be rejected.”
+<li class="fragment">Way-out: “In the range from a to b, the hypothesis can be rejected.”
 <ul>
 <li class="fragment">Max - min/First difference</li>
 <li class="fragment">Marginal effects across values</li>
-<li class="fragment">Just plot it. (Do this, cool kids!)</li>
+<li class="fragment">Just plot it. (<span class="green">Do this, cool kids!</span>)</li>
 </ul></li>
 </ul>
 </section>
-<section id="take-home-point" class="slide level2">
+<section id="take-home-point" class="slide level2 unnumbered">
 <h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/spe_mindmap.png" class="r-stretch">
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/spec_mindmap.png" class="r-stretch"></section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix</h1>
+
+</section>
+<section id="stretch" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-14" data-glightbox="description: .lightbox-desc-14" title="松茸的世界：5分钟正念冥想-自信之心"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400" alt="松茸的世界：5分钟正念冥想-自信之心"></a></p>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</div></section>
     </div>
   </div>
 
@@ -927,7 +1088,6 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1057,7 +1217,7 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -1228,10 +1388,27 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1241,8 +1418,17 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1296,22 +1482,34 @@ SE(\beta_1 + 2\beta_2X) =&amp; \sqrt{var(\beta_1 + 2\beta_2X)}, \\
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"openEffect":"fade","loop":false,"closeEffect":"fade","descPosition":"bottom","selector":".lightbox"});
+    window.onload = () => {
+      lightboxQuarto.on('slide_before_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        const href = trigger.getAttribute('href');
+        if (href !== null) {
+          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+          if (imgEl !== null) {
+            const srcAttr = imgEl.getAttribute("src");
+            if (srcAttr && srcAttr.startsWith("data:")) {
+              slideConfig.href = srcAttr;
+            }
+          }
+        } 
+      });
+
+      lightboxQuarto.on('slide_after_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(slideNode);
+        }
+      });
+
+    };
+              </script>
     
 
 </body></html>
