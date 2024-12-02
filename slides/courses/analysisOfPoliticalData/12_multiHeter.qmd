@@ -2,42 +2,45 @@
 title: "Multicollinearity & Heteroskedasticity"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-execute:
-  echo: false
-  message: false
-  warning: false
+knitr: 
+    opts_chunk: 
+      echo: false
 editor_options: 
   chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-filters:
-  - lightbox
 revealjs-plugins:
   - spotlight
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
+
+
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 if (!require(pacman)) install.packages("pacman")
@@ -68,38 +71,46 @@ theme_update(
 
 ```
 
-## A Question Left from the Last Lecture
-
-:::{.fragment style="text-align:center"}
-Why should we use multiple regression, and why *controls*? 
-:::
-
-:::: {.columns}
-
-::: {.column width="50%"}
-
-:::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif){.fragment}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif){.fragment}
+::: {.nonincremental}
+1. Collinearity
+    + Violation
+    + Diagnosis
+    + Adjustment
+1. Heteroscedasticity
+    + Violation
+    + Diagnosis
+    + Adjustment
 :::
 
 :::{.notes}
-We wanna understand things realistically and predict them.
-
-Things happens all together, while we care what's the most important
+- Hetero-: From the Greek word "heteros," meaning "different" or "other."
+- Skedasticity: Derived from the Greek word "skedastikos," meaning "able to scatter(spread)." 
+- It refers to the dispersion or variability of the error term in a regression model.
+So, heteroskedasticity literally means "different scattering" or "variable dispersion," which implies that the variance of the error term is not constant.
 :::
 
+# Multicollinearity
+
+## Before going into details
+
+:::{.fragment style="text-align:center"}
+*Why should we use multiple regressions, and why controls? *
 :::
 
-::: {.column .fragment width="50%" style="margin-top: 5em"}
+:::{.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/mh_drStrange1.gif){.fragment height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/mh_drStrange2.gif){.fragment height=250}
+:::
+
+:::{.fragment}
 > One observes a set of covariates that is, after [statistical adjustment]{.blue}, sufficient to make treatment status [as-if random]{.red}.---Keele et al. 2020
 :::
-
-::::
 
 
 ## Statistical Adjustment
 
+::: {.nonincremental}
 1. Linearity in the parameter; &larr; [&#9083;]{.green} [Specification](/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html), [Moderation](/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html) & [GLM](/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html)
 1. Nonstochastic X ("given X," a.k.a., "X is fixed");  &larr; [&check;]{.gray} Data collection
 1. X has positive noninfinite variance (var(X)); &larr; [&check;]{.gray} Data collection
@@ -110,21 +121,7 @@ Things happens all together, while we care what's the most important
 1. No autocorrelation; &larr; [&cross;]{.red} [Autocorrelation issue](/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html)
 1. No perfect collinearity &larr; [&cross;]{.red} [(Today)]{.golden}
 1. Homoskedasticity; &larr; [&cross;]{.red} [(Today)]{.golden}
-
-
-## Overview
-
-1. Collinearity
-    + Violation
-    + Diagnosis
-    + Adjustment
-1. Heteroscedasticity
-    + Violation
-    + Diagnosis
-    + Adjustment
-
-
-# Collinearity
+:::
 
 
 ## Perfect Collinearity
@@ -137,13 +134,17 @@ When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then $\hat\beta_
 
 ::: {.column .fragment width="50%"}
 
-E.g., $X_{2i} = 1 + 2X_{1i}.$
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg){.fragment height=450}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg){width=450}
+![](https://drhuyue.site:10002/sammo3182/figure/mh_majia.png){.fragment fig-align="center" height=450}
+:::
 
 :::
 
 ::: {.column .fragment width="50%"}
+
+E.g., $X_{2i} = 1 + 2X_{1i}.$
 
 :::{.small}
 \begin{align}
@@ -166,17 +167,22 @@ PRF: population regression function
 
 ::::
 
-
-
 ## Multicollinearity
 
+- Coefficient, $\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}$
+    - Small changes in X can lead to dramatic changes in $(\boldsymbol{X'X})^{-1}$, and thus $\hat\beta$.
+
+:::{.callout-note .fragment}
+## Example
+
+$$X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1 \end{bmatrix}, \tilde X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1.01 \end{bmatrix} \Rightarrow X^{-1} \approx \begin{bmatrix} 50.25 & -49.75 \\ -49.75 & 50.25 \end{bmatrix}, \tilde X^{-1} \approx \begin{bmatrix} 33.44 & 0.3311 \\ 0.3311 & 33.78 \end{bmatrix}$$
+
+
+:::
+
 - Variance
-    - $var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},$
-        - Where $\beta_{12} = cov(X_1, X_2)$.
-    - As &beta;<sub>12</sub> increases, the variance also increases [(What does that mean?)]{.small}.
-- Coefficient
-    - $\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}$
-        - Small changes in X can lead to dramatic changes in $(\boldsymbol{X'X})^{-1}$, and thus $\hat\beta$. [(Why?)]{.small}
+    - $var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},$ where $\beta_{12} = cov(X_1, X_2)$.
+    - As &beta;<sub>12</sub> increases, the variance also [increases]{.red} (*Means?*)
 
 :::{.notes}
 E.g., $X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1 \end{bmatrix}, \tilde X = \begin{bmatrix} 1 & 0.99 \\ 0.99 & 1.01 \end{bmatrix}$
@@ -230,6 +236,7 @@ cor(df_fake$x1, df_fake$x2)
 ```{r regComp}
 #| echo: true
 #| output-location: fragment
+#| fig-height: 4
 
 ls_result <- map(list(df_sim, df_fake), \(dataset){
   lm(y ~ x1 + x2, data = dataset)
@@ -240,19 +247,22 @@ small_multiple(ls_result)
 ```
 
 
-## Diagnosis {.smaller}
+## Diagnosis
 
 **Variance Inflation Factors** (VIF, [1, +&infin;]): A measure of how much the variance of the estimated coefficient &beta;<sub>x</sub> is "inflated" by the correlation among the predictor variables.
 
 $$VIF = \frac{1}{1 - {R}^{2}_{X_i}} = \frac{1}{Tolerance}$$
 
+:::{.small .nonincremental}
 - ${R}^{2}_{X_i}$: The coefficient of determination for a regression model where X<sub>i</sub> is the dependent variable, and all other predictor variables are independent variables.
     - 1: no correlation between X<sub>1</sub> and the rest
     - Rule of thumb: 4, 10
-    - E.g., VIF of the true model is `r car::vif(ls_result[[1]])`, and for the one with multicollinearity is `r car::vif(ls_result[[2]])`
+    - E.g., VIF of the true model is `r car::vif(ls_result[[1]])` in the previous slide, and for the one with multicollinearity is `r car::vif(ls_result[[2]])`
+:::
+
 
 - Adjustment
-    1. Removed the highly collinear variables [(what's the problem of using it?)]{.small}.
+    1. Removed the highly collinear variables (*Risk?*)
     1. Remeasure the collinear variables (e.g., EFA, CFA, IRT)
 
 
@@ -267,7 +277,8 @@ Problems of using the first adjustment
 
 ##  What's Heteroscedasticity
 
-- Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance), var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>
+- Homo/heteroscedasticity &asymp; Homo/heterogeneity (of variance)
+    - var(&epsilon;<sub>i</sub>|X) = &sigma;<sup>2</sup>
     - Violation: $var(\epsilon_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.$
 
 :::{.notes}
@@ -279,10 +290,10 @@ ANOVA: Heterogeneity (of variance)
 :::
 
 
-:::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png){.fragment fig-align="center" height=400}
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity1.png){.fragment fig-align="center" height=400}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp){.fragment fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity2.webp){.fragment fig-align="center" height=400}
 :::
 
 
@@ -299,7 +310,7 @@ H_0: var(\hat\beta|X) =& \sum(X_i - \bar X)^2;\\
     - [Unbiased]{.red}, expected consistent, but inefficient
     - Only when $\frac{\sigma_i^2}{\sigma^2} = 1$, the estimate is efficient.
 
-- Diagnosis: Breusck-Pagan(-Godfreg) test, Goldfeld-Quandt test, Park test, White test, etc.
+- Diagnosis: Breusck-Pagan, Goldfeld-Quandt, Park, White, etc.
 
 ## Diagnosis: Breusck-Pagan(-Godfreg) test
 
@@ -314,7 +325,7 @@ H_0: var(\hat\beta|X) =& \sum(X_i - \bar X)^2;\\
 #| fig-align: center
 #| fig-height: 3.5
 
-n <- 1000
+n <- 10000
 
 df_sim <- tibble(x = runif(n, 1, 10),
                  y = 2 * x + rnorm(n, sd = x / 2)) %>% 
@@ -387,7 +398,7 @@ ggplot(df_sim, aes(x = log(x), y = log(abs(res)))) +
 :::{.notes}
 Ocular: 望远镜
 
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_parkTest.png" height = 200 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/mh_parkTest.png" height = 200 />
 :::
 
 
@@ -403,7 +414,7 @@ Ocular: 望远镜
 #| fig-height: 3
 
 # White Test Visualization - Showing only one plot for simplicity
-ggplot(df_sim, aes(x = x + I(x^2) + I(x*y), y = squared_resid)) +
+ggplot(df_sim, aes(x = x + x^2 + x*y, y = squared_resid)) +
               geom_point() +
               xlab(expression(X + X^2 + XY)) +
               ylab(expression(epsilon[i]^2))
@@ -437,7 +448,7 @@ ggplot(data = df_fake) +
   ylab(expression(epsilon[i]))
 ```
 
-----
+## Statistics of X1 and X2 from different tests
 
 :::: {.columns}
 
@@ -460,171 +471,6 @@ bptest(m_fit, varformula = ~x2)
 - If you have a **specific** hypothesis about the variance changes (e.g., increasing with the level of an explanatory variable), the Goldfeld-Quandt or Park test might be appropriate.
 - If you're **unsure** of the form of heteroscedasticity or have **multiple** Xs, the Breusch-Pagan or White test would be more suitable.
 
-## Adjustment: White covariance matrix
-
-(a.k.a., Heteroscedasitic-consistent covariance matrix).
-
-$$E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}$$
-
-:::{.fragment}
-Since E(&epsilon;<sub>i</sub>|X) = 0 by assumption, we can estimate $\epsilon_i$ with $\hat \epsilon_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.$
-:::
-
-
-:::{.fragment}
-The estimates turn out to be [biased]{.red}, but converge asymptotically in n to the true distribution. [(What does this imply?)]{.small}
-:::
-
-
-:::{.notes}
-Means it's fine when N is large enough.
-:::
-
-## Adjustment: Weighted least square
-
-Reduce the substantive effect of the change in X by $\frac{1}{\sigma_i}$, in order to squeeze the value towards the middle: If &sigma;<sub>i</sub> is known, 
-
-\begin{align}
-\frac{Y_i}{\sigma_i} =& \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
-\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =& \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
-\Rightarrow Y_i^* =& \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*. 
-\end{align}
-
-:::{.fragment}
-The last equation is homoscedastistic. 
-However, in most cases, we don't know &sigma;<sub>i</sub> &rArr; var(&epsilon;<sub>i</sub>)&sim; X<sub>1i</sub>, i.e., var(&epsilon;<sub>i</sub>) = &sigma;<sub>i</sub><sup>2</sup> = &sigma;<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>&sigma;<sup>2</sup>.
-:::
-
-----
-
-:::: {.columns}
-
-::: {.column .fragment width="70%"}
-Given the goal var(&epsilon;<sup>\*</sup><sub>i</sub>) = var(&epsilon;<sup>\*</sup><sub>j</sub>), &forall; i,j. 
-
-\begin{align}
-\epsilon^*_i =& \frac{\epsilon_i}{\sqrt{h_i}},\\
-var(\frac{\epsilon_i}{\sqrt{h_i}}) =& \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
-\Rightarrow Y_i^* =& \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
-\end{align}
-:::
-
-::: {.column .fragment width="30%"}
-:::{.callout-tip}
-In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.
-:::
-:::
-
-::::
-
-
-## Adjustment: Feasible Generalized Linear Squares (FGLS) {.smaller}
-
-\begin{align}
-\boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
-var(\boldsymbol{\epsilon}) =& \Omega_{n\times n} = \left(
-       \begin{array}{cccc}
-       \sigma_1^2 & 0 & \cdots & 0\\
-       0 & \sigma_2^2 & \cdots & 0\\
-       \vdots & \vdots & \vdots & \vdots \\
-       0 & 0 & \cdots & \sigma_n^2\\
-       \end{array}\right),\\
-\text{Then, } \boldsymbol{\hat\beta_{GLS}} =& (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
-\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
-var(\boldsymbol{\epsilon})=& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
-var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
-\end{align}
-
-
-* If there's no heteroscedasticity, $\boldsymbol{\Omega} = \sigma\boldsymbol{I}.$
-* If there is heteroscedasticity and $\boldsymbol{\Omega}$ is known, then WLS (a special type of GLS).
-* If $\boldsymbol{\Omega}$ is unknown, run $\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}$ to estimate $\boldsymbol{\Omega}$ with $\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}$
-
-:::{.fragment}
-:::{.callout-warning}
-NB: This method does not get SE, and also [biased]{.red} for small N.
-:::
-:::
-
-
-
-## "Sandwich" Matrix
-
-FGLS is a type of "sandwich" estimator.
-
-In a more general view, let $\boldsymbol{Q} = \boldsymbol{X'X}$ and 
-
-\begin{align}
-\boldsymbol{Q} = \left(
-\begin{array}{cccc}
-\sigma_1^2 & 0 & \cdots & 0\\
-0 & \sigma_2^2 & \cdots & 0\\
-\vdots & \vdots & \vdots & \vdots \\
-0 & 0 & \cdots & \sigma_n^2\\
-\end{array}\right)
-\end{align}
-
-Then for regular OLS, $var(\beta) = \sigma^2(\boldsymbol{X'X})^{-1} = \sigma^2\boldsymbol{Q}^{-1}$.
-
-But when heteroscedasticity occurs, $var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}$.
-
-Instead, let $\boldsymbol{G} = \boldsymbol{X'GX}$, then $var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.$
-
-
-## Heteroscedasticity in TSCS Data
-
-- TSCS: Time-series cross-sectional data.
-    - Sometimes, they are called "pooled data", "panel data"(WRONG!)
-- Reason of heterosceasticity
-    - Spatical heterogeneity
-    - Temporal heterogeneity
-- Deal with heteroscedasticity in TSCS data:
-    1. Robust standard error
-    1. Fixed effect
-    1. Multilevel modeling
-
-
-## Robust Standard Error{.smaller}
-
-- **Sandwich SE**
-    - In the FGLS version, the "meat" can be identified only when T > N, and before this, the autocorrelation ($cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j$) has to be eliminated.
-- **Panel-corrected SE**
-    - An alternative version of the sandwich SE. &Omega; is clustered by time periods: $\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}$
-- **Cluster SE**
-    - Adjust SE to account for correlations within clusters.
-- **Within-between model**
-    1. Run separate models in each group
-    1. Run an aggregate regression
-
- 
-:::{.fragment}
-
-Let $\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}$. Then,
-
-\begin{align}
-\bar{Y_i} =& \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
-Y_{it} - \bar{Y_i} =& (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
-\hat{Y_i} =& \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
-Y_{it} =& \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
-\end{align}
-:::
-
-## Alternative Methods
-
-- Fixed effect
-    - Least Square with Dummy Variables (LSDV)
-    - Demeaning
-    - Fixed effect vector decomposition (FEVD)
-- Multilevel modeling
-    - Random intercept
-    - Random slop
-
-## Take-home point
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png){.r-stretch}
-
-# Appendix
 
 ## Fixed Effect
 
@@ -642,7 +488,7 @@ Y_{it} =& \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{i
 For the last two concerns, considering using duration models.
 :::
 
-## Alternatives adjustments
+## Alternatives corrections
 
 1. Demeaning
 1. Fixed effect vector decomposition (FEVD)
@@ -726,3 +572,188 @@ Covariate Matrix
 :::
 
 
+
+## Alternative Methods
+
+- White covariance matrix
+- Weighted least square
+- Feasible Generalized Linear Squares (FGLS)
+- "Sandwich" Matrix
+- Robust Standard Error
+
+
+## Take-home point
+
+![](https://drhuyue.site:10002/sammo3182/figure/mh_mindmap.png){.r-stretch}
+
+# Appendix {.appendix .unnumbered}
+
+## White covariance matrix
+
+(a.k.a., Heteroscedasitic-consistent covariance matrix).
+
+$$E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}$$
+
+:::{.fragment}
+Since E(&epsilon;<sub>i</sub>|X) = 0 by assumption, we can estimate $\epsilon_i$ with $\hat \epsilon_i^2$ and estimate $var(\hat\beta_1|X)$ with $\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.$
+:::
+
+
+:::{.fragment}
+The estimates turn out to be [biased]{.red}, but converge asymptotically in n to the true distribution. (*Means?*)
+:::
+
+
+:::{.notes}
+Means it's fine when N is large enough.
+:::
+
+
+## Weighted least square
+
+Reduce the substantive effect of the change in X by $\frac{1}{\sigma_i}$, in order to squeeze the value towards the middle: If &sigma;<sub>i</sub> is known, 
+
+\begin{align}
+\frac{Y_i}{\sigma_i} =& \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
+\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =& \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
+\Rightarrow Y_i^* =& \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*. 
+\end{align}
+
+:::{.fragment}
+The last equation is homoscedastistic. 
+However, in most cases, we don't know &sigma;<sub>i</sub> &rArr; var(&epsilon;<sub>i</sub>)&sim; X<sub>1i</sub>, i.e., var(&epsilon;<sub>i</sub>) = &sigma;<sub>i</sub><sup>2</sup> = &sigma;<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>&sigma;<sup>2</sup>.
+:::
+
+## Weighted least square (continued)
+
+:::: {.columns}
+
+::: {.column .fragment width="70%"}
+Given the goal var(&epsilon;<sup>\*</sup><sub>i</sub>) = var(&epsilon;<sup>\*</sup><sub>j</sub>), &forall; i,j. 
+
+\begin{align}
+\epsilon^*_i =& \frac{\epsilon_i}{\sqrt{h_i}},\\
+var(\frac{\epsilon_i}{\sqrt{h_i}}) =& \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
+\Rightarrow Y_i^* =& \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
+\end{align}
+:::
+
+::: {.column .fragment width="30%"}
+:::{.callout-tip}
+In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.
+:::
+:::
+
+::::
+
+
+## Feasible Generalized Linear Squares (FGLS) {.smaller}
+
+\begin{align}
+\boldsymbol{Y} =& \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
+var(\boldsymbol{\epsilon}) =& \Omega_{n\times n} = \left(
+       \begin{array}{cccc}
+       \sigma_1^2 & 0 & \cdots & 0\\
+       0 & \sigma_2^2 & \cdots & 0\\
+       \vdots & \vdots & \vdots & \vdots \\
+       0 & 0 & \cdots & \sigma_n^2\\
+       \end{array}\right),\\
+\text{Then, } \boldsymbol{\hat\beta_{GLS}} =& (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =& \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
+\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{\epsilon})=& (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+var(\boldsymbol{\hat\beta_{GLS}}) =& (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
+\end{align}
+
+
+* If there's no heteroscedasticity, $\boldsymbol{\Omega} = \sigma\boldsymbol{I}.$
+* If there is heteroscedasticity and $\boldsymbol{\Omega}$ is known, then WLS (a special type of GLS).
+* If $\boldsymbol{\Omega}$ is unknown, run $\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}$ to estimate $\boldsymbol{\Omega}$ with $\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}$
+
+:::{.fragment}
+:::{.callout-warning}
+NB: This method does not get SE, and also [biased]{.red} for small N.
+:::
+:::
+
+## "Sandwich" Matrix
+
+FGLS is a type of "sandwich" estimator.
+
+In a more general view, let $\boldsymbol{Q} = \boldsymbol{X'X}$ and 
+
+\begin{align}
+\boldsymbol{Q} = \left(
+\begin{array}{cccc}
+\sigma_1^2 & 0 & \cdots & 0\\
+0 & \sigma_2^2 & \cdots & 0\\
+\vdots & \vdots & \vdots & \vdots \\
+0 & 0 & \cdots & \sigma_n^2\\
+\end{array}\right)
+\end{align}
+
+Then for regular OLS, $var(\beta) = \sigma^2(\boldsymbol{X'X})^{-1} = \sigma^2\boldsymbol{Q}^{-1}$.
+
+But when heteroscedasticity occurs, $var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}$.
+
+Instead, let $\boldsymbol{G} = \boldsymbol{X'GX}$, then $var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.$
+
+
+## Heteroscedasticity in TSCS Data
+
+- TSCS: Time-series cross-sectional data.
+    - Sometimes, they are called "pooled data", "panel data"(WRONG!)
+- Reason of heterosceasticity
+    - Spatical heterogeneity
+    - Temporal heterogeneity
+- Deal with heteroscedasticity in TSCS data:
+    1. Robust standard error
+    1. Fixed effect
+    1. Multilevel modeling
+
+
+## Robust Standard Error {.smaller}
+
+- **Sandwich SE**
+    - In the FGLS version, the "meat" can be identified only when T > N, and before this, the autocorrelation ($cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j$) has to be eliminated.
+- **Panel-corrected SE**
+    - An alternative version of the sandwich SE. &Omega; is clustered by time periods: $\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}$
+- **Cluster SE**
+    - Adjust SE to account for correlations within clusters.
+- **Within-between model**
+    1. Run separate models in each group
+    1. Run an aggregate regression
+
+ 
+:::{.fragment}
+
+Let $\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}$. Then,
+
+\begin{align}
+\bar{Y_i} =& \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
+Y_{it} - \bar{Y_i} =& (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
+\hat{Y_i} =& \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
+Y_{it} =& \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
+\end{align}
+:::
+
+## Stretch {.unnumbered}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::

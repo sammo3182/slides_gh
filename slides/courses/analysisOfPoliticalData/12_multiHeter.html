@@ -7,8 +7,13 @@
 <link href="12_multiHeter_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="12_multiHeter_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="12_multiHeter_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="12_multiHeter_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="12_multiHeter_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="12_multiHeter_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="12_multiHeter_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="12_multiHeter_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="12_multiHeter_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="12_multiHeter_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="Yue Hu">
   <title>Multicollinearity &amp; Heteroskedasticity</title>
@@ -31,7 +36,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -95,8 +100,8 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="12_multiHeter_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="12_multiHeter_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="12_multiHeter_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="12_multiHeter_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="12_multiHeter_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -224,7 +229,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -405,19 +411,30 @@ Yue Hu
 </div>
 
 </section>
-<section id="a-question-left-from-the-last-lecture" class="slide level2">
-<h2>A Question Left from the Last Lecture</h2>
-<div class="fragment" style="text-align:center">
-<p>Why should we use multiple regression, and why <em>controls</em>?</p>
-</div>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="r-stack">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange1.gif" class="fragment"> <img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_drStrange2.gif" class="fragment"></p>
+<section id="overview" class="slide level2 unnumbered">
+<h2>Overview</h2>
+<div>
+<ol type="1">
+<li>Collinearity
+<ul>
+<li>Violation</li>
+<li>Diagnosis</li>
+<li>Adjustment</li>
+</ul></li>
+<li>Heteroscedasticity
+<ul>
+<li>Violation</li>
+<li>Diagnosis</li>
+<li>Adjustment</li>
+</ul></li>
+</ol>
 </div>
 <aside class="notes">
-<p>We wanna understand things realistically and predict them.</p>
-<p>Things happens all together, while we care what’s the most important</p>
+<ul>
+<li>Hetero-: From the Greek word “heteros,” meaning “different” or “other.”</li>
+<li>Skedasticity: Derived from the Greek word “skedastikos,” meaning “able to scatter(spread).”</li>
+<li>It refers to the dispersion or variability of the error term in a regression model. So, heteroskedasticity literally means “different scattering” or “variable dispersion,” which implies that the variance of the error term is not constant.</li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -429,59 +446,59 @@ Yue Hu
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div><div class="column fragment" style="margin-top: 5em">
+</section>
+<section>
+<section id="multicollinearity" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Multicollinearity</h1>
+
+</section>
+<section id="before-going-into-details" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Before going into details</h2>
+<div class="fragment" style="text-align:center">
+<p><em>Why should we use multiple regressions, and why controls? </em></p>
+</div>
+<div class="r-hstack">
+<p><img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_drStrange1.gif" class="fragment" height="250"> <img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_drStrange2.gif" class="fragment" height="250"></p>
+</div>
+<div class="fragment">
 <blockquote>
 <p>One observes a set of covariates that is, after <span class="blue">statistical adjustment</span>, sufficient to make treatment status <span class="red">as-if random</span>.—Keele et al.&nbsp;2020</p>
 </blockquote>
 </div>
+</section>
+<section id="statistical-adjustment" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Statistical Adjustment</h2>
+<div>
+<ol type="1">
+<li>Linearity in the parameter; ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a>, <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">Moderation</a> &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">GLM</a></li>
+<li>Nonstochastic X (“given X,” a.k.a., “X is fixed”); ← <span class="gray">✓</span> Data collection</li>
+<li>X has positive noninfinite variance (var(X)); ← <span class="gray">✓</span> Data collection</li>
+<li>Correct specification; ← <span class="green">✓</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a></li>
+<li>Identification (N &gt; K; K = 2 for a simple OLS); ← <span class="gray">✓</span> Data collection &amp; perfect collinearity <span class="golden">(Today)</span></li>
+<li>Mean zero errors (E(ε<sub>i</sub>|X<sub>i</sub>) = 0); ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a> (Omited variables, etc.) &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">Missing</a></li>
+<li>No covariance between X<sub>i</sub> and ε<sub>i</sub>; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Endogeneity issue</a></li>
+<li>No autocorrelation; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Autocorrelation issue</a></li>
+<li>No perfect collinearity ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
+<li>Homoskedasticity; ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
+</ol>
 </div>
 </section>
-<section id="statistical-adjustment" class="slide level2">
-<h2>Statistical Adjustment</h2>
-<ol type="1">
-<li class="fragment">Linearity in the parameter; ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a>, <a href="/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html">Moderation</a> &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">GLM</a></li>
-<li class="fragment">Nonstochastic X (“given X,” a.k.a., “X is fixed”); ← <span class="gray">✓</span> Data collection</li>
-<li class="fragment">X has positive noninfinite variance (var(X)); ← <span class="gray">✓</span> Data collection</li>
-<li class="fragment">Correct specification; ← <span class="green">✓</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a></li>
-<li class="fragment">Identification (N &gt; K; K = 2 for a simple OLS); ← <span class="gray">✓</span> Data collection &amp; perfect collinearity <span class="golden">(Today)</span></li>
-<li class="fragment">Mean zero errors (E(ε<sub>i</sub>|X<sub>i</sub>) = 0); ← <span class="green">⍻</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html">Specification</a> (Omited variables, etc.) &amp; <a href="/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html">Missing</a></li>
-<li class="fragment">No covariance between X<sub>i</sub> and ε<sub>i</sub>; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Endogeneity issue</a></li>
-<li class="fragment">No autocorrelation; ← <span class="red">✗</span> <a href="/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html">Autocorrelation issue</a></li>
-<li class="fragment">No perfect collinearity ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
-<li class="fragment">Homoskedasticity; ← <span class="red">✗</span> <span class="golden">(Today)</span></li>
-</ol>
-</section>
-<section id="overview" class="slide level2">
-<h2>Overview</h2>
-<ol type="1">
-<li class="fragment">Collinearity
-<ul>
-<li class="fragment">Violation</li>
-<li class="fragment">Diagnosis</li>
-<li class="fragment">Adjustment</li>
-</ul></li>
-<li class="fragment">Heteroscedasticity
-<ul>
-<li class="fragment">Violation</li>
-<li class="fragment">Diagnosis</li>
-<li class="fragment">Adjustment</li>
-</ul></li>
-</ol>
-</section>
-<section>
-<section id="collinearity" class="title-slide slide level1 center">
-<h1>Collinearity</h1>
-
-</section>
-<section id="perfect-collinearity" class="slide level2">
-<h2>Perfect Collinearity</h2>
+<section id="perfect-collinearity" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Perfect Collinearity</h2>
 <p><span class="math display">\[X_{2i} = \hat\delta_0 + \hat\delta_1X_{1i} + \hat r_{1i}.\]</span></p>
 <p>When cov(X<sub>1</sub>, X<sub>2</sub>) = 1, r<sub>1i</sub> = 0, then <span class="math inline">\(\hat\beta_1 = \frac{\sum\hat r_{1i}y_i}{\hat r_{1i}^2}\)</span> cannot be estimated.</p>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p>E.g., <span class="math inline">\(X_{2i} = 1 + 2X_{1i}.\)</span></p>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg" width="450"></p>
+<div class="r-stack">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_zhenJiaMeiHouWang.jpeg" class="fragment" height="450"></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mh_majia.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_majia.png" class="fragment quarto-figure quarto-figure-center" height="450"></a></p>
+</figure>
+</div>
+</div>
 </div><div class="column fragment" style="width:50%;">
+<p>E.g., <span class="math inline">\(X_{2i} = 1 + 2X_{1i}.\)</span></p>
 <div class="small">
 <p><span class="math display">\[\begin{align}
 Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \text{(PRF)}\\
@@ -513,23 +530,34 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \t
 </div>
 </div>
 </section>
-<section id="multicollinearity" class="slide level2">
-<h2>Multicollinearity</h2>
+<section id="multicollinearity-1" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> Multicollinearity</h2>
+<ul>
+<li class="fragment">Coefficient, <span class="math inline">\(\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}\)</span>
+<ul>
+<li class="fragment">Small changes in X can lead to dramatic changes in <span class="math inline">\((\boldsymbol{X'X})^{-1}\)</span>, and thus <span class="math inline">\(\hat\beta\)</span>.</li>
+</ul></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Example</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math display">\[X = \begin{bmatrix} 1 &amp; 0.99 \\ 0.99 &amp; 1 \end{bmatrix}, \tilde X = \begin{bmatrix} 1 &amp; 0.99 \\ 0.99 &amp; 1.01 \end{bmatrix} \Rightarrow X^{-1} \approx \begin{bmatrix} 50.25 &amp; -49.75 \\ -49.75 &amp; 50.25 \end{bmatrix}, \tilde X^{-1} \approx \begin{bmatrix} 33.44 &amp; 0.3311 \\ 0.3311 &amp; 33.78 \end{bmatrix}\]</span></p>
+</div>
+</div>
+</div>
+</div>
 <ul>
 <li class="fragment">Variance
 <ul>
-<li class="fragment"><span class="math inline">\(var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},\)</span>
-<ul>
-<li class="fragment">Where <span class="math inline">\(\beta_{12} = cov(X_1, X_2)\)</span>.</li>
-</ul></li>
-<li class="fragment">As β<sub>12</sub> increases, the variance also increases <span class="small">(What does that mean?)</span>.</li>
-</ul></li>
-<li class="fragment">Coefficient
-<ul>
-<li class="fragment"><span class="math inline">\(\hat\beta = (\boldsymbol{X'X})^{-1}\boldsymbol{X'Y}\)</span>
-<ul>
-<li class="fragment">Small changes in X can lead to dramatic changes in <span class="math inline">\((\boldsymbol{X'X})^{-1}\)</span>, and thus <span class="math inline">\(\hat\beta\)</span>. <span class="small">(Why?)</span></li>
-</ul></li>
+<li class="fragment"><span class="math inline">\(var(\hat\beta_1|X) = \sigma^2(\boldsymbol{X'X})^{-1}= \frac{\sigma^2}{\sum(X_{1i} - \bar X_1)^2(1 - \beta_{12}^2)},\)</span> where <span class="math inline">\(\beta_{12} = cov(X_1, X_2)\)</span>.</li>
+<li class="fragment">As β<sub>12</sub> increases, the variance also <span class="red">increases</span> (<em>Means?</em>)</li>
 </ul></li>
 </ul>
 <aside class="notes">
@@ -573,56 +601,64 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \t
           display:block!important;
       }</style></aside>
 </section>
-<section id="illustration-with-simulated-data" class="slide level2">
-<h2>Illustration with simulated data</h2>
+<section id="illustration-with-simulated-data" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Illustration with simulated data</h2>
 <p>E.g., <span class="math inline">\(X'_2 = 0.5X_1 + 0.5X_2 + \nu.\)</span></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>df_sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
-<span id="cb1-4"><a href="#cb1-4"></a>  <span class="at">x1 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="fl">3.13</span>), <span class="at">x2 =</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.4</span>),</span>
-<span id="cb1-5"><a href="#cb1-5"></a>  <span class="at">y =</span> <span class="dv">2</span> <span class="sc">+</span> .<span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> .<span class="dv">4</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb1-6"><a href="#cb1-6"></a>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a></span>
-<span id="cb1-8"><a href="#cb1-8"></a>df_fake <span class="ot">&lt;-</span> df_sim <span class="sc">|&gt;</span> </span>
-<span id="cb1-9"><a href="#cb1-9"></a>  <span class="fu">mutate</span>(<span class="at">x2 =</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.1</span>))  </span>
-<span id="cb1-10"><a href="#cb1-10"></a></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="fu">cor</span>(df_fake<span class="sc">$</span>x1, df_fake<span class="sc">$</span>x2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb1-2"><a href=""></a></span>
+<span id="cb1-3"><a href=""></a>df_sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-4"><a href=""></a>  <span class="at">x1 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="fl">3.13</span>), <span class="at">x2 =</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.4</span>),</span>
+<span id="cb1-5"><a href=""></a>  <span class="at">y =</span> <span class="dv">2</span> <span class="sc">+</span> .<span class="dv">2</span> <span class="sc">*</span> x1 <span class="sc">+</span> .<span class="dv">4</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb1-6"><a href=""></a>)</span>
+<span id="cb1-7"><a href=""></a></span>
+<span id="cb1-8"><a href=""></a>df_fake <span class="ot">&lt;-</span> df_sim <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">x2 =</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fl">0.5</span> <span class="sc">*</span> x2 <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd =</span> <span class="fl">0.1</span>))  </span>
+<span id="cb1-10"><a href=""></a></span>
+<span id="cb1-11"><a href=""></a><span class="fu">cor</span>(df_fake<span class="sc">$</span>x1, df_fake<span class="sc">$</span>x2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0.9118169</code></pre>
 </div>
 </div>
 </section>
-<section id="consequence-of-multicollinearity-illustration" class="slide level2">
-<h2>Consequence of multicollinearity: Illustration</h2>
+<section id="consequence-of-multicollinearity-illustration" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> Consequence of multicollinearity: Illustration</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ls_result <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">list</span>(df_sim, df_fake), \(dataset){</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dataset)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>}) <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">set_names</span>(<span class="fu">c</span>(<span class="st">"True"</span>, <span class="st">"W. multicol"</span>))</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="fu">small_multiple</span>(ls_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>ls_result <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">list</span>(df_sim, df_fake), \(dataset){</span>
+<span id="cb3-2"><a href=""></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x1 <span class="sc">+</span> x2, <span class="at">data =</span> dataset)</span>
+<span id="cb3-3"><a href=""></a>}) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href=""></a>  <span class="fu">set_names</span>(<span class="fu">c</span>(<span class="st">"True"</span>, <span class="st">"W. multicol"</span>))</span>
+<span id="cb3-5"><a href=""></a></span>
+<span id="cb3-6"><a href=""></a><span class="fu">small_multiple</span>(ls_result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output-display">
-<p><img data-src="12_multiHeter_files/figure-revealjs/regComp-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="12_multiHeter_files/figure-revealjs/regComp-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="12_multiHeter_files/figure-revealjs/regComp-1.png" width="960"></a></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
-<section id="diagnosis" class="slide level2 smaller">
-<h2>Diagnosis</h2>
+<section id="diagnosis" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> Diagnosis</h2>
 <p><strong>Variance Inflation Factors</strong> (VIF, [1, +∞]): A measure of how much the variance of the estimated coefficient β<sub>x</sub> is “inflated” by the correlation among the predictor variables.</p>
 <p><span class="math display">\[VIF = \frac{1}{1 - {R}^{2}_{X_i}} = \frac{1}{Tolerance}\]</span></p>
+<div class="small">
 <ul>
-<li class="fragment"><span class="math inline">\({R}^{2}_{X_i}\)</span>: The coefficient of determination for a regression model where X<sub>i</sub> is the dependent variable, and all other predictor variables are independent variables.
+<li><span class="math inline">\({R}^{2}_{X_i}\)</span>: The coefficient of determination for a regression model where X<sub>i</sub> is the dependent variable, and all other predictor variables are independent variables.
 <ul>
-<li class="fragment">1: no correlation between X<sub>1</sub> and the rest</li>
-<li class="fragment">Rule of thumb: 4, 10</li>
-<li class="fragment">E.g., VIF of the true model is 1.0000473, 1.0000473, and for the one with multicollinearity is 5.9315546, 5.9315546</li>
+<li>1: no correlation between X<sub>1</sub> and the rest</li>
+<li>Rule of thumb: 4, 10</li>
+<li>E.g., VIF of the true model is 1.0000473, 1.0000473 in the previous slide, and for the one with multicollinearity is 5.9315546, 5.9315546</li>
 </ul></li>
+</ul>
+</div>
+<ul>
 <li class="fragment">Adjustment
 <ol type="1">
-<li class="fragment">Removed the highly collinear variables <span class="small">(what’s the problem of using it?)</span>.</li>
+<li class="fragment">Removed the highly collinear variables (<em>Risk?</em>)</li>
 <li class="fragment">Remeasure the collinear variables (e.g., EFA, CFA, IRT)</li>
 </ol></li>
 </ul>
@@ -645,15 +681,16 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \t
       }</style></aside>
 </section></section>
 <section>
-<section id="heteroscedasticity" class="title-slide slide level1 center">
-<h1>Heteroscedasticity</h1>
+<section id="heteroscedasticity" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Heteroscedasticity</h1>
 
 </section>
-<section id="whats-heteroscedasticity" class="slide level2">
-<h2>What’s Heteroscedasticity</h2>
+<section id="whats-heteroscedasticity" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> What’s Heteroscedasticity</h2>
 <ul>
-<li class="fragment">Homo/heteroscedasticity ≈ Homo/heterogeneity (of variance), var(ε<sub>i</sub>|X) = σ<sup>2</sup>
+<li class="fragment">Homo/heteroscedasticity ≈ Homo/heterogeneity (of variance)
 <ul>
+<li class="fragment">var(ε<sub>i</sub>|X) = σ<sup>2</sup></li>
 <li class="fragment">Violation: <span class="math inline">\(var(\epsilon_i|X) = \sigma_i^2, \sigma_i^2 \neq \sigma_j^2, \forall i, j.\)</span></li>
 </ul></li>
 </ul>
@@ -672,21 +709,21 @@ Y_i =&amp; \hat\beta_0 + \hat\beta_1X_{1} + \hat\beta_2X_{2} + \hat \epsilon, \t
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<div class="r-stack">
+<div class="r-hstack">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity1.png" class="fragment" height="400"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity1.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_heteroscedasticity2.webp" class="fragment" height="400"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity2.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_heteroscedasticity2.webp" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="consequence" class="slide level2">
-<h2>Consequence</h2>
+<section id="consequence" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Consequence</h2>
 <p><span class="math display">\[\begin{align}
 var(\hat\beta|X) =&amp; \frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\sigma_i^2.\\
 H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
@@ -699,11 +736,11 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <li class="fragment"><span class="red">Unbiased</span>, expected consistent, but inefficient</li>
 <li class="fragment">Only when <span class="math inline">\(\frac{\sigma_i^2}{\sigma^2} = 1\)</span>, the estimate is efficient.</li>
 </ul></li>
-<li class="fragment">Diagnosis: Breusck-Pagan(-Godfreg) test, Goldfeld-Quandt test, Park test, White test, etc.</li>
+<li class="fragment">Diagnosis: Breusck-Pagan, Goldfeld-Quandt, Park, White, etc.</li>
 </ul>
 </section>
-<section id="diagnosis-breusck-pagan-godfreg-test" class="slide level2">
-<h2>Diagnosis: Breusck-Pagan(-Godfreg) test</h2>
+<section id="diagnosis-breusck-pagan-godfreg-test" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Diagnosis: Breusck-Pagan(-Godfreg) test</h2>
 <ol type="1">
 <li class="fragment">Assuming <span class="math inline">\(\boldsymbol{\sigma_i^2} = \boldsymbol{X\delta} + \boldsymbol{v_i}\)</span></li>
 <li class="fragment">Regress <span class="math inline">\(\hat \epsilon_i^2\)</span> on <span class="math inline">\(X_1, X_2, \cdots, X_{k - 1}\)</span>,
@@ -718,15 +755,15 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="12_multiHeter_files/figure-revealjs/bp-1.png" width="960"></p>
+<p><a href="12_multiHeter_files/figure-revealjs/bp-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="12_multiHeter_files/figure-revealjs/bp-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="diagnosis-goldfeld-quandt-test" class="slide level2 smaller">
-<h2>Diagnosis: Goldfeld-Quandt test</h2>
+<section id="diagnosis-goldfeld-quandt-test" class="slide level2 smaller" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Diagnosis: Goldfeld-Quandt test</h2>
 <ol type="1">
 <li class="fragment">Divide the domain of X to three parts, <span class="math inline">\(\frac{n -c}{2}, c, \frac{n -c}{2}\)</span>.<sup>1</sup></li>
 <li class="fragment">Regress Y on X as usual for each part.</li>
@@ -741,15 +778,15 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="12_multiHeter_files/figure-revealjs/gq-1.png" width="960"></p>
+<p><a href="12_multiHeter_files/figure-revealjs/gq-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="12_multiHeter_files/figure-revealjs/gq-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">Theoretically, the smaller the c is, the more power the test has. However, too small c may also cause the difference between low and high groups difficult to be identified.</span></p></li></ol></aside></section>
-<section id="diagnosis-park-test" class="slide level2">
-<h2>Diagnosis: Park test</h2>
+<section id="diagnosis-park-test" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Diagnosis: Park test</h2>
 <p>Ocular-inspection test: Use the scalar points of <span class="math inline">\(\hat \epsilon_i^2\)</span> against <span class="math inline">\(X_i\)</span><sup>1</sup></p>
 <p>Regress <span class="math inline">\(ln(\hat \epsilon_i^2)\)</span> on some <span class="math inline">\(X_{ki}\)</span>: <span class="math display">\[ln(\hat \epsilon_i) = \hat\delta_0 + \hat\delta_1ln(X_{ki}) + \hat\gamma_i.\]</span></p>
 <p>Do the t-test of coefficient in <span class="math inline">\(ln(X_i)\)</span>: <span class="math inline">\(H_0: \hat\delta_1 = 0.\)</span></p>
@@ -758,7 +795,7 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="12_multiHeter_files/figure-revealjs/park-1.png" width="960"></p>
+<p><a href="12_multiHeter_files/figure-revealjs/park-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="12_multiHeter_files/figure-revealjs/park-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
@@ -766,7 +803,7 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 </div>
 <aside class="notes">
 <p>Ocular: 望远镜</p>
-<p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_parkTest.png" height="200"></p>
+<p><img src="https://drhuyue.site:10002/sammo3182/figure/mh_parkTest.png" height="200"></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -779,8 +816,8 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
           display:block!important;
       }</style></aside>
 <aside><ol class="aside-footnotes"><li id="fn2"><p>Or <span class="math inline">\(\hat \epsilon_i^2\)</span> against <span class="math inline">\(Y_i\)</span></p></li></ol></aside></section>
-<section id="diagnosis-white-test" class="slide level2">
-<h2>Diagnosis: White Test</h2>
+<section id="diagnosis-white-test" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Diagnosis: White Test</h2>
 <ol type="1">
 <li class="fragment">Regress Y on X to get <span class="math inline">\(\hat \epsilon_i^2\)</span></li>
 <li class="fragment">Regress <span class="math inline">\(\hat \epsilon_i^2\)</span> on <span class="math inline">\(\sum X_i + \sum X_i^2 + \sum X_iX_j\)</span> or <span class="math inline">\(\hat Y_i\)</span>.</li>
@@ -791,25 +828,33 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="12_multiHeter_files/figure-revealjs/white-1.png" width="960"></p>
+<p><a href="12_multiHeter_files/figure-revealjs/white-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="12_multiHeter_files/figure-revealjs/white-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="when-to-use-which" class="slide level2">
-<h2>When to use which</h2>
+<section id="when-to-use-which" class="slide level2" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> When to use which</h2>
 <ul>
 <li class="fragment">Choose based on data conditions
 <ul>
 <li class="fragment">E.g., BP test examines X<sub>i</sub> affects the squared residuals, GQ tests differences between subsamples ⇒ Not yield the same result</li>
 </ul></li>
 </ul>
-
-<img data-src="12_multiHeter_files/figure-revealjs/simulatedData-1.png" width="960" class="r-stretch quarto-figure-center"></section>
-<section class="slide level2">
-
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="12_multiHeter_files/figure-revealjs/simulatedData-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="12_multiHeter_files/figure-revealjs/simulatedData-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="statistics-of-x1-and-x2-from-different-tests" class="slide level2" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> Statistics of X1 and X2 from different tests</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
 <div class="cell">
@@ -818,7 +863,7 @@ H_0: var(\hat\beta|X) =&amp; \sum(X_i - \bar X)^2;\\
     Goldfeld-Quandt test
 
 data:  m_fit
-GQ = 8.6335, df1 = 4997, df2 = 4997, p-value &lt; 2.2e-16
+GQ = 9.0616, df1 = 4997, df2 = 4997, p-value &lt; 2.2e-16
 alternative hypothesis: variance increases from segment 1 to 2</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
@@ -826,7 +871,7 @@ alternative hypothesis: variance increases from segment 1 to 2</code></pre>
     Goldfeld-Quandt test
 
 data:  m_fit
-GQ = 1.0463, df1 = 4997, df2 = 4997, p-value = 0.05494
+GQ = 0.94963, df1 = 4997, df2 = 4997, p-value = 0.9661
 alternative hypothesis: variance increases from segment 1 to 2</code></pre>
 </div>
 </div>
@@ -837,14 +882,14 @@ alternative hypothesis: variance increases from segment 1 to 2</code></pre>
     studentized Breusch-Pagan test
 
 data:  m_fit
-BP = 1546.1, df = 1, p-value &lt; 2.2e-16</code></pre>
+BP = 1599.8, df = 1, p-value &lt; 2.2e-16</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     studentized Breusch-Pagan test
 
 data:  m_fit
-BP = 1.0021, df = 1, p-value = 0.3168</code></pre>
+BP = 1.9111, df = 1, p-value = 0.1668</code></pre>
 </div>
 </div>
 </div>
@@ -854,196 +899,8 @@ BP = 1.0021, df = 1, p-value = 0.3168</code></pre>
 <li class="fragment">If you’re <strong>unsure</strong> of the form of heteroscedasticity or have <strong>multiple</strong> Xs, the Breusch-Pagan or White test would be more suitable.</li>
 </ul>
 </section>
-<section id="adjustment-white-covariance-matrix" class="slide level2">
-<h2>Adjustment: White covariance matrix</h2>
-<p>(a.k.a., Heteroscedasitic-consistent covariance matrix).</p>
-<p><span class="math display">\[E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}\]</span></p>
-<div class="fragment">
-<p>Since E(ε<sub>i</sub>|X) = 0 by assumption, we can estimate <span class="math inline">\(\epsilon_i\)</span> with <span class="math inline">\(\hat \epsilon_i^2\)</span> and estimate <span class="math inline">\(var(\hat\beta_1|X)\)</span> with <span class="math inline">\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.\)</span></p>
-</div>
-<div class="fragment">
-<p>The estimates turn out to be <span class="red">biased</span>, but converge asymptotically in n to the true distribution. <span class="small">(What does this imply?)</span></p>
-</div>
-<aside class="notes">
-<p>Means it’s fine when N is large enough.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="adjustment-weighted-least-square" class="slide level2">
-<h2>Adjustment: Weighted least square</h2>
-<p>Reduce the substantive effect of the change in X by <span class="math inline">\(\frac{1}{\sigma_i}\)</span>, in order to squeeze the value towards the middle: If σ<sub>i</sub> is known,</p>
-<p><span class="math display">\[\begin{align}
-\frac{Y_i}{\sigma_i} =&amp; \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
-\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =&amp; \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
-\Rightarrow Y_i^* =&amp; \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*.
-\end{align}\]</span></p>
-<div class="fragment">
-<p>The last equation is homoscedastistic. However, in most cases, we don’t know σ<sub>i</sub> ⇒ var(ε<sub>i</sub>)∼ X<sub>1i</sub>, i.e., var(ε<sub>i</sub>) = σ<sub>i</sub><sup>2</sup> = σ<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>σ<sup>2</sup>.</p>
-</div>
-</section>
-<section class="slide level2">
-
-<div class="columns">
-<div class="column fragment" style="width:70%;">
-<p>Given the goal var(ε<sup>*</sup><sub>i</sub>) = var(ε<sup>*</sup><sub>j</sub>), ∀ i,j.</p>
-<p><span class="math display">\[\begin{align}
-\epsilon^*_i =&amp; \frac{\epsilon_i}{\sqrt{h_i}},\\
-var(\frac{\epsilon_i}{\sqrt{h_i}}) =&amp; \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
-\Rightarrow Y_i^* =&amp; \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
-\end{align}\]</span></p>
-</div><div class="column fragment" style="width:30%;">
-<div class="callout callout-tip callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="adjustment-feasible-generalized-linear-squares-fgls" class="slide level2 smaller">
-<h2>Adjustment: Feasible Generalized Linear Squares (FGLS)</h2>
-<p><span class="math display">\[\begin{align}
-\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
-var(\boldsymbol{\epsilon}) =&amp; \Omega_{n\times n} = \left(
-       \begin{array}{cccc}
-       \sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
-       0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
-       \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
-       0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
-       \end{array}\right),\\
-\text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
-\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
-\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
-var(\boldsymbol{\epsilon})=&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
-var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
-\end{align}\]</span></p>
-<ul>
-<li class="fragment">If there’s no heteroscedasticity, <span class="math inline">\(\boldsymbol{\Omega} = \sigma\boldsymbol{I}.\)</span></li>
-<li class="fragment">If there is heteroscedasticity and <span class="math inline">\(\boldsymbol{\Omega}\)</span> is known, then WLS (a special type of GLS).</li>
-<li class="fragment">If <span class="math inline">\(\boldsymbol{\Omega}\)</span> is unknown, run <span class="math inline">\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}\)</span> to estimate <span class="math inline">\(\boldsymbol{\Omega}\)</span> with <span class="math inline">\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}\)</span></li>
-</ul>
-<div class="fragment">
-<div class="callout callout-warning callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>NB: This method does not get SE, and also <span class="red">biased</span> for small N.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="sandwich-matrix" class="slide level2">
-<h2>“Sandwich” Matrix</h2>
-<p>FGLS is a type of “sandwich” estimator.</p>
-<p>In a more general view, let <span class="math inline">\(\boldsymbol{Q} = \boldsymbol{X'X}\)</span> and</p>
-<p><span class="math display">\[\begin{align}
-\boldsymbol{Q} = \left(
-\begin{array}{cccc}
-\sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
-0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
-\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
-0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
-\end{array}\right)
-\end{align}\]</span></p>
-<p>Then for regular OLS, <span class="math inline">\(var(\beta) = \sigma^2(\boldsymbol{X'X})^{-1} = \sigma^2\boldsymbol{Q}^{-1}\)</span>.</p>
-<p>But when heteroscedasticity occurs, <span class="math inline">\(var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}\)</span>.</p>
-<p>Instead, let <span class="math inline">\(\boldsymbol{G} = \boldsymbol{X'GX}\)</span>, then <span class="math inline">\(var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.\)</span></p>
-</section>
-<section id="heteroscedasticity-in-tscs-data" class="slide level2">
-<h2>Heteroscedasticity in TSCS Data</h2>
-<ul>
-<li class="fragment">TSCS: Time-series cross-sectional data.
-<ul>
-<li class="fragment">Sometimes, they are called “pooled data”, “panel data”(WRONG!)</li>
-</ul></li>
-<li class="fragment">Reason of heterosceasticity
-<ul>
-<li class="fragment">Spatical heterogeneity</li>
-<li class="fragment">Temporal heterogeneity</li>
-</ul></li>
-<li class="fragment">Deal with heteroscedasticity in TSCS data:
-<ol type="1">
-<li class="fragment">Robust standard error</li>
-<li class="fragment">Fixed effect</li>
-<li class="fragment">Multilevel modeling</li>
-</ol></li>
-</ul>
-</section>
-<section id="robust-standard-error" class="slide level2 smaller">
-<h2>Robust Standard Error</h2>
-<ul>
-<li class="fragment"><strong>Sandwich SE</strong>
-<ul>
-<li class="fragment">In the FGLS version, the “meat” can be identified only when T &gt; N, and before this, the autocorrelation (<span class="math inline">\(cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j\)</span>) has to be eliminated.</li>
-</ul></li>
-<li class="fragment"><strong>Panel-corrected SE</strong>
-<ul>
-<li class="fragment">An alternative version of the sandwich SE. Ω is clustered by time periods: <span class="math inline">\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)</span></li>
-</ul></li>
-<li class="fragment"><strong>Cluster SE</strong>
-<ul>
-<li class="fragment">Adjust SE to account for correlations within clusters.</li>
-</ul></li>
-<li class="fragment"><strong>Within-between model</strong>
-<ol type="1">
-<li class="fragment">Run separate models in each group</li>
-<li class="fragment">Run an aggregate regression</li>
-</ol></li>
-</ul>
-<div class="fragment">
-<p>Let <span class="math inline">\(\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}\)</span>. Then,</p>
-<p><span class="math display">\[\begin{align}
-\bar{Y_i} =&amp; \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
-Y_{it} - \bar{Y_i} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
-\hat{Y_i} =&amp; \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
-Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
-\end{align}\]</span></p>
-</div>
-</section>
-<section id="alternative-methods" class="slide level2">
-<h2>Alternative Methods</h2>
-<ul>
-<li class="fragment">Fixed effect
-<ul>
-<li class="fragment">Least Square with Dummy Variables (LSDV)</li>
-<li class="fragment">Demeaning</li>
-<li class="fragment">Fixed effect vector decomposition (FEVD)</li>
-</ul></li>
-<li class="fragment">Multilevel modeling
-<ul>
-<li class="fragment">Random intercept</li>
-<li class="fragment">Random slop</li>
-</ul></li>
-</ul>
-</section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mh_mindmap.png" class="r-stretch">
-</section></section>
-<section>
-<section id="appendix" class="title-slide slide level1 center">
-<h1>Appendix</h1>
-
-</section>
-<section id="fixed-effect" class="slide level2">
-<h2>Fixed Effect</h2>
+<section id="fixed-effect" class="slide level2" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> Fixed Effect</h2>
 <p><strong>Least Square with Dummy Variables</strong> (LSDV)</p>
 <ul>
 <li class="fragment">Type I: <span class="math inline">\(Y_{it} = \beta_1X_{it} + \alpha_i + \epsilon_{it},\)</span> in which α is unit-specific mean differences (unit fixed effect).</li>
@@ -1070,8 +927,8 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilo
           display:block!important;
       }</style></aside>
 </section>
-<section id="alternatives-adjustments" class="slide level2">
-<h2>Alternatives adjustments</h2>
+<section id="alternatives-corrections" class="slide level2" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> Alternatives corrections</h2>
 <ol type="1">
 <li class="fragment">Demeaning</li>
 <li class="fragment">Fixed effect vector decomposition (FEVD)</li>
@@ -1088,8 +945,8 @@ Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilo
 <p>Multilevel modeling (MLM)</p>
 </div>
 </section>
-<section id="mlm" class="slide level2">
-<h2>MLM</h2>
+<section id="mlm" class="slide level2" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> MLM</h2>
 <ul>
 <li class="fragment">Target: Heteroscedasticity can be theoretically meaningful, esp., when researchers focus on how the variance changes.</li>
 <li class="fragment">Also called as hierarchical linear models (HLM), mixed models, random coefficient models, and variance component models</li>
@@ -1134,8 +991,8 @@ Y_{ij} = \beta_{0j}&amp; + \beta_{1j}X_{ij} + \epsilon_{ij}, \epsilon_{ij}\sim N
           display:block!important;
       }</style></aside>
 </section>
-<section id="random-slop-mlm" class="slide level2">
-<h2>Random-Slop MLM</h2>
+<section id="random-slop-mlm" class="slide level2" data-number="2.12">
+<h2><span class="header-section-number">2.12</span> Random-Slop MLM</h2>
 <p><span class="math display">\[\begin{align}
 Y_{ij} = &amp;\beta_{0j} + \beta_{1j}X_{ij} + \epsilon_{ij}\\
        &amp;\beta_{0j} = \gamma_{00} + \gamma_{01}Z_j + u_{0j}\\
@@ -1181,10 +1038,243 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</section>
+<section id="alternative-methods" class="slide level2" data-number="2.13">
+<h2><span class="header-section-number">2.13</span> Alternative Methods</h2>
+<ul>
+<li class="fragment">White covariance matrix</li>
+<li class="fragment">Weighted least square</li>
+<li class="fragment">Feasible Generalized Linear Squares (FGLS)</li>
+<li class="fragment">“Sandwich” Matrix</li>
+<li class="fragment">Robust Standard Error</li>
+</ul>
+</section>
+<section id="take-home-point" class="slide level2" data-number="2.14">
+<h2><span class="header-section-number">2.14</span> Take-home point</h2>
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/mh_mindmap.png" class="r-stretch"></section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix</h1>
+
+</section>
+<section id="white-covariance-matrix" class="slide level2" data-visibility="uncounted" data-number="2.15">
+<h2><span class="header-section-number">2.15</span> White covariance matrix</h2>
+<p>(a.k.a., Heteroscedasitic-consistent covariance matrix).</p>
+<p><span class="math display">\[E(\epsilon_i|X) = E\{\sqrt{[\epsilon_i - E(\epsilon_i)]^2}|X\}\]</span></p>
+<div class="fragment">
+<p>Since E(ε<sub>i</sub>|X) = 0 by assumption, we can estimate <span class="math inline">\(\epsilon_i\)</span> with <span class="math inline">\(\hat \epsilon_i^2\)</span> and estimate <span class="math inline">\(var(\hat\beta_1|X)\)</span> with <span class="math inline">\(\frac{\sum(X_i - \bar X)^2}{[\sum(X_i - \bar X)^2]^2}\hat \epsilon_i^2.\)</span></p>
+</div>
+<div class="fragment">
+<p>The estimates turn out to be <span class="red">biased</span>, but converge asymptotically in n to the true distribution. (<em>Means?</em>)</p>
+</div>
+<aside class="notes">
+<p>Means it’s fine when N is large enough.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="weighted-least-square" class="slide level2" data-visibility="uncounted" data-number="2.16">
+<h2><span class="header-section-number">2.16</span> Weighted least square</h2>
+<p>Reduce the substantive effect of the change in X by <span class="math inline">\(\frac{1}{\sigma_i}\)</span>, in order to squeeze the value towards the middle: If σ<sub>i</sub> is known,</p>
+<p><span class="math display">\[\begin{align}
+\frac{Y_i}{\sigma_i} =&amp; \frac{\beta_0}{\sigma_i} + \frac{\beta_1}{\sigma_i}X_i + \frac{\epsilon_i}{\sigma_i};\\
+\text{Then, } var(\frac{\epsilon_i}{\sigma_i}) =&amp; \frac{1}{\sigma_i^2}var(\epsilon_i) = \frac{\sigma_i^2}{\sigma_i^2} = 1;\\
+\Rightarrow Y_i^* =&amp; \beta_0X^*_{0i} + \beta_1X^*_{1i} + \epsilon_i^*.
+\end{align}\]</span></p>
+<div class="fragment">
+<p>The last equation is homoscedastistic. However, in most cases, we don’t know σ<sub>i</sub> ⇒ var(ε<sub>i</sub>)∼ X<sub>1i</sub>, i.e., var(ε<sub>i</sub>) = σ<sub>i</sub><sup>2</sup> = σ<sup>2</sup>X<sub>i</sub> = h<sub>i</sub>σ<sup>2</sup>.</p>
+</div>
+</section>
+<section id="weighted-least-square-continued" class="slide level2" data-visibility="uncounted" data-number="2.17">
+<h2><span class="header-section-number">2.17</span> Weighted least square (continued)</h2>
+<div class="columns">
+<div class="column fragment" style="width:70%;">
+<p>Given the goal var(ε<sup>*</sup><sub>i</sub>) = var(ε<sup>*</sup><sub>j</sub>), ∀ i,j.</p>
+<p><span class="math display">\[\begin{align}
+\epsilon^*_i =&amp; \frac{\epsilon_i}{\sqrt{h_i}},\\
+var(\frac{\epsilon_i}{\sqrt{h_i}}) =&amp; \frac{var(\epsilon_i)}{h_i} = \frac{h_i\sigma^2}{h_i} = \sigma^2,\\
+\Rightarrow Y_i^* =&amp; \frac{Y_i}{\sqrt{h_i}}; X_{0i}^* = \frac{1}{\sqrt{h_i}}; X_{1i}^* = \frac{X_{1i}}{\sqrt{h_i}}, \text{ assuming } X_i\in R^+.
+\end{align}\]</span></p>
+</div><div class="column fragment" style="width:30%;">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>In practice, there are different ways to estimate the weight, one need to carefully choose the proper one.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="feasible-generalized-linear-squares-fgls" class="slide level2 smaller" data-visibility="uncounted" data-number="2.18">
+<h2><span class="header-section-number">2.18</span> Feasible Generalized Linear Squares (FGLS)</h2>
+<p><span class="math display">\[\begin{align}
+\boldsymbol{Y} =&amp; \boldsymbol{X\beta} + \boldsymbol{\epsilon}; \\
+var(\boldsymbol{\epsilon}) =&amp; \Omega_{n\times n} = \left(
+       \begin{array}{cccc}
+       \sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
+       0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
+       \vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+       0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
+       \end{array}\right),\\
+\text{Then, } \boldsymbol{\hat\beta_{GLS}} =&amp; (\boldsymbol{X'\Omega X})^{-1}(\boldsymbol{X'\Omega Y}).\\
+\text{Let }\boldsymbol{H}: \boldsymbol{\Omega} = \boldsymbol{HH^{-1}},\text{then, } \boldsymbol{H^{-1}Y} =&amp; \boldsymbol{H^{-1}X\beta} + \boldsymbol{H^{-1}\epsilon},
+\boldsymbol{H^{-1}\epsilon} = \boldsymbol{H^{-1}(H^{-1})'};\\
+var(\boldsymbol{\epsilon})=&amp; (\boldsymbol{HH'})^{-1}\boldsymbol{\Omega} = \boldsymbol{\Omega}^{-1}\boldsymbol{\Omega} = \boldsymbol{I},\\
+var(\boldsymbol{\hat\beta_{GLS}}) =&amp; (\boldsymbol{X'X})^{-1}(\boldsymbol{X'\Omega X})(\boldsymbol{X'X})^{-1}.
+\end{align}\]</span></p>
+<ul>
+<li class="fragment">If there’s no heteroscedasticity, <span class="math inline">\(\boldsymbol{\Omega} = \sigma\boldsymbol{I}.\)</span></li>
+<li class="fragment">If there is heteroscedasticity and <span class="math inline">\(\boldsymbol{\Omega}\)</span> is known, then WLS (a special type of GLS).</li>
+<li class="fragment">If <span class="math inline">\(\boldsymbol{\Omega}\)</span> is unknown, run <span class="math inline">\(\boldsymbol{Y} = \boldsymbol{X\beta} + \boldsymbol{\epsilon}\)</span> to estimate <span class="math inline">\(\boldsymbol{\Omega}\)</span> with <span class="math inline">\(\boldsymbol{\hat\Omega} = \boldsymbol{\hat\epsilon\hat\epsilon'}\)</span></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>NB: This method does not get SE, and also <span class="red">biased</span> for small N.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sandwich-matrix" class="slide level2" data-visibility="uncounted" data-number="2.19">
+<h2><span class="header-section-number">2.19</span> “Sandwich” Matrix</h2>
+<p>FGLS is a type of “sandwich” estimator.</p>
+<p>In a more general view, let <span class="math inline">\(\boldsymbol{Q} = \boldsymbol{X'X}\)</span> and</p>
+<p><span class="math display">\[\begin{align}
+\boldsymbol{Q} = \left(
+\begin{array}{cccc}
+\sigma_1^2 &amp; 0 &amp; \cdots &amp; 0\\
+0 &amp; \sigma_2^2 &amp; \cdots &amp; 0\\
+\vdots &amp; \vdots &amp; \vdots &amp; \vdots \\
+0 &amp; 0 &amp; \cdots &amp; \sigma_n^2\\
+\end{array}\right)
+\end{align}\]</span></p>
+<p>Then for regular OLS, <span class="math inline">\(var(\beta) = \sigma^2(\boldsymbol{X'X})^{-1} = \sigma^2\boldsymbol{Q}^{-1}\)</span>.</p>
+<p>But when heteroscedasticity occurs, <span class="math inline">\(var(\boldsymbol{\beta}|X)\neq \sigma^2\boldsymbol{Q}^{-1}\)</span>.</p>
+<p>Instead, let <span class="math inline">\(\boldsymbol{G} = \boldsymbol{X'GX}\)</span>, then <span class="math inline">\(var(\boldsymbol{\beta}|X) = \boldsymbol{Q^{-1}GQ}^{-1}.\)</span></p>
+</section>
+<section id="heteroscedasticity-in-tscs-data" class="slide level2" data-visibility="uncounted" data-number="2.20">
+<h2><span class="header-section-number">2.20</span> Heteroscedasticity in TSCS Data</h2>
+<ul>
+<li class="fragment">TSCS: Time-series cross-sectional data.
+<ul>
+<li class="fragment">Sometimes, they are called “pooled data”, “panel data”(WRONG!)</li>
+</ul></li>
+<li class="fragment">Reason of heterosceasticity
+<ul>
+<li class="fragment">Spatical heterogeneity</li>
+<li class="fragment">Temporal heterogeneity</li>
+</ul></li>
+<li class="fragment">Deal with heteroscedasticity in TSCS data:
+<ol type="1">
+<li class="fragment">Robust standard error</li>
+<li class="fragment">Fixed effect</li>
+<li class="fragment">Multilevel modeling</li>
+</ol></li>
+</ul>
+</section>
+<section id="robust-standard-error" class="slide level2 smaller" data-visibility="uncounted" data-number="2.21">
+<h2><span class="header-section-number">2.21</span> Robust Standard Error</h2>
+<ul>
+<li class="fragment"><strong>Sandwich SE</strong>
+<ul>
+<li class="fragment">In the FGLS version, the “meat” can be identified only when T &gt; N, and before this, the autocorrelation (<span class="math inline">\(cov(\epsilon_i, u_j|X_i, X_j) = 0, \forall i, j\)</span>) has to be eliminated.</li>
+</ul></li>
+<li class="fragment"><strong>Panel-corrected SE</strong>
+<ul>
+<li class="fragment">An alternative version of the sandwich SE. Ω is clustered by time periods: <span class="math inline">\(\hat\Omega_{ij} = \frac{\sum^T_{t = 1}\epsilon_{it}\epsilon_{jt}}{T}\)</span></li>
+</ul></li>
+<li class="fragment"><strong>Cluster SE</strong>
+<ul>
+<li class="fragment">Adjust SE to account for correlations within clusters.</li>
+</ul></li>
+<li class="fragment"><strong>Within-between model</strong>
+<ol type="1">
+<li class="fragment">Run separate models in each group</li>
+<li class="fragment">Run an aggregate regression</li>
+</ol></li>
+</ul>
+<div class="fragment">
+<p>Let <span class="math inline">\(\bar Y_i = \frac{\sum^n_{i=1}Y_{it}}{n_i}, \bar X_i = \frac{\sum^n_{i=1}X_{it}}{n_i}, \bar \epsilon_i = \frac{\sum^n_{i=1}\epsilon_{it}}{n_i}\)</span>. Then,</p>
+<p><span class="math display">\[\begin{align}
+\bar{Y_i} =&amp; \beta_0 + \beta_1\bar{X_i} + \epsilon_i + \epsilon_i\\
+Y_{it} - \bar{Y_i} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{it} - \bar{X_i}) + (\epsilon_{it} - \epsilon_i)\\
+\hat{Y_i} =&amp; \beta_1\hat{X_{it}} + \hat{\epsilon_{it}}, \text{(a.k.a., the within model)}\\
+Y_{it} =&amp; \beta_0 + \beta_1(X_{it} - \bar{X_i}) + \beta_2\bar{X_i} + \epsilon_{it}, \text{(a.k.a., the between model)}
+\end{align}\]</span></p>
+</div>
+</section>
+<section id="stretch" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-12" data-glightbox="description: .lightbox-desc-12" title="松茸的世界：5分钟正念冥想-自信之心"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400" alt="松茸的世界：5分钟正念冥想-自信之心"></a></p>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</div></section>
 
     </div>
   </div>
@@ -1214,7 +1304,6 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1344,7 +1433,7 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -1515,10 +1604,27 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1528,8 +1634,17 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1583,22 +1698,34 @@ u_{0j}\\ u_{1j}\end{array}\right)&amp;\sim BVN\left[\left(\begin{array}{c}
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","selector":".lightbox","loop":false,"openEffect":"fade"});
+    window.onload = () => {
+      lightboxQuarto.on('slide_before_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        const href = trigger.getAttribute('href');
+        if (href !== null) {
+          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+          if (imgEl !== null) {
+            const srcAttr = imgEl.getAttribute("src");
+            if (srcAttr && srcAttr.startsWith("data:")) {
+              slideConfig.href = srcAttr;
+            }
+          }
+        } 
+      });
+
+      lightboxQuarto.on('slide_after_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(slideNode);
+        }
+      });
+
+    };
+              </script>
     
 
 </body></html>
