@@ -9,8 +9,11 @@
 <link href="13_autoEndo_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="13_autoEndo_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="13_autoEndo_files/libs/quarto-contrib/videojs/video.min.js"></script>
-<link href="13_autoEndo_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="13_autoEndo_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="13_autoEndo_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="13_autoEndo_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="13_autoEndo_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="Yue Hu">
   <title>Endogeneity and Autocorrelation</title>
@@ -32,8 +35,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="13_autoEndo_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="13_autoEndo_files/libs/revealjs/dist/theme/quarto.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="13_autoEndo_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="13_autoEndo_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="13_autoEndo_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -161,7 +164,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -342,12 +346,7 @@ Yue Hu
 </div>
 
 </section>
-<section id="quiz-time" class="slide level2">
-<h2>Quiz Time</h2>
-<p>Based on what you’ve known, what does the Upper did right &amp; wrong?</p>
-<video id="video_shortcode_videojs_video2" height="500" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="http://103.238.162.29:10002/webdav/sammo3182/video/mh_quiz.mp4"></video>
-</section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
 <div>
 <ol type="1">
@@ -367,35 +366,43 @@ Yue Hu
 </div>
 </section>
 <section>
-<section id="endogeneity" class="title-slide slide level1 center">
-<h1>Endogeneity</h1>
+<section id="endogeneity" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Endogeneity</h1>
 
 </section>
-<section id="egg-vs.-chicken" class="slide level2">
-<h2>Egg vs.&nbsp;Chicken</h2>
+<section id="egg-vs.-chicken" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Egg vs.&nbsp;Chicken</h2>
 <p><em>Substantively</em></p>
 <p>Institutional Confidence ~ Evaluation of Redistribution Performance</p>
-<div class="fragment" style="text-align:center; margin-top: 1em">
-<p>Causal <span class="red">direction</span>?</p>
-</div>
 <div class="fragment">
 <p><em>Formally</em></p>
-<p>Given Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>X<sub>i</sub> + u<sub>i</sub>, exogeneity ⇔ cov(X<sub>i</sub>, u<sub>i</sub>) = 0.</p>
-<div class="fragment" style="text-align:center; margin-top: 1em">
-<p>Endogeneity ⇔ cov(X<sub>i</sub>, u<sub>i</sub>) <span class="red">≠ 0</span>.</p>
+<p>Given Y<sub>i</sub> = β<sub>0</sub> + β<sub>1</sub>X<sub>i</sub> + u<sub>i</sub>,</p>
+<div style="text-align:center; margin-top: 1em">
+<p>Exogeneity ⇔ cov(X<sub>i</sub>, u<sub>i</sub>) = 0.<br>
+Endogeneity ⇔ cov(X<sub>i</sub>, u<sub>i</sub>) <span class="red">≠ 0</span>.</p>
 </div>
 </div>
 <div class="fragment">
-<p><em>Explicitly</em>,</p>
-<p><span class="math display">\[\begin{align}
-Y =&amp; \beta_0 + \beta_1X + u\\
-X =&amp; \beta'_0 + \beta'_1Y + v
-\end{align}\]</span></p>
+<p><em>Explicitly</em>, in <span class="math inline">\(X = \beta'_0 + \beta'_1Y + \nu,\)</span></p>
+<p><span class="math display">\[\beta_1' = 0.\]</span></p>
 </div>
 </section>
-<section id="one-cause-yule-simpsons-paradox" class="slide level2">
-<h2>One Cause: Yule-Simpson’s Paradox</h2>
-<video id="video_shortcode_videojs_video3" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="http://103.238.162.29:10002/webdav/sammo3182/video/ea_simpsonsParadox.mp4"></video>
+<section id="when-does-exogeneity-imply-causality" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> When does Exogeneity imply Causality</h2>
+<div class="large" style="text-align:center; margin-top: 2em">
+<ul>
+<li><span class="fragment highlight-red">Compliance with Gauss-Markov Assumptions</span>
+<ul>
+<li>Exogeneity of X</li>
+</ul></li>
+<li>Temporal Precedence</li>
+<li>Significant Correlation</li>
+</ul>
+</div>
+</section>
+<section id="cause-of-endogeneity-yule-simpsons-paradox" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> Cause of endogeneity: Yule-Simpson’s Paradox</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yule-Simpson's"><source src="https://drhuyue.site:10002/sammo3182/video/ea_simpsonsParadox.mp4"></video>
 <aside class="notes">
 <ul>
 <li>Edward H. Simpson 1951</li>
@@ -416,27 +423,27 @@ X =&amp; \beta'_0 + \beta'_1Y + v
           display:block!important;
       }</style></aside>
 </section>
-<section id="data-illustration" class="slide level2">
-<h2>Data Illustration</h2>
+<section id="what-does-the-data-look-like-under-simpsons-paradox" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> What does the data look like under Simpson’s Paradox</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_yuleSimpson.gif" height="600"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif" class="quarto-figure quarto-figure-center" height="600"></a></p>
 </figure>
 </div>
 </section>
-<section id="causal-diagram-ish" class="slide level2 smaller">
-<h2>Causal Diagram(-ish)</h2>
+<section id="cause-of-endogeneity-confounding-factor" class="slide level2 smaller" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Cause of endogeneity: Confounding factor</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_correlation.png"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_correlation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_correlation.png" class="quarto-figure quarto-figure-center"></a></p>
 </figure>
 </div>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p><em>Selections on the Observables</em></p>
+<p><em>Selections on an observable confounder</em></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_selectionBias.png"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_selectionBias.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_selectionBias.png" class="quarto-figure quarto-figure-center"></a></p>
 </figure>
 </div>
 <div class="fragment">
@@ -444,8 +451,8 @@ X =&amp; \beta'_0 + \beta'_1Y + v
 <ul>
 <li class="fragment">Hausman Procedure:
 <ul>
-<li class="fragment">Full (true) model is <span class="math inline">\(Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u\)</span>, and if one estimates <span class="math inline">\(Y = \beta_0 + \beta_1X_1 + u'\)</span>, X<sub>2</sub> is missed.</li>
-<li class="fragment">To test if this leads to endogeneity, we regress: <span class="math inline">\(X_1 = \gamma X_2 + v\)</span>, and test: H<sub>0</sub>: cov(u’, v) = 0.</li>
+<li class="fragment">Full (true) model is <span class="math inline">\(Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \epsilon\)</span>, and if one estimates <span class="math inline">\(Y = \beta_0 + \beta_1X_1 + \epsilon'\)</span>, X<sub>2</sub> is missed.</li>
+<li class="fragment">To test if this leads to endogeneity, we regress: <span class="math inline">\(X_1 = \gamma X_2 + \nu\)</span>, and test: H<sub>0</sub>: cov(ε’, ν) = 0.</li>
 </ul></li>
 </ul>
 </div>
@@ -453,25 +460,34 @@ X =&amp; \beta'_0 + \beta'_1Y + v
 <p><em>Unobservable Confounders</em></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_unobservable.png"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_unobservable.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_unobservable.png" class="quarto-figure quarto-figure-center"></a></p>
 </figure>
 </div>
 <div class="fragment">
 <p><strong>Diagnosis</strong></p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="13_autoEndo_files/figure-revealjs/resPlot-1.png" width="960"></p>
+<div>
+<figure>
+<p><a href="13_autoEndo_files/figure-revealjs/resPlot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="13_autoEndo_files/figure-revealjs/resPlot-1.png" width="960"></a></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="adjustment-observable" class="slide level2">
-<h2>Adjustment: Observable</h2>
-<p><em>Fully ~</em>: Matching, weighting, even better controls would be helpful.</p>
-<div class="fragment">
-<p><em>Partially ~</em>: e.g., Wage ~ <strong>X</strong><sub>labor</sub>, but only <strong>X</strong><sub>employed</sub> is observable.</p>
+<section id="correction-for-observable-confounders" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> Correction for Observable confounders</h2>
+<ul>
+<li class="fragment"><em>Fully ~</em>: Matching, weighting, even better controls would be helpful.</li>
+<li class="fragment"><em>Partially ~</em>: e.g., Wage ~ <strong>X</strong><sub>labor</sub>, but only <strong>X</strong><sub>employed</sub> is observable.
+<ul>
+<li class="fragment">If the omission has a <span class="red">fixed, known limit</span> determining what observations get in to the sample → a <span class="navy">Tobit</span> model.</li>
+<li class="fragment">If not → a <span class="navy">Heckman</span> model (two/three-stage model)</li>
+</ul></li>
+</ul>
 <aside class="notes">
 <p>Suppose that a researcher wants to estimate the determinants of wage offers, but has access to wage observations for only those who work. Since people who work are selected non-randomly from the population, estimating the determinants of wages from the subpopulation who work may introduce bias.</p>
 <style type="text/css">
@@ -485,16 +501,12 @@ X =&amp; \beta'_0 + \beta'_1Y + v
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<ul>
-<li class="fragment">If the omission has a <span class="red">fixed, known limit</span> determining what observations get in to the sample → a <span class="navy">Tobit</span> model.</li>
-<li class="fragment">If not → a <span class="navy">Heckman</span> model (two/N-stage model)</li>
-</ul>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p>Stage I: <strong>E</strong> ~ <strong>Z</strong>γ + <strong>u</strong><sub>e</sub>;</p>
+<p>Stage I: <strong>E</strong> ~ <strong>Z</strong>γ + <strong>ε</strong><sub>e</sub>;</p>
 <p>Stage II:<br>
-<strong>Wage</strong>|(E, <strong>X</strong>), ~ <strong>X</strong><sub>employed</sub> + <strong>u</strong><sub>w</sub></p>
-<p>E[W|X,E]=Xβ +ρσ<sub><strong>u</strong><sub>w</sub></sub>λ (Zγ),</p>
+<strong>Wage</strong>|(E, <strong>X</strong>), ~ <strong>X</strong><sub>employed</sub> + <strong>ε</strong><sub>w</sub></p>
+<p>E[W|X,E]=Xβ +ρσ<sub><strong>ε</strong><sub>w</sub></sub>λ (Zγ),</p>
 <p>E is the probability to be hired; Z is the explanatory variables</p>
 <aside class="notes">
 <p>ASSUMPTION: The errors are jointly normal.</p>
@@ -518,8 +530,8 @@ m(x) :=&amp; \frac{\bar{F}(x)}{f(x)},\\
 \bar{F}(x) :=&amp; \Pr[X&gt;x] = \int_x^{+\infty} f(u)\, du
 \end{align}\]</span></span></li>
 </ul></li>
-<li class="fragment">ρ = corr(<strong>u</strong><sub>e</sub>, <strong>u</strong><sub>w</sub>)<sup>*</sup>;</li>
-<li class="fragment">σ<sub><strong>u</strong><sub>w</sub></sub>: Standard deviation of <strong>u</strong><sub>w</sub>.</li>
+<li class="fragment">ρ = corr(<strong>ε</strong><sub>e</sub>, <strong>ε</strong><sub>w</sub>)<sup>*</sup>;</li>
+<li class="fragment">σ<sub><strong>ε</strong><sub>w</sub></sub>: Standard deviation of <strong>ε</strong><sub>w</sub>.</li>
 </ol>
 <aside class="notes">
 <p>Mills ratio: Complementary cumulative distribution function OVER probability density function</p>
@@ -536,14 +548,13 @@ m(x) :=&amp; \frac{\bar{F}(x)}{f(x)},\\
       }</style></aside>
 </div>
 </div>
-</div>
 </section>
-<section id="adjustment-unobservables" class="slide level2">
-<h2>Adjustment: Unobservables</h2>
-<p>Famous/“notorious” instrumental variables (IV)</p>
+<section id="correction-for-unobservable-confounders" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> Correction for Unobservable confounders</h2>
+<p>Famous (notorious, maybe) instrumental variables (IV)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_instrumental.png" height="150"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_instrumental.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_instrumental.png" class="quarto-figure quarto-figure-center" height="150"></a></p>
 </figure>
 </div>
 <ul>
@@ -554,8 +565,8 @@ m(x) :=&amp; \frac{\bar{F}(x)}{f(x)},\\
 </ol></li>
 </ul>
 </section>
-<section id="examples" class="slide level2">
-<h2>Examples</h2>
+<section id="examples" class="slide level2" data-number="1.8">
+<h2><span class="header-section-number">1.8</span> Examples</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>The effect of education on earnings</p>
@@ -635,24 +646,36 @@ EV: Economic growth per capita</p>
 </div>
 </div>
 </section>
-<section id="secret-to-find-a-proper-iv" class="slide level2">
-<h2>Secret to find a proper IV</h2>
+<section id="secret-to-find-a-proper-iv" class="slide level2" data-number="1.9">
+<h2><span class="header-section-number">1.9</span> Secret to find a proper IV</h2>
 <ol type="1">
 <li class="fragment">Seeking something seemingly irrelevant, like geographic stuff</li>
 <li class="fragment">Seeking back to the time, such as old distribution, parental features</li>
 <li class="fragment">Seeking for diverse laws or policies</li>
 <li class="fragment">Making some assumptions, like weather is random</li>
 </ol>
-<div class="fragment">
-<p>Ok, …IV is a <span class="red">myth</span>, unless by design…</p>
+<div class="fragment" style="text-align:center; margin-top: 1em">
+<p>Ok, …IV is a <span class="red">myth</span>, unless it is by design…</p>
 </div>
 <div class="fragment">
-<p>Expedient strategy: Multiple IVs</p>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Expedient strategy: Multiple IVs</strong></p>
+</div>
+<div class="callout-content">
 <ul>
 <li class="fragment">Dreaming that Z<sub>weak1</sub> + Z<sub>weak2</sub> + Z<sub>weak3</sub> +… = Z<sub>super</sub></li>
 <li class="fragment">Picking out the <em>one</em></li>
 <li class="fragment">Different sources of endogeneity</li>
 </ul>
+</div>
+</div>
+</div>
+</div>
 <aside class="notes">
 <ol type="1">
 <li><p><strong>Improved Identification</strong>: Multiple IVs can provide a more robust identification strategy, especially when each IV is weakly correlated with the independent variable but collectively they are strongly correlated.</p></li>
@@ -670,10 +693,9 @@ EV: Economic growth per capita</p>
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section>
-<section id="weak-instruments" class="slide level2">
-<h2>Weak Instruments</h2>
+<section id="weak-instruments" class="slide level2" data-number="1.10">
+<h2><span class="header-section-number">1.10</span> Weak Instruments</h2>
 <p>An ideal Z<sub>i</sub> simultaneously satisfies cov(X<sub>i</sub>, Z<sub>i</sub>) ≠ 0, and cov(u<sub>i</sub>, Z<sub>i</sub>) = 0. When cov(Y, Z) is small but not equal 0, then “weak” ~.</p>
 <p><span class="math display">\[\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}\]</span></p>
 <aside class="notes">
@@ -691,26 +713,25 @@ EV: Economic growth per capita</p>
       }</style></aside>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<ul>
-<li class="fragment">When cov(X, Z) is salient, not fatal.</li>
-<li class="fragment">When it’s small, the estimate will be <span class="red">biased</span><sup>1</sup></li>
-</ul>
-<video id="video_shortcode_videojs_video1" height="200" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title=""><source src="http://103.238.162.29:10002/webdav/sammo3182/video/olsEvenBetter.mp4"></video>
-</div><div class="column fragment" style="width:50%;">
 <p>Check: Sargan–Hansen test (Sargan’s J test, Statistics: <span class="math inline">\(\chi^2\)</span>)</p>
 <ul>
 <li class="fragment">Computing from residuals from instrumental variables regression by constructing a quadratic form based on the cross-product of the residuals and exogenous variables</li>
 <li class="fragment"><span class="math inline">\(H_0\)</span>: The over-identifying restrictions are valid</li>
 </ul>
+</div><div class="column fragment" style="width:50%;">
+<ul>
+<li class="fragment">When cov(X, Z) is salient, not fatal.</li>
+<li class="fragment">When it’s small, the estimate will be <span class="red">biased</span><sup>1</sup></li>
+</ul>
+<video id="video_shortcode_videojs_video2" height="200" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="IV vs. OLS"><source src="https://drhuyue.site:10002/sammo3182/video/olsEvenBetter.mp4"></video>
 </div>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p><span class="fragment">in which case, OLS may be even better.</span></p></li></ol></aside></section>
-<section id="assuming-youve-got-one" class="slide level2">
-<h2>Assuming You’ve Got One</h2>
+<section id="assuming-youve-got-one" class="slide level2" data-number="1.11">
+<h2><span class="header-section-number">1.11</span> Assuming You’ve Got One</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p>Two Stage Least Squares (2SLS)</p>
-<p><span class="small">A pretty rough way to make sense of it~</span></p>
 <ol type="1">
 <li class="fragment">Regress <strong>X</strong> on <strong>Z</strong> to get <span class="math inline">\(\boldsymbol{\hat X}\)</span>;</li>
 <li class="fragment">Regress <strong>Y</strong> on <span class="math inline">\(\boldsymbol{\hat X}\)</span>.</li>
@@ -741,8 +762,8 @@ EV: Economic growth per capita</p>
 </div>
 </div>
 </section>
-<section id="consequences" class="slide level2">
-<h2>Consequences</h2>
+<section id="consequences" class="slide level2" data-number="1.12">
+<h2><span class="header-section-number">1.12</span> Consequences</h2>
 <p><span class="math display">\[\begin{align}
 cov(Y_i, Z_i) =&amp; cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
               =&amp; cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
@@ -755,12 +776,12 @@ cov(Y_i, Z_i) =&amp; cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
 </div>
 </section></section>
 <section>
-<section id="autocorrelation" class="title-slide slide level1 center">
-<h1>Autocorrelation</h1>
+<section id="autocorrelation" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Autocorrelation</h1>
 
 </section>
-<section id="typology-of-autocorrelation" class="slide level2">
-<h2>Typology of Autocorrelation</h2>
+<section id="typology-of-autocorrelation" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Typology of Autocorrelation</h2>
 <div style="text-align:center; margin-top: 2em">
 <p>E(u<sub>1</sub>, u<sub>2</sub>) = 0</p>
 </div>
@@ -772,12 +793,15 @@ cov(Y_i, Z_i) =&amp; cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
 </ul>
 </div>
 <p><span class="fragment"><em>Temporal autocorrelation</em></span></p>
+<div class="r-fit-text fragment" style="text-align:center; margin-top: 1em">
+<p>A quick taste of <span class="red">time series analysis</span> 💀</p>
+</div>
 </section>
-<section id="temporal-autocorrelation" class="slide level2">
-<h2>Temporal autocorrelation</h2>
+<section id="temporal-autocorrelation" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Temporal autocorrelation</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_oneShot.gif"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_oneShot.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_oneShot.gif"></a></p>
 <p>One-period shock</p>
 <p><span class="small"><span class="math display">\[\begin{align}
 Y_t =&amp; \beta_0 + \color{maroon}{\beta_1(Z_t + 1)} + \beta_2Z_{t-1} + \cdots + u\\
@@ -785,7 +809,7 @@ Y_{t + 1} =&amp; \beta_0 + \beta_1Z_{t + 1} + \color{maroon}{\beta_2(Z_t + 1)} +
 Y_{t + 2} =&amp; \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \color{maroon}{\beta_3(Z_t + 1)} + \cdots + u
 \end{align}\]</span></span></p>
 </div><div class="column fragment" style="width:50%;">
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_loki.jpg" height="250"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_loki.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_loki.jpg" height="250"></a></p>
 <p>Permanent Shift</p>
 <p><span class="small"><span class="math display">\[\begin{align}
 Y_t =&amp; \beta_0 + \color{maroon}{\beta_1(Z_{t + 1})} + \cdots + u\\
@@ -794,8 +818,8 @@ Y_{t + 1} =&amp; \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} + \color{maroo
 </div>
 </div>
 </section>
-<section id="time-dependency-when-time-per-se-is-the-effect" class="slide level2">
-<h2>Time Dependency: When Time Per Se Is the Effect</h2>
+<section id="time-dependency-when-time-per-se-is-the-effect" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Time Dependency: When Time Per Se Is the Effect</h2>
 <p><span class="math display">\[E(u_{t_1}, u_{t_2}|X_{t_1}, X_{t_2}) \neq 0.\]</span></p>
 <p>When two variables both have, e.g., a positive trend, then they appear correlated, although they are actually not.</p>
 <p><span class="fragment"><strong>Adjustment</strong></span></p>
@@ -818,7 +842,7 @@ Y_{t + 1} =&amp; \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} + \color{maroo
 <ul>
 <li class="fragment">Spline
 <ul>
-<li class="fragment"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_spline.png" height="250"></li>
+<li class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_spline.png" height="250"></li>
 </ul></li>
 <li class="fragment">Smooth function
 <ul>
@@ -841,11 +865,11 @@ Y_{t + 1} =&amp; \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} + \color{maroo
 </div>
 </div>
 </section>
-<section id="when-time-is-more-than-time" class="slide level2">
-<h2>When Time is More than Time</h2>
+<section id="when-time-is-more-than-time" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> When Time is More than Time</h2>
 <p>Affecting the relations between OV and EVs and among IVs…</p>
 <div class="fragment" style="text-align:center">
-<p><em>Time series analysis</em></p>
+<p><em>(Real) Time series analysis</em></p>
 </div>
 <ul>
 <li class="fragment">Random Walk &amp; Unit Root: Let ρ∈[-1, 1] identify the direction the path will go (↓-1, ↑1, →0).
@@ -862,11 +886,11 @@ u_t =&amp; \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 </ul></li>
 </ul>
 <aside class="notes">
-<h3 id="stationary">Stationary</h3>
+<h3 data-number="2.4.1" id="stationary"><span class="header-section-number">2.4.1</span> Stationary</h3>
 <p>For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,… where t<sub>1</sub> &lt; t<sub>2</sub> &lt; t<sub>3</sub>…), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + … i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.</p>
-<p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_baguazhang.gif" height="300"></p>
-<p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_zuiquan.gif" height="300"></p>
-<h3 id="covariance-stationary">Covariance Stationary</h3>
+<p><img src="https://drhuyue.site:10002/sammo3182/figure/ea_baguazhang.gif" height="300"></p>
+<p><img src="https://drhuyue.site:10002/sammo3182/figure/ea_zuiquan.gif" height="300"></p>
+<h3 data-number="2.4.2" id="covariance-stationary"><span class="header-section-number">2.4.2</span> Covariance Stationary</h3>
 <p>Given:</p>
 <ol type="1">
 <li>t(X<sub>t</sub>) is constant;</li>
@@ -875,7 +899,7 @@ u_t =&amp; \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 </ol>
 <p>Then, a moving average process that is covariance stationary is weakly dependent if cov(X<sub>t</sub>,X<sub>t + n</sub>)→0 as n→∞.</p>
 <p>When covariance stationary plus weakly dependent (e.g., <span class="math inline">\(Y_t = \rho Y_{t - 1} + X_t + e_t\)</span>), the OLS is consistent.</p>
-<h3 id="influence-on-the-coefficient">Influence on the Coefficient</h3>
+<h3 data-number="2.4.3" id="influence-on-the-coefficient"><span class="header-section-number">2.4.3</span> Influence on the Coefficient</h3>
 <p>Let’s assume the mean of X is zero to simplify the maths</p>
 <p><span class="math display">\[\begin{align}
 \hat\beta_1 =&amp; \beta_1 + \frac{\sum(X_t - \bar X)}{\sum(X_t - \bar X)^2}u_t\\
@@ -883,7 +907,7 @@ u_t =&amp; \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 \end{align}\]</span></p>
 <p>Only when ρ = 0 (or cov(X<sub>t</sub>, X<sub>t + n</sub>) = 0), the estimate is identical with the OLS estimate.</p>
 <p>In other cases, β is <span class="red">biased</span>.</p>
-<h3 id="influence-on-the-variance">Influence on the Variance</h3>
+<h3 data-number="2.4.4" id="influence-on-the-variance"><span class="header-section-number">2.4.4</span> Influence on the Variance</h3>
 <p><span class="math display">\[\begin{align}
 var(u_t|X) =&amp; var(\rho u_{t - 1} + e_t|X),\\
            =&amp; var(\rho(\rho u_{t - 2} + e_{t - 1}) + e_t|X),\\
@@ -909,8 +933,8 @@ var(u_t|X) =&amp; \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots,\\
           display:block!important;
       }</style></aside>
 </section>
-<section id="diagnosis-durbin-watson-test" class="slide level2">
-<h2>Diagnosis: Durbin-Watson test</h2>
+<section id="diagnosis-durbin-watson-test" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Diagnosis: Durbin-Watson test</h2>
 <p>Testing <span class="red">only</span> AR(1)</p>
 <p><span class="math display">\[\begin{align}
 DW =&amp; \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}= \frac{\sum^T_{t = 2}(\rho\hat u_{t-1} + e_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
@@ -940,13 +964,13 @@ d<sub>l</sub> &lt; (4 - DW) &lt; d<sub>u</sub>, inconclusive;<br>
 </div>
 </div>
 </section>
-<section id="adjustment" class="slide level2">
-<h2>Adjustment</h2>
+<section id="regression-accounting-for-temporal-autocorrelation" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Regression accounting for temporal autocorrelation</h2>
 <p>Most common model: Autoregressive distributed lag model (ADL)</p>
 <div class="fragment" style="text-align:center">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://cran.r-project.org/web/views/TimeSeries.html"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_hugePit.jfif"></a></p>
+<p><a href="https://cran.r-project.org/web/views/TimeSeries.html"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_hugePit.jfif" class="quarto-figure quarto-figure-center" height="350"></a></p>
 </figure>
 </div>
 </div>
@@ -954,8 +978,18 @@ d<sub>l</sub> &lt; (4 - DW) &lt; d<sub>u</sub>, inconclusive;<br>
 <li class="fragment">Mitchell, Sara B. 2017. “Time Series Analysis for the Social Sciences.” <em>Contemporary Sociology</em> 46(5).</li>
 <li class="fragment">Box-Steffensmeier, Janet M. 2014. <em>Time Series Analysis for the Social Sciences</em>. New York: Cambridge University Press.</li>
 </ul>
-<aside class="notes">
-<h3 id="special-case-panel">Special Case: Panel</h3>
+</section>
+<section id="take-home-point" class="slide level2" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> Take-home point</h2>
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_mindMap.png" class="r-stretch"></section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix</h1>
+
+</section>
+<section id="special-case-panel" class="slide level2" data-visibility="uncounted" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> Special Case: Panel</h2>
 <p>Different from time series: T small, N large</p>
 <p>General model: <span class="math inline">\(Y_{it} = \beta_0 + \beta_1X_{it} + u_{it}\)</span></p>
 <p><strong>Solution 1</strong>: Fixed effect</p>
@@ -971,16 +1005,20 @@ Y_{i2} - Y_{i1} =&amp; (\beta_0 - \beta_0) + \beta_1(X_{i2} - X_{i1}),\\
 <p>When N &gt; 2, not necessarily;</p>
 <p>When autocorrelation is weak in the errors, FE might be better with smaller variance.</p>
 <p><span class="red">Hint</span>: Neither methods allows time invariant X.</p>
-<h3 id="special-case-tscs">Special Case: TSCS</h3>
+</section>
+<section id="special-case-tscs" class="slide level2" data-visibility="uncounted" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> Special Case: TSCS</h2>
 <p>General model:</p>
 <p><span class="math display">\[Y_{it} = \beta_0 + \beta_1X_{it} + \beta_2X_t + \beta_3X_i + u_{it}\]</span></p>
 <p>X<sub>t</sub>: Only varying by time.</p>
 <p>X<sub>i</sub>: Only varying by unit.</p>
-<h3 id="tscs-dealing-with-time">TSCS Dealing with Time</h3>
+</section>
+<section id="tscs-dealing-with-time" class="slide level2" data-visibility="uncounted" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> TSCS Dealing with Time</h2>
 <p><strong>Solution 1</strong>: Detrend</p>
 <ol type="1">
-<li>Detrending functions, e.g., the time smooth function/spline</li>
-<li>Adding lag Y [AR(1)] (.magenta[Hint]: May cause bias).</li>
+<li class="fragment">Detrending functions, e.g., the time smooth function/spline</li>
+<li class="fragment">Adding lag Y [AR(1)] (.magenta[Hint]: May cause bias).</li>
 </ol>
 <p><strong>Solution 2</strong>: Regime switching</p>
 <p><span class="math display">\[\begin{align}
@@ -988,15 +1026,17 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
    dZ_t =&amp; 1, \text{if } t \leq t^*.
 \end{align}\]</span></p>
 <p>Structural break at t<sup>*</sup> in the X-Y relationship.</p>
-<h4 id="treating-time-dependency-as-unit-heterogeneity">Treating time dependency as unit heterogeneity</h4>
+</section>
+<section id="treating-time-dependency-as-unit-heterogeneity" class="slide level2" data-visibility="uncounted" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> Treating time dependency as unit heterogeneity</h2>
 <p><strong>Solution 1</strong>: LSDV, <span class="math inline">\(Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}\)</span></p>
 <p><span class="math inline">\(\delta_td_{t}\)</span>: Fixed effect for time</p>
 <p><span class="math inline">\(a_i\)</span>: Fixed effect for unit (unit-specific mean differences)</p>
 <p><strong>Cons</strong>:</p>
 <ol type="1">
-<li>Using up the d.f.</li>
-<li>Aggravating multicollinearity</li>
-<li>.magenta[Losing time invariant variables].</li>
+<li class="fragment">Using up the d.f.</li>
+<li class="fragment">Aggravating multicollinearity</li>
+<li class="fragment">.magenta[Losing time invariant variables].</li>
 </ol>
 <p><strong>Solution 2</strong>: Within-between model or random effect model</p>
 <p>Modeling time as a level</p>
@@ -1004,9 +1044,15 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
 <p>Instead of using binaries, modeling <span class="math inline">\(a_i\sim N(0, \tau^2)\)</span></p>
 <p>[ASSUMPTION].red:</p>
 <ol type="1">
-<li>cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)</li>
-<li>cov(a<sub>i</sub>, u<sub>it</sub>)= 0</li>
+<li class="fragment">cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)</li>
+<li class="fragment">cov(a<sub>i</sub>, u<sub>it</sub>)= 0</li>
 </ol>
+</section>
+<section id="stretch" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video3" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -1019,13 +1065,37 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
           display:block!important;
       }</style></aside>
 </section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_mindMap.png" class="r-stretch">
+<section id="meditation" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-10" data-glightbox="description: .lightbox-desc-10" title="松茸的世界：5分钟正念冥想-自信之心"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400" alt="松茸的世界：5分钟正念冥想-自信之心"></a></p>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section><div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</div></section>
 
     </div>
   </div>
@@ -1055,7 +1125,6 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1185,7 +1254,7 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -1356,10 +1425,27 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn) {
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1369,8 +1455,17 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1424,25 +1519,36 @@ Y_{it} =&amp; \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
-    
-    
-    
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>videojs(video_shortcode_videojs_video2);</script>
+    <script>videojs(video_shortcode_videojs_video3);</script>
+    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"fade","openEffect":"fade","loop":false,"descPosition":"bottom"});
+    window.onload = () => {
+      lightboxQuarto.on('slide_before_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        const href = trigger.getAttribute('href');
+        if (href !== null) {
+          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+          if (imgEl !== null) {
+            const srcAttr = imgEl.getAttribute("src");
+            if (srcAttr && srcAttr.startsWith("data:")) {
+              slideConfig.href = srcAttr;
+            }
+          }
+        } 
+      });
+
+      lightboxQuarto.on('slide_after_load', (data) => {
+        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(slideNode);
+        }
+      });
+
+    };
+              </script>
     
 
 </body></html>

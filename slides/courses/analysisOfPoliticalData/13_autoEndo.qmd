@@ -2,36 +2,36 @@
 title: "Endogeneity and Autocorrelation"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-execute:
-  echo: false
-  message: false
-  warning: false
+knitr: 
+    opts_chunk: 
+      echo: false
 editor_options: 
   chunk_output_type: console
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-filters:
-  - lightbox
 revealjs-plugins:
   - spotlight
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
@@ -39,19 +39,22 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
+
+## Overview {.unnumbered}
+
 ```{r setup, include = FALSE}
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  tidyverse,
   drhutools,
+  tidyverse,
   dotwhisker
 ) 
 
 
 # Functions preload
-set.seed(114)
+set.seed(313)
 
 theme_set(
   theme_minimal(base_size = 18)
@@ -64,15 +67,6 @@ theme_update(
 )
 
 ```
-
-## Quiz Time
-
-Based on what you've known, what does the Upper did right & wrong?
-
-{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/mh_quiz.mp4" height="500" >}}
-
-
-## Overview
 
 :::{.nonincremental}
 1. Endogeneity
@@ -94,35 +88,40 @@ Based on what you've known, what does the Upper did right & wrong?
 
 Institutional Confidence ~ Evaluation of Redistribution Performance 
 
-:::{.fragment style="text-align:center; margin-top: 1em"}
-Causal [direction]{.red}?
-:::
 
-. . .
-
+:::{.fragment}
 *Formally*
 
-Given Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>i</sub> + u<sub>i</sub>, exogeneity &hArr; cov(X<sub>i</sub>, u<sub>i</sub>) = 0.
+Given Y<sub>i</sub> = &beta;<sub>0</sub> + &beta;<sub>1</sub>X<sub>i</sub> + u<sub>i</sub>, 
 
-
-:::{.fragment style="text-align:center; margin-top: 1em"}
+:::{style="text-align:center; margin-top: 1em"}
+Exogeneity &hArr; cov(X<sub>i</sub>, u<sub>i</sub>) = 0.        
 Endogeneity &hArr; cov(X<sub>i</sub>, u<sub>i</sub>) [&ne; 0]{.red}.
 :::
 
-. . .
-
-*Explicitly*, 
-
-\begin{align}
-Y =& \beta_0 + \beta_1X + u\\
-X =& \beta'_0 + \beta'_1Y + v
-\end{align}
+:::
 
 
+:::{.fragment}
+*Explicitly*, in $X = \beta'_0 + \beta'_1Y + \nu,$
 
-## One Cause: Yule-Simpson's Paradox
+$$\beta_1' = 0.$$
 
-{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/ea_simpsonsParadox.mp4" >}}
+:::
+
+## When does Exogeneity imply Causality
+
+:::{.nonincremental .large style="text-align:center; margin-top: 2em"}
+- [Compliance with Gauss-Markov Assumptions]{.fragment .highlight-red}
+    - Exogeneity of X
+- Temporal Precedence
+- Significant Correlation
+:::
+
+## Cause of endogeneity: Yule-Simpson's Paradox
+
+{{< video https://drhuyue.site:10002/sammo3182/video/ea_simpsonsParadox.mp4 title=Yule-Simpson's Paradox height=600 preload="auto" controls allowfullscreen>}}
+
 
 :::{.notes}
 + Edward H. Simpson 1951
@@ -134,29 +133,28 @@ X =& \beta'_0 + \beta'_1Y + v
 男女都是treatment < control
 :::
 
-## Data Illustration
+## What does the data look like under Simpson's Paradox
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_yuleSimpson.gif){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif){fig-align="center" height=600}
 
+## Cause of endogeneity: Confounding factor{.smaller}
 
-## Causal Diagram(-ish){.smaller}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_correlation.png){fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_correlation.png){fig-align="center"}
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 
-*Selections on the Observables*
+*Selections on an observable confounder*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_selectionBias.png){fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_selectionBias.png){fig-align="center"}
 
 :::{.fragment}
 **Diagnosis**
 
 - Hausman Procedure:
-    - Full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + u$, and if one estimates $Y = \beta_0 + \beta_1X_1 + u'$, X<sub>2</sub> is missed. 
-    - To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + v$, and test: H<sub>0</sub>: cov(u', v) = 0.
+    - Full (true) model is $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 + \epsilon$, and if one estimates $Y = \beta_0 + \beta_1X_1 + \epsilon'$, X<sub>2</sub> is missed. 
+    - To test if this leads to endogeneity, we regress: $X_1 = \gamma X_2 + \nu$, and test: H<sub>0</sub>: cov(&epsilon;', &nu;) = 0.
 :::
 
 
@@ -166,7 +164,7 @@ X =& \beta'_0 + \beta'_1Y + v
 
 *Unobservable Confounders*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_unobservable.png){fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_unobservable.png){fig-align="center"}
 
 :::{.fragment}
 **Diagnosis**
@@ -181,30 +179,28 @@ lm(mpg ~ wt, data = mtcars) %>% plot(1)
 
 ::::
 
-## Adjustment: Observable
+## Correction for Observable confounders
 
-*Fully ~*: Matching, weighting, even better controls would be helpful.
-
-. . .
-
-*Partially ~*: e.g., Wage  ~ **X**<sub>labor</sub>, but only **X**<sub>employed</sub> is observable.
+- *Fully ~*: Matching, weighting, even better controls would be helpful.
+- *Partially ~*: e.g., Wage  ~ **X**<sub>labor</sub>, but only **X**<sub>employed</sub> is observable.
+    - If the omission has a [fixed, known limit]{.red} determining what observations get in to the sample &rarr; a [Tobit]{.navy} model.
+    - If not &rarr; a [Heckman]{.navy} model (two/three-stage model)
 
 :::{.notes}
 Suppose that a researcher wants to estimate the determinants of wage offers, but has access to wage observations for only those who work. Since people who work are selected non-randomly from the population, estimating the determinants of wages from the subpopulation who work may introduce bias.
 :::
 
-- If the omission has a [fixed, known limit]{.red} determining what observations get in to the sample &rarr; a [Tobit]{.navy} model.
-- If not &rarr; a [Heckman]{.navy} model (two/N-stage model)
+
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-Stage I: **E** ~ **Z**&gamma; + **u**<sub>e</sub>;
+Stage I: **E** ~ **Z**&gamma; + **&epsilon;**<sub>e</sub>;
 
 Stage II:     
-**Wage**|(E, **X**),  ~ **X**<sub>employed</sub> + **u**<sub>w</sub>
+**Wage**|(E, **X**),  ~ **X**<sub>employed</sub> + **&epsilon;**<sub>w</sub>
 
-E[W|X,E]=X&beta; +&rho;&sigma;<sub>**u**<sub>w</sub></sub>&lambda; (Z&gamma;),
+E[W|X,E]=X&beta; +&rho;&sigma;<sub>**&epsilon;**<sub>w</sub></sub>&lambda; (Z&gamma;),
 
 E is the probability to be hired; Z is the explanatory variables
 
@@ -223,8 +219,8 @@ ASSUMPTION: The errors are jointly normal.
 m(x) :=& \frac{\bar{F}(x)}{f(x)},\\
 \bar{F}(x) :=& \Pr[X>x] = \int_x^{+\infty} f(u)\, du
 \end{align}]{.small}
-1. &rho; = corr(**u**<sub>e</sub>, **u**<sub>w</sub>)<sup>\*</sup>;
-1. &sigma;<sub>**u**<sub>w</sub></sub>: Standard deviation of **u**<sub>w</sub>.
+1. &rho; = corr(**&epsilon;**<sub>e</sub>, **&epsilon;**<sub>w</sub>)<sup>\*</sup>;
+1. &sigma;<sub>**&epsilon;**<sub>w</sub></sub>: Standard deviation of **&epsilon;**<sub>w</sub>.
 
 :::{.notes}
 Mills ratio: Complementary cumulative distribution function OVER probability density function
@@ -235,11 +231,11 @@ Mills ratio: Complementary cumulative distribution function OVER probability den
 ::::
 
 
-## Adjustment: Unobservables
+## Correction for Unobservable confounders
 
-Famous/"notorious" instrumental variables (IV)
+Famous (notorious, maybe) instrumental variables (IV)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_instrumental.png){fig-align="center" height=150}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_instrumental.png){fig-align="center" height=150}
 
 - Statistically, we need a variable Z<sub>i</sub> that [simultaneously]{.red} satisfies: 
   1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
@@ -304,17 +300,18 @@ Is rainfall random? Drought in one country could make another country's projects
 1. Seeking for diverse laws or policies
 1. Making some assumptions, like weather is random
 
-. . .
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Ok, ...IV is a [myth]{.red}, unless it is by design...
+:::
 
-Ok, ...IV is a [myth]{.red}, unless by design...
 
-. . . 
-
-Expedient strategy: Multiple IVs
+:::{.fragment .callout-note}
+## Expedient strategy: Multiple IVs
 
 - Dreaming that Z<sub>weak1</sub> + Z<sub>weak2</sub> + Z<sub>weak3</sub> +... = Z<sub>super</sub>
 - Picking out the *one*
 - Different sources of endogeneity
+:::
 
 
 :::{.notes}
@@ -339,20 +336,18 @@ Check for the Problem: Stock and Watson (2007, 735)
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-+ When cov(X, Z) is salient, not fatal. 
-+ When it's small, the estimate will be [biased]{.red}^[[in which case, OLS may be even better.]{.fragment}]
-
-{{< video src="http://103.238.162.29:10002/webdav/sammo3182/video/olsEvenBetter.mp4" height=200 >}}
-
-
-
-:::
-
-::: {.column .fragment width="50%"}
 Check:  Sargan–Hansen test (Sargan's J test, Statistics: $\chi^2$)
 
 - Computing from residuals from instrumental variables regression by constructing a quadratic form based on the cross-product of the residuals and exogenous variables
 - $H_0$: The over-identifying restrictions are valid
+:::
+
+::: {.column .fragment width="50%"}
++ When cov(X, Z) is salient, not fatal. 
++ When it's small, the estimate will be [biased]{.red}^[[in which case, OLS may be even better.]{.fragment}]
+
+{{< video https://drhuyue.site:10002/sammo3182/video/olsEvenBetter.mp4 title="IV vs. OLS" height=200 preload="auto" controls allowfullscreen>}}
+
 :::
 
 ::::
@@ -363,8 +358,6 @@ Check:  Sargan–Hansen test (Sargan's J test, Statistics: $\chi^2$)
 
 ::: {.column width="50%"}
 Two Stage Least Squares (2SLS)
-
-[A pretty rough way to make sense of it~]{.small}
 
 1. Regress **X** on **Z** to get $\boldsymbol{\hat X}$;
 1. Regress **Y** on $\boldsymbol{\hat X}$.
@@ -430,13 +423,17 @@ E(u<sub>1</sub>, u<sub>2</sub>) = 0
 
 [*Temporal autocorrelation*]{.fragment}
 
+:::{.r-fit-text .fragment style="text-align:center; margin-top: 1em"}
+A quick taste of [time series analysis]{.red} 💀
+:::
+
 ## Temporal autocorrelation
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_oneShot.gif)
+![](https://drhuyue.site:10002/sammo3182/figure/ea_oneShot.gif)
 
 One-period shock
 
@@ -450,7 +447,7 @@ Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \color{maroon}{\bet
 
 ::: {.column .fragment width="50%"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_loki.jpg){height=250}
+![](https://drhuyue.site:10002/sammo3182/figure/ea_loki.jpg){height=250}
 
 Permanent Shift
 
@@ -489,7 +486,7 @@ When two variables both have, e.g., a positive trend, then they appear correlate
 
 ::: {.column width="40%"}
 - Spline
-  - ![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_spline.png){height=250}
+  - ![](https://drhuyue.site:10002/sammo3182/figure/ea_spline.png){height=250}
 - Smooth function
     - t + t<sup>2</sup> + t<sup>3</sup>
 
@@ -507,7 +504,7 @@ When two variables both have, e.g., a positive trend, then they appear correlate
 Affecting the relations between OV and EVs and among IVs...
 
 :::{.fragment style="text-align:center"}
-*Time series analysis*
+*(Real) Time series analysis*
 :::
 
 - Random Walk & Unit Root: Let &rho;&in;[-1, 1] identify the direction the path will go (&darr;-1, &uarr;1, &rarr;0).
@@ -527,9 +524,9 @@ u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
 For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,... where t<sub>1</sub> < t<sub>2</sub> < t<sub>3</sub>...), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
 
 
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_baguazhang.gif" height = 300 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/ea_baguazhang.gif" height = 300 />
 
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/ea_zuiquan.gif" height = 300 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/ea_zuiquan.gif" height = 300 />
 
 
 ### Covariance Stationary
@@ -624,12 +621,13 @@ d<sub>l</sub> < (4 - DW) < d<sub>u</sub>, inconclusive;
 ::::
 
 
-## Adjustment
+## Regression accounting for temporal autocorrelation
 
 Most common model: Autoregressive distributed lag model (ADL)
 
 :::{.fragment style="text-align:center"}
-[![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_hugePit.jfif){.r-stretch}](https://cran.r-project.org/web/views/TimeSeries.html)
+
+[![](https://drhuyue.site:10002/sammo3182/figure/ea_hugePit.jfif){fig-align="center" height=350}](https://cran.r-project.org/web/views/TimeSeries.html)
 :::
 
 
@@ -637,8 +635,15 @@ Most common model: Autoregressive distributed lag model (ADL)
 - Box-Steffensmeier, Janet M. 2014. *Time Series Analysis for the Social Sciences*. New York: Cambridge University Press.
 
 
-:::{.notes}
-### Special Case: Panel
+
+
+## Take-home point
+
+![](https://drhuyue.site:10002/sammo3182/figure/ea_mindMap.png){.r-stretch}
+
+# Appendix {.appendix .unnumbered}
+
+## Special Case: Panel
 
 Different from time series: T small, N large
 
@@ -670,7 +675,7 @@ When autocorrelation is weak in the errors, FE might be better with smaller vari
 [Hint]{.red}: Neither methods allows time invariant X.
 
 
-### Special Case: TSCS
+## Special Case: TSCS
 
 General model: 
 
@@ -681,7 +686,7 @@ X<sub>t</sub>: Only varying by time.
 X<sub>i</sub>: Only varying by unit.
 
 
-### TSCS Dealing with Time
+## TSCS Dealing with Time
 
 **Solution 1**:  Detrend
 
@@ -697,7 +702,7 @@ Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
 
 Structural break at t<sup>*</sup> in the X-Y relationship.
 
-#### Treating time dependency as unit heterogeneity
+## Treating time dependency as unit heterogeneity
 
 **Solution 1**: LSDV, $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$
 
@@ -725,15 +730,24 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 
 1. cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)
 1. cov(a<sub>i</sub>, u<sub>it</sub>)= 0
+
+## Stretch {.unnumbered}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
 :::
 
 
-
-
-## Take-home point
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ea_mindMap.png){.r-stretch}
-
-
-
-
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::
