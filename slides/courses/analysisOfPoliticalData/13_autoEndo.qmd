@@ -109,7 +109,7 @@ $$\beta_1' = 0.$$
 
 :::
 
-## When does Exogeneity imply Causality
+## When does Exogeneity imply Causality![](https://drhuyue.site:10002/sammo3182/figure/ci_fsmrof.png){height=30} 
 
 :::{.nonincremental .large style="text-align:center; margin-top: 2em"}
 - [Compliance with Gauss-Markov Assumptions]{.fragment .highlight-red}
@@ -233,13 +233,11 @@ Mills ratio: Complementary cumulative distribution function OVER probability den
 
 ## Correction for Unobservable confounders
 
-Famous (notorious, maybe) instrumental variables (IV)
-
-![](https://drhuyue.site:10002/sammo3182/figure/ea_instrumental.png){fig-align="center" height=150}
+![The famous (notorious, maybe) instrumental variables (IV) method](https://drhuyue.site:10002/sammo3182/figure/ea_instrumental.png){fig-align="center" height=150}
 
 - Statistically, we need a variable Z<sub>i</sub> that [simultaneously]{.red} satisfies: 
   1. cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0
-  1. cov(u<sub>i</sub>, Z<sub>i</sub>) = 0
+  1. cov(&epsilon;<sub>i</sub>, Z<sub>i</sub>) = 0
 
 ## Examples
 
@@ -279,7 +277,7 @@ Endogeneity: religious fractionalization, mountainous terrain, and population
 Miguel, Satyanath, and Sergenti 2004, Journal of Political Economy
 :::
 
-:::{.fragment style="text-align:center; margin-top: 2em"}
+:::{.fragment style="text-align:center; margin-top: 1em"}
 Any concern? 
 :::
 
@@ -309,8 +307,8 @@ Ok, ...IV is a [myth]{.red}, unless it is by design...
 ## Expedient strategy: Multiple IVs
 
 - Dreaming that Z<sub>weak1</sub> + Z<sub>weak2</sub> + Z<sub>weak3</sub> +... = Z<sub>super</sub>
-- Picking out the *one*
-- Different sources of endogeneity
+  - Picking out the *one*
+  - Different sources of endogeneity
 :::
 
 
@@ -327,7 +325,7 @@ Ok, ...IV is a [myth]{.red}, unless it is by design...
 An ideal Z<sub>i</sub> simultaneously satisfies cov(X<sub>i</sub>, Z<sub>i</sub>) &ne; 0, and cov(u<sub>i</sub>, Z<sub>i</sub>) = 0. 
 When cov(Y, Z) is small but not equal 0, then "weak" ~.
 
-$$\beta_1 = \frac{cov(Y, Z) - cov(u, Z)}{cov(X, Z)}$$
+$$\beta_1 = \frac{cov(Y, Z) - cov(\epsilon, Z)}{cov(X, Z)}$$
 
 :::{.notes}
 Check for the Problem: Stock and Watson (2007, 735)
@@ -342,11 +340,13 @@ Check:  Sargan–Hansen test (Sargan's J test, Statistics: $\chi^2$)
 - $H_0$: The over-identifying restrictions are valid
 :::
 
-::: {.column .fragment width="50%"}
+::: {.column width="50%"}
 + When cov(X, Z) is salient, not fatal. 
-+ When it's small, the estimate will be [biased]{.red}^[[in which case, OLS may be even better.]{.fragment}]
++ When it's small, the estimate will be [biased]{.red}
 
-{{< video https://drhuyue.site:10002/sammo3182/video/olsEvenBetter.mp4 title="IV vs. OLS" height=200 preload="auto" controls allowfullscreen>}}
+::: {.fragment}
+{{< video https://drhuyue.site:10002/sammo3182/video/olsEvenBetter.mp4 title="In which case, OLS may be even better." height=200 preload="auto" controls allowfullscreen>}}
+:::
 
 :::
 
@@ -391,16 +391,17 @@ because the additional instruments can be used to increase the precision of the 
 ## Consequences
 
 \begin{align}
-cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + u_i, Z_i)\\
-              =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(u_i, Z_i)\\
+cov(Y_i, Z_i) =& cov(\beta_0 + \beta_1X_i + \epsilon_i, Z_i)\\
+              =& cov(\beta_0, Z_i) + cov(\beta_1X_i, Z_i) + cov(\epsilon_i, Z_i)\\
               =& \beta_1cov(X_i, Z_i)\\
 \Rightarrow\beta_1 =& \frac{cov(Y_i, Z_i)}{\beta_1cov(X_i, Z_i)} = \frac{\sum(Y_i - \bar Y)(Z_i - \bar Z)}{\sum(X_i - \bar X)(Z_i - \bar Z)},\\
        var(\hat\beta_1) =& \frac{\sigma^2}{n\sigma_X^2\rho_{XZ}^2} \geq \frac{\sigma^2}{n\sigma_X^2\rho_{XX}^2} = \frac{\sigma^2}{\sum(X_i - \bar X)^2}
 \end{align}
 
+::: {.callout-warning .fragment}
+## Trade-off of IV estimates
 
-:::{.fragment}
-Trade-off: [Unbiased estimates]{.navy} from IV, yet a [bigger variance]{.red} (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
+[Unbiased estimates]{.navy} from IV, yet a [bigger variance]{.red} (&rho;<sup>2</sup><sub>XX</sub> = 1 > &rho;<sup>2</sup><sub>XZ</sub>)
 :::
 
 
@@ -411,7 +412,7 @@ Trade-off: [Unbiased estimates]{.navy} from IV, yet a [bigger variance]{.red} (&
 ## Typology of Autocorrelation
 
 :::{style="text-align:center; margin-top: 2em"}
-E(u<sub>1</sub>, u<sub>2</sub>) = 0
+E(&epsilon;<sub>1</sub>, &epsilon;<sub>2</sub>) = 0
 :::
 
 :::{.fragment}
@@ -427,44 +428,43 @@ E(u<sub>1</sub>, u<sub>2</sub>) = 0
 A quick taste of [time series analysis]{.red} 💀
 :::
 
-## Temporal autocorrelation
+## Temporal autocorrelation: Shock
+
+![One-period shock](https://drhuyue.site:10002/sammo3182/figure/ea_shock.gif){fig-align="center" height=400}
+
+\begin{align}
+Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_t + 1)} + \beta_2Z_{t-1} + \cdots + \epsilon\\
+Y_{t + 1} =& \beta_0 + \beta_1Z_{t + 1} + \color{maroon}{\beta_2(Z_t + 1)} + \beta_3Z_{t-1} + \cdots + \epsilon\\
+Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \color{maroon}{\beta_3(Z_t + 1)} + \cdots + \epsilon
+\end{align}
+
+##  Temporal autocorrelation: Path
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-
-![](https://drhuyue.site:10002/sammo3182/figure/ea_oneShot.gif)
-
-One-period shock
-
-[\begin{align}
-Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_t + 1)} + \beta_2Z_{t-1} + \cdots + u\\
-Y_{t + 1} =& \beta_0 + \beta_1Z_{t + 1} + \color{maroon}{\beta_2(Z_t + 1)} + \beta_3Z_{t-1} + \cdots + u\\
-Y_{t + 2} =& \beta_0 + \beta_1Z_{t + 2} + \beta_2Z_{t + 1} + \color{maroon}{\beta_3(Z_t + 1)} + \cdots + u
-\end{align}]{.small}
-
+\begin{align}
+Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1})} + \cdots + \epsilon\\
+Y_{t + 1} =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} \\
+&+ \color{maroon}{\beta_2(Z_t + 1)} + \cdots + \epsilon.
+\end{align}
 :::
 
-::: {.column .fragment width="50%"}
+::: {.column width="50%"}
+![Permanent Shift](https://drhuyue.site:10002/sammo3182/figure/ea_EndOfEternity.jpg){fig-align="center" height=600}
 
-![](https://drhuyue.site:10002/sammo3182/figure/ea_loki.jpg){height=250}
-
-Permanent Shift
-
-[\begin{align}
-Y_t =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1})} + \cdots + u\\
-Y_{t + 1} =& \beta_0 + \color{maroon}{\beta_1(Z_{t + 1} + 1)} + \color{maroon}{\beta_2(Z_t + 1)} + \cdots + u
-\end{align}]{.small}
-
+::: {.notes}
+阿西莫夫的科幻小说《永恒的终结》讲述了一个围绕时间旅行和伦理抉择的扣人心弦的故事。小说的背景设定在一个庞大的超越时间的组织——“永恒时空”（The Eternals），它负责通过微调时间线来消除社会灾难和历史性错误，以达到最优的“终结状态”。故事的主人公是安德鲁·哈伦，一位才华横溢的时间技师，他深刻理解时空规律，却因一次任务结识了一位女子诺雅，从而陷入了爱情的漩涡。随着情节的展开，哈伦逐渐发现“永恒”的调控不仅限制了个人选择，也阻碍了人类文明的真正发展。他面临一个艰难的决定——是否破坏永恒，放手让人类面对未知的未来。小说通过复杂的时间逻辑和伦理议题探讨了自由意志、进步与牺牲的主题，被誉为科幻文学的经典之作。
+:::
 :::
 
 ::::
 
 
-## Time Dependency: When Time Per Se Is the Effect
+## Time Dependency and the adjustment
 
 
-$$E(u_{t_1}, u_{t_2}|X_{t_1}, X_{t_2}) \neq 0.$$
+$$E(\epsilon_{t_1}, \epsilon_{t_2}|X_{t_1}, X_{t_2}) \neq 0.$$
 
 When two variables both have, e.g., a positive trend, then they appear correlated, although they are actually not.
 
@@ -476,8 +476,8 @@ When two variables both have, e.g., a positive trend, then they appear correlate
 - Fixed Effect: $Y_t\sim X_t + Time_t$
 - De-trend: $Y_t\sim X_t$
   - \begin{align}
-\text{Run } Y_t =& \beta_0 + \beta_1Time + u_t;\\
-            X_t =& \gamma_0 + \gamma_1Time + v_t;\\
+\text{Run } Y_t =& \beta_0 + \beta_1Time + \epsilon_t;\\
+            X_t =& \gamma_0 + \gamma_1Time + \nu_t;\\
 \text{Run } Y'_t =& Y_t - (\hat\beta_0 + \hat\beta_1Time);\\
             X'_t =& X_t - (\hat\gamma_0 + \hat\gamma_1Time).\\
 \Rightarrow\ Y'_t =& \delta X'_t + e_t.
@@ -510,74 +510,16 @@ Affecting the relations between OV and EVs and among IVs...
 - Random Walk & Unit Root: Let &rho;&in;[-1, 1] identify the direction the path will go (&darr;-1, &uarr;1, &rarr;0).
   - \begin{align}
 Y_t =& \rho Y_{t - 1} + e_t\\
-u_t =& \rho u_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
-\Rightarrow\ u_{t + 1} =& \rho u_t + e_{t+1}\\
-                       =& \rho(\rho u_{t - 1} + e_t) + e_{t + 1}\\
-                       =& \rho(\rho (\rho u_{t - 2} + e_{t-1}) + e_t) + e_{t + 1}
+\epsilon_t =& \rho \epsilon_{t - 1} + e_t, e_t\sim iid(0, \sigma^2)\\
+\Rightarrow\ \epsilon_{t + 1} =& \rho \epsilon_t + e_{t+1}\\
+                       =& \rho(\rho \epsilon_{t - 1} + e_t) + e_{t + 1}\\
+                       =& \rho(\rho (\rho \epsilon_{t - 2} + e_{t-1}) + e_t) + e_{t + 1}
 \end{align}
   - |&rho;| < 1 implies the effects of previous errors goes away eventually;
   - |&rho;| = 1, the pass never goes away, and the trend can end anywhere, a.k.a. one [Unit Root]{.red}.
 
-:::{.notes}
-### Stationary
-
-For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,... where t<sub>1</sub> < t<sub>2</sub> < t<sub>3</sub>...), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
-
-
-<img src="https://drhuyue.site:10002/sammo3182/figure/ea_baguazhang.gif" height = 300 />
-
-<img src="https://drhuyue.site:10002/sammo3182/figure/ea_zuiquan.gif" height = 300 />
-
-
-### Covariance Stationary
-
-Given: 
-
-1. t(X<sub>t</sub>) is constant;
-1. var(X<sub>t</sub>) is constant;
-1. cov(X<sub>t</sub>,X<sub>t + n</sub>)does not rely on t, i.e., cov(X<sub>t,</sub>X<sub>t + n</sub>) = cov(X<sub>t + 1</sub>,X<sub>t + 2</sub>).
-
-
-Then, a moving average process that is covariance stationary is weakly dependent if cov(X<sub>t</sub>,X<sub>t + n</sub>)&rarr;0 as n&rarr;&infin;.
-
-
-When covariance stationary plus weakly dependent (e.g., $Y_t = \rho Y_{t - 1} + X_t + e_t$), the OLS is consistent.
-
-
-### Influence on the Coefficient
-
-Let's assume the mean of X is zero to simplify the maths
-
-\begin{align}
-\hat\beta_1 =& \beta_1 + \frac{\sum(X_t - \bar X)}{\sum(X_t - \bar X)^2}u_t\\
-            =& \beta_1 + \frac{\sum X_t}{\sum X_t^2}u_t, u_t = \rho u_{t - 1} + e_t
-\end{align}
-
-Only when &rho; = 0 (or cov(X<sub>t</sub>, X<sub>t + n</sub>) = 0), the estimate is identical with the OLS estimate.
-
-In other cases, &beta; is [biased]{.red}.
-
-
-### Influence on the Variance
-
-\begin{align}
-var(u_t|X) =& var(\rho u_{t - 1} + e_t|X),\\
-           =& var(\rho(\rho u_{t - 2} + e_{t - 1}) + e_t|X),\\
-           =& var(\rho(\rho (\rho u_{t - 3} + e_{t-2}) + e_{t-1}) + e_t|X),\\
-           =& var(\rho^3u_{t - 3} + \rho^2e_{t-2} + \rho e_{t - 1} + e_t |X),\\
-           =& \rho^6var(u_{t - 3}) + \rho^4\sigma_{e_{t-2}} + \rho^2\sigma_{e_{t-2}} + \sigma_e^2.
-\end{align}
-
-
-Following this manner, when t increases,
-
-\begin{align}
-var(u_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots,\\
-           =& \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)} = \frac{\sigma_e^2}{1 - \rho^2}.
-\end{align}
-
-
-When &rho; > 0, the estimation of variance through OLS will be [overestimated]{.red}.
+::: {.notes}
+Relevant concept: stationary, see the appendix
 :::
 
 ## Diagnosis: Durbin-Watson test
@@ -585,9 +527,9 @@ When &rho; > 0, the estimation of variance through OLS will be [overestimated]{.
 Testing [only]{.red} AR(1)
 
 \begin{align}
-DW =& \frac{\sum^T_{t = 2}(\hat u_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}= \frac{\sum^T_{t = 2}(\rho\hat u_{t-1} + e_t - \hat u_{t - 1})^2}{\sum^T_{t = 2}\hat u_t^2}\\
-   =& \frac{\sum^T_{t = 2}[(\rho - 1)\hat u_{t - 1} + e_t]^2}{\frac{\sigma_e^2}{1 - \rho^2}}\\
-   =& \frac{\sum^T_{t = 2}\{[(1 - \rho)^2\hat u^2_{t - 1}] + 2(\rho - 1)\hat u_{t - 1}e_t + e_t^2\}}{\frac{\sigma_e^2}{1 - \rho^2}}\\
+DW =& \frac{\sum^T_{t = 2}(\hat \epsilon_t - \hat \epsilon_{t - 1})^2}{\sum^T_{t = 2}\hat \epsilon_t^2}= \frac{\sum^T_{t = 2}(\rho\hat \epsilon_{t-1} + e_t - \hat \epsilon_{t - 1})^2}{\sum^T_{t = 2}\hat \epsilon_t^2}\\
+   =& \frac{\sum^T_{t = 2}[(\rho - 1)\hat \epsilon_{t - 1} + e_t]^2}{\frac{\sigma_e^2}{1 - \rho^2}}\\
+   =& \frac{\sum^T_{t = 2}\{[(1 - \rho)^2\hat \epsilon^2_{t - 1}] + 2(\rho - 1)\hat \epsilon_{t - 1}e_t + e_t^2\}}{\frac{\sigma_e^2}{1 - \rho^2}}\\
    \approx& \frac{\sum^T_{t = 2}[(1 - \rho)^2\sigma_u^2 + \sigma_e^2]}{\frac{\sigma_e^2}{1 - \rho^2}} = (1 - \rho)^2 + (1 - \rho^2) = 2(1 - \rho)
 \end{align}
 
@@ -647,19 +589,19 @@ Most common model: Autoregressive distributed lag model (ADL)
 
 Different from time series: T small, N large
 
-General model: $Y_{it} = \beta_0 + \beta_1X_{it} + u_{it}$
+General model: $Y_{it} = \beta_0 + \beta_1X_{it} + \epsilon_{it}$
 
 
 **Solution 1**: Fixed effect
 
-$$Y_{it} = \beta_0 + \beta_1X_{it} + a_i + u_{it}$$
+$$Y_{it} = \beta_0 + \beta_1X_{it} + a_i + \epsilon_{it}$$
 
 **Solution 2**: Fixed differentiating
 
 \begin{align}
 Y_{i2} - Y_{i1} =& (\beta_0 - \beta_0) + \beta_1(X_{i2} - X_{i1}),\\
-                 &+ (u_{i2} - u_{i1}),\\
-\Delta Y_i =& \beta_1\Delta X_i + \Delta u_i.
+                 &+ (\epsilon_{i2} - \epsilon_{i1}),\\
+\Delta Y_i =& \beta_1\Delta X_i + \Delta \epsilon_i.
 \end{align}
 
 
@@ -679,7 +621,7 @@ When autocorrelation is weak in the errors, FE might be better with smaller vari
 
 General model: 
 
-$$Y_{it} = \beta_0 + \beta_1X_{it} + \beta_2X_t + \beta_3X_i + u_{it}$$
+$$Y_{it} = \beta_0 + \beta_1X_{it} + \beta_2X_t + \beta_3X_i + \epsilon_{it}$$
 
 X<sub>t</sub>: Only varying by time.
 
@@ -696,7 +638,7 @@ X<sub>i</sub>: Only varying by unit.
 **Solution 2**: Regime switching
 
 \begin{align}
-Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + u_{it}\\
+Y_{it} =& \beta_0 + \beta_1X_{it} + \beta_2X_{it}dZ_t + \beta_3dZ_t + \epsilon_{it}\\
    dZ_t =& 1, \text{if } t \leq t^*.
 \end{align}
 
@@ -704,7 +646,7 @@ Structural break at t<sup>*</sup> in the X-Y relationship.
 
 ## Treating time dependency as unit heterogeneity
 
-**Solution 1**: LSDV, $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$
+**Solution 1**: LSDV, $Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + \epsilon_{it}$
 
 $\delta_td_{t}$: Fixed effect for time
 
@@ -722,7 +664,7 @@ $a_i$: Fixed effect for unit (unit-specific mean differences)
 
 Modeling time as a level
 
-$$Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + u_{it}$$
+$$Y_{it} = \delta_td_{t} + \beta_1X_{it} + a_i + \epsilon_{it}$$
 
 Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 
@@ -730,6 +672,66 @@ Instead of using binaries, modeling $a_i\sim N(0, \tau^2)$
 
 1. cov(a<sub>i</sub>, X<sub>it</sub>)= 0 (strong)
 1. cov(a<sub>i</sub>, u<sub>it</sub>)= 0
+
+## Stationary
+
+For every collection of time periods (X<sub>t<sub>1</sub></sub>, X<sub>t<sub>2</sub></sub>, X<sub>t<sub>3</sub></sub>,... where t<sub>1</sub> < t<sub>2</sub> < t<sub>3</sub>...), their distributions are the same as X<sub>t<sub>1</sub></sub> + h, X<sub>t<sub>2</sub></sub> + h, X<sub>t<sub>3</sub></sub> + ... i.e., the .navy[same joint distribution], or saying the .navy[error terms are the same] for every period.
+
+
+<img src="https://drhuyue.site:10002/sammo3182/figure/ea_baguazhang.gif" height = 300 />
+
+<img src="https://drhuyue.site:10002/sammo3182/figure/ea_zuiquan.gif" height = 300 />
+
+
+## Covariance Stationary
+
+Given: 
+
+1. t(X<sub>t</sub>) is constant;
+1. var(X<sub>t</sub>) is constant;
+1. cov(X<sub>t</sub>,X<sub>t + n</sub>)does not rely on t, i.e., cov(X<sub>t,</sub>X<sub>t + n</sub>) = cov(X<sub>t + 1</sub>,X<sub>t + 2</sub>).
+
+
+Then, a moving average process that is covariance stationary is weakly dependent if cov(X<sub>t</sub>,X<sub>t + n</sub>)&rarr;0 as n&rarr;&infin;.
+
+
+When covariance stationary plus weakly dependent (e.g., $Y_t = \rho Y_{t - 1} + X_t + e_t$), the OLS is consistent.
+
+
+## Influence on the Coefficient
+
+Let's assume the mean of X is zero to simplify the maths
+
+\begin{align}
+\hat\beta_1 =& \beta_1 + \frac{\sum(X_t - \bar X)}{\sum(X_t - \bar X)^2}\epsilon_t\\
+            =& \beta_1 + \frac{\sum X_t}{\sum X_t^2}\epsilon_t, \epsilon_t = \rho \epsilon_{t - 1} + e_t
+\end{align}
+
+Only when &rho; = 0 (or cov(X<sub>t</sub>, X<sub>t + n</sub>) = 0), the estimate is identical with the OLS estimate.
+
+In other cases, &beta; is [biased]{.red}.
+
+
+## Influence on the Variance
+
+\begin{align}
+var(\epsilon_t|X) =& var(\rho \epsilon_{t - 1} + e_t|X),\\
+           =& var(\rho(\rho \epsilon_{t - 2} + e_{t - 1}) + e_t|X),\\
+           =& var(\rho(\rho (\rho \epsilon_{t - 3} + e_{t-2}) + e_{t-1}) + e_t|X),\\
+           =& var(\rho^3\epsilon_{t - 3} + \rho^2e_{t-2} + \rho e_{t - 1} + e_t |X),\\
+           =& \rho^6var(\epsilon_{t - 3}) + \rho^4\sigma_{e_{t-2}} + \rho^2\sigma_{e_{t-2}} + \sigma_e^2.
+\end{align}
+
+
+Following this manner, when t increases,
+
+\begin{align}
+var(\epsilon_t|X) =& \sigma_e^2 + \rho^2\sigma_e^2 + \rho^4\sigma^2 +\cdots,\\
+           =& \sigma_e^2\sum^T_{t = 1}\rho^{2(t - 1)} = \frac{\sigma_e^2}{1 - \rho^2}.
+\end{align}
+
+
+When &rho; > 0, the estimation of variance through OLS will be [overestimated]{.red}.
 
 ## Stretch {.unnumbered}
 
