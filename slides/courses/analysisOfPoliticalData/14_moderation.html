@@ -6,9 +6,13 @@
 <script src="14_moderation_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="14_moderation_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="14_moderation_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="14_moderation_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="14_moderation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.14">
+<link href="14_moderation_files/libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="14_moderation_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="14_moderation_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
+<script src="14_moderation_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="14_moderation_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="14_moderation_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.32">
 
   <meta name="author" content="Yue Hu">
   <title>Moderation Effect</title>
@@ -30,8 +34,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="14_moderation_files/libs/revealjs/dist/theme/quarto.css" id="theme">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="14_moderation_files/libs/revealjs/dist/theme/quarto-48f225a532854478bb6de5675fa5c081.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="14_moderation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="14_moderation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="14_moderation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -159,7 +163,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -340,43 +345,57 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p><strong>Moderation in Theory</strong></p>
 <ol type="1">
 <li class="fragment">Specialty</li>
 <li class="fragment">Wrong ways</li>
-<li class="fragment">Correct way</li>
+<li class="fragment">Right way</li>
 </ol>
+</div><div class="column" style="width:50%;">
 <p><strong>Moderation in Practice</strong></p>
 <ol type="1">
 <li class="fragment">Theory</li>
 <li class="fragment">Data</li>
 <li class="fragment">Interpretation</li>
 </ol>
+</div></div>
 </section>
 <section>
-<section id="moderation-in-theory" class="title-slide slide level1 center">
-<h1>Moderation in Theory</h1>
+<section id="moderation-in-theory" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Moderation in Theory</h1>
 
 </section>
-<section id="moderation" class="slide level2">
-<h2>Moderation</h2>
+<section id="moderation" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Moderation</h2>
 <p><strong>Conditional effect</strong>: the <span class="red">contribution</span> of X on the variance of Y varies when Z has <span class="red">different</span> values</p>
+<p><span class="math display">\[Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3XZ + \epsilon.\]</span></p>
 <div class="fragment">
-<p>A.k.a., a nonlinear effect → one unit change of X does <span class="red">not</span> lead to β unit change in Y.</p>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div class="fragment">
-<p><span class="math display">\[Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3XZ + u.\]</span></p>
-<p>Testing the conditional effect of Z on X’s contribution (or the conditional effect of X on Z’s contribution) to the variance of Y.</p>
+<p><strong>nonlinear effect</strong></p>
 </div>
+<div class="callout-content">
+<p>One unit change of X does <span class="red">not</span> lead to β unit change in Y.</p>
+</div>
+</div>
+</div>
+</div>
+<div style="text-align:center; margin-top: 0.5em">
 <div class="fragment">
-<div style="text-align:center">
 <p>H<sub>0</sub>: If effects of X depends on Z (β<sub>3</sub> = 0).</p>
 </div>
-<div class="fragment" style="text-align:center">
+<div class="fragment">
 <div class="fragment grow">
 <p>H<sub>0</sub>: If X has an effect when Z varies (β<sub>1</sub> + β<sub>3</sub>Z = 0).</p>
+</div>
 </div>
 </div>
 <aside class="notes">
@@ -392,17 +411,16 @@ Yue Hu
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section>
-<section id="two-versions" class="slide level2">
-<h2>Two Versions</h2>
+<section id="two-versions" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Two Versions</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
-<h3 id="dichotomous-z">Dichotomous Z</h3>
-<p>Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then</p>
+<p><em>Dichotomous Z</em></p>
+<p>Let (X|Z=0) = X<sup>0</sup>; (X|Z=1) = X<sup>1</sup>, then</p>
 <p><span class="math display">\[\begin{align}
-\hat Y =&amp; \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
-\Leftrightarrow \hat{\tilde{Y}} =&amp; \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1
+\hat Y =&amp; \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z;\\
+\Leftrightarrow \hat{\tilde{Y}} =&amp; \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1.
 \end{align}\]</span></p>
 <ul>
 <li class="fragment">When Z = 0, <span class="math inline">\(H_0: \tilde\beta_1 = 0;\)</span></li>
@@ -422,33 +440,31 @@ Yue Hu
           display:block!important;
       }</style></aside>
 </div><div class="column fragment" style="width:50%;">
-<!-- -->
-<h3 id="continuousordinal-z">Continuous/Ordinal Z</h3>
+<p><em>Continuous/Ordinal Z</em></p>
 <p>Effect of X:</p>
 <p><span class="math display">\[\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.\]</span></p>
 <p>Statistics:</p>
 <p><span class="math display">\[\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4}\]</span></p>
-</div>
-</div>
+</div></div>
 </section></section>
 <section>
-<section id="how-things-get-wrong" class="title-slide slide level1 center">
-<h1>How Things Get Wrong?</h1>
+<section id="how-things-get-wrong" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> How Things Get Wrong?</h1>
 
 </section>
-<section id="not-including-the-interaction" class="slide level2">
-<h2>Not Including the Interaction</h2>
+<section id="not-including-the-interaction" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Not Including the Interaction</h2>
 <blockquote>
 <p><span class="large">☠️</span> “I don’t care about the interaction, and so just control the moderator.”</p>
 </blockquote>
 <p><span class="math display">\[\begin{align}
-Y =&amp; \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + u,\\
-  =&amp; \beta_0 + (\beta_1 + \beta_3Z) X + \beta_2Z + u.\\
-\text{Let Z increases by c, } Y =&amp; \beta_0 + [\beta_1 + \beta_3(Z + c)] X + \beta_2(Z + c) + u,\\
-  =&amp; (\beta_0 + \beta_2c) + \color{red}{(\beta_1 + \beta_3c + \beta_3Z)}X + \beta_2Z + u.
+Y =&amp; \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + \epsilon,\\
+  =&amp; \beta_0 + (\beta_1 + \beta_3Z) X + \beta_2Z + \epsilon.\\
+\text{Z increases c, } Y =&amp; \beta_0 + [\beta_1 + \beta_3(Z + c)] X + \beta_2(Z + c) + \epsilon,\\
+  =&amp; (\beta_0 + \beta_2c) + \color{red}{(\beta_1 + \beta_3c + \beta_3Z)}X + \beta_2Z + \epsilon.
 \end{align}\]</span></p>
 <div class="fragment">
-<div class="callout callout-warning callout-titled callout-style-simple">
+<div class="callout callout-warning callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
@@ -463,14 +479,14 @@ Y =&amp; \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + u,\\
 </div>
 </div>
 </section>
-<section id="no-β1" class="slide level2">
-<h2>No β<sub>1</sub></h2>
+<section id="no-β1" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> No β<sub>1</sub></h2>
 <blockquote>
 <p><span class="large">☠️☠️</span> “I just care about the interaction.”</p>
 </blockquote>
-<p><span class="math display">\[Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',\]</span></p>
+<p><span class="math display">\[Y = \beta_0 + \beta_2Z + \beta_3X\times Z + \epsilon',\]</span></p>
 <div class="fragment">
-<p>which means <span class="math inline">\(u' = \beta_1X + u\)</span>. Then</p>
+<p>which means <span class="math inline">\(\epsilon' = \beta_1X + \epsilon\)</span>. Then</p>
 <p><span class="math display">\[\begin{align}
 E(u'|X) \neq&amp; 0,\\
 E[u'(X,Z)] \neq&amp; 0.
@@ -478,7 +494,7 @@ E[u'(X,Z)] \neq&amp; 0.
 <p>…unless β<sub>1</sub>X or XZ is zero → β<sub>3</sub> is biased and meaningless.</p>
 </div>
 <div class="fragment">
-<p>(What is this problem called?)</p>
+<p>(<em>What is this problem called?</em>)</p>
 <aside class="notes">
 <p>Omitted variable bias; endogeneity</p>
 <style type="text/css">
@@ -494,48 +510,39 @@ E[u'(X,Z)] \neq&amp; 0.
       }</style></aside>
 </div>
 </section>
-<section id="only-β3" class="slide level2">
-<h2>Only β<sub>3</sub></h2>
+<section id="only-β3" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Only β<sub>3</sub></h2>
 <blockquote>
-<p><span class="large">☠️☠️☠️</span> “The significance of the interaction term”</p>
+<p><span class="large">☠️☠️☠️</span> “The interaction is significant”</p>
 </blockquote>
 <p>When testing the X’s effect, <span class="math inline">\(\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.\)</span></p>
 <div class="fragment">
 <p>The standard error: <span class="math inline">\(SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} &gt; SE_{\beta_3}\)</span></p>
-<ul>
-<li class="fragment">It’s possible for the contribution of X on Y to be statistically <span class="red">significant</span> for certain values of Z, <em>even if all of the model parameters are <span class="red">insignificant</span></em>.</li>
-</ul>
 <div class="fragment">
-<div class="callout callout-important callout-style-simple">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
+<div class="callout-title">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
+<p><strong>Implication</strong></p>
+</div>
 <div class="callout-content">
-<p>One cannot infer whether X has a meaningful conditional effect on Y <span class="red">simply from the magnitude and significance of either β<sub>1</sub> or β<sub>3</sub></span>.</p>
-</div>
-</div>
-</div>
-</div>
-<aside class="notes">
-<p>Brambor, Clark and Golder 2006</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 <ul>
+<li class="fragment">It’s possible for the contribution of X on Y to be statistically significant for certain values of Z, <em>even if all of the model parameters are <span class="red"><strong>insignificant</strong></span></em>.
+<ul>
+<li class="fragment">One cannot infer whether X has a meaningful conditional effect on Y <span class="red">simply from the magnitude and significance of either β<sub>1</sub> or β<sub>3</sub></span>.</li>
+</ul></li>
 <li class="fragment">Point estimation may not be reliable, if link function (e.g., logit and probit) is involved</li>
 <li class="fragment">Substantive significance of the <span class="red">conditional effect</span> highly relates to the distribution of the <span class="red">conditioning variable</span> (viz., Z in the above example).</li>
 </ul>
+</div>
+</div>
+</div>
+</div>
 <aside class="notes">
 <ul>
+<li>Brambor, Clark and Golder 2006</li>
 <li>Berry, DeMeritt, and Esarey (2016)</li>
 <li>Berry, Golder, and Milton (2012)</li>
 </ul>
@@ -552,44 +559,32 @@ E[u'(X,Z)] \neq&amp; 0.
       }</style></aside>
 </div>
 </section>
-<section id="how-to-interpret-right" class="slide level2">
-<h2>How to Interpret Right</h2>
+<section id="how-to-interpret-right" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> How to Interpret Right</h2>
 <p>“Sins”:</p>
 <ol type="1">
 <li class="fragment">Not including XZ ☠️</li>
 <li class="fragment">Not including X or Z ☠️☠️</li>
-<li class="fragment">The significance of the interaction term ☠️☠️☠️</li>
+<li class="fragment">Interpreting based on the signifance of the interaction ☠️☠️☠️</li>
 </ol>
 <ul>
 <li class="fragment">Solution:
 <ul>
 <li class="fragment">Using the full model</li>
-<li class="fragment">Plotting the <span class="red">marginal effects</span>.</li>
-<li class="fragment">Showing the confidence intervals</li>
+<li class="fragment">Plotting the <span class="red">marginal effects and their CIs</span>.<sup>1</sup></li>
 <li class="fragment">Presenting the frequency distribution of Z, esp., when the effect trend goes across the zero point.</li>
 </ul></li>
 </ul>
-<div class="fragment">
-<div class="callout callout-note callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>Marginal effects may not be enough</p>
-<ul>
-<li class="fragment">The estimation of the regular marginal effects might cause a “multiple comparison problem”
-<ul>
-<li class="fragment">Leading to <span class="red">over- or under-confidence</span> of the confidential intervals.</li>
-<li class="fragment">Adjust the CIs with a critical t-statistics by Benjamini 1995</li>
-</ul></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
 <aside class="notes">
 <p>Esarey and Sumner (2017)</p>
+<p>Marginal effects may not be enough</p>
+<ul>
+<li>The estimation of the regular marginal effects might cause a “multiple comparison problem”
+<ul>
+<li>Leading to <span class="red">over- or under-confidence</span> of the confidential intervals.</li>
+<li>Adjust the CIs with a critical t-statistics by Benjamini 1995</li>
+</ul></li>
+</ul>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -601,16 +596,18 @@ E[u'(X,Z)] \neq&amp; 0.
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</section>
-<section id="beyond-moderation-effect-of-interest" class="slide level2">
-<h2>Beyond Moderation Effect of Interest</h2>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>CI may need be adjusted as well.</p></li></ol></aside></section>
+<section id="beyond-moderation-effect-of-interest" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Beyond Moderation Effect of Interest</h2>
 <p>As a “control”:</p>
 <p><span class="math display">\[\begin{align}
-Pr(Civil\ War) ~&amp; \beta_0 + \beta_1Inequality + \beta_2Regime\ Type + \beta_3 Inequality \times Regime + \\
-&amp; \beta_4GDP + \beta_5Inequality \times GDP + u.
+Pr(\text{Civil War}) \sim&amp; \beta_0 + \beta_1Inequality \\
+&amp;+ \beta_2Regime + \beta_3 Inequality \times Regime \\
+&amp;+ \beta_4GDP + \beta_5Inequality \times GDP + \epsilon.
 \end{align}\]</span>(Beiser-McGrath &amp; Beiser-McGrath 2020).</p>
 <div class="fragment">
-<p><span class="r-fit-text">What happened if <span class="red">Inequality × GDP</span> is not in the model?</span></p>
+<p><em>What happened if <span class="red">Inequality × GDP</span> is not in the model?</em></p>
+</div>
 <aside class="notes">
 <p>Omitted variable</p>
 <p>Beiser-McGrath, Janina, and Liam F. Beiser-McGrath. 2020. “Problems with Products? Control Strategies for Models with Interaction and Quadratic Effects.” Political Science Research and Methods 8(4): 707–30.</p>
@@ -629,15 +626,14 @@ Pr(Civil\ War) ~&amp; \beta_0 + \beta_1Inequality + \beta_2Regime\ Type + \beta_
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
 </section></section>
 <section>
-<section id="moderation-in-practice" class="title-slide slide level1 center">
-<h1>Moderation in Practice</h1>
+<section id="moderation-in-practice" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Moderation in Practice</h1>
 
 </section>
-<section id="context-meritocracy-and-inequality" class="slide level2">
-<h2>Context: Meritocracy and Inequality</h2>
+<section id="context-meritocracy-and-inequality" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> Context: Meritocracy and Inequality</h2>
 <div class="columns">
 <div class="column" style="width:30%;">
 <div style="text-align:center">
@@ -647,7 +643,7 @@ Income inequality</p>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_zootopia.gif" class="fragment"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_zootopia.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_zootopia.gif" class="fragment quarto-figure quarto-figure-center"></a></p>
 </figure>
 </div>
 <aside class="notes">
@@ -665,29 +661,27 @@ Income inequality</p>
       }</style></aside>
 </div><div class="column fragment" style="width:35%;">
 <p><em>Self-reproducing</em></p>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hulk.gif" width="350"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_hulk.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_hulk.gif" width="350"></a></p>
 <p>H<sub>0</sub>: Poor people living with high inequality believe in meritocracy <span class="red">less</span>.</p>
 </div><div class="column fragment" style="width:35%;">
 <p><em>Self-negating</em></p>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hypnosis.gif" width="350"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_hypnosis.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_hypnosis.gif" width="350"></a></p>
 <p>H<sub>1</sub>: Poor people living with high inequality believe in meritocracy <span class="red">more</span>.</p>
-</div>
-</div>
+</div></div>
 </section>
-<section id="examination" class="slide level2">
-<h2>Examination</h2>
+<section id="examination" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> Examination</h2>
 <p><span class="math display">\[\begin{align}
 Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
-                      &amp;+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
+                      &amp;+ \gamma_{11}Inequality_{j} \times Income_{ij} + \epsilon_{ij}.
 \end{align}\]</span></p>
-<p>Data: <a href="https://www.pewresearch.org/">Pew survey</a></p>
-<h3 id="answers">Answers</h3>
+<p><strong>Findings</strong></p>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
 <p>Newman, Johnston, &amp; Lown(2015, <em>AJPS</em>)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_NJL_plot.png" height="350"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_NJL_plot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_NJL_plot.png" class="quarto-figure quarto-figure-center" height="350"></a></p>
 </figure>
 </div>
 <aside class="notes">
@@ -707,47 +701,100 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
 <p>Solt, Hu, Hundson, Song, &amp; Yu (2017, <em>JOP</em>)</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_interaction1.jpg" height="350"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_interaction1.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_interaction1.jpg" class="quarto-figure quarto-figure-center" height="350"></a></p>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="suspicious-data" class="slide level2">
-<h2>Suspicious Data</h2>
+<section id="suspicious-data" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> Suspicious Data</h2>
 <div class="columns">
 <div class="column fragment" style="width:35%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_three_measures.jpg" height="400"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_three_measures.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_three_measures.jpg" class="quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 </div><div class="column fragment" style="width:35%;">
 <p>W. better data</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_SH_plot2.png" height="400"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/mod_SH_plot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_SH_plot2.png" class="quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 </div><div class="column fragment" style="width:30%;">
 <p>Marginal effects</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg" height="400"></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/interaction2.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/interaction2.jpg" class="quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 </section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
-<img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/mod_mindmap.png" class="r-stretch">
+<section id="take-home-point" class="slide level2" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> Take-home point</h2>
+
+<img data-src="https://drhuyue.site:10002/sammo3182/figure/mod_mindmap.png" class="r-stretch"></section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix</h1>
+
+</section>
+<section id="stretch" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="松茸的世界：5分钟正念冥想-自信之心"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400" alt="松茸的世界：5分钟正念冥想-自信之心"></a></p>
+</figure>
+</div>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
-</section></section>
-    </div>
-  </div>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="14_moderation_files/libs/revealjs/dist/reveal.js"></script>
@@ -774,12 +821,12 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
 'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
@@ -904,7 +951,7 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
         transition: 'none',
@@ -935,7 +982,7 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -962,42 +1009,80 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1031,18 +1116,7 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1074,11 +1148,55 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -1088,8 +1206,17 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -1103,7 +1230,11 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
@@ -1143,22 +1274,41 @@ Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &amp;+ \gamma_{10}Income
           });
         }
       }
-        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var filterRegex = new RegExp('/' + window.location.host + '/');
-        var isInternal = (href) => {
-            return filterRegex.test(href) || localhostRegex.test(href);
-        }
-        // Inspect non-navigation links and adorn them if external
-     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
-        for (var i=0; i<links.length; i++) {
-          const link = links[i];
-          if (!isInternal(link.href)) {
-              // target, if specified
-              link.setAttribute("target", "_blank");
-          }
-        }
     });
     </script>
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","loop":false,"openEffect":"fade","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
     
 
 </body></html>

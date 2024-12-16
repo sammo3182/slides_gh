@@ -2,42 +2,46 @@
 title: "Moderation Effect"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-execute:
-  echo: false
-  message: false
-  warning: false
+knitr: 
+    opts_chunk: 
+      echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-filters:
-  - lightbox
 revealjs-plugins:
   - spotlight
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
+
+
+## Overview {.unnumbered}
 
 ```{r setup, include = FALSE}
 if (!require(pacman)) install.packages("pacman")
@@ -65,20 +69,26 @@ theme_update(
 ```
 
 
-## Overview
+:::: {.columns}
 
-
+::: {.column width="50%"}
 **Moderation in Theory**
 
 1. Specialty
 1. Wrong ways
-1. Correct way
+1. Right way
     
+:::
+
+::: {.column width="50%"}
 **Moderation in Practice**
 
 1. Theory
 1. Data
 1. Interpretation
+:::
+
+::::
 
 
 # Moderation in Theory
@@ -87,27 +97,25 @@ theme_update(
 
 **Conditional effect**: the [contribution]{.red} of X on the variance of Y varies when Z has [different]{.red} values
 
-. . .
+$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3XZ + \epsilon.$$
 
-A.k.a., a nonlinear effect &rarr; one unit change of X does [not]{.red} lead to &beta; unit change in Y.
+::: {.callout-warning .fragment}
+## nonlinear effect 
+One unit change of X does [not]{.red} lead to &beta; unit change in Y.
+:::
 
-. . .
-
-$$Y = \beta_0 + \beta_1X + \beta_2Z + \beta_3XZ + u.$$
-
-Testing the conditional effect of Z on X's contribution (or the conditional effect of X on Z's contribution) to the variance of Y.
-
-. . .
-
-:::{style="text-align:center"}
+::: {style="text-align:center; margin-top: 0.5em"}
+:::{.fragment}
 H<sub>0</sub>: If effects of X depends on Z (&beta;<sub>3</sub> = 0).
 :::
 
-:::{.fragment style="text-align:center"}
+:::{.fragment}
 :::{.fragment .grow}
 H<sub>0</sub>: If X has an effect when Z varies (&beta;<sub>1</sub> + &beta;<sub>3</sub>Z = 0). 
 :::
 :::
+:::
+
 
 :::{.notes}
 The second is more useful, since X is the focus/prerequesite
@@ -118,13 +126,13 @@ The second is more useful, since X is the focus/prerequesite
 :::: {.columns}
 
 ::: {.column width="50%"}
-### Dichotomous Z
+*Dichotomous Z*
 
-Let X = X<sup>0</sup> when Z = 0; X = X<sup>1</sup> when Z = 1, then 
+Let (X|Z=0) = X<sup>0</sup>; (X|Z=1) = X<sup>1</sup>, then 
 
 \begin{align}
-\hat Y =& \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z\\
-\Leftrightarrow \hat{\tilde{Y}} =& \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1
+\hat Y =& \hat\beta_0 + \hat\beta_1X + \hat\beta_2Z + \hat\beta_3X\times Z;\\
+\Leftrightarrow \hat{\tilde{Y}} =& \hat{\tilde\beta_0} + \hat{\tilde\beta_1}X^0 + \hat{\tilde\beta_2}Z + \hat{\tilde\beta_3}X^1.
 \end{align}
 
 * When Z = 0, $H_0: \tilde\beta_1 = 0;$
@@ -136,7 +144,7 @@ This case applied to DID methodologically
 :::
 
 ::: {.column .fragment width="50%"}
-### Continuous/Ordinal Z
+*Continuous/Ordinal Z*
 
 Effect of X: 
 
@@ -158,31 +166,28 @@ $$\frac{\hat\beta_1 + \hat\beta_3Z}{SE(\hat\beta_1 + \hat\beta_3Z)}\sim t_{n - 4
 > [☠️]{.large} "I don't care about the interaction, and so just control the moderator." 
 
 \begin{align}
-Y =& \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + u,\\
-  =& \beta_0 + (\beta_1 + \beta_3Z) X + \beta_2Z + u.\\
-\text{Let Z increases by c, } Y =& \beta_0 + [\beta_1 + \beta_3(Z + c)] X + \beta_2(Z + c) + u,\\
-  =& (\beta_0 + \beta_2c) + \color{red}{(\beta_1 + \beta_3c + \beta_3Z)}X + \beta_2Z + u.
+Y =& \beta_0 + \color{red}{\beta_1}X + \beta_2Z + \beta_3XZ + \epsilon,\\
+  =& \beta_0 + (\beta_1 + \beta_3Z) X + \beta_2Z + \epsilon.\\
+\text{Z increases c, } Y =& \beta_0 + [\beta_1 + \beta_3(Z + c)] X + \beta_2(Z + c) + \epsilon,\\
+  =& (\beta_0 + \beta_2c) + \color{red}{(\beta_1 + \beta_3c + \beta_3Z)}X + \beta_2Z + \epsilon.
 \end{align}
 
-:::{.fragment}
-:::{.callout-warning}
+:::{.callout-warning .fragment}
 ## Consequence
 
 The coefficient of X [changes]{.red} by changing Z.
 :::
-:::
 
----
 
 ## No &beta;<sub>1</sub>
 
 > [☠️☠️]{.large} "I just care about the interaction."
 
-$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + u',$$
+$$Y = \beta_0 + \beta_2Z + \beta_3X\times Z + \epsilon',$$
 
 . . .
 
-which means $u' = \beta_1X + u$. Then 
+which means $\epsilon' = \beta_1X + \epsilon$. Then 
 
 \begin{align}
 E(u'|X) \neq& 0,\\
@@ -193,7 +198,7 @@ E[u'(X,Z)] \neq& 0.
 
 . . .
 
-(What is this problem called?)
+(*What is this problem called?*)
 
 :::{.notes}
 Omitted variable bias; endogeneity
@@ -201,7 +206,7 @@ Omitted variable bias; endogeneity
 
 ## Only &beta;<sub>3</sub>
 
-> [☠️☠️☠️]{.large} "The significance of the interaction term"
+> [☠️☠️☠️]{.large} "The interaction is significant"
 
 When testing the X's effect, $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z.$
 
@@ -209,24 +214,17 @@ When testing the X's effect, $\frac{\partial Y}{\partial X} = \beta_1 + \beta_3Z
 
 The standard error: $SE_{\frac{\partial Y}{\partial X}} = \sqrt{var(\hat{\beta_1}) + Z^2var(\hat{\beta_3}) + 2Zcov(\hat{\beta_1}, \hat{\beta_3})} > SE_{\beta_3}$
 
-
-- It's possible for the contribution of X on Y to be statistically [significant]{.red} for certain values of Z, *even if all of the model parameters are [insignificant]{.red}*. 
-
-:::{.fragment}
-:::{.callout-important}
-One cannot infer whether X has a meaningful conditional effect on Y [simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>]{.red}.
+:::{.callout-important .fragment}
+## Implication
+- It's possible for the contribution of X on Y to be statistically significant for certain values of Z, *even if all of the model parameters are [**insignificant**]{.red}*. 
+    - One cannot infer whether X has a meaningful conditional effect on Y [simply from the magnitude and significance of either &beta;<sub>1</sub> or &beta;<sub>3</sub>]{.red}.
+- Point estimation may not be reliable, if link function (e.g., logit and probit) is involved
+- Substantive significance of the [conditional effect]{.red} highly relates to the distribution of the [conditioning variable]{.red} (viz., Z in the above example). 
 :::
-:::
-
-:::{.notes}
-Brambor, Clark and Golder 2006
-:::
-
-* Point estimation may not be reliable, if link function (e.g., logit and probit) is involved
-* Substantive significance of the [conditional effect]{.red} highly relates to the distribution of the [conditioning variable]{.red} (viz., Z in the above example). 
 
 
 :::{.notes}
+- Brambor, Clark and Golder 2006
 - Berry, DeMeritt, and Esarey (2016)
 - Berry, Golder, and Milton (2012)
 :::
@@ -237,26 +235,21 @@ Brambor, Clark and Golder 2006
 
 1. Not including XZ ☠️ 
 1. Not including X or Z ☠️☠️
-1. The significance of the interaction term ☠️☠️☠️
+1. Interpreting based on the signifance of the interaction ☠️☠️☠️
 
 - Solution:
     - Using the full model
-    - Plotting the [marginal effects]{.red}.
-    - Showing the confidence intervals
+    - Plotting the [marginal effects and their CIs]{.red}.^[CI may need be adjusted as well.]
     - Presenting the frequency distribution of Z, esp., when the effect trend goes across the zero point.
 
-:::{.fragment}
-:::{.callout-note}
+:::{.notes}
+Esarey and Sumner (2017)
+
 Marginal effects may not be enough
 
 - The estimation of the regular marginal effects might cause a "multiple comparison problem"
     - Leading to [over- or under-confidence]{.red} of the confidential intervals.
     - Adjust the CIs with a critical t-statistics by Benjamini 1995
-:::
-:::
-
-:::{.notes}
-Esarey and Sumner (2017)
 :::
 
 
@@ -265,14 +258,14 @@ Esarey and Sumner (2017)
 As a "control":
 
 \begin{align}
-Pr(Civil\ War) ~& \beta_0 + \beta_1Inequality + \beta_2Regime\ Type + \beta_3 Inequality \times Regime + \\
-& \beta_4GDP + \beta_5Inequality \times GDP + u.
+Pr(\text{Civil War}) \sim& \beta_0 + \beta_1Inequality \\
+&+ \beta_2Regime + \beta_3 Inequality \times Regime \\
+&+ \beta_4GDP + \beta_5Inequality \times GDP + \epsilon.
 \end{align}(Beiser-McGrath & Beiser-McGrath 2020).
 
-
-. . .
-
-[What happened if [Inequality &times; GDP]{.red} is not in the model?]{.r-fit-text}
+::: {.fragment}
+*What happened if [Inequality &times; GDP]{.red} is not in the model?*
+:::
 
 :::{.notes}
 Omitted variable
@@ -296,7 +289,6 @@ Controversial: Lasso avoided over fitting by setting "useless" variables to zero
 
 # Moderation in Practice
 
-
 ## Context: Meritocracy and Inequality
 
 :::: {.columns}
@@ -308,7 +300,7 @@ Low-income &rarr; Meritocracy
 Income inequality 
 :::
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_zootopia.gif){.fragment fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_zootopia.gif){.fragment fig-align="center"}
 
 :::{.notes}
 Self-reproducing: relative power theory
@@ -320,7 +312,7 @@ Self-negating: conflict theory
 ::: {.column .fragment width="35%"}
 *Self-reproducing*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hulk.gif){width=350}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_hulk.gif){width=350}
 
 H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [less]{.red}.
 
@@ -330,7 +322,7 @@ H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [l
 *Self-negating*
 
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_hypnosis.gif){width=350}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_hypnosis.gif){width=350}
 
 H<sub>1</sub>: Poor people living with high inequality believe in meritocracy [more]{.red}.
 :::
@@ -341,20 +333,18 @@ H<sub>1</sub>: Poor people living with high inequality believe in meritocracy [m
 
 \begin{align}
 Reject\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
-                      &+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
+                      &+ \gamma_{11}Inequality_{j} \times Income_{ij} + \epsilon_{ij}.
 \end{align}
 
-Data: [Pew survey](https://www.pewresearch.org/)
 
-### Answers
-
+**Findings**
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
 Newman, Johnston, & Lown(2015, *AJPS*)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_NJL_plot.png){fig-align="center" height=350}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_NJL_plot.png){fig-align="center" height=350}
 
 :::{.notes}
 Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “False Consciousness or Class Awareness? Local Income Inequality, Personal Economic Position, and Belief in American Meritocracy.” American Journal of Political Science 59(2): 326–40.
@@ -365,7 +355,7 @@ Newman, Benjamin J., Christopher D. Johnston, and Patrick L. Lown. 2015. “Fals
 ::: {.column .fragment width="50%"}
 Solt, Hu, Hundson, Song, & Yu (2017, *JOP*)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_interaction1.jpg){height=350 fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_interaction1.jpg){height=350 fig-align="center"}
 :::
 
 ::::
@@ -377,29 +367,50 @@ Solt, Hu, Hundson, Song, & Yu (2017, *JOP*)
 :::: {.columns}
 
 ::: {.column .fragment width="35%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_three_measures.jpg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_three_measures.jpg){fig-align="center" height=400}
 :::
 
 ::: {.column .fragment width="35%"}
 
 W. better data
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_SH_plot2.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_SH_plot2.png){fig-align="center" height=400}
 :::
 
 ::: {.column .fragment width="30%"}
 
 Marginal effects
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/spe_interaction2.jpg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/interaction2.jpg){fig-align="center" height=400}
 :::
 
 ::::
 
 
-
 ## Take-home point
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/mod_mindmap.png){.r-stretch}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_mindmap.png){.r-stretch}
 
 
+# Appendix {.appendix .unnumbered}
+
+## Stretch {.unnumbered}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::
