@@ -2,38 +2,37 @@
 title: "Missingness & GLM"
 subtitle: "Large N & Leeuwenhoek (70700173)"
 author: "Yue Hu"
-execute:
-  echo: false
-  message: false
-  warning: false
+knitr: 
+    opts_chunk: 
+      echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: true
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
     preview-links: true # open an iframe for a link
-    embed-resources: false
+    link-external-newwindow: true
+    self-contained: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
-    callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-
 revealjs-plugins:
   - spotlight
-  
-lightbox:
+lightbox: 
   match: auto
   effect: fade
-
 spotlight:
   size: 50
   presentingCursor: default
@@ -41,7 +40,13 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-```{r setup, include = FALSE}
+
+## Overview {.unnumbered}
+
+```{r}
+#| label: setup
+#| include: false
+
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
@@ -52,7 +57,7 @@ p_load(
 
 
 # Functions preload
-set.seed(313)
+set.seed(114)
 
 theme_set(
   theme_minimal(base_size = 18)
@@ -66,7 +71,7 @@ theme_update(
 
 ```
 
-## Overview
+
 
 :::: {.columns}
 
@@ -74,16 +79,16 @@ theme_update(
 
 **Missingness Issue**
 
-- Understand missing data from OLS assumptions
-    - Type of missingness
+- Understand missing data from an OLS perspective
+    - Typology
     - Consequences
-- Solutions for missingness
+    - "Solutions"
 :::
 
 ::: {.column width="50%"}
 **Continueous &rarr; Discrete**
 
-- How to use linear regression to estimate discrete Ys
+- Linear model for nonlinear relationships
 - Model fitness
 :::
 
@@ -164,11 +169,12 @@ P(M|D) &ne; P(M|D<sup>Observed</sup>)
 
 
 
-## Illustration
+## How do they look like in data
 
-:::{.fragment}
-```{r missingness}
+```{r}
+#| label: missingness
 #| fig-align: center
+#| fig-height: 6
 
 # Number of observations
 n <- 100
@@ -193,7 +199,9 @@ df_sim <- tibble(
   pivot_longer(cols = mcar:ni,
                names_to = "missingness",
                values_to = "miss") %>% 
-  mutate(missingness = factor(missingness, levels = c("mcar", "mar", "ni")), 
+  mutate(missingness = factor(missingness, 
+  levels = c("mcar", "mar", "ni"), 
+  labels = c("MCAR", "MAR", "NI")), 
          miss = factor(miss, labels = c("Observed", "Missing")))
 
 ggplot(df_sim, aes(x = x, y = y, color = miss)) +
@@ -201,19 +209,20 @@ ggplot(df_sim, aes(x = x, y = y, color = miss)) +
   scale_color_gb() +
   facet_wrap(~ missingness, ncol = 1)
 ```
-:::
 
 
 ## NI
 
-```{r ni}
+```{r}
 #| fig-align: center
+#| label: ni
+#| fig-height: 6
 
 library(plotly)
 
 color_gb <- c("gold", "black")
 
-filter(df_sim, missingness == "ni") %>%
+filter(df_sim, missingness == "NI") %>%
   plot_ly(x = ~z, y = ~x, z = ~y,
           color = ~miss, colors = color_gb, opacity = 0.8,
           type = "scatter3d", mode = "markers")
@@ -264,8 +273,8 @@ Using neayby approximate values, e.g., mean, the right last-observed observation
 
 
 :::{.notes}
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/interpolation.png" height = 200 />
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_extrapolation.png" height = 200 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/interpolation.png" height = 200 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/lm_extrapolation.png" height = 200 />
 :::
 
 [(*Problems*?)]{.red .fragment}
@@ -331,7 +340,7 @@ Misspecification of the model does not affect MI.
 :::
 
 :::{.fragment}
-Solution:
+What you may try:
 
 **Likelihood approach**: Estimate distribution and integrate over it (the results are identical no matter how many times doing it), e.g., SEM.
 :::
@@ -368,7 +377,7 @@ observable when it < 100,000
 + `tobit`, use the right distribution---a combination of P(Y<sub>i</sub><sup>*</sup> < 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).
 
 :::{.notes}
-<img src="http://103.238.162.29:10002/webdav/sammo3182/figure/censorTruncated.png" height = 200 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/censorTruncated.png" height = 200 />
 :::
 
 
@@ -386,13 +395,13 @@ observable when it < 100,000
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
-[But OLS is so beautiful, efficient, and easy!]{.red .Large}
+[But OLS is so beautiful, efficient, and easy!]{.red .large}
 :::
 
 ::: {.column .fragment width="50%"}
 Solution:
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/lm_multiuseTie.jpg){fig-align="center" height=200}
+![](https://drhuyue.site:10002/sammo3182/figure/lm_multiuseTie.jpg){fig-align="center" height=200}
 :::
 
 ::::
@@ -590,7 +599,11 @@ Ways to interpret GLM outcomes:
 
 ## Predicted Value Plots
 
-```{r predVal, fig.align='center'}
+```{r}
+#| label: predVal
+#| fig-align: center
+#| fig-height: 6
+
 library(ggplot2)
 
 ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
@@ -615,54 +628,6 @@ ggplot(data = data.frame(x = c(-3, 3)), aes(x)) +
 Compare when beta equals different values, the larger the more s
 :::
 
-:::{.notes}
-### Marginal Effects
-
-The instantaneous change
-
-\begin{align}
-&\frac{\partial P(Y = 1|X)}{\partial X} \\
-=& \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
-& -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
-=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
-=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
-=& \beta_1P(Y = 1|X)P(Y = 0|X)
-\end{align}
-
-The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&beta; = 0. In other words, marginal effect depends on the value of X.
-
-In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.
-
-
-
-### First Difference
-
-The discrete version of marginal effect.
-
-$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$
-
-X<sub>-k</sub>:
-
-1. All other independent variables (holding them constant)
-1. Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.
-
-
-X<sub>k</sub><sup>H,L</sup>:
-
-1. Max &rarr; Min
-1. Median/mean &plusmn; &sigma;<sub>X<sub>k</sub></sub>
-1. Two theoretical interesting values
-1. Discrete: 0/1
-1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
-
-
-### Uncertainty of Marginal Effects and FDs
-
-1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
-1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
-1. Just using the variance of $X\hat\beta$.
-
-:::
 
 ## Goodness of Fit
 
@@ -703,8 +668,76 @@ ePRE: expected PRE, Herron 1999, PA
 
 ## Take-home point
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/lm_mindmap.png){fig-align="center" height=600}
+::: {.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/lm_mindmap.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lm_mindmap2.png){fig-align="center" height=600}
+:::
 
 ## The Journey
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ml_fullMindmap.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/ml_fullMindmap.png){fig-align="center" height=600}
+
+# Appendix {.appendix .unnumbered}
+
+## Marginal Effects of GLM
+
+The instantaneous change
+
+\begin{align}
+&\frac{\partial P(Y = 1|X)}{\partial X} \\
+=& \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
+& -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
+=& \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
+=& \beta_1P(Y = 1|X)P(Y = 0|X)
+\end{align}
+
+::: {.notes}
+The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying X&beta; = 0. In other words, marginal effect depends on the value of X.
+
+In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.
+:::
+
+
+## First Difference
+
+The discrete version of marginal effect.^[X<sub>-k</sub>: All other independent variables (holding them constant); Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.]
+
+$$FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})$$
+
+X<sub>k</sub><sup>H,L</sup>:
+
+1. Max &rarr; Min
+1. Median/mean &plusmn; &sigma;<sub>X<sub>k</sub></sub>
+1. Two theoretical interesting values
+1. Discrete: 0/1
+1. Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.
+
+
+## Uncertainty of Marginal Effects and FDs
+
+1. Mathematical: Approximating with the [delta method](https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html).
+1. Simulation: It is nice since one variable may not (often not) have symmetric distributions.
+1. Just using the variance of $X\hat\beta$.
+
+## Stretch {.unnumbered}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/relax.mp4 title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！" height=600 preload="auto" controls allowfullscreen>}}
+
+:::{.notes}
+https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&from_spmid=main.space-search.0.0&is_story_h5=false&mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&p=2&plat_id=114&share_from=ugc&share_medium=iphone&share_plat=ios&share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&share_source=WEIXIN&share_tag=s_i&timestamp=1728732278&unique_k=skSWw7j&up_id=390316092&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Meditation {.unnumbered}
+
+:::{style="text-align:center; margin-top: 2em"}
+![松茸的世界：5分钟正念冥想-自信之心](https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg){fig-align="center" height=400}
+
+<audio controls preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width=900></audio>
+:::
+
+
+:::{.notes}
+https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9
+:::

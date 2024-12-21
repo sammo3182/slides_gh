@@ -6,12 +6,13 @@
 <script src="15_logitMissing_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="15_logitMissing_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="15_logitMissing_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="15_logitMissing_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
-<link href="15_logitMissing_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="15_logitMissing_files/libs/quarto-html/quarto-syntax-highlighting-2486e1f0a3ee9ee1fc393803a1361cdb.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="15_logitMissing_files/libs/quarto-contrib/videojs/video.min.js"></script>
+<link href="15_logitMissing_files/libs/quarto-contrib/videojs/video-js.css" rel="stylesheet">
 <script src="15_logitMissing_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="15_logitMissing_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="15_logitMissing_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.533">
+  <meta name="generator" content="quarto-1.6.32">
 
   <meta name="author" content="Yue Hu">
   <title>Missingness &amp; GLM</title>
@@ -33,8 +34,8 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="15_logitMissing_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
+  <link rel="stylesheet" href="15_logitMissing_files/libs/revealjs/dist/theme/quarto-48f225a532854478bb6de5675fa5c081.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
   <link href="15_logitMissing_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="15_logitMissing_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -326,14 +327,24 @@
       margin-right: 0; 
     }
   </style>
+  <link href="15_logitMissing_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
   <script src="15_logitMissing_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-  <script src="15_logitMissing_files/libs/plotly-binding-4.10.3.9000/plotly.js"></script>
+
+  <script src="15_logitMissing_files/libs/plotly-binding-4.10.4/plotly.js"></script>
+
   <script src="15_logitMissing_files/libs/typedarray-0.1/typedarray.min.js"></script>
+
   <script src="15_logitMissing_files/libs/jquery-3.5.1/jquery.min.js"></script>
+
   <link href="15_logitMissing_files/libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
+
   <script src="15_logitMissing_files/libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+
   <link href="15_logitMissing_files/libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet">
+
   <script src="15_logitMissing_files/libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -352,35 +363,34 @@ Yue Hu
 </div>
 
 </section>
-<section id="overview" class="slide level2">
+<section id="overview" class="slide level2 unnumbered">
 <h2>Overview</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><strong>Missingness Issue</strong></p>
 <ul>
-<li class="fragment">Understand missing data from OLS assumptions
+<li class="fragment">Understand missing data from an OLS perspective
 <ul>
-<li class="fragment">Type of missingness</li>
+<li class="fragment">Typology</li>
 <li class="fragment">Consequences</li>
+<li class="fragment">“Solutions”</li>
 </ul></li>
-<li class="fragment">Solutions for missingness</li>
 </ul>
 </div><div class="column" style="width:50%;">
 <p><strong>Continueous → Discrete</strong></p>
 <ul>
-<li class="fragment">How to use linear regression to estimate discrete Ys</li>
+<li class="fragment">Linear model for nonlinear relationships</li>
 <li class="fragment">Model fitness</li>
 </ul>
-</div>
-</div>
+</div></div>
 </section>
 <section>
-<section id="missingness" class="title-slide slide level1 center">
-<h1>Missingness</h1>
+<section id="missingness" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Missingness</h1>
 
 </section>
-<section id="modeling-missingness" class="slide level2">
-<h2>Modeling Missingness</h2>
+<section id="modeling-missingness" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> Modeling Missingness</h2>
 <p>True data: <strong>D</strong>; observable: <strong>X</strong>, <strong>Y</strong>, &amp; <strong>M</strong>.<sup>1</sup></p>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
@@ -411,8 +421,8 @@ X_4 &amp; \end{array}\right)
 \end{align}\]</span></p>
 </div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>m<sub>ij</sub> = 1, if X<sub>i</sub> is missing.</p></li></ol></aside></section>
-<section id="type-of-missingness" class="slide level2">
-<h2>Type of Missingness</h2>
+<section id="type-of-missingness" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> Type of Missingness</h2>
 <div class="fragment" style="text-align:center">
 <p><strong>Missing completely at random (MCAR)</strong></p>
 <p>P(M|D) = P(M)</p>
@@ -424,8 +434,7 @@ X_4 &amp; \end{array}\right)
 </div><div class="column fragment" style="text-align:center">
 <p><strong>Non-ignorable (NI/MNAR)</strong></p>
 <p>P(M|D) ≠ P(M|D<sup>Observed</sup>)</p>
-</div>
-</div>
+</div></div>
 <div class="fragment">
 <p><em>Illustrate with fake data</em></p>
 </div>
@@ -440,9 +449,8 @@ X_4 &amp; \end{array}\right)
 </ul></li>
 </ul>
 </section>
-<section id="illustration" class="slide level2">
-<h2>Illustration</h2>
-<div class="fragment">
+<section id="how-do-they-look-like-in-data" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> How do they look like in data</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -452,21 +460,20 @@ X_4 &amp; \end{array}\right)
 </div>
 </div>
 </div>
-</div>
 </section>
-<section id="ni" class="slide level2">
-<h2>NI</h2>
+<section id="ni" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> NI</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<div class="plotly html-widget html-fill-item" id="htmlwidget-82dab771b04d56b8f3c6" style="width:960px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-82dab771b04d56b8f3c6">{"x":{"visdat":{"28ec686ac2115e":["function () ","plotlyVisDat"]},"cur_data":"28ec686ac2115e","attrs":{"28ec686ac2115e":{"x":{},"y":{},"z":{},"opacity":0.80000000000000004,"mode":"markers","color":{},"colors":["gold","black"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"z"},"yaxis":{"title":"x"},"zaxis":{"title":"y"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-0.4485368340467939,-0.15927595375954448,0.25410761286294475,-0.17985125102992902,0.19420776493468095,0.26374592565017652,-1.2031431442228313,0.4001557138886464,-0.52650418370819052,0.39386736323759125,0.90005256021896507,0.21320831914981478,-0.024663117644122039,-1.8595944382677021,-0.37873721521308862,-1.1754746188364722,0.6024035332737131,0.31311664226265862,0.5895560568049113,0.076759045680379875,-0.36870081111063929,-0.91634165701447123,0.002846318317495931,0.32527591052609539,-0.11033675126688315,-0.83184567697785794,0.38625398036270198,-0.79280650254999985,0.36557871837740058,0.41677927184854197,0.0028415448397464504,-0.31621271512040616,0.3309543780111584,-0.10853405067762274,-0.43972694081815467,0.59258866807384591,-0.79333377121122306,0.26653426110145423,0.90533396186711423,-2.1615575949591936,-0.85756300777416083,0.67799129130897162,0.016178194870855093,-0.044274875670057383,-1.0177067707226011,0.61564902668963628,0.86178235805638403,0.36271978632785201,0.094420928107717572,-1.1466561061625384,-1.0033444166152443,-0.68556468887113908,-0.96702444994921821,-1.4539566971378926,-0.48565711037509668,-0.083634355651846931,-0.27407482546809481,0.21090349775059788,-1.3418495886575801,0.12555209918127339,0.70411741918962567,-1.1636184395195668,0.34069437986992512,0.6337055716297072,-1.5879372634274764,-0.30214626029432928,0.24586203371182971,-2.6606921984921637,0.096251045569590535,-0.76293377860848033,0.18209758624061223,0.42602306774378784,-0.68319828469360788,-0.75563238326171855,0.51492617664227047],"y":[-0.0024830650166770343,0.78889717729496334,-1.0884742292235847,0.84550067446157673,0.28280283359026198,-0.13469718454416851,-0.39945229946145849,1.0392921849325059,0.23387791789699125,-1.0025692838828422,-0.66423798844149629,0.42557778214868991,-1.5995361823676373,1.6441855151522504,0.40502250475975621,0.12573319679132169,-0.28208816774730877,0.77176456202172949,-1.7823656108305765,0.65587156861840556,-1.9432927590436697,-0.37118213905266956,-2.2597784703718578,-1.6346000736657162,-0.44782250138688479,-0.083058428034009049,0.057529482490471059,-1.0598986481723285,0.070948016737964179,-1.4695719517466823,0.9846290689381284,1.5097195272810637,-0.24529105479290486,0.61550241011805451,-1.2717071681049767,0.40918549283970201,1.7669423168613771,0.13135586323063866,-0.88328847987659609,0.15938628777346983,1.9918682954238192,-0.31971892823849524,-0.43498783631249355,-0.61158018587775531,1.1365925737461786,-0.13153967446397469,0.18837394637570748,0.33424132171974125,0.80461043706765711,1.2351875133062724,-0.9310855095167172,-1.9171257774617865,1.1291549029869827,-1.3876005387973498,0.011623050762349407,0.53001813454287072,-0.14074126955855226,-0.2446381331611448,-0.61850975750759807,-1.4888064382172004,-0.74351306805830264,0.55098990643114365,-0.81418572216558505,-0.12761913939652905,1.1562899712224626,-0.47025126492714575,1.3948840810852865,-1.3948727205394882,-1.3767915847208363,0.63550423188679916,0.5006351498483308,-0.20485130311136887,-1.069942557178559,0.75976603069718074,2.5082281847820429],"z":[2.3625958834321739,1.1858722999736333,-1.7837072434837185,-0.064595781007652064,-0.86199805565032472,-1.1598650279079301,6.7352138112866111,-2.6730745443142125,3.2098168523617909,-2.9170770606407985,-5.6259154628266925,-0.88257339037340787,-0.82392828252765127,11.651420115387539,2.5081853823621909,6.6963433869429903,-4.0765859398709061,-1.2328100973832643,-4.5848039461728751,-0.04829196690419893,1.4114722807753004,5.4472212102642974,-1.7142674075855346,-2.8878300909832464,0.91260670165393154,4.9699006440694271,-2.267669121405711,4.4214980054938229,-1.9012050770655122,-2.8151940888704536,1.3280522857554815,2.403589819347403,-1.8503790584173354,1.296344231171894,1.5627273525077512,-3.2851526869638228,6.2040205597912443,-1.7592186017112494,-6.1361489292339746,13.042026442716086,6.5276037866555932,-4.600539733058902,-0.74793989413104756,0.45923410866961639,6.5287932220746017,-3.6895681739389317,-4.5651007903094509,-1.5766122770420603,-0.43103988801518561,7.588408751393322,5.3055432890641674,2.8099987342708301,5.5381013562206514,8.3744533311186764,3.2491307617461573,0.89968579506534541,1.1263391188711855,-0.96479120894115444,7.2645206839754843,-1.8274185604859705,-4.8493930886181564,6.5482640917942643,-2.725348030265982,-4.2035081740307598,9.7739883784048462,2.3331566034266351,-0.44002931175743204,14.974664556926017,-1.4367576217864759,5.4640142123212252,-1.0279365333586648,-2.259365858465983,3.4275457399507436,4.4194283337642277,-2.5113013049155635],"opacity":0.80000000000000004,"mode":"markers","type":"scatter3d","name":"Observed","marker":{"color":"rgba(255,215,0,1)","line":{"color":"rgba(255,215,0,1)"}},"textfont":{"color":"rgba(255,215,0,1)"},"error_y":{"color":"rgba(255,215,0,1)"},"error_x":{"color":"rgba(255,215,0,1)"},"line":{"color":"rgba(255,215,0,1)"},"frame":null},{"x":[0.97511100209714852,1.0569027571067782,1.0888426372150537,1.3945309167601929,2.2717748163998004,1.8297100459547722,1.7387687481247682,1.0253522483157709,1.0606929740241886,1.3748534627531623,1.3661521172883433,1.1701411054692852,1.2808814506114479,2.3442611228551957,1.4424762401256077,1.5857899623274772,1.7557336996480286,1.3864915596497092,2.2447214823620598,0.99345501378612333,1.0019542867094586,1.6196842429385689,1.5752753752138402,1.3652516489404896,1.3299541430636339],"y":[0.7059779709034032,-0.45439510863736959,-0.68677599095227426,-0.61890388314984623,0.3138931062769203,0.26087764654732754,-0.19970016065137461,-0.67824054491541075,-1.7395681196444175,0.76028315248566514,0.55514548421630705,1.3371091060187912,-0.43337454369841261,1.091711216170826,0.93465112115703741,-1.6759826752211284,0.48799714260241556,0.93426813504994011,0.036168797489427036,-0.28711727435777612,1.6416784570663738,-0.26636895660374627,-1.6106173615730237,2.0617721244248632,-0.35141803066215221],"z":[-5.3654656387249862,-6.6682624578957004,-7.023747372792065,-8.2734297159749826,-13.174392681723061,-11.177034700995476,-10.264007453943863,-6.3477012620360806,-6.8645706331704233,-8.2698081394152148,-8.3820044008231136,-7.0866427963177658,-7.1469199619082788,-13.665499774532744,-8.1475971097747628,-10.76216026746744,-10.343620328969344,-7.4836138877881471,-13.184247089513763,-6.1650330076866204,-5.0877268672732452,-10.316405861288059,-9.732255104582384,-6.9232754883368735,-8.0841683148546188],"opacity":0.80000000000000004,"mode":"markers","type":"scatter3d","name":"Missing","marker":{"color":"rgba(0,0,0,1)","line":{"color":"rgba(0,0,0,1)"}},"textfont":{"color":"rgba(0,0,0,1)"},"error_y":{"color":"rgba(0,0,0,1)"},"error_x":{"color":"rgba(0,0,0,1)"},"line":{"color":"rgba(0,0,0,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-fdb04b15e3ee3498afe1" style="width:960px;height:576px;"></div>
+<script type="application/json" data-for="htmlwidget-fdb04b15e3ee3498afe1">{"x":{"visdat":{"935463cc9dc":["function () ","plotlyVisDat"]},"cur_data":"935463cc9dc","attrs":{"935463cc9dc":{"x":{},"y":{},"z":{},"opacity":0.80000000000000004,"mode":"markers","color":{},"colors":["gold","black"],"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"z"},"yaxis":{"title":"x"},"zaxis":{"title":"y"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-1.5272533770880476,-1.0108101109092933,-0.36528749050142534,0.12536333375335282,0.26904991475172579,0.75033279051028356,0.10928784438635832,-0.22329285792461134,-0.81300215417287824,-0.39066709285378959,0.77405400158608795,-0.05150788296153061,-1.477362750032833,-0.35104793763566172,-0.29396058631252903,-0.43939664945193002,0.18423070195893371,-0.53221788631328237,-0.98588673273208149,0.45466949048307648,-1.0647755498954283,0.62359354598770322,0.70218037410863521,-0.19398214665531971,-0.72885055864481751,0.34452530339430831,-1.1352260539942174,0.73051825778409496,0.59296780997939313,0.32963980447554475,-0.46999158974369759,0.045261475654851877,-0.0022452633841922097,-0.34538785448375209,-0.18079907229965272,0.054531004078558647,-1.3945294101187447,0.29850381030956596,0.13190404907638553,-0.063600034039417011,-0.38406286263478656,-0.64640739492078847,-1.1171407968755918,-0.83416161342874862,-0.064529550445481726,-0.95030563004433366,-1.307825797939774,-1.4798667604718658,0.5420039711855823,-0.73704065644771932,0.56906465214077073,-2.6658207175544106,-0.63527704892060677,0.65967564073192531,-0.059795033733531858,0.42665843003498077,-0.97338896461453672,-0.4089806592720826,0.26542212220099604,0.056939580079284666,0.76070152377701417,0.27948106776148485,0.11357508118372307,-1.2203832025839929,0.46152790664409227,0.37643133543827889,-0.67268152943671788,-0.072022992258507099,0.35490536301766951,0.047948887167598403,0.20469950777717366,-0.14212038321525614,-0.11239221498207057,-1.2210040868039245,0.72362678542832304],"y":[0.16418223283788561,1.1622765366975834,-0.4008855819602114,2.1837019128647572,0.19507553248182119,0.4912775455228498,-0.82964936428213876,-1.8116142853231336,0.56097279743813433,0.236957035908195,0.10060057586183341,-2.4777901610584463,-0.75882414209246074,1.2298709981366558,-0.2126338803549859,-0.17228844591062226,-0.55962753389181463,-0.55126291173018138,0.26829067666797857,-0.95902709073774262,0.027654720477304218,2.0161591643923811,1.0188537469170043,-2.2848862756779473,-0.034374635870793126,-0.45873023094088289,0.64843033488714164,-0.64063293269061494,-0.1138128846133387,0.24462641229422871,-1.0521995512447899,1.3405170518176672,0.030893635503688722,0.19969425677661121,-1.0164565394788068,-0.13213161793483905,-0.20622314848389917,1.0983958081056677,-0.22228311011613888,1.2337249970130439,1.1936008756459642,1.2115191023269787,0.21646943290626697,-0.96245480133620043,-1.4778295434430693,0.97543897747436725,-0.96085156200369581,0.69865830729585843,0.63990120858019695,2.2117285635921147,0.30767669659533237,1.1808622914612901,1.364441388803723,2.146750302186045,-0.33828854075560555,0.4397442867365392,-0.24443443305153917,-1.1332349454456021,0.84234470029015851,-1.352089731659651,0.93667416793137248,0.34276513452034862,0.027855884334797774,-1.2251040545506791,1.3321887544783142,-2.0201208419114187,0.14521635511347733,0.61616585326153961,-0.502849415356458,-0.8893363866927636,-1.9174221546384969,1.8278179321054542,1.2526721001047951,-1.1976522198569226,-0.24868434621246097],"z":[9.111485050157313,6.9664581169604043,1.6585246601975385,0.46907202971549911,-1.5234596608172633,-4.4264341860797076,-1.2848810708246536,0.30340933071992648,5.6363920682699531,2.7543189522431328,-4.9541978725566409,-1.051701923889043,8.5853748844986342,2.9983497984525536,1.4732375565459093,3.2285565001649892,-1.2655532472927613,2.8806246743576973,5.424090384800083,-3.2327644835257026,5.9780803123068758,-1.6452618239719876,-4.1048581762777072,-0.19534365272477788,5.2289957523711381,-2.0649780134711206,7.0461300163867628,-5.1594562419033565,-4.1640673763572655,-1.6667567324645121,1.8683413843588921,0.37056393322507691,0.75303824661927365,1.8244920004606062,0.46160640110473383,-0.73027219719183356,8.7544660362795472,-1.6307990126680654,-1.9821542560873957,0.60660811882205889,2.9842067113250423,4.12126451001782,6.2041690643136622,4.1653853222473494,-0.49949772921328095,4.9111054053393142,6.9467795121226423,10.22460945779229,-2.5481352394128685,4.9389968562414834,-3.1572039172214712,16.694169435117516,4.3836619375676822,-3.2914031750581891,-0.68234054171112968,-1.0121765088404975,6.1290162129320231,2.3870103470562083,-1.0599626442502579,-1.2365744342558198,-4.5412333145441339,-2.0296603056275222,-0.28898701133389759,5.777346132103407,-2.1557995612255514,-4.361903757426024,4.1377818468260976,0.70897615581016193,-3.2629099132071229,-0.85938344050714799,-2.6195343651037355,2.3841994423035722,1.1255555188141084,6.9480624829953941,-4.2638190877949311],"opacity":0.80000000000000004,"mode":"markers","type":"scatter3d","name":"Observed","marker":{"color":"rgba(255,215,0,1)","line":{"color":"rgba(255,215,0,1)"}},"textfont":{"color":"rgba(255,215,0,1)"},"error_y":{"color":"rgba(255,215,0,1)"},"error_x":{"color":"rgba(255,215,0,1)"},"line":{"color":"rgba(255,215,0,1)"},"frame":null},{"x":[3.113645944773952,0.88598135594874783,1.724909558968218,1.1161530378296738,1.0983819982584215,1.0405992092954079,1.7949617401674551,1.2336229063702557,1.3665157807956154,1.645307100329042,1.3701268643350519,2.2817493957106461,1.0457172092252525,1.5800738804182497,0.80524768167591654,1.1327876474117919,0.95014785336298369,0.8802859081481389,1.0375334329022097,1.2231886284814459,0.78215354383174751,0.8325004150655323,1.5433368809401393,1.2966558737587097,1.6764386082495366],"y":[-0.85602971609747724,0.87709978380000941,0.11137896877737063,0.20430497429376002,-1.4452225413322217,1.6837983418984019,-0.5070703631572101,-0.67411648054252948,-0.931395870881498,-0.30786211993627272,1.9163692568562967,1.1380795492860625,0.0272616908934918,-0.55544356082343493,-0.88348523122868816,0.43231894519305869,1.0231868241109989,0.78978672913143677,-0.92311548320235948,-0.8367158637985106,0.34243232946186242,-0.66351188624617607,0.76317268723900844,-0.59818919173259499,-1.1633103288987281],"z":[-19.301783242376114,-5.3131670119527579,-10.357004582538599,-6.9048784425809275,-6.7826484717720126,-4.8034918370358595,-10.466432188826291,-8.1089002678088207,-8.0032136085718459,-10.204225943737532,-7.0431469853960884,-13.449420624642944,-5.7136744748678394,-10.431022283964802,-5.7873253255790225,-6.9439753371593147,-4.9491665216280483,-5.1732359669272663,-6.2515473041596152,-8.4695513367885749,-4.525775153011157,-4.7615883562315293,-8.4377267358171899,-7.8318820230572639,-12.105167576766485],"opacity":0.80000000000000004,"mode":"markers","type":"scatter3d","name":"Missing","marker":{"color":"rgba(0,0,0,1)","line":{"color":"rgba(0,0,0,1)"}},"textfont":{"color":"rgba(0,0,0,1)"},"error_y":{"color":"rgba(0,0,0,1)"},"error_x":{"color":"rgba(0,0,0,1)"},"line":{"color":"rgba(0,0,0,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
-<section id="consequence-of-missingness" class="slide level2">
-<h2>Consequence of Missingness</h2>
+<section id="consequence-of-missingness" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> Consequence of Missingness</h2>
 <p><span class="math display">\[Y = \hat \beta_0 + \hat \beta_1 X + \hat \epsilon_i\]</span></p>
-<table>
+<table class="caption-top">
 <thead>
 <tr class="header">
 <th></th>
@@ -511,8 +518,8 @@ X_4 &amp; \end{array}\right)
           display:block!important;
       }</style></aside>
 </section>
-<section id="dealing-with-missing" class="slide level2">
-<h2>Dealing with Missing</h2>
+<section id="dealing-with-missing" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> Dealing with Missing</h2>
 <p><strong>Ignore it</strong>: Listwise deletion <span class="red fragment">(<em>Problem</em>?)</span></p>
 <aside class="notes">
 <p>Even for MAR, dropping the entire entry due to the missing would cause bias, because there is no missing in Y but Y is dropped because of the missing of X; cov(X, u) ≠ 0, so often pairwise deletion</p>
@@ -554,7 +561,7 @@ X_4 &amp; \end{array}\right)
 </ul></li>
 </ol>
 <aside class="notes">
-<p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/interpolation.png" height="200"> <img src="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_extrapolation.png" height="200"></p>
+<p><img src="https://drhuyue.site:10002/sammo3182/figure/interpolation.png" height="200"> <img src="https://drhuyue.site:10002/sammo3182/figure/lm_extrapolation.png" height="200"></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -569,8 +576,8 @@ X_4 &amp; \end{array}\right)
 <p><span class="red fragment">(<em>Problems</em>?)</span></p>
 </div>
 </section>
-<section id="better-solutions" class="slide level2">
-<h2>Better solutions</h2>
+<section id="better-solutions" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> Better solutions</h2>
 <ul>
 <li class="fragment">Nonparametric modeling: e.g., MICE, KNN Imputation, Missingness Pattern Alternating Lasso, <a href="https://academic-oup-com.proxy.lib.uiowa.edu/bioinformatics/article/28/1/112/219101?login=true&amp;token=">Miss Forest</a></li>
 <li class="fragment">Multiple Imputations (MI)
@@ -601,8 +608,8 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
           display:block!important;
       }</style></aside>
 <aside><ol class="aside-footnotes"><li id="fn2"><p><span class="fragment"><span class="math inline">\(W = \frac{1}{m}\sum^m var(\hat\beta_i - \bar{\hat\beta})^2\)</span>.</span></p></li></ol></aside></section>
-<section id="mi" class="slide level2">
-<h2>MI</h2>
+<section id="mi" class="slide level2" data-number="1.8">
+<h2><span class="header-section-number">1.8</span> MI</h2>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
 <p><em>Advantages</em></p>
@@ -621,11 +628,10 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 <li class="fragment">Rule of thumb: 10 (err…)</li>
 </ul></li>
 </ol>
-</div>
-</div>
+</div></div>
 </section>
-<section id="when-mi-isnt-a-good-idea" class="slide level2">
-<h2>When MI Isn’t a Good Idea</h2>
+<section id="when-mi-isnt-a-good-idea" class="slide level2" data-number="1.9">
+<h2><span class="header-section-number">1.9</span> When MI Isn’t a Good Idea</h2>
 <ol type="1">
 <li class="fragment">Model is <span class="red">conditional on X</span> + <span class="red">correctly specified</span>: Listwise would not affect the analysis.</li>
 <li class="fragment"><span class="red">Large</span> data: Listwise is <a href="https://statisticalhorizons.com/listwise-deletion-its-not-evil">trivial</a>.</li>
@@ -648,12 +654,12 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
           display:block!important;
       }</style></aside>
 <div class="fragment">
-<p>Solution:</p>
+<p>What you may try:</p>
 <p><strong>Likelihood approach</strong>: Estimate distribution and integrate over it (the results are identical no matter how many times doing it), e.g., SEM.</p>
 </div>
 </section>
-<section id="some-more-words-about-ni" class="slide level2">
-<h2>Some more words about NI</h2>
+<section id="some-more-words-about-ni" class="slide level2" data-number="1.10">
+<h2><span class="header-section-number">1.10</span> Some more words about NI</h2>
 <p>When we know what happened:</p>
 <div class="fragment">
 <p>Censored data:</p>
@@ -685,7 +691,7 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 <li class="fragment"><code>tobit</code>, use the right distribution—a combination of P(Y<sub>i</sub><sup>*</sup> &lt; 0|X) and f(Y<sub>i</sub>|X<sub>i</sub>).</li>
 </ul>
 <aside class="notes">
-<p><img src="http://103.238.162.29:10002/webdav/sammo3182/figure/censorTruncated.png" height="200"></p>
+<p><img src="https://drhuyue.site:10002/sammo3182/figure/censorTruncated.png" height="200"></p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -700,12 +706,12 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 </div>
 </section></section>
 <section>
-<section id="glm" class="title-slide slide level1 center">
-<h1>GLM</h1>
+<section id="glm" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> GLM</h1>
 
 </section>
-<section id="terminology" class="slide level2">
-<h2>Terminology</h2>
+<section id="terminology" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> Terminology</h2>
 <ul>
 <li class="fragment"><span class="red">Generalized</span> linear regression ≠ <span class="red">general</span> linear regression</li>
 <li class="fragment">When the very first assumption (“linearity”) of OLS is violated.
@@ -720,16 +726,15 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
 </ul>
 <div class="columns">
 <div class="column fragment" style="width:50%;">
-<p><span class="red Large">But OLS is so beautiful, efficient, and easy!</span></p>
+<p><span class="red large">But OLS is so beautiful, efficient, and easy!</span></p>
 </div><div class="column fragment" style="width:50%;">
 <p>Solution:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_multiuseTie.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_multiuseTie.jpg" class="quarto-figure quarto-figure-center" height="200"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lm_multiuseTie.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lm_multiuseTie.jpg" class="quarto-figure quarto-figure-center" height="200"></a></p>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <p>General linear regression is multivariate regression</p>
 <style type="text/css">
@@ -744,8 +749,8 @@ var(\hat\beta) =&amp;  \frac{\sum^m_{i = 1}var(\hat\beta_i)}{m} + \frac{m + 1}{m
           display:block!important;
       }</style></aside>
 </section>
-<section id="approach-linear-probability-model-lpm" class="slide level2">
-<h2>Approach: Linear Probability Model (LPM)</h2>
+<section id="approach-linear-probability-model-lpm" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Approach: Linear Probability Model (LPM)</h2>
 <div class="fragment">
 <p><span class="math display">\[\begin{align}
 \pi_i\equiv P(Y = 1|X) =&amp; \beta_0 + \beta_1X_i\\
@@ -773,8 +778,7 @@ var(\pi_i) =&amp; \pi(1 - \pi) \\
 </div><div class="column fragment" style="width:50%;">
 <p><em>Cons</em></p>
 <p>Not very reliable transformation</p>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <p>Rule of thumb: 0.2~0.8</p>
 <ol type="1">
@@ -793,8 +797,8 @@ var(\pi_i) =&amp; \pi(1 - \pi) \\
           display:block!important;
       }</style></aside>
 </section>
-<section id="approach-link-function-method" class="slide level2">
-<h2>Approach: Link Function Method</h2>
+<section id="approach-link-function-method" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> Approach: Link Function Method</h2>
 <p><span class="math display">\[P(Y = 1|X) = G(\beta_0 + \beta_1X_1 + ... + \beta_kX_k).\]</span></p>
 <ul>
 <li class="fragment">This G() is the <em>link</em> function.
@@ -846,11 +850,10 @@ Y^* =&amp; X\beta + u, u\sim \Phi(0, 1)\\
 \text{Similarly, } P(Y_i = 1|X) =&amp; 1 - \Phi(-X\beta)\\
 f(x) =&amp;\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}
 \end{align}\]</span></p>
-</div>
-</div>
+</div></div>
 </section>
-<section id="logit-vs.-probit" class="slide level2">
-<h2>Logit vs.&nbsp;Probit</h2>
+<section id="logit-vs.-probit" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> Logit vs.&nbsp;Probit</h2>
 <ul>
 <li class="fragment"><p>Probit is a little <em>more</em> computationally costly than logit ( <span class="math inline">\(\frac{e^x}{1 + e^x}\)</span> vs.&nbsp;<span class="math inline">\(\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x - \mu)^2}{2\sigma^2}}\)</span>)</p></li>
 <li class="fragment"><p>Logit and probit coefficients are identical but on different scales (var<sub>logit</sub> = π<sup>2</sup>/3, var<sub>probit</sub> = 1)</p></li>
@@ -865,8 +868,8 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 \end{align}\]</span></p>
 </div>
 </section>
-<section id="estimation" class="slide level2">
-<h2>Estimation</h2>
+<section id="estimation" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> Estimation</h2>
 <p>Minimize the least square? No~</p>
 <p>The maximum likelihood estimation:</p>
 <p><span class="math display">\[\mathcal{L}(\hat\theta|Y, X, m) \equiv \mathcal{L}(\hat\theta|Y, X) = k(Y)f(Y|\hat\theta, X)\propto f(Y|\hat\theta, X)\]</span></p>
@@ -906,8 +909,7 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 <li class="fragment">Asymptotically unbiased;</li>
 <li class="fragment">Generally asymptotically efficient.</li>
 </ol>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <p>Asymptotical: 渐进式的</p>
 <style type="text/css">
@@ -922,8 +924,8 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
           display:block!important;
       }</style></aside>
 </section>
-<section id="interpretation" class="slide level2">
-<h2>Interpretation</h2>
+<section id="interpretation" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> Interpretation</h2>
 <p><span class="math display">\[P(Y = 1|X) = \frac{e^{XP}}{1 + e^{X\beta}}\]</span></p>
 <p>What’s the effect of every one unit change of X on P(Y = 1|X)?</p>
 <div class="fragment">
@@ -935,8 +937,8 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 </ol>
 </div>
 </section>
-<section id="predicted-value-plots" class="slide level2">
-<h2>Predicted Value Plots</h2>
+<section id="predicted-value-plots" class="slide level2" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> Predicted Value Plots</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -959,55 +961,9 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-<aside class="notes">
-<h3 id="marginal-effects">Marginal Effects</h3>
-<p>The instantaneous change</p>
-<p><span class="math display">\[\begin{align}
-&amp;\frac{\partial P(Y = 1|X)}{\partial X} \\
-=&amp; \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
-&amp; -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
-=&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
-=&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
-=&amp; \beta_1P(Y = 1|X)P(Y = 0|X)
-\end{align}\]</span></p>
-<p>The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying Xβ = 0. In other words, marginal effect depends on the value of X.</p>
-<p>In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.</p>
-<h3 id="first-difference">First Difference</h3>
-<p>The discrete version of marginal effect.</p>
-<p><span class="math display">\[FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})\]</span></p>
-<p>X<sub>-k</sub>:</p>
-<ol type="1">
-<li>All other independent variables (holding them constant)</li>
-<li>Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.</li>
-</ol>
-<p>X<sub>k</sub><sup>H,L</sup>:</p>
-<ol type="1">
-<li>Max → Min</li>
-<li>Median/mean ± σ<sub>X<sub>k</sub></sub></li>
-<li>Two theoretical interesting values</li>
-<li>Discrete: 0/1</li>
-<li>Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.</li>
-</ol>
-<h3 id="uncertainty-of-marginal-effects-and-fds">Uncertainty of Marginal Effects and FDs</h3>
-<ol type="1">
-<li>Mathematical: Approximating with the <a href="https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html">delta method</a>.</li>
-<li>Simulation: It is nice since one variable may not (often not) have symmetric distributions.</li>
-<li>Just using the variance of <span class="math inline">\(X\hat\beta\)</span>.</li>
-</ol>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
 </section>
-<section id="goodness-of-fit" class="slide level2">
-<h2>Goodness of Fit</h2>
+<section id="goodness-of-fit" class="slide level2" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> Goodness of Fit</h2>
 <p><em>Psedo-R<sup>2</sup></em></p>
 <p>Several <a href="https://stats.idre.ucla.edu/other/mult-pkg/faq/general/faq-what-are-pseudo-r-squareds/">ways</a> to estimate it, but none of them is quite straightforward.</p>
 <div class="fragment">
@@ -1015,7 +971,7 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 <p>Comparing estimates of P(Y = 1|X) to Y: If P(Y = 1|X) &gt; 0.5, define Ŷ = 1, otherwise, Ŷ = 0. Let’s denote</p>
 <div class="columns">
 <div class="column" style="width:50%;">
-<table>
+<table class="caption-top">
 <thead>
 <tr class="header">
 <th></th>
@@ -1040,8 +996,7 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 </div><div class="column" style="width:50%;">
 <p>Advanced: How much better the model predict than plain guess. Define <em>PMC</em> as the percent modal category (the plain guess). That is,</p>
 <p><span class="math display">\[PRE = \frac{PCP - PMC}{1 - PMC}\]</span></p>
-</div>
-</div>
+</div></div>
 <aside class="notes">
 <p>An advanced version is <a href="https://www.cambridge.org/core/journals/political-analysis/article/postestimation-uncertainty-in-limited-dependent-variable-models/92B052AADD9756C8BCC00527749E029D">ePRE</a>.</p>
 <p>ePRE: expected PRE, Herron 1999, PA</p>
@@ -1058,30 +1013,136 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
       }</style></aside>
 </div>
 </section>
-<section id="take-home-point" class="slide level2">
-<h2>Take-home point</h2>
+<section id="take-home-point" class="slide level2" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> Take-home point</h2>
+<div class="r-hstack">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_mindmap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/lm_mindmap.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lm_mindmap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lm_mindmap.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
 </figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lm_mindmap2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lm_mindmap2.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
 </div>
 </section>
-<section id="the-journey" class="slide level2">
-<h2>The Journey</h2>
+<section id="the-journey" class="slide level2" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> The Journey</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="http://103.238.162.29:10002/webdav/sammo3182/figure/ml_fullMindmap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="http://103.238.162.29:10002/webdav/sammo3182/figure/ml_fullMindmap.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ml_fullMindmap.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ml_fullMindmap.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
 </figure>
 </div>
+</section></section>
+<section>
+<section id="appendix" class="title-slide slide level1 appendix unnumbered center" data-visibility="uncounted">
+<h1>Appendix</h1>
 
-</section><div class="quarto-auto-generated-content">
+</section>
+<section id="marginal-effects-of-glm" class="slide level2" data-visibility="uncounted" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> Marginal Effects of GLM</h2>
+<p>The instantaneous change</p>
+<p><span class="math display">\[\begin{align}
+&amp;\frac{\partial P(Y = 1|X)}{\partial X} \\
+=&amp; \beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^{-1}\\
+&amp; -e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\\
+=&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}) - e^{\beta_0 + \beta_1X_1 + \beta_2X_2}\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2}\\
+=&amp; \frac{\beta_1e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{(1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2})^2} = \beta_1(\frac{e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}})(\frac{1}{1 + e^{\beta_0 + \beta_1X_1 + \beta_2X_2}}) \\
+=&amp; \beta_1P(Y = 1|X)P(Y = 0|X)
+\end{align}\]</span></p>
+<aside class="notes">
+<p>The margin has the maximum value when P(Y = 1|X) = P(Y = 0|X) = 0.5, or saying Xβ = 0. In other words, marginal effect depends on the value of X.</p>
+<p>In fact, it depends on the value of .red[all the X]. This requires the report of marginal effect including the value of the Xs.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="first-difference" class="slide level2" data-visibility="uncounted" data-number="2.12">
+<h2><span class="header-section-number">2.12</span> First Difference</h2>
+<p>The discrete version of marginal effect.<sup>1</sup></p>
+<p><span class="math display">\[FD: P(Y|X = X_k^H, X_{-k}) - P(Y|X = X_k^L, X_{-k})\]</span></p>
+<p>X<sub>k</sub><sup>H,L</sup>:</p>
+<ol type="1">
+<li class="fragment">Max → Min</li>
+<li class="fragment">Median/mean ± σ<sub>X<sub>k</sub></sub></li>
+<li class="fragment">Two theoretical interesting values</li>
+<li class="fragment">Discrete: 0/1</li>
+<li class="fragment">Compound change: Change more than one variable once, since some of them often change together, e.g., eco level and edu level.</li>
+</ol>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>X<sub>-k</sub>: All other independent variables (holding them constant); Usually mean or median. The median is sometimes nicer because it can fit both ordinal and continuous variables.</p></li></ol></aside></section>
+<section id="uncertainty-of-marginal-effects-and-fds" class="slide level2" data-visibility="uncounted" data-number="2.13">
+<h2><span class="header-section-number">2.13</span> Uncertainty of Marginal Effects and FDs</h2>
+<ol type="1">
+<li class="fragment">Mathematical: Approximating with the <a href="https://cran.r-project.org/web/packages/modmarg/vignettes/delta-method.html">delta method</a>.</li>
+<li class="fragment">Simulation: It is nice since one variable may not (often not) have symmetric distributions.</li>
+<li class="fragment">Just using the variance of <span class="math inline">\(X\hat\beta\)</span>.</li>
+</ol>
+</section>
+<section id="stretch" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Stretch</h2>
+<video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Yoyo孙佳祺:拯救久坐党体态！办公间隙的5分钟拉伸，重新挺拔起来～！"><source src="https://drhuyue.site:10002/sammo3182/video/relax.mp4"></video>
+<aside class="notes">
+<p>https://www.bilibili.com/video/BV1E54y1r76o/?buvid=Y045340D2FD9FA3A46419EEFE4578279ECBD&amp;from_spmid=main.space-search.0.0&amp;is_story_h5=false&amp;mid=7RnjBONLRMus4FQZFBWD2g%3D%3D&amp;p=2&amp;plat_id=114&amp;share_from=ugc&amp;share_medium=iphone&amp;share_plat=ios&amp;share_session_id=79FE08C9-F2B1-4C18-A16C-B31179817B42&amp;share_source=WEIXIN&amp;share_tag=s_i&amp;timestamp=1728732278&amp;unique_k=skSWw7j&amp;up_id=390316092&amp;vd_source=f38aeefd0d38cecba9017eeee43e71c8</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="meditation" class="slide level2 unnumbered" data-visibility="uncounted">
+<h2>Meditation</h2>
+<div style="text-align:center; margin-top: 2em">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="松茸的世界：5分钟正念冥想-自信之心"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ci_songrong.jpg" class="quarto-figure quarto-figure-center" height="400" alt="松茸的世界：5分钟正念冥想-自信之心"></a></p>
+</figure>
+</div>
+<figcaption>松茸的世界：5分钟正念冥想-自信之心</figcaption>
+</figure>
+</div>
+<audio controls="" preload="auto" src="https://drhuyue.site:10002/sammo3182/video/meditation.m4a" width="900">
+</audio>
+</div>
+<aside class="notes">
+<p>https://www.xiaoyuzhoufm.com/episode/65b752ed0bef6c207457f51b?s=eyJ1IjogIjYwNDA1OGJiZTBmNWU3MjNiYmY3MjZiZSJ9</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+
+</section></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
 
 </div>
-</div></section>
-
-    </div>
-  </div>
+</div></div>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script>
   <script src="15_logitMissing_files/libs/revealjs/dist/reveal.js"></script>
@@ -1112,7 +1173,8 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
-'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
 'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
@@ -1268,7 +1330,7 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1295,42 +1357,80 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1364,18 +1464,7 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1407,7 +1496,52 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+              // target, if specified
+              link.setAttribute("target", "_blank");
+              if (link.getAttribute("rel") === null) {
+                link.setAttribute("rel", "noopener");
+              }
+          }
+        }
       function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
@@ -1444,7 +1578,11 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {
@@ -1486,30 +1624,38 @@ P(Y = 1|X) =&amp; 1 - P(u \leq -X\beta_{probit}|X)\\
       }
     });
     </script>
-    <script>var lightboxQuarto = GLightbox({"selector":".lightbox","descPosition":"bottom","closeEffect":"fade","openEffect":"fade","loop":false});
-    window.onload = () => {
-      lightboxQuarto.on('slide_before_load', (data) => {
-        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-        const href = trigger.getAttribute('href');
-        if (href !== null) {
-          const imgEl = window.document.querySelector(`a[href="${href}"] img`);
-          if (imgEl !== null) {
-            const srcAttr = imgEl.getAttribute("src");
-            if (srcAttr && srcAttr.startsWith("data:")) {
-              slideConfig.href = srcAttr;
-            }
-          }
-        } 
-      });
-
-      lightboxQuarto.on('slide_after_load', (data) => {
-        const { slideIndex, slideNode, slideConfig, player, trigger } = data;
-        if (window.Quarto?.typesetMath) {
-          window.Quarto.typesetMath(slideNode);
+    <script>videojs(video_shortcode_videojs_video1);</script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","loop":false,"openEffect":"fade","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
         }
-      });
-
-    };
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
               </script>
     
 
