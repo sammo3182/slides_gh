@@ -1,46 +1,44 @@
 ---
-title: "计算社会科学“敲门砖”"
-subtitle: "新文科人才编程语言精准学习法·以R为例"
+title: "计算社会科学的“敲门砖”"
+subtitle: "新文科编程语言学习法·以R为例"
 author: "胡悦"
 institute: |
     | 清华大学政治学系
     | 清华大学计算社会科学平台
-    | 清华大学数据与治理研究中心
-execute:
-  echo: false
-  message: false
-  warning: false
-editor_options: 
-  chunk_output_type: console
+knitr: 
+    opts_chunk: 
+      echo: false
 format: 
   revealjs:
     css: https://sammo3182.github.io/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
     incremental: true
-    preview-links: false # open an iframe for a link
+    preview-links: true # open an iframe for a link
     link-external-newwindow: true
-    embed-resources: false
+    self-contained: false
     chalkboard: false # allwoing chalk board B, notes canvas C
-    
-    callout-appearance: simple
+    # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    showNotes: false # 'true' or 'separate-page' if you want notes on a separate page
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-filters:
-  - lightbox
+    default-image-extension: png
 revealjs-plugins:
   - spotlight
-# lightbox: auto
+lightbox: 
+  match: auto
+  effect: fade
 spotlight:
   size: 50
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+editor_options: 
+  chunk_output_type: console
+editor: 
+  render-on-save: true
 ---
 
 ```{r setup, include=FALSE}
@@ -57,81 +55,104 @@ p_load(
 set.seed(114)
 ```
 
-## 个人简介{.Small}
+## 自我介绍{.Small}
 
 :::: {.columns}
 
-::: {.column width="60%"}
+::: {.column .nonincremental width="60%"}
 *个人经历*
 
-- 政治[科学]{.red}博士[（University of Iowa)]{.small}
-  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 政治[科学]{.red}博士[(University of Iowa)]{.small}
+  - 信息学[(Graduated Certificate in Informatics)]{.small}
 - 清华大学计算社会科学平台[(副主任)]{.small}
-  - 清华数据与治理中心[(副主任)]{.small}
-- 计算社会科学编程语言证书项目
+- "Learning R with Dr. Hu & His Friends"
+  - 计算社会科学编程语言证书项目
 
-*研究特点*：*现代性与学科[交叉]{.red}*
+::: {.fragment}
+*研究焦点*：*现代性的科学[证据]{.red}*
 
-- **W. 数据科学**
-  - 实验室和调查实验
-  - 潜变量分析、网络分析、空间分析
-  - 文本大数据分析、数据可视化
-  - R package: 270K+
+- **W. 心理学**
+  - 政治[认知]{.red}（表达、参与、记忆）
+  - 政治传播（官媒、政治讨论）
+:::
 :::
 
 ::: {.column width="40%"}
-*研究领域*
 
-- **W. 心理学**
-  - 政治[认知]{.red}（参与、公卫）
-  - 政治传播（官媒、青年）
-  - 身份政治（城乡、香港、司法）
 - **W. 经济学**
-  - 宏观经济 &rarr; 微观认知 &rarr; 中观行为公共政策
-  - 不平等[感知]{.red}
+  - 宏观经济 &rarr; 微观认知 &rarr; 制度
+  - [不平等感知]{.red}
 - **W. 语言学**
-  - 语言能力的政治影响
-  - 语言政策的[治理功能]{.red}
-
+  - 语言 &rarr; 政治思维
+  - 权力 &rarr; 语言偏好
+- **W. 数据科学**
+  - 实验室与调查实验
+  - 潜变量分析、网络、空间
+  - 文本大数据分析、数据可视化
+  - R package: 600K+
 :::
 
 ::::
 
-## 讲座概要
+## 概要
 
-:::{.large style="text-align:center; margin-top: 2em"}
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+*内容*
+
 - Cognition
 - Confidence
 - Curriculum
 :::
 
+::: {.column .fragment .nonincremental width="50%"}
+*(预装)工具*
 
-:::{.fragment}
-:::{.callout-warning}
+- R
+- Rstudio/Positron/VSCode
+:::
+
+::::
+
+
+
+:::{.callout-warning .fragment}
 
 ## 不包含
 
 - R语言“速成”
 - “零售”代码
     
-:::
+
 :::
 
 # Cognition
 
-正确认知编程语言
-
-## 三个问题
+## 问题  {background="#43464B"}
 
 :::{.large style="text-align:center; margin-top: 2em"}
-1. 有了LLM（GPTish)为什么还要学编程
-1. 什么样的人才不会被机器取代
-1. Python这么火为什么要学R
+1. 大语言模型时代为什么还要学编程？
+1. Python这么火，为什么要学R？
 :::
 
 
 :::{.notes}
-1. 有了LLM（GPTish)为什么还要学编程
+1. Systemic learning:
+  - Data collection (no)
+  - Data cleaning (no without guide)
+  - Data analysis (no without model decisions)
+  - Data visualization (no without thoughts and feelings)
+  - LLM 时代要更明确什么技术与方法、能力的区别
+1. Capacity
+  - Computational thinking
+    - Problem decomposition
+  - Debug skill
+  - Security concerns
+1. Power
+  - Who don't want you to learn programming the most
+  - Who dominate the research: the computer or you
+1. OLD: 有了LLM（GPTish)为什么还要学编程
     - A training -> AI literacy
         - 能用勺儿吃一切，为啥要学用筷子
         - 能用电脑打字，为什么要学写字
@@ -145,11 +166,11 @@ set.seed(114)
         - Only the results not side-findings
     - Unreplaceable
         - To adjust the program not adapt
-1. 什么样的人才不会被机器取代
+1. OLD: 什么样的人才不会被机器取代
     - The best: Not enough, 柯洁
     - The one who know how to use: make value
     - 懂社会科学的人: responsibility
-1. Python这么火为什么要学R
+1. OLD: Python这么火为什么要学R
     - Analyze not scrapping
     - Easy to learn for nonprogrammers
     - Easy to learn for statisticians
@@ -159,6 +180,16 @@ set.seed(114)
 
 - A [language]{.red}, not software, nor method
 - An object-oriented programming language
+- R可以帮你做什么
+    - Statistics and econometrics
+    - Crunching almost any sizes of data
+    - Edit and running codes from Excel, STATA, Python, C++, ...
+    - Scrape data from local files, websites, databases, pdf...
+    - Create webpages
+    - Write academic articles, books, or dissertations in html, pdf, or docx
+    - Create presentation slides
+    - Sending emails    
+    - ......
 
 :::{.notes}
 
@@ -183,17 +214,6 @@ set.seed(114)
 C++, Python, Ruby, Perl, Matlab
 :::
 
-- R可以帮你做什么
-    - Statistics and econometrics
-    - Crunching almost any sizes of data
-    - Edit and running codes from Excel, STATA, Python, C++, ...
-    - Scrape data from local files, websites, databases, pdf...
-    - Create webpages
-    - Write academic articles, books, or dissertations in html, pdf, or docx
-    - Create presentation slides
-    - Sending emails    
-    - ......
-
 ## R 的强项
 
 :::: {.columns style="text-align:center"}
@@ -210,42 +230,28 @@ e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
 ### 可视化
 :::{.r-stack}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ggmap.png){.fragment height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/ggmap.png){.fragment height=500}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/hillShade.png){.fragment height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/hillShade.png){.fragment height=500}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/distributionHill.png){.fragment}
+![](https://drhuyue.site:10002/sammo3182/figure/distributionHill.png){.fragment height=400}
 
 :::
 :::
 
 ::::
 
+## 问题 {background="#43464B"}
 
-## 研究生态
+:::{.large .nonincremental style="text-align:center; margin-top: 2em"}
+1. [大语言模型时代为什么还要学编程？]{.gray} [&check;]{.green}
+1. Python这么火，为什么要学R？
+:::
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rflow.png){fig-align="center" width=500}
 
 ## R vs Others
 
 :::: {.columns}
-
-::: {.column width="50%"}
-### R vs. STATA
-
-**STATA > R**
-
-- Reliable
-- Your supervisors
-
-**R > STATA**
-
-- Frequently update
-- Visualization
-- Language vs. software
-- [Free]{.red}
-
-:::
 
 ::: {.column width="50%"}
 ### R vs. Python
@@ -264,28 +270,38 @@ e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
 
 :::
 
+::: {.column width="50%"}
+### R vs. STATA
+
+**STATA > R**
+
+- Reliable
+- Your advisor
+
+**R > STATA**
+
+- Frequently update
+- Visualization
+- Language vs. software
+- [Free]{.red}
+
+:::
+
 ::::
 
-## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg" background-size="auto auto" background-opacity=0.1}
+## {background-image="https://drhuyue.site:10002/sammo3182/figure/rPython.jpg" background-size="auto auto" background-opacity=0.1}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/rPython.jpg){fig-align="center" height=600}
-
-
-## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
-
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/rPython.jpg){fig-align="center" height=600}
 
 
 # Confidence
 
-为什么文科生能学[好]{.red}编程
-
-## 文科生学习R的系统优势（与劣势）
+## 文科生为什么能学号R
 
 :::: {.columns}
 
 ::: {.column width="30%"}
-### 优势
+*优势*
 
 1. 语感
     - 一般性语言能力
@@ -296,22 +312,23 @@ e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
 :::
 
 ::: {.column width="20%"}
-### 劣势
+*为什么学好的人少*
 
+1. 系统认知
 1. 心理问题
     - 心理障碍
     - 内在动力
 1. 应用场景
-1. 系统认知
+
 :::
 
 ::: {.column width="50%"}
 ### 排难
 
-1. [**信我**]{.red}
-1. 完成“计算社会科学编程学习项目”
+1. [**Trust me**]{.red}
 1. 修习一门社科教师主教的相关课程
 1. 实践一项计算社会科学科研项目
+1. “计算社会科学编程学习项目”
 :::
 
 ::::
@@ -319,121 +336,38 @@ e.g., [Survival Task View](https://cran.r-project.org/web/views/Survival.html)
 
 # Curriculum
 
-新文科人才如何系统学习R语言
-
-## Learning R with Dr. Hu & His Friends
-
-> 面向所有[无任何编程、计算机或统计基础]{.red}但对数据分析有兴趣的朋友
-
-::::{.columns}
-
-::: {.column width="60%"}
-- 清华计算社会科学平台编程语言[学习证书项目]{.red}必修课
-- "R survivor" 称号获取途径 
-- R语言学习朋辈社区
-- Ongoing的R语言教材
-:::
-
-::: {.column .fragment width="40%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/survivorBadge.jpg){ fig-align="center" height=400}
-:::
-
-::::
-
-
-## 秋季课程
-
-::::{.columns style="text-align:center; margin-top: 2em"}
-
-::: {.column .nonincremental width="30%"}
-### R语言基础
-
-- [Should I learn R]{.red}
-- [Data input/Output]{.red}
-- Data wrangling
-- Data visualization
-- Data analysis
-:::
-
-::: {.column .nonincremental width="40%"}
-### R语言生态
-
-- Loop & batch
-- R global and project setting
-- Version control with R
-- Rmarkdown
-:::
-
-::: {.column width="30%"}
-### 适用人群
-
-- 无编程背景，有编程需求
-- 使用过Excel, SPSS, STATA, SAS, Python, Matlab，但不喜欢
-- 我的导师（让我）用R
-- 想要交朋友
-:::
-
-::::
-
-## 春季课程 (Planned)
-
-::::{.columns style="text-align:center; margin-top: 2em"}
-
-::: {.column .nonincremental width="30%"}
-### 进阶应用
-
-+ Generalized Linear Modeling
-+ Multilevel modeling
-+ Latent variable analysis
-+ Survival analysis
-:::
-
-::: {.column .nonincremental width="30%"}
-### 计算社会科学
-
-+ Web scrapping
-+ Advanced visualization
-+ Text analysis
-+ Spatial analysis
-+ Network analysis
-:::
-
-::: {.column width="40%"}
-### 适用人群
-
-+ R使用者（比如R survivors)
-+ 希望见识R语言真正的力量！
-+ 希望能成为同辈中的cool kids
-+ 有分享和交流的愿望
-:::
-
-::::
-
-## Kick off
+## 使用界面
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="40%"}
 *核心程序*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rlogo.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/Rlogo.png){fig-align="center" height=400}
 :::
 
-::: {.column width="50%"}
+::: {.column  width="60%"} 
 *Integrated development environment（IDE）*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/rstudio.jpg){fig-align="center" height=400}
+:::{layout="[[1], [1,1]]"}
+![](https://drhuyue.site:10002/sammo3182/figure/rstudio.jpg){fig-align="center" height=200}
+
+![](https://drhuyue.site:10002/sammo3182/figure/r_positron.png){fig-align="center" height=200}
+
+![](https://drhuyue.site:10002/sammo3182/figure/r_vscode.jpg){fig-align="center" height=200}
+:::
+
 :::
 
 ::::
 
 
-## Packages
+## 软件包
 
 :::: {.columns}
 
 ::: {.column width="40%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/apps.jpeg){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/apps.jpeg){fig-align="center" height=500}
 :::
 
 ::: {.column width="60%"}
@@ -468,7 +402,8 @@ drhur::drhur("playing")
 
 ::::
 
-# 感谢倾听，期待交流 {background="#43464B"}
+
+# Thank you {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
 
