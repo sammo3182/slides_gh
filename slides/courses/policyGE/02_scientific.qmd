@@ -1,28 +1,34 @@
 ---
-title: "A scientific view of public policy"
+title: "A scientific view to understand policy"
 subtitle: "Understanding Policies (10700193-90)"
 author: "Yue Hu"
 institute: "Tsinghua University" 
 knitr: 
     opts_chunk: 
       echo: false
+editor_options: 
+  chunk_output_type: console
+editor: 
+  render-on-save: true
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: false
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
     incremental: true
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
-    chalkboard: false # allwoing chalk board B, notes canvas C
+    chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
       data-background-position: top 10% right 5%
-    default-image-extension: png
 revealjs-plugins:
   - spotlight
 lightbox: 
@@ -33,11 +39,12 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
-editor_options: 
-  chunk_output_type: console
 ---
 
-```{r setup, include = FALSE}
+```{r setup}
+#| label: setup
+#| include: false
+
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
@@ -66,50 +73,31 @@ theme_update(
 
 ## Administrative
 
-Given the number of students, let me propose...
-
-- More and less
-    - More rounds of challenges
-    - Less on a writing-out full proposal
-        - A full presentation
-        - A feedback (no requirement on number of words)
-
-::: {.fragment .r-fit-text}
-What do [you]{.red} think?
-:::
-
-
+- The syllabus has been updated.
+- The first Challenging team will be released by today's class
 
 ## Overview
 
-Understanding policies [scientifically]{.red}
+Goal: Understanding policies [scientifically]{.red}
 
-+ What does "being scientific" mean
-+ How to conduct a scientific inquiry
-+ When (*not why*) understanding policies scientifically
+::: {style="text-align:center; margin-top: 2em"}
++ [Dissect]{.red} Science: What does being "scientific" mean
++ [Process]{.red} Science: How to conduct a scientific inquiry
++ [Apply]{.red} Science: When (*not why*) understanding policies scientifically
+:::
 
+# Dissect Science
 
-# Being scientific
-What does it mean?
-
-## Paradigms to Understand Policies
+## Paradigms For Understanding Policies
 
 > Paradigm: a bag of theories, research methods, postulations, and standards for what constitutes contributions to a field.
 
 + Positivist: 
-    + *Data*-based
-    + Problem solving through systematic queries
+    + Evidence-based
+    + Problem-solving through systematic queries
 + Post-positivist
     + *Culture*-based (norms, morality, values)
     + Normative, ethical process
-
-:::{.fragment}
-:::{.callout-note}
-## Question
-
-Does positivism mean being scientific? 
-:::
-:::
 
 :::{.notes}
 Dominant, 实证主义
@@ -117,22 +105,24 @@ Dominant, 实证主义
 Re-imported from the French word positivisme(/positee vish men/), derived from positif in its sense of 'imposed on the mind by experience'. 
 :::
 
+## Question {.center background="#43464B"}
 
+::: {.r-fit-text}
+Being positivist = being scientific? 
+:::
 
 ## A Story
 
-A TCM^[Traditional Chinese Medicine, TCM] 🧑‍⚕️told a [story](http://szyyj.gd.gov.cn/zyyfw/ysbj/content/post_2541293.html) about drinking water.^[《为什么外国人喝凉水没事》之“每天早晨喝一杯凉水，是一个错误的养生做法”]
+A TCM^[Traditional Chinese Medicine, TCM] 🧑‍⚕️told a [story](http://szyyj.gd.gov.cn/zyyfw/ysbj/content/post_2541293.html) about drinking water:^[《为什么外国人喝凉水没事》之“每天早晨喝一杯凉水，是一个错误的养生做法”]
 
 
 > 每天早晨喝一杯凉水，是一个错误的养生做法……[某大历害老医师]是偶然发现这个问题的，当时他在给一位女士调理身体，本来调理得很好……突然有一天，再诊脉的时候，发现她的舌质又淡白了，舌体胖大，病情反复，忙问这是怎么回事儿？她回答，半个月前，看到电视里面有养生专家让晨起喝凉水，于是坚持了这些天，已经腹泻了很多次了。这么样，损失了阳气，导致水湿重。有位中医也被这一说法骗了……最后竟然收集了几百例的病例，都是晨起喝凉水，导致的各种复杂古怪的病症的。
 
-:::{.fragment}
-:::{.callout-note}
-## Question
+## Question {.center background="#43464B"}
 
+::: {.r-fit-text}
 - Will the seniors in your family be convinced by this piece?
 - Is it a scientific inquiry?
-:::
 :::
 
 ## Let's Decompose It
@@ -164,55 +154,63 @@ A TCM^[Traditional Chinese Medicine, TCM] 🧑‍⚕️told a [story](http://szy
 
 ## Why Convincing
 
-A human inquiry: [almost]{.red} a scientific inquiry!
+It's a human inquiry: a question/puzzle -> point + evidence
 
-:::: {.columns}
+::: {.callout-note .fragment}
+## Example
 
-::: {.column .fragment width="50%"}
-**Objective**: Edibility
+Q: Why do you Sichuanese/Jiangxiness/Huanese like to eat spicy food?
 
-![](https://drhuyue.site:10002/sammo3182/figure/sci_mushroom.jpg){fig-align="center" height=350}
-:::
+A: Our place is humid. Spices can "qu~shi~"
 
-::: {.column .fragment width="50%"}
-**Test**: "Call your BFF"😏
-
-![](https://drhuyue.site:10002/sammo3182/figure/sci_mushroomT.jpg){fig-align="center" height=350}
-:::
-
-::::
-
-
-:::{.fragment}
-:::{.callout-note}
-## Question
-
-What's missing here from a SCIENTIFIC inquiry?
-:::
+![](https://drhuyue.site:10002/sammo3182/figure/sci_hotpot.jpg){fig-align="center" height=400}
 :::
 
 
-## Another story
+## Another Example
 
 ![“你递啊，你伸啊！”](https://drhuyue.site:10002/sammo3182/figure/sci_driverCasher.gif){fig-align="center" height=500}
 
 
 The video shows that the toll collector and the driver were in a standoff for 1 minute.
 
+## Question {.center background="#43464B"}
 
-## Incomplete Information
+::: {.r-fit-text}
+Why aren't above inquires not [scientific]{.red} inquiries?
+:::
+
+$$\text{Human inquiry} = Point + Evidence.$$
+
+$$\text{Scientific inquiry} = \color{Procedure}{red}(Point + Evidence).$$
+
+# Process Science
+
+## Why not stay with human inquiries
+
+::: {.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/sci_driverCasher.jpeg){fig-align="center" height=600}
+
+::: {.r-hstack .fragment}
+![湃客(2020)](https://drhuyue.site:10002/sammo3182/figure/sci_spicy.jpg){fig-align="center" height=600}
+
+![王静爱、左伟(2010)](https://drhuyue.site:10002/sammo3182/figure/sci_huminity.png){fig-align="center" height=600}
+:::
+:::
+
+::: {.notes}
+- 湃客. 2020. 《如果吃辣有段位，你的家乡排第几？》. 澎湃号. https://www.thepaper.cn/newsDetail_forward_8315589 (2025年2月23日).
+- 王静爱和左伟. 2010. 中国地理图集. 中国地图出版社. https://book.douban.com/subject/4733762/ (2025年2月23日).
+
+https://www.bilibili.com/video/BV17RAgeoEvs/?spm_id_from=333.1387.favlist.content.click&vd_source=f38aeefd0d38cecba9017eeee43e71c8
+:::
+
+## Risks of human inquiry
 
 :::: {.columns}
 
-::: {.column width="50%"}
-
-![](https://drhuyue.site:10002/sammo3182/figure/sci_driverCasher.jpeg){fig-align="center" height=600}
-
-:::
-
-::: {.column width="50%"}
-*Other flaws*:
-
+::: {.column .nonincremental width="40%"}
+- Incomplete information
 - Illogical reasoning  
 - Selection observation  
 - Inaccurate observation  
@@ -220,86 +218,63 @@ The video shows that the toll collector and the driver were in a standoff for 1 
 - ......
 :::
 
-::::
-
-## A recent story about overgeneralization
-
-<center>
+::: {.column .fragment width="60%"}
 {{< video https://drhuyue.site:10002/sammo3182/video/sci_shangChunShan_dissection.mp4 title=dissection height=300 loading="eager" allowfullscreen>}}
 
 :::{.fragment}
 {{< video https://drhuyue.site:10002/sammo3182/video/sci_shangChunShan_twist.mp4 title=dissection height=300 loading="eager" allowfullscreen>}}
 :::
-
-</center>
-
-# How to be scientific
-
-## Human &rarr; Scientific Inquiries
-
-<center>
-**Hypothesis**
-
-{{< video https://drhuyue.site:10002/sammo3182/video/sci_Charle's_Angle_ScientistScene.mp4 title="A scientific Inquiry always starts with a guess" loading="eager" height=300 allowfullscreen>}}
-
-</center>
-
-
-:::{.notes}
-Charle's Angle, 2019, Columbia Pictures, Elizabeth Banks' film
-:::
-
-:::: {.columns}
-
-::: {.column .fragment width="50%"}
-
-**Data**
-
-- To be [Valid]{.red}
-    - Being representative
-
-- To be [Sufficient]{.red}
-    - Being diverse
-
-:::{.notes}
-Solving the incomplete, selective, or inaccurate observation
-:::
-
-:::
-
-::: {.column .fragment width="50%"}
-**Analysis**
-
-- To be [Proper & consistent]{.red}
-
-- P &rarr; A &rarr; M & M &rArr; implications/conclusions
-
-:::{.notes}
-Solvign the overgeneralization and illogical reasoning
-:::
-
 :::
 
 ::::
 
 
-## Why should we do this? A philosophical thought
 
-- Progress: finding more and better
-- Truth: finding what it is
-- Beauty: not missing something surprising and amazing 
+## Human &rarr; Scientific Inquiries
 
-![](https://drhuyue.site:10002/sammo3182/figure/sci_beautyScience.webp){.fragment height=400 fig-align="center"}
+<center>
+{{< video https://drhuyue.site:10002/sammo3182/video/sci_Charle's_Angle_ScientistScene.mp4 title="A scientific Inquiry always starts with a guess" loading="eager" height=300 allowfullscreen>}}
 
+[**Guess/Hypothesis**]{.fragment}
+</center>
 
-## Scientific Process
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+**Data**
+
+- Be [Valid]{.red}
+    - Being representative
+- Be [Sufficient]{.red}
+    - Being diverse
+:::
+
+::: {.column .fragment width="50%"}
+**Analysis**
+
+- Be [Proper & consistent]{.red}
+
+- Point     
+  &rarr; [Data + Method &rarr; Analysis]{.green}     
+  &rArr; Evidence/conclusions
+:::
+
+::::
+
+:::{.notes}
+- Guess: Charle's Angle, 2019, Columbia Pictures, Elizabeth Banks' film
+- Data: Solving the incomplete, selective, or inaccurate observation
+- Analysis: Solving the overgeneralization and illogical reasoning
+:::
+
+## Scientific Procedure
 
 :::: {.columns}
 
 ::: {.column width="40%"}
 **Three (or Four) Steps**^[No need to complete in one piece.]
 
-1. Exploration
+1. Lay out (assumptions & hypotheses)
 1. Description
 1. Explanation
 1. (Prediction)  
@@ -315,52 +290,53 @@ Inductive vis-a-vis Deductive
 
 ::::
 
-# When to be scientific
+# Apply Science
 
-## Can science always...
+## What can science do
 
-Give an answer? Of course, no.^[A true story in the [public policy area](@sec-app-story). ]
+- Give an answer? [No.^[A true story in the [public policy area](@sec-app-story). ]]{.fragment}
+- Win an argument? [Not exactly, but]
+    - Provide [acceptable]{.red} evidence
+    - Win an argument *among scientists*
 
-
-:::{.fragment}
-Be scientific?
-
+::: {.fragment}
 <center>
 {{< video https://drhuyue.site:10002/sammo3182/video/sci_youngSheldon.mp4 title="Nonscientific debates between scientists" loading="eager" height=400 allowfullscreen>}}
 </center>
 :::
 
+## Social science
 
-## Are scientists always...
-
-That scientific?
-
-<center>
-{{< video https://drhuyue.site:10002/sammo3182/video/sci_sheldon_socialScience.mp4 title="Sheldon on Social Science" height=300 loading="eager" allowfullscreen>}}
-</center>
-
-:::{style="text-align:center; margin-top: 2em"}
-1. Can human behavior being scientifically researched?
-1. Can social scientific results scientifically reliable?
-1. Is social science different from natural science?
+:::{.nonincremental style="text-align:center"}
+1. Can human behavior being [scientifically]{.red} researched?
+1. Can social scientific results scientifically [reliable]{.red}?
+1. Is social science [different]{.red} from natural science?
 :::
 
+<center>
+{{< video https://drhuyue.site:10002/sammo3182/video/sci_sheldon_socialScience.mp4 title="Sheldon on Social Science" height=400 loading="eager" allowfullscreen>}}
+</center>
 
 
-## When being scientific is a quantity issue
 
-What do you want: 
+## When do policymakers need science
+
+Depends on *what kind of conclusion* s/he wants to make:
 
 :::{style="text-align:center; margin-top: 0.5em"}
 Credible conclusions vs. Strong conclusions
 :::
 
-:::{.fragment style="text-align:center; margin-top: 4em"}
-### **The Law of Decreasing Credibility**
+::: {.callout-important .fragment}
+## The Law of Decreasing Credibility
 
-::: {.r-fit-text}
-> Strength of assumptions [&uarr;]{.blue} &rArr; credibility [&darr;]{.red} 
+Strength of assumptions [&uarr;]{.blue} &rArr; credibility [&darr;]{.red} 
 :::
+
+::: {.fragment}
+<center>
+{{< video https://drhuyue.site:10002/sammo3182/video/sci_dontlookup.mp4 title="don't look up" height=400 loading="eager" allowfullscreen>}}
+</center>
 :::
 
 
@@ -368,25 +344,16 @@ Credible conclusions vs. Strong conclusions
 - 只要有疫苗了，我们就安全了 vs. 疫苗是战胜新冠病毒之制胜关键
 :::
 
-## When to chooose between credibility and strength
 
-<center>
-{{< video https://drhuyue.site:10002/sammo3182/video/sci_dontlookup.mp4 title="don't look up" height=450 loading="eager" allowfullscreen>}}
-</center>
-
-:::{.fragment .large style="text-align:center; margin-top: 1em"}
-[*Power vs. Science*]{.red}
-:::
-
-## The Big Dogs Say
+## Power and science
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-![Lyndon Johnson, the 36th POTUS](https://drhuyue.site:10002/sammo3182/figure/sci_Johnson.jpg){fig-align="center" height=400}
+> Ranges are for cattle. Give me a number.
 
-> Ranges are for cattles. Give me a number.
+![Lyndon Johnson, the 36th POTUS](https://drhuyue.site:10002/sammo3182/figure/sci_Johnson.jpg){fig-align="center" height=400}
 
 :::
 
@@ -400,34 +367,40 @@ Credible conclusions vs. Strong conclusions
 
 ::::
 
-## A big decision
-
-:::{style="text-align:center; margin-top: 4em"}
-[Being scientific and being heard are both important.]{.fragment}
-
-[The resonances of the two are different!]{.large .fragment}
-
-[What's [your]{.red} choice? ]{.r-fit-text .fragment}
+::: {.notes}
+Johnson use the anecdote to reply an economist's description of the uncertainty of his forecast
 :::
 
+##
+
+::: {.r-fit-text}
+Both being [considered]{.red} and being [solid][.red] can be important
+:::
+
+## Question {.center background="#43464B"}
+
+::: {.r-fit-text}
+*What's your choice?*
+:::
 
 ## Take-Home Points
 
-+ What does "being scientific" mean
-    - Human inquiry &rarr; scientific inquiry (hypothesis + data + analysis)
-+ How to conduct a scientific inquiry
-    - Four steps + two approaches
-+ When (*not why*) understanding policies scientifically
-    - Science is not everybody's favorite
-    - Being scientific vs. being heard
++ [Dissect]{.red} Science: What does being "scientific" mean
+    - $\text{Scientific inquiry} = \color{Procedure}{red}(Point + Evidence).$
++ [Process]{.red} Science: How to conduct a scientific inquiry
+    - Why human inquiries can be risky?
+    - Steps of processing science
++ [Apply]{.red} Science: When (*not why*) understanding policies scientifically
+    - Social science
+    - Policymakers' view
 
 :::{.notes}
 Four steps:
 
-1. Exploration
+1. Lay out (assumptions & hypotheses)
 1. Description
 1. Explanation
-1. (Prediction)  
+1. (Prediction)   
 
 Two approaches: deductive and inductive
 :::
@@ -435,9 +408,11 @@ Two approaches: deductive and inductive
 
 ## Challenge is on the way
 
-Who are the lucky dogs today??
+::: {style="text-align:center"}
+Who are the [lucky dogs]{.red} today??
+:::
 
-- Your missions?
+- Your missions
     - Hansen(2019) 
 - Presenter: 
     + Content
@@ -449,7 +424,7 @@ Who are the lucky dogs today??
 
 # Appendix {.appendix}
 
-## A True Story: Even not on a political or ideolgical issue {#sec-app-story}
+## A story about problems brought by science {#sec-app-story}
 
 Congressional Budget Office & Joint Committee on Taxation of *Patient Protection and Affordable Care Act* and *Reconciliation Act*
 
@@ -457,10 +432,9 @@ Congressional Budget Office & Joint Committee on Taxation of *Patient Protection
 :::: {.columns}
 
 ::: {.column width="50%"}
+> Enacting both pieces of legislation...would produce a net reduction of changes in federal deficits of [$138 billion]{.red} over the 2010--2019 period as a result of changes in direct spending and revenue.
 
 ![Douglas Elmendorf, Dean and Don K. Price Professor of Public Policy at Harvard Kennedy School](https://drhuyue.site:10002/sammo3182/figure/sci_elemendorf.jfif){fig-align="center" height=100}
-
-> Enacting both pieces of legislation...would produce a net reduction of changes in federal deficits of [$138 billion]{.red} over the 2010--2019 period as a result of changes in direct spending and revenue.
 
 :::{.notes}
 Congressional Budget Office, CBO;  
@@ -471,9 +445,9 @@ Joint Committee on Taxation, JCT
 
 ::: {.column .fragment width="50%"}
 
-![Douglas Holtz-Eakin, economics professor at Syracuse University, 2003 director of CBO](https://drhuyue.site:10002/sammo3182/figure/sci_HoltzEakin.jpg){fig-align="center" height=100}
-
 > The health care reform legislation would raise, not lower, federal deficits, by [$562 billion]{.red}.
+
+![Douglas Holtz-Eakin, economics professor at Syracuse University, 2003 director of CBO](https://drhuyue.site:10002/sammo3182/figure/sci_HoltzEakin.jpg){fig-align="center" height=100}
 
 :::{.fragment}
 A gap of [**138+562 (700)** billion]{.red} 😱
@@ -488,9 +462,8 @@ an economics professor at Syracuse University, 2003 director of CBO, Director of
 ::::
 
 
-## Problem of uncertainty
-
-![U.S. Dep of Health and Human Services](https://drhuyue.site:10002/sammo3182/figure/sci_usHHS.webp){fig-align="center" height=300}
+## The Essence of the problem
 
 > All such estimates are [uncertain]{.red} and that actual future impacts could differ significantly from the estimates of any given organization.
 
+![](https://drhuyue.site:10002/sammo3182/figure/sci_usHHS.webp){fig-align="center" height=400}
