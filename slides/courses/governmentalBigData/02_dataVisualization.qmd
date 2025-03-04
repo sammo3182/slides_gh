@@ -1,18 +1,18 @@
 ---
-title: "数据可视化理论与实践"
+title: "数据可视化理论与工具"
 subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
-institute: "清华大学" 
-knitr: 
-    opts_chunk: 
-      echo: false
+institute: "清华大学社会科学学院" 
+bibliography: t_politicalData.bib
+
 format: 
   revealjs:
     css: https://sammo3182.github.io/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
+    number-sections: true
     slide-number: true
     filters: [appExclusion.lua] # not count appendices into page number
-    incremental: true
+    incremental: false
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
@@ -34,12 +34,18 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+  echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 ---
 
-```{r setup}
-#| include = FALSE
+```{r}
+#| label: setup
+#| include: false
 
 library(pacman)
 
@@ -49,13 +55,13 @@ p_load(
   dotwhisker,
   interplot,
   modelsummary,
+  drhutools,
   # dependency
   stringr,
-  haven,
-  purrr,
   broom,
-  
-  tidyr,
+  gganimate,
+  gifski,
+  tinytable,
   tidyverse
 ) # data wrangling # data wrangling
 
@@ -73,18 +79,18 @@ theme_update(
 )
 ```
 
-## 概要
+## 概要 {.unnumbered}
 
-::::{.columns style="text-align:center; margin-top: 2em"}
+::::{.columns}
 :::{.column width="50%" .fragment}
-### 可视化理论
+### 可视化理论 {.unnumbered}
 
-+ 基本功能
-+ 统计可视化基本原则
++ 可视化基本功能
++ **可视化基本原则**
 :::
 
 :::{.column width="50%" .fragment}
-### 可视化工具
+### 可视化工具 {.unnumbered}
 
 + 可视化编码
 + 可视化通道
@@ -92,50 +98,46 @@ theme_update(
 ::::
 
 :::{.fragment style="text-align:center"}
-### 可视化操作
+### 可视化操作* {.unnumbered}
 :::
 
 # 可视化理论
 
-## 可视化基本功能
+## 理解可视化功能
 
-:::{.r-stack}
+:::: {.columns}
+::: {.column width="40%"}
 - 记录信息
 - 分析推理
 - 证实假设
 - 交流思想
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif){.fragment height=600}
 :::
 
-## How about tables?
-
-::::{.columns style="text-align:center; margin-top: 2em"}
-:::{.column width="50%" .fragment}
-**表之优势**
-
-* 容易制作
-* 发表常见
-* 有助后续
-:::
-
-:::{.column width="50%" .fragment}
+::: {.column .fragment width="30%"}
 **图之劣势**
 
 * 制作费事
 * “不精确”
 * 形式不统一
 :::
+
+::: {.column .fragment width="30%"}
+**表之优势**
+
+* 容易制作
+* 发表常见
+* 有助后续
+:::
 ::::
 
-::: {.r-fit-text .fragment}
-那还可视化个喵？
+::: {.fragment .Large style="text-align:center; margin-top: 2em"}
+*作图为了什么？*
 :::
 
-## A Picture Is Worth a Thousand Words
+## A Picture is Worth a Thousand Words
 
 :::{.r-stack}
-> Even before he became president, Mr Trump had *a history of controversial comments* about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz---the list goes on---he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them."
+> Even before he became president, Mr Trump had *a history of controversial comments* about women. His comments in a 2005 Access Hollywood tape about grabbing women *"by the pussy"* are perhaps the most notorious, and made headlines in 2016....."The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz---the list goes on---he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them."[@Rogers2016]
 
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_trumpNastyWoman.gif){.fragment height="600"}
 :::
@@ -153,54 +155,75 @@ https://time.com/4537960/donald-trump-hillary-clinton-nasty-woman-debate/
 
 ## 可视化与人类技术发展
 
-[Friendly, Michael, and Howard Wainer. 2021. *A History of Data Visualization and Graphic Communication*. Harvard University Press.](https://datavis.ca/milestones/index.php)
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_history.png){height=500}
+![@FriendlyWainer2021](https://drhuyue.site:10002/sammo3182/figure/vis_history.png){height=600}
 
 :::{.notes}
 - Topographical map: 地形图，等高线图
 - Bar invented: 清乾隆五十一年
 - Word cloud: 2002年发明
 - `ggplot2`: 2006年，之后基本没有新的可视化类型问世
+
+https://datavis.ca/milestones/index.php
 :::
 
-## 可视化在“视”什么？
+## 可视化与政治学研究
 
-APSR，AJPS和PA 2006年五刊，发现如下结果:^[Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” *Perspectives on Politics* 5(4): 755–71.]
+@KastellecLeoni2007： APSR，AJPS和PA 2006年五刊
 
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_graphTable.png)
 
-## 专家举例（丑😱？）
+## 表转图
 
+::::{.overlay-container}
+
+::: {.overlay-image}
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png){height=600}
+:::
+
+::: {.overlay-text-over .fragment .Large}
+丑不丑？
+:::
+
+::::
 
 :::{.notes}
 有人说很丑，但为什么画图专家喜欢这个？我们之后会回来讲
 :::
 
-## 精确 vs. 眼球
+## 下面的可视化做得如何{.unnumbered background="#43464B"}
 
-:::{.r-hstack}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_sexism_chart.jpg){.fragment height=600}
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg){height=600}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg){.fragment height=600}
-:::
-
-## 另一组例子
-
-:::{.r-hstack}
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg){.fragment height=600}
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg){.fragment height=600}
 :::
 
-
-## 博眼球有什么错
+## “毒图”（Viral Charts）
 
 :::{.r-hstack}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_image.png){.fragment height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg){height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg){height=600}
+:::
+
+---
+
+::: {.r-stack}
+:::{.r-hstack}
+[![](https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_image.png){height=600}](https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-chart-but-only-slightly.html)
 
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_chart.png){.fragment height=600}
+:::
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_flipY.webp){.fragment fig-align="center" height=600}
+:::
+
+## 图的问题也是人的问题
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp){height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS_commented.webp){.fragment height=600}
 :::
 
 :::{.notes}
@@ -209,32 +232,65 @@ APSR，AJPS和PA 2006年五刊，发现如下结果:^[Kastellec, Jonathan P., an
 https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-chart-but-only-slightly.html
 :::
 
----
+## 可视化原则 {.unnumbered .center background="#43464B"}
 
-:::{style="text-align:center; margin-top: 4em"}
+[1. 准确]{.Huge}
 
-[可视化原则1]{.huge}
 
-[准确]{.Huge .red}
+## 如何识别“毒图” [@Smith2023a; @Smith2024]
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp){fig-align="center" height=400}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 🚩 Startling trend
+- 🚩 Unlabeled/Dual axis
+- 🚩 No source
+:::
+
+::: {.column .fragment width="50%"}
+- 👁️ Learn about old tricks
+- 👁️ Check comments
+- 👁️ Check where axis starts
+- 👁️ Check the unit of axes
+:::
+
+::::
+
+## 做幅*合格*的图
+
+如何可视化以下数据?
+
+:::: {.columns}
+
+::: {.column width="30%"}
+| 政党 	| 得票率 	|
+|------	|--------	|
+| A    	| 38     	|
+| B    	| 34     	|
+| C    	| 24     	|
+| D    	| 4      	|
 
 :::
 
-
-## 常见可视化形式
-
+::: {.column .fragment width="70%"}
 :::{.r-stack}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png){height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png){height=550}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png){.fragment height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png){.fragment height=550}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png){.fragment height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png){.fragment height=550}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png){.fragment height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png){.fragment height=550}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png){.fragment height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png){.fragment height=550}
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png){.fragment height=600}
+![[蝉联[junk chart](http://junkcharts.com)之冠]{.fragment}](https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png){.fragment height=500}
 :::
+:::
+
+::::
 
 :::{.notes}
 哪一块最大？橘红色？实际是绿色; 人类对于面积是尤为不敏感的。
@@ -244,100 +300,50 @@ https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-c
 3D圆饼图哪一个最大？更模糊，而且多了一个没有任何意义的维度
 :::
 
-## 饼状图
+## 什么是*不合格*的图
 
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
+* 使用多种图形组成要素重复呈现[同一种]{.red}信息
+* 虽未歪曲数据，但可能[误导]{.red}读者
 
-* 用于呈现数字就能呈现的东西
-* 容易误导读者（人类对面积不敏感）
-* 使用多种图形组成要素重复呈现同一种信息
 
-:::
+:::{.r-stack}
+![@Fung2007](https://drhuyue.site:10002/sammo3182/figure/vis_pieBBC.png){.fragment fig-align="center" height=450}
 
-:::{.column width="50%" .fragment}
-
-蝉联[junk chart](http://junkcharts.com)之冠
-
-“图不如表”
-
-:::
-::::
-
-:::{.fragment style="text-align:center"}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg){height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg){.fragment height=500}
 :::
 
 :::{.notes}
 词云相邻的词就会同时出现吗？比例多少
 :::
 
+## 可视化原则 {.unnumbered .center background="#43464B"}
 
-## 如果非饼不可
+[1. 准确]{.Huge}    
+[2. 明确]{.Huge}
 
-```{r nightinggale}
-#| fig-align: center
-#| fig-height: 6
 
-mydata <-
-  data.frame(
-    Day = c(
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday"
-    ),
-    Browse = c(50, 60, 70, 20, 90, 110, 30)
-  )
+## Quiz 1
 
-ggplot(mydata) +
-  geom_bar(
-    aes(x = Day, y = Browse),
-    width = 1,
-    stat = "identity",
-    colour = "black",
-    fill = "#F8766D"
-  ) +
-  geom_text(aes(x = Day, y = Browse - 8, label = Browse), color = "white") +
-  coord_polar(theta = "x", start = 0) +
-  ylim(c(0, 120)) +
-  xlab("") + ylab("") +
-  theme_light() +
-  theme(
-    panel.background = element_blank(),
-    panel.grid.major = element_line(colour = "grey80", size = .25),
-    axis.text.y = element_text(size = 12, colour = "black"),
-    axis.line.y = element_line(size = 0.25),
-    axis.text.x = element_text(size = 13, colour = "black")
-  )
-```
+:::: {.columns}
 
-:::{.notes}
-Nightingale Rose diagram, created by the famous Florence Nightingale
+::: {.column width="50%"}
+::: {.r-vstack}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png){height=250}
 
-Good for time series,save space than bars
-
-问题在于大小和突出代表同样信息
+![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png){.fragment height=250}
+:::
 :::
 
-## Pie vs. Bar 
+::: {.column width="50%"}
+::: {.r-vstack}
+![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png){.fragment height=250}
 
-:::{.r-hstack}
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png){height=300}
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png){.fragment height=300}
-
+![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png){.fragment height=250}
+:::
 :::
 
-:::{.r-hstack}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png){.fragment height=300}
+::::
 
-![](https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png){.fragment height=300}
-:::
 
 :::{.notes}
 1. bar plot, 可以看出对比，但问题在哪里？（颜色没什么意义，宽度没意义，对不准）
@@ -347,23 +353,212 @@ Good for time series,save space than bars
     - 看似是中心边缘理论，但画面之外研究表明，并非如此。
 :::
 
----
-
-:::{style="text-align:center; margin-top: 4em"}
-
-[可视化原则2]{.huge}
-
-[极简]{.Huge .red}
-
-:::
-
 
 ## Call back
 
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png){height=600}
 
+## Quiz 2
 
-## 一维 &rarr; 二维
+```{r}
+#| label: data-penguin
+
+penguins_dat <- palmerpenguins::penguins |> 
+  filter(!is.na(sex))
+
+```
+
+```{r}
+#| label: box-penguin
+
+
+penguins_dat |> 
+  ggplot(aes(x = body_mass_g, y = 1)) +
+  geom_boxplot()  +
+  labs(
+    x = 'Weight (gram)', 
+    title = 'Distribution of Penguin Weights'  
+  ) +
+  theme(
+    axis.title.y = element_blank(),
+    legend.position = 'none'
+  ) +
+  coord_cartesian(
+    xlim = range(penguins_dat$body_mass_g),
+    ylim = 1 + c(-0.5, 0.5)
+  )
+```
+
+Marks: Min, 25%, 50%, 75%, Max
+
+---
+
+```{r}
+#| label: boxBad
+#| eval: false
+
+plot_comparison <- function(vals_tib) {
+  vals_tib |> 
+  ggplot() +
+  geom_boxplot(
+    aes(x = 'boxplot', y = boxplot_vals),
+    fill = '#CC79A7',
+    col = 'black',
+    linewidth = 1
+  ) +
+  geom_violin(
+    aes(x = 'violin', y = boxplot_vals),
+    fill = '#009E73',
+    col = 'black',
+    linewidth = 1
+  ) +
+  coord_cartesian(ylim = c(0, 100)) +
+  theme_minimal(
+    base_size = 15,
+    base_family = 'Source Sans Pro'
+  ) +
+  labs(
+    x = element_blank(),
+    y = element_blank(),
+    title = 'Different Data, Same Boxplot',
+    subtitle = 'Boxplots can look exactly the same, even when the distribution is wildly different.'
+  ) +
+  theme(
+    plot.title = element_text(
+      family = 'Merriweather',
+      face = 'bold',
+      size = rel(2)
+    ),
+    plot.title.position = 'plot',
+    panel.grid.minor = element_blank()
+  )
+}
+runif_boxplot_vals <- function(x, sample_size = 25) {
+  tibble(
+    seq = x,
+    boxplot_vals = c(
+      0,
+      runif(sample_size, min = 0, max = 25),
+      25,
+      runif(sample_size, min = 25, max = 50),
+      50,
+      runif(sample_size, min = 50, max = 75),
+      75,
+      runif(sample_size, min = 75, max = 100),
+      100
+    )
+  )
+}
+
+set.seed(313)
+
+sim_dat <- map2_dfr(
+  c(1, 3, 5, 7), 
+  c(25, 25, 25, 1000),
+  runif_boxplot_vals
+) |> 
+  bind_rows(
+    tibble(
+      seq = 2,
+      boxplot_vals = c(
+        0,
+        rep(12.5, 100),
+        25,
+        rep(75 / 2, 100),
+        50,
+        rep(125 / 2, 100),
+        75,
+        rep(175 / 2, 100),
+        100
+      )
+    )
+  ) |> 
+  bind_rows(
+    tibble(
+      seq = 4,
+      boxplot_vals = c(
+        0,
+        pmin(rexp(100, rate  = 1 / 12), 25),
+        25,
+        25 + pmin(rexp(100, rate = 1 / 12), 25),
+        50,
+        50 +pmin(rexp(100, rate  = 1 / 12), 25),
+        75,
+        75 + pmin(rexp(100, rate  = 1 / 12), 25),
+        100
+      )
+    )
+  ) |> 
+  bind_rows(
+    tibble(
+      seq = 6,
+      boxplot_vals = c(
+        0,
+        25 - pmin(rexp(100, rate  = 12), 25),
+        25,
+        50 - pmin(rexp(100, rate  = 12), 25),
+        50,
+        75 - pmin(rexp(100, rate  = 1 / 12), 25),
+        75,
+        100 - pmin(rexp(100, rate  = 1 / 12), 25),
+        100
+      )
+    )
+  ) 
+
+anim <- sim_dat |> 
+  ggplot() +
+  geom_boxplot(
+    aes(x = 'boxplot', y = boxplot_vals),
+    fill = '#CC79A7',
+    col = 'black',
+    linewidth = 1
+  ) +
+  geom_violin(
+    aes(x = 'violin', y = boxplot_vals),
+    fill = '#009E73',
+    col = 'black',
+    linewidth = 1
+  ) +
+  ggforce::geom_sina(
+    aes(x = 'violin', y = boxplot_vals, size = as.factor(seq)),
+    alpha = 0.5
+  ) +
+  scale_size_manual(values = c(3, 3, 3, 3, 3, 3, 1)) +
+  coord_cartesian(ylim = c(0, 100)) +
+  labs(
+    x = element_blank(),
+    y = element_blank()) +
+  theme(
+    panel.grid.minor = element_blank(),
+    legend.position = 'none'
+  ) +
+  transition_states(
+    seq, 
+    transition_length = 1, 
+    state_length = 5
+  ) +
+  enter_fade() +
+  exit_fade()
+
+animate(
+  anim, 
+  nframes = 200,
+  fps = 30,
+  renderer = gifski_renderer(),
+  width = 900,
+  height = 600,
+  res = 100,
+  units = 'px',
+  quality = 90
+)
+
+```
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_badBox.gif){fig-align="center" height=600}
+
+
+## 下列数据如何可视化？
 
 ::::{.columns}
 :::{.column width="50%"}
@@ -379,7 +574,7 @@ Good for time series,save space than bars
 Table: 墨西哥各政党在大选中得票比例趋势
 
 :::{.fragment .fade-in-then-out}
-和之前的数据有什么不同？想表达什么？
+和之前的数据有什么不同？
 :::
 :::
 
@@ -400,7 +595,7 @@ Table: 墨西哥各政党在大选中得票比例趋势
     - PAN + PRD是不是超过PRI很难判断
 :::
 
-## 其他办法
+## 其他选择
 
 :::: {.columns}
 
@@ -418,14 +613,13 @@ Table: 墨西哥各政党在大选中得票比例趋势
 
 ::::
 
-
 :::{.notes}
 Basic 版本legend比较多余，对打印不那么友好，当然对相加结果还是不是那么清楚
 
 表达的是1997年墨西哥实现民主转型，不是一党执政
 :::
 
-## 极简不是最高原则
+## 不是越简单越好
 
 :::: {.columns}
 
@@ -451,19 +645,14 @@ Basic 版本legend比较多余，对打印不那么友好，当然对相加结�
 
 ::::
 
+## 可视化原则 {.unnumbered .center background="#43464B"}
 
----
-
-:::{style="text-align:center; margin-top: 4em"}
-
-[可视化原则3]{.huge}
-
-[主动]{.Huge .red}
-
-:::
+[1. 准确]{.Huge}    
+[2. 明确]{.Huge}    
+[3. 详确]{.Huge}
 
 
-## 二维+
+## Quiz 3
 
 | 学生 	| 原始成绩 	| 补习班周数 	| 进步分数 	|
 |------	|----------	|------------	|----------	|
@@ -477,12 +666,9 @@ Basic 版本legend比较多余，对打印不那么友好，当然对相加结�
 | H    	| 752      	| 10         	| 123      	|
 Table: 补习班有效吗？
 
-::: {.fragment .r-fit-text}
-和之前的数据有什么不同？想表达什么？怎么可视化？
-:::
+[和之前的数据有什么不同]{.fragment}
 
-
-## 多维数据的二位可视化
+---
 
 :::{.r-hstack}
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot.png){.fragment height=400}
@@ -515,17 +701,17 @@ Bubble chart 图一对大小相近bubbles无法区分
 
 :::: {.columns}
 
-::: {.column width="50%"}
-- “表做得挺好的，下次画个图吧”
-    - 抉择：精确 vs. 眼球
+::: {.column .incremental width="50%"}
+- 为什么可视化
+    - 做得比表好
+- 可视化基本原则
+    1. 准确：不歪曲量差和关系
+    1. 明确：没有冗余元素
+    1. 详确：表达[想表达]{.red}的信息
 - 可视化方式选择
     - 对于饼图，我们的态度是？
     - 对于柱状图，我们的态度是？
     - 对于点和线，我们的态度是？
-- 可视化基本原则
-    1. 准确：明确表达量差和关系
-    1. 极简：没有冗余的信息元素
-    1. 主动：我不要你觉得，我要我觉得
 
 :::{.notes}
 - 对于饼图，我们的态度是？
@@ -542,7 +728,7 @@ Bubble chart 图一对大小相近bubbles无法区分
 
 :::
 
-::: {.column .fragment .nonincremental width="50%"}
+::: {.column .fragment width="50%"}
 
 *Bonus*
 
@@ -550,24 +736,20 @@ Bubble chart 图一对大小相近bubbles无法区分
 - Cleveland, William S. 1994. *The Elements of Graphing Data*. Murray Hill, N.J: Hobart Press.    
 - Wilkinson, Leland. 2005. *The Grammar of Graphics*. New York: Springer-Verlag.
 
-:::{.notes}
-习近平： 我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化更加清晰、更加科学、更加可感可行。
-
-Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视化圣经，手绘时代的产物，有点细节吹毛求疵，比如柱状图不能用tick呀之类的
-:::
-
 :::
 
 ::::
 
+:::{.notes}
+Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视化圣经，手绘时代的产物，有点细节吹毛求疵，比如柱状图不能用tick呀之类的
+:::
 
 
 # 可视化工具
-实现“准确、极简、主动”可视化的路经和手段
 
 ## 可视化编码
 
-::::{.columns style="text-align:center"}
+::::{.columns}
 :::{.column width="30%"}
 * 数值（numeric）
     + 10厘米，17厘米，23厘米
@@ -590,8 +772,8 @@ Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视�
 
 ## 通道
 
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
+::::{.columns}
+:::{.column width="50%"}
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_category.png){.fragment height=300 width=370}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_group.png){.fragment height=300}
@@ -604,6 +786,12 @@ Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视�
 
 
 ## 通道选择
+
+:::{.callout-important .large style="text-align:center"}
+## 统计可视化原则
+
+准确·明确·详确
+:::
 
 :::{.fragment style="text-align:center"}
 **类型（Type）**
@@ -624,21 +812,12 @@ Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视�
 **表现力（Expressiveness）**
 
 + 表达且仅表达数据的完整属性
-+ *判断标准*：可辨性、可分离性、视觉突出
++ 可辨性、可分离性、视觉突出
 :::
 ::::
 
-:::{.fragment}
-:::{.callout-tip}
-## 统计可视化原则
 
-准确·极简·主动
-:::
-:::
-
-
-
-## 有效性
+## 什么叫有效性
 
 :::{.r-stack}
 ![](https://drhuyue.site:10002/sammo3182/figure/vis_Os.png){.fragment height=600}
@@ -718,7 +897,7 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 ## 通过分组分主次
 
 ::::{.columns style="text-align:center"}
-:::{.column width="30%" .fragment}
+:::{.column width="30%"}
 * 分组会对[大部分]{.red}任务有效
 * 如果不能进行分组，则需要[转换]{.red}任务目标
 * 避免[过多]{.red}类别
@@ -732,9 +911,7 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 
 ## 色彩
 
-:::{style="text-align:center"}
-> 入门容易，坑较深
-:::
+
 
 :::{.notes}
 最容易被关注到的视觉元素，基础原则很简单，较真起来问题多
@@ -785,6 +962,11 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
 
 :::
 ::::
+
+:::{.callout-warning}
+入门容易，坑较深（没大必要入）
+:::
+
 
 
 ## 色彩选择
@@ -842,10 +1024,67 @@ psychophysicist Stanley Smith Stevens (1957, 1961)
     - 可分离性
     - 视觉突出
 - 色彩
+    - 相信专家
 
 
-# 可视化操作
-统计可视化的（编程）操作逻辑
+
+## Take-Home Points
+
+::::{.columns style="text-align:center"}
+
+:::{.column .nonincremental width="30%" .fragment}
+**可视化理论**
+
+- 抉择：精确 vs. 眼球
+- 可视化基本原则
+    1. 准确
+    1. 明确
+    1. 详确
+:::
+
+:::{.column .nonincremental width="30%" .fragment}
+**可视化工具**
+
+- 编码和通道
+- 通道选择原则
+  - 有效性
+    - 准确性
+  - 表现力
+    - 可辨性
+    - 可分离性
+    - 视觉突出
+- 色彩
+    - 相信专家
+:::
+
+:::{.column .fragment width="40%" .fragment}
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif){height=600}
+:::
+
+::::
+
+## 可视化的指导思想
+
+> [我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化更加清晰、更加科学、更加可感可行。]{.red .large}[@XiJinPing2024]
+
+:::{.fragment}
+> The art of any propagandist and agitator consists in his ability to find the best means of influencing any given audience, by presenting a definite truth, in such a way as to make it most convincing, most easy to digest, most graphic, and most strongly impressive [@Lenin1974].
+:::
+
+
+:::{.notes}
+Impressive 不是不重要
+
+https://www.marxists.org/archive/lenin/works/1911/dec/08.htm
+:::
+
+## 参考文献
+
+::: {#refs}
+:::
+
+# 附录：可视化操作 {.appendix}
 
 ## 可视化平台
 
@@ -870,7 +1109,10 @@ D3 (JS)
 
 ## 描述图：柱状图
 
-```{r data-1D, include=FALSE}
+```{r data-1D}
+#| label: data1D
+#| include: false
+
 mydata <-
   data.frame(
     Cut = c("Fair", "Good", "Very Good", "Premium", "Ideal"),
@@ -892,6 +1134,7 @@ mydata2 <-
 ```
 
 ```{r plot-1D}
+#| label: plot1D
 #| echo: true
 #| fig-align: center
 #| output-location: fragment
@@ -910,7 +1153,8 @@ ggplot(data = mydata, aes(x = Cut, y = Price)) +
 
 ## 分组柱状图
 
-```{r plot1D}
+```{r plot1D-codes}
+#| label: plot1Dcode
 #| echo: true
 #| fig-align: center
 #| code-line-numbers: "|3|11"
@@ -944,6 +1188,8 @@ ggplot(data = mydata2,
 ## 描述图：雷达图
 
 ```{r data-radar-show}
+#| label: radarPlot
+
 coord_radar <- function (theta = "x",
                          start = 0,
                          direction = 1)
@@ -984,7 +1230,9 @@ mydata %>%
 
 ---
 
-```{r plot-radar-code, fig.width=5}
+```{r plot-radar-code}
+#| label: radarPlotCode
+#| fig-width: 5
 #| echo: true
 #| fig-align: center
 #| output-location: column-fragment
@@ -1023,11 +1271,15 @@ ggplot() +
 
 ## 描述图：趋势图（点-线）
 
-```{r data-2D, include = FALSE}
+```{r data-2D}
+#| label: plot2D
+#| include: false
+
 mydata<-read.csv("data/Scatter_Data.csv",stringsAsFactors=FALSE) 
 ```
 
 ```{r plot-2D-code}
+#| label: plot2Dcode
 #| echo: true
 #| fig-align: center
 #| code-line-numbers: "|2|8"
@@ -1065,73 +1317,25 @@ ggplot(data = mydata, aes(x, y)) +
   )
 ```
 
-## 描述图：网络图
-
-```{r network-plot}
-#| echo: true
-#| fig-align: center
-#| code-line-numbers: "|6,7"
-#| output-location: fragment
-#| fig-height: 4
-
-library(network) # for data
-data(emon)
-library(ggnetwork)
-
-ggplot(emon[[1]], aes(x = x, y = y, xend = xend, yend = yend)) +
-  geom_edges(arrow = arrow(length = unit(6, "pt"), type = "closed")) +
-  geom_nodes(color = "tomato", size = 4)
-```
-
-## 桑积图
-
-```{r sankey-code}
-#| echo: true
-#| output-location: slide
-#| fig-align: center
-#| fig-height: 6.5
-
-library(ggalluvial)
-
-data(vaccinations)
-levels(vaccinations$response) <- rev(levels(vaccinations$response))
-
-ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           y = freq,
-           fill = response, label = response)) +
-  scale_x_discrete(expand = c(.1, .1)) +
-  geom_flow() +
-  geom_stratum(alpha = .5) +
-  geom_text(stat = "stratum", size = 3) +
-  theme(legend.position = "none") +
-  ggtitle("Vaccination survey responses at three points in time")
-```
-
-:::{.notes}
-three RAND American Life Panel (ALP) surveys that asked respondents their probability of vaccinating for influenza. 
-:::
-
-
-## 动画
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_patrioBase9709.gif){height=600 fig-align="center"}
 
 
 ## 结果图：回归系数
 
 ```{r ols-table}
+#| label: olsTable
+
 m1 <- m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
 m2 <- update(m1, . ~ . + hp)
 m3 <- update(m2, . ~ . + am)
 
-modelsummary(list(m1, m2, m3), stars = TRUE) %>%
-  kableExtra::kable_styling(font_size = 16)
+modelsummary(list(m1, m2, m3), stars = TRUE)  |>
+  style_tt(fontsize = 0.4)
 ```
 
 ## Dot-whisker
 
 ```{r ols-dw}
+#| label: olsPlot
 #| echo: true
 #| fig-align: center
 #| output-location: fragment
@@ -1144,6 +1348,7 @@ dwplot(list(m1, m2, m3), show_stats = TRUE)
 ## More delicate version
 
 ```{r dwComplex}
+#| label: olsDW
 #| fig-align: center
 #| fig-height: 7
 
@@ -1188,8 +1393,9 @@ three_brackets <- list(
 ## Small-multiple
 
 ```{r sm}
+#| label: smallMultiple
 #| fig-align: center
-#| fig-height: 6
+#| fig-height: 7
 
 
 small_multiple(list(m1, m2, m3)) +
@@ -1208,9 +1414,10 @@ small_multiple(list(m1, m2, m3)) +
 ## 结果图：交互效应(`interplot`)
 
 ```{r interplot-simple}
+#| label: interplot
 #| echo: true
 #| fig-align: center
-#| fig-height: 5
+#| fig-height: 4
 #| output-location: fragment
 
 data(mtcars) 
@@ -1223,6 +1430,7 @@ interplot(m = m_cyl, var1 = "cyl", var2 = "wt")
 ## More delicate
 
 ```{r interplotAdvanced}
+#| label: interplotAdvanced
 #| fig-align: center
 #| layout-ncol: 2
 #| fig-cap: 
@@ -1239,74 +1447,16 @@ interplot(m = m_gear, var1 = "wt", var2 = "gear") +
   ylab("Weight")
 ```
 
-
-## Take-Home Points
-
-::::{.columns style="text-align:center"}
-
-:::{.column .nonincremental width="30%" .fragment}
-**可视化理论**
-
-- 抉择：精确 vs. 眼球
-- 可视化基本原则
-    1. 准确
-    1. 极简
-    1. 主动
-:::
-
-:::{.column .nonincremental width="30%" .fragment}
-**可视化工具**
-
-- 编码和通道
-- 通道选择
-  - 有效性
-  - 表现力
-- 色彩
-:::
-
-:::{.column .fragment width="40%" .fragment}
-**可视化操作**
-
-- 描述图
-- 结果图
-- 以图代表
-    - 贯彻可视化基本原则
-:::
-
-::::
-
-:::: {.fragment .columns}
-
-::: {.column width="70%"}
-> [我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化**更加清晰、更加科学、更加可感可行**。---习近平. 2023. ["在学习贯彻党的二十大精神研讨班开班式上发表重要讲话"](https://www.gov.cn/xinwen/2023-02/07/content_5740520.htm)]{.red}
-:::
-
-::: {.column width="30%"}
-![](https://drhuyue.site:10002/sammo3182/figure/vis_xijinping.jpg){fig-align="center" height=250}
-:::
-
-::::
-
-
-
-
-# Bonus: 做表 {.appendix}
-
 ## 描述性统计
 
 ```{r desc-data}
 df_mtcars <- mutate(mtcars, 
        across(c(vs, am), as.logical))
-```
 
-```{r desc-table}
 library(modelsummary)
 
-datasummary_skim(df_mtcars) %>% 
-  kableExtra::kable_styling(font_size = 18)
-
-datasummary_skim(df_mtcars, type = "categorical") %>% 
-  kableExtra::kable_styling(font_size = 18)
+datasummary_skim(df_mtcars) |>
+  style_tt(fontsize = 0.4)
 ```
 
 ## 回归表格
@@ -1316,8 +1466,6 @@ datasummary_skim(df_mtcars, type = "categorical") %>%
 #| output-location: fragment
 
 library(modelsummary)
-modelsummary(list(m1, m2, m3), stars = TRUE) %>%
-  kableExtra::kable_styling(font_size = 13)
+modelsummary(list(m1, m2, m3), stars = TRUE) |>
+  style_tt(fontsize = 0.4)
 ```
-
-

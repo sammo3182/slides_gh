@@ -16,7 +16,7 @@
   <meta name="generator" content="quarto-1.4.533">
 
   <meta name="author" content="胡悦">
-  <title>数据可视化理论与实践</title>
+  <title>数据可视化理论与工具</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -99,7 +99,27 @@
     code span.va { color: #111111; } /* Variable */
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="02_dataVisualization_files/libs/revealjs/dist/theme/quarto.css">
   <link rel="stylesheet" href="https://sammo3182.github.io/slides_gh/css/style_basic.css">
   <link href="02_dataVisualization_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -391,15 +411,13 @@
       margin-right: 0; 
     }
   </style>
-  <script src="02_dataVisualization_files/libs/kePrint-0.0.1/kePrint.js"></script>
-  <link href="02_dataVisualization_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 </head>
 <body class="quarto-light">
   <div class="reveal">
     <div class="slides">
 
 <section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
-  <h1 class="title">数据可视化理论与实践</h1>
+  <h1 class="title">数据可视化理论与工具</h1>
   <p class="subtitle">政务大数据应用与分析 (80700673)</p>
 
 <div class="quarto-title-authors">
@@ -408,83 +426,78 @@
 胡悦 
 </div>
         <p class="quarto-title-affiliation">
-            清华大学
+            清华大学社会科学学院
           </p>
     </div>
 </div>
 
 </section>
-<section id="概要" class="slide level2">
+<section id="概要" class="slide level2 unnumbered">
 <h2>概要</h2>
-<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="columns">
 <div class="column fragment" style="width:50%;">
 <!-- -->
-<h3 id="可视化理论">可视化理论</h3>
+<h3 class="unnumbered" id="可视化理论">可视化理论</h3>
 <ul>
-<li class="fragment">基本功能</li>
-<li class="fragment">统计可视化基本原则</li>
+<li>可视化基本功能</li>
+<li><strong>可视化基本原则</strong></li>
 </ul>
 </div><div class="column fragment" style="width:50%;">
 <!-- -->
-<h3 id="可视化工具">可视化工具</h3>
+<h3 class="unnumbered" id="可视化工具">可视化工具</h3>
 <ul>
-<li class="fragment">可视化编码</li>
-<li class="fragment">可视化通道</li>
+<li>可视化编码</li>
+<li>可视化通道</li>
 </ul>
 </div>
 </div>
 <div class="fragment" style="text-align:center">
 <!-- -->
-<h3 id="可视化操作">可视化操作</h3>
+<h3 class="unnumbered" id="可视化操作">可视化操作*</h3>
 </div>
 </section>
 <section>
-<section id="可视化理论-1" class="title-slide slide level1 center">
-<h1>可视化理论</h1>
+<section id="可视化理论-1" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> 可视化理论</h1>
 
 </section>
-<section id="可视化基本功能" class="slide level2">
-<h2>可视化基本功能</h2>
-<div class="r-stack">
+<section id="理解可视化功能" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> 理解可视化功能</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
 <ul>
-<li class="fragment">记录信息</li>
-<li class="fragment">分析推理</li>
-<li class="fragment">证实假设</li>
-<li class="fragment">交流思想</li>
+<li>记录信息</li>
+<li>分析推理</li>
+<li>证实假设</li>
+<li>交流思想</li>
 </ul>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif" class="fragment" height="600"></a></p>
-</div>
-</section>
-<section id="how-about-tables" class="slide level2">
-<h2>How about tables?</h2>
-<div class="columns" style="text-align:center; margin-top: 2em">
-<div class="column fragment" style="width:50%;">
-<p><strong>表之优势</strong></p>
-<ul>
-<li class="fragment">容易制作</li>
-<li class="fragment">发表常见</li>
-<li class="fragment">有助后续</li>
-</ul>
-</div><div class="column fragment" style="width:50%;">
+</div><div class="column fragment" style="width:30%;">
 <p><strong>图之劣势</strong></p>
 <ul>
-<li class="fragment">制作费事</li>
-<li class="fragment">“不精确”</li>
-<li class="fragment">形式不统一</li>
+<li>制作费事</li>
+<li>“不精确”</li>
+<li>形式不统一</li>
+</ul>
+</div><div class="column fragment" style="width:30%;">
+<p><strong>表之优势</strong></p>
+<ul>
+<li>容易制作</li>
+<li>发表常见</li>
+<li>有助后续</li>
 </ul>
 </div>
 </div>
-<div class="r-fit-text fragment">
-<p>那还可视化个喵？</p>
+<div class="fragment Large" style="text-align:center; margin-top: 2em">
+<p><em>作图为了什么？</em></p>
 </div>
 </section>
-<section id="a-picture-is-worth-a-thousand-words" class="slide level2">
-<h2>A Picture Is Worth a Thousand Words</h2>
+<section id="a-picture-is-worth-a-thousand-words" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> A Picture is Worth a Thousand Words</h2>
 <div class="r-stack">
 <blockquote>
-<p>Even before he became president, Mr Trump had <em>a history of controversial comments</em> about women. His comments in a 2005 Access Hollywood tape about grabbing women <em>“by the pussy”</em> are perhaps the most notorious, and made headlines in 2016…..”The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz—the list goes on—he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them.”</p>
+<p>Even before he became president, Mr Trump had <em>a history of controversial comments</em> about women. His comments in a 2005 Access Hollywood tape about grabbing women <em>“by the pussy”</em> are perhaps the most notorious, and made headlines in 2016…..”The kind of things that he said about Hillary Clinton, Carly Fiorina, Elizabeth Warren, Heidi Cruz—the list goes on—he talks about women, any prominent, powerful woman, in the most DEMEANING of ways, trivializing them.”<span class="citation" data-cites="Rogers2016">(<a href="#/参考文献" role="doc-biblioref" onclick="">Rogers 2016</a>)</span></p>
 </blockquote>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_trumpNastyWoman.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_trumpNastyWoman.gif" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_trumpNastyWoman.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_trumpNastyWoman.gif" class="fragment" height="600"></a></p>
 </div>
 <aside class="notes">
 <ol type="1">
@@ -506,10 +519,14 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="可视化与人类技术发展" class="slide level2">
-<h2>可视化与人类技术发展</h2>
-<p><a href="https://datavis.ca/milestones/index.php">Friendly, Michael, and Howard Wainer. 2021. <em>A History of Data Visualization and Graphic Communication</em>. Harvard University Press.</a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_history.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_history.png" height="500"></a></p>
+<section id="可视化与人类技术发展" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> 可视化与人类技术发展</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_history.png" class="lightbox" data-glightbox="description: .lightbox-desc-2" data-gallery="quarto-lightbox-gallery-2" title="@FriendlyWainer2021"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_history.png" height="600" alt="Friendly and Wainer (2021)"></a></p>
+<figcaption><span class="citation" data-cites="FriendlyWainer2021">Friendly and Wainer (<a href="#/参考文献" role="doc-biblioref" onclick="">2021</a>)</span></figcaption>
+</figure>
+</div>
 <aside class="notes">
 <ul>
 <li>Topographical map: 地形图，等高线图</li>
@@ -517,6 +534,7 @@
 <li>Word cloud: 2002年发明</li>
 <li><code>ggplot2</code>: 2006年，之后基本没有新的可视化类型问世</li>
 </ul>
+<p>https://datavis.ca/milestones/index.php</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
           position:absolute!important;
@@ -529,14 +547,21 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="可视化在视什么" class="slide level2">
-<h2>可视化在“视”什么？</h2>
-<p>APSR，AJPS和PA 2006年五刊，发现如下结果:<sup>1</sup></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_graphTable.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_graphTable.png"></a></p>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. “Using Graphs Instead of Tables in Political Science.” <em>Perspectives on Politics</em> 5(4): 755–71.</p></li></ol></aside></section>
-<section id="专家举例丑" class="slide level2">
-<h2>专家举例（丑😱？）</h2>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" height="600"></a></p>
+<section id="可视化与政治学研究" class="slide level2" data-number="1.4">
+<h2><span class="header-section-number">1.4</span> 可视化与政治学研究</h2>
+<p><span class="citation" data-cites="KastellecLeoni2007">Kastellec and Leoni (<a href="#/参考文献" role="doc-biblioref" onclick="">2007</a>)</span>： APSR，AJPS和PA 2006年五刊</p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_graphTable.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_graphTable.png"></a></p>
+</section>
+<section id="表转图" class="slide level2" data-number="1.5">
+<h2><span class="header-section-number">1.5</span> 表转图</h2>
+<div class="overlay-container">
+<div class="overlay-image">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" height="600"></a></p>
+</div>
+<div class="overlay-text-over fragment Large">
+<p>丑不丑？</p>
+</div>
+</div>
 <aside class="notes">
 <p>有人说很丑，但为什么画图专家喜欢这个？我们之后会回来讲</p>
 <style type="text/css">
@@ -551,25 +576,39 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="精确-vs.-眼球" class="slide level2">
-<h2>精确 vs.&nbsp;眼球</h2>
-<div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_chart.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_chart.jpg" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg" class="fragment" height="600"></a></p>
+<section id="下面的可视化做得如何" class="slide level2 unnumbered" data-background="#43464B">
+<h2>下面的可视化做得如何</h2>
+<div class="r-stack">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_sexism_image.jpg" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" class="fragment" height="600"></a></p>
 </div>
 </section>
-<section id="另一组例子" class="slide level2">
-<h2>另一组例子</h2>
+<section id="毒图viral-charts" class="slide level2" data-number="1.6">
+<h2><span class="header-section-number">1.6</span> “毒图”（Viral Charts）</h2>
 <div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_image.jpg" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_africanGDP_chart.jpg" height="600"></a></p>
 </div>
 </section>
-<section id="博眼球有什么错" class="slide level2">
-<h2>博眼球有什么错</h2>
+<section class="slide level2">
+
+<div class="r-stack">
 <div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_image.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_image.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_chart.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_chart.png" class="fragment" height="600"></a></p>
+<p><a href="https://junkcharts.typepad.com/junk_charts/2021/06/start-at-zero-improves-this-chart-but-only-slightly.html"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_image.png" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_chart.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_femaleHi_chart.png" class="fragment" height="600"></a></p>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_flipY.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-10"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_flipY.webp" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="图的问题也是人的问题" class="slide level2" data-number="1.7">
+<h2><span class="header-section-number">1.7</span> 图的问题也是人的问题</h2>
+<div class="r-hstack">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS_commented.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS_commented.webp" class="fragment" height="600"></a></p>
 </div>
 <aside class="notes">
 <p>左图夸装了数据本意，indian太小了</p>
@@ -586,22 +625,80 @@
           display:block!important;
       }</style></aside>
 </section>
-<section class="slide level2">
-
-<div style="text-align:center; margin-top: 4em">
-<p><span class="huge">可视化原则1</span></p>
-<p><span class="Huge red">准确</span></p>
+<section id="可视化原则" class="slide level2 unnumbered center" data-background="#43464B">
+<h2>可视化原则</h2>
+<p><span class="Huge">1. 准确</span></p>
+</section>
+<section id="如何识别毒图-smith2023a-smith2024" class="slide level2" data-number="1.8">
+<h2><span class="header-section-number">1.8</span> 如何识别“毒图” <span class="citation" data-cites="Smith2023a Smith2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">Smith 2023</a>, <a href="#/参考文献" role="doc-biblioref" onclick="">2024</a>)</span></h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_immigrationUS.webp" class="quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>🚩 Startling trend</li>
+<li>🚩 Unlabeled/Dual axis</li>
+<li>🚩 No source</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<ul>
+<li>👁️ Learn about old tricks</li>
+<li>👁️ Check comments</li>
+<li>👁️ Check where axis starts</li>
+<li>👁️ Check the unit of axes</li>
+</ul>
+</div>
 </div>
 </section>
-<section id="常见可视化形式" class="slide level2">
-<h2>常见可视化形式</h2>
+<section id="做幅合格的图" class="slide level2" data-number="1.9">
+<h2><span class="header-section-number">1.9</span> 做幅<em>合格</em>的图</h2>
+<p>如何可视化以下数据?</p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<table>
+<thead>
+<tr class="header">
+<th>政党</th>
+<th>得票率</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A</td>
+<td>38</td>
+</tr>
+<tr class="even">
+<td>B</td>
+<td>34</td>
+</tr>
+<tr class="odd">
+<td>C</td>
+<td>24</td>
+</tr>
+<tr class="even">
+<td>D</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column fragment" style="width:70%;">
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" height="550"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie2.png" class="fragment" height="550"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-16"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie3.png" class="fragment" height="550"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie5.png" class="fragment" height="550"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie4.png" class="fragment" height="550"></a></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png" class="lightbox" data-glightbox="description: .lightbox-desc-19" data-gallery="quarto-lightbox-gallery-19" title="蝉联junk chart之冠"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie6.png" class="fragment" height="500" alt="蝉联junk chart之冠"></a></p>
+<figcaption><span class="fragment">蝉联<a href="http://junkcharts.com">junk chart</a>之冠</span></figcaption>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <aside class="notes">
 <p>哪一块最大？橘红色？实际是绿色; 人类对于面积是尤为不敏感的。</p>
@@ -619,22 +716,20 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="饼状图" class="slide level2">
-<h2>饼状图</h2>
-<div class="columns" style="text-align:center">
-<div class="column fragment" style="width:50%;">
+<section id="什么是不合格的图" class="slide level2" data-number="1.10">
+<h2><span class="header-section-number">1.10</span> 什么是<em>不合格</em>的图</h2>
 <ul>
-<li class="fragment">用于呈现数字就能呈现的东西</li>
-<li class="fragment">容易误导读者（人类对面积不敏感）</li>
-<li class="fragment">使用多种图形组成要素重复呈现同一种信息</li>
+<li>使用多种图形组成要素重复呈现<span class="red">同一种</span>信息</li>
+<li>虽未歪曲数据，但可能<span class="red">误导</span>读者</li>
 </ul>
-</div><div class="column fragment" style="width:50%;">
-<p>蝉联<a href="http://junkcharts.com">junk chart</a>之冠</p>
-<p>“图不如表”</p>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pieBBC.png" class="lightbox" data-glightbox="description: .lightbox-desc-20" data-gallery="quarto-lightbox-gallery-20" title="@Fung2007"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pieBBC.png" class="fragment quarto-figure quarto-figure-center" height="450" alt="Fung (2007)"></a></p>
+<figcaption><span class="citation" data-cites="Fung2007">Fung (<a href="#/参考文献" role="doc-biblioref" onclick="">2007</a>)</span></figcaption>
+</figure>
 </div>
-</div>
-<div class="fragment" style="text-align:center">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-18"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_wordCloud.jpg" class="fragment" height="500"></a></p>
 </div>
 <aside class="notes">
 <p>词云相邻的词就会同时出现吗？比例多少</p>
@@ -650,42 +745,25 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="如果非饼不可" class="slide level2">
-<h2>如果非饼不可</h2>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/nightinggale-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19"><img data-src="02_dataVisualization_files/figure-revealjs/nightinggale-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<aside class="notes">
-<p>Nightingale Rose diagram, created by the famous Florence Nightingale</p>
-<p>Good for time series,save space than bars</p>
-<p>问题在于大小和突出代表同样信息</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
+<section id="可视化原则-1" class="slide level2 unnumbered center" data-background="#43464B">
+<h2>可视化原则</h2>
+<p><span class="Huge">1. 准确</span><br>
+<span class="Huge">2. 明确</span></p>
 </section>
-<section id="pie-vs.-bar" class="slide level2">
-<h2>Pie vs.&nbsp;Bar</h2>
-<div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" height="300"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png" class="fragment" height="300"></a></p>
+<section id="quiz-1" class="slide level2" data-number="1.11">
+<h2><span class="header-section-number">1.11</span> Quiz 1</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="r-vstack">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pie1.png" height="250"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot1.png" class="fragment" height="250"></a></p>
 </div>
-<div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png" class="fragment" height="300"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png" class="fragment" height="300"></a></p>
+</div><div class="column" style="width:50%;">
+<div class="r-vstack">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot2.png" class="fragment" height="250"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_barPlot3.png" class="fragment" height="250"></a></p>
+</div>
+</div>
 </div>
 <aside class="notes">
 <ol type="1">
@@ -709,19 +787,33 @@
           display:block!important;
       }</style></aside>
 </section>
+<section id="call-back" class="slide level2" data-number="1.12">
+<h2><span class="header-section-number">1.12</span> Call back</h2>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" height="600"></a></p>
+</section>
+<section id="quiz-2" class="slide level2" data-number="1.13">
+<h2><span class="header-section-number">1.13</span> Quiz 2</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="02_dataVisualization_files/figure-revealjs/box-penguin-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img data-src="02_dataVisualization_files/figure-revealjs/box-penguin-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Marks: Min, 25%, 50%, 75%, Max</p>
+</section>
 <section class="slide level2">
 
-<div style="text-align:center; margin-top: 4em">
-<p><span class="huge">可视化原则2</span></p>
-<p><span class="Huge red">极简</span></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_badBox.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_badBox.gif" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
 </div>
 </section>
-<section id="call-back" class="slide level2">
-<h2>Call back</h2>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" class="lightbox" data-gallery="quarto-lightbox-gallery-24"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_tableGraph.png" height="600"></a></p>
-</section>
-<section id="一维-二维" class="slide level2">
-<h2>一维 → 二维</h2>
+<section id="下列数据如何可视化" class="slide level2" data-number="1.14">
+<h2><span class="header-section-number">1.14</span> 下列数据如何可视化？</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <table>
@@ -774,11 +866,11 @@
 </tbody>
 </table>
 <div class="fragment fade-in-then-out">
-<p>和之前的数据有什么不同？想表达什么？</p>
+<p>和之前的数据有什么不同？</p>
 </div>
 </div><div class="column fragment" style="width:50%;">
 <p><strong>堆积图</strong></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" width="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" width="600"></a></p>
 </div>
 </div>
 <aside class="notes">
@@ -804,19 +896,19 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="其他办法" class="slide level2">
-<h2>其他办法</h2>
+<section id="其他选择" class="slide level2" data-number="1.15">
+<h2><span class="header-section-number">1.15</span> 其他选择</h2>
 <div class="columns">
 <div class="column" style="width:30%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="quarto-figure quarto-figure-center"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_areaPlot.png" class="quarto-figure quarto-figure-center"></a></p>
 </figure>
 </div>
 </div><div class="column" style="width:70%;">
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot.png" class="fragment" height="500"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot2.png" class="fragment" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot.png" class="fragment" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_linePlot2.png" class="fragment" height="500"></a></p>
 </div>
 </div>
 </div>
@@ -835,13 +927,13 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="极简不是最高原则" class="slide level2">
-<h2>极简不是最高原则</h2>
+<section id="不是越简单越好" class="slide level2" data-number="1.16">
+<h2><span class="header-section-number">1.16</span> 不是越简单越好</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot.png" class="fragment" height="500"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot2.png" class="fragment" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-33"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot.png" class="fragment" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-34"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_scatterPlot2.png" class="fragment" height="500"></a></p>
 </div>
 <aside class="notes">
 <p>中产家庭收入越高，在劳动力市场投入越多</p>
@@ -864,21 +956,20 @@
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_facet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_facet.png" class="fragment quarto-figure quarto-figure-center" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_facet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-35"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_facet.png" class="fragment quarto-figure quarto-figure-center" height="500"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section class="slide level2">
-
-<div style="text-align:center; margin-top: 4em">
-<p><span class="huge">可视化原则3</span></p>
-<p><span class="Huge red">主动</span></p>
-</div>
+<section id="可视化原则-2" class="slide level2 unnumbered center" data-background="#43464B">
+<h2>可视化原则</h2>
+<p><span class="Huge">1. 准确</span><br>
+<span class="Huge">2. 明确</span><br>
+<span class="Huge">3. 详确</span></p>
 </section>
-<section id="二维" class="slide level2">
-<h2>二维+</h2>
+<section id="quiz-3" class="slide level2" data-number="1.17">
+<h2><span class="header-section-number">1.17</span> Quiz 3</h2>
 <table>
 <caption>补习班有效吗？</caption>
 <thead>
@@ -940,15 +1031,13 @@
 </tr>
 </tbody>
 </table>
-<div class="fragment r-fit-text">
-<p>和之前的数据有什么不同？想表达什么？怎么可视化？</p>
-</div>
+<p><span class="fragment">和之前的数据有什么不同</span></p>
 </section>
-<section id="多维数据的二位可视化" class="slide level2">
-<h2>多维数据的二位可视化</h2>
+<section class="slide level2">
+
 <div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot.png" class="fragment" height="400"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-33"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot2.png" class="fragment" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot.png" class="lightbox" data-gallery="quarto-lightbox-gallery-36"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot.png" class="fragment" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-37"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_bubblePlot2.png" class="fragment" height="400"></a></p>
 </div>
 <aside class="notes">
 <p>比表好，面积不好、颜色没意义</p>
@@ -968,38 +1057,38 @@
 <div class="column fragment" style="width:50%;">
 <p><strong>Pro</strong></p>
 <ul>
-<li class="fragment">散点图变异</li>
-<li class="fragment">通过气泡大小呈现第三维度数据</li>
+<li>散点图变异</li>
+<li>通过气泡大小呈现第三维度数据</li>
 </ul>
 </div><div class="column fragment" style="width:50%;">
 <p><strong>Con</strong></p>
 <ul>
-<li class="fragment">气泡大小当接近时可能造成辨识困难，信息无法完全精确地传达</li>
+<li>气泡大小当接近时可能造成辨识困难，信息无法完全精确地传达</li>
 </ul>
 </div>
 </div>
 </section>
-<section id="小结" class="slide level2">
-<h2>小结</h2>
+<section id="小结" class="slide level2" data-number="1.18">
+<h2><span class="header-section-number">1.18</span> 小结</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <ul>
-<li class="fragment">“表做得挺好的，下次画个图吧”
+<li class="fragment">为什么可视化
 <ul>
-<li class="fragment">抉择：精确 vs.&nbsp;眼球</li>
+<li class="fragment">做得比表好</li>
 </ul></li>
+<li class="fragment">可视化基本原则
+<ol type="1">
+<li class="fragment">准确：不歪曲量差和关系</li>
+<li class="fragment">明确：没有冗余元素</li>
+<li class="fragment">详确：表达<span class="red">想表达</span>的信息</li>
+</ol></li>
 <li class="fragment">可视化方式选择
 <ul>
 <li class="fragment">对于饼图，我们的态度是？</li>
 <li class="fragment">对于柱状图，我们的态度是？</li>
 <li class="fragment">对于点和线，我们的态度是？</li>
 </ul></li>
-<li class="fragment">可视化基本原则
-<ol type="1">
-<li class="fragment">准确：明确表达量差和关系</li>
-<li class="fragment">极简：没有冗余的信息元素</li>
-<li class="fragment">主动：我不要你觉得，我要我觉得</li>
-</ol></li>
 </ul>
 <aside class="notes">
 <ul>
@@ -1040,8 +1129,9 @@
 </li>
 <li>Wilkinson, Leland. 2005. <em>The Grammar of Graphics</em>. New York: Springer-Verlag.</li>
 </ul>
+</div>
+</div>
 <aside class="notes">
-<p>习近平： 我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化更加清晰、更加科学、更加可感可行。</p>
 <p>Edward Tufte，跨界政治学、统计学，可视化之父，该书为可视化圣经，手绘时代的产物，有点细节吹毛求疵，比如柱状图不能用tick呀之类的</p>
 <style type="text/css">
         span.MJX_Assistive_MathML {
@@ -1054,80 +1144,56 @@
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
-</div>
-</div>
 </section></section>
 <section>
-<section id="可视化工具-1" class="title-slide slide level1 center">
-<h1>可视化工具</h1>
-<p>实现“准确、极简、主动”可视化的路经和手段</p>
+<section id="可视化工具-1" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> 可视化工具</h1>
+
 </section>
-<section id="可视化编码" class="slide level2">
-<h2>可视化编码</h2>
-<div class="columns" style="text-align:center">
+<section id="可视化编码" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> 可视化编码</h2>
+<div class="columns">
 <div class="column" style="width:30%;">
 <ul>
-<li class="fragment">数值（numeric）
+<li>数值（numeric）
 <ul>
-<li class="fragment">10厘米，17厘米，23厘米</li>
+<li>10厘米，17厘米，23厘米</li>
 </ul></li>
-<li class="fragment">定序（ordinal）
+<li>定序（ordinal）
 <ul>
-<li class="fragment">小，中，大</li>
-<li class="fragment">周日，周一，周二……</li>
+<li>小，中，大</li>
+<li>周日，周一，周二……</li>
 </ul></li>
-<li class="fragment">定类（nominal）
+<li>定类（nominal）
 <ul>
-<li class="fragment">苹果，桔子，香蕉……</li>
+<li>苹果，桔子，香蕉……</li>
 </ul></li>
 </ul>
 </div><div class="column fragment" style="width:70%;">
 <ul>
-<li class="fragment"><p><strong>标记</strong>：点、线、面<br>
+<li><p><strong>标记</strong>：点、线、面<br>
 <img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_sign.png"></p></li>
-<li class="fragment"><p><strong>通道</strong>：位置、大小、形状、方向、色调、饱和度、亮度……<br>
+<li><p><strong>通道</strong>：位置、大小、形状、方向、色调、饱和度、亮度……<br>
 <img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_pipe.png"></p></li>
 </ul>
 </div>
 </div>
 </section>
-<section id="通道" class="slide level2">
-<h2>通道</h2>
-<div class="columns" style="text-align:center">
-<div class="column fragment" style="width:50%;">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_category.png" class="lightbox" data-gallery="quarto-lightbox-gallery-34"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_category.png" class="fragment" width="370" height="300"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_group.png" class="lightbox" data-gallery="quarto-lightbox-gallery-35"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_group.png" class="fragment" height="300"></a></p>
+<section id="通道" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> 通道</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_category.png" class="lightbox" data-gallery="quarto-lightbox-gallery-38"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_category.png" class="fragment" width="370" height="300"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_group.png" class="lightbox" data-gallery="quarto-lightbox-gallery-39"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_group.png" class="fragment" height="300"></a></p>
 </div><div class="column fragment" style="width:50%;">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_order.png" class="lightbox" data-gallery="quarto-lightbox-gallery-36"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_order.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_order.png" class="lightbox" data-gallery="quarto-lightbox-gallery-40"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_order.png" class="fragment" height="600"></a></p>
 </div>
 </div>
 </section>
-<section id="通道选择" class="slide level2">
-<h2>通道选择</h2>
-<div class="fragment" style="text-align:center">
-<p><strong>类型（Type）</strong></p>
-<ul>
-<li class="fragment">是什么/在哪里（what/where）</li>
-<li class="fragment">何种程度（how much）</li>
-</ul>
-</div>
-<div class="columns" style="text-align:center; margin-top: 2em">
-<div class="column fragment" style="width:50%;">
-<p><strong>有效性（Effectiveness）</strong></p>
-<ul>
-<li class="fragment">通道表现力符合属性的重要性</li>
-<li class="fragment">准确性</li>
-</ul>
-</div><div class="column fragment" style="width:50%;">
-<p><strong>表现力（Expressiveness）</strong></p>
-<ul>
-<li class="fragment">表达且仅表达数据的完整属性</li>
-<li class="fragment"><em>判断标准</em>：可辨性、可分离性、视觉突出</li>
-</ul>
-</div>
-</div>
-<div class="fragment">
-<div class="callout callout-tip callout-titled callout-style-default">
+<section id="通道选择" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> 通道选择</h2>
+<div class="large" style="text-align:center">
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <div class="callout-icon-container">
@@ -1136,27 +1202,49 @@
 <p><strong>统计可视化原则</strong></p>
 </div>
 <div class="callout-content">
-<p>准确·极简·主动</p>
+<p>准确·明确·详确</p>
 </div>
 </div>
+</div>
+</div>
+<div class="fragment" style="text-align:center">
+<p><strong>类型（Type）</strong></p>
+<ul>
+<li>是什么/在哪里（what/where）</li>
+<li>何种程度（how much）</li>
+</ul>
+</div>
+<div class="columns" style="text-align:center; margin-top: 2em">
+<div class="column fragment" style="width:50%;">
+<p><strong>有效性（Effectiveness）</strong></p>
+<ul>
+<li>通道表现力符合属性的重要性</li>
+<li>准确性</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>表现力（Expressiveness）</strong></p>
+<ul>
+<li>表达且仅表达数据的完整属性</li>
+<li>可辨性、可分离性、视觉突出</li>
+</ul>
 </div>
 </div>
 </section>
-<section id="有效性" class="slide level2">
-<h2>有效性</h2>
+<section id="什么叫有效性" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> 什么叫有效性</h2>
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os.png" class="lightbox" data-gallery="quarto-lightbox-gallery-37"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-38"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os3.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-39"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os2.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os.png" class="lightbox" data-gallery="quarto-lightbox-gallery-41"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-42"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os3.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_Os2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-43"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_Os2.png" class="fragment" height="600"></a></p>
 </div>
 </section>
-<section id="准确性accuracy" class="slide level2">
-<h2>准确性（Accuracy）</h2>
+<section id="准确性accuracy" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> 准确性（Accuracy）</h2>
 <p><span class="math display">\[\displaystyle S (I)=kI^{n},\]</span></p>
 <p><code>k</code>: proportionality constant that depends on the units used</p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_stevensPowerLaw.png" class="lightbox" data-gallery="quarto-lightbox-gallery-40"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_stevensPowerLaw.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_stevensPowerLaw.png" class="lightbox" data-gallery="quarto-lightbox-gallery-44"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_stevensPowerLaw.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
 </figure>
 </div>
 <aside class="notes">
@@ -1179,11 +1267,11 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="可辨性discriminability" class="slide level2">
-<h2>可辨性（Discriminability）</h2>
+<section id="可辨性discriminability" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> 可辨性（Discriminability）</h2>
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_commuNet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-41"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_commuNet.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_contract.png" class="lightbox" data-gallery="quarto-lightbox-gallery-42"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_contract.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_commuNet.png" class="lightbox" data-gallery="quarto-lightbox-gallery-45"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_commuNet.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_contract.png" class="lightbox" data-gallery="quarto-lightbox-gallery-46"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_contract.png" class="fragment" height="600"></a></p>
 </div>
 <aside class="notes">
 <p>通过粗细动态表现范围，准确性略显不足</p>
@@ -1199,11 +1287,11 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="可分离性separability" class="slide level2">
-<h2>可分离性（Separability）</h2>
+<section id="可分离性separability" class="slide level2" data-number="2.7">
+<h2><span class="header-section-number">2.7</span> 可分离性（Separability）</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_separability.png" class="lightbox" data-gallery="quarto-lightbox-gallery-43"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_separability.png" class="quarto-figure quarto-figure-center" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_separability.png" class="lightbox" data-gallery="quarto-lightbox-gallery-47"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_separability.png" class="quarto-figure quarto-figure-center" height="400"></a></p>
 </figure>
 </div>
 <aside class="notes">
@@ -1220,11 +1308,11 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="视觉突出pop-out" class="slide level2">
-<h2>视觉突出（Pop-out）</h2>
+<section id="视觉突出pop-out" class="slide level2" data-number="2.8">
+<h2><span class="header-section-number">2.8</span> 视觉突出（Pop-out）</h2>
 <div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_popOut3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-44"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_popOut3.png" class="fragment" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png" class="lightbox" data-gallery="quarto-lightbox-gallery-45"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_popOut3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-48"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_popOut3.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png" class="lightbox" data-gallery="quarto-lightbox-gallery-49"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png" class="fragment" height="600"></a></p>
 </div>
 <aside class="notes">
 <p>是不是越精确越好？不一定……关键在我想让你看见什么，不想让你注意什么</p>
@@ -1240,11 +1328,11 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="视觉突出基础分主次" class="slide level2">
-<h2>视觉突出基础：分主次</h2>
+<section id="视觉突出基础分主次" class="slide level2" data-number="2.9">
+<h2><span class="header-section-number">2.9</span> 视觉突出基础：分主次</h2>
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_lattice2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-46"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_lattice2.png" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_lattice1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-47"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_lattice1.png" class="fragment" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_lattice2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-50"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_lattice2.png" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_lattice1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-51"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_lattice1.png" class="fragment" height="600"></a></p>
 </div>
 <aside class="notes">
 <p>左边更是不需要网格</p>
@@ -1261,28 +1349,23 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="通过分组分主次" class="slide level2">
-<h2>通过分组分主次</h2>
+<section id="通过分组分主次" class="slide level2" data-number="2.10">
+<h2><span class="header-section-number">2.10</span> 通过分组分主次</h2>
 <div class="columns" style="text-align:center">
-<div class="column fragment" style="width:30%;">
+<div class="column" style="width:30%;">
 <ul>
-<li class="fragment">分组会对<span class="red">大部分</span>任务有效</li>
-<li class="fragment">如果不能进行分组，则需要<span class="red">转换</span>任务目标</li>
-<li class="fragment">避免<span class="red">过多</span>类别</li>
-<li class="fragment">对数据的每个维度指定<span class="red">一种</span>或一个阶层的颜色</li>
+<li>分组会对<span class="red">大部分</span>任务有效</li>
+<li>如果不能进行分组，则需要<span class="red">转换</span>任务目标</li>
+<li>避免<span class="red">过多</span>类别</li>
+<li>对数据的每个维度指定<span class="red">一种</span>或一个阶层的颜色</li>
 </ul>
 </div><div class="column fragment" style="width:70%;">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_network_democracy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-48"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_network_democracy.png" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_network_democracy.png" class="lightbox" data-gallery="quarto-lightbox-gallery-52"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_network_democracy.png" height="600"></a></p>
 </div>
 </div>
 </section>
-<section id="色彩" class="slide level2">
-<h2>色彩</h2>
-<div style="text-align:center">
-<blockquote>
-<p>入门容易，坑较深</p>
-</blockquote>
-</div>
+<section id="色彩" class="slide level2" data-number="2.11">
+<h2><span class="header-section-number">2.11</span> 色彩</h2>
 <aside class="notes">
 <p>最容易被关注到的视觉元素，基础原则很简单，较真起来问题多</p>
 <style type="text/css">
@@ -1299,22 +1382,22 @@
 <div class="columns">
 <div class="column fragment" style="width:30%;">
 <ul>
-<li class="fragment">灰度有序 → 数值型
+<li>灰度有序 → 数值型
 <ul>
-<li class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_grey1.png"></li>
-<li class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_grey2.png"></li>
+<li><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_grey1.png"></li>
+<li><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_grey2.png"></li>
 </ul></li>
-<li class="fragment">色调无序 → 类别型
+<li>色调无序 → 类别型
 <ul>
-<li class="fragment"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_rainbow.png"></li>
+<li><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_rainbow.png"></li>
 </ul></li>
 </ul>
 </div><div class="column fragment" style="width:30%;">
 <p><strong>色彩设计基本原则</strong></p>
 <ul>
-<li class="fragment">避免<span class="red">过多</span>颜色交错导致的杂乱无章</li>
-<li class="fragment">注意控制同时对比（Simultaneous contrast）</li>
-<li class="fragment">注意<span class="red">饱和度</span></li>
+<li>避免<span class="red">过多</span>颜色交错导致的杂乱无章</li>
+<li>注意控制同时对比（Simultaneous contrast）</li>
+<li>注意<span class="red">饱和度</span></li>
 </ul>
 <aside class="notes">
 <p>如果纯色为绿色，则灰色色块看起来带有红味,产生颜色偏差</p>
@@ -1331,8 +1414,8 @@
       }</style></aside>
 </div><div class="column" style="width:40%;">
 <div class="r-stack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_w.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-49"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_w.jpg" class="fragment" height="500"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_r.png" class="lightbox" data-gallery="quarto-lightbox-gallery-50"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_r.png" class="fragment" height="400"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_w.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-53"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_w.jpg" class="fragment" height="500"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_r.png" class="lightbox" data-gallery="quarto-lightbox-gallery-54"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_redGreen_r.png" class="fragment" height="400"></a></p>
 </div>
 <aside class="notes">
 <p>上海美术电影制片厂于1961年到1964年制作的一部彩色动画长片</p>
@@ -1357,20 +1440,33 @@
       }</style></aside>
 </div>
 </div>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>入门容易，坑较深（没大必要入）</p>
+</div>
+</div>
+</div>
 </section>
-<section id="色彩选择" class="slide level2">
-<h2>色彩选择</h2>
+<section id="色彩选择" class="slide level2" data-number="2.12">
+<h2><span class="header-section-number">2.12</span> 色彩选择</h2>
 <ul>
-<li class="fragment">大部分作图软件默认配色已经<strong>非常好</strong>（也就是说，没事儿别瞎改~）</li>
-<li class="fragment">请在颜色选择过程中体现人文关怀
+<li>大部分作图软件默认配色已经<strong>非常好</strong>（也就是说，没事儿别瞎改~）</li>
+<li>请在颜色选择过程中体现人文关怀
 <ul>
-<li class="fragment">Color blind</li>
-<li class="fragment">Hard-copy person</li>
+<li>Color blind</li>
+<li>Hard-copy person</li>
 </ul></li>
-<li class="fragment">如果非要较真，辅助软件来选择合适的色阶
+<li>如果非要较真，辅助软件来选择合适的色阶
 <ul>
-<li class="fragment"><a href="https://colorbrewer2.org/">colorbrewer2.org</a></li>
-<li class="fragment"><a href="https://paletton.com/">paletton.com</a></li>
+<li><a href="https://colorbrewer2.org/">colorbrewer2.org</a></li>
+<li><a href="https://paletton.com/">paletton.com</a></li>
 </ul></li>
 </ul>
 <aside class="notes">
@@ -1388,54 +1484,152 @@
           display:block!important;
       }</style></aside>
 </section>
-<section id="调色板" class="slide level2">
-<h2>调色板</h2>
+<section id="调色板" class="slide level2" data-number="2.13">
+<h2><span class="header-section-number">2.13</span> 调色板</h2>
 <div class="columns" style="text-align:center">
 <div class="column" style="width:50%;">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_color_sequential.png" class="lightbox" data-gallery="quarto-lightbox-gallery-51"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_color_sequential.png" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_color_sequential.png" class="lightbox" data-gallery="quarto-lightbox-gallery-55"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_color_sequential.png" height="600"></a></p>
 </div><div class="column" style="width:50%;">
 <p><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_color_diverging.png" height="300"> <img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_color_qualitative.png" height="300"></p>
 </div>
 </div>
 </section>
-<section id="向大厂学习" class="slide level2">
-<h2>向大厂学习</h2>
+<section id="向大厂学习" class="slide level2" data-number="2.14">
+<h2><span class="header-section-number">2.14</span> 向大厂学习</h2>
 <div class="r-hstack">
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_background_apple.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-52"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_background_apple.jpg" height="600"></a></p>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_background_huawei.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-53"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_background_huawei.jpeg" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_background_apple.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-56"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_background_apple.jpg" height="600"></a></p>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_background_huawei.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-57"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_background_huawei.jpeg" height="600"></a></p>
 </div>
 </section>
-<section id="色彩层次的主动性" class="slide level2">
-<h2>色彩层次的主动性</h2>
+<section id="色彩层次的主动性" class="slide level2" data-number="2.15">
+<h2><span class="header-section-number">2.15</span> 色彩层次的主动性</h2>
 <video id="video_shortcode_videojs_video1" height="600" class="video-js vjs-default-skin " controls="" preload="auto" data-setup="{}" title="Jiojio奇妙冒险配色"><source src="https://drhuyue.site:10002/sammo3182/video/vis_jiojio.mp4"></video>
 </section>
-<section id="小结-1" class="slide level2">
-<h2>小结</h2>
+<section id="小结-1" class="slide level2" data-number="2.16">
+<h2><span class="header-section-number">2.16</span> 小结</h2>
 <ul>
-<li class="fragment">编码和通道</li>
-<li class="fragment">通道选择原则
+<li>编码和通道</li>
+<li>通道选择原则
 <ul>
-<li class="fragment">有效性
+<li>有效性
 <ul>
-<li class="fragment">准确性</li>
+<li>准确性</li>
 </ul></li>
-<li class="fragment">表现力
+<li>表现力
 <ul>
-<li class="fragment">可辨性</li>
-<li class="fragment">可分离性</li>
-<li class="fragment">视觉突出</li>
+<li>可辨性</li>
+<li>可分离性</li>
+<li>视觉突出</li>
 </ul></li>
 </ul></li>
-<li class="fragment">色彩</li>
+<li>色彩
+<ul>
+<li>相信专家</li>
+</ul></li>
 </ul>
+</section>
+<section id="take-home-points" class="slide level2" data-number="2.17">
+<h2><span class="header-section-number">2.17</span> Take-Home Points</h2>
+<div class="columns" style="text-align:center">
+<div class="column fragment" style="width:30%;">
+<p><strong>可视化理论</strong></p>
+<ul>
+<li>抉择：精确 vs.&nbsp;眼球</li>
+<li>可视化基本原则
+<ol type="1">
+<li>准确</li>
+<li>明确</li>
+<li>详确</li>
+</ol></li>
+</ul>
+</div><div class="column fragment" style="width:30%;">
+<p><strong>可视化工具</strong></p>
+<ul>
+<li>编码和通道</li>
+<li>通道选择原则
+<ul>
+<li>有效性
+<ul>
+<li>准确性</li>
+</ul></li>
+<li>表现力
+<ul>
+<li>可辨性</li>
+<li>可分离性</li>
+<li>视觉突出</li>
+</ul></li>
+</ul></li>
+<li>色彩
+<ul>
+<li>相信专家</li>
+</ul></li>
+</ul>
+</div><div class="column fragment" style="width:40%;">
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif" class="lightbox" data-gallery="quarto-lightbox-gallery-58"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_socialEngineer.jfif" height="600"></a></p>
+</div>
+</div>
+</section>
+<section id="可视化的指导思想" class="slide level2" data-number="2.18">
+<h2><span class="header-section-number">2.18</span> 可视化的指导思想</h2>
+<blockquote>
+<p><span class="red large">我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化更加清晰、更加科学、更加可感可行。</span><span class="citation" data-cites="XiJinPing2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">习近平 2024</a>)</span></p>
+</blockquote>
+<div class="fragment">
+<blockquote>
+<p>The art of any propagandist and agitator consists in his ability to find the best means of influencing any given audience, by presenting a definite truth, in such a way as to make it most convincing, most easy to digest, most graphic, and most strongly impressive <span class="citation" data-cites="Lenin1974">(<a href="#/参考文献" role="doc-biblioref" onclick="">Lenin 1974</a>)</span>.</p>
+</blockquote>
+</div>
+<aside class="notes">
+<p>Impressive 不是不重要</p>
+<p>https://www.marxists.org/archive/lenin/works/1911/dec/08.htm</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="参考文献" class="slide level2 smaller scrollable" data-number="2.19">
+<h2><span class="header-section-number">2.19</span> 参考文献</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-FriendlyWainer2021" class="csl-entry" role="listitem">
+Friendly, Michael, and Howard Wainer. 2021. <em>A History of Data Visualization and Graphic Communication</em>. Harvard University Press.
+</div>
+<div id="ref-Fung2007" class="csl-entry" role="listitem">
+Fung, Kaiser. 2007. <span>“Adulterated Education.”</span> Junk Charts. July 9, 2007.
+</div>
+<div id="ref-KastellecLeoni2007" class="csl-entry" role="listitem">
+Kastellec, Jonathan P., and Eduardo L. Leoni. 2007. <span>“Using Graphs Instead of Tables in Political Science.”</span> <em>Perspectives on Politics</em> 5 (4): 755–71. <a href="https://doi.org/10.1017/S1537592707072209">https://doi.org/10.1017/S1537592707072209</a>.
+</div>
+<div id="ref-Lenin1974" class="csl-entry" role="listitem">
+Lenin, Vladimir. 1974. <span>“The Slogans and Organisation of Social-Democratic Work Inside and Outside the Duma (1911).”</span> In <em>Lenin Collected Works</em>, translated by Dora Cox, 331–41. Moscow: Progress Publishers.
+</div>
+<div id="ref-Rogers2016" class="csl-entry" role="listitem">
+Rogers, Tessa Berenson. 2016. <span>“Watch Trump Call Clinton a ’Nasty Woman’.”</span> <em>Time: Politics Debates</em>, October 20, 2016.
+</div>
+<div id="ref-Smith2023a" class="csl-entry" role="listitem">
+Smith, Noah. 2023. <span>“How Not to Be Fooled by Viral Charts.”</span> Noahpinion. September 13, 2023.
+</div>
+<div id="ref-Smith2024" class="csl-entry" role="listitem">
+———. 2024. <span>“How Not to Be Fooled by Viral Charts, Part 2.”</span> Noahpinion. June 14, 2024.
+</div>
+<div id="ref-XiJinPing2024" class="csl-entry" role="listitem">
+习近平. 2024. <span>“以中国式现代化全面推进强国建设、民族复兴伟业.”</span> <em>求是</em>, December 31, 2024.
+</div>
+</div>
 </section></section>
 <section>
-<section id="可视化操作-1" class="title-slide slide level1 center">
-<h1>可视化操作</h1>
-<p>统计可视化的（编程）操作逻辑</p>
+<section id="附录可视化操作" class="title-slide slide level1 appendix center" data-visibility="uncounted" data-number="3">
+<h1><span class="header-section-number">3</span> 附录：可视化操作</h1>
+
 </section>
-<section id="可视化平台" class="slide level2">
-<h2>可视化平台</h2>
+<section id="可视化平台" class="slide level2" data-visibility="uncounted" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> 可视化平台</h2>
 <div class="fragment" style="text-align:center; margin-top: 2em">
 <p>常见绘图工具</p>
 <p>Tableau (Echarts)<br>
@@ -1452,8 +1646,8 @@ D3 (JS)<br>
 </ul>
 </div>
 </section>
-<section id="描述图柱状图" class="slide level2">
-<h2>描述图：柱状图</h2>
+<section id="描述图柱状图" class="slide level2" data-visibility="uncounted" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> 描述图：柱状图</h2>
 <div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">ggplot</span>(<span class="at">data =</span> mydata, <span class="fu">aes</span>(<span class="at">x =</span> Cut, <span class="at">y =</span> Price)) <span class="sc">+</span></span>
 <span id="cb1-2"><a href=""></a>  <span class="fu">geom_bar</span>(</span>
@@ -1469,14 +1663,14 @@ D3 (JS)<br>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/plot-1D-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-54"><img data-src="02_dataVisualization_files/figure-revealjs/plot-1D-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/plot1D-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-59"><img data-src="02_dataVisualization_files/figure-revealjs/plot1D-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="分组柱状图" class="slide level2">
-<h2>分组柱状图</h2>
+<section id="分组柱状图" class="slide level2" data-visibility="uncounted" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> 分组柱状图</h2>
 <div class="cell long_chunk columns column-output-location" data-layout-align="center">
 <div class="column">
 <div class="sourceCode cell-code" id="cb2" data-code-line-numbers="|3|11"><pre class="sourceCode numberSource r long_chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="fu">ggplot</span>(<span class="at">data =</span> mydata2,</span>
@@ -1503,15 +1697,15 @@ D3 (JS)<br>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/plot1D-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-55"><img data-src="02_dataVisualization_files/figure-revealjs/plot1D-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/plot1Dcode-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-60"><img data-src="02_dataVisualization_files/figure-revealjs/plot1Dcode-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="描述图雷达图" class="slide level2">
-<h2>描述图：雷达图</h2>
+<section id="描述图雷达图" class="slide level2" data-visibility="uncounted" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> 描述图：雷达图</h2>
 <div class="cell">
 <div class="cell-output-display">
 <table data-quarto-postprocess="true">
@@ -1587,15 +1781,15 @@ D3 (JS)<br>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/plot-radar-code-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-56"><img data-src="02_dataVisualization_files/figure-revealjs/plot-radar-code-1.png" class="quarto-figure quarto-figure-center" width="480"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/radarPlotCode-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-61"><img data-src="02_dataVisualization_files/figure-revealjs/radarPlotCode-1.png" class="quarto-figure quarto-figure-center" width="480"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="描述图趋势图点-线" class="slide level2">
-<h2>描述图：趋势图（点-线）</h2>
+<section id="描述图趋势图点-线" class="slide level2" data-visibility="uncounted" data-number="3.5">
+<h2><span class="header-section-number">3.5</span> 描述图：趋势图（点-线）</h2>
 <div class="cell long_chunk columns column-output-location" data-layout-align="center">
 <div class="column">
 <div class="sourceCode cell-code" id="cb4" data-code-line-numbers="|2|8"><pre class="sourceCode numberSource r long_chunk number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="fu">ggplot</span>(<span class="at">data =</span> mydata, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
@@ -1628,313 +1822,321 @@ D3 (JS)<br>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/plot-2D-code-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-57"><img data-src="02_dataVisualization_files/figure-revealjs/plot-2D-code-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/plot2Dcode-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-62"><img data-src="02_dataVisualization_files/figure-revealjs/plot2Dcode-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="描述图网络图" class="slide level2">
-<h2>描述图：网络图</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb5" data-code-line-numbers="|6,7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(network) <span class="co"># for data</span></span>
-<span id="cb5-2"><a href=""></a><span class="fu">data</span>(emon)</span>
-<span id="cb5-3"><a href=""></a><span class="fu">library</span>(ggnetwork)</span>
-<span id="cb5-4"><a href=""></a></span>
-<span id="cb5-5"><a href=""></a><span class="fu">ggplot</span>(emon[[<span class="dv">1</span>]], <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend)) <span class="sc">+</span></span>
-<span id="cb5-6"><a href=""></a>  <span class="fu">geom_edges</span>(<span class="at">arrow =</span> <span class="fu">arrow</span>(<span class="at">length =</span> <span class="fu">unit</span>(<span class="dv">6</span>, <span class="st">"pt"</span>), <span class="at">type =</span> <span class="st">"closed"</span>)) <span class="sc">+</span></span>
-<span id="cb5-7"><a href=""></a>  <span class="fu">geom_nodes</span>(<span class="at">color =</span> <span class="st">"tomato"</span>, <span class="at">size =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell fragment" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/network-plot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-58"><img data-src="02_dataVisualization_files/figure-revealjs/network-plot-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="桑积图" class="slide level2">
-<h2>桑积图</h2>
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">library</span>(ggalluvial)</span>
-<span id="cb6-2"><a href=""></a></span>
-<span id="cb6-3"><a href=""></a><span class="fu">data</span>(vaccinations)</span>
-<span id="cb6-4"><a href=""></a><span class="fu">levels</span>(vaccinations<span class="sc">$</span>response) <span class="ot">&lt;-</span> <span class="fu">rev</span>(<span class="fu">levels</span>(vaccinations<span class="sc">$</span>response))</span>
-<span id="cb6-5"><a href=""></a></span>
-<span id="cb6-6"><a href=""></a><span class="fu">ggplot</span>(vaccinations,</span>
-<span id="cb6-7"><a href=""></a>       <span class="fu">aes</span>(<span class="at">x =</span> survey, <span class="at">stratum =</span> response, <span class="at">alluvium =</span> subject,</span>
-<span id="cb6-8"><a href=""></a>           <span class="at">y =</span> freq,</span>
-<span id="cb6-9"><a href=""></a>           <span class="at">fill =</span> response, <span class="at">label =</span> response)) <span class="sc">+</span></span>
-<span id="cb6-10"><a href=""></a>  <span class="fu">scale_x_discrete</span>(<span class="at">expand =</span> <span class="fu">c</span>(.<span class="dv">1</span>, .<span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb6-11"><a href=""></a>  <span class="fu">geom_flow</span>() <span class="sc">+</span></span>
-<span id="cb6-12"><a href=""></a>  <span class="fu">geom_stratum</span>(<span class="at">alpha =</span> .<span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb6-13"><a href=""></a>  <span class="fu">geom_text</span>(<span class="at">stat =</span> <span class="st">"stratum"</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb6-14"><a href=""></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb6-15"><a href=""></a>  <span class="fu">ggtitle</span>(<span class="st">"Vaccination survey responses at three points in time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-
-<aside class="notes">
-<p>three RAND American Life Panel (ALP) surveys that asked respondents their probability of vaccinating for influenza.</p>
-<style type="text/css">
-        span.MJX_Assistive_MathML {
-          position:absolute!important;
-          clip: rect(1px, 1px, 1px, 1px);
-          padding: 1px 0 0 0!important;
-          border: 0!important;
-          height: 1px!important;
-          width: 1px!important;
-          overflow: hidden!important;
-          display:block!important;
-      }</style></aside>
-</section>
-<section id="桑积图-output" class="slide level2 output-location-slide"><h2>桑积图</h2><div class="cell output-location-slide" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/sankey-code-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-59"><img data-src="02_dataVisualization_files/figure-revealjs/sankey-code-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
-</figure>
-</div>
-</div>
-</div></section><section id="动画" class="slide level2">
-<h2>动画</h2>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_patrioBase9709.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-60"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_patrioBase9709.gif" class="quarto-figure quarto-figure-center" height="600"></a></p>
-</figure>
-</div>
-</section>
-<section id="结果图回归系数" class="slide level2">
-<h2>结果图：回归系数</h2>
+<section id="结果图回归系数" class="slide level2" data-visibility="uncounted" data-number="3.6">
+<h2><span class="header-section-number">3.6</span> 结果图：回归系数</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table" data-quarto-postprocess="true" style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto; font-size: 16px; margin-left: auto; margin-right: auto;">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;(1)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;&nbsp;(2)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;&nbsp;(3)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">43.540***</td>
-<td style="text-align: center;">37.363***</td>
-<td style="text-align: center;">37.742***</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(4.860)</td>
-<td style="text-align: center;">(5.972)</td>
-<td style="text-align: center;">(6.023)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">wt</td>
-<td style="text-align: center;">−3.793**</td>
-<td style="text-align: center;">−3.714**</td>
-<td style="text-align: center;">−3.310**</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(1.082)</td>
-<td style="text-align: center;">(1.048)</td>
-<td style="text-align: center;">(1.159)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">cyl</td>
-<td style="text-align: center;">−1.784**</td>
-<td style="text-align: center;">−1.119</td>
-<td style="text-align: center;">−1.086</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.614)</td>
-<td style="text-align: center;">(0.714)</td>
-<td style="text-align: center;">(0.719)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">disp</td>
-<td style="text-align: center;">0.007</td>
-<td style="text-align: center;">0.014</td>
-<td style="text-align: center;">0.013</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.012)</td>
-<td style="text-align: center;">(0.012)</td>
-<td style="text-align: center;">(0.012)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">gear</td>
-<td style="text-align: center;">−0.490</td>
-<td style="text-align: center;">0.679</td>
-<td style="text-align: center;">0.120</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.790)</td>
-<td style="text-align: center;">(1.035)</td>
-<td style="text-align: center;">(1.234)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">hp</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">−0.028</td>
-<td style="text-align: center;">−0.029+</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">(0.017)</td>
-<td style="text-align: center;">(0.017)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">am</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">1.465</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;">(1.743)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Num.Obs.</td>
-<td style="text-align: center;">32</td>
-<td style="text-align: center;">32</td>
-<td style="text-align: center;">32</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R2</td>
-<td style="text-align: center;">0.835</td>
-<td style="text-align: center;">0.851</td>
-<td style="text-align: center;">0.855</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R2 Adj.</td>
-<td style="text-align: center;">0.811</td>
-<td style="text-align: center;">0.822</td>
-<td style="text-align: center;">0.820</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">AIC</td>
-<td style="text-align: center;">159.1</td>
-<td style="text-align: center;">157.8</td>
-<td style="text-align: center;">158.9</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">BIC</td>
-<td style="text-align: center;">167.9</td>
-<td style="text-align: center;">168.1</td>
-<td style="text-align: center;">170.6</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Log.Lik.</td>
-<td style="text-align: center;">−73.553</td>
-<td style="text-align: center;">−71.906</td>
-<td style="text-align: center;">−71.460</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">F</td>
-<td style="text-align: center;">34.149</td>
-<td style="text-align: center;">29.723</td>
-<td style="text-align: center;">24.608</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">RMSE</td>
-<td style="text-align: center;">2.41</td>
-<td style="text-align: center;">2.29</td>
-<td style="text-align: center;">2.26</td>
-</tr>
-</tbody><tfoot>
-<tr class="odd">
-<td style="text-align: left; padding: 0;"><sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-</tfoot>
+<!-- preamble start -->
 
-</table>
+    <script>
 
+      function styleCell_4k65mhy7e0qmleerbtow(i, j, css_id) {
+          var table = document.getElementById("tinytable_4k65mhy7e0qmleerbtow");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_4k65mhy7e0qmleerbtow');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_4k65mhy7e0qmleerbtow(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_4k65mhy7e0qmleerbtow");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_yn5ktnc3wai1p57on5ta',}, 
+          { positions: [ { i: 14, j: 1 }, { i: 14, j: 3 }, { i: 14, j: 2 },  ], css_id: 'tinytable_css_uwqky8nrxudgjso129y2',}, 
+          { positions: [ { i: 14, j: 0 },  ], css_id: 'tinytable_css_rf5lmxuij9i2k0irdojo',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_k4lygv7y4yqcwz2r1o89',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 6, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 10, j: 0 }, { i: 11, j: 0 }, { i: 12, j: 0 }, { i: 13, j: 0 }, { i: 18, j: 0 }, { i: 15, j: 0 }, { i: 16, j: 0 }, { i: 17, j: 0 }, { i: 19, j: 0 }, { i: 20, j: 0 }, { i: 21, j: 0 },  ], css_id: 'tinytable_css_hxudxy03jpj3t5z34tc0',}, 
+          { positions: [ { i: 1, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 6, j: 1 }, { i: 11, j: 1 }, { i: 12, j: 1 }, { i: 13, j: 1 }, { i: 4, j: 2 }, { i: 15, j: 1 }, { i: 16, j: 1 }, { i: 17, j: 1 }, { i: 18, j: 1 }, { i: 19, j: 1 }, { i: 7, j: 1 }, { i: 21, j: 1 }, { i: 12, j: 2 }, { i: 10, j: 1 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 17, j: 2 }, { i: 5, j: 2 }, { i: 6, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 9, j: 2 }, { i: 20, j: 1 }, { i: 11, j: 2 }, { i: 2, j: 3 }, { i: 13, j: 2 }, { i: 4, j: 3 }, { i: 15, j: 2 }, { i: 16, j: 2 }, { i: 7, j: 3 }, { i: 18, j: 2 }, { i: 19, j: 2 }, { i: 20, j: 2 }, { i: 21, j: 2 }, { i: 12, j: 3 }, { i: 10, j: 2 }, { i: 1, j: 3 }, { i: 15, j: 3 }, { i: 3, j: 3 }, { i: 17, j: 3 }, { i: 5, j: 3 }, { i: 6, j: 3 }, { i: 20, j: 3 }, { i: 8, j: 3 }, { i: 9, j: 3 }, { i: 10, j: 3 }, { i: 11, j: 3 }, { i: 16, j: 3 }, { i: 13, j: 3 }, { i: 18, j: 3 }, { i: 19, j: 3 }, { i: 21, j: 3 },  ], css_id: 'tinytable_css_f7j3uftyjzptgg5ug8v7',}, 
+          { positions: [ { i: 22, j: 0 },  ], css_id: 'tinytable_css_8wdlf0dcvs6yjs0tkefb',}, 
+          { positions: [ { i: 22, j: 1 }, { i: 22, j: 2 }, { i: 22, j: 3 },  ], css_id: 'tinytable_css_511keuyzyvdq1br2sg6b',}, 
+          ];
 
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_4k65mhy7e0qmleerbtow(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_yn5ktnc3wai1p57on5ta, .table th.tinytable_css_yn5ktnc3wai1p57on5ta { text-align: center; font-size: 0.4em; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_uwqky8nrxudgjso129y2, .table th.tinytable_css_uwqky8nrxudgjso129y2 { text-align: center; border-bottom: solid black 0.05em; font-size: 0.4em; }
+      .table td.tinytable_css_rf5lmxuij9i2k0irdojo, .table th.tinytable_css_rf5lmxuij9i2k0irdojo { text-align: left; border-bottom: solid black 0.05em; font-size: 0.4em; }
+      .table td.tinytable_css_k4lygv7y4yqcwz2r1o89, .table th.tinytable_css_k4lygv7y4yqcwz2r1o89 { text-align: left; font-size: 0.4em; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_hxudxy03jpj3t5z34tc0, .table th.tinytable_css_hxudxy03jpj3t5z34tc0 { text-align: left; font-size: 0.4em; }
+      .table td.tinytable_css_f7j3uftyjzptgg5ug8v7, .table th.tinytable_css_f7j3uftyjzptgg5ug8v7 { text-align: center; font-size: 0.4em; }
+      .table td.tinytable_css_8wdlf0dcvs6yjs0tkefb, .table th.tinytable_css_8wdlf0dcvs6yjs0tkefb { text-align: left; font-size: 0.4em; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_511keuyzyvdq1br2sg6b, .table th.tinytable_css_511keuyzyvdq1br2sg6b { text-align: center; font-size: 0.4em; border-bottom: solid #d3d8dc 0.1em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_4k65mhy7e0qmleerbtow" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+                <th scope="col">(2)</th>
+                <th scope="col">(3)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="4">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>43.540***</td>
+                  <td>37.363***</td>
+                  <td>37.742***</td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(4.860)  </td>
+                  <td>(5.972)  </td>
+                  <td>(6.023)  </td>
+                </tr>
+                <tr>
+                  <td>wt         </td>
+                  <td>-3.793** </td>
+                  <td>-3.714** </td>
+                  <td>-3.310** </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(1.082)  </td>
+                  <td>(1.048)  </td>
+                  <td>(1.159)  </td>
+                </tr>
+                <tr>
+                  <td>cyl        </td>
+                  <td>-1.784** </td>
+                  <td>-1.119   </td>
+                  <td>-1.086   </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.614)  </td>
+                  <td>(0.714)  </td>
+                  <td>(0.719)  </td>
+                </tr>
+                <tr>
+                  <td>disp       </td>
+                  <td>0.007    </td>
+                  <td>0.014    </td>
+                  <td>0.013    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.012)  </td>
+                  <td>(0.012)  </td>
+                  <td>(0.012)  </td>
+                </tr>
+                <tr>
+                  <td>gear       </td>
+                  <td>-0.490   </td>
+                  <td>0.679    </td>
+                  <td>0.120    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.790)  </td>
+                  <td>(1.035)  </td>
+                  <td>(1.234)  </td>
+                </tr>
+                <tr>
+                  <td>hp         </td>
+                  <td>         </td>
+                  <td>-0.028   </td>
+                  <td>-0.029+  </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>         </td>
+                  <td>(0.017)  </td>
+                  <td>(0.017)  </td>
+                </tr>
+                <tr>
+                  <td>am         </td>
+                  <td>         </td>
+                  <td>         </td>
+                  <td>1.465    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>         </td>
+                  <td>         </td>
+                  <td>(1.743)  </td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>32       </td>
+                  <td>32       </td>
+                  <td>32       </td>
+                </tr>
+                <tr>
+                  <td>R2         </td>
+                  <td>0.835    </td>
+                  <td>0.851    </td>
+                  <td>0.855    </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.    </td>
+                  <td>0.811    </td>
+                  <td>0.822    </td>
+                  <td>0.820    </td>
+                </tr>
+                <tr>
+                  <td>AIC        </td>
+                  <td>159.1    </td>
+                  <td>157.8    </td>
+                  <td>158.9    </td>
+                </tr>
+                <tr>
+                  <td>BIC        </td>
+                  <td>167.9    </td>
+                  <td>168.1    </td>
+                  <td>170.6    </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.   </td>
+                  <td>-73.553  </td>
+                  <td>-71.906  </td>
+                  <td>-71.460  </td>
+                </tr>
+                <tr>
+                  <td>F          </td>
+                  <td>34.149   </td>
+                  <td>29.723   </td>
+                  <td>24.608   </td>
+                </tr>
+                <tr>
+                  <td>RMSE       </td>
+                  <td>2.41     </td>
+                  <td>2.29     </td>
+                  <td>2.26     </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 </section>
-<section id="dot-whisker" class="slide level2">
-<h2>Dot-whisker</h2>
+<section id="dot-whisker" class="slide level2" data-visibility="uncounted" data-number="3.7">
+<h2><span class="header-section-number">3.7</span> Dot-whisker</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(dotwhisker)</span>
-<span id="cb7-2"><a href=""></a></span>
-<span id="cb7-3"><a href=""></a><span class="fu">dwplot</span>(<span class="fu">list</span>(m1, m2, m3), <span class="at">show_stats =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a><span class="fu">library</span>(dotwhisker)</span>
+<span id="cb5-2"><a href=""></a></span>
+<span id="cb5-3"><a href=""></a><span class="fu">dwplot</span>(<span class="fu">list</span>(m1, m2, m3), <span class="at">show_stats =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/ols-dw-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-61"><img data-src="02_dataVisualization_files/figure-revealjs/ols-dw-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/olsPlot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-63"><img data-src="02_dataVisualization_files/figure-revealjs/olsPlot-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="more-delicate-version" class="slide level2">
-<h2>More delicate version</h2>
+<section id="more-delicate-version" class="slide level2" data-visibility="uncounted" data-number="3.8">
+<h2><span class="header-section-number">3.8</span> More delicate version</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/dwComplex-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-62"><img data-src="02_dataVisualization_files/figure-revealjs/dwComplex-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/olsDW-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-64"><img data-src="02_dataVisualization_files/figure-revealjs/olsDW-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="small-multiple" class="slide level2">
-<h2>Small-multiple</h2>
+<section id="small-multiple" class="slide level2" data-visibility="uncounted" data-number="3.9">
+<h2><span class="header-section-number">3.9</span> Small-multiple</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/sm-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-63"><img data-src="02_dataVisualization_files/figure-revealjs/sm-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/smallMultiple-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-65"><img data-src="02_dataVisualization_files/figure-revealjs/smallMultiple-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="结果图交互效应interplot" class="slide level2">
-<h2>结果图：交互效应(<code>interplot</code>)</h2>
+<section id="结果图交互效应interplot" class="slide level2" data-visibility="uncounted" data-number="3.10">
+<h2><span class="header-section-number">3.10</span> 结果图：交互效应(<code>interplot</code>)</h2>
 <div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">data</span>(mtcars) </span>
-<span id="cb8-2"><a href=""></a>m_cyl <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">*</span> cyl, <span class="at">data =</span> mtcars)</span>
-<span id="cb8-3"><a href=""></a></span>
-<span id="cb8-4"><a href=""></a><span class="fu">library</span>(interplot)</span>
-<span id="cb8-5"><a href=""></a><span class="fu">interplot</span>(<span class="at">m =</span> m_cyl, <span class="at">var1 =</span> <span class="st">"cyl"</span>, <span class="at">var2 =</span> <span class="st">"wt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a><span class="fu">data</span>(mtcars) </span>
+<span id="cb6-2"><a href=""></a>m_cyl <span class="ot">&lt;-</span> <span class="fu">lm</span>(mpg <span class="sc">~</span> wt <span class="sc">*</span> cyl, <span class="at">data =</span> mtcars)</span>
+<span id="cb6-3"><a href=""></a></span>
+<span id="cb6-4"><a href=""></a><span class="fu">library</span>(interplot)</span>
+<span id="cb6-5"><a href=""></a><span class="fu">interplot</span>(<span class="at">m =</span> m_cyl, <span class="at">var1 =</span> <span class="st">"cyl"</span>, <span class="at">var2 =</span> <span class="st">"wt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/interplot-simple-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-64"><img data-src="02_dataVisualization_files/figure-revealjs/interplot-simple-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/interplot-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-66"><img data-src="02_dataVisualization_files/figure-revealjs/interplot-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
 </figure>
 </div>
 </div>
 </div>
 </section>
-<section id="more-delicate" class="slide level2">
-<h2>More delicate</h2>
-<div class="cell quarto-layout-panel" data-layout-align="center" data-layout-ncol="2">
+<section id="more-delicate" class="slide level2" data-visibility="uncounted" data-number="3.11">
+<h2><span class="header-section-number">3.11</span> More delicate</h2>
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-layout-align="center">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/interplotAdvanced-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-65" data-glightbox="description: .lightbox-desc-65" title="Numeric Conditioner"><img data-src="02_dataVisualization_files/figure-revealjs/interplotAdvanced-1.png" class="quarto-figure quarto-figure-center" width="960" alt="Numeric Conditioner"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/interplotAdvanced-1.png" class="lightbox" data-glightbox="description: .lightbox-desc-67" data-gallery="quarto-lightbox-gallery-67" title="Numeric Conditioner"><img data-src="02_dataVisualization_files/figure-revealjs/interplotAdvanced-1.png" class="quarto-figure quarto-figure-center" width="960" alt="Numeric Conditioner"></a></p>
 <figcaption>Numeric Conditioner</figcaption>
 </figure>
 </div>
@@ -1942,7 +2144,7 @@ D3 (JS)<br>
 <div class="quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;display: flex;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><a href="02_dataVisualization_files/figure-revealjs/interplotAdvanced-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-66" data-glightbox="description: .lightbox-desc-66" title="Categorical Conditioner"><img data-src="02_dataVisualization_files/figure-revealjs/interplotAdvanced-2.png" class="quarto-figure quarto-figure-center" width="960" alt="Categorical Conditioner"></a></p>
+<p><a href="02_dataVisualization_files/figure-revealjs/interplotAdvanced-2.png" class="lightbox" data-glightbox="description: .lightbox-desc-68" data-gallery="quarto-lightbox-gallery-68" title="Categorical Conditioner"><img data-src="02_dataVisualization_files/figure-revealjs/interplotAdvanced-2.png" class="quarto-figure quarto-figure-center" width="960" alt="Categorical Conditioner"></a></p>
 <figcaption>Categorical Conditioner</figcaption>
 </figure>
 </div>
@@ -1950,528 +2152,529 @@ D3 (JS)<br>
 </div>
 </div>
 </section>
-<section id="take-home-points" class="slide level2">
-<h2>Take-Home Points</h2>
-<div class="columns" style="text-align:center">
-<div class="column fragment" style="width:30%;">
-<p><strong>可视化理论</strong></p>
-<ul>
-<li>抉择：精确 vs.&nbsp;眼球</li>
-<li>可视化基本原则
-<ol type="1">
-<li>准确</li>
-<li>极简</li>
-<li>主动</li>
-</ol></li>
-</ul>
-</div><div class="column fragment" style="width:30%;">
-<p><strong>可视化工具</strong></p>
-<ul>
-<li>编码和通道</li>
-<li>通道选择
-<ul>
-<li>有效性</li>
-<li>表现力</li>
-</ul></li>
-<li>色彩</li>
-</ul>
-</div><div class="column fragment" style="width:40%;">
-<p><strong>可视化操作</strong></p>
-<ul>
-<li class="fragment">描述图</li>
-<li class="fragment">结果图</li>
-<li class="fragment">以图代表
-<ul>
-<li class="fragment">贯彻可视化基本原则</li>
-</ul></li>
-</ul>
-</div>
-</div>
-<div class="fragment columns">
-<div class="column" style="width:70%;">
-<blockquote>
-<p><span class="red">我们进一步深化对中国式现代化的内涵和本质的认识，概括形成中国式现代化的中国特色、本质要求和重大原则，初步构建中国式现代化的理论体系，使中国式现代化<strong>更加清晰、更加科学、更加可感可行</strong>。—习近平. 2023. <a href="https://www.gov.cn/xinwen/2023-02/07/content_5740520.htm">“在学习贯彻党的二十大精神研讨班开班式上发表重要讲话”</a></span></p>
-</blockquote>
-</div><div class="column" style="width:30%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><a href="https://drhuyue.site:10002/sammo3182/figure/vis_xijinping.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-67"><img data-src="https://drhuyue.site:10002/sammo3182/figure/vis_xijinping.jpg" class="quarto-figure quarto-figure-center" height="250"></a></p>
-</figure>
-</div>
-</div>
-</div>
-</section></section>
-<section>
-<section id="bonus-做表" class="title-slide slide level1 appendix center" data-visibility="uncounted">
-<h1>Bonus: 做表</h1>
-
-</section>
-<section id="描述性统计" class="slide level2" data-visibility="uncounted">
-<h2>描述性统计</h2>
+<section id="描述性统计" class="slide level2" data-visibility="uncounted" data-number="3.12">
+<h2><span class="header-section-number">3.12</span> 描述性统计</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table" data-quarto-postprocess="true" style="width: auto !important; margin-left: auto; margin-right: auto; font-size: 18px; margin-left: auto; margin-right: auto;">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 11%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Unique (#)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Missing (%)</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Mean</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">SD</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Min</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Median</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">Max</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th"></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">mpg</td>
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">20.1</td>
-<td style="text-align: right;">6.0</td>
-<td style="text-align: right;">10.4</td>
-<td style="text-align: right;">19.2</td>
-<td style="text-align: right;">33.9</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.02" y="7.44" width="9.46" height="4.22" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.48" y="3.22" width="9.46" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="19.93" y="6.03" width="9.46" height="5.63" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="29.39" y="10.25" width="9.46" height="1.41" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.85" y="8.85" width="9.46" height="2.81" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">cyl</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">6.2</td>
-<td style="text-align: right;">1.8</td>
-<td style="text-align: right;">4.0</td>
-<td style="text-align: right;">6.0</td>
-<td style="text-align: right;">8.0</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="5.03" width="5.56" height="6.63" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="7.33" y="11.66" width="5.56" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="12.89" y="11.66" width="5.56" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="18.44" y="7.44" width="5.56" height="4.22" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.00" y="11.66" width="5.56" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="29.56" y="11.66" width="5.56" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.11" y="11.66" width="5.56" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="40.67" y="3.22" width="5.56" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">disp</td>
-<td style="text-align: right;">27</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">230.7</td>
-<td style="text-align: right;">123.9</td>
-<td style="text-align: right;">71.1</td>
-<td style="text-align: right;">196.3</td>
-<td style="text-align: right;">472.0</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="-0.56" y="5.63" width="5.54" height="6.03" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.98" y="3.22" width="5.54" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="10.52" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="16.07" y="10.46" width="5.54" height="1.21" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="21.61" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="27.15" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.70" y="6.84" width="5.54" height="4.83" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="38.24" y="10.46" width="5.54" height="1.21" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="43.78" y="9.25" width="5.54" height="2.41" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">hp</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">146.7</td>
-<td style="text-align: right;">68.6</td>
-<td style="text-align: right;">52.0</td>
-<td style="text-align: right;">123.0</td>
-<td style="text-align: right;">335.0</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.46" y="4.06" width="7.85" height="7.60" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="9.32" y="3.22" width="7.85" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="17.17" y="6.60" width="7.85" height="5.07" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="25.02" y="7.44" width="7.85" height="4.22" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="32.87" y="10.82" width="7.85" height="0.84" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="40.73" y="10.82" width="7.85" height="0.84" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">drat</td>
-<td style="text-align: right;">22</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3.6</td>
-<td style="text-align: right;">0.5</td>
-<td style="text-align: right;">2.8</td>
-<td style="text-align: right;">3.7</td>
-<td style="text-align: right;">4.9</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="-3.55" y="8.85" width="10.24" height="2.81" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="6.69" y="5.33" width="10.24" height="6.33" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="16.93" y="3.22" width="10.24" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="27.17" y="7.44" width="10.24" height="4.22" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="37.42" y="10.96" width="10.24" height="0.70" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">wt</td>
-<td style="text-align: right;">29</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">3.2</td>
-<td style="text-align: right;">1.0</td>
-<td style="text-align: right;">1.5</td>
-<td style="text-align: right;">3.3</td>
-<td style="text-align: right;">5.4</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.63" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="7.31" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="12.99" y="7.91" width="5.68" height="3.75" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="18.68" y="3.22" width="5.68" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="24.36" y="5.09" width="5.68" height="6.57" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.04" y="10.72" width="5.68" height="0.94" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="35.72" y="11.66" width="5.68" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.40" y="8.85" width="5.68" height="2.81" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">qsec</td>
-<td style="text-align: right;">30</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">17.8</td>
-<td style="text-align: right;">1.8</td>
-<td style="text-align: right;">14.5</td>
-<td style="text-align: right;">17.7</td>
-<td style="text-align: right;">22.9</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="-0.87" y="9.97" width="5.29" height="1.69" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="4.42" y="9.13" width="5.29" height="2.53" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="9.71" y="8.28" width="5.29" height="3.38" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="15.01" y="3.22" width="5.29" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="20.30" y="6.60" width="5.29" height="5.07" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="25.59" y="8.28" width="5.29" height="3.38" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="30.88" y="9.97" width="5.29" height="1.69" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="36.17" y="11.66" width="5.29" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="41.46" y="10.82" width="5.29" height="0.84" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">carb</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">2.8</td>
-<td style="text-align: right;">1.6</td>
-<td style="text-align: right;">1.0</td>
-<td style="text-align: right;">2.0</td>
-<td style="text-align: right;">8.0</td>
-<td style="text-align: right;"><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" class="svglite" width="48.00pt" height="12.00pt" viewbox="0 0 48.00 12.00">
-<defs>
-<style type="text/css">
-    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
-      fill: none;
-      stroke: #000000;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-miterlimit: 10.00;
-    }
-    .svglite text {
-      white-space: pre;
-    }
-  </style>
-</defs><rect width="100%" height="100%" style="stroke: none; fill: none;"></rect><defs><clippath id="cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw"><rect x="0.00" y="0.00" width="48.00" height="12.00"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwwLjAwfDEyLjAw)"> </g><defs><clippath id="cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw"><rect x="0.00" y="2.88" width="48.00" height="9.12"></rect></clippath></defs><g clip-path="url(#cpMC4wMHw0OC4wMHwyLjg4fDEyLjAw)"><rect x="1.78" y="3.22" width="6.35" height="8.44" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="8.13" y="10.17" width="6.35" height="1.49" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="14.48" y="6.69" width="6.35" height="4.97" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="20.83" y="11.66" width="6.35" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="27.17" y="11.17" width="6.35" height="0.50" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="33.52" y="11.66" width="6.35" height="0.00" style="stroke-width: 0.38; fill: #000000;"></rect><rect x="39.87" y="11.17" width="6.35" height="0.50" style="stroke-width: 0.38; fill: #000000;"></rect></g>
-</svg></td>
-</tr>
-</tbody>
-</table>
+<!-- preamble start -->
 
+    <script>
 
-</div>
-<div class="cell-output-display">
-<table class="table" data-quarto-postprocess="true" style="width: auto !important; margin-left: auto; margin-right: auto; font-size: 18px; margin-left: auto; margin-right: auto;">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">N</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">%</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">vs</td>
-<td style="text-align: left;">FALSE</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">56.2</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">TRUE</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">43.8</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">am</td>
-<td style="text-align: left;">FALSE</td>
-<td style="text-align: right;">19</td>
-<td style="text-align: right;">59.4</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">TRUE</td>
-<td style="text-align: right;">13</td>
-<td style="text-align: right;">40.6</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">gear</td>
-<td style="text-align: left;">3</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">46.9</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">4</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">37.5</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"></td>
-<td style="text-align: left;">5</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">15.6</td>
-</tr>
-</tbody>
-</table>
+      function styleCell_pucmfj9a17cnndazo9de(i, j, css_id) {
+          var table = document.getElementById("tinytable_pucmfj9a17cnndazo9de");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_pucmfj9a17cnndazo9de');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_pucmfj9a17cnndazo9de(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_pucmfj9a17cnndazo9de");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 16, j: 1 }, { i: 16, j: 6 }, { i: 16, j: 5 }, { i: 16, j: 2 }, { i: 16, j: 7 }, { i: 16, j: 0 }, { i: 16, j: 4 }, { i: 16, j: 3 }, { i: 16, j: 8 },  ], css_id: 'tinytable_css_wens9gm1yt9p18e9davl',}, 
+          { positions: [ { i: 9, j: 7 }, { i: 9, j: 4 }, { i: 9, j: 2 }, { i: 9, j: 5 }, { i: 9, j: 6 }, { i: 9, j: 3 }, { i: 9, j: 8 }, { i: 9, j: 0 }, { i: 9, j: 1 },  ], css_id: 'tinytable_css_n3wjgeac4p3zz32hgvav',}, 
+          { positions: [ { i: 6, j: 0 }, { i: 10, j: 0 }, { i: 7, j: 0 }, { i: 12, j: 0 }, { i: 1, j: 0 }, { i: 14, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 1, j: 1 }, { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 8, j: 0 }, { i: 15, j: 2 }, { i: 6, j: 1 }, { i: 7, j: 1 }, { i: 8, j: 1 }, { i: 13, j: 0 }, { i: 10, j: 1 }, { i: 15, j: 0 }, { i: 12, j: 1 }, { i: 13, j: 1 }, { i: 14, j: 1 }, { i: 15, j: 1 }, { i: 5, j: 4 }, { i: 4, j: 1 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 4, j: 2 }, { i: 15, j: 3 }, { i: 6, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 15, j: 4 }, { i: 10, j: 2 }, { i: 5, j: 0 }, { i: 12, j: 2 }, { i: 13, j: 2 }, { i: 14, j: 2 }, { i: 4, j: 5 }, { i: 5, j: 5 }, { i: 11, j: 0 }, { i: 1, j: 3 }, { i: 2, j: 3 }, { i: 3, j: 3 }, { i: 4, j: 3 }, { i: 5, j: 3 }, { i: 6, j: 3 }, { i: 7, j: 3 }, { i: 8, j: 3 }, { i: 15, j: 5 }, { i: 10, j: 3 }, { i: 5, j: 1 }, { i: 12, j: 3 }, { i: 13, j: 3 }, { i: 14, j: 3 }, { i: 4, j: 6 }, { i: 5, j: 6 }, { i: 11, j: 1 }, { i: 1, j: 4 }, { i: 2, j: 4 }, { i: 3, j: 4 }, { i: 4, j: 4 }, { i: 11, j: 6 }, { i: 6, j: 4 }, { i: 7, j: 4 }, { i: 8, j: 4 }, { i: 15, j: 6 }, { i: 10, j: 4 }, { i: 5, j: 2 }, { i: 12, j: 4 }, { i: 13, j: 4 }, { i: 14, j: 4 }, { i: 4, j: 7 }, { i: 5, j: 7 }, { i: 11, j: 2 }, { i: 1, j: 5 }, { i: 2, j: 5 }, { i: 3, j: 5 }, { i: 10, j: 7 }, { i: 11, j: 7 }, { i: 6, j: 5 }, { i: 7, j: 5 }, { i: 8, j: 5 }, { i: 15, j: 7 }, { i: 10, j: 5 }, { i: 11, j: 5 }, { i: 12, j: 5 }, { i: 13, j: 5 }, { i: 14, j: 5 }, { i: 4, j: 8 }, { i: 5, j: 8 }, { i: 11, j: 3 }, { i: 1, j: 6 }, { i: 2, j: 6 }, { i: 3, j: 6 }, { i: 10, j: 8 }, { i: 11, j: 8 }, { i: 6, j: 6 }, { i: 7, j: 6 }, { i: 8, j: 6 }, { i: 15, j: 8 }, { i: 10, j: 6 }, { i: 7, j: 7 }, { i: 12, j: 6 }, { i: 13, j: 6 }, { i: 14, j: 6 }, { i: 7, j: 8 }, { i: 12, j: 7 }, { i: 11, j: 4 }, { i: 1, j: 7 }, { i: 2, j: 7 }, { i: 3, j: 7 }, { i: 13, j: 8 }, { i: 1, j: 8 }, { i: 6, j: 7 }, { i: 3, j: 8 }, { i: 8, j: 7 }, { i: 13, j: 7 }, { i: 6, j: 8 }, { i: 2, j: 8 }, { i: 8, j: 8 }, { i: 14, j: 7 }, { i: 12, j: 8 }, { i: 14, j: 8 },  ], css_id: 'tinytable_css_fjnkxdwgtydmdxy1cvcm',}, 
+          { positions: [ { i: 0, j: 0 }, { i: 0, j: 5 }, { i: 0, j: 4 }, { i: 0, j: 8 }, { i: 0, j: 1 }, { i: 0, j: 6 }, { i: 0, j: 3 }, { i: 0, j: 2 }, { i: 0, j: 7 },  ], css_id: 'tinytable_css_73k9q03fwvbike5pcj6x',}, 
+          ];
 
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_pucmfj9a17cnndazo9de(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
 
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_wens9gm1yt9p18e9davl, .table th.tinytable_css_wens9gm1yt9p18e9davl { font-size: 0.4em; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_n3wjgeac4p3zz32hgvav, .table th.tinytable_css_n3wjgeac4p3zz32hgvav { border-top: solid black 0.1em; font-size: 0.4em; }
+      .table td.tinytable_css_fjnkxdwgtydmdxy1cvcm, .table th.tinytable_css_fjnkxdwgtydmdxy1cvcm { font-size: 0.4em; }
+      .table td.tinytable_css_73k9q03fwvbike5pcj6x, .table th.tinytable_css_73k9q03fwvbike5pcj6x { font-size: 0.4em; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_pucmfj9a17cnndazo9de" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">Unique</th>
+                <th scope="col">Missing Pct.</th>
+                <th scope="col">Mean</th>
+                <th scope="col">SD</th>
+                <th scope="col">Min</th>
+                <th scope="col">Median</th>
+                <th scope="col">Max</th>
+                <th scope="col">Histogram</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>mpg</td>
+                  <td>25</td>
+                  <td>0</td>
+                  <td>20.1</td>
+                  <td>6.0</td>
+                  <td>10.4</td>
+                  <td>19.2</td>
+                  <td>33.9</td>
+                  <td><img src="./tinytable_assets/idnplbzcw1nfxxyvl4g38p.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>cyl</td>
+                  <td>3</td>
+                  <td>0</td>
+                  <td>6.2</td>
+                  <td>1.8</td>
+                  <td>4.0</td>
+                  <td>6.0</td>
+                  <td>8.0</td>
+                  <td><img src="./tinytable_assets/iddmvl0l3y8xodvaoz1b8q.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>disp</td>
+                  <td>27</td>
+                  <td>0</td>
+                  <td>230.7</td>
+                  <td>123.9</td>
+                  <td>71.1</td>
+                  <td>196.3</td>
+                  <td>472.0</td>
+                  <td><img src="./tinytable_assets/id7ixlrjacxv39q1eujtti.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>hp</td>
+                  <td>22</td>
+                  <td>0</td>
+                  <td>146.7</td>
+                  <td>68.6</td>
+                  <td>52.0</td>
+                  <td>123.0</td>
+                  <td>335.0</td>
+                  <td><img src="./tinytable_assets/idvn4nntaw2uhtp0h1vct9.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>drat</td>
+                  <td>22</td>
+                  <td>0</td>
+                  <td>3.6</td>
+                  <td>0.5</td>
+                  <td>2.8</td>
+                  <td>3.7</td>
+                  <td>4.9</td>
+                  <td><img src="./tinytable_assets/id5apt87ghd5kdpic4pk8q.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>wt</td>
+                  <td>29</td>
+                  <td>0</td>
+                  <td>3.2</td>
+                  <td>1.0</td>
+                  <td>1.5</td>
+                  <td>3.3</td>
+                  <td>5.4</td>
+                  <td><img src="./tinytable_assets/idpetfdknuashq3sn1zk6g.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>qsec</td>
+                  <td>30</td>
+                  <td>0</td>
+                  <td>17.8</td>
+                  <td>1.8</td>
+                  <td>14.5</td>
+                  <td>17.7</td>
+                  <td>22.9</td>
+                  <td><img src="./tinytable_assets/id8yr2g0hn7l75zlcb5akl.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td>carb</td>
+                  <td>6</td>
+                  <td>0</td>
+                  <td>2.8</td>
+                  <td>1.6</td>
+                  <td>1.0</td>
+                  <td>2.0</td>
+                  <td>8.0</td>
+                  <td><img src="./tinytable_assets/idwf0e2681q3b0yl1m9bzb.png" style="height: 1em;"></td>
+                </tr>
+                <tr>
+                  <td> </td>
+                  <td>  </td>
+                  <td>N</td>
+                  <td>%</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>vs</td>
+                  <td>FALSE</td>
+                  <td>18</td>
+                  <td>56.2</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>TRUE</td>
+                  <td>14</td>
+                  <td>43.8</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>am</td>
+                  <td>FALSE</td>
+                  <td>19</td>
+                  <td>59.4</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>TRUE</td>
+                  <td>13</td>
+                  <td>40.6</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>gear</td>
+                  <td>3</td>
+                  <td>15</td>
+                  <td>46.9</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>4</td>
+                  <td>12</td>
+                  <td>37.5</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>5</td>
+                  <td>5</td>
+                  <td>15.6</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 </section>
-<section id="回归表格" class="slide level2" data-visibility="uncounted">
-<h2>回归表格</h2>
+<section id="回归表格" class="slide level2" data-visibility="uncounted" data-number="3.13">
+<h2><span class="header-section-number">3.13</span> 回归表格</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">library</span>(modelsummary)</span>
-<span id="cb9-2"><a href=""></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(m1, m2, m3), <span class="at">stars =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href=""></a>  kableExtra<span class="sc">::</span><span class="fu">kable_styling</span>(<span class="at">font_size =</span> <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb7-2"><a href=""></a><span class="fu">modelsummary</span>(<span class="fu">list</span>(m1, m2, m3), <span class="at">stars =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href=""></a>  <span class="fu">style_tt</span>(<span class="at">fontsize =</span> <span class="fl">0.4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
 <div class="cell-output-display">
-<table class="table" data-quarto-postprocess="true" style="NAborder-bottom: 0; width: auto !important; margin-left: auto; margin-right: auto; font-size: 13px; margin-left: auto; margin-right: auto;">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;(1)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;&nbsp;(2)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">&nbsp;&nbsp;(3)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: center;">43.540***</td>
-<td style="text-align: center;">37.363***</td>
-<td style="text-align: center;">37.742***</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(4.860)</td>
-<td style="text-align: center;">(5.972)</td>
-<td style="text-align: center;">(6.023)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">wt</td>
-<td style="text-align: center;">−3.793**</td>
-<td style="text-align: center;">−3.714**</td>
-<td style="text-align: center;">−3.310**</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(1.082)</td>
-<td style="text-align: center;">(1.048)</td>
-<td style="text-align: center;">(1.159)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">cyl</td>
-<td style="text-align: center;">−1.784**</td>
-<td style="text-align: center;">−1.119</td>
-<td style="text-align: center;">−1.086</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.614)</td>
-<td style="text-align: center;">(0.714)</td>
-<td style="text-align: center;">(0.719)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">disp</td>
-<td style="text-align: center;">0.007</td>
-<td style="text-align: center;">0.014</td>
-<td style="text-align: center;">0.013</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.012)</td>
-<td style="text-align: center;">(0.012)</td>
-<td style="text-align: center;">(0.012)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">gear</td>
-<td style="text-align: center;">−0.490</td>
-<td style="text-align: center;">0.679</td>
-<td style="text-align: center;">0.120</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;">(0.790)</td>
-<td style="text-align: center;">(1.035)</td>
-<td style="text-align: center;">(1.234)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">hp</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">−0.028</td>
-<td style="text-align: center;">−0.029+</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">(0.017)</td>
-<td style="text-align: center;">(0.017)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">am</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;">1.465</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;"></td>
-<td style="text-align: center; box-shadow: 0px 1.5px;">(1.743)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Num.Obs.</td>
-<td style="text-align: center;">32</td>
-<td style="text-align: center;">32</td>
-<td style="text-align: center;">32</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">R2</td>
-<td style="text-align: center;">0.835</td>
-<td style="text-align: center;">0.851</td>
-<td style="text-align: center;">0.855</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">R2 Adj.</td>
-<td style="text-align: center;">0.811</td>
-<td style="text-align: center;">0.822</td>
-<td style="text-align: center;">0.820</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">AIC</td>
-<td style="text-align: center;">159.1</td>
-<td style="text-align: center;">157.8</td>
-<td style="text-align: center;">158.9</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">BIC</td>
-<td style="text-align: center;">167.9</td>
-<td style="text-align: center;">168.1</td>
-<td style="text-align: center;">170.6</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Log.Lik.</td>
-<td style="text-align: center;">−73.553</td>
-<td style="text-align: center;">−71.906</td>
-<td style="text-align: center;">−71.460</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">F</td>
-<td style="text-align: center;">34.149</td>
-<td style="text-align: center;">29.723</td>
-<td style="text-align: center;">24.608</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">RMSE</td>
-<td style="text-align: center;">2.41</td>
-<td style="text-align: center;">2.29</td>
-<td style="text-align: center;">2.26</td>
-</tr>
-</tbody><tfoot>
-<tr class="odd">
-<td style="text-align: left; padding: 0;"><sup></sup> + p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-</tfoot>
+<!-- preamble start -->
 
-</table>
+    <script>
 
+      function styleCell_47divi49zoqorctbpnly(i, j, css_id) {
+          var table = document.getElementById("tinytable_47divi49zoqorctbpnly");
+          var cell = table.rows[i]?.cells[j];  // Safe navigation to avoid errors
+          if (cell) {
+              console.log(`Styling cell at (${i}, ${j}) with class ${css_id}`);
+              cell.classList.add(css_id);
+          } else {
+              console.warn(`Cell at (${i}, ${j}) not found.`);
+          }
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_47divi49zoqorctbpnly');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_47divi49zoqorctbpnly(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_47divi49zoqorctbpnly");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: 22, j: 1 }, { i: 22, j: 2 }, { i: 22, j: 3 },  ], css_id: 'tinytable_css_y2j4w9t7g9r2y97z216v',}, 
+          { positions: [ { i: 0, j: 0 },  ], css_id: 'tinytable_css_p2zac3zw7gb0ac9viop5',}, 
+          { positions: [ { i: 1, j: 1 }, { i: 4, j: 1 }, { i: 5, j: 1 }, { i: 2, j: 1 }, { i: 3, j: 1 }, { i: 8, j: 1 }, { i: 9, j: 1 }, { i: 6, j: 1 }, { i: 11, j: 1 }, { i: 12, j: 1 }, { i: 13, j: 1 }, { i: 4, j: 2 }, { i: 15, j: 1 }, { i: 16, j: 1 }, { i: 17, j: 1 }, { i: 18, j: 1 }, { i: 19, j: 1 }, { i: 7, j: 1 }, { i: 21, j: 1 }, { i: 12, j: 2 }, { i: 10, j: 1 }, { i: 1, j: 2 }, { i: 2, j: 2 }, { i: 3, j: 2 }, { i: 17, j: 2 }, { i: 5, j: 2 }, { i: 6, j: 2 }, { i: 7, j: 2 }, { i: 8, j: 2 }, { i: 9, j: 2 }, { i: 20, j: 1 }, { i: 11, j: 2 }, { i: 2, j: 3 }, { i: 13, j: 2 }, { i: 4, j: 3 }, { i: 15, j: 2 }, { i: 16, j: 2 }, { i: 7, j: 3 }, { i: 18, j: 2 }, { i: 19, j: 2 }, { i: 20, j: 2 }, { i: 21, j: 2 }, { i: 12, j: 3 }, { i: 10, j: 2 }, { i: 1, j: 3 }, { i: 15, j: 3 }, { i: 3, j: 3 }, { i: 17, j: 3 }, { i: 5, j: 3 }, { i: 6, j: 3 }, { i: 20, j: 3 }, { i: 8, j: 3 }, { i: 9, j: 3 }, { i: 10, j: 3 }, { i: 11, j: 3 }, { i: 16, j: 3 }, { i: 13, j: 3 }, { i: 18, j: 3 }, { i: 19, j: 3 }, { i: 21, j: 3 },  ], css_id: 'tinytable_css_lxuj9yg4ik1k7zpm4fqp',}, 
+          { positions: [ { i: 22, j: 0 },  ], css_id: 'tinytable_css_jay8le2ftogst5mdw5te',}, 
+          { positions: [ { i: 14, j: 0 },  ], css_id: 'tinytable_css_j783c3c16gbqztlplm67',}, 
+          { positions: [ { i: 0, j: 1 }, { i: 0, j: 2 }, { i: 0, j: 3 },  ], css_id: 'tinytable_css_gp5ls2ii1be3xnscatmt',}, 
+          { positions: [ { i: 14, j: 1 }, { i: 14, j: 3 }, { i: 14, j: 2 },  ], css_id: 'tinytable_css_czftkd23k9scpteeueth',}, 
+          { positions: [ { i: 1, j: 0 }, { i: 2, j: 0 }, { i: 3, j: 0 }, { i: 4, j: 0 }, { i: 5, j: 0 }, { i: 6, j: 0 }, { i: 7, j: 0 }, { i: 8, j: 0 }, { i: 9, j: 0 }, { i: 10, j: 0 }, { i: 11, j: 0 }, { i: 12, j: 0 }, { i: 13, j: 0 }, { i: 18, j: 0 }, { i: 15, j: 0 }, { i: 16, j: 0 }, { i: 17, j: 0 }, { i: 19, j: 0 }, { i: 20, j: 0 }, { i: 21, j: 0 },  ], css_id: 'tinytable_css_1imm5dmxu5slmq3bff36',}, 
+          ];
 
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  styleCell_47divi49zoqorctbpnly(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <style>
+      /* tinytable css entries after */
+      .table td.tinytable_css_y2j4w9t7g9r2y97z216v, .table th.tinytable_css_y2j4w9t7g9r2y97z216v { text-align: center; font-size: 0.4em; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_p2zac3zw7gb0ac9viop5, .table th.tinytable_css_p2zac3zw7gb0ac9viop5 { text-align: left; font-size: 0.4em; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_lxuj9yg4ik1k7zpm4fqp, .table th.tinytable_css_lxuj9yg4ik1k7zpm4fqp { text-align: center; font-size: 0.4em; }
+      .table td.tinytable_css_jay8le2ftogst5mdw5te, .table th.tinytable_css_jay8le2ftogst5mdw5te { text-align: left; font-size: 0.4em; border-bottom: solid #d3d8dc 0.1em; }
+      .table td.tinytable_css_j783c3c16gbqztlplm67, .table th.tinytable_css_j783c3c16gbqztlplm67 { text-align: left; border-bottom: solid black 0.05em; font-size: 0.4em; }
+      .table td.tinytable_css_gp5ls2ii1be3xnscatmt, .table th.tinytable_css_gp5ls2ii1be3xnscatmt { text-align: center; font-size: 0.4em; border-top: solid #d3d8dc 0.1em; border-bottom: solid #d3d8dc 0.05em; }
+      .table td.tinytable_css_czftkd23k9scpteeueth, .table th.tinytable_css_czftkd23k9scpteeueth { text-align: center; border-bottom: solid black 0.05em; font-size: 0.4em; }
+      .table td.tinytable_css_1imm5dmxu5slmq3bff36, .table th.tinytable_css_1imm5dmxu5slmq3bff36 { text-align: left; font-size: 0.4em; }
+    </style>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_47divi49zoqorctbpnly" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        <thead>
+        
+              <tr>
+                <th scope="col"> </th>
+                <th scope="col">(1)</th>
+                <th scope="col">(2)</th>
+                <th scope="col">(3)</th>
+              </tr>
+        </thead>
+        <tfoot><tr><td colspan="4">+ p &lt; 0.1, * p &lt; 0.05, ** p &lt; 0.01, *** p &lt; 0.001</td></tr></tfoot>
+        <tbody>
+                <tr>
+                  <td>(Intercept)</td>
+                  <td>43.540***</td>
+                  <td>37.363***</td>
+                  <td>37.742***</td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(4.860)  </td>
+                  <td>(5.972)  </td>
+                  <td>(6.023)  </td>
+                </tr>
+                <tr>
+                  <td>wt         </td>
+                  <td>-3.793** </td>
+                  <td>-3.714** </td>
+                  <td>-3.310** </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(1.082)  </td>
+                  <td>(1.048)  </td>
+                  <td>(1.159)  </td>
+                </tr>
+                <tr>
+                  <td>cyl        </td>
+                  <td>-1.784** </td>
+                  <td>-1.119   </td>
+                  <td>-1.086   </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.614)  </td>
+                  <td>(0.714)  </td>
+                  <td>(0.719)  </td>
+                </tr>
+                <tr>
+                  <td>disp       </td>
+                  <td>0.007    </td>
+                  <td>0.014    </td>
+                  <td>0.013    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.012)  </td>
+                  <td>(0.012)  </td>
+                  <td>(0.012)  </td>
+                </tr>
+                <tr>
+                  <td>gear       </td>
+                  <td>-0.490   </td>
+                  <td>0.679    </td>
+                  <td>0.120    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>(0.790)  </td>
+                  <td>(1.035)  </td>
+                  <td>(1.234)  </td>
+                </tr>
+                <tr>
+                  <td>hp         </td>
+                  <td>         </td>
+                  <td>-0.028   </td>
+                  <td>-0.029+  </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>         </td>
+                  <td>(0.017)  </td>
+                  <td>(0.017)  </td>
+                </tr>
+                <tr>
+                  <td>am         </td>
+                  <td>         </td>
+                  <td>         </td>
+                  <td>1.465    </td>
+                </tr>
+                <tr>
+                  <td>           </td>
+                  <td>         </td>
+                  <td>         </td>
+                  <td>(1.743)  </td>
+                </tr>
+                <tr>
+                  <td>Num.Obs.   </td>
+                  <td>32       </td>
+                  <td>32       </td>
+                  <td>32       </td>
+                </tr>
+                <tr>
+                  <td>R2         </td>
+                  <td>0.835    </td>
+                  <td>0.851    </td>
+                  <td>0.855    </td>
+                </tr>
+                <tr>
+                  <td>R2 Adj.    </td>
+                  <td>0.811    </td>
+                  <td>0.822    </td>
+                  <td>0.820    </td>
+                </tr>
+                <tr>
+                  <td>AIC        </td>
+                  <td>159.1    </td>
+                  <td>157.8    </td>
+                  <td>158.9    </td>
+                </tr>
+                <tr>
+                  <td>BIC        </td>
+                  <td>167.9    </td>
+                  <td>168.1    </td>
+                  <td>170.6    </td>
+                </tr>
+                <tr>
+                  <td>Log.Lik.   </td>
+                  <td>-73.553  </td>
+                  <td>-71.906  </td>
+                  <td>-71.460  </td>
+                </tr>
+                <tr>
+                  <td>F          </td>
+                  <td>34.149   </td>
+                  <td>29.723   </td>
+                  <td>24.608   </td>
+                </tr>
+                <tr>
+                  <td>RMSE       </td>
+                  <td>2.41     </td>
+                  <td>2.29     </td>
+                  <td>2.26     </td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
 </div>
 </div>
 
@@ -2480,7 +2683,6 @@ D3 (JS)<br>
 
 </div>
 </div></section>
-
     </div>
   </div>
 
@@ -2904,7 +3106,7 @@ D3 (JS)<br>
     });
     </script>
     <script>videojs(video_shortcode_videojs_video1);</script>
-    <script>var lightboxQuarto = GLightbox({"descPosition":"bottom","closeEffect":"fade","selector":".lightbox","loop":false,"openEffect":"fade"});
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","selector":".lightbox","descPosition":"bottom","openEffect":"fade","loop":false});
     window.onload = () => {
       lightboxQuarto.on('slide_before_load', (data) => {
         const { slideIndex, slideNode, slideConfig, player, trigger } = data;
