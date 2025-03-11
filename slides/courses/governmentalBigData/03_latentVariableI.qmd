@@ -1,18 +1,18 @@
 ---
-title: "潜变量分析（基础篇）"
+title: "潜变量分析（基础）"
 subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
-institute: "清华大学" 
-knitr: 
-    opts_chunk: 
-      echo: false
+institute: "清华大学社会科学学院" 
+bibliography: t_politicalData.bib
+
 format: 
   revealjs:
-    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
+    number-sections: true
     slide-number: true
     filters: [appExclusion.lua] # not count appendices into page number
-    incremental: true
+    incremental: false
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
@@ -34,8 +34,13 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+  echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 ---
 
 ```{r setup}
@@ -43,14 +48,20 @@ editor_options:
 
 library(pacman)
 
-p_load(psych,
-       lavaan,
-       semPlot,
-       qgraph,
-       haven,
-       here,
-       corrplot,
-       tidyverse)
+p_load(
+  psych,
+  lavaan,
+  drhutools,
+  semPlot,
+  qgraph,
+  haven,
+  here,
+  corrplot,
+  FactoMineR, 
+  vcd, 
+  factoextra,
+  tidyverse
+)
 
 # Functions preload
 set.seed(313)
@@ -60,13 +71,13 @@ theme_set(
 )
 
 theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
   axis.text = element_text(size = 18)
 )
 ```
 
-## 概要
+## 提要 {.unnumbered}
 
 :::: {.columns}
 
@@ -76,7 +87,7 @@ theme_update(
     - 什么是潜变量
     - 怎么分析
 1. 探索性因子分析
-1. 验证性因子分析（与结构方程模型）
+1. 验证性因子分析（与结构方程模型）*
 
 :::
 
@@ -85,7 +96,8 @@ theme_update(
 
 * R
     + [`psych`](https://personality-project.org/r/psych/vignettes/intro.pdf)
-    + [`laavan`](https://lavaan.ugent.be/)
+    + [`FactoMineR`](http://factominer.free.fr/book/)
+    + [`laavan`](https://lavaan.ugent.be/)*
 :::
 
 ::::
@@ -115,16 +127,21 @@ theme_update(
 ![战狼II](https://drhuyue.site:10002/sammo3182/figure/lv_patriotism.webp){.fragment fig-align="center" height=600}
 :::
 
+:::{.notes}
+同样行为背后的动机不同
+
+- Liberty leading the people: the July Revolution of 1830 that toppled King Charles X，最终以查理十世退位导致波旁王朝灭亡、奥尔良公爵路易-菲利普继承王位告终，法国亦开始了奥尔良王朝的统治，但奥尔良王朝也不长命，亡于1848年的法国二月革命。
+:::
 
 ---
 
-> Latent variable analysis is the [cornerstone]{.red} of successful scientific inquiry.^[Delli Carpini, M. X., and S. Keeter. 1993. “Measuring Political Knowledge: Putting First Things First.” *American Journal of Political Science* 37 (4): 1179–1206.]
+> Vaild [latent variable] measurement is the [cornerstone]{.red} of successful scientific inquiry [@CarpiniKeeter1993, p. 1203].
 
 
 :::: {.columns}
 
 ::: {.column width="30%"}
-涵盖所有社会科学学科
+涵盖所有社科学科
 
 * 抽象
 * 复杂
@@ -134,12 +151,19 @@ theme_update(
 :::
 
 ::: {.column .fragment width="30%"}
-学科性挑战
+操作性挑战
 
 1. 不可见(Unobservable)
 1. 多维度(Multidimensional)
 1. 有效果(Consequential)
 
+:::
+
+::: {.column width="40%"}
+![[@Stimson1991]](https://drhuyue.site:10002/sammo3182/figure/lv_jamesStimson.jpg){.fragment fig-align="center" height=400}
+:::
+
+::::
 
 :::{.notes}
 兜里有多少钱，不可见，但维度单一，不宜用潜变量分析，更好的办法是翻兜
@@ -147,37 +171,14 @@ theme_update(
 The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
 :::
 
-:::
-
-::: {.column width="40%"}
-![](https://drhuyue.site:10002/sammo3182/figure/lv_jamesStimson.jpg){.fragment fig-align="center" height=400}
-
-:::{.notes}
-Jaes Stimson (1991), University of North Carolina at Chapel Hill
-:::
-:::
-
-::::
-
-
-
 ## 分析逻辑
 
-:::{style="text-align:center; margin-top: 2em"}
-结果 [&larr;]{.red} 共因
+:::{style="text-align:center"}
+共因 [&rarr;]{.red .large} 结果
 :::
 
 :::{.fragment}
 🌰 个体的社会资本（social capital）
-:::
-
-
-:::{.notes}
-Three dimensions of social capital:
-
-1. Trust
-1. Norms
-1. Networks
 :::
 
 :::{.fragment .nonincremental style="text-align:center; margin-top: 2em"}
@@ -188,12 +189,28 @@ Three dimensions of social capital:
 1. 您的朋友是否和您的想法经常一致？
 :::
 
+:::{.notes}
+结果可见，共因不可见，以果推因
+
+Three dimensions of social capital:
+
+1. Trust
+1. Norms
+1. Networks
+:::
 
 ## 测量社会资本
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+指标问题（1~10）：
+
+1. 您是否信任身边人？
+1. 您在政府机关有没有亲戚？
+1. 您的朋友是否和您的想法经常一致？
+
+
 累加综合法(additive scales)
 
 $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
@@ -202,8 +219,8 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 ::: {.column .fragment width="50%"}
 *潜在问题*
 
-1. 平等权重(equal weight)
-1. 数据敏感(extreme value sensitivity)
+1. 相同权重(equal weight)
+1. 结果不稳(extreme value sensitivity)
 1. 忽略极化(polarity ignoring)
 :::
 
@@ -226,11 +243,11 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 1. 结构方程模型(SEM)
 :::
 
-::: {.column width="50%"}
+::: {.column .fragment .semi-fade-out width="50%"}
 **离散回应模型**
 
-1. 项目反应理论(IRT)
-1. 项目反应聚合估计
+- 项目反应理论(IRT)
+    - 项目反应聚合估计
 :::
 
 ::::
@@ -242,15 +259,15 @@ $$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
 ## 基本原理
 
 :::{style="text-align:center"}
-结果 [&larr;]{.red} 共因
+共因 [&rarr;]{.red .large} 结果
 
-&uArr;
+&dArr;
 
-可见指标(indicators) [&larr;]{.red} 潜在变量
+潜在变量 [&rarr;]{.red .large} 可见指标(indicators)
 :::
 
 :::{.fragment style="text-align:center"}
-&uArr;
+&dArr;
 
 ![Minimum factors for the variances](https://drhuyue.site:10002/sammo3182/figure/lv_jiangwei.jpg){fig-align="center" height=300}
 :::
@@ -270,13 +287,12 @@ determine the minimum number of hypothetical factors or components that account 
 :::
 
 ::: {.column width="40%"}
-- **目标**
-  - I wanna fewer dimensons
-- **挑战**: 
+- **目标**: Fewer dimensons
+- **决策**: 
     - 降到几维
       - 一维是是不是最优选择
     - 如何降维
-      - 如何克服“累加综合法”缺陷
+      - 克服“累加法”缺陷
     
 ::: {.fragment .r-fit-text}
 *Exploratory* FA
@@ -289,7 +305,7 @@ determine the minimum number of hypothetical factors or components that account 
 ## 探索式因子分析
 
 :::{.callout-important}
-## 根本公式
+## 根本式 [@Quinn2004]
 
 $$X^* = \Phi\Lambda' + \epsilon,$$
 
@@ -297,18 +313,15 @@ $$X^* = \Phi\Lambda' + \epsilon,$$
 **$X^*$**: 潜在变量  
 **&Phi;**: 指标选择  
 **&Lambda;**: 单项贡献（a.k.a., factor loading）  
-**&epsilon;** 选择误差
+**&epsilon;** 选择性误差
 :::
 :::
 
-:::{.notes}
-Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and Continuous Responses.” Political Analysis 12(4): 338–53.
-:::
 
-:::{.fragment .nonincremental style="text-align:center"}
-*操作步骤*
+:::{.fragment style="text-align:center"}
+*执行步骤*
 
-1. 因子个数选择
+1. 个数选择
 1. 因子提取
 1. Rotation
 1. 因子合成
@@ -321,7 +334,7 @@ Quinn, Kevin M. undefined/ed. “Bayesian Factor Analysis for Mixed Ordinal and 
 
 19,719 参与者, Big5 personality
 
-![](https://drhuyue.site:10002/sammo3182/figure/lv_big5.jpg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/lv_big5.jpg){fig-align="center" height=500}
 
 ## 实证数据
 
@@ -338,17 +351,27 @@ df_big5
 https://quantdev.ssri.psu.edu/tutorials/intro-basic-exploratory-factor-analysis
 :::
 
-:::{.fragment .nonincremental style="text-align:center"}
-*挑战（again）*
+:::{.fragment style="text-align:center; margin-top: 1em"}
 
 - 降到几维
 - 如何降维
 :::
 
 
-## 维度选择方法：相关性分析
 
-```{r corrplot, fig.align='center', fig.height=6}
+## 维度选择
+
+:::{.callout-note}
+## 选择依据
+
+概念关系 + 数据关系
+:::
+
+```{r corrplot}
+#| label: corrplot
+#| fig-align: center
+#| fig-height: 4
+
 df_big5 %>%
   select(8:57) %>%
   cor(use = "complete.obs") %>%
@@ -359,17 +382,9 @@ df_big5 %>%
 
 
 
-## 维度选择方法：Horn's Parallel Analysis
+## Horn's Parallel Analysis
 
 :::: {.columns}
-
-::: {.column width="70%"}
-```{r parallelAnalysis, fig.align='center', fig.height=6, results='hide'}
-df_big5 %>%
-  select(8:57) %>%
-  fa.parallel(fa = "fa")
-```
-:::
 
 ::: {.column width="30%"}
 已知观测数据集**O**<sub>m&times;n</sub>
@@ -380,10 +395,25 @@ df_big5 %>%
 1. &lambda;<sub>**Ok**</sub> vs. &lambda;<sub>**R**</sub>
 
 :::{.fragment}
+标准：
+
 A. 如果&lambda;<sub>**Ok**</sub> < &lambda;<sub>**R**</sub>, 则 ~~k~~
-B. Kaiser criterion
+B. Kaiser criterion: &lambda; < 1 不可
 :::
 
+:::
+
+::: {.column width="70%"}
+```{r parallelAnalysis}
+#| label: parallelAnalysis
+#| fig-align: center
+#| fig-height: 6
+#| results: hide
+
+df_big5 %>%
+  select(8:57) %>%
+  fa.parallel(fa = "fa")
+```
 :::
 
 ::::
@@ -405,7 +435,7 @@ B. Kaiser criterion
 
 ## Rotation: 效果优化
 
-![](https://drhuyue.site:10002/sammo3182/figure/lv_rotation.jpg){fig-align="center" height=400}   
+![](https://drhuyue.site:10002/sammo3182/figure/lv_rotation.jpg){fig-align="center" height=450}   
 
 :::{.notes}
 Rotation:
@@ -428,11 +458,13 @@ Orthogonal(正交)
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column width="45%"}
 
 ML + Oblimin
 
-```{r efa, eval = TRUE}
+```{r efa}
+#| label: efa
+
 result_efa <- df_big5 %>%
   select(8:57) %>%
   fa(nfactors = 5,
@@ -443,8 +475,13 @@ print(result_efa$loadings, cutoff = .296) # the point was picked for the purpose
 ```
 :::
 
-::: {.column width="50%"}
-```{r scores, fig.align='center', fig.height=8}
+::: {.column width="55%"}
+```{r scores}
+#| label: scores
+#| fig-align: center
+#| fig-height: 8
+
+
 # Reshape the data to a long format
 df_scores_long <- as.data.frame(result_efa$scores) |>
   pivot_longer(cols = everything(), 
@@ -462,7 +499,7 @@ ggplot(df_scores_long, aes(x = Score)) +
 ::::
 
 
-## 诊断指标
+## 诊断
 
 1. Sum of squared (SS) loading^[特征值]: 1
 1. Communality/Uniqueness
@@ -470,26 +507,28 @@ ggplot(df_scores_long, aes(x = Score)) +
 1. Tucker-Lewis Indes (TLI): 0.9
 1. Reliability test (Crobach's &alpha;)^[为每个因子分别计算]
 
-:::{.notes}
-SS：Kaiser criterion: &lambda; < 1 不可
-Communality:  SS of all the factor loadings for a given variable
-Uniqueness: 1 - Communality
-RMSR < 0.05
-TLI > 0.9
-
-Crobach's &alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要
-:::
-
----
 
 ```{r efa-full}
+#| label: efaFull
+
 summary(result_efa)
 ```
 
+
+:::{.notes}
+- SS：Kaiser criterion: &lambda; < 1 不可
+- Communality:  SS of all the factor loadings for a given variable
+- Uniqueness: 1 - Communality
+- RMSR < 0.05
+- TLI > 0.9
+- Crobach's &alpha;: 计算因子分布的variables是不是内部一致，除非发表，不大必要
+:::
+
+
 ## 注意事项
 
-- EFA是*归纳式*研究方法，[并非统计推断]{.red}
-- EFA应用需满足以下假定:
+- EFA是数据探索方法，[不能用作统计推断]{.red}
+- EFA应用需满足以下[*假定*]{.red}:
     1. [*Linearity*]{.red} between the observed and latent
     1. [*Sufficient correlation*]{.red} between the observed and latent
     1. [*Homoscedasticity*]{.red}
@@ -497,9 +536,9 @@ summary(result_efa)
     1. [*No singularity*]{.blue} among the observed
     1. [*Large N*]{.blue}: 10 ~ 300
     1. [*Factorial Simplicity*]{.blue}
-- EFA不是唯一合理的合并方式
-    - [IRT]{.gray}
+- EFA不是唯一合理的降维方式
     - PCA
+    - IRT
 
 
 :::{.notes}
@@ -525,7 +564,7 @@ Violations of these assumptions can lead to inaccurate factor solutions, mislead
 ## Principal Component Analysis
 
 :::{.callout-important}
-## 根本公式
+## 根本式
 
 $$C = w_iY_i,$$
 
@@ -549,7 +588,7 @@ create one or more index variables (Components) from a larger set of measured va
 ![](https://drhuyue.site:10002/sammo3182/figure/lv_pcaVsEfa.PNG){fig-align="center" height=500}
 
 
-::: {.fragment .r-fit-text}
+::: {.fragment .large style="text-align:center; margin-top: 1em"}
 结果或近似，逻辑大不同
 :::
 
@@ -567,15 +606,89 @@ find a set of features which allow for understanding as much of the correlations
 
 
 
-## When to usd what
+## 如何选择
 
 * PCA最大程度保留可见变量信息，EFA旨在提取不可变量特征；
 * 当Variable之间关系不那么紧密或受同一变量影响，PCA > EFA；
 * 当估计潜在变量时，PCA可能夸大可见指标的影响
 
+## Bonus: 非连续变量PCA
+
+```{r pca-category}
+#| label: pcaCat
+#| fig-cap: "Multiple Correspondence Analysis [MCA, @HussonEtAl2010]"
+#| fig-height: 6
+
+data(Arthritis)
+arthritis_data <- Arthritis[,c(2,3,5)]
+
+arthritis_mca <- MCA(arthritis_data,
+    ncp = 3,
+    graph = FALSE)
+
+fviz_mca_biplot(arthritis_mca,
+               repel = TRUE)
+```
 
 
-# 验证性因子分析
+## Bonus: 混合变量的PCA
+
+```{r pca-mixed}
+#| label: pcaMixed
+#| fig-cap: "Factorial Analysis of Mixed Data [FAMD, @Pages2004]"
+#| fig-height: 6
+
+data(wine)
+wine_data <- wine[,c(1,2,13,22,24,28,30)]
+wine_famd <- FAMD(wine_data, graph=FALSE)
+
+fviz_famd_ind(wine_famd,col.ind = "cos2",
+             gradient.cols = gb_cols("black", "gold"),
+             repel = TRUE)
+```
+
+:::{.notes}
+https://www.r-bloggers.com/2022/11/pca-for-categorical-variables-in-r/
+
+- Factorial Analysis of Mixed Data
+    - cos² statistic (cosine squared): how well a variable, individual, or category is represented by a given factor (dimension)
+:::
+
+## 总结
+
+:::: {.columns}
+::: {.column width="50%"}
+
+* 潜在变量分析概述
+    + *连续性因子分析*
+    + 离散型因子分析
+    
+:::
+
+
+::: {.column width="50%"}
+
+* EFA
+    + 探索性因子分析：通过loading找到潜在变量
+    + EFA诊断：Kaiser's criterion
+    + EFA vs. PCA: 结果相似，逻辑不同
+
+:::
+::::
+
+:::{.fragment}
+::: {.r-fit-text}
+**待解之题**：观测变量与潜变量之间关系要是[非线性]{.red}的那该怎么办呢？
+:::
+
+:::
+
+## 参考文献
+
+::: {#refs}
+:::
+
+# 附录：验证性因子分析 {.appendix}
 
 ## 探索性 vs 验证性
 
@@ -594,7 +707,7 @@ find a set of features which allow for understanding as much of the correlations
 1. Underidentified
 :::
 
-::: {.column width="50%"}
+::: {.column .fragment width="50%"}
 **CFA: 理论指向**
 
 1. 理论定义（演绎）
@@ -617,7 +730,7 @@ find a set of features which allow for understanding as much of the correlations
 ::: {.column width="50%"}
 
 1. 严格依据理论：~~原因~~效果指标
-1. 每维度一指标^[但维度拆分，[艺术>技术]{.red}.]
+1. 每维度一指标，[艺术>技术]{.red}
 
 :::{.fragment}
 🌰 人际信任: [相信]{.red}他人不会[伤害自己]{.red}或[违背约定]{.red}.
@@ -669,7 +782,7 @@ s -> {d, j, i}
 双侧: factor complexity > 1
 :::
 
-## 定义公式
+## 定义公式 {auto-animate=true}
 
 :::: {.columns}
 
@@ -713,8 +826,29 @@ $$
 ::::
 
 
-## 估算
+## 估算 {auto-animate=true}
 
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png){ fig-align="center" height=300}
+
+[潜变量矩阵]{.navy}
+
+$$\Phi = \begin{bmatrix}
+\phi_{11} & & \\
+0 & \phi_{22} & \\
+0 & \phi_{23} & \phi_{33}
+\end{bmatrix}$$
+
+:::{.notes}
+&phi;23$: classical 和showy 裁判的相关性
+:::
+:::
+
+::: {.column width="60%"}
 [测量矩阵]{.red}
 
 $$
@@ -742,23 +876,6 @@ x_5
 \end{bmatrix}
 $$
 
-:::: {.columns}
-
-::: {.column width="35%"}
-[潜变量矩阵]{.navy}
-
-$$\Phi = \begin{bmatrix}
-\phi_{11} & & \\
-0 & \phi_{22} & \\
-0 & \phi_{23} & \phi_{33}
-\end{bmatrix}$$
-
-:::{.notes}
-&phi;23$: classical 和showy 裁判的相关性
-:::
-:::
-
-::: {.column width="65%"}
 [偏误矩阵]{.green}
 
 diag **&Theta;<sub>&sigma;</sub>** = diag[var(&epsilon;<sub>1</sub>) var(&epsilon;<sub>2</sub>)...var(&epsilon;<sub>5</sub>)]
@@ -766,10 +883,6 @@ diag **&Theta;<sub>&sigma;</sub>** = diag[var(&epsilon;<sub>1</sub>) var(&epsilo
 
 ::::
 
-
-:::{.fragment}
-似曾相识？
-:::
 
 
 
@@ -849,12 +962,12 @@ $$\Sigma(\theta) = \Lambda_X\Phi\Lambda_X' + \Theta_\epsilon,$$
 
 :::: {.columns}
 
-::: {.column width="35%"}
+::: {.column width="30%"}
 `错误：待分析的矩阵不是正定的`
 
 + 数据或协方差矩阵中录入错误
 + 缺失数据
-+ 完全共线性
++ **完全共线性**
 + 异常值
 :::
 
@@ -862,14 +975,14 @@ $$\Sigma(\theta) = \Lambda_X\Phi\Lambda_X' + \Theta_\epsilon,$$
 `错误：不恰当的解`
 
 + 录入错误
-+ 总体至接近变量边界，加之抽样波动
++ 总体值接近变量边界，加之抽样波动
 + 模型错误
-+ 因素指标观测量过小（<150左右）且只有2指标
++ 因素指标观测量过小（<150左右）且**只有2个指标**
 + “Unlucky”样本
 + 异常值
 :::
 
-::: {.column width="30%"}
+::: {.column width="35%"}
 `错误：未收敛`
 
 + 录入错误
@@ -879,7 +992,7 @@ $$\Sigma(\theta) = \Lambda_X\Phi\Lambda_X' + \Theta_\epsilon,$$
 + 小样本（N<100）
 + 每个因素只有2指标
 + 异常值
-+ 观测变量量纲极大差异
++ 观测变量**量纲极大差异**
 :::
 
 ::::
@@ -1054,7 +1167,7 @@ summary(fit, fit.measures = TRUE)
 :::
 
 ::: {.column width="50%"}
-**诊断** (完全一样)
+**诊断**
 
 + Overall：&chi;<sup>2</sup>
 + Incremental：
@@ -1171,52 +1284,24 @@ summary(fit, fit.measures = TRUE)
 ```
 
 
-## 总结
+
+## 小结
 
 :::: {.columns}
 
 ::: {.column width="50%"}
-:::{.fragment .nonincremental}
-
-* 潜在变量分析概述
-    + *连续性因子分析*
-    + 离散型因子分析
-    
-:::
-
-
-:::{.fragment .nonincremental}
-* EFA
-    + 探索性因子分析：通过loading找到潜在变量
-    + EFA诊断：Kaiser's criterion
-    + EFA vs. PCA: 结果相似，逻辑不同
-
-:::
-
-:::
-
-::: {.column width="50%"}
-:::{.fragment .nonincremental}
 * CFA
     + 验证性因子分析：检验潜在变量对于观察指标是否有影响
     + CFA诊断：&chi;<sup>2</sup>, TLI/CFI，RMSEA/SRMR
-
 :::
 
-
-:::{.fragment .nonincremental}
+::: {.column width="50%"}
 * SEM 
     + Latent + measurement models
     + 不能证明因果关系！
 :::
-:::
 
 ::::
 
-:::{.fragment}
-::: {.r-fit-text}
-**待解之题**：观测变量与潜变量之间关系要是[非线性]{.red}的呢？
-:::
 
-:::
 
