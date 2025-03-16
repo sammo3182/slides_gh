@@ -1,24 +1,25 @@
 ---
-title: "潜变量分析（进阶篇）"
+title: "潜变量分析（进阶）"
 subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
-institute: "清华大学" 
-knitr: 
-    opts_chunk: 
-      echo: false
+institute: "清华大学社会科学学院" 
+bibliography: t_politicalData.bib
+
 format: 
   revealjs:
     css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
+    number-sections: true
     slide-number: true
     filters: [appExclusion.lua] # not count appendices into page number
-    incremental: true
+    incremental: false
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     self-contained: false
     chalkboard: false # allwoing chalk board B, notes canvas C
     # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    show-notes: false
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
@@ -34,27 +35,35 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+  echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 ---
 
 ```{r setup}
-#| include = FALSE
+#| label: setup
+#| include: false
 
 library(pacman)
 
-p_load(ltm,
-       mirt,
-       TeachingSampling,
-       lme4,
-       ggalt,
-       DCPO,
-       latex2exp,
-       knitr,
-       kableExtra,
-       drhutools,
-       here,
-       tidyverse)
+p_load(
+  ltm,
+  mirt,
+  TeachingSampling,
+  lme4,
+  ggalt,
+  DCPO,
+  latex2exp,
+  knitr,
+  kableExtra,
+  drhutools,
+  here,
+  tidyverse
+)
 
 # Functions preload
 set.seed(313)
@@ -64,17 +73,16 @@ theme_set(
 )
 
 theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
   axis.text = element_text(size = 18)
 )
 ```
 
 
-## 概要
+## 概要 {.unnumbered}
 
-:::{style="text-align:center
-"}
+:::{style="text-align:center"}
 **待解之题**
 
 观测变量与潜变量之间关系要[非线性]{.red}
@@ -83,14 +91,14 @@ theme_update(
 :::: {.columns}
 
 ::: {.column .fragment .nonincremental width="50%"}
-### 方法
+*方法*
 
 1. 项目反应理论(IRT)
 1. 项目反应聚合估计
 :::
 
 ::: {.column .fragment .nonincremental width="50%"}
-### 操作语言
+*操作语言*
 
 * R^[现存处理IRT的R packages已超过[50](https://www.tandfonline.com/doi/full/10.1080/15366367.2019.1586404?src=recsys)个。]
     + [`mirt`](https://github.com/philchalmers/mirt/wiki)
@@ -104,18 +112,25 @@ theme_update(
 ## 超越因子分析
 **因子分析弊端**：
 
-:::{.nonicremental}
+:::: {.columns}
+
+::: {.column width="50%"}
 1. 假定潜在变量是[连续]{.red}的；
 1. 对于指标[不区分]{.red}变量类型；
 1. 难以捕捉[群组]{.red}差异
-1. EFA无法囊括[指标间]{.red}关系;
-1. CFA面临“[简略]{.red}理论vs测量质量”的矛盾
 :::
+
+::: {.column width="50%"}
+4. EFA无法囊括[指标间]{.red}关系;
+5. CFA“[简略]{.red}理论vs测量质量”矛盾
+:::
+
+::::
 
 :::{.fragment style="text-align:center"}
 &dArr;
 
-![离散回应模型](https://drhuyue.site:10002/sammo3182/figure/lv_irt.webp){fig-align="center" height=200}
+![离散回应模型](https://drhuyue.site:10002/sammo3182/figure/lv_irt.webp){fig-align="center" height=300}
 :::
 
 :::{.notes}
@@ -131,13 +146,6 @@ CFA理论通常简略，只涉及一部分indices，但实际可能很复杂；�
 
 ::: {.column .fragment width="50%"}
 ![Frederic M. Lord](https://drhuyue.site:10002/sammo3182/figure/lv_lord.png){fig-align="center" height=300}
-
-:::{.notes}
-Frederic M. Lord, psychometrician, first worked for the Carnegie Foundation in 1944. By 1950, he began working for the Educational Testing Service (ETS). 
-Lord's research shaped the SAT, GRE, GMAT, LSAT and the TOEFL. 
-Lord was called the "Father of Modern Testing" by the National Council on Measurement in Education.
-:::
-
 :::
 
 ::: {.column .fragment width="50%"}
@@ -150,7 +158,11 @@ Lord was called the "Father of Modern Testing" by the National Council on Measur
 
 ::::
 
-
+:::{.notes}
+Frederic M. Lord, psychometrician, first worked for the Carnegie Foundation in 1944. By 1950, he began working for the Educational Testing Service (ETS). 
+Lord's research shaped the SAT, GRE, GMAT, LSAT and the TOEFL. 
+Lord was called the "Father of Modern Testing" by the National Council on Measurement in Education.
+:::
 
 ## Basic IRT
 
@@ -166,13 +178,14 @@ Lord was called the "Father of Modern Testing" by the National Council on Measur
     3. 定序问题（e.g., Liker scale questions）
 :::
 
-::: {.column .fragment .nonincremental width="40%"}
+::: {.column .fragment width="40%"}
 [**Assumptions**]{.red}
 
 1. Monotonicity
 1. Unidimensionality
 1. Local independence
 1. Parameter invariance
+
 :::
 
 ::::
@@ -202,21 +215,15 @@ Lord was called the "Father of Modern Testing" by the National Council on Measur
 
 ::::
 
-## Parameter Invarance
+## Local Independence
 
-![](https://drhuyue.site:10002/sammo3182/figure/lv_gre.jpg){fig-align="center" height=350}
+::::{.columns}
 
-- 项目特点（parameters of items，比如难度、梯度等）在[项目间]{.red}不变
-- 项目特点在[响应人群间]{.red}不变^[通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF).]
-    + 当进行Multiple Group IRT时尤其可能被违反
-
-## Local Independency
-
-:::{.nonincremental}
-
-$$P(Y_{ip}, Y_{iq}|\theta_i) = P(Y_{ip}|\theta_i)P(Y_{iq}|\theta_i),$$
+::: {.column width="60%"}
 
 :::{style="text-align:center"}
+$P(Y_{ip}, Y_{iq}|\theta_i) = P(Y_{ip}|\theta_i)P(Y_{iq}|\theta_i),$
+
 - p, q: Items
 - i: Respondent
 - Y<sub>ip</sub>: i对于项目p的的反应
@@ -227,14 +234,38 @@ $$P(Y_{ip}, Y_{iq}|\theta_i) = P(Y_{ip}|\theta_i)P(Y_{iq}|\theta_i),$$
 对于不同项目的反应之间，关联性[只]{.red}来自共同的潜在变量。
 :::
 
-
 :::
+
+::: {.column .fragment width="40%"}
+![](https://drhuyue.site:10002/sammo3182/figure/lv_musk.png){fig-align="center" height=600}
+:::
+
+::::
+
+
 
 :::{.notes}
 换言之，控制潜在变量影响后，问题间响应相互独立
 :::
 
 
+
+## Parameter Invariance
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_gre.jpg){fig-align="center" height=350}
+
+- 项目特点（parameters of items，比如难度、梯度等）在[项目间]{.red}不变
+- 项目特点在[响应人群间]{.red}不变^[通过基于Wald and likelihood-ratio approach来检测Differential item functioning (DIF).]
+
+::: {.callout-warning .fragment}
+## When parameters vary
+
+当进行Multiple Group IRT时尤其容易被违反!
+:::
+
+::: {.notes}
+不想被违反的办法：足够多的参数；GPT 3.5 175B parameters； 4， 1.8T； deepseek R1 671 b
+:::
 
 
 ## IRT模型发展
@@ -292,13 +323,9 @@ $$
 :::
 
 
-## 操作案例 (Bock & Lieberman 1970)
+## 演示案例 [@BockLieberman1970]
 
 :::: {.columns}
-
-::: {.column width="50%"}
-![](https://drhuyue.site:10002/sammo3182/figure/lv_lsat.jpg){fig-align="center" height=600}
-:::
 
 ::: {.column .fragment width="50%"}
 Law School Admissions Test    
@@ -309,13 +336,17 @@ df_lsat <- expand.table(LSAT7)
 df_lsat
 ```
 
-:::{.notes}
-[`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
 :::
+
+::: {.column width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/lv_lsat.jpg){fig-align="center" height=600}
 :::
 
 ::::
 
+:::{.notes}
+[`mirt` Workshop 1](http://philchalmers.github.io/mirt/extra/mirt-Workshop-2015_Day-1.pdf)
+:::
 
 ## Difficulty Parameter
 
@@ -332,23 +363,40 @@ coef(m_lsat, simplify = TRUE)$item
 ```{r icc}
 #| fig-cap: "Item Characteristic Curves"
 
-plot(m_lsat, type = "trace", facet_items = FALSE)
-```
+trellis.par.set(
+  par.xlab.text = list(cex = 4),
+  par.ylab.text = list(cex = 4),
+  par.main.text = list(cex = 4)
+)
 
-:::{.notes}
-检查各题affirmative的难易程度，看逐个是不是大体同一个趋势
-:::
+plot(
+  m_lsat,
+  type = "trace",
+  facet_items = FALSE,
+  par.settings = list(
+    axis.text = list(cex = 4) # Adjusts the size of axis tick labels
+  )
+)
+
+```
 
 :::
 
 ::::
 
+:::{.notes}
+检查各题affirmative的难易程度，看逐个是不是大体同一个趋势
+:::
 
 
-## Test Charactersitic Curve
+## Test Characteristic Curve
 
 ```{r tcc}
-plot(m_lsat, type = "infoSE")
+plot(m_lsat,
+     type = "infoSE",
+     par.settings = list(
+       axis.text = list(cex = 4) # Adjusts the size of axis tick labels
+     ))
 ```
 
 :::{.notes}
@@ -554,7 +602,7 @@ anova(m_lsat, m_lsat2PL) %>%
 :::
 
 
-## Further what if
+## 2PL &rarr; 3PL &rarr; 4PL 
 
 如果发给了初中生高中数学题？&rarr; Three-Parameter Logistic Model (3PL)
 
@@ -594,38 +642,33 @@ $$Pr(y_{iq} = 1) = c_i + (\color{red}{d_i} - c_i)logist^{-1}[\frac{(\theta_i - \
 
 ## Global Fit<sup>1</sup>
 
-:::: {.columns}
 
-::: {.column width="40%"}
 $G^2 = 2[\sum_l^s r_lln(\frac{r_l}{N\tilde{P}_l})],$^[RMSEA, SRMSR, CFI, TLI对于IRT同样使用.]
 
 N: 参与人数  
 l: 可能的反应  
 r: 做出特定反应的人数
-:::
 
-::: {.column width="60%"}
+
+::: {.fragment}
 当数据过于稀疏时(item > 10)，M2, M2* 
 
 ```{r diagnostics-overall}
 M2(m_lsat)
 ```
+:::
 
 :::{.notes}
 REDO: @Maydeu-Olivares2013
 
 N is the number of subjects, L is number of possible response patterns, $P_ l$ is the estimated probability of observing response pattern l, and $r_ l$ is the number of subjects who have response pattern l
 
-&chi; sig   
-Tucker-lewis index, 1 ideal, < .95 poor   
-Comparative fit index, the same   
-Root mean square error of approximation, 0 perfect, <.05 good, [.05, .08] ok, > .1 poor    
-Standardized root mean square residual <.08 acceptable
+- &chi; sig   
+- Tucker-lewis index, 1 ideal, < .95 poor   
+- Comparative fit index, the same   
+- Root mean square error of approximation, 0 perfect, <.05 good, [.05, .08] ok, > .1 poor    
+- Standardized root mean square residual <.08 acceptable
 :::
-
-:::
-
-::::
 
 
 ## Item Diagnostics
@@ -680,6 +723,34 @@ Z<sub>h</sub> > 0 better
 1. 如果最初用binary，尝试polytomous或者nominal response models
 1. 尝试non-parametric smoothing techniques
 
+## 小结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 项目反应理论（IRT）
+  - 项目：题
+  - 反应：做题
+- IRT 假定
+  - Monotonicity
+  - Unidimensionality
+  - Local independence
+  - Parameter invariance
+:::
+
+::: {.column .fragment width="50%"}
+- IRT 模型演进
+  - Rasch Model
+  - 2PL, 3PL, 4PL
+- IRT 诊断
+  - Global fit
+  - Item fit & residual
+  - Personal fit
+:::
+
+::::
+
+
 
 # 发展的项目反应理论
 
@@ -700,11 +771,13 @@ Z<sub>h</sub> > 0 better
 
 ## 一维到多维
 
-Multidimentional IRT (MIRT, Phil Chalmers, 2015)
+Multidimentional IRT [MIRT, @Chalmers2015]
 
 $$Pr(y_{iq} = 1) = logist^{-1}[\frac{\boldsymbol{\theta_i} - \beta_q}{\boldsymbol{\alpha_q}}]$$
 
+:::{.callout-note}
 **&theta;<sub>i</sub>**和**&alpha;<sub>q</sub>**不再是单一值，而是一个矩阵。
+:::
 
 
 ## 二分到多类
@@ -744,7 +817,7 @@ https://stats.stackexchange.com/questions/402440/how-should-we-select-between-va
 
 ![](https://drhuyue.site:10002/sammo3182/figure/countryBias.png){fig-align="center" height=300}
 
-Multilevel Mixture IRT with Item Bias Effects (Stegmueller 2011)
+Multilevel Mixture IRT with Item Bias Effects [@Stegmueller2011]
 
 在估测&alpha;<sub>q</sub>时加入random effect.
 
@@ -756,7 +829,7 @@ Daniel Stegmueller, Duke U, poli sci
 
 ## 超越个体
 
-Why bother? Individual fallacy
+Conquer the individual fallacy
 
 :::{.r-stack}
 ![](https://drhuyue.site:10002/sammo3182/figure/lv_maleFeminist.jpg){fig-align="center" .fragment height=500}
@@ -775,7 +848,7 @@ Ecological fallacy (Simpson's paradox)
 
 
 
-## 聚合层级上的尝试：Caughey & Warshaw (2015)
+## 聚合层级上的尝试 [@CaugheyWarshaw2015]
 
 **Dynamic Group-level IRT（DGIRT)**
 
@@ -850,7 +923,7 @@ Caughey & Warshaw称会跑几个星期
 :::
 
 
-## 简化DGIRT (Claassen 2019)
+## 简化DGIRT [@Claassen2019]
 
 $$
 \begin{align}
@@ -865,16 +938,13 @@ $$
 :::
 
 1. 只作用于代表性样本和[国家]{.red}级别  
-1. 只对二分变量进行分析；
+1. 只对二分变量进行分析
 1. 将国家作用从估测&theta;变为估测difficulty  
 1. 假定本地项目正态分布（忽略极化等现象😱）
 
-:::{.fragment .large style="text-align:center"}
-*过犹不及？*
-:::
 
 
-## 聚合IRT最新尝试：DCPO
+## 聚合IRT修正版 [@Solt2020a]
 
 :::: {.columns}
 
@@ -883,13 +953,25 @@ $$
 :::
 
 ::: {.column width="50%"}
-[D]{.red}ynamic [C]{.red}omparative [P]{.red}ublic [O]{.red}pinion
+[[D]{.red}ynamic [C]{.red}omparative [P]{.red}ublic [O]{.red}pinion](https://dcpo.org/team/)
 
 :::{.fragment}
 复杂程度：
 
 Claasseen 2019 < DCPO < DGIRT
 :::
+
+:::{.fragment}
+发表：
+
+- *APSR*[@TaiEtAl2024]
+- *BJPS*[@WooEtAl2023]
+- *PSRM*[@HuEtAl2024a]
+- *SSQ*[@WooEtAl2024]
+
+......
+:::
+
 
 :::
 
@@ -913,7 +995,7 @@ DCPO等聚合IRT方法使用贝叶斯统计框架，结果需要对[reccurence, 
 
 
 
-## 效果与长处
+## 效果与优势
 
 :::{.r-stack}
 ![](https://drhuyue.site:10002/sammo3182/figure/irtCompare.png){fig-align="center" height=600}
@@ -926,10 +1008,55 @@ DCPO等聚合IRT方法使用贝叶斯统计框架，结果需要对[reccurence, 
 Bounded: 使用logit归为0-1
 :::
 
+## 最新进展 [“究极形态”？, @BerwickCaughey2025]
+
+
+
+::::{.overlay-container}
+
+:::{.overlay-image}
+![](https://drhuyue.site:10002/sammo3182/figure/lv_modgirt.png){fig-align="center" height=600}
+:::
+
+:::{.overlay-text-over .fragment}
+[Multidimensional]{.red}, multilevel IRT
+
+- **Strengths**
+  - Flexible: Single-country or cross-national datasets
+  - Extensible: Overdispersion, differential item functioning, and predictors.
+
+- **Considerations**
+  - Computationally intensive (Bayesian estimation).
+  - Needs bridging items for comparability across groups/time.
+
+:::
+
+::::
 
 ## 总结
 
 :::: {.columns}
+
+::: {.column width="50%"}
+*连续因子模型*
+
+- 解决问题：潜在变量描述与关系检验
+- 探索性因子分析(EFA)
+    - 潜在因子探索
+- 验证性因子分析(CFA)
+    - 统计推断
+- 结构方程模型(SEM)
+    - 潜在变量与外生变量关系
+
+:::{.callout-tip .fragment}
+## 使用建议
+
+- 没有高低之分
+- 确有难易之别
+- 关键是方法的[恰当]{.red}应用和[诊断]{.red}
+:::
+
+:::
 
 ::: {.column width="50%"}
 *离散回应模型*
@@ -943,36 +1070,16 @@ Bounded: 使用logit归为0-1
 - GIRT
   - 解决问题：Individual fallacy
   - DGIRT, Claassen model
-  - DCPO
-:::
-
-::: {.column width="50%"}
-*连续因子模型*
-
-- 解决问题：潜在变量描述与关系检验
-- 探索性因子分析(EFA)
-    - 潜在因子探索
-- 验证性因子分析(CFA)
-    - 统计推断
-- 结构方程模型(SEM)
-    - 潜在变量与外生变量关系
-    
-:::{.fragment}
-:::{.callout-tip}
-## 使用建议
-
-- 没有高低之分
-- 确有难易之别
-- 指标量纲或为线索
-:::
-:::
-
+  - DCPO, MODGIRT
 :::
 
 ::::
 
 
+## 参考文献 {.unnumbered}
 
+::: {#refs}
+:::
 
 # 附录：群组加权平均计算 {#sec-mrp .appendix}
 
@@ -1144,7 +1251,7 @@ MrP 没有解决的问题
 ::::
 
 
-# 附录：贝叶斯结果诊断 {#sec-bayesian}
+# 附录：贝叶斯结果诊断 {#sec-bayesian .appendix}
 
 ## 贝叶斯分析参数检验
 
