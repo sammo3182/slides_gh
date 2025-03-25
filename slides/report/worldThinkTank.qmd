@@ -95,22 +95,22 @@ set.seed(313)
 #| label: rank
 
 df_thinktank <- tribble(
-  ~institution, ~ranking, ~country, ~institutional_collaboration, 
-  ~think_tank_conference, ~think_tank_network, ~transdisciplinary_research, 
-  ~social_media, ~media, ~public_policy_impact,
-  
-  "Carnegie Endowment for International Peace", 13, "China", 8, 14, 2, 4, 8, 7, 1,
-  "Facultad Latinoamericana de Ciencias Sociales", 25, "Costa Rica", 46, NA, 74, 29, 72, 36, 49,
-  "BRICS Policy Center", 7, "Brazil", NA, 20, 19, 19, 28, NA, NA,
-  "Yale Center for the Study of Globalization", 38, "United States", NA, NA, NA, 8, NA, NA, NA,
-  "Economic Policy Research Center", 43, "Uganda", NA, NA, NA, 47, NA, NA, NA,
-  "Freeman Spogli Institute for International Studies", 17, "United States", NA, NA, NA, 53, NA, NA, NA,
-  "Mercatus Center", 12, "United States", NA, NA, NA, NA, 41, NA, NA,
-  "Centre for Studies in Science Policy", 65, "India", NA, NA, NA, NA, 65, NA, NA,
-  "Institute of Defence and Strategic Studies", 33, "Singapore", NA, NA, NA, NA, NA, 37, NA,
-  "Chongyang Institute for Financial Studies", 35, "China", NA, NA, NA, NA, NA, 40, NA,
-  "Hoover Institution", 16, "United States", NA, NA, NA, NA, NA, 59, 64
-) |> 
+    ~institution, ~ranking, ~country, ~institutional_collaboration, 
+    ~think_tank_conference, ~think_tank_network, ~transdisciplinary_research, 
+    ~social_media, ~media, ~public_policy_impact,
+    
+    "Carnegie Endowment for International Peace", 13, "China", 8, 14, 2, 4, 8, 7, 1,
+    "Facultad Latinoamericana de Ciencias Sociales", 25, "Costa Rica", 46, NA, 74, 29, 72, 36, 49,
+    "BRICS Policy Center", 7, "Brazil", NA, 20, 19, 19, 28, NA, NA,
+    "Yale Center for the Study of Globalization", 38, "United States", NA, NA, NA, 8, NA, NA, NA,
+    "Economic Policy Research Center", 43, "Uganda", NA, NA, NA, 47, NA, NA, NA,
+    "Freeman Spogli Institute for International Studies", 17, "United States", NA, NA, NA, 53, NA, NA, NA,
+    "Mercatus Center", 12, "United States", NA, NA, NA, NA, 41, NA, NA,
+    "Centre for Studies in Science Policy", 65, "India", NA, NA, NA, NA, 65, NA, NA,
+    "Institute of Defence and Strategic Studies", 33, "Singapore", NA, NA, NA, NA, NA, 37, NA,
+    "Chongyang Institute for Financial Studies", 35, "China", NA, NA, NA, NA, NA, 40, NA,
+    "Hoover Institution", 16, "United States", NA, NA, NA, NA, NA, 59, 64
+    ) |> 
     mutate(across(where(is.numeric), as.integer)) |> 
     arrange(ranking)
 
@@ -130,16 +130,16 @@ kable(df_thinktank) |>
 #| label: case
 
 tribble(
-  ~Rank, ~Thintank,
-  0, "Harvard University: Belfer Center for Science and International Affairs (United States)",
-  1, "Rice University: Baker Institute for Public Policy (United States)",
-  8, "MGIMO University: Moscow State Institute of International Relations (MGIMO) (Russia)",
-  9, "Peking University, FKA Center for International and Strategic Studies: Institute of International and Strategic Studies (IISS) (China)",
-  18, "Australian National University (ANU): Strategic and Defence Studies Centre (SDSC) (Australia)",
-  19, "Harvard University: Weatherhead Center for International Affairs (WCFIA) (United States)",
-  93, "University of Copenhagen: Political Ideas and Analysis (Denmark) - No specific information found; possibly a research direction within the Department of Political Science",
-  94, "Armenian State University of Economics, ASUE: AMBIRD Research Center (Armenia)"
-) |> 
+    ~Rank, ~Thintank,
+    0, "Harvard University: Belfer Center for Science and International Affairs (United States)",
+    1, "Rice University: Baker Institute for Public Policy (United States)",
+    8, "MGIMO University: Moscow State Institute of International Relations (MGIMO) (Russia)",
+    9, "Peking University, FKA Center for International and Strategic Studies: Institute of International and Strategic Studies (IISS) (China)",
+    18, "Australian National University (ANU): Strategic and Defence Studies Centre (SDSC) (Australia)",
+    19, "Harvard University: Weatherhead Center for International Affairs (WCFIA) (United States)",
+    93, "University of Copenhagen: Political Ideas and Analysis (Denmark) - No specific information found; possibly a research direction within the Department of Political Science",
+    94, "Armenian State University of Economics, ASUE: AMBIRD Research Center (Armenia)"
+    ) |>
     kable() |>
     kable_classic(c("striped", "hover"), full_width = F) |>
     kable_styling(font_size = 20) 
@@ -176,14 +176,14 @@ tribble(
 #| label: caseStudy
 
 df_case <- tribble(
-  ~类别, ~头部, ~前20, ~末尾,
-  "人员构成", "国际化（国内+国外）、多元化（政要/学者等）、复合型（多领域/跨学科）", "某特定领域国内外<strong>知名</strong>学者", "特定且小众领域的学者",
-  "资金来源", "资金充足、稳定、来源<strong>多样</strong>（政府/基金/项目/捐赠）", "资金充足、稳定，来源<strong>集中</strong>（多为政府和捐赠）", "较难查到具体来源，推测应该来源于大学拨款",
-  "合作网络", "与国内外高校、研究机构、社会组织形成互动网络，与政府和国际组织存在<strong>“旋转门”</strong>关联", "主要与国内高校、机构、组织有合作，为政府和国际组织提供咨询", "主要是国内/当地的合作者，合作方向是毕业生就业",
-  "政策咨询", "长期、稳定、多种方式参与政策咨询（政策报告、国家会议、在政府担任重要职位）；为<strong>多元群体</strong>（政府、政党、总统候选人等）提供政策咨询", "长期、稳定提供咨询，咨询方式多为<strong>政策报告</strong>，担任职位多为政策顾问，主要为政府机关提供咨询服务", "为特定地区政府提供特定领域的咨询（例如为亚美尼亚提供经济政策建议）",
-  "成果产出", "领域广泛、产出频繁、形式多元（报告、书籍、自己主编的期刊），被国内外研究者/机构<strong>广泛引用</strong>。所获荣誉大多为综合世界级", "有自己的专业领域、不定期产出内容（多为报告或期刊投稿），<strong>被引用情况良好</strong>。所获荣誉集中在国内或特定领域", "产出较少、单一、集中",
-  "活动关注度", "<strong>定期</strong>组织国际会议、论坛，吸引高质量、多样化参与者（全球政策精英、专家学者，部分对公众开放），国内外媒体密切关注其活动动态", "不定期举办<strong>国际会议和研讨会</strong>，多为专家学者参与，也有政要精英，媒体关注度较高", "也会举办会议，但是吸引力弱，多为学生/青年参加",
-  "媒体传播情况", "国内外媒体邀请智库人员发表观点、关注智库及其成果动态。智库有自己的传播网络（网站+社交媒体平台）并<strong>频繁更新</strong>", "多为国内，也有国外媒体引用智库人员发言/智库成果。<strong>有自己发布成果的渠道</strong>", "没有特别完善的媒体传播网络"
+    ~类别, ~头部, ~前20, ~末尾,
+    "人员构成", "国际化（国内+国外）、多元化（政要/学者等）、复合型（多领域/跨学科）", "某特定领域国内外<strong>知名</strong>学者", "特定且小众领域的学者",
+    "资金来源", "资金充足、稳定、来源<strong>多样</strong>（政府/基金/项目/捐赠）", "资金充足、稳定，来源<strong>集中</strong>（多为政府和捐赠）", "较难查到具体来源，推测应该来源于大学拨款",
+    "合作网络", "与国内外高校、研究机构、社会组织形成互动网络，与政府和国际组织存在<strong>“旋转门”</strong>关联", "主要与国内高校、机构、组织有合作，为政府和国际组织提供咨询", "主要是国内/当地的合作者，合作方向是毕业生就业",
+    "政策咨询", "长期、稳定、多种方式参与政策咨询（政策报告、国家会议、在政府担任重要职位）；为<strong>多元群体</strong>（政府、政党、总统候选人等）提供政策咨询", "长期、稳定提供咨询，咨询方式多为<strong>政策报告</strong>，担任职位多为政策顾问，主要为政府机关提供咨询服务", "为特定地区政府提供特定领域的咨询（例如为亚美尼亚提供经济政策建议）",
+    "成果产出", "领域广泛、产出频繁、形式多元（报告、书籍、自己主编的期刊），被国内外研究者/机构<strong>广泛引用</strong>。所获荣誉大多为综合世界级", "有自己的专业领域、不定期产出内容（多为报告或期刊投稿），<strong>被引用情况良好</strong>。所获荣誉集中在国内或特定领域", "产出较少、单一、集中",
+    "活动关注度", "<strong>定期</strong>组织国际会议、论坛，吸引高质量、多样化参与者（全球政策精英、专家学者，部分对公众开放），国内外媒体密切关注其活动动态", "不定期举办<strong>国际会议和研讨会</strong>，多为专家学者参与，也有政要精英，媒体关注度较高", "也会举办会议，但是吸引力弱，多为学生/青年参加",
+    "媒体传播情况", "国内外媒体邀请智库人员发表观点、关注智库及其成果动态。智库有自己的传播网络（网站+社交媒体平台）并<strong>频繁更新</strong>", "多为国内，也有国外媒体引用智库人员发言/智库成果。<strong>有自己发布成果的渠道</strong>", "没有特别完善的媒体传播网络"
 )
 
 # kable(df_case)|>
@@ -192,10 +192,10 @@ df_case <- tribble(
 #     scroll_box(height = "600px")
 
 kable(df_case, format = "html", escape = FALSE) |> 
-  kable_styling(bootstrap_options = c("striped", "hover"), 
-                font_size = 20,
-                full_width = FALSE) |> 
-  scroll_box(height = "600px")
+    kable_styling(bootstrap_options = c("striped", "hover"), 
+                    font_size = 20,
+                    full_width = FALSE) |> 
+    scroll_box(height = "600px")
 
 ```
 
