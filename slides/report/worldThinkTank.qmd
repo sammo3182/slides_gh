@@ -1,0 +1,217 @@
+---
+title: "世界一流智库比较分析"
+date: "2025-03-27"
+author:
+    - 胡悦
+    - 徐妍迪
+    - 邱乾
+# bibliography: [My_Articles.bib, My_Chinese.bib]
+csl: apa.csl
+
+format: 
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../css/goldenBlack.scss
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        title-slide-attributes:
+            data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+            data-background-size: 250px   
+            data-background-position: top 10% right 5%
+        default-image-extension: png
+revealjs-plugins:
+    - spotlight
+lightbox: 
+    match: auto
+    effect: fade
+spotlight:
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+editor: 
+    render-on-save: true
+editor_options: 
+    chunk_output_type: console
+---
+
+```{r setup}
+#| label: setup
+#| include: false
+
+library(pacman)
+
+p_load(
+    "icons",
+    "knitr",
+    "kableExtra",
+    "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+
+## 调研思路
+
+- 数据来源
+    - "Global Go To Think Tank Index Report" (2022)
+    - 相关智库分析网站
+- 目标
+    - 研究对象：基于大学的智库机构 (university-affiliated think tanks)
+    - **核心问题**：何以排名靠前
+- 思路
+    - 全局分析：排名“解释”排名
+    - 梯级比较分析：
+        - Top 20 : Bottom 10
+        - Top 10 : Top 20
+
+## 中国上榜智库
+
+## 全局分析
+
+- Y: Best University-Affiliated Think Tanks（Table 41）
+- X:
+    - Best Institutional [Collaboration]{.red} Involving Two or More Think Tanks（Table 32）
+    - Best Think Tank [Conference]{.red}（Table 37）
+    - Best Think Tank [Network]{.red}（Table 38）
+    - Best [Transdisciplinary]{.red} Research Think Tanks （Table 40）
+    - Best Use of [Social Media]{.red} and Networks（Table 42）
+    - Best Use of [Media]{.red} (Print or Electronic)（Table 46）
+    - Think Tanks with the Most Significant [Impact on Public Policy]{.red}（Table 48)
+
+## 分析结果
+
+```{r ranking}
+#| label: rank
+
+df_thinktank <- tribble(
+  ~institution, ~ranking, ~country, ~institutional_collaboration, 
+  ~think_tank_conference, ~think_tank_network, ~transdisciplinary_research, 
+  ~social_media, ~media, ~public_policy_impact,
+  
+  "Carnegie Endowment for International Peace", 13, "China", 8, 14, 2, 4, 8, 7, 1,
+  "Facultad Latinoamericana de Ciencias Sociales", 25, "Costa Rica", 46, NA, 74, 29, 72, 36, 49,
+  "BRICS Policy Center", 7, "Brazil", NA, 20, 19, 19, 28, NA, NA,
+  "Yale Center for the Study of Globalization", 38, "United States", NA, NA, NA, 8, NA, NA, NA,
+  "Economic Policy Research Center", 43, "Uganda", NA, NA, NA, 47, NA, NA, NA,
+  "Freeman Spogli Institute for International Studies", 17, "United States", NA, NA, NA, 53, NA, NA, NA,
+  "Mercatus Center", 12, "United States", NA, NA, NA, NA, 41, NA, NA,
+  "Centre for Studies in Science Policy", 65, "India", NA, NA, NA, NA, 65, NA, NA,
+  "Institute of Defence and Strategic Studies", 33, "Singapore", NA, NA, NA, NA, NA, 37, NA,
+  "Chongyang Institute for Financial Studies", 35, "China", NA, NA, NA, NA, NA, 40, NA,
+  "Hoover Institution", 16, "United States", NA, NA, NA, NA, NA, 59, 64
+) |> 
+    mutate(across(where(is.numeric), as.integer)) |> 
+    arrange(ranking)
+
+options(knitr.kable.NA = "")
+
+kable(df_thinktank) |>
+    kable_classic(c("striped", "hover"), full_width = F) |>
+    kable_styling(font_size = 14) |>
+    scroll_box(height = "600px")
+```
+
+## 比较分析
+
+*对象*：
+
+```{r}
+#| label: case
+
+tribble(
+  ~Rank, ~Thintank,
+  0, "Harvard University: Belfer Center for Science and International Affairs (United States)",
+  1, "Rice University: Baker Institute for Public Policy (United States)",
+  8, "MGIMO University: Moscow State Institute of International Relations (MGIMO) (Russia)",
+  9, "Peking University, FKA Center for International and Strategic Studies: Institute of International and Strategic Studies (IISS) (China)",
+  18, "Australian National University (ANU): Strategic and Defence Studies Centre (SDSC) (Australia)",
+  19, "Harvard University: Weatherhead Center for International Affairs (WCFIA) (United States)",
+  93, "University of Copenhagen: Political Ideas and Analysis (Denmark) - No specific information found; possibly a research direction within the Department of Political Science",
+  94, "Armenian State University of Economics, ASUE: AMBIRD Research Center (Armenia)"
+) |> 
+    kable() |>
+    kable_classic(c("striped", "hover"), full_width = F) |>
+    kable_styling(font_size = 20) 
+
+```
+
+## 比较指标： 
+
+- **资源指标**  
+    - 人员构成：特定领域知名的国内外学者组成的专业化团队  
+    - 资金来源：有多元、稳定的资金来源，包括政府拨款、大学拨款、基金会资助和个人捐赠  
+    - 合作网络：与当地政府、国内外高校、国际/本国社会组织等多元群体形成互动网络  
+
+- **引用指标**  
+    - 媒体利用：智库学者常被媒体邀请采访，或媒体直接引用其研究成果  
+    - 政府利用：除长期直接为政府提供政策报告外，也会以其他方式（咨询会、政策会）为政府决策提供咨询服务  
+    - 学术利用：成果产出常被国内外研究机构/期刊引用，组织的活动（论坛、研讨会）能吸引国内外学者、精英参与  
+
+---
+
+- **输出指标**  
+    - 政策建议输出：为政府提供长期、稳定、多维度的政策简报  
+    - 出版物输出：有较稳定的书籍、期刊、研究报告、论文发布，发布平台多元（网站、新媒体平台更新研究进展等）  
+    - 政府岗位任职情况：有员工在政府重要机构任职，或担任政策顾问  
+
+- **影响力指标**  
+    - 议题网络：研究领域居于世界前列，研究成果成为该领域的重要参考  
+    - 所获荣誉：能获得较多世界前列的荣誉或国家级第一的荣誉  
+    - 传播渠道：有较完善的传播平台（传统媒体与新媒体结合）
+
+## 比较结果
+
+```{r}
+#| label: caseStudy
+
+df_case <- tribble(
+  ~类别, ~头部, ~前20, ~末尾,
+  "人员构成", "国际化（国内+国外）、多元化（政要/学者等）、复合型（多领域/跨学科）", "某特定领域国内外<strong>知名</strong>学者", "特定且小众领域的学者",
+  "资金来源", "资金充足、稳定、来源<strong>多样</strong>（政府/基金/项目/捐赠）", "资金充足、稳定，来源<strong>集中</strong>（多为政府和捐赠）", "较难查到具体来源，推测应该来源于大学拨款",
+  "合作网络", "与国内外高校、研究机构、社会组织形成互动网络，与政府和国际组织存在<strong>“旋转门”</strong>关联", "主要与国内高校、机构、组织有合作，为政府和国际组织提供咨询", "主要是国内/当地的合作者，合作方向是毕业生就业",
+  "政策咨询", "长期、稳定、多种方式参与政策咨询（政策报告、国家会议、在政府担任重要职位）；为<strong>多元群体</strong>（政府、政党、总统候选人等）提供政策咨询", "长期、稳定提供咨询，咨询方式多为<strong>政策报告</strong>，担任职位多为政策顾问，主要为政府机关提供咨询服务", "为特定地区政府提供特定领域的咨询（例如为亚美尼亚提供经济政策建议）",
+  "成果产出", "领域广泛、产出频繁、形式多元（报告、书籍、自己主编的期刊），被国内外研究者/机构<strong>广泛引用</strong>。所获荣誉大多为综合世界级", "有自己的专业领域、不定期产出内容（多为报告或期刊投稿），<strong>被引用情况良好</strong>。所获荣誉集中在国内或特定领域", "产出较少、单一、集中",
+  "活动关注度", "<strong>定期</strong>组织国际会议、论坛，吸引高质量、多样化参与者（全球政策精英、专家学者，部分对公众开放），国内外媒体密切关注其活动动态", "不定期举办<strong>国际会议和研讨会</strong>，多为专家学者参与，也有政要精英，媒体关注度较高", "也会举办会议，但是吸引力弱，多为学生/青年参加",
+  "媒体传播情况", "国内外媒体邀请智库人员发表观点、关注智库及其成果动态。智库有自己的传播网络（网站+社交媒体平台）并<strong>频繁更新</strong>", "多为国内，也有国外媒体引用智库人员发言/智库成果。<strong>有自己发布成果的渠道</strong>", "没有特别完善的媒体传播网络"
+)
+
+# kable(df_case)|>
+#     kable_classic(c("striped", "hover"), full_width = F) |>
+#     kable_styling(font_size = 20) |>
+#     scroll_box(height = "600px")
+
+kable(df_case, format = "html", escape = FALSE) |> 
+  kable_styling(bootstrap_options = c("striped", "hover"), 
+                font_size = 20,
+                full_width = FALSE) |> 
+  scroll_box(height = "600px")
+
+```
+
+## 初步结论
+
+1. 部分最好 &ne; 全局一流
+1. 资源、引用、输出、影响力指标能有效区分不同梯次智库特征
+1. 世界一流智库 vs. 世界一流智库矩阵
+
+# 感谢垂听·敬请指正 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
