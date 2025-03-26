@@ -56,6 +56,8 @@ p_load(
     "tidyverse"
 )
 
+options(knitr.kable.NA = "")
+
 # Functions preload
 set.seed(313)
 ```
@@ -76,6 +78,27 @@ set.seed(313)
         - Top 10 : Top 20
 
 ## 中国上榜智库
+
+```{r}
+#| label: thinkTankChina
+
+df_thinktank_china <- tribble(
+    ~排名, ~智库名, ~中文名, ~学校,
+    9, "Institute of International and Strategic Studies", "国际战略研究所", "北京大学",
+    13, "Carnegie Endowment for International Peace", "卡内基国际和平基金会", "清华大学",
+    14, "Brookings-Tsinghua Center for Public Policy", "布鲁金斯学会-清华大学公共政策研究中心", "清华大学",
+    35, "Chongyang Institute for Financial Studies", "重阳金融研究院", "中国人民大学",
+    58, "Center for China Studies", "（野村？）中国研究中心", "清华大学",
+    79, "National School of Development", "国家发展研究院", "北京大学"
+)
+
+
+kable(df_thinktank_china, format = "html", escape = FALSE) |> 
+    kable_styling(bootstrap_options = c("striped", "hover"), 
+                    font_size = 25,
+                    full_width = FALSE)
+
+```
 
 ## 全局分析
 
@@ -113,8 +136,6 @@ df_thinktank <- tribble(
     ) |> 
     mutate(across(where(is.numeric), as.integer)) |> 
     arrange(ranking)
-
-options(knitr.kable.NA = "")
 
 kable(df_thinktank) |>
     kable_classic(c("striped", "hover"), full_width = F) |>
@@ -186,10 +207,6 @@ df_case <- tribble(
     "媒体传播情况", "国内外媒体邀请智库人员发表观点、关注智库及其成果动态。智库有自己的传播网络（网站+社交媒体平台）并<strong>频繁更新</strong>", "多为国内，也有国外媒体引用智库人员发言/智库成果。<strong>有自己发布成果的渠道</strong>", "没有特别完善的媒体传播网络"
 )
 
-# kable(df_case)|>
-#     kable_classic(c("striped", "hover"), full_width = F) |>
-#     kable_styling(font_size = 20) |>
-#     scroll_box(height = "600px")
 
 kable(df_case, format = "html", escape = FALSE) |> 
     kable_styling(bootstrap_options = c("striped", "hover"), 
