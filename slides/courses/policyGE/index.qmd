@@ -24,52 +24,6 @@ set.seed(313)
 theme_set(theme_minimal())
 ```
 
-```{r calendar, include=FALSE}
-# Opening Date
-start <- ymd("2024-02-26")
-
-# Final Week
-end <- start + dweeks(15) 
-
-schedule <-
-  tibble(day = seq(from = start, to = end, by = "days")) %>%
-  mutate(day = ymd(day),
-         weekDay = wday(day, week_start = 1)) %>% # get the relative week number
-  filter(weekDay == 1) # only keep Monday
-
-# Schedule exchange due to Holiday
-
-# schedule$day[schedule$day == ymd(20230501)] <- ymd(20230507)
-
-# Holiday
-tombSweep <- ymd(20240404) %--% ymd(20240406)
-laborDay <- ymd(20240430) %--% ymd(20240505)
-dragonBoat <- ymd(20240610) %--% ymd(20240610)
-
-
-schedule$topic[schedule$day %within% list(tombSweep, laborDay)] <- "[Public Holiday]"
-schedule$translation[schedule$day %within% list(tombSweep, laborDay)] <- "[哗啦啦，休假啦！]"
-
-schedule$lab[schedule$day %within% list(tombSweep, laborDay)] <- 
-  schedule$reference[schedule$day %within% list(tombSweep, laborDay)] <- 
-  schedule$reading[schedule$day %within% list(tombSweep, laborDay)] <- 
-  "Nah~"
-
-schedule <- arrange(schedule, day) %>% 
-  rowid_to_column(var = "weekNum")
-
-content <- import("D:/Seafile/WW_employed/01_Teaching/01_courses/02_Analysis_of_Public_Policy/schedule_editable.xlsx")
-
-schedule$topic[is.na(schedule$topic)] <- content$topic
-schedule$translation[is.na(schedule$translation)] <- content$translation
-schedule$reading[is.na(schedule$reading)] <- content$reading
-schedule$reference[is.na(schedule$reference)] <- content$reference
-schedule$lab[is.na(schedule$lab)] <- content$lab
-
-schedule$caption <- paste0("第", schedule$weekNum, "周 (", schedule$day, "): ", schedule$translation, " (", schedule$topic, ")")
-
-```
-
 Welcome to the lecture sources for the *Understanding Policies*. Learn how to understand public polices with Dr. Hu.
 
 ![](https://drhuyue.site:10002/sammo3182/figure/goodluck.gif){fig-align="center"}
@@ -77,25 +31,25 @@ Welcome to the lecture sources for the *Understanding Policies*. Learn how to un
 ### Schedule
 
 ```{r slides}
-ls_slides <- list.files(here("slides", "courses", "policyGE"), 
+ls_slides <- list.files(here::here("slides", "courses", "policyGE"), 
                         pattern = "^\\d{2}_.*html$")
 dir_slides <- paste0("/slides_gh/slides/courses/policyGE/", ls_slides)
 # dir_slides <- dir_slides[-1]
 ```
 
 
-- [`r schedule$caption[1]`](`r dir_slides[1]`)
-- [`r schedule$caption[2]`](`r dir_slides[2]`)
-- [`r schedule$caption[3]`](`r dir_slides[3]`)
-- [`r schedule$caption[4]`](`r dir_slides[4]`)
-- [`r schedule$caption[5]`](`r dir_slides[5]`)
-- [`r schedule$caption[6]`](`r dir_slides[6]`)
-- [`r schedule$caption[7]`](`r dir_slides[7]`)
-- [`r schedule$caption[8]`](`r dir_slides[8]`)
-- [`r schedule$caption[9]`](`r dir_slides[9]`)
-- [`r schedule$caption[10]`](`r dir_slides[10]`)
-- [`r schedule$caption[11]`](/slides_gh/slides/courses/governmentalBigData/10_generalIdea.html)
-- [`r schedule$caption[12]`](`r dir_slides[11]`)
-- [`r schedule$caption[13]`](`r dir_slides[12]`)
-- [`r schedule$caption[14]`](`r dir_slides[13]`)
-- [`r schedule$caption[15]`](`r dir_slides[14]`)
+- [导论 1：公共政策是什么](`r dir_slides[1]`)
+- [导论 2：公共政策分析的科学方法](`r dir_slides[2]`)
+- [理性视角：决策是怎么进行的](`r dir_slides[3]`)
+- [系统视角：区隔 > 综合](`r dir_slides[4]`)
+- [功能视角：进阶系统论与Stuffed Pizza](`r dir_slides[5]`)
+- [精英视角：关键少数的理论](`r dir_slides[6]`)
+- [群体视角：群体组织与利益表达](`r dir_slides[7]`)
+- [实验方法：实验室里的政策分析](`r dir_slides[8]`)
+- [计量方法：见微知著的大样本分析](`r dir_slides[9]`)
+- [数据方法：大数据视角下的行为与政策](`r dir_slides[10]`)
+- [政务数据：大数据视角下的公共政策](/slides_gh/slides/courses/governmentalBigData/10_generalIdea.html)
+- [定性方法：“大未必佳”与小样本分析逻辑](`r dir_slides[11]`)
+- [案例方法：一叶知秋与比较逻辑](`r dir_slides[12]`)
+- [解释方法：超越科学范式](`r dir_slides[13]`)
+- [表达方法：蕴含主体性的项目报告策略](`r dir_slides[14]`)
