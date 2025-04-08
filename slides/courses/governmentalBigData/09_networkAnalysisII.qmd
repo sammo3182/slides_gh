@@ -1,66 +1,116 @@
 ---
-title: "社会网络方法论: 分析网络"
-subtitle: "Political Research with Big Data (80700673)"
-
+title: "社会网络分析: 分析网络"
+subtitle: "政务大数据应用与分析 (80700673)"
 author: "胡悦"
-institute: "清华大学" 
-
-knitr: 
-    opts_chunk: 
-      echo: true
+institute: "清华大学社会科学学院" 
+bibliography: t_politicalData.bib
 
 format: 
-  revealjs:
-    css: style_basic.css
-    theme: goldenBlack.scss
-    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
-    slide-number: true
-    incremental: true
-    preview-links: true # open an iframe for a link
-    link-external-newwindow: true
-    self-contained: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
-    
-    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    width: 1600
-    height: 900
-    title-slide-attributes:
-      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-      data-background-size: 250px   
-      data-background-position: top 10% right 5%
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../../css/goldenBlack.scss
+        number-sections: true
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        show-notes: false
+        title-slide-attributes:
+            data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+            data-background-size: 250px   
+            data-background-position: top 10% right 5%
+        default-image-extension: png
+revealjs-plugins:
+    - spotlight
+lightbox: 
+    match: auto
+    effect: fade
+spotlight:
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+    echo: false
+editor_options: 
+    chunk_output_type: console
+editor: 
+    render-on-save: true
 ---
 
 
-```{r setup, include = FALSE}
+```{r}
+#| label: setup
+#| include: false
+
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  knitr, sna, network, tidyverse
+  knitr, 
+  cluster,
+  sna, 
+  network, 
+  ergm,
+  data.table, 
+  clusterCrit,
+  mclust,
+  dbscan,
+  patchwork,
+  drhutools,
+  tidyverse
 ) # data wrangling # data wrangling
 
 # Functions preload
 set.seed(313)
+
+
+# Visualization
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 18)
+)
 ```
 
-## 概要
+## 概要 {.unnumbered}
 
-::::{.columns style="text-align:center; margin-top: 3em"}
+::::{.columns style="text-align:center"}
+
 :::{.column .nonincremental width="50%"}
+
 *理解网络*
+
+目的：描述网络结构，识别网络特征
 
 + 网络方法论 &check;
 + 网络要素  &check;
 + 自我中心网络  &check;
+
 :::
 
 :::{.column .nonincremental width="50%"}
+
 *分析网络*
 
-+ 邻居分析
-+ 扩散分析
-+ 全网分析
+目的：揭示网络构成因素和原因
+
++ 邻居分析（“近景”）
++ 扩散分析（“中景”）
++ [全网分析（“远景”）*]{.grayLight}
+
 :::
+
 ::::
 
 
@@ -69,106 +119,115 @@ set.seed(313)
 ## 邻居类型
 
 :::{.nonincremental .large style="text-align:center; margin-top: 3em"}
+
 1. Dyads
 1. Triads
 1. Communities
+
 :::
 
 ## Dyads Distribution
 
 :::: {.columns}
+
 :::{.column width="50%" .fragment}
+
 1. None: A &nbsp; B
 1. Arc: A &rarr; B; B &larr; C
-1. Reciprocal(互惠): A &harr; B
+1. Reciprocal: A &harr; B
+
 :::
 
 :::{.notes}
+
 Arc is a directed edge
 
 Both are using the described the same phenomenon
+
 :::
 
 :::{.column width="50%" .fragment}
-![](images/sna_arc.png){height=400}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_arc.png){height=400}
+
 :::
+
 ::::
 
 :::: {.columns}
 
 ::: {.column .fragment width="50%"}
+
 - Dyadic: $$R = \frac{\#Reciprocated\ Pairs}{\# Connected\ Pairs}$$
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 - Arc: $$R = \frac{\#Reciprocated\ Arcs}{\# Total\ Arcs}$$ 
+
 :::
 
 ::::
 
 
-## Simmelian tie
 
-Dyads in a triad:
-
-![](images/sna_taoyuan.jpeg){fig-align="center" height=400}
-
-- Simmelian tie: Dyads 同时与第三方有互惠关系
-    - Dyads more stable when embedded in triads
-
-
-## Triadic Analysis
+## Triads
 
 A、B、C三方，存在几种建立关系的方式? 
 
 :::{.fragment style="text-align:center"}
+
 (2<sup>2</sup>)<sup>3</sup> = 64
 
-![](images/sna_triads.gif){height=500 fig-align="center"}
+![Triad census, @PrellSkvoretz2008, fig. 1](https://drhuyue.site:10002/sammo3182/figure/sna_triads.gif){height=500 fig-align="center"}
+
 :::
 
-## Triads Distribution
-
-:::{.panel-tabset}
-
-### Transitive Triads
+## Transitive Triads
 
 A&rarr;B&rarr;C + A&rarr;C
 
-![](images/sna_triadsTrans.png){height=600 fig-align="center"}
+![@PrellSkvoretz2008, fig. 1](https://drhuyue.site:10002/sammo3182/figure/sna_triadsTrans.png){height=550 fig-align="center"}
 
-### Vacuous Triads
-![](images/sna_triadsVac.png){height=600 fig-align="center"}
+## Vacuous Triads
+
+![@PrellSkvoretz2008, fig. 1](https://drhuyue.site:10002/sammo3182/figure/sna_triadsVac.png){height=550 fig-align="center"}
 
 :::{.notes}
+
 /v'ækjuəs/
 
 No feature a directed path
 
 Used to study social capital: closure (all nodes are reciprocal) and brokerage
 
-Prell, Christina, and John Skvoretz. 2008. “Looking at Social Capital Through Triad Structures.” Connections 28(2): 4–16.
-:::
-
 :::
 
 
+## Dyads in triads
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_taoyuan.jpeg){fig-align="center" height=400}
+
+- Simmelian tie: Dyads 同时与第三方有互惠关系
+    - Dyads more stable when embedded in triads
 
 ## 应用
 
 定义网络结构[平衡]{.red}（Structural Balance）
 
 :::{.r-stack}
-![](images/sna_structuralBalance.jpg){.fragment fig-align="center" height=700}
 
-![](images/sna_structuralBalance.png){.fragment fig-align="center" height=700}
+![@MaozEtAl2007](https://drhuyue.site:10002/sammo3182/figure/sna_structuralBalance.jpg){.fragment fig-align="center" height=550}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_structuralBalance.png){.fragment fig-align="center" height=550}
+
 :::
 
 
 :::{.notes}
-The enemy of my enemy is my friends.
 
-Maoz, Zeev, Lesley G. Terris, Ranan D. Kuperman, and Ilan Talmud. 2007. “What Is the Enemy of My Enemy? Causes and Consequences of Imbalanced International Relations, 1816–2001.” Journal of Politics 69(1): 100–115.
+The enemy of my enemy is my friends.
 
 过往186年中，IR充满了imbalance, 友之敌为友，友by alliances, 敌military disputes
 
@@ -180,90 +239,128 @@ IGO membership
 :::
 
 
-## Beyond k-ads {background-image="images/sna_smallWorld.bmp" background-position="center" background-size="contain"}
+## Community: Beyond k-ads {background-image="https://drhuyue.site:10002/sammo3182/figure/sna_smallWorld_disney.jpg" background-position="center" background-size="contain"}
 
-社群（Community）: e.g, 小世界
+::::{.overlay-container}
 
-::::{.columns style="text-align:right"}
-:::{.column width="60%" .fragment}
+::: {.overlay-image .fragment}
+
+![小世界, @KlovdahlEtAl1994](https://drhuyue.site:10002/sammo3182/figure/sna_smallWorld.bmp){fig-align="center" height=600}
+
 :::
 
-:::{.column width="40%" .fragment}
+::: {.overlay-text-over .fragment}
+
 + 695 人
 + 平均距离为大约5步
 + 平均每人3步内就能覆盖75个其他人
+
 :::
+
 ::::
 
 
 :::{.notes}
+
+Disneyland: it's a small world
+
 超越strong, presented ties，小世界网络是一类特殊的复杂网络结构，在这种网络中大部分的节点彼此并不相连，但绝大部分节点之间经过少数几步就可到达，比如六度空间理论（实际可能在2左右，最长不过8）
 
 
 **Reachability in Colorado Springs**
 
-Epidemic Potential in Human Sexual Networks
+- Epidemic Potential in Human Sexual Networks
+- sexual contact only, STD 
+- High-risk actors over 4 years
 
-sexual contact only, STD 
-
-High-risk actors over 4 years
 :::
 
 
 ## 定义社群
 
-![](images/sna_community.jpg){height=300 fig-align="center"}
+```{r}
+#| label: exampleData
+#| fig-align: center
+#| fig-height: 5
+
+data_example <- data.table(
+  x = c(
+    rnorm(10, 3.5, 0.1), rnorm(10, 2, 0.1),
+    rnorm(10, 4.5, 0.1), c(5, 1.9, 3.95)
+  ),
+  y = c(
+    rnorm(10, 3.5, 0.1), rnorm(10, 2, 0.1),
+    rnorm(10, 4.5, 0.1), c(1.65, 2.9, 4.2)
+  )
+)
+
+fg_original <- ggplot(data_example, aes(x, y)) +
+  geom_point(alpha = 0.75, size = 8)
+
+fg_original
+```
 
 
-::::{.columns style="text-align:center; margin-top: 2em"}
+::::{.columns style="text-align:center"}
+
 :::{.column width="50%" .fragment}
+
+Top Down: 
+
+Cores &rarr; factions &rarr; modularity
+
+:::
+
+:::{.column width="50%" .fragment}
+
 Bottom Up: 
 
 Cliques &rarr; n-cliques &rarr; n-clans
+
 :::
 
-:::{.column width="50%" .fragment}
-Top Down: 
-
-k-cores &rarr; factions &rarr; modularity
-:::
 ::::
 
 
-## K-Core
+## (K-)Core
 
 The k-core of a network graph G is the maximal subgraph H &sube; G in which all vertices have degree at least k
 
-![](images/sna_kcore.png){height=650 fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/sna_kcore.png){height=500 fig-align="center"}
 
 :::{.notes}
 
 https://www.youtube.com/watch?v=rHVrgbc_3JA
 
-<img src="images/sna_kcoresSolution.png" height = 300 />
+<img src="https://drhuyue.site:10002/sammo3182/figure/sna_kcoresSolution.png" height = 300 />
 
 每个人都与其他若干人相连
 
 4-core is the null graph of the original graph or DNE (does not exist)
+
 :::
 
 
 ## Faction
 
-理想状态：
-
-> 邻国相望，鸡犬之声相闻，民至老死，不相往来 ——《老子·第八十》
+> 邻国相望，鸡犬之声相闻，民至老死，不相往来。 [@WangBiLouYuLie2011]
 
 ::::{.columns style="text-align:center; margin-top: 2em"}
+
 :::{.column width="50%" .fragment}
-![](images/sna_faction.png){height=600 fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_faction.png){height=400 fig-align="center"}
+
 :::
 
 :::{.notes}
+
 组内紧密连结，无跨组连结。
+
 :::
 
 :::{.column width="50%" .fragment}
+
 - 实现：Arranging actors to resemble the ideal as closely as possible.
 - 步骤： 
     1. Partition
@@ -271,95 +368,134 @@ https://www.youtube.com/watch?v=rHVrgbc_3JA
     1. Moving
     1. Evaluation, again
     1. Repeat
+
 :::
+
 ::::
 
 :::{.notes}
+
 + Partition the network
 + Evaluate how good the partition is
 + Move some actors from one group to another
 + See if there's improvement
 + Keep repeating the above steps until further improvement is impossible
+
 :::
 
-## 辨别社群
+## 辨别社群 （unsupervised）
 
-1. Faction method?
-    - Heuristic method, 但难以进行并行运算
-1. Hierarchical Clustering
+Aka., Cluster analysis
 
 ::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
-*Agglomerative method*^[可能丢失弱连结vertices。]
-
-![](images/sna_agglomerative.bmp){height=400 fig-align="center"}
-
-:::
-
-:::{.notes}
-Agglomerative (/ə'ɡlɔmərətiv/) 基于 a wide variety of similarity measures，从empty graph （没有任何ties）开始，将最similar的nodes加在一起
-:::
 
 :::{.column width="50%" .fragment}
-*Divisive method (top down)*
 
-![](images/sna_divisive.bmp){height=400 fig-align="center"}
+Non-hierarchical
+
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_agglomerative.bmp){height=500 fig-align="center"}
+
 :::
 
-:::{.notes}
-Divisive 从complete graph 开始， dedrogram横切二分点）（halting points）
+::: {.overlay-text-over .fragment}
+
+- Centroid-based
+- Model-based
+- Density-based
+- Grid-based
+
 :::
+
+::: {.notes}
+
+k-mean 是一种centroid-based方法
+
+:::
+
 ::::
 
 
-## Agglomerative vs. Divisive
-
-![](images/sna_agglomerativeDivisive.bmp){height=800 fig-align="center"}
-
-:::{.notes}
-A善于发现强连结community， D不会地区除peripheral vertices
 :::
 
-## 社群特征：内聚性
+
+
+:::{.column width="50%" .fragment}
+
+Hierarchical
+
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_divisive.bmp){height=500 fig-align="center"}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+- Agglomerative
+- Divisive
+
+:::
+
+::::
+
+
+:::
+
+
+::::
+
+
+
+
+## 社群特征：内聚性 (cohesion)
 
 A.k.a., 凝聚力
 
-::: {.panel-tabset}
-### 连结性
-
-![](images/sna_cohesive.png){height=500 fig-align="center"}
-
-### 可达性
-![](images/sna_cohesiveII.png){height=500 fig-align="center"}
-:::
+![连结与可达](https://drhuyue.site:10002/sammo3182/figure/sna_cohesiveII.png){height=500 fig-align="center"}
 
 :::{.notes}
+
 由一点到其他点paths越多可达性越高
+
 :::
 
 ## 最小内聚性
 
-![](images/sna_minimalCohesion.png){height=300 fig-align="center"}
-
 ::::{.columns style="text-align:center; margin-top: 2em"}
+
 :::{.column width="50%" .fragment}
-### 高
-+ 集权
+
+高 &rArr;
+
++ 权力集中
 + 信息集中
 + 不平等
 + 个体行为影响大
 + 碎片化结构
+
 :::
 
 :::{.column width="50%" .fragment}
-### 低
-+ 分权
+
+低 &rArr;
+
++ 权力分散
 + 信息透明
 + 平等
 + 个体行为难以撼动结构
 + 均衡结构
+
 :::
+
 ::::
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_minimalCohesion.png){.fragment height=300 fig-align="center"}
 
 
 :::{.notes}
@@ -368,21 +504,21 @@ Minimal cohesion: without that node, the network will break apart
 
 ## Modularity
 
-Modularity: 比起识别出群体，更关注社群如何[组成]{.red}社会。
+![](https://drhuyue.site:10002/sammo3182/figure/sna_moduality.png){height=600 fig-align="center"}
 
-![](images/sna_moduality.png){height=600 fig-align="center"}
+::: {.notes}
+
+比起识别出群体，更关注社群如何[组成]{.red}社会。
+
+:::
 
 ## 应用
 
-Tamburrini et al 2015
-
-![](images/sna_languageIdentity.png){height=600 fig-align="center"}
+![@TamburriniEtAl2015](https://drhuyue.site:10002/sammo3182/figure/sna_languageIdentity.png){height=600 fig-align="center"}
 
 :::{.notes}
-Tamburrini, Nadine, Marco Cinnirella, Vincent A. A. Jansen, and John
-Bryden. 2015. “Twitter Users Change Word Usage According to Conversation-Partner Social Identity.” Social Networks 40: 84–89.
 
-modularity maximisation algorithm
+modularity maximization algorithm
 
 word-usage frequencies (solid bars at the top of eachplot),   
 word-ending frequencies (slashed bars in the middle)    
@@ -390,168 +526,578 @@ apostrophe (/əp'ɒstrəfi/) usage (crossed bars at the bottom).
 
 1. 人们根据自己的community改变语言特征
 1. communities越独立，语言特征越明显
+
 :::
+
+## 小结
+
+- 邻近点关系: dyads, triads
+- 社群关系：
+    - Core/faction
+    - 辨识社群
+      - Hierarchical/non-hierarchical
+    - Modularity
 
 
 # 扩散分析
 
-## 分析目标
+## 分析对象
 
-:::{.fragment .fade-in-then-semi-out}
-![](images/sna_covid19difussion.gif){height=500 fig-align="center"}
-:::
+![](https://drhuyue.site:10002/sammo3182/figure/sna_covid19difussion.gif){height=450 fig-align="center"}
 
 :::{style="text-align:center"}
-1. （事件、法律、政策、习惯 etc.）采用的时间
+
 1. 谁是“始作俑者” vis-a-vis “第一个吃螃蟹的人”
 1. 扩散过程是谁影响了谁
+1. （事件、法律、政策、习惯 etc.）采用的时间
+
 :::
 
 ## 分析视角
 
-:::{.panel-tabset}
-### 联系网络<br>Contact network
+![@WuEtAl2018, fig. 1](https://drhuyue.site:10002/sammo3182/figure/sna_diffusionQ.png){height=400 fig-align="center"}
 
-“Patient 0”效应: 谁接触了Patient 0，最终感染了谁
+- 联系网络（Contact network）：“Patient 0”（P0）效应: 谁接触了P0，最终感染了谁
+- 暴露网络（Exposure network）：联系网络的子集，谁是易感人群
+- 传动网络 (Transmission network)：传播（传递）路径究竟是怎样的
 
-![](images/sna_diffusionQ.png){height=500 fig-align="center"}
+::: {.notes}
 
-:::{.notes}
-Wu, J., Crawford, F. W., Kim, D. A., Stafford, D., & Christakis, N. A. (2018). Exposure, Hazard, and Survival Analysis of Diffusion on Social Networks. Statistics in Medicine, 37(17), 2561–2585. https://doi.org/10.1002/sim.7658
+How network exposure works in a diffusion process. The first 2 rows show the evolution of an adoption process on an example network, starting with a seed labeled 1. The numbered circles denote the order of adoption, and arrows represent transmission of the innovation. The time just after the ith adoption is denoted as urn:x-wiley:sim:media:sim7658:sim7658-math-0012. Light gray lines and circles are susceptible edges and individuals at the moment of each adoption, respectively. The last 4 lines show how the total hazard/exposure of adoption felt by susceptible individuals changes over time, assuming constant edgewise hazards. The exposure increases one step whenever the number of prior adopters connected to the individual increases. The shaded area under each subject's curve is the cumulative exposure experienced by that subject
+
 :::
 
-### 暴露网络<br>Exposure network
 
-谁是易感人群
-
-![](images/sna_diffusionQ.png){height=500 fig-align="center"}
-
-:::{.notes}
-联系网络的子集
-:::
-
-### 传动网络<br>Transmission network
-
-传播（传递）路径究竟是怎样的
-
-![](images/sna_diffusionQ.png){height=500 fig-align="center"}
-:::
-
-## 应用：路径分析
+## 应用：门槛效应
 
 ::::{.columns style="text-align:center; margin-top: 2em"}
-:::{.column width="70%"}
-*Valente 1996*: Threshold model in the view of network
 
-![](images/sna_exposure.png){height=600 fig-align="center"}
+:::{.column width="70%"}
+
+![@Valente1996](https://drhuyue.site:10002/sammo3182/figure/sna_exposure.png){height=600 fig-align="center"}
+
 :::
 
 :::{.notes}
-exposure：按时间adopt
 
-Valente, Thomas W. 1996. “Social Network Thresholds in the Diffusion of Innovations.” *Social Networks* 18(1): 69–89.
+exposure：按时间adopt
 
 Threshold: Early adopter, early majority, late majority, laggards.
 
 个体网络与全网角度理解threshold
+
+Fig. l(a) shows a typical personal network for a doctor (from Peoria, identification number 20) who was connected to five people: two friends, two discussion partners and one advice partner. Fig. l(b) shows the same personal network 3 months later, when the two discussion partners had adopted tetracycline. Now the individual doctor is exposed to the innovation through his/her personal network partners. The degree of exposure is computed by dividing the number of adopters, 2, by the total size of the personal network, 5. Thus, the degree of exposure to the innovation is 40% for this doctor at time-period 3. In Fig. l(d), the individual doctor adopts at time-period 8 when all of his/her network partners have adopted. The adoption threshold is the exposure at timeof- adoption. In this example, the doctor adopted tetracycline after all of the other doctors in his/her network adopted. at a threshold of 100%. The proportion of adopters in an individual’s personal network
+
 :::
 
 
 :::{.column width="30%" .fragment}
-“始作俑者”?
 
-Brokers?
+基于网络的分析可以：
 
-Centrality?
+- 多样化对行为蔓延（behavioral contagion）的定义
+- 预测蔓延趋势
+- 识别始作俑者和跟从者
 
-Node attributes?
 :::
+
 ::::
 
 
-## 扩散的现实含义
+## 扩散机制
 
-::::{.columns .large style="text-align:center; margin-top: 2em"}
-:::{.column width="50%" .fragment}
-**机制**
+::::{.columns}
+
+:::{.column width="20%" .fragment}
+
+**主动机制**
 
 + 学习
 + 竞争
-+ 模仿
++ 认同
+
 :::
 
-:::{.column width="50%" .fragment}
-**表现**
+:::{.column width="30%" .fragment}
+
+**被动机制**
 
 + Common shock
 + Homophily
 + Strategic interaction
+
 :::
-::::
 
+:::{.column width="50%" .fragment}
 
-## 应用
+🌰 
 
-Desmarais, Harden, Boehmke (2015)
-
-::::{.columns style="text-align:center"}
-:::{.column width="40%" .fragment}
-*传播路径启示*：
+![@DesmaraisEtAl2015, tbl. 2](https://drhuyue.site:10002/sammo3182/figure/sna_diffusionFlorida.png){height=300 fig-align="center"}
 
 + i州比j州早采用一个政策的次数
 + 同一政策i和j采用的时间差
 + i采用在多大程度上能预测j的采用
-:::
 
 :::{.notes}
-Desmarais, Bruce A., Jeffrey J. Harden, and Frederick J. Boehmke. 2015. “Persistent Policy Pathways: Inferring Diffusion Networks in the American States.” *American Political Science Review* 109(2): 392–406.
-:::
 
-:::{.column width="60%" .fragment}
-![](images/sna_diffusionFlorida.png){height=600 fig-align="center"}
-:::
-
-:::{.notes}
 佛罗里达是近五年policy的主要推动者
 
 一个州被认为innovative，并不单纯取决于它多快采用一个policy
+
 :::
+
+:::
+
 ::::
 
 
-## 机制辨析：影响还是仅仅是相似
+## 一种现象，何种机制
 
-:::{style="text-align:center"}
-Influence vs. Homophily
-:::
+:::: {.columns}
 
-:::{.fragment}
-Aral et al 2009: Matched sample estimation &rarr; 传统方法会高估影响机制 300-700%
-:::
+::: {.column width="50%"}
+
+*Influencing vs. homophily*
+
+![@AralEtAl2009](https://drhuyue.site:10002/sammo3182/figure/sna_homophilyVsInfluenced.png){fig-align="center" height=500}
+
+[传统方法会高估影响机制 300-700%]{.fragment}
 
 :::{.notes}
-Aral, Sinan, Lev Muchnik, and Arun Sundararajan. 2009. “Distinguishing Influence-Based Contagion from Homophily-Driven Diffusion in Dynamic Networks.” Proceedings of the National Academy of Sciences 106(51): 21544–49.
 
 在用Yahoo！Go（类似于企业微信）使用者数据
 
 根据节点的网络性质：在控制了nodes的各种行为和个体特点后，比较那些有很多adopted friends 和没有那么多adopted friends之人
+
 :::
 
-:::{.fragment style="text-align:center; margin-top: 2em"}
-e.g. "云集响应"还是"人以群分" （Lazer et al. 2010）
+:::
+
+::: {.column .fragment width="50%"}
+
+Influencing vs. affiliating
+
+![@LazerEtAl2010](https://drhuyue.site:10002/sammo3182/figure/sna_affiliatingVsInfluenced.png){fig-align="center" height=500}
+
+[“关系 > 知识”]{.fragment}
+
+:::{.notes}
 
 + 164公共政策2年级硕士生
 + 同cohort
 + 刚入学(T1)，第二学期开始(T2)，第二学期结束(T3)
-:::
-
-:::{.notes}
-Influencing vs. affiliating 
-
-Lazer, David et al. 2010. “The Coevolution of Networks and Political Attitudes.” *Political Communication* 27(3): 248–74.
 
 个体根据其associates改变正政治看法，这种conformity受social ties 而非task ties影响。而政治看法反过来对relationship影响不大。
+
 :::
+
+:::
+
+::::
+
+## 小结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- 分析对象
+    - P0
+    - 上游 &rarr; 下游
+    - 时间、条件
+- 分析视角
+  - Contact network
+  - Exposure network
+  - Transmission network
+
+:::
+
+::: {.column width="50%"}
+
+- 扩散机制
+  - 主动机制：学习、认同、竞争
+  - 被动机制：shock，homophily，strategy
+  - 一种行为，辨析机制
+
+:::
+
+::::
+
+
+## Take-Home Points
+
+::::{.columns style="text-align:center"}
+
+:::{.column width="50%" .fragment}
+
+Edge Effect (邻居效应)
+
++ Dyad/Triad Census
++ 社群 (Homophily)
+
+:::
+
+:::{.column width="50%" .fragment}
+
+Diffusion Effect (扩散分析)
+
++ 联系
++ 暴露
++ 传动
+
+:::
+
+::::
+
+## 参考文献
+
+::: {#refs}
+:::
+
+# 附录：聚类分析 {.appendix}
+
+::: {.notes}
+
+https://petolau.github.io/Overview-clustering-methods-in-R/
+
+https://github.com/PetoLau/petolau.github.io/blob/master/_rmd/2024-01-11-Overview-clustering-methods-in-R.Rmd
+
+:::
+
+## Toy data
+
+```{r}
+#| label: comparison
+#| fig-align: center
+#| fig-height: 6
+#| fig-cap: "聚类前后对比"
+
+kmed_res <- pam(data_example, 3)$clustering
+
+data_example[, class := as.factor(kmed_res)]
+
+fg_colored <- ggplot(data_example, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  scale_color_gb()
+
+fg_original + fg_colored
+```
+
+
+
+## Agglomerative vs. Divisive
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_agglomerativeDivisive.bmp){height=600 fig-align="center"}
+
+:::{.notes}
+
+- Agglomerative (/ə'ɡlɔmərətiv/) 基于 a wide variety of similarity measures，从empty graph （没有任何ties）开始，将最similar的nodes加在一起
+- Divisive 从complete graph 开始， dedrogram横切二分点）（halting points）
+
+A善于发现强连结community， D不会去除peripheral vertices；类似EFA和PCA的差别
+
+:::
+
+## 非层次聚类
+
+- Centroid-based： K-means, K-medians, K-medoids, K-modes......
+- Model-based: Gaussian, gamma, t, poisson, GMM......
+- Density-based
+- Grid-based
+
+## 聚类之前：聚几类？
+
+::: {.callout-note}
+
+## 基本思路
+
+$$
+Max(\frac{类内相似性}{类间相似性}) 
+$$
+
+:::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+常见标准：
+
+- Silhouette
+- Davies-Bouldin index
+- Dunn index
+
+:::
+
+::: {.column width="50%"}
+
+判断方法：^[与EFA判断方式一样（为什么？）]
+
+```{r}
+#| label: clusterNumber
+#| fig-align: center
+#| fig-height: 3
+#| fig-cap: "5个是最佳的选择，不过为了显示方法差别，后面采用3个"
+
+library(clusterCrit)
+
+km_res_k <- lapply(2:6, function(i) kmeans(data_example[, .(x, y)], i)$cluster)
+
+db_km <- lapply(km_res_k, function(j) intCriteria(data.matrix(data_example[, .(x, y)]), j, "Davies_bouldin")$davies_bouldin)
+
+ggplot(data.table(K = 2:9, Dav_Boul = unlist(db_km)), aes(K, Dav_Boul)) +
+  geom_line() +
+  geom_point()
+```
+
+:::
+
+::::
+
+## Centroid-based: K-Mean
+
+```{r}
+#| label: kmean
+#| fig-align: center
+#| fig-height: 3
+
+km_res <- kmeans(data_example, 3)$cluster
+
+data_example[, class := as.factor(km_res)]
+
+centroids <- data_example[, .(x = mean(x), y = mean(y)), by = class]
+
+ggplot(data_example, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  geom_point(data = centroids, aes(x, y), color = "darkred", shape = "+", size = 25) +
+  scale_color_gb()
+```
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+*步骤*
+
+1. 创建随机的K个聚类（并计算质心）。
+1. 将点分配给最近的质心。
+1. 更新质心。
+1. 当质心仍在变化时，返回步骤2。
+
+
+:::
+
+::: {.column .fragment width="50%"}
+
+优点：计算速度快。易于理解
+
+缺点：
+
+- 不同的初始聚类可能导致最终聚类结果不同
+- 对尺度敏感
+- 只能创建凸形(球形)的聚类
+- 对异常值敏感
+
+:::
+
+::::
+
+## Centroid-based: K-medoids
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+使用中心点而非平均值
+
+*优点*
+
+- 对异常值不太敏感
+- 可以使用任何距离度量
+
+:::
+
+::: {.column width="50%"}
+
+*缺点*
+
+- 不同的初始聚类可能导致最终聚类结果不同
+- 对尺度敏感
+- 比K-means算法慢
+
+:::
+
+::::
+
+```{r}
+#| label: kmedoids
+#| fig-align: center
+#| fig-height: 3
+
+kmed_res <- pam(data_example[, .(x, y)], 3)
+data_example[, class := as.factor(kmed_res$clustering)]
+
+medoids <- data.table(kmed_res$medoids, class = as.factor(1:3))
+
+ggplot(data_example, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  scale_color_gb() +
+  geom_point(data = medoids, aes(x, y), color = "darkred", size = 11)
+```
+
+::: {.notes}
+
+Medoids: the one that minimizes the total distance to all other points，a real one not a calculated mean
+
+:::
+
+
+## Model-based: GMM
+
+通常对于多维数据采用Mixture of models, 比如Gaussian Mixture Models (GMM)
+
+$$
+L(\boldsymbol{\mu_1}, \dots, \boldsymbol{\mu_k}, \boldsymbol{\Sigma_1}, \dots, \boldsymbol{\Sigma_k} | \boldsymbol{x_1}, \dots, \boldsymbol{x_n}).
+$$
+
+::: {.notes}
+
+Cluster: mean ($\mathbf{\mu}$) and covariance matrix ($\mathbf{\Sigma}$)
+Here, cluster is represented by . So not just centroid as in the case of K-means.
+
+:::
+
+::: {.fragment}
+
+类数选择：BIC
+
+```{r}
+#| label: bic
+#| fig-align: center
+#| fig-height: 3
+#| 
+res <- Mclust(data_example[, .(x, y)], G = 2:6, modelNames = c("VVV", "EEE", "VII", "EII"), verbose = FALSE)
+
+plot(res, what = "BIC")
+
+```
+
+:::
+
+
+## 操作过程
+
+- 目标：Maximum likelihood
+- 过程：Expectation Maximization (EM)
+
+```{r}
+#| label: gmm
+#| fig-align: center
+#| fig-height: 5
+
+plot(res, what = "classification")
+```
+
+## Density-based 方法
+
+定义密度，然后寻找最大化密度的点
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+常见方法:
+
+- DBSCAN: 用neighborhood定义密度，所有点必须在一定距离内，每个cluster里必须有一定数量的点^[未与任何cluster连接且未通过最小点标准的点被标记为噪声（异常值）]
+- OPTICS
+- HDBSCAN
+- Multiple densities (Multi-density) methods
+
+
+:::
+
+::: {.column width="50%"}
+
+*优点*
+
+- 自动提取异常值
+- 计算速度快
+- 可以找到任意形状的簇
+- 根据数据[自动确定簇的数量]{.red}
+
+*缺点*
+
+- 必须预设参数（$\epsilon$，minPts）值
+- 邻域可能存在连接问题
+
+:::
+
+::::
+
+## DBSCAN效果
+
+```{r}
+#| label: dbscan
+#| fig-align: center
+#| fig-height: 6
+
+res <- dbscan(data_example[, .(x, y)], eps = 0.4, minPts = 5)
+
+data_example[, class := as.factor(res$cluster)]
+
+ggplot(data_example, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  scale_color_gb(palette = "digitMixed")
+```
+
+
+## 聚类除了聚类以外的功能
+
+::: {.r-stack}
+
+```{r}
+#| label: anomaly
+#| fig-align: center
+#| fig-height: 6
+#| fig-cap: "甄别异常值"
+
+anom <- c(rep(1, 30), rep(0, 3))
+data_example[, class := as.factor(anom)]
+levels(data_example$class) <- c("Anomaly", "Normal")
+
+ggplot(data_example, aes(x, y, color = class, shape = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  scale_color_gb()
+```
+
+::: {.fragment}
+
+
+```{r}
+#| label: compression
+#| fig-align: center
+#| fig-height: 6
+#| fig-cap-location: top
+#| fig-cap: "数据浓缩/降维"
+#| eval: true
+
+kmed_res <- pam(data_example, 3)$clustering
+data_example <- mutate(data_example, class = as.factor(kmed_res))
+
+centroids <- data_example[, .(x = mean(x), y = mean(y)), by = class]
+
+ggplot(data_example, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 8) +
+  scale_color_gb() +
+  geom_point(data = centroids, aes(x, y), color = "darkred", shape = "+", size = 18)
+```
+
+
+
+:::
+
+:::
+
 
 ## Network analysis &#129309; Spatial Analysis
 
@@ -569,176 +1115,206 @@ Modeling Peer Influence
 - **W**: [人际关系矩阵]{.red}（N &times; N).
 
 
-# 全网分析
+# 附录：全网分析  {.appendix}
 
-## 方法论的跃迁(复习)
+## 网络分析的统计推断
 
 ::::{.columns style="text-align:center; margin-top: 2em"}
+
 :::{.column width="50%" .fragment}
-**传统计量**
+
+**统计推断流程**
 
 1. 确定H<sub>0</sub>
-1. 描述H<sub>0</sub>下样本分布特征
-1. 检验观测值是否在“null distribution的尾巴上”
+1. 确定显著性标准
+1. 检验观测统计是否在“null distribution的尾巴上”
 1. 拒绝/不拒绝H<sub>0</sub>
 
-- ASSUMPTION
-    + Sample distribution 已知
-    + IID observations
+::: {.callout-important .fragment}
+
+## 传统计量的前提假定
+
++ Sample distribution (“假装”知道)
++ IID observations （“预设”满足）
+
+:::
 
 :::
 
 :::{.column width="50%" .fragment}
-**网络分析**
 
-1. 研究关系
+**网络分析**：研究个体 &rarr; 研究关系
+
 1. Sample是什么？
-1. Parameter怎么判断？
+1. Parameter怎么设置？
 1. H<sub>0</sub>是什么
+
+::: {.fragment}
+
+&dArr;
+
+随机网络分析
+
 :::
-::::
+
 
 :::{.notes}
+
 - Sample: 关系
 - Parameter：对比随机网络
 - H<sub>0</sub>: X不影响网络（关系）结构
+
 :::
 
-
-## 随机网络分析
-
-:::{style="text-align:center"}
-Conditional Uniform Graph (CUG)
-
-:::{.fragment .fade-in-then-out}
-Quadratic Assignment Procedure (QAP)
-:::
 :::
 
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
+::::
+
+
+
+## 随机网络分析常见方法
+
+- Conditional uniform graph (CUG)
+- Quadratic assignment procedure (QAP)
+- Exponential family random graph models (ERGM)
+
+
+## CUG
+
 "Baseline network"比较分析的一种
 
 1. 固定属性 (size, prob of edges, dyad census, degree, # of triangles, etc.)
 1. 同等可能
-:::
 
-:::{.notes}
-根据特定属性通过bernoulli分布建立随机网络，所有网络都是被视为同等可能出现
 
-Generating 1000 random graphs of size 20; assumes digraph. tprob, probility of any tie existing is 30%. Plotting the density. it is probability, so, some is before 0.3, some beyone 0.3
-:::
+```{r}
+#| label: cug
+#| fig-align: center
+#| fig-height: 4
 
-:::{.column width="50%" .fragment}
-```{r cugNet}
-
-library(sna)
 rand.gr <- rgraph(n = 20, m = 1000, tprob = 0.3)
 plot(density(gden(rand.gr)))
 ```
-:::
 
 :::{.notes}
+
+根据特定属性通过bernoulli分布建立随机网络，所有网络都是被视为同等可能出现
+
 - n: The size of the vertex set (|V(G)|) for the random graphs
 - m: The number of graphs to generate
 - tprob: Information regarding tie (edge) probabilities; see below
+
+Generating 1000 random graphs of size 20; assumes digraph. tprob, probability of any tie existing is 30%. Plotting the density. it is probability, so, some is before 0.3, some beyond 0.3
+
 :::
-::::
 
 
-## Network Hypotheses (H<sub>0</sub>)
 
-$$Network_{obs}\quad vs.\quad Network_{ran}$$
+## H<sub>0</sub>
+
+$$
+Network_{obs}\quad vs.\quad Network_{ran}
+$$
 
 :::{style="text-align:center"}
-  检验观测网络与随机网络在这些方面是否相异
+观测网络与随机网络在这些方面是否相异
 :::
 
-![](images/sna_networkHypothesis.png){height=400 fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/sna_networkHypothesis.png){height=450 fig-align="center"}
 
 ## Conditional Uniform Graph Test
 
-::::{.columns style="text-align:center; margin-top: 2em"}
-:::{.column width="50%" .fragment}
-```{r cugNetReal}
+::: {.r-stack}
 
-#| class-source: long_chunk
-#| classes: long_chunk
+```{r}
+#| label: cugDensity
+#| fig-align: center
+#| fig-cap: Density
 
-library(network);data(emon)
+data(emon)
 g <- emon$Cheyenne
-g
-```
-:::
-
-:::{.notes}
-Drabek et al. (1981) provide seven case studies of emergent multi-organizational networks (EMONs) in the context of search and rescue (SAR) activities. Networks of interaction frequency are reported, along with several organizational attributes.
-:::
-
-:::{.column width="50%" .fragment}
-```{r cugTestDens, fig.align='center'}
-
-#| class-source: long_chunk
-#| classes: long_chunk
 
 ## Density 
 cug.test(g, gden, mode="digraph", cmode="size", reps=1000) %>% 
   plot.cug.test()
 ```
-:::
-::::
 
----
+::: {.fragment}
 
-```{r cugTests}
-#| eval: false
-
-###Reciprocity
-cug.test(g, grecip, mode="digraph", cmode="size", reps=1000)
-
-####Controlling the number of edges & size
-cug.test(g, grecip, mode="digraph", cmode="edges", reps=1000)
-
-####Controlling the dyad census
-cug.test(g, grecip, mode="digraph", cmode="dyad.census", reps=1000)
-```
-
-
-```{r cugTestEdges}
+```{r}
+#| label: cugReciprocity
 #| fig-align: center
+#| fig-cap: Density
 
-###Transitivity
-cug.test(g, gtrans, mode="digraph", cmode="edges", reps=1000) %>% 
-  plot.cug.test() 
+## Reciprocity
+cug.test(g, grecip, mode="digraph", cmode="size", reps=1000) %>% 
+  plot.cug.test()
 ```
 
-## 随机网络分析
-
-:::{style="text-align:center"}
-:::{.fragment .fade-out}
-Conditional Uniform Graph (CUG)
 :::
 
-Quadratic Assignment Procedure (QAP)
+::: {.fragment}
+
+```{r}
+#| label: cugEdge
+#| fig-align: center
+#| fig-cap: Edge
+
+### Controlling the number of edges & size
+cug.test(g, grecip, mode="digraph", cmode="edges", reps=1000) %>% 
+  plot.cug.test()
+```
 
 :::
 
-::::{.columns style="text-align:center; margin-top: 2em"}
-:::{.column width="50%" .fragment}
-1. 创建随机网络分布 (= CUG)
-1. 控制网络结构 (&ne; CUG)
+::: {.fragment}
 
+```{r}
+#| label: cugDyad
+#| fig-align: center
+#| fig-cap: Dyad Census
+
+### Controlling the dyad census
+cug.test(g, grecip, mode="digraph", cmode="dyad.census", reps=1000) %>% 
+  plot.cug.test()
+```
+
+:::
 
 :::
 
 :::{.notes}
+
+Drabek et al. (1981) provide seven case studies of emergent multi-organizational networks (EMONs) in the context of search and rescue (SAR) activities. Networks of interaction frequency are reported, along with several organizational attributes.
+
+Drabek等人（1981年）提供了七个关于搜救（SAR）活动中涌现的多组织网络（EMONs）的案例研究。报告了互动频率网络，以及几个组织属性。
+
+:::
+
+
+## QAP
+
+::::{.columns style="text-align:center"}
+
+:::{.column width="50%"}
+
+- 创建随机网络分布 (= CUG)
+- 控制网络结构 (&ne; CUG)
+
+:::{.notes}
+
 网络结构: centrality 等
 
 non-parametric，从sample中抽出两组，对比stats，看是否一样。
 与t-test等的对比重要不同在于不是跟normal比
+
 :::
 
+:::
+
+
 :::{.column width="50%" .fragment}
+
 通过permutation test实现:
 
 1. 计算原始网络的correlation coefficient;^[Pearson's r correlation or Euclidean distance]
@@ -747,11 +1323,15 @@ non-parametric，从sample中抽出两组，对比stats，看是否一样。
 1. 一顿狂Permute + 狂比
 1. 看看correlation的分布
 1. 确定特定值和原始网络相同的概率
-:::
 
 :::{.notes}
+
 网络correlation 根据两点除相互连接外的其他degree (remaining degree)计算
+
 :::
+
+:::
+
 ::::
 
 
@@ -760,100 +1340,147 @@ non-parametric，从sample中抽出两组，对比stats，看是否一样。
 OV: 网络   
 EV: 解释变量adjacency matrices
 
-$$E(Y_{ij}) = \beta_0 + \beta_1X_{1ij} + \beta_2X_{2ij} + ... + \beta_kX_{kij}.$$
+$$
+E(\text{Advice}_{ij}) = \beta_0 + \beta_1\text{Reports}_{ij} + \beta_2\text{Friends}_{ij} +...
+$$
 
 
 :::{.fragment}
 
-```{r netReg-data, echo=FALSE}
+```{r}
+#| label: regData
+#| echo: false
+
 reports <- read.csv("data/reports.csv")
 reports <- reports[, -1]
 friends <- read.csv("data/friends.csv", row.names = "ID")
 advice <- read.csv("data/advice.csv", row.names = "ID")
 ```
 
+```{r}
+#| label: netReg
 
-```{r netReg}
 qap_reg <- netlogit(advice, list(friends, reports), nullhyp = "qap", reps = 10)
 summary(qap_reg)
 ```
+
 :::
 
 :::{.notes}
+
 There are also `netlm` etc.
 
 Not 10, often over 1000
 
-nullhyp choices: qap quick, qapspp robust
+null hyp choices: qap quick, qapspp robust
+
 :::
 
 
 ## ERGM
 
 ::::{.columns}
-:::{.column width="35%" .fragment}
+
+:::{.column width="35%"}
+
 *通盘考虑*：
 
 1. Nodal
 1. Edge (Dyadic)
 1. Network (Structural)
+
 :::
 
 :::{.notes}
+
 更关键在，在理解一个的时候考虑到其他层次问题，“全方位视听感受”
 
 但如果对structure不感兴趣，不需要用ERGM
 
 Latent space models 也可以控制structure，但目的在于去除而不是care，而且是基于baysian
+
 :::
 
-:::{.column width="65%" .fragment}
+:::{.column width="65%"}
+
 :::{.fragment}
+
 *Interdependence*
 
 1. 面对共同的敌人，是否减小彼此敌意？
 1. 合作者选择过程终得Popularity effects
+
 :::
 
 :::{.fragment}
+
 *Dyadic Covariate*
 
 1. 国家是否与相同政体国家更可能结盟
 1. 同个党派议员是否比不同党派议员合作更多
+
 :::
 
 :::{.fragment}
+
 *Structural*
 
 1. Cosponsorship是否存在互惠
 1. 教室中指定同桌，是否改变不同人群关系
-:::
+
 :::
 
 :::{.notes}
+
 联合抗敌 vs "攘外必先安内"
 
 partisanship vs. issues
+
+:::
+
 :::
 
 ::::
 
 
-## ERGM前世
+## ERGM沿革
+
+::: {.large style="text-align:center; margin-top: 2em"}
 
 Simple Random Graph Model
 
-$$P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}$$
+&darr;
 
-+ L: # of arcs
-+ &theta;: edge parameter^[k(&theta)意在标准化, 整个结果和为1。]
+P<sup>1</sup> Model
 
-:::{.notes}
-1959，只允许specify links
+&darr;
+
+P<sup>*</sup> Model
+
+&darr;
+
+ERGM &rarr GEGM/TEGM...
+
 :::
 
-:::{.fragment}
-### Bernoulli Assumption
+## Simple Random Graph Model
+
+$$
+P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}.
+$$
+
++ L: # of arcs
++ &theta;: edge parameter^[k(&theta;)意在标准化, 整个结果和为1。]
+
+:::{.notes}
+
+1959，只允许specify links
+
+:::
+
+::: {.callout-important .fragment}
+
+## Bernoulli Assumption
 
 + Tie 是独立的（🤨）
 + IID ties &rarr; Log-probability of a graph is proportional to a weighted sum of edge-count
@@ -861,174 +1488,213 @@ $$P(X = x) = \frac{exp(\theta_LL(x))}{k(\theta)}$$
 :::
 
 :::{.notes}
+
 基于这个assumption才有simple random graph
+
 :::
 
 ## P<sup>1</sup> Model
 
-$$P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy_{i+} + \sum_j\beta_iy_{+j}})}{\kappa(\theta)}$$
+$$
+P(X = x) = \frac{exp(\theta_LL(x) + \color{red}{\theta_MM(x) + \sum_i\alpha_iy_{i+} + \sum_j\beta_iy_{+j}})}{\kappa(\theta)}.
+$$
 
 + M: # of mutual
 + y<sub>i+</sub>: # outgoing ties
 + y<sub>+j</sub>: # incoming ties
 
-:::{.fragment}
-### ~~Bernoulli~~ Dyad Independence Assumption
+::: {.callout-important .fragment}
+
+## ~~Bernoulli~~ Dyad Independence Assumption
 
 + 允许互惠和不同方向的不同作用
 + 用于binary,有向网络
-:::
 
 :::{.notes}
+
 + Allows for reciprocity and differential attractiveness
 + Useful for binary, directed graphs
+
 :::
 
-:::{.fragment .fade-in style="text-align:center"}
-:::{.fragment .grow}
-:::{.fragment .strike}
-结构?
-:::
-:::
 :::
 
 :::{.notes}
+
 所有高于degree of reciprocity的性质都不能解决, 没人再用
+
 :::
 
 ## P<sup>*</sup> Model
 
-$$P(X = x) = \frac{exp(\sum_i\theta_i\color{red}{z_i(x)})}{\kappa(\theta)}$$
+$$
+P(X = x) = \frac{exp(\sum_i\theta_i\color{red}{z_i(x)})}{\kappa(\theta)}.
+$$
 
 z<sub>i</sub>: any network statistics加在一起
 
+::: {.callout-important .fragment}
 
-:::{.fragment}
-### ~~Dyad Independence~~ Markov assumption
+## ~~Dyad Independence~~ Markov assumption
 
 + Ties are (conditionally) independent unless they [share]{.red} a node.
     + Parallels in Markov chains, time series, spatial analysis
 + Think of nodes as [connecting]{.red} edges to obtain this dependence structure
 + Ties are conditionally dependent if and only if they [share]{.red} a node
+
 :::
 
 :::{.notes}
+
 ERGM基于此发展而来，现在两者区别更多是computational而非想法上的
+
 :::
 
 ## Network Statistics
 
 ::::{.columns style="text-align:center"}
+
 :::{.column width="50%"}
-![](images/sna_pStarParameters.jpg){height=800 fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_pStarParameters.jpg){height=600 fig-align="center"}
+
 :::
 
 :::{.column width="50%"}
-![](images/sna_pStarParametersII.jpg){height=800 fig-align="center"}
-:::
-::::
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_pStarParametersII.jpg){height=600 fig-align="center"}
+
 
 :::{.notes}
+
 Things one can test in P*, path closure: 多重triangle
 
 算起来更麻烦， necessary 
 
 如果你想了解更多
 
-```{r ergm}
+```{r}
+#| label: ergmR
+#| eval: false
+
 library(ergm)
+
 ?ergm.terms
+
 search.ergmTerms(keyword = "triangle")
 ```
 
 GOOGLE上没有全的表
+
 :::
 
+:::
 
-## ERGM完全体
+::::
 
+
+## ERGM
+
+$$
 \begin{align}
-P(N, \boldsymbol{\theta}) =& \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}\\
+P(N, \boldsymbol{\theta}) =& \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}.\\
 \downarrow& \\
 P(N, \boldsymbol{\theta}) =& \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}
-\end{align}
+\end{align}.
+$$
 
 - N* 是特定network statistics 的数目
 - 分母随所加statistics而变得复杂
 
-:::{.fragment}
-### ERGM Assumptions
+::: {.callout-important .fragment}
+
+## ERGM Assumptions
 
 1. Model是正确的
-1. 在设定了network statistics后，观测到任何两个具有同样网络属性的networks的几率是相同的
+1. 在特定network statistics下，观测到任何两个具有同样网络属性的networks的几率是相同的
+
 :::
 
 :::{.notes}
+
 1. Model is correctly specified
 1. Given a set of network statistics, there's equal probability of observing any two networks with the same values of those statistics.
+
 :::
 
 ## 理解ERGM结果
 
+$$
+P(N, \boldsymbol{\theta}) = \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}.
+$$
+
 - Network level：[exp(&theta;)]{.red}，relative likelihood of observing N<sup>i+</sup> to observing N<sup>i-</sup>
 
 :::{.notes}
+
 增加一个network statistics 比不加它变化的likelihood
 
 odd-like stuff: 那么 &theta; = 0代表什么？
 
 &theta; = 0 &rArr; exp(&theta;) = 1 &rArr; 增加或不增加这个stats看到observed network几率是一样的，a.k.a., 没用
+
 :::
 
 - Edge level：[exp(&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij)</sup>)]{.red}, P(N<sub>ij</sub> = 1|N<sub>-ij</sub>, &theta;) = logit<sup>-1</sup>&sum;<sub>r=1</sub>&theta;<sub>r</sub>&delta;<sub>r</sub><sup>(ij)</sup>(N)
 
 :::{.notes}
+
 &delta;<sub>r</sub><sup>(ij)</sup>: Change parameter
 
 记录改变多少： 比如同样是增加一个edge，对于mutual（包含reciprocal和not conntected），对于i 和 j已经相连的情况，加一个edge是增加了一个mutual，那么&delta; + 1, 但如果i 和 j不相连，那么加一个edge，是把一个互不相连的mutual弄没了，&delta; - 1。 所以实际计算比较复杂，但btergm::interpret
 
 $logit^{-1} = frac{1}{1 + e^{-1}}$
+
 :::
 
 - Nodal level: Block-wise conditional distributions
 
 :::{.notes}
+
 Blocks are split according to an attribute, complicated
+
 :::
 
-## 跑完ERGM之后
+## 跑完不算完
 
 ::::{.columns style="text-align:center; margin-top: 2em"}
+
 :::{.column width="30%" .fragment}
-### 诊断
+
+*诊断*
+
 - Convergence
 - Degeneracy
 
+[Super important!]{.fragment .highlight-red}
+
 :::{.notes}
+
 Degenracy is ERGM goodness of fit, unstable results, random process, model fit, little changes a lot; leading to prediction that everyone should connect to everyone or none
 
 Looking for high p-value (not violate the assumptions)
 
 Convergence is for Markov Chain
+
 :::
 
-:::{.fragment .highlight-red}
-Super important!
-:::
-
-:::{.fragment}
-但我们只有两堂课……
-:::
 :::
 
 :::{.column width="40%" .fragment}
-### 局限
+
+*局限*
+
 1. MPLE vs. MLE vs. MCMC-MLE
 1. Degeneracy
 1. Sensitivity to missing data
-:::
 
 :::{.notes}
+
 1. Maximum pseudo LE； 前两个对P1之前还好，之后算不出来
 
 Theory really matters!! 来解释要加什么network statistics
@@ -1036,48 +1702,33 @@ Theory really matters!! 来解释要加什么network statistics
 怎么解决 geometrically weighted degree distribution
 
 1. Sensitivity
+
 :::
 
+:::
+
+
 :::{.column width="30%" .fragment}
-### 进化
+
+*发展*
+
 + GERGM
 + TERGM
     + STERGM
 + FERGM
 
 ......
+
 :::
 
 :::{.notes}
+
 G ERGM: weighted ergm
 
 S TERGM: Network panel data, Separable TERGM for each time point the ties formatting and disoluting independently
 
 F ERGM: Frailty ERGM "individual-level random effects" for the propensity for a directed tie
-:::
-::::
 
-
-
-## Take-Home Points
-
-::::{.columns style="text-align:center"}
-:::{.column width="50%" .fragment}
-Edge Effect (邻居效应)
-
-+ Dyad/Triad Census
-+ 社群 (Homophily)
-
-Diffusion Effect (扩散分析)
-
-+ 联系
-+ 暴露
-+ 传动
 :::
 
-:::{.column width="50%" .fragment}
-Network Effect (全网分析)
-
-+ ERGM
-:::
 ::::
