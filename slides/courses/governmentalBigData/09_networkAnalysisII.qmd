@@ -59,6 +59,11 @@ p_load(
   ergm,
   data.table, 
 
+  # hierarchical clustering
+  ggdendro,
+  dendextend,  
+
+  # non-hierarchical
   cluster,
   clusterCrit,
   mclust,
@@ -947,11 +952,9 @@ fg_colored <- ggplot(data_example, aes(x, y, color = class)) +
 fg_original + fg_colored
 ```
 
-## 层次聚类
+## 层次聚类 (Hierarchical clustering)
 
-## Agglomerative vs. Divisive
-
-![](https://drhuyue.site:10002/sammo3182/figure/sna_agglomerativeDivisive.bmp){height=600 fig-align="center"}
+![Agglomerative vs. Divisive](https://drhuyue.site:10002/sammo3182/figure/sna_agglomerativeDivisive.bmp){height=600 fig-align="center"}
 
 :::{.notes}
 
@@ -962,7 +965,118 @@ A善于发现强连结community， D不会去除peripheral vertices；类似EFA�
 
 :::
 
-## 非层次聚类
+## 层次方式方法与标准
+
+:::: {.columns}
+
+::: {.column width="30%"}
+
+*常见分类（叉）linkage*
+
+- Single-linkage
+- Complete-linkage
+- Average-linkage
+- Centroid-linkage
+- Ward's minimum variance method
+
+:::
+
+::: {.column width="70%"}
+
+*分类（叉）标准* （$d(a,b)$ $a$ 和 $b$ 之间的距离）
+
+- Single-linkage: $\min \{ d(a,b):a\in A, b\in B \}$
+- Complete-linkage: $\max \{ d(a,b):a\in A, b\in B \}$
+- Average-linkage: $\frac{1}{|A||B|}\sum_{a\in A}\sum_{b\in B}d(a,b)$
+- Centroid-linkage: $||c_t - c_s||$, where $c_s$ and $c_t$ are the centroids of clusters $s$ and $t$.
+
+:::
+
+::::
+
+
+## 常见 Linkages 比较
+
+```{r}
+#| label: linkages
+#| fig-align: center
+#| fig-height: 6
+
+fg_true <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
+  geom_point(alpha = 0.8, size = 5) +
+  ggtitle("IRIS: True Species")
+
+
+data_m <- iris[,-5]
+
+hie_single <- hclust(dist(data_m), method = "single")
+dend <- as.dendrogram(hie_single)
+dend <- dend %>% set("branches_k_color", k = 3) %>%
+  set("branches_lwd", 1.2) %>% 
+  set("labels", rep(c("set", "ver", "vir"), each = 50)) %>%
+  set("labels_colors", rep(c("red", "green", "blue"), each = 50)) %>%
+  set("labels_cex", 0.6)
+
+ggd1 <- as.ggdend(dend)
+
+fg_single <- ggplot(ggd1) +
+  ggtitle("Single-Linkage")
+
+hie_complete <- hclust(dist(data_m), method = "complete")
+dend <- as.dendrogram(hie_complete)
+dend <- dend %>% set("branches_k_color", k = 3) %>%
+  set("branches_lwd", 1.2) %>% 
+  set("labels", rep(c("set", "ver", "vir"), each = 50)) %>%
+  set("labels_colors", rep(c("red", "green", "blue"), each = 50)) %>%
+  set("labels_cex", 0.6)
+
+ggd1 <- as.ggdend(dend)
+
+fg_complete <- ggplot(ggd1) +
+  ggtitle("Complete-Linkage")
+
+
+hie_ave <- hclust(dist(data_m), method = "average")
+dend <- as.dendrogram(hie_ave)
+dend <- dend %>% set("branches_k_color", k = 3) %>% 
+  set("branches_lwd", 1.2) %>% 
+  set("labels", rep(c("set", "ver", "vir"), each = 50)) %>%
+  set("labels_colors", rep(c("red", "green", "blue"), each = 50)) %>%
+  set("labels_cex", 0.6)
+
+ggd1 <- as.ggdend(dend)
+
+fg_average <- ggplot(ggd1) +
+  ggtitle("Average-Linkage")
+
+fg_true / (fg_single + fg_complete + fg_average)
+```
+
+## 三种linkages的精确度
+
+```{r}
+#| label: linkage-precision
+#| fig-align: center
+#| fig-height: 6
+
+df_precision <- tibble(
+  single = extCriteria(as.integer(iris[, 5]), cutree(hie_single, 3), crit = "Precision")$precision,
+  complete = extCriteria(as.integer(iris[, 5]), cutree(hie_complete, 3), crit = "Precision")$precision,
+  average = extCriteria(as.integer(iris[, 5]), cutree(hie_ave, 3), crit = "Precision")$precision
+) |> pivot_longer(everything(), names_to = "linkage", values_to = "precision")
+
+
+ggplot(df_precision, aes(x = linkage, y = precision)) +
+  geom_point() +
+  labs(
+    x = "Linkage",
+    y = "Precision"
+  )
+
+```
+
+
+## 非层次聚类 (Non-hierarchical clustering)
 
 - Centroid-based： K-means, K-medians, K-medoids, K-modes......
 - Model-based: Gaussian, gamma, t, poisson, GMM......
@@ -1148,6 +1262,7 @@ data_spiral[, class := as.factor(res)]
 
 fg_spectral <- ggplot(data_spiral, aes(x, y, color = class, shape = class)) +
   geom_point(size = 2) +
+  scale_color_gb() +
   ggtitle("Spectral Clustering")
 
 fg_spiral + fg_spectral
@@ -1254,8 +1369,6 @@ ggplot(data_example, aes(x, y, color = class)) +
 
 ## DBSCAN优势
 
-::: {.r-stack}
-
 ```{r}
 #| label: banana
 #| fig-align: center
@@ -1266,45 +1379,25 @@ db_res <- dbscan(bananas, eps = 10, minPts = 15)
 
 data_all <- data.table(bananas, class = as.factor(db_res$cluster))
 
-ggplot(data_all, aes(V1, V2)) +
+fg_raw <- ggplot(data_all, aes(V1, V2)) +
   geom_point(alpha = 0.75)
-
-```
-
-::: {.fragment}
-
-```{r}
-#| label: banana_kmean
-#| fig-align: center
-#| fig-height: 6
 
 km_res <- kmeans(bananas, 9)
 data_all[, class := as.factor(km_res$cluster)]
 
-ggplot(data_all, aes(V1, V2, color = class)) +
+fg_kmean <- ggplot(data_all, aes(V1, V2, color = class)) +
   geom_point(alpha = 0.75) +
   ggtitle("K-Mean Result")
-```
-
-:::
-
-::: {.fragment}
-
-```{r}
-#| label: banana_dbscan
-#| fig-align: center
-#| fig-height: 6
 
 data_all <- data.table(bananas, class = as.factor(db_res$cluster))
 
-ggplot(data_all, aes(V1, V2, color = class)) +
+fg_dbscan <- ggplot(data_all, aes(V1, V2, color = class)) +
   geom_point(alpha = 0.75) +
   ggtitle("DBSCAN Result")
+
+fg_raw / (fg_kmean + fg_dbscan)
+
 ```
-
-:::
-
-:::
 
 ## DBSCAN vs. Spectral
 
@@ -1313,33 +1406,110 @@ ggplot(data_all, aes(V1, V2, color = class)) +
 #| fig-align: center
 #| fig-height: 6
 
-data_compound <- rio::import("https://drhuyue.site:10002/sammo3182/data/sna_compound.csv") |> 
-  data.table()
+data_compound <- rio::import("https://drhuyue.site:10002/sammo3182/data/sna_compound.csv")
 
-fg_compound <- ggplot(data_compound, aes(x, y)) +
-  geom_point(size = 2)
+fg_compound <- ggplot(data_compound, aes(x, y, color = as.factor(label))) +
+  geom_point(size = 2) +
+  ggtitle("真实分类")
 
-res <- specc(data.matrix(data_compound[, .(x, y)]), centers = 6)
+res <- specc(data.matrix(select(data_compound, x, y)), centers = 6)
 
-data_compound[, class := as.factor(res)]
+df_spectral <- data_compound |> 
+  mutate(class = as.factor(res))
 
-fg_spectral <- ggplot(data_compound, aes(x, y, color = class)) +
+fg_spectral <- ggplot(df_spectral, aes(x, y, color = class)) +
   geom_point(size = 2) +
   ggtitle("Spectral")
 
-db_res <- dbscan(data.matrix(data_compound[, .(x, y)]), eps = 1.4, minPts = 5)
-# db_res
+db_res <- dbscan(data.matrix(select(data_compound, x, y)), eps = 1.4, minPts = 5)
 
-data_compound[, class := as.factor(db_res$cluster)]
+df_dbscan <- data_compound |> 
+  mutate(class = as.factor(db_res$cluster))
 
-fg_dbscan <- ggplot(data_compound, aes(x, y, color = class)) +
+fg_dbscan <- ggplot(df_dbscan, aes(x, y, color = class)) +
   geom_point(size = 2) +
   ggtitle("DBSCAN")
 
-fg_compound + fg_spectral + fg_dbscan
+fg_compound / (fg_spectral + fg_dbscan)
 ```
 
+## 初始值影响DBSCAN效果（交叠数据聚类）
 
+```{r}
+#| label: dbscan_parameter
+#| fig-align: center
+#| fig-height: 6
+
+data_connected <- as.data.table(cbind(
+  rbind(
+  MASS::mvrnorm(220, mu = c(3.48, 3.4), Sigma = matrix(c(0.005, -0.015, -0.01, 0.09), nrow = 2)),
+  MASS::mvrnorm(280, mu = c(3.8, 3.8), Sigma = matrix(c(0.05, 0, 0, 0.05), nrow = 2)),
+  MASS::mvrnorm(220, mu = c(3.85, 2.9), Sigma = matrix(c( 0.1, 0.03, 0.03, 0.017), nrow = 2))
+  ), 
+  c(
+    rep(1, 220), rep(2, 280), rep(3,220)
+  )
+))
+
+setnames(data_connected, c("V1", "V2", "V3"), c("x", "y", "label"))
+
+fg_true <- ggplot(data_connected, aes(x, y, color = as.factor(label))) +
+  geom_point(alpha = 0.75, size = 2) +
+  scale_color_gb() +
+  ggtitle("真实数据")
+
+db_res <- dbscan(data_connected, eps = 0.08, minPts = 18)
+
+data_all <- data.table(data_connected, class = as.factor(db_res$cluster))
+
+fg_goodset <- ggplot(data_all, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 2) +
+  ggtitle("DBSCAN(minPts = 18)")
+
+db_res <- dbscan(data_connected, eps = 0.08, minPts = 10)
+
+data_all <- data.table(data_connected, class = as.factor(db_res$cluster))
+
+fg_badset <- ggplot(data_all, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 2) +
+  ggtitle("DBSCAN(minPts = 10)")
+
+fg_true / (fg_goodset + fg_badset)
+```
+
+## 方法对比
+
+```{r}
+#| label: cluster_compare
+#| fig-align: center
+#| fig-height: 6
+
+km_res <- kmeans(data_connected, 3)
+
+df_kmean <- mutate(data_all, class = as.factor(km_res$cluster))
+
+fg_kmean <- ggplot(df_kmean, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 2) +
+  ggtitle("K-mean")
+
+m_res <- Mclust(data_connected[, .(x, y)], G = 3, modelNames = "VVV", verbose = FALSE)
+
+df_gmm <- mutate(data_all, class = as.factor(m_res$classification))
+
+fg_gmm <- ggplot(df_gmm, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 2)  +
+  ggtitle("GMM")
+
+res <- specc(data.matrix(data_connected[, .(x, y)]), centers = 3)
+
+df_spectral <- mutate(data_all, class = as.factor(res))
+
+fg_spectral <- ggplot(df_spectral, aes(x, y, color = class)) +
+  geom_point(alpha = 0.75, size = 2)  +
+  ggtitle("Spectral")
+
+(fg_kmean + fg_spectral) / (fg_goodset + fg_gmm)
+```
 
 ## 聚类除了聚类以外的功能
 
@@ -1355,13 +1525,12 @@ anom <- c(rep(1, 30), rep(0, 3))
 data_example[, class := as.factor(anom)]
 levels(data_example$class) <- c("Anomaly", "Normal")
 
-ggplot(data_example, aes(x, y, color = class, shape = class)) +
+ggplot(data_example, aes(x, y, color = class)) +
   geom_point(alpha = 0.75, size = 8) +
   scale_color_gb()
 ```
 
 ::: {.fragment}
-
 
 ```{r}
 #| label: compression
@@ -1387,23 +1556,6 @@ ggplot(data_example, aes(x, y, color = class)) +
 :::
 
 :::
-
-
-## Network analysis &#129309; Spatial Analysis
-
-Modeling Peer Influence
-
-\begin{align}
-\boldsymbol{Y}^{(1)} &= \boldsymbol{XB},\\
-\boldsymbol{Y}^{(t)} &= \alpha\boldsymbol{WY}^{t} + (1 - \alpha) Y^{(1)}.
-\end{align}
-
-
-- **Y**<sup>(1)</sup>: N个人，每人对M个问题的[初始]{.red}看法 (N &times; M); 
-- **X**: K个会影响个体看法的（[外生性]{.red}）变量（N &times; K）;
-- &alpha;: （内生性的）人际影响对Y的作用的[比重]{.red};
-- **W**: [人际关系矩阵]{.red}（N &times; N).
-
 
 # 附录：全网分析  {.appendix}
 
@@ -1865,3 +2017,20 @@ F ERGM: Frailty ERGM "individual-level random effects" for the propensity for a 
 :::
 
 ::::
+
+
+## Network analysis &#129309; Spatial Analysis
+
+Modeling Peer Influence
+
+\begin{align}
+\boldsymbol{Y}^{(1)} &= \boldsymbol{XB},\\
+\boldsymbol{Y}^{(t)} &= \alpha\boldsymbol{WY}^{t} + (1 - \alpha) Y^{(1)}.
+\end{align}
+
+
+- **Y**<sup>(1)</sup>: N个人，每人对M个问题的[初始]{.red}看法 (N &times; M); 
+- **X**: K个会影响个体看法的（[外生性]{.red}）变量（N &times; K）;
+- &alpha;: （内生性的）人际影响对Y的作用的[比重]{.red};
+- **W**: [人际关系矩阵]{.red}（N &times; N).
+
