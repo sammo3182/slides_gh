@@ -54,14 +54,17 @@ library(pacman)
 
 p_load(
   knitr, 
-  cluster,
   sna, 
   network, 
   ergm,
   data.table, 
+
+  cluster,
   clusterCrit,
   mclust,
   dbscan,
+  kernlab,
+
   patchwork,
   drhutools,
   tidyverse
@@ -944,7 +947,7 @@ fg_colored <- ggplot(data_example, aes(x, y, color = class)) +
 fg_original + fg_colored
 ```
 
-
+## 层次聚类
 
 ## Agglomerative vs. Divisive
 
@@ -1054,9 +1057,9 @@ ggplot(data_example, aes(x, y, color = class)) +
 
 缺点：
 
-- 不同的初始聚类可能导致最终聚类结果不同
-- 对尺度敏感
-- 只能创建凸形(球形)的聚类
+- 初始值敏感
+- 量纲敏感
+- 只能创建凸形聚类
 - 对异常值敏感
 
 :::
@@ -1082,8 +1085,8 @@ ggplot(data_example, aes(x, y, color = class)) +
 
 *缺点*
 
-- 不同的初始聚类可能导致最终聚类结果不同
-- 对尺度敏感
+- 初始值敏感
+- 量纲敏感
 - 比K-means算法慢
 
 :::
@@ -1114,17 +1117,41 @@ Medoids: the one that minimizes the total distance to all other points，a real 
 
 ## Centroid-like: Spectral Clustering
 
-基于谱分解（spectral decomposition）提取数据特征，然后根据特征聚类
+基于谱分解（spectral decomposition）提取数据特征，然后根据特征聚类。^[虽然使用到了k-mean，但之前步骤导致两种方法的数学基础有本质不同。]
 
 步骤：
 
-1. N = number of data, d = dimension of data,
-2. $\mathbf{A}$ = affinity matrix, $A_{ij} = \exp(- (data_i - data_j)^2 / (2*\sigma^2) )$ - N by N matrix,
-3. $\mathbf{D}$ = diagonal matrix whose (i,i)-element is the sum of $\mathbf{A}$ i-th row - N by N matrix,
-4. $\mathbf{L}$ = $\mathbf{D}^{-1/2} \mathbf{A} \mathbf{D}^{-1/2}$ - N by N matrix,
-5. $\mathbf{X}$ = union of k largest eigenvectors of $\mathbf{L}$ - N by k matrix,
-6. Renormalising each of $\mathbf{X}$ rows to have unit length - N by k matrix,
-7. Run K-means algorithm on $\mathbf{X}$.
+1. N = 数据数量，d = 数据维度，
+2. $\mathbf{A}$ = 相似度矩阵，$A_{ij} = \exp(- (data_i - data_j)^2 / (2*\sigma^2) )$ - N × N矩阵，
+3. $\mathbf{D}$ = 对角矩阵，其(i,i)元素是$\mathbf{A}$第i行元素之和 - N × N矩阵，
+4. $\mathbf{L}$ = $\mathbf{D}^{-1/2} \mathbf{A} \mathbf{D}^{-1/2}$ - N × N矩阵，
+5. $\mathbf{X}$ = $\mathbf{L}$的k个最大特征向量的集合 - N × k矩阵，
+6. 将$\mathbf{X}$的每一行归一化为单位长度 - N × k矩阵，
+7. 在$\mathbf{X}$上运行K-means算法。
+
+## 谱聚类效果
+
+```{r}
+#| label: spectral
+#| fig-align: center
+#| fig-height: 6
+
+data_spiral <- rio::import("https://drhuyue.site:10002/sammo3182/data/sna_spiral.csv")
+
+fg_spiral <- ggplot(data_spiral, aes(x, y)) +
+  geom_point(size = 2)
+
+res <- specc(data.matrix(select(data_spiral, x, y)), centers = 3)
+
+data_spiral <- data.table(data_spiral)
+data_spiral[, class := as.factor(res)]
+
+fg_spectral <- ggplot(data_spiral, aes(x, y, color = class, shape = class)) +
+  geom_point(size = 2) +
+  ggtitle("Spectral Clustering")
+
+fg_spiral + fg_spectral
+```
 
 
 ## Model-based: GMM
@@ -1256,7 +1283,6 @@ data_all[, class := as.factor(km_res$cluster)]
 
 ggplot(data_all, aes(V1, V2, color = class)) +
   geom_point(alpha = 0.75) +
-  scale_color_identity() +
   ggtitle("K-Mean Result")
 ```
 
@@ -1273,13 +1299,47 @@ data_all <- data.table(bananas, class = as.factor(db_res$cluster))
 
 ggplot(data_all, aes(V1, V2, color = class)) +
   geom_point(alpha = 0.75) +
-  scale_color_identity() +
   ggtitle("DBSCAN Result")
 ```
 
 :::
 
 :::
+
+## DBSCAN vs. Spectral
+
+```{r}
+#| label: spectralVSdbscan
+#| fig-align: center
+#| fig-height: 6
+
+data_compound <- rio::import("https://drhuyue.site:10002/sammo3182/data/sna_compound.csv") |> 
+  data.table()
+
+fg_compound <- ggplot(data_compound, aes(x, y)) +
+  geom_point(size = 2)
+
+res <- specc(data.matrix(data_compound[, .(x, y)]), centers = 6)
+
+data_compound[, class := as.factor(res)]
+
+fg_spectral <- ggplot(data_compound, aes(x, y, color = class)) +
+  geom_point(size = 2) +
+  ggtitle("Spectral")
+
+db_res <- dbscan(data.matrix(data_compound[, .(x, y)]), eps = 1.4, minPts = 5)
+# db_res
+
+data_compound[, class := as.factor(db_res$cluster)]
+
+fg_dbscan <- ggplot(data_compound, aes(x, y, color = class)) +
+  geom_point(size = 2) +
+  ggtitle("DBSCAN")
+
+fg_compound + fg_spectral + fg_dbscan
+```
+
+
 
 ## 聚类除了聚类以外的功能
 
