@@ -723,6 +723,162 @@ Influencing vs. affiliating
 
 ::::
 
+# 全网分析（一瞥）
+
+
+## 网络分析的统计推断
+
+::::{.columns style="text-align:center; margin-top: 2em"}
+
+:::{.column width="50%" .fragment}
+
+**统计推断流程**
+
+1. 确定H<sub>0</sub>
+1. 确定显著性标准
+1. 检验观测统计是否在“null distribution的尾巴上”
+1. 拒绝/不拒绝H<sub>0</sub>
+
+::: {.callout-important .fragment}
+
+## 传统计量的前提假定
+
++ Sample distribution (“假装”知道)
++ IID observations （“预设”满足）
+
+:::
+
+:::
+
+:::{.column width="50%" .fragment}
+
+**网络分析**：研究个体 &rarr; 研究关系
+
+1. Sample是什么？
+1. Parameter怎么设置？
+1. H<sub>0</sub>是什么
+
+::: {.fragment}
+
+&dArr;
+
+随机网络分析
+
+:::
+
+
+:::{.notes}
+
+- Sample: 关系
+- Parameter：对比随机网络
+- H<sub>0</sub>: X不影响网络（关系）结构
+
+:::
+
+:::
+
+::::
+
+## 随机网络分析常见方法
+
+- Conditional uniform graph (CUG)
+- Quadratic assignment procedure (QAP)
+- Exponential family random graph models (ERGM)
+
+
+## 分析目标
+
+::::{.columns}
+
+:::{.column width="35%"}
+
+*通盘考虑*：
+
+1. Nodal
+1. Edge (Dyadic)
+1. Network (Structural)
+
+:::
+
+:::{.notes}
+
+更关键在，在理解一个的时候考虑到其他层次问题，“全方位视听感受”
+
+但如果对structure不感兴趣，不需要用ERGM
+
+Latent space models 也可以控制structure，但目的在于去除而不是care，而且是基于baysian
+
+:::
+
+:::{.column width="65%"}
+
+:::{.fragment}
+
+*Interdependence*
+
+1. 面对共同的敌人，是否减小彼此敌意？
+1. 合作者选择过程终得Popularity effects
+
+:::
+
+:::{.fragment}
+
+*Dyadic Covariate*
+
+1. 国家是否与相同政体国家更可能结盟
+1. 同个党派议员是否比不同党派议员合作更多
+
+:::
+
+:::{.fragment}
+
+*Structural*
+
+1. Cosponsorship是否存在互惠
+1. 教室中指定同桌，是否改变不同人群关系
+
+:::
+
+:::{.notes}
+
+联合抗敌 vs "攘外必先安内"
+
+partisanship vs. issues
+
+:::
+
+:::
+
+::::
+
+## ERGM
+
+$$
+\begin{align}
+P(N, \boldsymbol{\theta}) =& \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}.\\
+\downarrow& \\
+P(N, \boldsymbol{\theta}) =& \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}.
+\end{align}
+$$
+
+- N* 是特定network statistics 的数目
+- 分母随所加statistics而变得复杂
+
+::: {.callout-important .fragment}
+
+## ERGM Assumptions
+
+1. Model是正确的
+1. 在特定network statistics下，观测到任何两个具有同样网络属性的networks的几率是相同的
+
+:::
+
+:::{.notes}
+
+1. Model is correctly specified
+1. Given a set of network statistics, there's equal probability of observing any two networks with the same values of those statistics.
+
+:::
 
 ## Take-Home Points
 
@@ -735,15 +891,20 @@ Edge Effect (邻居效应)
 + Dyad/Triad Census
 + 社群 (Homophily)
 
-:::
-
-:::{.column width="50%" .fragment}
-
 Diffusion Effect (扩散分析)
 
 + 联系
 + 暴露
 + 传动
+
+:::
+
+:::{.column width="50%"}
+
+Complete Network analysis (全网分析)
+
+- 可用模型
+- ERGM
 
 :::
 
@@ -951,6 +1112,20 @@ Medoids: the one that minimizes the total distance to all other points，a real 
 
 :::
 
+## Centroid-like: Spectral Clustering
+
+基于谱分解（spectral decomposition）提取数据特征，然后根据特征聚类
+
+步骤：
+
+1. N = number of data, d = dimension of data,
+2. $\mathbf{A}$ = affinity matrix, $A_{ij} = \exp(- (data_i - data_j)^2 / (2*\sigma^2) )$ - N by N matrix,
+3. $\mathbf{D}$ = diagonal matrix whose (i,i)-element is the sum of $\mathbf{A}$ i-th row - N by N matrix,
+4. $\mathbf{L}$ = $\mathbf{D}^{-1/2} \mathbf{A} \mathbf{D}^{-1/2}$ - N by N matrix,
+5. $\mathbf{X}$ = union of k largest eigenvectors of $\mathbf{L}$ - N by k matrix,
+6. Renormalising each of $\mathbf{X}$ rows to have unit length - N by k matrix,
+7. Run K-means algorithm on $\mathbf{X}$.
+
 
 ## Model-based: GMM
 
@@ -1050,6 +1225,61 @@ ggplot(data_example, aes(x, y, color = class)) +
   scale_color_gb(palette = "digitMixed")
 ```
 
+## DBSCAN优势
+
+::: {.r-stack}
+
+```{r}
+#| label: banana
+#| fig-align: center
+#| fig-height: 6
+
+bananas <- rio::import("https://drhuyue.site:10002/sammo3182/data/sna_banana.dat")
+db_res <- dbscan(bananas, eps = 10, minPts = 15)
+
+data_all <- data.table(bananas, class = as.factor(db_res$cluster))
+
+ggplot(data_all, aes(V1, V2)) +
+  geom_point(alpha = 0.75)
+
+```
+
+::: {.fragment}
+
+```{r}
+#| label: banana_kmean
+#| fig-align: center
+#| fig-height: 6
+
+km_res <- kmeans(bananas, 9)
+data_all[, class := as.factor(km_res$cluster)]
+
+ggplot(data_all, aes(V1, V2, color = class)) +
+  geom_point(alpha = 0.75) +
+  scale_color_identity() +
+  ggtitle("K-Mean Result")
+```
+
+:::
+
+::: {.fragment}
+
+```{r}
+#| label: banana_dbscan
+#| fig-align: center
+#| fig-height: 6
+
+data_all <- data.table(bananas, class = as.factor(db_res$cluster))
+
+ggplot(data_all, aes(V1, V2, color = class)) +
+  geom_point(alpha = 0.75) +
+  scale_color_identity() +
+  ggtitle("DBSCAN Result")
+```
+
+:::
+
+:::
 
 ## 聚类除了聚类以外的功能
 
@@ -1116,68 +1346,6 @@ Modeling Peer Influence
 
 
 # 附录：全网分析  {.appendix}
-
-## 网络分析的统计推断
-
-::::{.columns style="text-align:center; margin-top: 2em"}
-
-:::{.column width="50%" .fragment}
-
-**统计推断流程**
-
-1. 确定H<sub>0</sub>
-1. 确定显著性标准
-1. 检验观测统计是否在“null distribution的尾巴上”
-1. 拒绝/不拒绝H<sub>0</sub>
-
-::: {.callout-important .fragment}
-
-## 传统计量的前提假定
-
-+ Sample distribution (“假装”知道)
-+ IID observations （“预设”满足）
-
-:::
-
-:::
-
-:::{.column width="50%" .fragment}
-
-**网络分析**：研究个体 &rarr; 研究关系
-
-1. Sample是什么？
-1. Parameter怎么设置？
-1. H<sub>0</sub>是什么
-
-::: {.fragment}
-
-&dArr;
-
-随机网络分析
-
-:::
-
-
-:::{.notes}
-
-- Sample: 关系
-- Parameter：对比随机网络
-- H<sub>0</sub>: X不影响网络（关系）结构
-
-:::
-
-:::
-
-::::
-
-
-
-## 随机网络分析常见方法
-
-- Conditional uniform graph (CUG)
-- Quadratic assignment procedure (QAP)
-- Exponential family random graph models (ERGM)
-
 
 ## CUG
 
@@ -1377,72 +1545,6 @@ null hyp choices: qap quick, qapspp robust
 :::
 
 
-## ERGM
-
-::::{.columns}
-
-:::{.column width="35%"}
-
-*通盘考虑*：
-
-1. Nodal
-1. Edge (Dyadic)
-1. Network (Structural)
-
-:::
-
-:::{.notes}
-
-更关键在，在理解一个的时候考虑到其他层次问题，“全方位视听感受”
-
-但如果对structure不感兴趣，不需要用ERGM
-
-Latent space models 也可以控制structure，但目的在于去除而不是care，而且是基于baysian
-
-:::
-
-:::{.column width="65%"}
-
-:::{.fragment}
-
-*Interdependence*
-
-1. 面对共同的敌人，是否减小彼此敌意？
-1. 合作者选择过程终得Popularity effects
-
-:::
-
-:::{.fragment}
-
-*Dyadic Covariate*
-
-1. 国家是否与相同政体国家更可能结盟
-1. 同个党派议员是否比不同党派议员合作更多
-
-:::
-
-:::{.fragment}
-
-*Structural*
-
-1. Cosponsorship是否存在互惠
-1. 教室中指定同桌，是否改变不同人群关系
-
-:::
-
-:::{.notes}
-
-联合抗敌 vs "攘外必先安内"
-
-partisanship vs. issues
-
-:::
-
-:::
-
-::::
-
-
 ## ERGM沿革
 
 ::: {.large style="text-align:center; margin-top: 2em"}
@@ -1592,35 +1694,6 @@ GOOGLE上没有全的表
 
 ::::
 
-
-## ERGM
-
-$$
-\begin{align}
-P(N, \boldsymbol{\theta}) =& \frac{exp(\sum_i\theta_iz_i(N))}{\kappa(\theta)}.\\
-\downarrow& \\
-P(N, \boldsymbol{\theta}) =& \frac{exp(\boldsymbol{\theta'h}(N))}{\sum_{N^*\in N}exp(\boldsymbol{\theta'h}(N^*))}
-\end{align}.
-$$
-
-- N* 是特定network statistics 的数目
-- 分母随所加statistics而变得复杂
-
-::: {.callout-important .fragment}
-
-## ERGM Assumptions
-
-1. Model是正确的
-1. 在特定network statistics下，观测到任何两个具有同样网络属性的networks的几率是相同的
-
-:::
-
-:::{.notes}
-
-1. Model is correctly specified
-1. Given a set of network statistics, there's equal probability of observing any two networks with the same values of those statistics.
-
-:::
 
 ## 理解ERGM结果
 
