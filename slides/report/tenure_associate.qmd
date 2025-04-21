@@ -1,51 +1,49 @@
 ---
 title: "长聘副教授申请汇报"
 date: "2024-10-25"
-date-format: "iso"
 author:
   - 胡悦
 institute: "清华大学社科学院·政治学系" 
 bibliography: [My_Articles.bib, My_Chinese.bib]
 csl: apa.csl
-knitr: 
-    opts_chunk:
-      echo: false
 format: 
-  revealjs:
-    css: https://www.drhuyue.site/slides_gh/css/style_oldman.css
-    theme: ../../../css/oldMan.scss
-    slide-number: true
-    filters: [appExclusion.lua] # not count appendices into page number
-    incremental: false
-    preview-links: true # open an iframe for a link
-    link-external-newwindow: true
-    self-contained: false
-    chalkboard: false # allwoing chalk board B, notes canvas C
-    # callout-icon: false
-    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
-    title-slide-attributes:
-      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
-      data-background-size: 250px   
-      data-background-position: top 10% right 5%
-    default-image-extension: png
-    width: 1280 # 16:9
-    height: 720
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../css/goldenBlack.scss
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        title-slide-attributes:
+            data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+            data-background-size: 250px   
+            data-background-position: top 10% right 5%
+        default-image-extension: png
 revealjs-plugins:
-  - spotlight
+    - spotlight
 lightbox: 
-  match: auto
-  effect: fade
+    match: auto
+    effect: fade
 spotlight:
-  size: 50
-  presentingCursor: default
-  toggleSpotlightOnMouseDown: false
-  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+editor: 
+    render-on-save: true
 editor_options: 
-  chunk_output_type: console
+    chunk_output_type: console
 ---
 
-```{r setup}
-#| include = FALSE
+```{r}
+#| include: false
+#| label: setup
 
 library(pacman)
 
@@ -80,6 +78,7 @@ theme_update(
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 **现任职务**
 
 社科学院政治学系 副教授 (2021)
@@ -95,6 +94,7 @@ theme_update(
 :::
 
 ::: {.column width="50%"}
+
 **教育背景**
 
 - 爱荷华大学，博士（政治学，2018）
@@ -102,6 +102,7 @@ theme_update(
 - 南卡罗莱纳大学，硕士（政治学，2013）
 - 里贾纳大学，硕士（政治学，2011）
 - 南开大学，学士（国际政治，2009）
+
 :::
 
 ::::
@@ -116,6 +117,7 @@ theme_update(
 ```{r publicationTrend}
 #| fig-align: center
 #| fig-height: 4.5
+#| label: publicationTRend
 
 # Assuming your data is in a dataframe named `data`
 data <- data.frame(
@@ -129,7 +131,7 @@ data <- data.frame(
 cumulative_data <- data |>
   arrange(发表年) |>
   mutate(发表总量 = cumsum(发表数),
-         `A+发表量` = cumsum(A_plus发表数)) |>
+        `A+发表量` = cumsum(A_plus发表数)) |>
   select(发表年, 发表总量, `A+发表量`) |>
   pivot_longer(
     cols = c(发表总量, `A+发表量`),
@@ -149,8 +151,8 @@ cumulative_data |>
   scale_color_gb(reverse = TRUE) +
   scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +  # Ensure y-axis is displayed in integers
   geom_vline(xintercept = 2021,
-             linetype = "dashed",
-             color = gb_cols("red")) +  # Add red dashed vertical line at 2021
+            linetype = "dashed",
+            color = gb_cols("red")) +  # Add red dashed vertical line at 2021
   annotate(
     "text",
     x = 2021,
@@ -179,7 +181,10 @@ cumulative_data |>
 
 ## 学术贡献点1: 认知能动性与制度运行
 
-```{r thermostatic, eval=FALSE}
+```{r}
+#| label: thermostatic
+#| eval: false
+
 # Number of time points
 time_points <- 1:24
 
@@ -232,7 +237,9 @@ ggplot(data, aes(x = Time_Point)) +
 ```
 
 :::{.callout-important appearance="simple" .large}
+
 以认知能动视角，探索理性主义-制度主义理论融合难题的**破解之法**。
+
 :::
 
 :::{.r-stack}
@@ -247,12 +254,15 @@ ggplot(data, aes(x = Time_Point)) +
 ## 学术贡献点1: 认知能动性与制度运行
 
 :::{.callout-important appearance="simple" .large}
+
 挑战恒温计理论，提供民主认知能动性证据，理解**政治发展多样性成因**。
+
 :::
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 ![Tai, Hu (通讯/共一), Solt[-@TaiEtAl2024] ，政治学**“三大刊”之首**；五年平均影响因子：7.9](https://drhuyue.site:10002/sammo3182/figure/tenure_apsr.jpg){height=380}
 
 :::{.notes}
@@ -260,6 +270,7 @@ ggplot(data, aes(x = Time_Point)) +
 - 2021后 11 + 6
 
 钱端升 1942， National University of Peking, War-Time Government in China
+
 :::
 
 :::
@@ -275,7 +286,9 @@ ggplot(data, aes(x = Time_Point)) +
 - 民众支持**不**影响制度变化，**也不**受制度变化影响，只对经济、腐败等有响应（认知能动性）
 
 :::{.notes}
+
 1889项公共调查，UN 193个成员国
+
 :::
 
 :::
@@ -292,23 +305,29 @@ ggplot(data, aes(x = Time_Point)) +
 
 
 :::{.notes}
+
 Devin Caughey (MIT), Chris Warshaw (GWU), Alexander Wuttkle (LMU), and Christopher Claassen (Glasgow)
 
 To date, this article has been cited by articles in BJPS, CPS, EJPS, and PSRM
 among others and books such as Research Handbook on Authoritarianism.
+
 :::
 
 
 ## 学术贡献点1: 认知能动性与制度运行
 
 :::{.callout-important appearance="simple" .large}
+
 解构经济不平等影响政治合法性机制，揭示**结构影响行为的认知路径**。
+
 :::
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 ![Jin, Hu (通讯/共一), Meng [-@JinEtAl2024]，舆论研究**引用率最高**期刊之一，五年平均影响因子：4.5](https://drhuyue.site:10002/sammo3182/figure/tenure_poq.jpeg){height=380}
+
 :::
 
 ::: {.column width="70%"}
@@ -319,11 +338,13 @@ among others and books such as Research Handbook on Authoritarianism.
 - 揭示不平等削弱中央和地方政治信任的**机制差异**，为在高经济不平等状况下维持社会政治稳定提供借鉴。
 
 :::{.notes}
+
 Mediator-evaluation model
 
 - 腐败占一半
 - 中央：judicial justice 30%, governance responsiveness 15%
 - 地方：judicial justice 18%, governance responsiveness 23%
+
 :::
 
 :::
@@ -334,10 +355,13 @@ Mediator-evaluation model
 ## 学术贡献点1: 认知能动性与制度运行
 
 :::{.callout-important appearance="simple" .large}
+
 考察多领域认知能动性与治理关系，挖掘**治理工具的认知塑造效用**。
+
 :::
 
 :::{layout-nrow=1}
+
 ![不平等影响**阶级认知**：Solt, Hu et al.[-@SoltEtAl2017]，**“三大刊”之一**，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jop.png){fig-align="center" height=320 width=250}
 
 ![经济发展影响**不平等认知**：@JiChengYuanHuYue2022（通讯），学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_jpa.jpg){fig-align="center" height=320 width=250}
@@ -351,36 +375,44 @@ Mediator-evaluation model
 :::
 
 :::{.notes}
+
 从治理效度角度加深对认知机制重要性理解，揭示纪检监察、民情疏导、城市管理等重要领域治理过程中的潜藏问题，并提供破解思路。
 
 The meritocracy study was published in Research & Politics and has remained one of the “most read articles” since 2022.4
+
 :::
 
 ## 学术贡献点2：语言对大众政治思维的塑造效果与机制
 
 :::{.callout-important appearance="simple" .large}
+
 由认知路径探索语言效果生成机制，构建**对语-政关系政治心理学解释**。
+
 :::
 
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_languagePath.png){fig-align="center" height=490}
 
 
-
-
 :::{.notes}
+
 a landmark study that will have a lasting impact on our understanding of the intersection between language and politics. 
+
 :::
 
 ## 学术贡献点2：语言对大众政治思维的塑造作用与机制
 
 :::{.callout-important appearance="simple" .large}
+
 以语言学与政治学交叉视角，揭示语言的**权威标记效应**作用机制。
+
 :::
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 ![@Hu2020, **政治心理学顶刊**，五年平均影响因子：5.3](https://drhuyue.site:10002/sammo3182/figure/tenure_pops.png){height=420}
+
 :::
 
 ::: {.column width="70%"}
@@ -399,13 +431,17 @@ a landmark study that will have a lasting impact on our understanding of the int
 ## 学术贡献点2：语言对大众政治思维的塑造作用与机制
 
 :::{.callout-important appearance="simple" .large}
+
 关注英语学习的社会政治影响，展现**语言对政治现代性的助推作用**。
+
 :::
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 ![@HuYueZhuMeng2022，《中国学术期刊影响因子年报》（2023）中国政治类6/179，复合IF：7.2](https://drhuyue.site:10002/sammo3182/figure/tenure_gr.png){height=380}
+
 :::
 
 ::: {.column width="70%"}
@@ -416,7 +452,9 @@ a landmark study that will have a lasting impact on our understanding of the int
 - 发现英语通过**素质性而非价值性路径**影响政治认知。
 
 :::{.notes}
+
 在机制上,通过信息获取进路上提升内部政治效能感作用最明显,而语言竞争优势则是影响外部效能感的主导路径。
+
 :::
 
 :::
@@ -426,10 +464,13 @@ a landmark study that will have a lasting impact on our understanding of the int
 ## 学术贡献点2：语言对大众政治思维的塑造效果与机制
 
 :::{.callout-important appearance="simple" .large}
+
 揭示语言对**政治概念认知、历史观塑造、决策偏好塑造**等方面广泛作用。
+
 :::
 
 :::{layout-nrow=1}
+
 ![语言而非教育造成**民族差异**：Tang, Hu, Jin [-@TangEtAl2016]，学院**A**类](https://drhuyue.site:10002/sammo3182/figure/tenure_csr.png){fig-align="center" height=340 width=250}
 
 ![英语能力对**前侵略国态度**影响：@HuLiu2020](https://drhuyue.site:10002/sammo3182/figure/tenure_jeas.png){fig-align="center" height=340 width=250}
@@ -447,23 +488,31 @@ a landmark study that will have a lasting impact on our understanding of the int
 ## 学术贡献点3：比较政治学与计算政治学方法创新
 
 :::{.callout-important appearance="simple" .large}
+
 **不止步于应用**，发展民意测量和比较的前沿方法。
+
 :::
 
 
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 ![@HuYueOuYangRui2023，国内**政治学顶刊**，复合影响因子：6.3。本文为该期**封面首文**](https://drhuyue.site:10002/sammo3182/figure/tenure_sjz.png){fig-align="center" height=380}
+
 :::
 
 ::: {.column width="40%"}
+
 - **测量方法创新**：基于网络分析方法，发展软实力新测量，推动软硬实力关系理论发展
 - **比较方法创新**：贝叶斯统计+潜变量分析+极化测量，Dynamic Comparative Political Opinions (DCPO)，实现跨越国家与发展阶段的民意比较
+
 :::
 
 ::: {.column width="30%"}
+
 ![@HuEtAl2024a，唯二**政治方法论期刊**之一，五年平均影响因子：4.5，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_psrm.jpg){fig-align="center" height=380}
+
 :::
 
 ::::
@@ -473,10 +522,13 @@ a landmark study that will have a lasting impact on our understanding of the int
 
 
 :::{.callout-important appearance="simple" .large}
+
 推动中国政治科学**方法论建设**，扩展计算政治学应用领域。
+
 :::
 
 :::{layout-nrow=1}
+
 ![厘定实验室实验方法在政治学的**应用范畴和评价标准**：@Hu2022a，学院**A**类，**《中国社会科学文摘》《人大复印报刊资料》**共同转载](https://drhuyue.site:10002/sammo3182/figure/tenure_gwlldt.png){fig-align="center" height=350}
 
 ![以**因果分析**探究关闭孔子学院对国家形象影响：@HuEtAl2022，学院**A+**类](https://drhuyue.site:10002/sammo3182/figure/tenure_cjip.png){fig-align="center" height=350}
@@ -488,7 +540,11 @@ a landmark study that will have a lasting impact on our understanding of the int
 
 ## 学术贡献点3：比较政治学与计算政治学方法创新
 
-```{r badge, include=FALSE}
+```{r}
+#| label: badge
+#| include: false
+
+
 packages <- c("dotwhisker", "interplot", "regioncode", "drhur", "drhutools", "pewdata")
 
 # Fetch download counts for each package
@@ -499,16 +555,19 @@ total_downloads <- packages |>
 monthly_downloads <- cran_downloads(packages = "dotwhisker", 
                                     when = "last-month") |>
   summarize(lastMonth = sum(count))
- 
+
 ```
 
 :::{.callout-important appearance="simple" .large}
+
 通过**研发开源软件**，在**全球范围**内推广科学研究范式。
+
 :::
 
 :::: {.columns}
 
 ::: {.column width="65%"}
+
 全球累计下载量：[**`r total_downloads`万**]{.red};    
 `dotwhisker`近一月下载量: `r monthly_downloads`
 
@@ -516,10 +575,13 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 - 社科：经济学、心理学、法学、教育学、语言学......
 - 自科：生态学、环境科学、神经科学、医学......
 - 各种语言：*Zeitschrift für Vergleichende Politikwissenschaft*、*Соціологічністудії*、*커뮤니케이션이론*......
+
 :::
 
 ::: {.column width="35%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/hives.png){fig-align="center" height=480}
+
 :::
 
 ::::
@@ -530,6 +592,7 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited.png){fig-align="center" height=250 width=330}![](https://drhuyue.site:10002/sammo3182/figure/tenure_gsCited_trend.png){fig-align="center" height=250 width=270}
 
 - 主持[2项国自科基金]{.red}、1项北京社科基金在内的[6]{.red}项科研项目
@@ -549,7 +612,9 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 
 
 :::{.notes}
+
 文科3人之一
+
 :::
 
 :::
@@ -564,6 +629,7 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 :::: {.columns}
 
 ::: {.column width="65%"}
+
 - 教育理念
     - *知识*：打牢认知基础 &rarr; 问题意识
     - *能力*：着眼学科前沿 &rarr; 国际视野
@@ -579,6 +645,7 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 :::
 
 ::: {.column width="35%"}
+
 - 教学数据
     - 近三年主讲课程11门次
     - 共完成[344学时]{.red}教学工作
@@ -593,14 +660,18 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 
 
 :::{.notes}
+
 - *中国概况（教研院，英文）*
 - *大数据分析（A）*
+
 :::
 
 ## 教学质量与改革
 
 :::: {.columns}
+
 ::: {.column width="40%"}
+
 - 《公共政策分析》（本）、《理解政策》（本）、《政治数据分析》（研）[前25%]{.red}
 - 《理解政策》“清华大学优质通识课程建设计划”（2022）
 - 奖励
@@ -612,6 +683,7 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 
 ::: {.column width="60%"}
 
+
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_teachingAwards.png){fig-align="center" height=600}
 
 :::
@@ -621,7 +693,10 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 ## Learn R with Dr. Hu and His Friends 工作坊
 
 
-```{r badge2, include=FALSE}
+```{r}
+#| label: badge2
+#| include: false
+
 drhur_downloads <- cran_downloads(packages = "drhur", 
                                   from = "2020-10-30", 
                                   to = Sys.Date()) %>% 
@@ -636,17 +711,23 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 
 
 :::{.r-stack}
+
 :::{style="text-align:center"}
+
 - 累计学员[**10,000+**]{.red}；2021年开始B站直播部分课程
 - 自主研发[互动学习软件]{.red}`drhur`（总下载量`r drhur_downloads$total`万，上月`r monthly_downloads$lastMonth`）
 
 ![](https://drhuyue.site:10002/sammo3182/figure/2023_rClass.png){fig-align="center" height=450}
+
 :::
 
 :::{.fragment}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_Rcertificate.JPG){fig-align="center" height=500 width=600}
 ![](https://drhuyue.site:10002/sammo3182/figure/2023_rCertificate.jpg){fig-align="center" height=500 width=600}
+
 :::
+
 :::
 
 
@@ -657,35 +738,42 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 :::{.callout-tip}
+
 ## 孙宇飞
 
 ![[[**研究生国家奖学金**]{.red}<br>SSCI Q1期刊发表文章<br>清华大学研究生一等奖学金<br>清华大学国际学生工作奖]{.large}](https://drhuyue.site:10002/sammo3182/figure/tenure_sunYufei.jpg){fig-align="center" height=300}
 
 :::
+
 :::
 
 ::: {.column width="35%"}
+
 :::{.callout-tip}
+
 ## 苏畅
 
 ![[教育部港澳台奖学金<br>全国青联港区特邀委员<br>建党大会清华港生代表<br>[**香港特区特首政策组**]{.red}]{.large}](https://drhuyue.site:10002/sammo3182/figure/tenure_soChong.jpg){fig-align="center" height=300}
+
 :::
+
 :::
 
 ::: {.column width="35%"}
+
 :::{.callout-tip}
+
 ## 赵泽群
 
 ![[[**北京市优秀学生干部**]{.red}<br>清华大学“一二·九”辅导员<br>清华大学优秀学生干部<br>北京冬奥会清华先进个人]{.large}](https://drhuyue.site:10002/sammo3182/figure/tenure_zhaoZequn.jpg){fig-align="center" height=300}
 
 :::
+
 :::
 
 ::::
-
-
-
 
 
 # 公共服务
@@ -711,6 +799,7 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="45%"}
+
 - 举办“政治心理理论与方法”**学术研讨会**，获得[中国社会科学网报道]{.red}
 - 清华大学**“计算社会科学平台”**    
   **副主任**
@@ -720,7 +809,9 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::
 
 ::: {.column width="55%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_conference.png){fig-align="center" height=600}
+
 :::
 
 ::::
@@ -731,10 +822,13 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="45%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/tenure_comment.png){fig-align="center" height=600}
+
 :::
 
 ::: {.column width="55%"}
+
 中宣部**采纳**，中央和市领导**肯定性批示**：
 
 - 《12345违建类诉求分析和治理建议》获北京市副市长肯定性批示
@@ -753,17 +847,19 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="65%"}
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_future.png){fig-align="center" height=600}
 
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_future.png){fig-align="center" height=600}
 
 :::
 
 ::: {.column .fragment width="35%"}
+
 **经济不平等[认知]{.red}治理研究**
 
 - **方向**：经济不平等认知的社会比较、跨国剥夺感、家庭教养、服务均等化等
 - **在投论文**：《公共行政评论》（外审）、*Governance*（外审）
 - **拟稿论文**：3篇
+
 :::
 
 ::::
@@ -789,6 +885,7 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="60%"}
+
 **教育教学**
 
 - **教材：[2本以上]{.red}**
@@ -803,6 +900,7 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::
 
 ::: {.column width="40%"}
+
 **公共服务**
 
 - 继续组织“政治心理”研讨会，推广中国特色**政治心理学**和**政治语言学**发展
@@ -828,13 +926,16 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 :::: {.columns}
 
 ::: {.column width="40%"}
+
 ### [经典议题前沿推进]{.red}
 
 - 民众理解支持[（贡献点1）]{.small}是制度存续心理前提，语言[（贡献点2）]{.small}是建构理解根本途径，而对它们的精准度量比较[（贡献点3）]{.small}又是对政治认知进行科学研究的基石，三个学术贡献点**相互支撑、有机融合**
 - 聚焦“民主发展多样性”、 “结构权力与个体能动性”、 “现代化与现代性”等基础性议题
+
 :::
 
 ::: {.column width="60%"}
+
 ### [高水平国际对话]{.red}
 
 - 产出**国际水平成果**，在学术层面参与国际对话
@@ -844,6 +945,7 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 
 - 通过方法迭代和融合，为解决实际研究问题提供更坚实的实证基础
 - **不止步于应用**，更致力于对新方法研发和方法论层面研究，为社会科学工作者提供更为便捷、高效、科学的研究技法和工具
+
 :::
 
 ::::
@@ -856,9 +958,11 @@ monthly_downloads <- cran_downloads(packages = "drhur",
 
 
 :::{layout-nrow=1}
+
 ![北京大学，长聘副教授1 (2023)](https://drhuyue.site:10002/sammo3182/figure/tenure_maXiao.png){fig-align="center" height=250 width=400}
 
 ![北京大学，长聘副教授2 (2023)](https://drhuyue.site:10002/sammo3182/figure/tenure_liuYanjun.png){fig-align="center" height=250 width=400}
 
 ![复旦大学，长聘副教授 (2021)](https://drhuyue.site:10002/sammo3182/figure/tenure_huPeng.png){fig-align="center" height=250 width=400}
+
 :::
