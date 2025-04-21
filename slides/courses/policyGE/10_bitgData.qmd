@@ -45,15 +45,15 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-```{r setup, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
+
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
-  icons, knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       modelsummary,
-       broom, tidyverse
+  icons, tidyverse, drhutools
 ) # data wrangling # data wrangling
 
 # Functions preload
@@ -74,58 +74,43 @@ theme_update(
 
 ## Overview
 
-
 * What's "big" data
 * What can big-data do
 * Ethnic issues of Big Data
 
----
+# What's big data
 
-class: inverse, bottom
-
-# "Big-Data" (Data Sciene) Approach
-
----
+## The political meaning of the "Big-Data" (Computational) approach
 
 
-
-> [大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动，深入了解大数据发展现状和趋势及其对经济社会发展的影响，分析我国大数据发展取得的成绩和存在的问题，推动实施国家大数据战略，加快完善数字基础设施，推进数据资源整合和开放共享，保障数据安全，加快建设数字中国，更好服务我国经济社会发展和人民生活改善。]{.red}
-
-:::{style="text-align:right"}
---- 习近平 (《中共中央政治局第二次集体学习》, 2017年12月)
-:::
-
+> [大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动，深入了解大数据发展现状和趋势及其对经济社会发展的影响，分析我国大数据发展取得的成绩和存在的问题，推动实施国家大数据战略，加快完善数字基础设施，推进数据资源整合和开放共享，保障数据安全，加快建设数字中国，更好服务我国经济社会发展和人民生活改善 [@XiJinPing2017a]。]{.red .large}
 
 
 ## What's Big Data?
 
-What do you think? 
-
-
 :::: {.columns}
 
 ::: {.column width="30%"}
-:::{.callout-note}
-## Common definition:
 
 > Big data usually includes data sets with sizes **beyond the ability of commonly used software tools** to capture, curate, manage, and process data within a tolerable elapsed time.
-:::
+
+
 :::
 
-::: {.column width="70%"}
+::: {.column .fragment width="70%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/css_bd6v.png){fig-align="center" height=600}
+
 :::
 
 ::::
 
 
+## Quiz: Big-data based works?  {.center background="#43464B"}
 
+"I established a CPC elite database containing extensive biographical and career information for over 20,000 positions with a unique number of 4,700 cadres, including all the members of the Central Committee and Provincial Standing Committee of the CPC from 1982 to 2020......"
 
-## Quiz: where's the big data
-
-- > ......I established a CPC elite database containing extensive biographical and career information for over 20,000 positions with a unique number of 4,700 cadres, including all the members of the Central Committee and Provincial Standing Committee of the CPC from 1982 to 2020......
-
-- > To provide a further test of the classic arguments on democracy and public support, we generated estimates of democratic support......assembling as much survey data on democratic support as possible. We employed 4,905 national opinions on democracy from 1,889 national surveys, representing a 32.0% and 37.3% increase respectively over the 3,716 opinions and 1,376 national surveys used in Claassen (2020a; 2020b).
+["To provide a further test of the classic arguments on democracy and public support, we generated estimates of democratic support......assembling as much survey data on democratic support as possible. We employed 4,905 national opinions on democracy from 1,889 national surveys, representing a 32.0% and 37.3% increase respectively over the 3,716 opinions and 1,376 national surveys used in Claassen (2020a; 2020b)."]{.fragment}
 
 
 
@@ -134,7 +119,8 @@ What do you think?
 
 :::: {.columns}
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
+
 **Sources**
 
 1. Data from e-government, civil service hotlines, government-citizen interactions
@@ -146,7 +132,8 @@ What do you think?
 
 :::
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
+
 **Goals**
 
 1. Initiation of the agenda
@@ -158,22 +145,18 @@ What do you think?
 
 
 :::{.fragment}
+
 **Methods**
 
 1. Description✨
 1. Relationship analysis
-1. Pattern (machine) learning
-......
-:::
+1. Pattern learning
 
+:::
 
 :::
 
 ::::
-
-
-
-
 
 
 ## Description
@@ -181,88 +164,205 @@ What do you think?
 :::: {.columns}
 
 ::: {.column width="35%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/big_wuhanFlight.png){fig-align="center" height=600}
+
 :::
 
 ::: {.column .fragment width="65%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/big_wuhanFlight2.jpg){fig-align="center" height=600}
+
 :::
 
 ::::
 
-## Description to Pattern
+## Description &rarr; relationship [@HuEtAl2022]
 
 :::{.r-hstack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/map_closed.gif){fig-align="center" height=600}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/closeEffect.png){.fragment fig-align="center" height=600}
+
 :::
 
 
-## Pattern from Comparison
+## Description &rarr; patterns [@Hu2020a]
 
 :::{.r-hstack}
+
 ![1990](https://drhuyue.site:10002/sammo3182/figure/big_pd0.png){fig-align="center" height=600}
 
 ![1997](https://drhuyue.site:10002/sammo3182/figure/big_pd7.png){.fragment fig-align="center" height=600}
+
 :::
 
 
 
-## Beyond Vision
+## Beyond words
 
 ![](https://drhuyue.site:10002/sammo3182/figure/big_vocalPitch.png){fig-align="center" height=600}
 
 :::{.notes}
+
 Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfect: Vocal Pitch and the Emotional Intensity of Congressional Speech.” American Political Science Review: Forthcoming.
 
 female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
+
 :::
 
 ## Ethnic Issues of Big Data
 
-:::{.large style="text-align:center; margin-top: 2em"}
+:::{.large .nonincremental style="text-align:center; margin-top: 2em"}
+
 1. Who own the data
 1. Who can access the data
 1. Who can [use]{.red} the data to [do]{.red} what
+
 :::
 
-
-## Data Responsibility
+## Who own the data: Data Responsibility
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_dataPrivacy.mp4 title="Surveillance capitalism" height=600 loading="eager" allowfullscreen>}}
 
 :::{.notes}
+
 2018年FB数据泄露事件: 脸书2015年就发现英国剑桥分析公司“窃用”大量用户隐私数据用于投放政治广告，却为何没能及时告知用户、非等到媒体今年曝光才承认？
 
 Cambridge Analytica助选
+
 :::
 
-## Downstream Effect
+## Relative public policies
+
+```{r}
+#| label: privacyLaws
+#| fig-height: 6
+
+library(DiagrammeR)
+
+grViz("
+digraph G {
+  graph [rankdir=TB, fontsize=18]
+
+  # 定义节点样式
+  node [shape=box, style=filled, fontname=\"Microsoft YaHei\", fontsize=18]
+
+  # 根节点
+  A0 [label=\"《宪法》《民法典》《刑法》\", fillcolor=\"#e1eaf5\", color=\"#333\", penwidth=2]
+
+  # 主干法律
+  A1 [label=\"网络安全法（CSL）\\n2017.6.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
+  A2 [label=\"数据安全法（DSL）\\n2021.9.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
+  A3 [label=\"个人信息保护法（PIPL）\\n2021.11.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
+
+  # 配套法规
+  B1 [label=\"网络数据安全管理条例\\n2025.1.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
+  B2 [label=\"个人信息出境保护认证办法\\n2025征求意见稿\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
+  B3 [label=\"个人信息保护合规审计办法\\n2025.5.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
+  B4 [label=\"电信和互联网用户个人信息保护规定\\n2013.9.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
+  B5 [label=\"关键信息基础设施安全保护条例\\n2021.9.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
+
+  # 连接关系
+  A0 -> A1
+  A0 -> A2
+  A0 -> A3
+
+  A1 -> B1
+  A2 -> B1
+  A3 -> B1
+  A3 -> B2
+  A3 -> B3
+  A1 -> B4
+  A1 -> B5
+}
+")
+
+```
+
+## Who can access the data: information management
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_targeting.mp4 title="Software Kills" height=600 loading="eager" allowfullscreen>}}
 
-## Come to the Moment
+## Who can use the data to do what
 
 [![](https://drhuyue.site:10002/sammo3182/figure/big_audio.png){fig-align="center" height=600}](https://openai.com/blog/navigating-the-challenges-and-opportunities-of-synthetic-voices)
 
 :::{.notes}
+
 https://openai.com/blog/navigating-the-challenges-and-opportunities-of-synthetic-voices
+
 :::
 
-## Who is you
+## Who can use the data to do what
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_AImimic.mp4 title="Reid Hoffman and his AI mimic" height=600 loading="eager" allowfullscreen>}}
 
+## Policies and laws relating with information management
+
+```{r}
+#| label: infoManagement
+
+grViz("
+digraph law_framework {
+  graph [layout = dot, rankdir = TB, fontsize=18]
+  
+  # 节点定义
+  node [shape = rectangle, style = filled, fillcolor = '#b3d7f0', fontname = 'Microsoft YaHei']
+  PIPL [label = '个人信息保护法\n(PIPL)']
+  CSL [label = '网络安全法']
+  DSL [label = '数据安全法']
+  CISA [label = '关键信息基础设施安全保护条例']
+  
+  node [shape = rectangle, style = filled, fillcolor = '#f6f6e6', fontname = 'Microsoft YaHei']
+  PIPL1 [label = '网络数据安全管理条例']
+  PIPL2 [label = '个人信息出境保护认证办法']
+  PIPL3 [label = '个人信息保护合规审计办法']
+  PIPL4 [label = '配套细则']
+  
+  CSL1 [label = '等级保护制度']
+  CSL2 [label = '运营者义务']
+  CSL3 [label = '关键信息基础设施']
+  CSL4 [label = '配套细则']
+  
+  DSL1 [label = '数据分类分级']
+  DSL2 [label = '数据处理安全']
+  DSL3 [label = '跨境数据管理']
+  DSL4 [label = '配套细则']
+  
+  CISA1 [label = '设施范围']
+  CISA2 [label = '运营者责任']
+  CISA3 [label = '安全措施']
+  CISA4 [label = '配套细则']
+  
+  # 连线
+  PIPL -> PIPL1 -> PIPL2 -> PIPL3 -> PIPL4
+  CSL -> CSL1 -> CSL2 -> CSL3 -> CSL4
+  DSL -> DSL1 -> DSL2 -> DSL3 -> DSL4
+  CISA -> CISA1 -> CISA2 -> CISA3 -> CISA4
+}
+")
+```
+
 ## Take-Home Points
 
+::: {.nonincremental}
+
 * What's "big" data
-  - Vs
-  - Features
-      1. Big enough
-      1. Created unintentionally
-      1. Ongoing phenomena
+  - 6 Vs
 * What can big-data do
   1. Description
+  1. Relationship
   1. Pattern
 * Ethnic issues of big data
+  - Whose data
+  - Who access data
+  - Who use data and how
+
+:::
+
+## Reference
+
+::: {#refs}
+:::
