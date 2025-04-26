@@ -1,20 +1,16 @@
 ---
-title: "大数据在社会科学研究中的应用"
-date: "2024-04-21"
-date-format: "iso"
+title: 大数据在社会科学研究中的应用
 author: "胡悦"
 institute: |
-    | 清华大学社会科学学院政治学系
+    | 清华大学社会科学学院
     | 清华大学计算社会科学平台
-    | 清华大学数据与治理研究中心
 bibliography: pre_css.bib
-knitr: 
-    opts_chunk: 
-      echo: false
+
 format: 
   revealjs:
     css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
+    number-sections: false
     slide-number: true
     filters: [appExclusion.lua] # not count appendices into page number
     incremental: false
@@ -24,6 +20,7 @@ format:
     chalkboard: false # allwoing chalk board B, notes canvas C
     # callout-icon: false
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    show-notes: false
     title-slide-attributes:
       data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
       data-background-size: 250px   
@@ -39,12 +36,18 @@ spotlight:
   presentingCursor: default
   toggleSpotlightOnMouseDown: false
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+  echo: false
 editor_options: 
   chunk_output_type: console
+editor: 
+  render-on-save: true
 ---
 
-```{r setup}
-#| include = FALSE
+```{r}
+#| label: setup
+#| include: false
 
 library(pacman)
 
@@ -66,8 +69,8 @@ set.seed(313)
 ::: {.column width="60%"}
 *个人经历*
 
-- 政治[科学]{.red}博士[（University of Iowa)]{.small}
-  - 信息学[（Graduated Certificate in Informatics)]{.small}
+- 政治[科学]{.red}博士[(University of Iowa)]{.small}
+  - 信息学[(Graduated Certificate in Informatics)]{.small}
 - 清华大学计算社会科学平台[(副主任)]{.small}
   - 清华数据与治理中心[(副主任)]{.small}
   - 计算社会科学编程语言证书项目[（负责人）]{.small}
@@ -99,9 +102,9 @@ set.seed(313)
 
 ## 课程概要
 
-:::{style="text-align:center; margin-top: 2em"}
+:::{style="text-align:center; margin-top: 3em"}
 
-1. 大数据 + 社会科学：计算社会科学定位与沿革
+1. 计算社会科学定位与沿革
 1. 计算社会科学原理与应用
 1. 计算社会科学科研实践转化
 1. 国家大数据战略治理实践探索
@@ -109,7 +112,7 @@ set.seed(313)
 
 :::
 
-# 大数据 + 社会科学：<br>计算社会科学沿革与概要
+# 计算社会科学沿革与概要
 
 ## 什么是社会科学 {.scrollable}
 
@@ -118,6 +121,7 @@ set.seed(313)
 :::: {.columns}
 
 ::: {.column .fragment .nonincremental width="20%"}
+
 - 政治学
 - 经济学
 - 社会学
@@ -145,16 +149,21 @@ set.seed(313)
 - 性别研究
 - 媒体研究
 ……
+
 :::
 
 ::: {.column .fragment width="60%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/css_ss.png){fig-align="center" height=500}
+
 :::
 
 ::: {.column .fragment .nonincremental width="20%"}
+
 - 马克思主义理论
 - 法学
 - 历史
+
 :::
 
 ::::
@@ -202,20 +211,25 @@ Science special issue:
 - 数据是重要生产要素（十九届四中全会）
 - 加快构建数字技术[辅助政府决策]{.red}机制，提高基于[高频大数据精准动态监测预测预警]{.red}水平。强化数字技术在公共卫生、自然灾害、事故灾难、社会安全等突发公共事件应对中的运用，全面提升预警和应急处置能力。(十四五)
 
-## 大数据优势
+## 大数据优势 [@Stewart2020]
 
 {{< video https://drhuyue.site:10002/sammo3182/video/css_bigdataStrength.mp4 title="Irresistible" height=600 preload="auto" controls allowfullscreen>}}
+
 
 ## 大数据特点
 
 :::: {.columns}
 
 ::: {.column width="35%"}
+
 > 大数据是指需要新处理模式才能确保更强的决策力、洞察力和流程优化力的海量、高速增长和多样化的信息财富 [@GartnerHiebl2017]
+
 :::
 
 ::: {.column width="65%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/css_bd6v.png){fig-align="center" height=600}
+
 :::
 
 ::::
@@ -223,16 +237,19 @@ Science special issue:
 ## 以（大）数据为对象的科研
 
 :::{.r-hstack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.jpg){fig-align="center"}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/css_dsPyramid.png){fig-align="center"}
+
 :::
 
 ## 数据科学发展沿革
 
-```{r dsHist}
+```{r}
 #| fig-align: center
 #| fig-height: 6
+#| label: dsHist
 
 # df_event_en <- tribble(
 #   ~event, ~date, ~type,
@@ -310,6 +327,7 @@ ggplot(data = df_event) +
 ```
 
 :::{.notes}
+
 https://bjt.name/2018/11/18/timeline.html
 
 Information entropy, 1948
@@ -383,8 +401,8 @@ select fun, profit from real_world where relational=false;
 Deep Learning, 2015
 
 深度学习其实并不是什么新鲜技术，人工神经网络在 20 世纪 50 年代就出现了，但是受限于算力和要求的数据量，神经网络发展一直相对缓慢。2015 年随着 Google 在语音识别领域精度的极大提高（几项比赛的革命性效果），深度学习再一次火了起来。
-:::
 
+:::
 
 ## 计算社会科学{.smaller}
 
@@ -447,23 +465,12 @@ Deep Learning, 2015
 
 # 计算社会科学原理与系统
 
-## 研究流程
-
-![](https://drhuyue.site:10002/sammo3182/figure/css_techniques.jpg){fig-align="center" height=num}
-
-## 方法树
-
-:::{.r-hstack}
-![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.png){fig-align="center"}
-
-![](https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png){.fragment fig-align="center" height=600}
-:::
-
 ## 核心特征
 
 范式转换的八个特征
 
 ::: {.nonincremental}
+
 1. 数据生成机制：海量非结构化数据、消极数据
 1. 数据代表性：“全量数据”而不是“样本数据”
 1. 数据驱动范式：丰富、高效的方法工具箱
@@ -472,20 +479,34 @@ Deep Learning, 2015
 1. 开放科学 / 志愿科学共同体
 1. 社会科学知识平民化普及
 1. 良好的组织环境 + 充分的社会需求
+
+:::
+
+## 研究流程
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_techniques.jpg){fig-align="center" height=600}
+
+## 方法树
+
+:::{.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.png){fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png){.fragment fig-align="center" height=600}
+
 :::
 
 
-
-## 方法举例
+## 常用方法
 
 :::{.nonincremental style="text-align:center; margin-top: 2em"}
+
 - 自然语言处理
-- 机器学习
-- 音频分析
-- 视频/图片分析
+  - 音频分析
+  - 视频/图片分析
 - 社会网络分析
 - 空间/时间分析
-- 可视化
+- 可视化*
 
 :::
 
@@ -523,14 +544,17 @@ Deep Learning, 2015
 ## 现实与关注
 
 :::{.r-vstack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/css_haze.png){fig-align="center" height=300}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/css_hazeAttention.png){.fragment fig-align="center" height=250}
+
 :::
 
-
 :::{.notes}
+
 雾霾天和对于雾霾的关注
+
 :::
 
 ## 文化组学
@@ -541,9 +565,11 @@ Deep Learning, 2015
 
 
 :::{.notes}
+
 “文化组学”一词是2010年创造的新词，由英文中的“文化”（culture）与“组学”（omics）二词合并而成，@MichelEtAl2011 当年《自然》上发表首次提出了该词.
 
 米歇尔与埃登还参与了Google实验室的项目Google Ngram Viewer。这个项目通过n元语法（n-gram）分析Google图书中的数据，以展示语言中的文化模式随时间的变化。
+
 :::
 
 
@@ -602,6 +628,9 @@ an American cognitive linguist and philosopher, best known for his thesis that p
 2. 高维数据：所有语言的各种可能词语和短语等
 3. 语言复杂性：文本中词语之间复杂且微妙的关系
 
+## 语言分析技术发展沿革
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_llm.gif){fig-align="center" height=600}
 
 ## 高纬度数据
 
