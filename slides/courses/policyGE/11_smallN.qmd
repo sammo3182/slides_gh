@@ -45,83 +45,61 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-```{r setup, include=FALSE}
-if (!require(pacman)) install.packages("pacman")
-library(pacman)
-
-p_load(
-  icons, knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       modelsummary,
-       broom, tidyverse
-) # data wrangling # data wrangling
-
-# Functions preload
-set.seed(313)
-
-# Visualization
-theme_set(
-  theme_minimal(base_size = 18)
-)
-
-theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
-  axis.text = element_text(size = 18)
-)
-
-```
 
 ## Overview
 
 - What's small-N analyses (SNA)
-- SNA vs. LNA
-- What's a good SNA
+  - SNA vs. LNA
+- How to conduct a good SNA
 
 
-# SNA: A Deep Approach
-
+# SNA: An Introduction
 
 ## About N
 
-> What's the rule of thumb on observation size for a large-N analysis?
+*What's the rule of thumb on observation size for a large-N analysis?*
 
 :::: {.columns .fragment}
 
 ::: {.column width="50%"}
+
 ### Large N
 
 100 (LLN), > 1000 (CLT)
+
 :::
 
 ::: {.column width="50%"}
+
 ### Small N
 
 N &#x225D; 1~100
+
 :::
 
 ::::
 
 
 :::{.fragment style="text-align:center; margin-top: 2em"}
+
 ### How about 0 N (?😮)
 
 Check out the [Gaming Political Science, GPS](https://www.k-state.edu/polsci/gaming/general/)
+
 :::
-
-
 
 
 ## Common Approaches of SNA
 
-:::{style="text-align:center; margin-top: 2em"}
+:::{.nonincremental style="text-align:center; margin-top: 3em"}
+
 1. Value judging (critical theory)
 1. Story telling
 1. Narrative analysis
 1. Dramaturgical analysis
 1. Category analysis
-:::
 
+:::
 
 
 ## Value Judging
@@ -129,23 +107,29 @@ Check out the [Gaming Political Science, GPS](https://www.k-state.edu/polsci/gam
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 + Identifying "communities of meaning"
 + Studying the framing and interactions among the communities
+
 :::
 
 ::: {.column .fragment width="50%"}
-![](https://drhuyue.site:10002/sammo3182/figure/small_Lakoff.jpg){fig-align="center" height=600}
+
+![@LakoffEtAl2004](https://drhuyue.site:10002/sammo3182/figure/small_Lakoff.jpg){fig-align="center" height=600}
+
 :::
 
 ::::
 
 
-:::{style="text-align:center; margin-top: 2em"}
-Graham Tillett Allison Jr. , American political scientist and professor at the John F. Kennedy School of Government at Harvard, in his book of Essence of decision, he attributed the missile crisis of Cuba to Russia's ideological flaws.
+::: {.notes}
+
+Graham Tillett Allison Jr., American political scientist and professor at the John F. Kennedy School of Government at Harvard, in his book of Essence of decision, he attributed the missile crisis of Cuba to Russia's ideological flaws.
 
 Another example: George Lakoff: Don't Think of an Elephant! 
 
 Writing about framing and metaphor, a book writing for liberal peoples. Thus called them (Democrats) the 进步的, the Republicans 保守派
+
 :::
 
 
@@ -153,11 +137,9 @@ Writing about framing and metaphor, a book writing for liberal peoples. Thus cal
 
 Telling stories about a certain group or policy based on archives and interviews.
 
-![Anne Balay](https://drhuyue.site:10002/sammo3182/figure/small_semiQueer.jpg){fig-align="center" height=500}
+![@Balay2018](https://drhuyue.site:10002/sammo3182/figure/small_semiQueer.jpg){fig-align="center" height=500}
 
 :::{.notes}
-Balay, Anne. 2018. Semi Queer: Inside the World of Gay, Trans, and Black Truck Drivers. UNC Press Books.
-
 Winner of the Lambda Literary Emerging Writers Award. PhD students at University of Michigan’s American Culture.
 
 :::
@@ -167,20 +149,25 @@ Winner of the Lambda Literary Emerging Writers Award. PhD students at University
 :::: {.columns}
 
 ::: {.column width="50%"}
-[《悬浮时代——异乡人的都市生存》](https://posts.careerengine.us/p/61ea44f44ab3963c8b7df873)
 
-> 我想以“附近”（the nearby）作为研究框架，去**深度描绘这些在我们日常附近中出现的打工者**，他们是帮我们找房子的中介、为我们做家政的阿姨、给我们送外卖的外卖员……我想通过这本书来**记录这些陌生人的状态**……他们和我们之间会有什么样的交集，这样一种交集也是跟“真实的附近”产生亲密的关系……
+
+> 我想以“附近”（the nearby）作为研究框架，去**深度描绘这些在我们日常附近中出现的打工者**，他们是帮我们找房子的中介、为我们做家政的阿姨、给我们送外卖的外卖员……我想通过这本书来**记录这些陌生人的状态**……他们和我们之间会有什么样的交集，这样一种交集也是跟“真实的附近”产生亲密的关系…… [@YanFei2022]
+
 :::
 
 ::: {.column .fragment width="50%"}
-![](https://drhuyue.site:10002/sammo3182/figure/small_1587.jpg){fig-align="center" height=600}
+
+![@Huang1981](https://drhuyue.site:10002/sammo3182/figure/small_1587.jpg){fig-align="center" height=550}
+
 :::
 
 ::::
 
 
 :::{.notes}
+
 Another example: 1587, a Year of No Significance: The Ming Dynasty in Decline，一个皇帝和五个名臣的故事, 萬曆十五年, 黃仁宇
+
 :::
 
 
@@ -188,31 +175,57 @@ Another example: 1587, a Year of No Significance: The Ming Dynasty in Decline，
 
 :::: {.columns}
 
-::: {.column width="50%"}
-![](https://drhuyue.site:10002/sammo3182/figure/small_skocpol.jpg){fig-align="center" height=600}
+::: {.column .fragment width="50%"}
+
+![@Skocpol1979](https://drhuyue.site:10002/sammo3182/figure/small_skocpol.jpg){fig-align="center" height=550}
+
 :::
 
-::: {.column width="50%"}
+::: {.column .nonincremental width="50%"}
+
 - Going [beyond]{.red} telling a story  
   - Using story to make an argument
   - Putting an argument in the [thick context]{.red}
+
 :::
 
 ::::
 
 :::{.notes}
-Skocpol, Theda. 1979. States and Social Revolutions: A Comparative Analysis of France, Russia and China. Cambridge University Press.
+
+An outstanding example of comparative history analysis
+
 :::
 
 
 ## Dramaturgical Analysis
 
-{{< video https://drhuyue.site:10002/sammo3182/video/small_stage.mp4 title="Don't Look Up" preload="auto" controls height=500 allowfullscreen>}}
 
-[How do policy and policy makers "act"? "Actors,""Content,""Theme,""Space," etc.]{.fragment}
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/small_stage.mp4 title="Don't Look Up" preload="auto" controls height=600 allowfullscreen>}}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+How do policy and policy makers "act"? "Actors,""Content,""Theme,""Space," etc.
+
+::: {.fragment}
+
+> The state is not the reality which stands behind the mask of political practice. It is itself the mask which prevents our seeing political practice as it is. [@Abrams1988]
+
+:::
+
+:::
+
+::::
 
 
 :::{.notes}
+
 A sociological approach
 
 Dramaturgical analysis is a way of looking at our everyday life as if we were actors on a stage in a play. Imagine you're in a school play and you have different scenes where you act as different characters — maybe you're a student in one scene, a friend in another, or a sibling at home in another scene.
@@ -242,169 +255,48 @@ Dramaturgical analysis can be a very interesting way to explore political behavi
    - **Analysis:** Leaders often adopt a "commander-in-chief" or "guardian" role. They use specific language, attire, and settings that convey control, reassurance, and competence. Their public appearances and speeches are crafted to instill confidence and calm in the public, even if behind the scenes the situation might be chaotic.
 
 These examples show how dramaturgical analysis can provide insights into not just what political figures do, but how and why they perform their roles in the way they do, considering the effect on their audience and their political objectives. This method highlights the theatrical nature of politics, where public perception is as crucial as actual policy-making.
-:::
 
-## An Illustration
-
-{{< video https://drhuyue.site:10002/sammo3182/video/small_rorschach.mp4 title="Watchmen" height=600 preload="auto" controls allowfullscreen>}}
-
-
-:::{.notes}
-An example of the analysis part of dramaturgical analysis
 :::
 
 
 ## Category Analysis
 
 + Identity: Welfare recipients, official language...
-+ Levels: e.g., Comprehensive strategic partners, strategic and cooperative partners, strategic partners, constructive cooperative partners...
++ Levels: e.g., Comprehensive strategic partners, strategic and cooperative partners, strategic partners, constructive cooperative partners... [@Struver2017] {{< video https://drhuyue.site:10002/sammo3182/video/small_categorical_poliCorrect.mp4 title="总书记访欧之行正确分析" height=300 preload="auto" controls allowfullscreen>}}
 + Direction: Smart city, service-oriented government, neo-urbanization...
 
-:::{.notes}
-Strüver, Georg. 2017. “China’s Partnership Diplomacy: International Alignment Based on Interests or Ideology.” The Chinese Journal of International Politics 10(1): 31–65.
-:::
 
-:::{.fragment}
+:::{.notes}
+
+- France: 独立自主，与美唱反调；法国成为欧盟唯一常任理事国；法国调查中国新能源汽车，中国报复法国干邑白兰地（送习近平一瓶干邑白兰地）；法欧职责俄乌战争，奥运期间停火
+- 塞尔维亚：中国台湾，塞尔维亚科索沃，贝尔格莱德
+- 匈牙利：欧盟成员国，拥抱一带一路
+
+
 {{< video https://drhuyue.site:10002/sammo3182/video/small_categorical.mp4 title="总书记访欧" height=350 preload="auto" controls allowfullscreen>}}
-:::
-
-
----
-
-{{< video https://drhuyue.site:10002/sammo3182/video/small_categorical_poliCorrect.mp4 title="总书记访欧之行正确分析" height=600 preload="auto" controls allowfullscreen>}}
-
-:::{.notes}
 
 :::
 
 
-# SNA vis-à-vis LNA
-
-## Commonality and Differences
-
-:::: {.columns}
-
-::: {.column width="50%"}
-### Same
-
-1. Empirical basis
-1. Scientific analysis
-1. Falsifiability
-:::
-
-::: {.column width="50%"}
-### Different
-
-+ Role
-+ Data collection
-+ Analysis
-+ Criteria
-:::
-
-::::
-
-
-## Role
+## LNA vs. SNA: Different Criteria
 
 :::: {.columns}
 
 ::: {.column width="40%"}
-- Researchers are [human]{.red}
-    + Experiences
-    + Cognitive differences
 
-- Researchers [participate]{.red}
-    + Observer vs. Insider
-    + Undercover vs. Activist
-    
-    
-:::{.notes}
-Cognitive differences: men and women; allowing tourists entering the campus
-
-Researchers generalize/create culture, etc.
-:::
-:::
-
-::: {.column .fragment width="60%"}
-Researchers have [value]{.red}
-
-> Legalizing abortions lowers crime rates across cultural groups and time periods because crime is tightly correlated with unwanted children, and unwanted children with criminality and other social ills.^[[Donohue, John J., III, and Steven D. Levitt. 2001. “The Impact of Legalized Abortion on Crime.” *The Quarterly Journal of Economics* 116(2): 379–420.]{.fragment}]
-
-:::
-
-::::
-
-:::{.fragment style="text-align:center"}
-"The poor are more likely to commit crimes"   
-&darr;    
-"The poor is the source of crimes"    
-&darr;    
-"Less poor kids, less source of crime"
-:::
-
-
-## Poverty Governance
-
-:::{.r-stack}
-![](https://drhuyue.site:10002/sammo3182/figure/small_thePoor.jfif){fig-align="center" height=600}
-
-![](https://drhuyue.site:10002/sammo3182/figure/small_diDuan.png){.fragment fig-align="center" height=400}
-
-![](https://drhuyue.site:10002/sammo3182/figure/small_commonWealth.jpg){fig-align="center" .fragment height=650}
-:::
-
-
-:::{.notes}
-北京市安委会回应“驱赶低端人口”：是在排查隐患
-
-https://baijiahao.baidu.com/s?id=1585068230951214767&wfr=spider&for=pc
-:::
-
-
-## Data Collection and Analysis
-
-1. Observing with intention to [understand]{.red};
-1. Interviewing with respondents as [conversational]{.red} partner;  
-1. Reading the documents as they were writing [meaningfully]{.red};
-1. > No need to transform words into numbers
-    + Numbers are not the results but the sources
-    + More details than digits^[Narrative reports often read like novels.]
-    - Focus:
-        + Where did the number or whatever data come from?
-        + Where to find the data, what are data, how to know what are saying in the data?...
-  
-:::{.notes}
-1. Pader, Ellen-J. 1994. “Spatial Relations and Housing Policy: Regulations That Discriminate Against Mexican-Origin Households.” Journal of Planning Education and Research 13(2): 119–35.
-
-Using American view of occupancy (and thus housing policy enforcement) is discriminated.
-
-2. Schaffer, Frederic Charles. 2000. Democracy in Translation: Understanding Politics in an Unfamiliar Culture. Cornell University Press.
-
-Interview of people in Senegal about democracy and American democracy
-
-3. Chock, Phyllis Pease. 1995. “Ambiguity in Policy Discourse: Congressional Talk about Immigration.” Policy Sciences 28(2): 165–84.
-
-By examining the written record of spoken language, she was able to analyze the ways in which legislators’ and expert witnesses’ embedded ideas about immigrants reflected and shaped immigration reform and policy contentions.
-
-Analysis and collection are intertwined.
-:::
-
-## Different Criteria
-
-:::: {.columns}
-
-::: {.column width="40%"}
 ~~Be objective~~
 
 Reality is not universal;
 Policy is constructed.
 
 :::{.fragment}
+
 ~~Be voiceless~~   
 
 ![](https://drhuyue.site:10002/sammo3182/figure/small_Beauvoir.jpg){fig-align="center" height=300}
 
 :::{.notes}
+
 西蒙娜·德·波伏娃
 
 Simone de Beauvoir, The Second Sex, gender is constructed.
@@ -412,53 +304,61 @@ Simone de Beauvoir, The Second Sex, gender is constructed.
 One is not born a woman, but becomes one.
 
 :::
+
 :::
 
 :::
 
 ::: {.column .fragment width="60%"}
+
 ~~Be experimental~~
 
 The SNA assumes impacts and multi-causality are data and useful.
 
 :::{.fragment}
+
 ~~Be generalized~~
 
 ![](https://drhuyue.site:10002/sammo3182/figure/small_yangQihan.jpg){fig-align="center" height=400}
+
 :::
 
 :::
 
 ::::
 
-# Conducting a Good SNA
+# Conducting <br> a Good SNA
 
 
 ## Evaluation System
 
 :::{.nonincremental style="text-align:center; margin-top: 2em"}
+
 + Credibility
 + Transferability
 + Dependability
 + Confirmability
+
 :::
 
 
-## Credibility
+## Credibility [@WangYingLun2022]
 
 {{< video https://drhuyue.site:10002/sammo3182/video/small_chunwan.mp4 title="一场很（没）有必要的春晚" height=600 preload="auto" controls allowfullscreen>}}
 
 :::{.notes}
+
 If the data and implications are presented credibly.
 
 Based on enough description and background
 
 e.g. Censorship, social desirability
+
 :::
 
 ## Transferability
 
-> 当年的SARS也属于冠状病毒，公众容易将二者相类比。当年在应对SARS的过程中，我们是有过教训的。这就提醒我们，千万不可产生轻敌心态和麻痹思想，更不能犯下和当年一样的错误。---["尽快掐灭疫情传播的'火种'"](https://wap.peopleapp.com/article/5060699/4954813)《人民日报客户端》（2020-01-22）
+> 当年的SARS也属于冠状病毒，公众容易将二者相类比。当年在应对SARS的过程中，我们是有过教训的。这就提醒我们，千万不可产生轻敌心态和麻痹思想，更不能犯下和当年一样的错误。[@WangJunPing2020]
 
 
 [A result of detailed, illustrative description, and the responsibility shifts from the researcher (the sender) to individuals in other settings (the receivers)]{.fragment}
@@ -501,7 +401,7 @@ Morrow, Susan L. 2005. “Quality and Trustworthiness in Qualitative Research in
 ::::
 
 
-## Evaluation Comparison
+## Criterion Comparison
 
 | Large-N           | Small-N           |
 |---------------|---------------|
@@ -528,6 +428,7 @@ Always care about the framing and understanding an issue from different angles.
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 - What's small-N analysis (SNA)
   - N &#x225D; \[1~100\]
   - Common paths
@@ -536,9 +437,11 @@ Always care about the framing and understanding an issue from different angles.
       1. Narrative analysis
       1. Dramaturgical analysis
       1. Category analysis
+
 :::
 
 ::: {.column width="50%"}
+
 - SNA vis-à-vis LNA
   + Role
   + Data collection
@@ -549,8 +452,147 @@ Always care about the framing and understanding an issue from different angles.
   + Transferability
   + Dependability
   + Confirmability
+
 :::
 
 ::::
+
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
+
+# Bonus: More examples {.appendix}
+
+## Another Illustration of Dramaturgical Analysis
+
+{{< video https://drhuyue.site:10002/sammo3182/video/small_rorschach.mp4 title="Watchmen" height=600 preload="auto" controls allowfullscreen>}}
+
+## Commonality and Differences between SNA and LNA
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Same**
+
+1. Empirical basis
+1. Scientific analysis
+1. Falsifiability
+
+:::
+
+::: {.column width="50%"}
+
+**Different**
+
++ Role
++ Data collection
++ Analysis
++ Criteria
+
+:::
+
+::::
+
+
+## Role
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+- Researchers are [human]{.red}
+    + Experiences
+    + Cognitive differences
+
+- Researchers [participate]{.red}
+    + Observer vs. Insider
+    + Undercover vs. Activist
+    
+    
+:::{.notes}
+
+Cognitive differences: men and women; allowing tourists entering the campus
+
+Researchers generalize/create culture, etc.
+
+:::
+
+:::
+
+::: {.column .fragment width="60%"}
+
+Researchers have [value]{.red}
+
+> Legalizing abortions lowers crime rates across cultural groups and time periods because crime is tightly correlated with unwanted children, and unwanted children with criminality and other social ills [@DonohueLevitt2001].
+
+:::
+
+::::
+
+:::{.fragment style="text-align:center"}
+
+"The poor are more likely to commit crimes"   
+&darr;    
+"The poor is the source of crimes"    
+&darr;    
+"Less poor kids, less source of crime"
+
+:::
+
+
+## Poverty Governance
+
+:::{.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/small_thePoor.jfif){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/small_commonWealth.jpg){fig-align="center" .fragment height=650}
+
+:::
+
+
+:::{.notes}
+
+北京市安委会回应“驱赶低端人口”：是在排查隐患
+
+https://baijiahao.baidu.com/s?id=1585068230951214767&wfr=spider&for=pc
+
+![](https://drhuyue.site:10002/sammo3182/figure/small_diDuan.png){.fragment fig-align="center" height=400}
+
+:::
+
+
+## Data Collection and Analysis
+
+1. Observing with intention to [understand]{.red};
+1. Interviewing with respondents as [conversational]{.red} partner;  
+1. Reading the documents as they were writing [meaningfully]{.red};
+1. > No need to transform words into numbers
+    + Numbers are not the results but the sources
+    + More details than digits^[Narrative reports often read like novels.]
+    - Focus:
+        + Where did the number or whatever data come from?
+        + Where to find the data, what are data, how to know what are saying in the data?...
+  
+:::{.notes}
+
+1. Pader, Ellen-J. 1994. “Spatial Relations and Housing Policy: Regulations That Discriminate Against Mexican-Origin Households.” Journal of Planning Education and Research 13(2): 119–35.
+
+Using American view of occupancy (and thus housing policy enforcement) is discriminated [@Pader1994].
+
+2. Schaffer, Frederic Charles. 2000. Democracy in Translation: Understanding Politics in an Unfamiliar Culture. Cornell University Press.
+
+Interview of people in Senegal about democracy and American democracy [@Schaffer2000]
+
+3. Chock, Phyllis Pease. 1995. “Ambiguity in Policy Discourse: Congressional Talk about Immigration.” Policy Sciences 28(2): 165–84.
+
+By examining the written record of spoken language, she was able to analyse the ways in which legislators’ and expert witnesses’ embedded ideas about immigrants reflected and shaped immigration reform and policy contentions [@Chock1995].
+
+Analysis and collection are intertwined.
 
 :::
