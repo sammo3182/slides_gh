@@ -1,7 +1,7 @@
 ---
 title: |
-  Case Illustration: 
-  Case Study
+  | Case Illustration: 
+  | Case Study
 subtitle: "Understanding Policies (10700193-90)"
 author: "Yue Hu"
 institute: "Tsinghua University" 
@@ -45,15 +45,18 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-```{r setup, include=FALSE}
+```{r}
+#| label: setup
+#| include: false
+
 if (!require(pacman)) install.packages("pacman")
 library(pacman)
 
 p_load(
   icons, knitr, kableExtra, # dependency
-       stringr, arm, car, 
-       modelsummary,
-       broom, tidyverse
+  stringr, arm, car, 
+  modelsummary,
+  broom, tidyverse
 ) # data wrangling # data wrangling
 
 # Functions preload
@@ -74,25 +77,13 @@ theme_update(
 
 ## Overview
 
-> [综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、深入分析论证、科学把握尺度。]{.red}
+> [综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、**深入分析论证、科学把握尺度** [@ZhongGongZhongYangDangShiHeWenXianYanJiuYuanZhongYangXueXiGuanCheXiJinPingXinShiDaiZhongGuoTeSeSheHuiZhuYiSiXiangZhuTiJiaoYuLingDaoXiaoZuBanGongShi2023, p. 103]。]{.red}
 
-:::{style="text-align:right"}
---- 习近平 (《中央政治局的同志必须有很强的看齐意识》, 2015年12月)
-:::
-
-
-:::: {.columns .fragment}
-
-::: {.column .nonincremental width="50%"}
-### Topics
-
-1. What's a case study
-1. Logic of scientific case study
-1. How to do IT professionally
-:::
+:::: {.columns}
 
 ::: {.column .nonincremental .fragment width="50%"}
-### Where are you
+
+**Where are you**
 
 - large N
 - Small N
@@ -102,7 +93,15 @@ theme_update(
   + Focus group
   + Content analysis
 
+:::
 
+::: {.column .nonincremental .fragment width="50%"}
+
+**What to learn**
+
+1. What's a case study
+1. Scientific case study
+1. Effective case comparison*
 :::
 
 ::::
@@ -113,22 +112,25 @@ theme_update(
 
 ## Definition
 
-> An intensive study of a [single unit]{.red} for the purpose of understanding a larger class of (similar) units.[---Gerring (2004: 342)]{style="text-align:right"}
+> An intensive study of a [single unit]{.red} for the purpose of [understanding a larger class]{.red} of (similar) units [@Gerring2004, p.342].
 
 :::: {.columns}
 
 ::: {.column .fragment .nonincremental width="50%"}
-### A Case
+
+**What's a case**
 
 A unit within a [*boundary*](https://www.drhuyue.site/slides_gh/slides/courses/policyGE/04_systemTheory.html#/boundaries)
 
 * **Biological** boundaries
 * **Physical** boundaries (time and space)
 * **Social** boundaries
+
 :::
 
 ::: {.column .fragment .nonincremental width="50%"}
-### Types of cases
+
+**Types of cases**
 
 1. 1 unit over time
 1. N subunit at one time
@@ -139,121 +141,141 @@ A unit within a [*boundary*](https://www.drhuyue.site/slides_gh/slides/courses/p
 ::::
 
 ::: {.r-fit-text .fragment style="margin-top: 0.2em"}
+
 [Variance]{.red} is the key!
-:::
 
-
-:::{.notes}
-Gerring, John. 2004. “What Is a Case Study and What Is It Good For?” American Political Science Review 98(2): 341–54.
 :::
 
 
 
-## Differentiation: Observation, Variable, or Case
+## Observation, Variable, or Case {.center background="#43464B"}
 
-```{r unitCase}
+```{r}
+#| label: unitCase
+
 text_tb <- data.frame(Observed = 1:8,
                       Party = rep(c("Party Member", "Non-PM"), times = 4), 
                       Region = rep(c("Educational", "Dependents"), each = 4))
 
-kable(text_tb, "html", align = "crr") %>%
+kable(text_tb, "html", align = "crr") |> 
   kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
 ```
 
 :::{.notes}
+
 Where's the case: your goal
 
 1. Study regional differences
 1. Study party difference
-:::
-
-
-## Representativeness of Cases
-
-How about randomly select a case? 
-
-:::{.callout-tip .fragment}
-## Ways to defend your case selection
-
-1. **Relevance**: The case represents a significant or typical [empirical instance]{.red} of a phenomenon, providing rich data.
-   - > Examining the 2016 US presidential election provides empirical data crucial for understanding contemporary electoral behavior and polarization.
-   - > The lessons from Sweden’s welfare state can be generalized to other advanced economies facing similar social challenges.
-2. **Comparison**: The case offers a unique point of [comparison ]{.red} that can help understand broader patterns or anomalies.
-   - > Comparing the political systems of Singapore and Malaysia allows us to explore the divergent paths of development under similar initial conditions.
-   - > Analyzing healthcare systems in Canada and the US offers comparative leverage to understand the impact of different health policy approaches.
-:::
-
-:::{.notes}
-Representativeness roots from large-N analysis
-:::
-
----
-
-:::{.callout-tip}
-## Ways to defend your case selection
-
-3. **Deviance**: The case [deviates from expected]{.red} patterns, offering insights into exceptions and prompting theory refinement.
-   - > China’s sustained economic growth without Western democratization challenges conventional theories of development and democracy.
-   - > Singapore’s economic success without liberal democracy is a deviant case that challenges established theories of development.
-4. **Illustration**: The case [vividly illustrates]{.red} a particular process or mechanism, making abstract concepts more concrete.
-   - > The case study of Rwanda’s post-genocide reconciliation provides a clear illustration of the mechanisms of peacebuilding and transitional justice.
-   - > The example of Brazil’s participatory budgeting process illustrates the practical application and outcomes of participatory governance.
 
 :::
 
----
+# Scientific Case Study
 
-:::{.callout-tip}
-## Ways to defend your case selection
-
-5. **Policy Relevance**: The case has significant policy implications, offering [practical lessons]{.red} for policymakers.
-   - > The case of Germany’s Energiewende (energy transition) provides valuable insights for countries aiming to transition to renewable energy.
-   - > The study of urban planning in Copenhagen offers policy-relevant lessons for sustainable urban development worldwide.
-6. **Historical Significance**: The case has [historical]{.red} importance, helping to understand key events and their long-term impacts.
-   - > The study of the fall of the Berlin Wall provides critical insights into the end of the Cold War and the dynamics of political change in Eastern Europe.
-   - > Analyzing the Cuban Missile Crisis provides historical insights into Cold War diplomacy and crisis management.
-
-:::
-
-
-## Academic Descriptions of the strategies^[Gerring, John, and Lee Cojocaru. 2016. “Selecting Cases for Intensive Analysis: A Diversity of Goals and Methods.” *Sociological Methods & Research* 45(3): 392–423.]
-
-![](https://drhuyue.site:10002/sammo3182/figure/case_selection.png){fig-align="center" height=550}
-
-
-## Goal of Case Study
+## Goal of Case Studies
 
 :::: {.columns}
 
 ::: {.column .nonincremental width="30%"}
-### Small-N
+
+Small-N
 
 + Credibility
 + Transferability
 + Dependability
 + Confirmability
+
+::: {.notes}
+
++ Credibility: If the data and implications are presented credibly, Based on enough description and background
++ Transferability: A result of detailed, illustrative description, and the responsibility shifts from the researcher (the sender) to individuals in other settings (the receivers)
++ Dependability: What kinds of data, what period of time
++ Confirmability: Findings clearly linked to analysis, data, and the research site.
+
+:::
+
 :::
 
 ::: {.column width="70%"}
-### Case study
+
+Case study
 
 * [Deep]{.red} rather than broad, bounded scope of proposition
 * [Comparing]{.red} with rather than represent other cases
 * [Mechanism]{.red} rather than effect
 * [Deterministic]{.red} rather than probabilistic relations
 * [Exploring]{.red} rather than confirmatory test
+
 :::
 
 ::::
 
-# scientific case study Logic
+## Case Selection
 
-## An Illustrative Example
+> Is random selection a good method? Why/why not?
 
-{{< video https://drhuyue.site:10002/sammo3182/video/case_descriptive.mp4 title="橙红·扫地机器人" height=200 width=1000 preload controls allowfullscreen>}}
+:::{.notes}
 
-::: {.nonincremental}
-- What's the [problem]{.red} did the upper intend to solve?
+Representativeness roots from large-N analysis
+
+:::
+
+Relevance
+
+The case represents a significant or typical [empirical instance]{.red} of a phenomenon, providing rich data.
+
+- > Examining the 2016 US presidential election provides empirical data crucial for understanding contemporary electoral behavior and polarization.
+- > The lessons from Sweden's welfare state can be generalized to other advanced economies facing similar social challenges.
+
+## Policy Relevance
+
+The case has significant policy implications, offering [practical lessons]{.red} for policymakers.
+
+- > The case of Germany’s Energiewende (energy transition) provides valuable insights for countries aiming to transition to renewable energy.
+- > The study of urban planning in Copenhagen offers policy-relevant lessons for sustainable urban development worldwide.
+
+## Comparison
+
+The case offers a unique point of [comparison ]{.red} that can help understand broader patterns or anomalies.
+
+- > Comparing the political systems of Singapore and Malaysia allows us to explore the divergent paths of development under similar initial conditions.
+- > Analyzing healthcare systems in Canada and the US offers comparative leverage to understand the impact of different health policy approaches.
+
+
+## Deviance
+
+The case [deviates from expected]{.red} patterns, offering insights into exceptions and prompting theory refinement.
+
+- > China's sustained economic growth without Western democratization challenges conventional theories of development and democracy.
+- > Singapore’s economic success without liberal democracy is a deviant case that challenges established theories of development.
+
+## Illustration
+
+The case [vividly illustrates]{.red} a particular process or mechanism, making abstract concepts more concrete.
+
+- > The case study of Rwanda's post-genocide reconciliation provides a clear illustration of the mechanisms of peacebuilding and transitional justice.
+- > The example of Brazil's participatory budgeting process illustrates the practical application and outcomes of participatory governance.
+
+## Historical Significance
+
+The case has [historical]{.red} importance, helping to understand key events and their long-term impacts.
+
+- > The study of the fall of the Berlin Wall provides critical insights into the end of the Cold War and the dynamics of political change in Eastern Europe.
+- > Analyzing the Cuban Missile Crisis provides historical insights into Cold War diplomacy and crisis management.
+
+## Procedure of case studies
+
+- Descriptive approach
+- Analytic approach
+
+
+## Descriptive approach: An Illustration {background="#43464B"}
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+
+- What's the target [problem]{.red}?
 - What type of case does she choose?
 - How did she do it?
     - What **logic** did she apply?
@@ -262,9 +284,17 @@ Representativeness roots from large-N analysis
 - What [conclusions]{.red} did she draw? 
 - Are you **convincing**, and why specifically?
     - Can you do better?
+
 :::
-    
-```{r stopwatch, echo = FALSE}
+
+::: {.column width="50%"}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/case_descriptive.mp4 title="橙红·扫地机器人" height=400 width=500 preload controls allowfullscreen>}}
+
+```{r}
+#| label: stopwatch1
+#| echo: false
+
 library(countdown)
 
 countdown(
@@ -279,27 +309,50 @@ countdown(
 
 ```
 
+:::
+
+::::
+
 
 ## Descriptive Case Study
 
-Goal: Details and Mechanisms
-Approach:
-
-- Clear question
-- Detailed narrative
-- Calling back to the questions
-- Extension (more than the initial question)
-
-[Quality: Credibility > Confirmability > Transferability > Dependability]{.fragment}
+- Objective: Details and Mechanisms
+- Approach:
+  1. Clear question
+  1. Detailed narrative
+  1. Calling back to the questions
+  1. Extension (more than the initial question)
+- Quality: [Credibility]{.red} > Confirmability > Transferability > Dependability
 
 
-## Another Example
+## Analytic approach: An Illustration {background="#43464B"}
 
-{{< video https://drhuyue.site:10002/sammo3182/video/case_compare.mp4 title="comparison" width="1000" height="200" preload="auto" controls allowfullscreen>}}
+:::: {.columns}
 
+::: {.column width="50%"}
 
-::: {.nonincremental}
-- What's the [problem]{.red} did the upper intend to solve?
+{{< video https://drhuyue.site:10002/sammo3182/video/case_compare.mp4 title="comparison" width="500" height="400" preload="auto" controls allowfullscreen>}}
+
+```{r}
+#| label: stopwatch2
+#| echo: false
+
+countdown(
+  minutes = 2,
+  seconds = 0,
+  warn_when = 30,
+  left = "0%",
+  bottom = "2%",
+  font_size = "3em",
+  play_sound = TRUE
+)
+```
+
+:::
+
+::: {.column .nonincremental width="50%"}
+
+- What's the target [problem]{.red}?
 - What type of case does she choose?
 - How did she do it?
     - What **logic** did he apply?
@@ -308,60 +361,53 @@ Approach:
 - What [conclusions]{.red} did he draw? 
 - Are you **convincing**, and why specifically?
     - Can you do better?
+
 :::
 
-```{r stopwatch1, echo = FALSE}
-library(countdown)
-
-countdown(
-  minutes = 2,
-  seconds = 0,
-  warn_when = 30,
-  right = "0%",
-  bottom = "2%",
-  font_size = "3em",
-  play_sound = TRUE
-)
-
-```
+::::
 
 
 ## Analytic case study
 
-Goal: Testing inferences
-Approach:
+Ojbective: Testing inferences
 
 :::: {.columns}
 
+::: {.column width="50%"}
+
+Approach: 
+
+*Analytic*
+
+- Clear question
+- Case selection
+- Delicate design of comparison
+- General conclusion
+:::
+
 ::: {.column .nonincremental width="50%"}
 
-### Descriptive
+*Descriptive*
 
 - Clear question
 - Detailed narrative
 - Calling back to the questions
 - Extension (more than the initial question)
-:::
 
-::: {.column width="50%"}
-
-### Analytic
-
-- Clear question
-- Careful case selection
-- Delicate design of comparison
-- General conclusion
 :::
 
 ::::
 
-[Quality: Credibility = Confirmability = Transferability = Dependability]{.fragment}
+:::{style="text-align:center; margin-top: 1em"}
 
-:::{style="text-align:center; margin-top: 2em"}
-What're the key differences?
+> What're the key differences?
+
 :::
 
+- Quality: Credibility = Confirmability = Dependability > Transferability
+
 :::{.notes}
+
 What's the core difference? 
 
 a phase of comparison
@@ -369,10 +415,24 @@ a phase of comparison
 - Hypotheses test
 - Completion
 - Quality
+
 :::
 
+## Take-Home Points
 
-# How to do a case study professionally
+1. What's a case study
+    - Define a case
+    - Defend the case selection
+1. Logic of a scientific case study
+    - Descriptive
+    - Analytic
+
+## Reference
+
+::: {#refs}
+:::
+
+# Bonus: Effective Case Comparison {.appendix}
 
 ## Show your logic
 
@@ -381,13 +441,21 @@ The most classic case study logic:
 :::: {.columns}
 
 ::: {.column .nonincremental width="70%"}
-*Mill's Five Canons*(DARC)^[Mill, John Stuart. 2002. *A System of Logic: Ratiocinative and Inductive*. Honolulu, Hawaii: University Press of the Pacific.]
+
+*@Mill2002's Five Canons*(DARC)
 
 1. Method of **D**ifference (Most [similar]{.red} systems, MSS)
 1. Method of **A**greement (Most [different]{.red} systems, MDS)
 1. Joint Method of Agreement and Difference
 1. Method of **R**esidues
 1. Method of **C**oncomitant Variations 
+
+::: {.notes}
+
+originallly published in 1843
+
+:::
+
 :::
 
 ::: {.column width="30%"}
@@ -427,51 +495,69 @@ The most classic case study logic:
 :::: {.columns}
 
 ::: {.column width="40%"}
+
 > [Subtract]{.red} from any phenomenon the part which is [known]{.red} by previous inductions to be the effect of certain antecedents, and the residue of the phenomenon is the effect of the remaining antecedents.
+
 :::
 
 ::: {.column .fragment width="60%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/case_holmes.jpg){fig-align="center" height=600}
+
 :::
 
 ::::
 
 :::{.notes}
-### 1. **Forensic Investigation**
-#### Example: The Murder of O.J. Simpson's Ex-Wife, Nicole Brown Simpson
+
+1. **Forensic Investigation**
+
+Example: The Murder of O.J. Simpson's Ex-Wife, Nicole Brown Simpson
+
 - **Context:** In the investigation of Nicole Brown Simpson's murder, detectives gathered evidence from the crime scene and examined various suspects.
 - **Process:** Investigators eliminated suspects who had alibis or lacked motive, opportunity, or means to commit the crime.
 - **Result:** Despite being highly improbable to some, the remaining evidence pointed to O.J. Simpson as the prime suspect, leading to his arrest and trial. This case highlighted the principle of deductive reasoning in forensic science.
 
-### 2. **Medical Diagnosis**
-#### Example: Diagnosing Rare Diseases
+2. **Medical Diagnosis**
+
+Example: Diagnosing Rare Diseases
+
 - **Context:** Patients with rare diseases often experience a long diagnostic journey where common diseases are initially suspected.
 - **Process:** Doctors conduct tests to rule out common conditions that fit the symptoms.
 - **Result:** When common diseases are ruled out, doctors consider rare or less likely conditions. For example, diagnosing a rare genetic disorder like Ehlers-Danlos syndrome (EDS) often involves ruling out other connective tissue disorders first.
 
-### 3. **Scientific Discovery**
-#### Example: Discovery of the Higgs Boson
+3. **Scientific Discovery**
+
+Example: Discovery of the Higgs Boson
+
 - **Context:** Physicists at CERN sought to confirm the existence of the Higgs boson, a fundamental particle predicted by the Standard Model of particle physics.
 - **Process:** Through experiments at the Large Hadron Collider (LHC), scientists ruled out other particles and interactions that could explain the observed data.
 - **Result:** After eliminating other possibilities, the evidence pointed to the existence of the Higgs boson, leading to its discovery in 2012, despite its elusive nature.
 
-### 4. **Aviation Accident Investigation**
-#### Example: Malaysian Airlines Flight MH370
+4. **Aviation Accident Investigation**
+
+Example: Malaysian Airlines Flight MH370
+
 - **Context:** In the search for the missing MH370 flight, investigators considered various scenarios including mechanical failure, pilot error, hijacking, and terrorism.
 - **Process:** Through extensive analysis of radar, satellite data, and debris, many possibilities were ruled out.
 - **Result:** While the exact cause remains uncertain, eliminating other explanations narrowed the focus to scenarios involving deliberate human action or catastrophic failure, guiding ongoing search and investigation efforts.
 
-### 5. **Historical Investigation**
-#### Example: Identifying the Cause of the Black Death
+5. **Historical Investigation**
+
+Example: Identifying the Cause of the Black Death
+
 - **Context:** Historians and scientists debated the cause of the Black Death, which devastated Europe in the 14th century.
 - **Process:** Various theories included bubonic plague, anthrax, and other diseases. Modern research involving genetic analysis of remains ruled out some of these diseases.
 - **Result:** The identification of Yersinia pestis DNA in ancient remains confirmed the bubonic plague as the primary cause, despite initial skepticism due to the speed and mortality of the epidemic.
 
-### 6. **Legal Trials**
-#### Example: The Innocence Project
+6. **Legal Trials**
+
+Example: The Innocence Project
+
 - **Context:** The Innocence Project works to exonerate wrongfully convicted individuals through DNA testing and reevaluation of evidence.
 - **Process:** By eliminating the possibility that the convicted individual was the perpetrator through new evidence, they uncover the truth.
 - **Result:** Many individuals, such as Kirk Bloodsworth, have been exonerated after eliminating the impossibility of their guilt with DNA evidence, revealing the truth of their innocence.
+
 :::
 
 
@@ -481,70 +567,74 @@ The most classic case study logic:
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 > If two phenomena [vary together]{.red}, they are likely causally related. This method identifies correlations where an increase or decrease in one variable corresponds to an increase or decrease in another variable.
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/case_screenTime.jpg){fig-align="center" height=600}
+
 :::
 
 ::::
 
 :::{.notes}
-### 1. **Studying and Grades**
-#### Example: Study Time and Test Scores
+1. **Studying and Grades**
+
+Example: Study Time and Test Scores
+
 - **Observation:** When you spend more time studying for a test, your test scores tend to be higher. When you study less, your test scores tend to be lower.
 - **Conclusion:** There is a relationship between the amount of time spent studying and the grades you get. More studying generally leads to better grades.
 
-### 2. **Rain and Umbrella Sales**
-#### Example: Rainy Days and Umbrella Sales
+2. **Rain and Umbrella Sales**
+
+Example: Rainy Days and Umbrella Sales
+
 - **Observation:** On days when it rains, more umbrellas are sold at stores. On sunny days, fewer umbrellas are sold.
 - **Conclusion:** There is a relationship between the weather and umbrella sales. Rainy weather increases the sale of umbrellas.
 
-### 3. **Ice Cream Sales and Temperature**
-#### Example: Ice Cream Sales and Hot Weather
+3. **Ice Cream Sales and Temperature**
+
+Example: Ice Cream Sales and Hot Weather
+
 - **Observation:** When the temperature goes up, ice cream sales increase. When the temperature goes down, ice cream sales decrease.
 - **Conclusion:** There is a relationship between the temperature and ice cream sales. Hot weather leads to more people buying ice cream.
 
-### 4. **Physical Activity and Fitness**
-#### Example: Exercise and Fitness Levels
+4. **Physical Activity and Fitness**
+
+Example: Exercise and Fitness Levels
+
 - **Observation:** Kids who play sports and exercise regularly tend to be fitter and have more energy. Kids who don't exercise as much tend to be less fit.
 - **Conclusion:** There is a relationship between physical activity and fitness. More exercise leads to better fitness levels.
 
-### 5. **Screen Time and Sleep**
-#### Example: Screen Time and Amount of Sleep
+5. **Screen Time and Sleep**
+
+Example: Screen Time and Amount of Sleep
+
 - **Observation:** When you spend a lot of time on screens (like watching TV or playing video games) before bed, you have a harder time falling asleep and get less sleep. When you spend less time on screens, you fall asleep more easily and get more sleep.
 - **Conclusion:** There is a relationship between screen time and sleep. More screen time before bed can lead to less sleep.
 
-### 6. **Practice and Skill Improvement**
-#### Example: Playing a Musical Instrument
+6. **Practice and Skill Improvement**
+
+Example: Playing a Musical Instrument
+
 - **Observation:** The more you practice playing the piano, the better you get at it. When you don't practice, your skills don't improve as much.
 - **Conclusion:** There is a relationship between practice and skill improvement. More practice leads to better piano playing skills.
 
-### 7. **Healthy Eating and Energy Levels**
-#### Example: Eating Vegetables and Feeling Energetic
+7. **Healthy Eating and Energy Levels**
+
+Example: Eating Vegetables and Feeling Energetic
+
 - **Observation:** When you eat more vegetables and healthy foods, you have more energy throughout the day. When you eat junk food, you feel tired and sluggish.
 - **Conclusion:** There is a relationship between what you eat and how much energy you have. Healthy eating leads to higher energy levels.
 
-### 8. **Homework Completion and Free Time**
-#### Example: Finishing Homework and Having Free Time
+8. **Homework Completion and Free Time**
+
+Example: Finishing Homework and Having Free Time
+
 - **Observation:** When you finish your homework quickly, you have more free time to play. When you take a long time to do your homework, you have less free time.
 - **Conclusion:** There is a relationship between homework completion and free time. Finishing homework faster leads to more time to play.
 
-:::
-
-
-
-
-## Take-Home Points
-
-::: {.nonincremental}
-1. What's a case study
-    - Define a case
-    - Defend the case selection
-1. Logic of a scientific case study
-    - Descriptive
-    - Analytic
-1. Professional case study
-    - Mill's five canons
 :::
