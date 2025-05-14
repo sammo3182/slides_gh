@@ -1,0 +1,333 @@
+---
+title: |
+    | Best Practices for Getting
+    | Past the 'Janitor Work'
+subtitle: "PS symposium: Data Harmonization"
+date: "2025-05-16"
+
+author: 
+    - Yue Hu
+    - Yuehong Cassandra Tai
+    - Frederick Solt
+institute:
+    - Tsinghua University
+    - Pennsylvania State University
+    - University of Iowa
+
+bibliography: main_wrangling.bib
+
+format: 
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../css/goldenBlack.scss
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        # title-slide-attributes:
+        #     data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+        #     data-background-size: 250px   
+        #     data-background-position: top 10% right 5%
+        default-image-extension: png
+revealjs-plugins:
+    - spotlight
+lightbox: 
+    match: auto
+    effect: fade
+spotlight:
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+editor:
+    render-on-save: true
+    chunk_output_type: console
+---
+
+```{r}
+#| include: false
+#| label: setup
+
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse"
+)
+
+# Functions preload
+set.seed(313)
+```
+
+## Overview {.center .large}
+
+- The [problem]{.red} of wrangling data
+- A [solution]{.red} with 3 steps
+- Some [discussions]{.red} about the researchers' role
+
+# The problem
+
+## Data wrangling is a labor
+
+![Source: [Landers 2019](https://www.causeweb.org/cause/resources/library/r12926)](https://drhuyue.site:10002/sammo3182/figure/wrangle_labor.jpg){fig-align="center" height=600}
+
+::: {.notes}
+
+- A growing volume of research applies the data harmonization process that crunches a large quantity of data from different sources
+- Quality assurance must begin *earlier* to the data-wrangling step
+
+:::
+
+## A high-risk mission
+
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+![Source: [urbanlogiq.com](https://urbanlogiq.com/data-engineering-101-a-guide-for-government-officials/)](https://drhuyue.site:10002/sammo3182/figure/wrangle_risk.png){fig-align="center" height=600}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+Poor source data quality 
+
+\+ 
+
+Absence of reproducibility 
+
+\+ 
+
+Untrackable human discretion
+
+:::
+
+::::
+
+
+
+::: {.notes}
+
+- The conventional approach usually involves a notorious bulk of manual work on indicator identification, data merging, data scaling, and so on
+- Manual wrangling make a full reproducibility of research pipeline more difficulty and undermine the transparency
+- Heterogeneous sources increases the risk
+    - older survey files stored in SPSS's ASCII or portable formats often require extensive restructuring before they can be merged with new format of data.
+- Unfortunately, documentation does not cure everything, esp. the influence of human discretion embedded in manual processing
+
+:::
+
+
+# A solution
+
+## A Tao of Data Wrangling
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+*Goal*
+
+1. As **much data**  as possible;
+1. **~~Manual~~** entry errors
+1. **Reproducibility** of data wrangling 
+
+::: {.notes}
+
+1. To incorporate as much available data as possible to provide a base for comparable data and increase generality of the inferences;
+1. To reduce the manual entry errors to improve the accuracy of the harmonized data and analytic data; and 
+1. To improve the reproducibility of data wrangling process for the sake of transparency.
+
+:::
+
+
+::: {.fragment}
+
+*Routine*
+
+1. [T]{.red}eam-based concept construct and data selection;
+1. Data entry [a]{.red}utomation; 
+1. "Second-order" [o]{.red}pening.
+
+:::
+
+:::
+
+::: {.column .fragment width="40%"}
+
+*Illustration*
+
+::: {.r-vstack}
+
+![*Hard data*: SWIID](https://drhuyue.site:10002/sammo3182/figure/wrangle_swiid.png){fig-align="center"}
+
+![*Soft data*: DCPO](https://drhuyue.site:10002/sammo3182/figure/wrangle_dcpo.png){fig-align="center"}
+
+:::
+
+::: {.notes}
+
+- SWIID is a long-running project that seeks to provide harmonized income inequality statistics for the broadest possible coverage of countries and years
+- DCPO is both a method and a database, to address the lack of cross-national and longitudinal data on many topics
+
+:::
+
+:::
+
+::::
+
+
+## Step 1: Team-Based Construct Building and Data Selection
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*Problem*
+
+- "RA's main"
+    - Error rates approaching 1% [*after* the double-check instruction, @BarchardPace2011]
+    - Example misrouted financial transactions and airline flights [@HaegemansEtAl2019]
+
+:::
+
+::: {.column .fragment width="50%"}
+
+*Solution*: Team work
+
+- Conceptualized construct
+- Data selection
+- Data validation
+
+![Source: @BarchardPace2011 [fig. 2]](https://drhuyue.site:10002/sammo3182/figure/wrangle_doubleEntry.png){.fragment fig-align="center" height=300}
+
+:::
+
+::::
+
+::: {.notes}
+
+- SWIID: 
+    - Told RAs that the goal of the research, a list of sources mainly from national statistic bureaus for them to start, but we also told them that update statistics for some countries may come from academic papers, published documents, and other sources, and they are free to add them in while *making sure a valid link* of the new sources are also recorded.
+    - how the data would use later is also important, as they could have a better sense of what data are analyticable and a forward perspective of how many situations would the later entry part need to take care. In the SWIID project, we told the RAs that the inequality statistics be recorded in four formats: Gini index in disposable (post-tax, post-transfer) income, Gini in market (pre-tax, pre-transfer) income, absolute redistribution (market-income inequality minus net-income inequality), or relative redistribution (market-income inequality minus net-income inequality, divided by market-income inequality).
+    - Cross-check: with new RAs
+- DCPO: clearly defining and agreeing upon the latent construct among team members 
+    - Done by researchers not RAs
+    - Each team member is then assigned survey datasets from specific geographic regions and tasked with identifying potentially relevant items and potential dimensions based on both general theoretical guidance and region-specific knowledge. 
+    - Before data selection begins, team members undergo hands-on training on how the method work and what type of data and detail they need to collect, such as data format and weighting types, which provide a valuable help of later build the automative data preparation software. 
+    - the dural-entry section comes in: each team member reviews and re-codes the survey data originally handled by another member.
+    - Disputed cases are flagged for group discussion.
+
+:::
+
+## Step 2: Data Entry Automation
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*Problem*: Entry error and intransparency
+
+:::
+
+::: {.column width="50%"}
+
+*Solution*: Entry automation
+
+- Programming + API 
+
+:::
+
+::::
+
+![](https://drhuyue.site:10002/sammo3182/figure/wrangle_api.png){fig-align="center" height=500}
+
+::: {.notes}
+
+- `DCPOTools`, `countrycode`, `tabulapdf`
+
+:::
+
+## Step 3: "Second-Order" Opening
+
+*Problem*: The wrangling phase has not captured the attention of the open science movement
+
+[*Solution*: Second-order opening, aka opening not only the analytic but also DGP processes]{.fragment}
+
+::: {.r-hstack .fragment}
+
+![Quarto](https://drhuyue.site:10002/sammo3182/figure/wrangle_quarto.svg){fig-align="center" height=400}
+
+![Github](https://drhuyue.site:10002/sammo3182/figure/wrangle_github.png){fig-align="center" height=400}
+
+![OSF](https://drhuyue.site:10002/sammo3182/figure/wrangle_osf.png){fig-align="center" height=400}
+
+:::
+
+::: {.notes}
+
+If researchers applied our suggestions of team-based construct building, systematic data selection, and automated data entry, the second-order opening becomes both feasible and efficient.
+Along with a clearly conceptualized theoretical framework, researchers can simply share their programming scripts for data downloading, formatting, and wrangling, ensuring that the full pipeline is documented and reproducible.
+
+With developed scientific and technical publishing system, such as Quarto or R markdown, and version control platforms (e.g., Github) and open collaboration platforms (e.g., Open Science Framework, OSF), researchers can integrate the entire workflow—from raw data collection to final analysis—within a single, publicly trackable archive.
+We reached at this step for all the DCPO projects so far. 
+
+:::
+
+# Some discussions
+
+## Optimizing data wrangling: An ongoing job
+
+::: {.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/wrangle_diagram.png){fig-align="center" height=600 width=500}
+
+![Source: [einfochips.com](https://www.einfochips.com/blog/data-cleaning-in-machine-learning-best-practices-and-methods/)](https://drhuyue.site:10002/sammo3182/figure/wrangle_ai.jpg){fig-align="center" width=500 .fragment}
+
+:::
+
+## Researchers' role
+
+![Source: [Kuocheng Liao](https://hbr.org/2018/07/collaborative-intelligence-humans-and-ai-are-joining-forces) ](https://drhuyue.site:10002/sammo3182/figure/wrangle_human.png){fig-align="center" height=600}
+
+# Thank you {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)    
+[`r feather_icons("mail")`&nbsp; yhcasstai@psu.edu](mailto:yhcasstai@psu.edu)     
+[`r feather_icons("mail")`&nbsp; frederick-solt@uiowa.edu](mailto:frederick-solt@uiowa.edu) 
+:::
+
+
+## Reference
+
+::: {#refs}
+:::
+
+
+# Appendix: A Vivid Case {.appendix}
+
+## What would happen if you replicate the data wrangling
+
+![](https://drhuyue.site:10002/sammo3182/figure/wrangle_replication.png){fig-align="center" height=600}
+
+::: {.notes}
+
+Here we provide a vivid example from real-life research to show how different results the seemingly basic, well-described hand-entered steps can produce.
+We attempted to replicate the spreadsheets applied in prominent studies following the replication instructions of the publications but with a more automatic process (elaborated below).
+Points on the diagonal show agreement; points above indicate higher hand-entered values, while points below show lower hand-entered percentages compared to machine-collected data.
+
+For about 85% of country-year-item observations, differences between percentages are negligible-less than half a percent-resulting in points near the plot’s diagonal. 
+However, for the remaining cases, differences are significant and cannot be ignored.
+These discrepancies stem from decisions on categorization, processing numerators and denominators in ratio calculation, and whether counting respondents excluded from original surveys. 
+Though errors introduced during such processes seems minor and may appear as random noise, they can lead to opposite conclusions [@HuEtAl2024a]. 
+Such issues pose a major, yet underrecognized, challenge to data harmonization in political science.
+
+:::
