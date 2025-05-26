@@ -1,0 +1,438 @@
+---
+title: "Case Illustration: Large-N Method"
+subtitle: "Understanding Policies: Interdisciplinary Perspectives and Case Illustrations (10700193)"
+author: "Yue HU"
+institute: "Political Science, Tsinghua University"
+output:
+  xaringan::moon_reader:
+    self_contained: FALSE
+    chakra: libs/remark-latest.min.js
+    css: 
+      - default
+      - zh-CN_custom.css
+      - style_ui.css
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      highlightSpans: true
+      countIncrementalSlides: false
+      ratio: 16:9
+---
+
+## Overview
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(icons, knitr, kableExtra, # dependency
+       stringr, arm, car, 
+       modelsummary,
+       broom, tidyverse
+) # data wrangling # data wrangling
+
+xaringanExtra::use_xaringan_extra(c("tile_view", # O
+                                    "broadcast", 
+                                    "panelset",
+                                    "tachyons"))
+
+xaringanExtra::use_fit_screen() # Alt + F
+
+# Functions preload
+set.seed(313)
+```
+
+
+
+.pull-left[
++ What
+  + How large is large?
+- Why
+  - Why Not experiment?
+  - Why analysis with large-N data?
+  - What do we look for from the LNA?
+]
+
+.pull-right[
++ How
+    + One
+    + Two
+    + More than two
+
+<img src="images/lar_econometrics.jpg" height = 300 />
+
+]
+
+
+---
+
+class: inverse, bottom
+
+# What
+
+---
+
+## What's Large-N
+
+In lieu of "quantitative"...
+
+???
+
+What's a 定量研究?
+
+- 定结果的量
+- 定数据的量
+  - 都是量吗？binary，categorical， ordinary
+
+Did you really 定量？
+
+--
+
+Large-.red[N]: Number of **observations**---not subjects, not trails
+
+- How large? 10, 100, 1000, 10000?
+    - > We don't know......   
+    - > It depends......  
+    - > The larger, the better!
+
+???
+
+How about experiment
+
+--
+
+.center[To know what, you need to know WHY]
+
+---
+
+class: inverse, bottom
+
+# Why
+
+---
+
+## Why Not Experiments?
+
+.pull-left[
+### Experiment is powerful!
+
++ Excluding confounders
++ Clear outcomes
++ Clear causal chain
+]
+--
+
+.pull-right[
+### However,
+
+1. .red[Not always] practical
+1. .red[Difficult] to collect observed data
+1. "Not-cool" methods
+]
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+.center[
+Goal*
+
+Quasi-experiment
+]
+]
+
+.footnote[\* *Collins Thesaurus*: Quasi- =  pseudo-, apparent, seeming, semi-, so-called, would-be]
+
+---
+
+## Why Have to Be LARGE-N
+
+What are we looking for?
+
+???
+
+A representative number of a lot of numbers
+
+--
+
+Statistically, 
+
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+
+.center[*Law of Large Numbers*(LLN)]
+
+As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
+]
+
+
+???
+
+Using sample to estimate population
+
+---
+
+## Then How Large
+
+LLN gives a rule of thumb: 100
+
+--
+
+.center[Is LLN enough? ]
+
+--
+
+.bg-black.golden.ba.shadow-5.ph4.mt3[
+
+.center[*Central Limit Theorem*(CLT)]
+
+The sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.
+]
+
+???
+
+Why using normal distribution
+
+---
+
+## Let's Feel It
+
+.pull-left[
+My highly-educated fellows, let's play a .blue[happy-happy] kid game!
+
+And we are going outside! 😈
+
+]
+
+.pull-right[
+### Step 1: Toss a fair coin
+
++ Head: 1 step to the .blue[&larr;]
++ Tail: 1 step to the .red[&rarr;]
+
+### Step 2: Toss six times
+
+### Step 3: Going forward
+]
+
+---
+
+<video width="1000" height="600" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8xR3lVRGoxaEpFODFDVkN0P2U9SWJHUWRY.mp4" type="video/mp4">
+</video>
+
+---
+
+## How Large Is Large?
+
+.center[LLN says 100. CLT ?]
+
+.center[<img src="images/lar_largeNumber.gif" />]
+
+--
+
+.center[Should we always get 10,000?]
+
+.pull-left[
+$\text{Margin of Error} = Z \times \frac{S}{\sqrt n}.$
+]
+.pull-right[
+| Sample Size (n) | Margin of Error (M.E.) |
+|-----------------|------------------------|
+| 200             | 7.1%                   |
+| 1000            | 3.2%                   |
+| 2000            | 2.2%                   |
+| 4000            | 1.6%                   |
+]
+
+???
+
+To cut the margin of error in half, like from 3.2% down to 1.6%, you need four times as big of a sample, like going from 1000 to 4000 respondents. To cut the margin of error by a factor of five, you need 25 times as big of a sample
+
+---
+
+class: inverse, bottom
+
+# How
+
+---
+
+## Univariate analysis
+
+.pull-left[
+.center[<img src="images/lar_tooManyCourses.jpg" />]
+]
+
+.pull-right[
+```{r data}
+showWatching <- tibble(Student_ID = paste0("202309", sample(1000:9000, size = 7)), Courses = c(9, 9, 12, 10, 8, 10, 15))
+
+kable(showWatching, "html", align = "cl")%>%
+  kable_styling(full_width = TRUE, font_size = 25)
+```
+]
+
+???
+
+Let's say we'll test a school policy of course management
+
+---
+
+## How to Represent Variable
+
+Given the courses students took: (9, 9, 12, 10, 8, 10, 15)
+--
+
+.pull-left[
+
++ Mean: $\frac{9 + 9 + 12 + 10 + 8 + 10 + 15}{7} \approx 11.$
++ Median: 8, 9, 9, .red[10], 10, 12, 15
++ Mode: 8, .red[9], .red[9], .red[10], .red[10], 12, 15
+
+Which one is better?
+
+]
+
+--
+
+.pull-right[
+How about this data?
+
+<img src="../analysisOfPoliticalData/images/desc_sheHulk.png" height = 400 />
+
+]
+
+---
+
+## Descriptive Statistics
+
+- Number (mean, usually)
+- Statistics
+- Plot (.red[**&check;**])
+
+```{r descriptive}
+df_descrptive <- select(mtcars, -am, -carb) %>% 
+  mutate(across(where(~length(unique(.x)) == 2), as.logical),
+         across(where(~length(unique(.x)) < 7 & !is.logical(.x)), as.factor))
+
+datasummary_skim(df_descrptive, histogram = FALSE)
+```
+
+---
+
+## Binary Analysis
+
+.pull-left[
+
+Relations between variables
+
+```{r scatter, fig.align='center'}
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  ylab("Mileage per Gallon") +
+  xlab("Weight")
+```
+]
+
+--
+
+.pull-right[
+
+How about...
+
+```{r scatterMess, fig.align='center'}
+data(tobacco, package = "summarytools")
+
+ggplot(tobacco, aes(age, cigs.per.day)) +
+  geom_point() +
+  ylab("Cigrate per day") +
+  xlab("Age")
+```
+]
+
+---
+
+## Multivariate Analysis
+
+.center[<img src="../analysisOfPublicPolicy/images/lar_buyerSeller.jpg" height = 250 />]
+
+.pull-left[
+<img src="../analysisOfPublicPolicy/images/lar_matching.png" height = 250 />
+]
+
+.pull-right[
+.center[<img src="../analysisOfPublicPolicy/images/lar_fitOLS.png" height = 250 />]
+]
+
+---
+
+## Controls May Not Work
+
+<video width="1000" height="500" controls preload>
+    <source src="https://link.jscdn.cn/1drv/aHR0cHM6Ly8xZHJ2Lm1zL3YvcyFBcnR0dk83MHdLSU8ybkpQMndTTjZ2MGRiUjFnP2U9bXBIV1NK.mp4" type="video/mp4">
+</video>
+
+---
+
+class: middle
+
+.bg-dark-red.golden.ba.shadow-5.ph4.mt3[
+
+任何政策都建立在对事物差异性的分析和把握之上，**没有差异性就没有政策**。我国社会差异性特征明显，反映在地域、城乡、民族、人群等多个层面。我们的决策部署有综合性的，也有专项性的……这些都需要充分熟悉情况、深入分析论证、科学把握尺度。要坚持科学决策、民主决策、依法决策，对情况进行深入分析。
+
+.tr[
+--- 习近平 (《中央政治局的同志必须有很强的看齐意识》, 2015年12月)
+]
+]
+
+---
+
+## In Practice
+
+.pull-left[<img src="images/table.png" height = 550 />]
+
+.pull-right[
++ Coefficients
+
++ Uncertainty
+
++ Significance
+
++ Goodness of fit
+
+
+]
+
+---
+
+## Take-Home Points
+
+.pull-left[
++ What: "Quantitative" analysis
+  + How large is large?
+    + LLN: 100
+    + CLT: 1000
+- Why
+  - Why Not experiment?
+  - What do we look for from the LNA?
+    - Average and distribution
++ How 
+    + Univariate
+    + Bivariate
+    + Multivariate
+]
+
+--
+
+.pull-right[
+### Bonus: Wonder how to conduct large-N analysis?
+
+Ta-da~~~
+
+.large[.green["治理技术专题：政治数据分析" (70700173)] 😋]
+]
+
+```{r pdfPrinting, eval = FALSE, include = FALSE}
+pagedown::chrome_print(list.files(pattern = "10_.*.html"), timeout = 300)
+```

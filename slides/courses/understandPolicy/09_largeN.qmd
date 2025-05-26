@@ -1,0 +1,543 @@
+---
+title: |
+  Case Illustration: 
+  Econometric Analysis
+subtitle: "Understanding Policies (10700193-90)"
+author: "Yue Hu"
+institute: "Tsinghua University" 
+bibliography: t_publicPolicy.bib
+
+execute: 
+  echo: false
+editor_options: 
+  chunk_output_type: console
+editor: 
+  render-on-save: true
+
+format: 
+  revealjs:
+    number-sections: false
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
+    incremental: true
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: true # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+---
+
+
+```{r}
+#| label: setup
+#| include: false
+
+if (!require(pacman)) install.packages("pacman")
+library(pacman)
+
+p_load(
+  icons, 
+  tidyverse,
+  tinytable,
+  modelsummary,
+  drhutools,
+  dotwhisker
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(313)
+
+# Visualization
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+```
+
+## Review how to evaluate an experiment {.center .unnumbered background="#43464B"}
+
+:::: {.columns}
+
+::: {.column .nonincremental width="70%"}
+
+- **Question**: Do people view others differently because of the language they use?  
+- **Subjects**: 500 students from Japan and Korea 
+- **Design**: 
+    1. Watch the video on the right
+    1. Answer the survey about the characteristics of Nezha (masculinity, intimacy, powerfulness, literacy, etc.)
+
+:::
+
+::: {.column width="30%"}
+
+{{< video https://drhuyue.site:10002/sammo3182/video/lab_nezhaDialect.mp4 title="黎叔在加班：《哪吒2》多国多地区多语言多方言配音来啦！体验不一样的哪吒！" height=600 preload="auto" controls allowfullscreen>}}
+
+::: {.notes}
+
+https://www.bilibili.com/video/BV1euPkerEnp/?vd_source=f38aeefd0d38cecba9017eeee43e71c8
+
+:::
+
+:::
+
+::::
+
+## Overview {.unnumbered}
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
++ WHAT is a large-N analysis (LNA)
+- WHY LNA
+  - Why *not* experiment
+  - What do we look for with LNA?
++ HOW
+    + One
+    + Two
+    + More than two
+
+:::
+
+::: {.column width="40%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_econometrics.jpg){fig-align="center" height=400}
+
+:::
+
+::::
+
+
+# What
+
+## What's LNA
+
+In lieu of "quantitative"...
+
+:::{.fragment}
+Large-[N]{.red}: Number of **observations**---not participants, but trails/units
+:::
+
+
+:::{.notes}
+
+What's a 定量研究?
+
+- 定结果的量
+- 定数据的量
+  - 都是量吗？binary，categorical， ordinary
+
+Did you really 定量？
+
+:::
+
+
+::: {.callout-note .fragment}
+
+## How large? 10, 100, 1000, 10000?
+
+- > We don't know......   
+- > It depends......  
+- > The larger, the better!
+
+[To know how large, you have to know why using this method...]{.fragment}
+
+:::
+
+
+# Why
+
+## Why Not Experiments?
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+
+**Experiment is powerful!**
+
++ Excluding confounders
++ Clear outcomes
++ Clear causal chain
+
+:::
+
+::: {.column width="50%"}
+
+**But**
+
+- [Difficult]{.red} to conduct
+- [Difficult]{.red} to represent
+- No "cool" methods
+
+:::
+
+::::
+
+
+::: {.fragment .large style="text-align:center; margin-top: 2em"}
+
+Alternative: [Quasi]{.grayLight}-experiment^[[*Collins Thesaurus*: Quasi- =  pseudo-, apparent, seeming, semi-, so-called, would-be.]{.fragment}]
+
+[A.k.a., Pseudo random assignment]{.fragment}
+
+:::
+
+
+## Why Have to Be large
+
+:::{.large style="text-align:center; margin-top: 1em"}
+
+- Sufficient variance to [fake]{.red} the control-treatment structure
+- Sufficient amount to [represent]{.red} the population
+
+::: {.callout-tip .fragment}
+
+## Statistical foundation
+
+- Law of Large Numbers
+- Central Limit Theorem
+
+:::
+
+:::
+
+
+## Representation
+
+
+:::{.callout-important}
+## *Law of Large Numbers*(LLN)
+
+As the number of experiments (sample) increases, the ratio of outcomes will converge to the theoretical (population) average.
+:::
+
+- &rarr; A rule of thumb: 100
+
+:::{.fragment .callout-important}
+## *Central Limit Theorem*(CLT)
+
+The sampling distribution of the sample means approaches a normal distribution as the sample size gets larger.
+:::
+
+- &rarr; A rule of thumb: 1000 [*(Where does this number come from? We'll talk about that soon)*]{.fragment}
+
+::: {.notes}
+
+Many natural phenomena and measurements tend to follow a **normal distribution** (a bell-shaped curve) because of how randomness and averages work. Here’s why:
+
+### **Why Things Often Look "Normal"**
+1. **The "Averaging Out" Effect**  
+   Imagine rolling a single die: each number (1–6) is equally likely. But if you roll **10 dice** and take the *average*, the results will cluster around 3.5 (the middle). This happens because extreme highs and lows cancel out when you average many tries. This is called the **Central Limit Theorem**—when you collect enough data, averages tend to form a bell curve, even if the original data isn’t normal.
+
+2. **Many Small Factors**  
+   Things like human height or test scores are influenced by *lots of tiny, random factors* (genes, diet, study habits). No single factor dominates, so their combined effect creates a balanced, symmetric pattern around an average.
+
+### **Why Some Things Start Non-Normal But Become Normal**
+Some patterns start off skewed or uneven but turn normal as you gather more data:
+
+#### **Example 1: Counting Rare Events (Poisson Distribution)**  
+- **Small numbers**: If you count something rare, like "how many shooting stars you see in 10 minutes," most counts will be 0 or 1, with a few higher numbers. This creates a lopsided (right-skewed) distribution.  
+- **Large numbers**: If you count shooting stars over *100 nights*, the counts will spread out and average out, forming a bell curve. The randomness balances out with more data.
+
+#### **Example 2: Coin Flips (Binomial Distribution)**  
+- **Few flips**: Flip a coin 10 times. The number of heads might be 3, 5, or 7—unpredictable and uneven.  
+- **Many flips**: Flip it 1,000 times. The number of heads will almost always be close to 500, forming a normal curve. More trials = more predictability.
+
+---
+
+### **Key Takeaway**  
+- **Normal distribution** is common because randomness often "smooths out" when you average many small, independent effects.  
+- **Non-normal at first?** With enough data (or larger sample sizes), even skewed patterns tend to look normal due to the Central Limit Theorem.  
+
+Think of it like stirring a lumpy cake batter: at first, you see chunks (unevenness), but after enough mixing (more data), it becomes smooth!
+
+:::
+
+## You gonna feel it
+
+::: {style="text-align:center"}
+
+My highly-educated fellows, let's play a [happy-happy]{.golden} kid game!
+
+And we are going outside! 😈
+
+1. Toss a fair, single die
+    - Odds: [One]{.golden} step to the [&larr;]{.blue}
+    - Evens: [One]{.golden} step to the [&rarr;]{.red}
+1. Toss [six]{.golden} times
+1. Going forward
+
+:::
+
+
+## Replicate the "magic"
+
+{{< video https://drhuyue.site:10002/sammo3182/video/lar_normalDistribution_bbc.mp4 title="Normal by people" height=600 loading="eager" allowfullscreen>}}
+
+## Why does CLT ask for over 1000
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_largeNumber.gif){fig-align="center" height=200}
+
+:::{.fragment .callout-tip}
+
+## The larger the better? 
+
+$$\text{Margin of Error (M.E.)} = Z \times \frac{S}{\sqrt n}.$$
+
+| Sample Size (n) | Margin of Error (M.E.) |
+|-----------------|------------------------|
+| 200             | 7.1%                   |
+| 1000            | 3.2%                   |
+| 2000            | 2.2%                   |
+| 4000            | 1.6%                   |
+
+:::
+
+:::{.notes}
+
+To cut the margin of error in half, like from 3.2% down to 1.6%, you need four times as big of a sample, like going from 1000 to 4000 respondents. To cut the margin of error by a factor of five, you need 25 times as big of a sample
+
+:::
+
+::: {.fragment style="text-align:center"}
+
+*Now you know how large is large! Good for you 👍🎉*
+
+:::
+
+## LNA for public policy
+
+:::{.large}
+
+> [任何政策都建立在对事物差异性的分析和把握之上，**没有差异性就没有政策**。我国社会差异性特征明显，反映在地域、城乡、民族、人群等多个层面。我们的决策部署有综合性的，也有专项性的……这些都需要充分熟悉情况、深入分析论证、科学把握尺度。要坚持科学决策、民主决策、依法决策，对情况进行深入分析]{.red} [@XiJinPing2019, pp. 118-119]。
+
+:::
+
+::: {.notes}
+
+《中央政治局的同志必须有很强的看齐意识》(2015年12月28日、29 日),习近平《论坚持党对一切工作的领导》,中央文献出版社2019年版，第118-119页
+
+:::
+
+# How
+
+## Univariate analysis
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_tooManyCourses.jpg){fig-align="center" height=600}
+
+:::{.notes}
+
+Let's say we'll test a school policy of course management
+
+:::
+
+:::
+
+::: {.column width="40%"}
+
+```{r}
+#| label: data
+
+showWatching <- tibble(Student_ID = paste0("202509", sample(1000:9000, size = 7)), Courses = c(9, 9, 12, 10, 8, 10, 15))
+
+tt(showWatching)
+```
+
+:::
+
+::::
+
+
+
+## How to Describe a Variable
+
+Given the courses students took: (9, 9, 12, 10, 8, 10, 15)
+
+::: {.fragment .nonincremental}
+
++ Mean: $\frac{9 + 9 + 12 + 10 + 8 + 10 + 15}{7} \approx 11.$
++ Median: 8, 9, 9, [10]{.red}, 10, 12, 15
++ Mode: 8, [9]{.red}, [9]{.red}, [10]{.red}, [10]{.red}, 12, 15
+
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="40%"}
+
+*Which one is **the best**?*
+
+:::
+
+::: {.column .fragment width="60%"}
+
+![How about this](https://drhuyue.site:10002/sammo3182/figure/desc_sheHulk.png){fig-align="center" height=400}
+
+:::
+
+::::
+
+## Levels of Descriptive Statistics {.scrollable}
+
+:::: {.columns}
+
+::: {.column width="20%"}
+
+- Number
+- Statistics
+- Plot
+
+:::
+
+::: {.column .fragment width="80%"}
+
+```{r}
+#| label: descriptive
+
+df_descrptive <- select(mtcars, -am, -carb) |>
+  mutate(across(where(~length(unique(.x)) == 2), as.logical),
+  across(where(~length(unique(.x)) < 7 & !is.logical(.x)), as.factor))
+
+datasummary_skim(df_descrptive)
+```
+
+:::
+
+::::
+
+
+## Binary Analysis
+
+
+```{r}
+#| fig-align: center
+#| fig-height: 6
+#| fig-cap: Weight of a car and how long it can run
+#| label: scatter
+
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  ylab("Mileage per Gallon") +
+  xlab("Weight")
+```
+
+## Not always work
+
+```{r}
+#| fig-align: center
+#| fig-height: 6
+#| fig-cap: How about this data then?
+#| label: scatterMess
+
+data(tobacco, package = "summarytools")
+
+ggplot(tobacco, aes(age, cigs.per.day)) +
+  geom_point() +
+  ylab("Cigrate per day") +
+  xlab("Age")
+```
+
+## Multivariate Analysis
+
+:::{.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_buyerSeller.jpg){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_matching.png){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_fitOLS.png){.fragment fig-align="center" height=600}
+
+:::
+
+
+## Multivariate analysis not a panacea
+
+{{< video https://drhuyue.site:10002/sammo3182/video/lar_pork.mp4 title="Predicting Pork Price" height=600 loading="eager" allowfullscreen>}}
+
+
+## Present your model efficiently
+
+```{r}
+#| fig-align: center
+#| fig-height: 7
+#| label: dotwhisker
+
+m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
+m2 <- update(m1, . ~ . + hp) # add another predictor
+m3 <- update(m2, . ~ . + am) # and another
+
+list(m1, m2, m3) |>
+  dwplot(
+    show_stats = TRUE,
+    vline = geom_vline(
+      xintercept = 0,
+      colour = "grey60",
+      linetype = 2
+    )
+  )
+```
+
+
+
+## Take-Home Points
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
++ What: "Quantitative" analysis
+  + How large is large?
+    + LLN: 100
+    + CLT: 1000
+- Why
+  - Why Not experiment?
+  - What do we look for from the LNA?
+    - Average and distribution
++ How 
+    + Univariate
+    + Bivariate
+    + Multivariate
+
+:::
+
+::: {.column .fragment width="50%"}
+
+*Bonus: If you wanna know more*
+
+[["治理技术专题：政治数据分析" (70700173)]{.green} 😋]{.large}
+
+:::
+
+::::
+
+## Reference
+
+::: {#refs}
+:::
