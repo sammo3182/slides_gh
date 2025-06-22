@@ -1,0 +1,88 @@
+---
+title: "Analysis of Political Data (70700173)"
+author: "Dr. Yue Hu"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(pacman)
+p_load(tidyverse, lubridate, rio)
+```
+
+```{r calendar, include=FALSE}
+# Opening Date ####
+start <- ymd("2024-09-09")
+
+# Final Week ####
+end <- start + dweeks(16) 
+
+schedule <-
+  tibble(day = seq(from = start, to = end, by = "days")) %>%
+  mutate(day = ymd(day),
+         weekDay = wday(day, week_start = 1)) %>% # get the relative week number
+  filter(weekDay == 1) # only keep Monday
+
+# Holiday
+
+schedule$day[schedule$day == "2024-09-09"] <- "2024-09-14"
+schedule$day[schedule$day == "2024-09-16"] <- "2024-09-21"
+
+midAutumn <- ymd(20240915) %--% ymd(20240917)
+nationalDay <- ymd(20241001) %--% ymd(20241007)
+newYear <- ymd(20241230) %--% ymd(20250101)
+
+
+schedule$topic[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- "Public Holiday"
+schedule$translation[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- "哗啦啦，放假啦！"
+schedule$lab[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- 
+  schedule$lab_tran[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- 
+  schedule$tip[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- 
+  schedule$reading[schedule$day %within% list(midAutumn, nationalDay, newYear)] <- 
+  "Nah~"
+
+schedule <- arrange(schedule, day) %>% 
+  rowid_to_column(var = "weekNum")
+
+# Final Week
+
+schedule$topic[schedule$day == max(schedule$day)] <- "Final Week"
+schedule$translation[schedule$day == max(schedule$day)] <- "期末周"
+
+content <- import("schedule_editable.xlsx")
+content <- content[-nrow(content), ]
+
+schedule$topic[is.na(schedule$topic)] <- content$topic
+schedule$translation[is.na(schedule$translation)] <- content$translation
+schedule$reading[is.na(schedule$reading)] <- content$reading
+schedule$lab[is.na(schedule$lab)] <- content$lab
+schedule$lab_tran[is.na(schedule$lab_tran)] <- content$lab_tran
+schedule$tip[is.na(schedule$tip)] <- content$tip
+
+schedule$caption <- paste0("第", schedule$weekNum, "周 (", schedule$day, "): ", schedule$translation, " (", schedule$topic, ")")
+```
+
+Welcome to the lecture sources for the Analysis of Political Data.
+Learn how to describe, analyze, and diagnose large-N data with Dr. Hu!
+
+[![](https://drhuyue.site:10002/sammo3182/figure/goodluck.gif){fig-align="center" height=200}](/slides_gh/slides/courses/analysisOfPoliticalData/17_quiz.html)
+
+
+* [`r schedule$caption[1]`](/slides_gh/slides/courses/analysisOfPoliticalData/01_courseIntro.html)
+* [`r schedule$caption[2]`](/slides_gh/slides/courses/analysisOfPoliticalData/02_descriptiveStats.html)
+* [`r schedule$caption[3]`](/slides_gh/slides/courses/analysisOfPoliticalData/03_probability.html)
+* [`r schedule$caption[4]`](/slides_gh/slides/courses/analysisOfPoliticalData/04_distribution.html)
+* [`r schedule$caption[6]`](/slides_gh/slides/courses/analysisOfPoliticalData/05_ciSample.html)
+* [`r schedule$caption[7]`](/slides_gh/slides/courses/analysisOfPoliticalData/06_hypothesis.html)
+* [`r schedule$caption[8]`](/slides_gh/slides/courses/analysisOfPoliticalData/07_association.html)
+* [`r schedule$caption[9]`](/slides_gh/slides/courses/analysisOfPoliticalData/08_simpleOLS.html)
+* [`r schedule$caption[10]`](/slides_gh/slides/courses/analysisOfPoliticalData/09_assumptions.html)
+* [`r schedule$caption[11]`](/slides_gh/slides/courses/analysisOfPoliticalData/10_multipleRegression.html)
+* [`r schedule$caption[12]`](/slides_gh/slides/courses/analysisOfPoliticalData/11_specification.html)
+* [`r schedule$caption[13]`](/slides_gh/slides/courses/analysisOfPoliticalData/12_multiHeter.html)
+* [`r schedule$caption[14]`](/slides_gh/slides/courses/analysisOfPoliticalData/13_autoEndo.html)
+* [`r schedule$caption[15]`](/slides_gh/slides/courses/analysisOfPoliticalData/14_moderation.html)
+* [`r schedule$caption[16]`](/slides_gh/slides/courses/analysisOfPoliticalData/15_logitMissing.html)
+
