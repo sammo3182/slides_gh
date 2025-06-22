@@ -7,6 +7,8 @@ date: "2025-06-23"
 author: "胡悦"
 institute: "清华大学社会科学学院"
 
+bibliography: pre_css.bib
+
 format: 
   revealjs:
     css: https://www.drhuyue.site/slides_gh/css/style_basic.css
@@ -37,7 +39,7 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 
 execute: 
-    echo: false
+    echo: true
 editor_options: 
     chunk_output_type: console
 editor: 
@@ -74,18 +76,974 @@ set.seed(313)
 
 ## 缘起
 
-- [纯]{.red}文科生
+::: {style="text-align:center"}
+
+[纯]{.red}文科生上了“定量”的船
+
+:::
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+![@Hu2020a](https://drhuyue.site:10002/sammo3182/figure/text_democracy1991.png){.fragment fig-align="center" height=500}
+
+::: {.notes}
+
+- 由survey起家的研究进路
+- 政治心理学 + 政治语言学
+- 较早将STM引入中国政治学研究
+
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
 
 
-## 挑战
+![](https://drhuyue.site:10002/sammo3182/figure/2023_rClass.png){.fragment fig-align="center" height=500}
+
+::: {.notes}
+
+- 基础方法课程（概率论 &rarr; 回归）
+- 大数据课程
+- 编程工作坊
+
+:::
+
+:::
+
+::::
+
+
+
+## 大语言模型来了……
+
+::::{.overlay-container}
+
+::: {.overlay-text}
+
+- 前兆：“计算社会科学时代” &rarr; 词频分析落伍了
+- 大语言模型：人类语言被破解 &rarr; 自然语言分析/“机器学习”落伍了
+
+:::
+
+::: {.overlay-image .fragment}
+
+![@YangEtAl2024a](https://drhuyue.site:10002/sammo3182/figure/css_llmTree.jpg){fig-align="center" height=600}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+::: {.callout-note}
+
+## 与美国知名政治学副教授、名校博士、大厂分析师的交流
+
+:::: {.columns}
+
+::: {.column .incremental width="50%"}
+
+- *我*：大语言模型时代，学生们还用学习方法吗？
+- *专家*：就是用一下可以不学，要想深入研究的话，还是得学一些。
+- *我*：“深入研究”什么？
+- *专家*：理解方法应用的原理呀、正确使用啊之类的。
+- *我*：不是可以问大语言模型么？而且给的答案越来越准确了。
+- *专家*：确实。
+- *我*：省下精力来，还可以多读理论、多看论文。
+- *专家*：他们也不看啊……
+
+:::
+
+::: {.column .incremental width="50%"}
+
+- *我*：这个时代还用学习编程么？
+- *专家*：现在LLM还不行，会出很多bug。
+- *我*：跑不通可以再让LLM debug啊。而且，vibe coding在飞速发展呀！肯定会越来越准的。
+- *专家*：确实，90%的程序都不是自己写的了。
+- *我*：那我的编程培训班是不是可以不开了……
+- *专家*：（尴尬而又不失礼貌的微笑）
+
+:::
+
+::::
+
+:::
+
+:::
+
+::::
+
 
 ## 想法1：学习主体
 
+:::: {.columns}
+
+::: {.column .incremental width="50%"}
+
+- 学者还要不要关注方法：
+  - 还是得关注
+  - 还是得关注
+
+::: {.notes}
+
+- 从方法角度：弥补人力
+- 从讲故事的角度：提供新视角
+
+:::
+
+:::
+
+::: {.column .incremental width="50%"}
+
+- 学生还要不要学习方法：
+  - 系统学习
+  - 能力训练
+  - 权力关系
+
+::: {.notes}
+
+- 系统学习 vs. 碎片化学习
+- 能力训练 vs. 知识积累
+- 主动权在谁的手里
+
+:::
+
+:::
+
+::::
+
 ## 想法2：学习内容
 
-## 想法3：学习方式
+“最好像人一样读”……吗？与 “能跑就行”
 
-## 请教
+::: {.notes}
+
+- 语言的统计性规律
+- Function words
+- Linguistic psychology
+
+:::
+
+
+::: {.r-stack .fragment}
+
+```{r}
+#| label: llmCoding
+#| eval: false
+
+##说明
+#8-170行属于爬取数据的环节
+#180-321 搜索data scraping包及相关信息
+#325-474 搜索data cleaning包及相关信息
+#478-632 搜索data transformation包以及相关信息
+
+library(rvest)
+library(httr)
+library(dplyr)
+library(purrr)
+library(progress)
+library(cli)
+
+user_agent <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+delay_seconds <- 0.5
+
+# 爬取所有R包的元信息
+scrape_cran_meta_descriptions <- function(max_packages = NULL) {
+  # 获取包的链接
+  cli_alert_info("正在获取CRAN包列表...")
+  main_url <- "https://cran.r-project.org/web/packages/available_packages_by_date.html"
+
+  # 发送HTTP请求
+  response <- GET(main_url, user_agent(user_agent))
+  if (http_status(response)$category != "Success") {
+    cli_alert_danger("无法获取主页面: {http_status(response)$message}")
+    return(NULL)
+  }
+
+  # 解析HTML内容
+  html_content <- content(response, as = "text")
+  page <- read_html(html_content)
+
+  # 提取表格中的所有行
+  rows <- page %>% html_nodes("table tr")
+
+  # 提取包名和链接(跳过表头)
+  package_links <- map_dfr(rows[-1], function(row) {
+    cols <- html_nodes(row, "td")
+    if (length(cols) >= 2) {
+      link <- html_node(cols[2], "a")
+      if (!is.na(link)) {
+        href <- html_attr(link, "href")
+        name <- html_text(link) %>% trimws()
+
+        # 构建URL
+        full_url <- paste0(
+          "https://cran.r-project.org",
+          sub("^\\.\\./(\\.\\./)?", "/", href)
+        )
+
+        return(data.frame(
+          package = name,
+          url = full_url,
+          stringsAsFactors = FALSE
+        ))
+      }
+    }
+    return(NULL)
+  })
+
+  #
+  if (!is.null(max_packages)) {
+    package_links <- head(package_links, max_packages)
+    cli_alert_info("测试模式：只爬取前 {max_packages} 个包")
+  }
+
+  cli_alert_success("准备爬取 {nrow(package_links)} 个R包的元描述信息")
+
+  # 遍历每个包获取元信息
+  cli_alert_info("开始爬取元描述信息...")
+
+  # 创建进度条
+  pb <- progress_bar$new(
+    format = "[:bar] :percent | 已处理: :current / :total | 剩余: :eta",
+    total = nrow(package_links),
+    clear = FALSE
+  )
+
+  # 定义抓取单个包描述的函数
+  scrape_package_meta <- function(url, package_name) {
+    pb$tick()
+    Sys.sleep(delay_seconds)
+
+    tryCatch(
+      {
+        # 发送HTTP请求
+        pkg_response <- GET(url, user_agent(user_agent))
+        if (http_status(pkg_response)$category != "Success") {
+          return(data.frame(
+            package = package_name,
+            meta_description = paste(
+              "HTTP错误:",
+              http_status(pkg_response)$message
+            ),
+            stringsAsFactors = FALSE
+          ))
+        }
+
+        # 解析HTML内容
+        pkg_html <- content(pkg_response, as = "text")
+        pkg_page <- read_html(pkg_html)
+
+        # 提取<head>中的<meta property="og:description">内容
+        meta_description <- pkg_page %>%
+          html_node('head meta[property="og:description"]') %>%
+          html_attr("content")
+
+        # 如果找到描述，进行清理
+        if (!is.na(meta_description)) {
+          # 清理HTML实体和多余空格
+          meta_description <- gsub("&amp;", "&", meta_description)
+          meta_description <- gsub("&lt;", "<", meta_description)
+          meta_description <- gsub("&gt;", ">", meta_description)
+          meta_description <- gsub("\\s+", " ", meta_description) %>% trimws()
+
+          return(data.frame(
+            package = package_name,
+            meta_description = meta_description,
+            stringsAsFactors = FALSE
+          ))
+        }
+
+        # 如果找不到描述，尝试提取常规描述
+        cli_alert_warning(
+          "包 {package_name} 未找到og:description元标签，尝试提取常规描述"
+        )
+
+        # 尝试从表格中提取描述
+        description_row <- pkg_page %>%
+          html_nodes("tr") %>%
+          keep(~ html_text(html_node(.x, "td:nth-child(1)")) == "Description:")
+
+        if (length(description_row) > 0) {
+          description <- description_row[[1]] %>%
+            html_node("td:nth-child(2)") %>%
+            html_text() %>%
+            gsub("\\s+", " ", .) %>%
+            trimws()
+
+          return(data.frame(
+            package = package_name,
+            meta_description = description,
+            stringsAsFactors = FALSE
+          ))
+        }
+
+        # 如果都找不到，返回未找到
+        return(data.frame(
+          package = package_name,
+          meta_description = "Description not found",
+          stringsAsFactors = FALSE
+        ))
+      },
+      error = function(e) {
+        return(data.frame(
+          package = package_name,
+          meta_description = paste("错误:", conditionMessage(e)),
+          stringsAsFactors = FALSE
+        ))
+      }
+    )
+  }
+
+  # 使用map安全地遍历所有包
+  results <- map2_dfr(
+    package_links$url,
+    package_links$package,
+    scrape_package_meta
+  )
+
+  # 统计结果
+  success_count <- sum(
+    results$meta_description != "Description not found" &
+      !grepl("错误:|HTTP错误", results$meta_description)
+  )
+
+  cli_alert_success("成功爬取 {success_count} 个包的元描述信息")
+
+  # 保存结果到CSV
+  output_file <- "cran_package_meta_descriptions.csv"
+  write.csv(results, output_file, row.names = FALSE, fileEncoding = "UTF-8")
+  cli_alert_success("结果已保存到: {output_file}")
+
+  return(results)
+}
+
+
+# test只爬取前5个包
+results_sample <- scrape_cran_meta_descriptions(max_packages = 5)
+
+# 查看结果
+print(results_sample)
+
+# 完整爬取
+all_results <- scrape_cran_meta_descriptions()
+
+data <- read.csv("cran_package_meta_descriptions.csv", nrows = 100)
+View(data)
+
+library(readr)
+data <- read_csv("cran_package_meta_descriptions.csv")
+
+#分别匹配关键词
+
+library(dplyr)
+library(stringr)
+library(openxlsx)
+
+##data scraping
+
+descriptions_df <- read.csv(
+  "cran_package_meta_descriptions.csv",
+  stringsAsFactors = FALSE,
+  fileEncoding = "UTF-8"
+)
+###匹配关键词
+scraping_keywords <- c(
+  "scrap",
+  "crawl",
+  "API",
+  "extract",
+  "harvest",
+  "gather",
+  "retrieve",
+  "collect"
+)
+
+###建立“或”关系
+pattern <- paste0("\\b(", paste(scraping_keywords, collapse = "|"), ")\\b")
+pattern <- regex(pattern, ignore_case = TRUE)
+
+###筛选包含关键词的包
+scraping_packages <- descriptions_df %>%
+
+  filter(
+    !str_detect(meta_description, "错误:|HTTP错误|Description not found")
+  ) %>%
+
+  mutate(
+    is_scraping = str_detect(meta_description, pattern),
+
+    matched_keywords = str_extract_all(meta_description, pattern) %>%
+      map_chr(~ paste(unique(.x), collapse = ", "))
+  ) %>%
+
+  filter(is_scraping) %>%
+
+  select(package, meta_description, matched_keywords) %>%
+
+  arrange(package)
+
+###打印前10
+head(scraping_packages, 10)
+
+write.xlsx(scraping_packages, "scraping_packages.xlsx")
+
+cat("发现", nrow(scraping_packages), "个与数据抓取相关的R包\n")
+
+###添加包链接
+scraping_packages <- scraping_packages %>%
+  mutate(
+    cran_link = paste0(
+      "https://cran.r-project.org/web/packages/",
+      package,
+      "/index.html"
+    )
+  )
+
+###保存带链接的结果
+write.xlsx(scraping_packages, "data_scraping_packages_with_links.xlsx")
+
+###添加下载量信息
+library(cranlogs)
+
+###分批处理50
+batch_size <- 50
+batches <- split(
+  scraping_packages$package,
+  ceiling(seq_along(scraping_packages$package) / batch_size)
+)
+
+from_date <- Sys.Date() - 90
+to_date <- Sys.Date()
+
+
+download_stats_list <- map(batches, function(batch) {
+  Sys.sleep(1)
+  cran_downloads(
+    packages = batch,
+    from = from_date,
+    to = to_date
+  )
+})
+
+###合并分批下载的数据
+download_stats <- bind_rows(download_stats_list)
+
+download_summary <- download_stats %>%
+  group_by(package) %>%
+  summarise(total_downloads = sum(count))
+
+scraping_packages <- scraping_packages %>%
+  left_join(download_summary, by = "package") %>%
+  arrange(desc(total_downloads))
+
+print(scraping_packages)
+
+write.xlsx(scraping_packages, "data_scraping_packages_with_links_rank.xlsx")
+
+###添加作者信息
+
+get_authors_from_cran <- function(package_name) {
+  tryCatch(
+    {
+      ###构建DESCRIPTION文件URL
+      desc_url <- paste0(
+        "https://cran.r-project.org/web/packages/",
+        package_name,
+        "/DESCRIPTION"
+      )
+
+      ###发送HTTP请求
+      response <- GET(desc_url, user_agent("Mozilla/5.0"))
+      if (http_status(response)$category != "Success") {
+        return(list(author = NA, maintainer = NA))
+      }
+
+      ###解析DESCRIPTION内容
+      desc_content <- content(response, as = "text")
+
+      ###提取作者和维护者信息
+      author <- if (grepl("Author:", desc_content)) {
+        sub(".*Author:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      maintainer <- if (grepl("Maintainer:", desc_content)) {
+        sub(".*Maintainer:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      return(list(author = author, maintainer = maintainer))
+    },
+    error = function(e) {
+      return(list(author = NA, maintainer = NA))
+    }
+  )
+}
+
+###为每个包获取作者信息
+if (
+  !"author" %in% colnames(scraping_packages) ||
+    all(is.na(scraping_packages$author))
+) {
+  ###创建进度条
+  pb <- progress_bar$new(
+    format = "获取作者信息 [:bar] :percent | 已处理: :current / :total | 剩余: :eta",
+    total = nrow(scraping_packages),
+    clear = FALSE
+  )
+
+  ###获取作者信息
+  author_info <- map(scraping_packages$package, function(pkg) {
+    pb$tick()
+    Sys.sleep(0.3) # 礼貌性延时
+    get_authors_from_cran(pkg)
+  })
+
+  ###添加作者信息到数据框
+  scraping_packages$author <- map_chr(author_info, ~ .x$author)
+  scraping_packages$maintainer <- map_chr(author_info, ~ .x$maintainer)
+}
+
+write.xlsx(scraping_packages, "data_scraping_packages_final.xlsx")
+
+##data cleaing
+
+#读取已爬取的数据
+descriptions_df <- read.csv(
+  "cran_package_meta_descriptions.csv",
+  stringsAsFactors = FALSE,
+  fileEncoding = "UTF-8"
+)
+
+# 定义关键词列表
+cleaning_keywords <- c(
+  "clean",
+  "preprocess",
+  "sanitize",
+  "scrub",
+  "correct",
+  "rectify"
+)
+
+# 检查并移除空元素
+cleaning_keywords <- cleaning_keywords[nchar(cleaning_keywords) > 0]
+
+#创建“或”关系
+pattern <- paste0("\\b(", paste(cleaning_keywords, collapse = "|"), ")\\b")
+pattern <- regex(pattern, ignore_case = TRUE)
+
+# 筛选包含关键词的包
+cleaning_packages <- descriptions_df %>%
+  # 过滤掉错误和未找到的描述
+  filter(
+    !str_detect(meta_description, "错误:|HTTP错误|Description not found")
+  ) %>%
+  # 添加新列标记是否匹配关键词
+  mutate(
+    is_cleaning = str_detect(meta_description, pattern),
+    # 提取匹配的关键词
+    matched_keywords = sapply(meta_description, function(desc) {
+      matches <- str_extract_all(desc, pattern)[[1]]
+      if (length(matches) > 0) {
+        paste(unique(tolower(matches)), collapse = ", ") # 转换为小写并去重
+      } else {
+        ""
+      }
+    })
+  ) %>%
+  # 只保留匹配的包
+  filter(is_cleaning) %>%
+  # 选择需要的列
+  select(package, meta_description, matched_keywords) %>%
+  # 按包名排序
+  arrange(package)
+
+# 显示前10
+head(cleaning_packages, 10)
+
+# 输出结果到Excel文件
+write.xlsx(cleaning_packages, "data_cleaning_packages.xlsx")
+
+# 添加包链接
+cleaning_packages <- cleaning_packages %>%
+  mutate(
+    cran_link = paste0(
+      "https://cran.r-project.org/web/packages/",
+      package,
+      "/index.html"
+    )
+  )
+
+# 保存结果
+write.xlsx(cleaning_packages, "data_cleaning_packages_with_links.xlsx")
+
+
+# 分批次处理包
+batch_size <- 50
+batches <- split(
+  cleaning_packages$package,
+  ceiling(seq_along(cleaning_packages$package) / batch_size)
+)
+
+from_date <- Sys.Date() - 90
+to_date <- Sys.Date()
+
+# 分批获取下载量
+download_stats_list <- map(batches, function(batch) {
+  Sys.sleep(1)
+  cran_downloads(
+    packages = batch,
+    from = from_date,
+    to = to_date
+  )
+})
+
+# 合并所有批次的结果
+download_stats <- bind_rows(download_stats_list)
+
+download_summary <- download_stats %>%
+  group_by(package) %>%
+  summarise(total_downloads = sum(count))
+
+cleaning_packages <- cleaning_packages %>%
+  left_join(download_summary, by = "package") %>%
+  arrange(desc(total_downloads))
+
+
+write.xlsx(cleaning_packages, "data_cleaning_packages_with_links_rank.xlsx")
+
+# 添加作者信息
+
+get_authors_from_cran <- function(package_name) {
+  tryCatch(
+    {
+      # 构建DESCRIPTION文件URL
+      desc_url <- paste0(
+        "https://cran.r-project.org/web/packages/",
+        package_name,
+        "/DESCRIPTION"
+      )
+
+      # 发送HTTP请求
+      response <- GET(desc_url, user_agent("Mozilla/5.0"))
+      if (http_status(response)$category != "Success") {
+        return(list(author = NA, maintainer = NA))
+      }
+
+      # 解析DESCRIPTION内容
+      desc_content <- content(response, as = "text")
+
+      # 提取作者和维护者信息
+      author <- if (grepl("Author:", desc_content)) {
+        sub(".*Author:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      maintainer <- if (grepl("Maintainer:", desc_content)) {
+        sub(".*Maintainer:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      return(list(author = author, maintainer = maintainer))
+    },
+    error = function(e) {
+      return(list(author = NA, maintainer = NA))
+    }
+  )
+}
+
+# 为每个包获取作者信息
+if (
+  !"author" %in% colnames(cleaning_packages) ||
+    all(is.na(cleaning_packages$author))
+) {
+  # 创建进度条
+  pb <- progress_bar$new(
+    format = "获取作者信息 [:bar] :percent | 已处理: :current / :total | 剩余: :eta",
+    total = nrow(cleaning_packages),
+    clear = FALSE
+  )
+
+  # 获取作者信息
+  author_info <- map(cleaning_packages$package, function(pkg) {
+    pb$tick()
+    Sys.sleep(0.3) # 礼貌性延时
+    get_authors_from_cran(pkg)
+  })
+
+  # 添加作者信息到数据框
+  cleaning_packages$author <- map_chr(author_info, ~ .x$author)
+  cleaning_packages$maintainer <- map_chr(author_info, ~ .x$maintainer)
+}
+
+# 保存最终结果
+write.xlsx(cleaning_packages, "data_cleaning_packages_final.xlsx")
+
+##data transformation
+
+descriptions_df <- read.csv(
+  "cran_package_meta_descriptions.csv",
+  stringsAsFactors = FALSE,
+  fileEncoding = "UTF-8"
+)
+
+# 关键词列表
+transformation_keywords <- c(
+  "transform",
+  "reshape",
+  "recode",
+  "convert",
+  "compute",
+  "derive",
+  "mutate",
+  "modify",
+  "reformat",
+  "restructure",
+  "aggregate"
+)
+
+# 检查并移除空元素
+transformation_keywords <- transformation_keywords[
+  nchar(transformation_keywords) > 0
+]
+
+# 创建正则表达式
+pattern <- paste0(
+  "\\b(",
+  paste(transformation_keywords, collapse = "|"),
+  ")\\b"
+)
+pattern <- regex(pattern, ignore_case = TRUE)
+
+# 筛选包含关键词的包
+transformation_packages <- descriptions_df %>%
+  # 过滤掉错误和未找到的描述
+  filter(
+    !str_detect(meta_description, "错误:|HTTP错误|Description not found")
+  ) %>%
+  # 添加新列标记是否匹配关键词
+  mutate(
+    is_transformation = str_detect(meta_description, pattern),
+    # 提取匹配的关键词
+    matched_keywords = sapply(meta_description, function(desc) {
+      matches <- str_extract_all(desc, pattern)[[1]]
+      if (length(matches) > 0) {
+        paste(unique(tolower(matches)), collapse = ", ") # 转换为小写并去重
+      } else {
+        ""
+      }
+    })
+  ) %>%
+  # 只保留匹配的包
+  filter(is_transformation) %>%
+  # 选择需要的列
+  select(package, meta_description, matched_keywords) %>%
+  # 按包名排序
+  arrange(package)
+
+# 显示前10
+head(transformation_packages, 10)
+
+# 输出结果
+write.xlsx(transformation_packages, "data_transformation_packages.xlsx")
+
+# 统计结果
+cat("发现", nrow(transformation_packages), "个与数据转换相关的R包\n")
+
+# 添加包链接
+transformation_packages <- transformation_packages %>%
+  mutate(
+    cran_link = paste0(
+      "https://cran.r-project.org/web/packages/",
+      package,
+      "/index.html"
+    )
+  )
+
+# 保存结果
+write.xlsx(
+  transformation_packages,
+  "data_transformation_packages_with_links.xlsx"
+)
+
+
+# 将包列表分成较小的批次
+batch_size <- 50
+batches <- split(
+  transformation_packages$package,
+  ceiling(seq_along(transformation_packages$package) / batch_size)
+)
+
+# 设置时间范围
+from_date <- Sys.Date() - 90
+to_date <- Sys.Date()
+
+# 分批获取下载量
+download_stats_list <- map(batches, function(batch) {
+  Sys.sleep(1) # 添加延时避免请求过快
+  cran_downloads(
+    packages = batch,
+    from = from_date,
+    to = to_date
+  )
+})
+
+# 合并所有批次的结果
+download_stats <- bind_rows(download_stats_list)
+
+# 计算总下载量
+download_summary <- download_stats %>%
+  group_by(package) %>%
+  summarise(total_downloads = sum(count))
+
+# 合并下载量信息
+transformation_packages <- transformation_packages %>%
+  left_join(download_summary, by = "package") %>%
+  arrange(desc(total_downloads))
+
+
+write.xlsx(
+  transformation_packages,
+  "data_transformation_packages_with_links_rank.xlsx"
+)
+
+# 添加作者信息
+
+get_authors_from_cran <- function(package_name) {
+  tryCatch(
+    {
+      # 构建DESCRIPTION文件URL
+      desc_url <- paste0(
+        "https://cran.r-project.org/web/packages/",
+        package_name,
+        "/DESCRIPTION"
+      )
+
+      # 发送HTTP请求
+      response <- GET(desc_url, user_agent("Mozilla/5.0"))
+      if (http_status(response)$category != "Success") {
+        return(list(author = NA, maintainer = NA))
+      }
+
+      # 解析DESCRIPTION内容
+      desc_content <- content(response, as = "text")
+
+      # 提取作者和维护者信息
+      author <- if (grepl("Author:", desc_content)) {
+        sub(".*Author:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      maintainer <- if (grepl("Maintainer:", desc_content)) {
+        sub(".*Maintainer:([^\n]+).*", "\\1", desc_content) %>% trimws()
+      } else {
+        NA_character_
+      }
+
+      return(list(author = author, maintainer = maintainer))
+    },
+    error = function(e) {
+      return(list(author = NA, maintainer = NA))
+    }
+  )
+}
+
+# 为每个包获取作者信息
+if (
+  !"author" %in% colnames(transformation_packages) ||
+    all(is.na(transformation_packages$author))
+) {
+  # 创建进度条
+  pb <- progress_bar$new(
+    format = "获取作者信息 [:bar] :percent | 已处理: :current / :total | 剩余: :eta",
+    total = nrow(transformation_packages),
+    clear = FALSE
+  )
+
+  # 获取作者信息
+  author_info <- map(transformation_packages$package, function(pkg) {
+    pb$tick()
+    Sys.sleep(0.3)
+    get_authors_from_cran(pkg)
+  })
+
+  # 添加作者信息到数据框
+  transformation_packages$author <- map_chr(author_info, ~ .x$author)
+  transformation_packages$maintainer <- map_chr(author_info, ~ .x$maintainer)
+}
+
+# 保存结果
+write.xlsx(transformation_packages, "data_transformation_packages_final.xlsx")
+
+```
+
+::: {.fragment}
+
+```{r}
+#| label: myCoding
+#| eval: false
+
+library(purrr)
+library(pkgsearch)
+
+kw_download <- c("api download", "collect", "gather")
+kw_clean <- c("preprocess data", "data clean", "parse", "sanitize", "scrub",  "correct", "rectify", "standardize")
+kw_transform <- c("convert data", "reformat", "transform", "aggregate", "rescale", "reshape", "recode", "modify", "restructure")
+
+kw_short <- c(kw_download[1], kw_clean[1], kw_transform[1])
+
+ls_packages <- map(kw_short, \(keyword){
+  pkg_search(keyword, format = "long", size = 50) |> 
+    select(package, title, maintainer = maintainer_name) 
+}) |> 
+  set_names(c("download", "clean", "transform")) 
+```
+
+:::
+
+:::
+
+## 想法3：使用方式
+
+:::{.r-hstack}
+
+![有效连结](https://drhuyue.site:10002/sammo3182/figure/weibo_net-1.png){fig-align="center" height=600}
+
+![核心连结](https://drhuyue.site:10002/sammo3182/figure/weibo_net-2.png){fig-align="center" height=600}
+
+:::
+
+
+
+## 主观且不负责地认为
+
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_kanglongyouhui.png){fig-align="center" height=600}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+- "小孩子才做选择"
+  - 理解大语言模型的运作方式和产出性质
+- "近读"读不出的内容
+- 量力而行
+
+:::
+
+::::
+
+
 
 # 敬请指正 {background="#43464B"}
 
@@ -99,4 +1057,9 @@ set.seed(313)
 
 ![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 
+:::
+
+## 参考文献
+
+:::{.ref}
 :::
