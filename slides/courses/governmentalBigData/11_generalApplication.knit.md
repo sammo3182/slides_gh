@@ -1,0 +1,1048 @@
+---
+title: 大数据在社会科学研究中的应用
+author: "胡悦"
+institute: |
+    | 清华大学社会科学学院
+    | 清华大学计算社会科学平台
+bibliography: pre_css.bib
+
+format: 
+  revealjs:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: ../../../css/goldenBlack.scss
+    number-sections: false
+    slide-number: true
+    filters: [appExclusion.lua] # not count appendices into page number
+    incremental: false
+    preview-links: true # open an iframe for a link
+    link-external-newwindow: true
+    self-contained: false
+    chalkboard: false # allwoing chalk board B, notes canvas C
+    # callout-icon: false
+    show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+    show-notes: false
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px   
+      data-background-position: top 10% right 5%
+    default-image-extension: png
+revealjs-plugins:
+  - spotlight
+lightbox: 
+  match: auto
+  effect: fade
+spotlight:
+  size: 50
+  presentingCursor: default
+  toggleSpotlightOnMouseDown: false
+  spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+  echo: false
+editor_options: 
+  chunk_output_type: console
+editor: 
+  render-on-save: true
+---
+
+
+
+## 个人简介{.Small}
+
+:::: {.columns}
+
+::: {.column width="60%"}
+*个人经历*
+
+- 政治[科学]{.red}博士[(University of Iowa)]{.small}
+  - 信息学[(Graduated Certificate in Informatics)]{.small}
+- 清华大学计算社会科学平台[(副主任)]{.small}
+  - 清华数据与治理中心[(副主任)]{.small}
+  - 计算社会科学编程语言证书项目[（创始人）]{.small}
+
+*研究兴趣*：*认知、行为与现代性*
+
+- **W. 数据科学**
+  - 实验室和调查实验
+  - 潜变量分析、网络分析、空间分析
+  - 文本大数据分析、数据可视化
+:::
+
+::: {.column width="40%"}
+*研究领域*
+
+- **W. 心理学**
+  - 政治[认知与行为]{.red}
+  - 政治传播
+  - 身份政治（城乡、司法）
+- **W. 经济学**
+  - 社会经济不平等[感知]{.red}
+- **W. 语言学**
+  - 语言能力的政治影响
+  - 语言政策的[治理功能]{.red}
+
+:::
+
+::::
+
+## 课程概要
+
+:::{style="text-align:center; margin-top: 3em"}
+
+1. 计算社会科学定位与沿革
+1. 计算社会科学原理与应用
+1. 计算社会科学科研实践转化
+1. 国家大数据战略治理实践探索
+1. 计算社会科学与国家安全
+
+:::
+
+# 计算社会科学沿革与概要
+
+## 什么是社会科学 {.scrollable}
+
+> 社会科学是用[科学的方法]{.red}，研究人类社会的种种现象。
+
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="20%"}
+
+- 政治学
+- 经济学
+- 社会学
+- 国际关系
+- 心理学
+- 行政学
+- 军事学
+- 统计学
+- 人类学
+- 民俗学
+- 公共关系学
+- 公共行政学
+- 犯罪学
+- 考古学
+- 教育学
+- 语言学
+- 社会工作
+- 新闻学
+- 传播学
+- 宗教学
+- 图书馆学
+- 区域研究
+- 发展研究
+- 环境研究
+- 性别研究
+- 媒体研究
+……
+
+:::
+
+::: {.column .fragment width="60%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_ss.png){fig-align="center" height=500}
+
+:::
+
+::: {.column .fragment .nonincremental width="20%"}
+
+- 马克思主义理论
+- 法学
+- 历史
+
+:::
+
+::::
+
+
+## 大数据 &rarr; 社会科研
+
+:::{style="text-align:center"}
+什么是**大数据**
+:::
+
+:::: {.columns}
+
+::: {.column width="35%"}
+![@Goldston2008](https://drhuyue.site:10002/sammo3182/figure/css_natureBD.png){fig-align="center" height=500}
+:::
+
+::: {.column width="30%"}
+人类社会的“*快速、大尺度、深层次*”数字化转型
+
+- 社会数字化---[海量]{.red}资源待处理
+- 数据科学---计算机[辅助]{.red}方法
+- 新生现象---[新]{.red}理论、新范式
+:::
+
+::: {.column width="35%"}
+![@ScienceStaff2011](https://drhuyue.site:10002/sammo3182/figure/css_scienceBD.jpg){fig-align="center" height=500}
+:::
+
+::::
+
+:::{.notes}
+Nature column: 
+Science special issue: 
+
+拍字节或拍它字节（Petabyte、PB）是一种信息计量单位，现今通常在标示网络硬盘总容量，或具有大容量的保存媒介之保存容量时使用。
+
+1PB = 1,000 TB (兆) = 1,000,000 GB (十亿)，所以中文的全称是：1千兆
+:::
+
+## 从政治层面理解大数据
+
+- 大数据是以容量大、类型多、存取速度快、应用价值高为主要特征的数据集合，正快速发展为对数量巨大、来源分散、格式多样的数据进行采集、存储和关联分析，从中发现新知识、创造新价值、提升新能力的[新一代]{.red}信息技术和服务业态。（国务院 2015）
+- 数据已成为国家[基础性战略资源]{.red}（十三五）
+- 数据是重要生产要素（十九届四中全会）
+- 加快构建数字技术[辅助政府决策]{.red}机制，提高基于[高频大数据精准动态监测预测预警]{.red}水平。强化数字技术在公共卫生、自然灾害、事故灾难、社会安全等突发公共事件应对中的运用，全面提升预警和应急处置能力。(十四五)
+
+## 大数据优势 [@Stewart2020]
+
+{{< video https://drhuyue.site:10002/sammo3182/video/css_bigdataStrength.mp4 title="Irresistible" height=600 preload="auto" controls allowfullscreen>}}
+
+
+## 大数据特点
+
+:::: {.columns}
+
+::: {.column width="35%"}
+
+> 大数据是指需要新处理模式才能确保更强的决策力、洞察力和流程优化力的海量、高速增长和多样化的信息财富 [@GartnerHiebl2017]
+
+:::
+
+::: {.column width="65%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_bd6v.png){fig-align="center" height=600}
+
+:::
+
+::::
+
+## 以（大）数据为对象的科研
+
+:::{.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.jpg){fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_dsPyramid.png){fig-align="center"}
+
+:::
+
+## 数据科学发展沿革
+
+
+::: {.cell layout-align="center"}
+::: {.cell-output-display}
+![](11_generalApplication_files/figure-revealjs/dsHist-1.png){fig-align='center' width=960}
+:::
+:::
+
+
+:::{.notes}
+
+https://bjt.name/2018/11/18/timeline.html
+
+Information entropy, 1948
+
+由信息论之父 C. E. Shannon 在论文《A Mathematical Theory of Communication 》提出。Shannon 借用热力学的原理解决了 Uncertainty 的测量性问题。（太早，故未在时间轴上体现）
+
+The Future of Data Analysis, 1962
+
+John W. Tukey 也是个人最为崇拜的统计学家（除了祖师爷 Fisher 以外），Tukey 讨论了两个有意思的问题：
+
+统计学和数据分析的关系
+统计学和计算机学的关系
+大家有兴趣可以搜一下原文，感受一下 56 年前大佬的思考深度。
+
+Data science, 1974
+
+Data science 的概念是 Peter Naur 在《Concise Survey of Computer Methods》首次提出，Peter Naur 是计算机科学家，图灵奖的获得者。 在这本书里，Peter Naur 给了偏计算机领域的数据定义：
+
+Data is a representation of facts or ideas in a formalized manner capable of being communicated or manipulated by some process.
+
+Peter Naur 对 computer science 这个词很有意见，建议应该叫做 datalogy 或者 data science，当然和现代 data science 的定义还是差别很大。
+
+Two-Way Communication, 1975
+
+由日本邮政和通信省主导，在这次信息社会普查发现：信息（数据）的传递不是单向的，双向（个性化）的是未来的趋势。
+
+Exploratory Data Analysis, 1977
+
+这个词学统计的应该非常清楚是什么意思，不多讲。Tukey 在 1977 年就提出来这个观点，让我们这些后辈只有佩服的份。
+
+Business Intelligence, 1989
+
+Howard Dresner 赋予了商业智能以现代概念：
+
+concepts and methods to improve business decision making by using fact-based support systems
+
+The First Database Report, 1992
+
+Crystal Reports (水晶报表)，较晚一些从事数据科学的童鞋可能没听过这款产品。想想那是 1992 年，能够在 Windows 上通过连接数据库形成一个数据报告是多么酷的事情。
+
+The World Wide Web Explodes, 1995
+
+互联网技术和应用开始井喷式爆发，我们面临的以及需要优化的问题是人类社会前所未有的，同时提供给了数据科学更多的可能性。
+
+Data Mining and Knowledge Discovery, 1997
+
+聚焦在数据挖掘的权威期刊，包括基础理论、数据挖掘方法、数据挖掘算法、知识发现过程、应用等。Data mining 这个词是表示了从大型数据库中提取信息之意。
+
+S(ACM Software System Award), 1998
+
+S 语言由贝尔实验室的 John Chambers 发明，在 1998 年被授予 ACM 软件系统奖。这是唯一的数据科学领域被授予奖项的系统，它永久的改变了人们分析数据的方式，是探索性数据分析的集大成之作。
+
+Statistical Modeling: The Two Cultures, 2001
+
+Leo Breiman 在该论文中提到：在使用统计模型从数据中提取结论的过程中有两种文化。一个假定数据是由一个特定分布模型生成的。另一个使用算法模型，并把数据结构看作未知的。统计学界普遍致力于仅仅使用针对数据的模型。这种投入产生了无意义的理论、值得怀疑的结论，并让统计学家无法触及大量现实问题。算法模型，在理论与实践中，在统计学之外快速发展。它既可以被应用于庞大复杂的数据集，也可以在小数据集上建立精确信息量大的模型。如果我们这个领域的目标是使用数据解决问题，那么我们需要摆脱对纯粹基于数据模型的依赖，并使用更多样的工具。
+
+Hadoop, 2006
+
+离线分布式计算的基石，且免费，对硬件的要求不高。因为它的存在，所有机构都可以用较小的成本来处理海量的数据。记得 2011 年之后，国内讲大数据如果不讲 Hadoop 就感觉非常不专业的样子。
+
+Data scientist, 2008
+
+Jeff Hammerbacher (Facebook) 和 DJ Patil (LinkedIn) 开始使用数据科学家来描述他们的团队以及工作。从此以后，数据科学家这个名词开始广泛地被提起。
+
+NOSQL, 2009
+
+非关系型数据库，其口号是：
+
+select fun, profit from real_world where relational=false;
+
+Deep Learning, 2015
+
+深度学习其实并不是什么新鲜技术，人工神经网络在 20 世纪 50 年代就出现了，但是受限于算力和要求的数据量，神经网络发展一直相对缓慢。2015 年随着 Google 在语音识别领域精度的极大提高（几项比赛的革命性效果），深度学习再一次火了起来。
+
+:::
+
+## 计算社会科学{.smaller}
+
+> “计算社会科学”这一研究领域正在兴起，人们将在前所未有的深度和广度上[自动]{.red}地收集和利用数据，为社会科学的研究服务。社会计算是指社会行为和计算系统[交叉融合]{.red}而成的一个研究领域，研究的是如何利用计算技术帮助人们进行沟通与协作，如何[利用计算技术研究社会运行的规律与发展趋势]{.red}。
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_cssPaper.png){fig-align="center" height=400}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_davidLazer.jpg){fig-align="center" height=400}
+:::
+
+## 学科交叉
+
+- @LazerEtAl2009： 15位美国学者在*Science*上联合发表里程碑意义文章"Computational Social Science"
+- @Hey2009：“第四范式”，大数据时代的科学研究不再需要模型和假设，而是利用超级计算能力直接分析海量数据发现相关关系即可获得知识
+  - Empirical evidence
+  - Scientific theory
+  - Computational science
+  - Data-intensive research
+- @King2016: 大数据方法将终结传统的定量、定性方法分野
+
+## 计算·社会科学
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_css_cn.png){fig-align="center" height=num}
+
+## 新交叉学科
+
+从海量数据中利用机器学习抽离出有价值的信息
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- 积累海量数据
+- 利用统计和数学知识 + 模式识别技术
+- 发现有意义的新关系、新模式或新趋势
+:::
+
+::: {.column width="50%"}
+- [数据来源拓展]{.red}：文本、图片、视频、空间地理……
+- [工具箱拓展]{.red}:  机器学习
+- [研究问题拓展]{.red}：大规模、复杂问题、新生议题
+
+:::
+
+::::
+
+
+## {background-image="https://drhuyue.site:10002/sammo3182/figure/css_org.png"}
+
+:::{.notes}
+- MIT
+- Harvard: IQSS
+- Princeton: center for statistics and machine learning
+- Stanford: Institute for Research in the Social Science
+- Chicago: masters in computational social science
+- Northeastern University: Lazer Lab
+- Carnegie Mellon University: Center for Computational Analysis of Social and Organizational Systems
+:::
+
+
+# 计算社会科学原理与系统
+
+## 核心特征
+
+范式转换的八个特征
+
+::: {.nonincremental}
+
+1. 数据生成机制：海量非结构化数据、消极数据
+1. 数据代表性：“全量数据”而不是“样本数据”
+1. 数据驱动范式：丰富、高效的方法工具箱
+1. 预测性研究：机器学习提升预测能力
+1. 知识消费：强时效性数据+知识
+1. 开放科学 / 志愿科学共同体
+1. 社会科学知识平民化普及
+1. 良好的组织环境 + 充分的社会需求
+
+:::
+
+## 研究流程
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_techniques.jpg){fig-align="center" height=600}
+
+## 方法树
+
+:::{.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/idea_dataScience.png){fig-align="center"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/vis_measurement.png){.fragment fig-align="center" height=600}
+
+:::
+
+
+## 常用方法
+
+:::{.nonincremental style="text-align:center; margin-top: 2em"}
+
+- 自然语言处理
+  - 音频分析
+  - 视频/图片分析
+- 社会网络分析
+- 空间/时间分析
+- 可视化*
+
+:::
+
+## 自然语言处理(Natural Language Processing)
+
+- 语言（自然语言）是人类获得信息和表达信息的重要载体之一
+  - 计算语言学：NLP是使用自然语言与计算机进行通信的技术——从语料中产生知识
+    - 信息抽取、实体识别、词性标注、句法分析、语音识别、机器翻译、自动文摘、信息检索等
+    - 语言模型：描述自然语言内在规律的数学模型
+    - 向量空间模型(Vector Space Model)、统计语言模型（N-gram）、字符嵌入(word embedding)
+
+## 生成条件
+
+:::: {.columns}
+
+::: {.column width="60%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_nlpSource.png){fig-align="center" height=500}
+:::
+
+::: {.column width="40%"}
+- 大规模文本数据采集；
+- 存储和管理能力增强；
+- 文本分析方法蓬勃发展；
+- 文本资料指数级增长；
+- 通过文本表达的社会意义更广泛。
+
+:::
+
+::::
+
+## 表层语言学分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_survey_openQuestion.png){fig-align="center" height=num}
+
+## 现实与关注
+
+:::{.r-vstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_haze.png){fig-align="center" height=300}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_hazeAttention.png){.fragment fig-align="center" height=250}
+
+:::
+
+:::{.notes}
+
+雾霾天和对于雾霾的关注
+
+:::
+
+## 文化组学
+
+- 指通过电子化文本的量化分析研究[人类行为与文化趋势]{.red}的计算词典学方法，以研究人们使用的语言与词汇，进而揭示其中反应出来的文化现象。
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_googleNgram.png){fig-align="center" height=500}
+
+
+:::{.notes}
+
+“文化组学”一词是2010年创造的新词，由英文中的“文化”（culture）与“组学”（omics）二词合并而成，@MichelEtAl2011 当年《自然》上发表首次提出了该词.
+
+米歇尔与埃登还参与了Google实验室的项目Google Ngram Viewer。这个项目通过n元语法（n-gram）分析Google图书中的数据，以展示语言中的文化模式随时间的变化。
+
+:::
+
+
+## 应用：国家认同
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_usIdentity.png){fig-align="center" height=500}
+
+Google books 1760 - 2011
+
+## 社会语言学
+
+Linguistic Inquiry and Word Count（LIWC）
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_pennebaker.jpg){fig-align="center" height=500}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_pennebakerBook.jpg){fig-align="center" height=500}
+:::
+
+:::{.notes}
+James W. Pennebaker, an American social psychologist. He is the Centennial Liberal Arts Professor of Psychology at the University of Texas at Austin and a member of the Academy of Distinguished Teachers
+:::
+
+## LIWC树
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_liwcTree.png){fig-align="center" height=600}
+
+## 宗教背景与词汇选择
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_liwc.png){fig-align="center" height=600}
+
+
+## 概念化比喻（Conceptual Metaphors)
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_lakoffBook.jpg){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_lakoff.jpg){fig-align="center" height=num}
+:::
+
+:::{.notes}
+an American cognitive linguist and philosopher, best known for his thesis that people's lives are significantly influenced by the conceptual metaphors they use to explain complex phenomena.
+:::
+
+## 应用
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_metaphor.webp){fig-align="center" height=600}
+
+## 语言处理三大挑战
+
+1. 非结构化：文本数据是典型的非结构化数据
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_bazhuayu.jpg){fig-align="center" height=300}
+
+
+2. 高维数据：所有语言的各种可能词语和短语等
+3. 语言复杂性：文本中词语之间复杂且微妙的关系
+
+## 高纬度数据
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_bagOfWords2.jpg){fig-align="center" height=600}
+
+## 处理高纬度数据
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_analysis-method.png){fig-align="center" height=600}
+
+## 应用
+
+:::{.r-hstack}
+![1991](https://drhuyue.site:10002/sammo3182/figure/text_democracy1991.png){fig-align="center" height=600}
+
+![1997](https://drhuyue.site:10002/sammo3182/figure/text_democracy1997.png){fig-align="center" height=600}
+:::
+
+## “一以贯之”
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_democracyCoef.png){fig-align="center" height=600}
+
+## 语言复杂性
+
+- 文本中词语之间复杂且微妙的关系；
+- 词语模糊性和情景敏感性；
+- 一词多义vs多词同义
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_misunderstand.jpeg){.fragment fig-align="center" height=400}
+
+---
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_misunderstand.png){fig-align="center" height=num}
+
+<iframe src="//player.bilibili.com/player.html?aid=100260282&bvid=BV1H7411D7zx&cid=171017279&page=1&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="1000" height="500" > </iframe>
+
+## 建模语言复杂性
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_wordEmbedding.png){fig-align="center" height=num}
+
+:::{.notes}
+- The embedding model GloVe (“Global Vectors”) by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
+- An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
+:::
+
+## 词汇 &rarr; 向量
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_wordEmbedding.webp){fig-align="center" height=600}
+
+## 破拆语言
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_multiMode.jpg){fig-align="center" height=600}
+
+## 机器学习
+
+> 通过计算机编程实现比人工检索更[好]{.red}的效果 [@Samuel2000]。
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_ml.png){fig-align="center" height=num}
+
+:::{.notes}
+Generative pre-trained transformers; GPT
+:::
+:::
+
+::: {.column .fragment width="50%"}
+1. 收集数据
+1. 数据准备
+1. 选择一个模型
+1. 训练
+1. 评估
+1. 参数调整
+1. 预测
+:::
+
+::::
+
+## 深度学习
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_llm.gif){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_llmTree.jpg){.fragment fig-align="center" height=600}
+
+:::
+
+## 应用：从文字到情绪
+
+:::{.r-vstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_sputnik.png){fig-align="center" height=150}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_sputnikPolarity.png){fig-align="center" height=400}
+:::
+
+:::{.notes}
+How much the proposition of the European Gas Demand Reduction Plan on 20 July, 2022 affected Sputnik's coverage of energy issues in the United States and the European Union.
+
+1. No new gas supply contracts with Russia
+1. Replace Russian supplies with gas from alternative sources
+1. Introduce minimum gas storage obligations to enhance market resilience
+
+Sputnik (Russian pronunciation: [ˈsputnʲɪk]; formerly Voice of Russia and RIA Novosti, naming derived from Russian спутник, "satellite") is a Russian state-owned news agency and radio broadcast service. It was established by the Russian government-owned news agency Rossiya Segodnya on 10 November 2014. With headquarters in Moscow, Sputnik maintains regional editorial offices in Washington, D.C., Cairo, Beijing, Paris, Berlin, Madrid, Montevideo and Rio de Janeiro. Sputnik describes itself as being focused on global politics and economics and aims for an international audience.
+:::
+
+## 情感变化曲线
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_sputnikSentiment.png){fig-align="center" height=600}
+
+
+## 音频分析 [@DietrichEtAl2019]
+
+74,158 Congressional floor speeches
+
+![](https://drhuyue.site:10002/sammo3182/figure/text_vocalPitch.png){fig-align="center" height=550}
+
+:::{.notes}
+female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
+:::
+
+
+
+## 视频/图片分析[@YeeEtAl2021]
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_imageCrops.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/css_cropFocus.png){fig-align="center" height=num}
+
+:::{.notes}
+whether Twitter's image cropping has disparate impact on racial or gendered lines by performing an analysis measuring disparate impact based on the fairness notion of demographic parity.
+
+Demographic parity: The intuition behind using demographic parity is that the model should not be favoring representing one demographic group over another, so in cases where the model is forced to choose between two individuals, the rate at which they are cropped out should be roughly equal. Another interpretation is that roughly equal rates of cropping mitigates the representational harm associated with under-representation
+
+Data: WikiCeleb consists of images of individuals who have Wikipedia pages, obtained through the Wikidata Query Service. It contains 4073 images of individuals labeled along with their gender11 identity and ethnic group12 as recorded on Wikidata.
+
+Method: We perform analysis on all six pairs of subgroups across four subgroups (Black-Female, Black-Male, White-Female, and White-Male). On each pair, we sample one image independently and uniformly at random from each of the two groups and attach those two images horizontally (padding black background when images have different heights).16 We run the saliency model on the attached image and determine what image the maximum saliency point lies on. The group from which the image has maximum saliency point is defined to be favored (by the saliency model compared to the other group) in this sampling pair. We repeat the process on this pair of groups 10000 times, and record the ratio of times (or probability) that the first group is favored.
+
+Result: Same as left figure, but in a graph format. Four vertices represent four subgroups, and each arrow is one comparison. The head of the arrow is the less favored group. The x% indicates x% deviation from 50%. For example, White female images are more favored than Black male images with probability 0.635. Each has ±1.0% (after rounding) with a 95% confidence interval.
+:::
+
+## 街景图片分析[@GebruEtAl2017]
+
+:::: {.columns}
+
+::: {.column width="60%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_gebru1.png){fig-align="center" height=600}
+:::
+
+::: {.column width="40%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_gebru2.png){fig-align="center" height=600}
+:::
+
+::::
+
+
+:::{.notes}
+accurately estimate income, race, education, and voting patterns with single-precinct resolution using data from a census of motor vehicles, which enumerated 22 million automobiles in total (8% of all automobiles in the US)； regional level 
+
+:::
+
+## 眼球竞争
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_luPan.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_luPan2.png){.fragment fig-align="center" height=600}
+:::
+
+:::{.notes}
+We find that a large share of trending videos are produced by accounts affiliated with the Chinese government. These videos contain visual characteristics designed to maximize attention such as high levels of brightness and entropy and very short duration, and are more visually similar to content produced by celebrities and ordinary users than to content from non-official media accounts.
+
+Entropy: colorfulness
+:::
+
+
+## 社会网络分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_centralities.png){fig-align="center" height=600}
+
+## 圈子分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_homophily.bmp){fig-align="center" height=600}
+
+## 政府间关系
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_govermentNet.png){fig-align="center" height=600}
+
+## 政党关系 
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_polarizationParty.jpg){fig-align="center" height=600}
+
+:::{.notes}
+美国政党1949-2011
+
+Edges between nodes are drawn if each member agrees with another member more often than the "threshold value" of votes specific to that particular Congress. The threshold value is the number of agreements where any pair exhibiting this number of agreements is equally likely to comprised of two members of the same party (e.g. D-D or R-R), or a cross-party pair (e.g. D-R). 
+:::
+
+## 小世界
+
+![](https://drhuyue.site:10002/sammo3182/figure/sna_smallWorld.bmp){fig-align="center" height=600}
+
+:::{.notes}
+小世界理论认为，尽管人与人之间存在着巨大的距离和社会地理隔离，但通过少数几个中介人（也被称为"中间人"）的连接，任何两个人之间可以通过短暂的关系链相互联系起来。也就是说，社交网络中的任意两个人之间，平均只需要经过几步连接就能够达到。
+
+小世界理论的核心观点是"六度分隔"，也就是著名的"六度空间"概念。这个概念指的是，在一个庞大的人际网络中，任意两个陌生人之间，通过不超过六个中介人的传递，就可以建立联系。也就是说，人与人之间的联系可以通过少数几步传递就达到，这种现象在社会网络中普遍存在。
+:::
+
+## 饭圈
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_fandom.png){fig-align="center" height=600}
+
+## 空间分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_12345pursuits.png){fig-align="center" height=600}
+
+:::{.notes}
+总，服务类，管理类，安保类
+:::
+
+## 时间分析
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_quarantine_wuhan.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_quarantine_yunnan.png){.fragment fig-align="center" height=600}
+:::
+
+:::{.notes}
+通过交通量衡量quarantine效果
+:::
+
+## 时空比较
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_wuhanBefore.png){fig-align="center" height=num}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_wuhanAfter){fig-align="center" height=num}
+:::
+
+## 时空分析
+
+![](https://drhuyue.site:10002/sammo3182/figure/stat_patrioBase9705.gif){fig-align="center" height=600}
+
+## 基于时空的因果推断
+
+![](https://drhuyue.site:10002/sammo3182/figure/idea_closed.gif){fig-align="center" height=600}
+
+## 值得注意
+
+{{< video https://drhuyue.site:10002/sammo3182/video/css_fieldKnowledge.mp4 title="Irresistible" height=600 preload="auto" controls allowfullscreen>}}
+
+
+# 计算社会科学科研实践转化
+
+## 顶层设计
+
+- 2013-09-30：第18届政治局第9次集体学习
+  - 主题：“实施创新驱动发展战略”
+      - 百度创始人兼CEO李彦宏作为创新企业代表讲解了信息技术领域的前沿课题——大数据的发展情况
+  - > [**机会稍纵即逝，抓住了就是机遇，抓不住就是挑战。必须增强忧患意识，紧紧抓住和用好新一轮科技革命和产业变革的机遇，不能等待、不能观望、不能懈怠**。]{.red}
+
+## 2017-12-08：第19届政治局第2次集体学习
+
+- 主题：“实施国家大数据战略”
+- > [大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动，深入了解大数据发展现状和趋势及其对经济社会发展的影响，分析我国大数据发展取得的成绩和存在的问题，推动实施国家大数据战略，加快完善数字基础设施，推进数据资源整合和开放共享，保障数据安全，加快建设数字中国，更好服务我国经济社会发展和人民生活改善。**要审时度势精心谋划超前布局力争主动，实施国家大数据战略，加快建设数字中国。各级干部要懂得用好大数据。**]{.red}
+
+## 2018-10-31: 第19届政治局第9次集体学习
+
+- 主题: “人工智能发展现状和趋势”
+- > [人工智能是新一轮科技革命和产业变革的重要驱动力量，加快发展新一代人工智能是事关我国能否抓住新一轮科技革命和产业变革机遇的战略问题。要深刻认识加快发展新一代人工智能的重大意义，加强领导，做好规划，明确任务，夯实基础，促进其同经济社会发展深度融合，推动我国新一代人工智能健康发展。要**加强人工智能同社会治理的结合，开发适用于政府服务和决策的人工智能系统，加强政务信息资源整合和公共需求精准预测，推进智慧城市建设，促进人工智能在公共安全领域的深度应用，加强生态领域人工智能运用，运用人工智能提高公共服务和社会治理水平。**]{.red}
+
+## 2024-01-31: 第20届政治局第11词集体学习
+
+- 主题：“加快发展新质生产力 扎实推进高质量发展”
+- > [要根据科技发展新趋势，优化高等学校学科设置、人才培养模式，为发展新质生产力、推动高质量发展**培养急需人才**。要健全要素参与收入分配机制，激发劳动、知识、技术、管理、资本和**数据等生产要素活力**，更好体现知识、技术、人才的市场价值……]{.red}
+
+
+## 大数据驱动的国家治理现代化
+
+- 2015年《促进大数据发展行动纲要》、国家大数据战略（十三五规划）
+- 数字中国战略（十九大）
+- 数据是重要生产要素（十九届四中全会）
+- 数字政府：经济与社会数字化的基础设施（十四五规划）
+
+> “大数据发展日新月异，我们应该审时度势、精心谋划、超前布局、力争主动”，要“运用大数据升国家治理现代化水平”，要“[利用大数据平台，分析风险因素，提高感知、预测、防范能力]{.red}”;要“[运用大数据促进保障和改善民生，利用‘互联网+N’推进教育、就业、社保、医药卫生、住房、交通等领域大数据普及应用。]{.red}” [(*十九届中央政治局专门就实施大数据国家战略的第2次集体学习*)]{.small}
+
+## 国家大数据战略
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_bdStrategy.png){fig-align="center" height=600}
+
+## 《数字中国建设整体布局规划》
+
+2023-02-27, 中共中央 国务院
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_digitalChina.png){fig-align="center" height=550}
+
+
+## 拥有大数据发展的世界视野
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/css_xiBRICS.jpg){fig-align="center" height=400}
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_xiBD_importance.jpg){fig-align="center" height=600}
+:::
+
+
+# 国家大数据战略治理实践探索
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_cdg.jpg){fig-align="center" height=100}
+
+## 治理与军队发展的高站位
+
+:::{style="text-align:center; margin-top: 4em"}
+> [高层机关和高级干部要带头解放思想，创新工作方式，**以治理的理念推进各项工作，增强系统治理、依法治理、综合治理、源头治理本领**。要高度重视基层治理，尊重官兵主体地位和首创精神，**推动基层建设全面进步、全面过硬**。要把军事治理同改革和法治有机结合起来，巩固拓展国防和军队改革成果，深化军事立法工作，强化法规制度实施和执行监督，发挥好改革的推动作用，用好法治这个基本方式，更好推进军事治理各项工作。]{.red}[（第二十届中共中央政治局第7次集体学习，2023-07-24，“全面加强军事治理 以高水平治理推动我军高质量发展”）]{.small}
+:::
+
+## 计算社会科学融入治理实践案例
+
+:::{.large style="text-align:center; margin-top: 4em"}
+- 城感通：城市治理及公共决策风险防范系统
+- 社情通：社会治理效能提升的智能化解决方案
+:::
+
+
+## 城感通：城市治理及公共决策风险防范系统
+
+![物感 + 人感](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_smartCity.png){fig-align="center" height=300}
+
+建立城市社会风险预警处置平台，加强城市应急管理与风险管控工作。通过进一步拓展完善“一网通管”体系，汇集政府监测数据、民生反馈数据和社会舆情数据，实现突发事件实时感知，舆论整体态势预研预控，转办督办工作方案的制定。促进城市治理、智慧城市建设、风险防范体系建设，提升政务机构服务响应和满意度。
+
+## 突发事件感知
+
+- 舆论危机发现要早，尽量在苗头期迅速处置
+- 舆论环境瞬息万变，须及时掌握变化情况
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_emergency.png){fig-align="center" height=450}
+
+## 感知途径和作用
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_bars.png){fig-align="center" height=600}
+
+## 多模态感知诊断
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_multiMode.png){fig-align="center" height=600}
+
+:::{.notes}
+2020-5-13 11:28:01
+
+上海 虹口区 广灵四路水木年华花园小区12号 发生了 火灾
+
+[121.46241,31.286421]
+:::
+
+## 舆论态势感知
+
+![通过系列指数全面呈现某个区域整体舆论环境](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_panel.png){fig-align="center" height=500}
+
+:::{.notes}
+- 舆论负面情绪淤积风险: 某领域、某地域非常态小事件聚集
+- 市民主要关注点、诉求点分布
+- 外界舆论评价及情绪反馈
+:::
+
+## 舆论感知指数化
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_index.png){fig-align="center" height=600}
+
+## 指数搭建
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_indexConstruct.png){fig-align="center" height=600}
+
+## 服务搭建
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_path.png){fig-align="center" height=600}
+
+## 转办督办工作台
+
+![舆情事件风险等级、信息分类、组织结构设置均可自由配置](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_transfer1.png){fig-align="center" height=600}
+
+## 处置结果大屏展示
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_chenggan_transfer2.png){fig-align="center" height=600}
+
+
+## 社情通：社会治理效能提升的智能化解决方案
+
+[打造基层治理矛盾感知与风险化解平台，助力地方精准施策与精细管理，提升基层社会治理效能。]{.red} 打造“区级-街道-社区-网格-小区”五级联动一体化信息处置平台，建设基层综合业务系统，通过建设智能政务客户端、政务引导机器人、政务一体化办理机等多端为基层治理提供智能化、精准化服务，实现基层治理服务智能化运营，提升居民政务体验满意度，提升基层治理的精细化、数字化、智能化。
+
+- 社情民意诉求：12345诉求数据、网络舆情数据等
+- 治理资源诉求：人员、资金、空间等
+- 数据质量：事项分类、时间颗粒度、空间颗粒度、诉求内容完整度和准确度
+- 数据特征：实时性、追踪性、穿透性
+
+:::{.notes}
+巨大数据优势
+:::
+
+## 以街道为基础层级的精确治理
+
+:::: {.columns}
+
+::: {.column width="50%"}
+基于数据源特性，进行分类数据源平台整合，汇同新浪微博等社交媒体数据，形成[街道社会治理大数据集]{.red} (成果：201908-202108历史性数据)。
+
+1. 市民民生反馈平台数据源——某市12345平台
+2. 政府网民互动平台数据源——网络论坛+公众监督
+3. 公众信访服务平台数据源——阳光信访+线下来访+领导信箱（市长、园区主任、园区书记）
+
+:::
+
+::: {.column width="50%"}
+![技术框架](https://drhuyue.site:10002/sammo3182/figure/css_sheqing_framework.png){fig-align="center" height=550}
+:::
+
+::::
+
+## 应用分析指标体系
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_sheqing_system.png){fig-align="center" height=600}
+
+## 全景分析 + 风险感知
+
+在集合层次上发现民生诉求治理难易的地区差异与时间周期特征，通过大数据智能筛选方式，形成诉求扬言风险指数，建立风险指数公式。
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_sheqing_risk.png){fig-align="center" height=500}
+
+:::{.notes}
+全景分析： 民生诉求加权指基于民生诉求的渠道来源，建立民生诉求加权指数，并在集合层次上发现民生诉求治理难易的地区差异与时间周期特征。
+
+风险感知：项目组通过大数据智能筛选方式，对各个渠道源诉求进行筛查，判定扬言工单，并根据扬言工单的渠道源、诉求内容、诉求方式、诉求人特质和扬言关键词等进行加权赋值，形成诉求扬言风险指数，建立风险指数公式
+
+:::
+
+## 清河实验2.0
+
+- 利用微信平台方式，征求居民对于公共空间改善的意见，并搜集有效的提案，为街道的公共空间改善提出具体方案与建议。
+- 打造一个居住工作环境上“有品质”、民生关怀上“有温度”、街区治理创新上“有活力”的 “人文新清河”
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_sheqing_qinghe.png){fig-align="center" height=400}
+
+:::{.notes}
+“清河实验”的名称不是笔者发明的，社会学历史上的“清河实验”可以追溯至20世纪20年代末至30年代，当时的社会学家杨开道、许仕廉先生在北平西北郊外清河镇开展了乡村建设实验，命名为“清河实验”。1937 年，由于日本军队占领北平，老一代的清河实验就此中断。
+
+新清河实验：2014年由清华大学的李强教授和他的社会学团队发起的一项社区研究和社会实验。这项实验涉及到基层社区治理体制、社区空间改造、社区民生改善、社区社会组织以及社区物业管理实验等多个方面。他们的目标是对社区进行干预实验，既提供了学术研究的心得，也为学生们完成学位论文提供了社会实验环境。
+:::
+
+# 计算社会科学与国家安全
+
+## 宏观安全：战略资源
+
+:::: {.columns}
+
+::: {.column width="70%"}
+![](https://drhuyue.site:10002/sammo3182/figure/css_xiBD_security.jpg){fig-align="center" height=600}
+:::
+
+::: {.column width="30%"}
+- 战略属性
+  - 体量
+  - 属性
+- [分析价值]{.red}
+:::
+
+::::
+
+
+## 微观安全：认知渗透
+
+![](https://drhuyue.site:10002/sammo3182/figure/css_security.jpg){fig-align="center" height=600}
+
+:::{.notes}
+https://mp.weixin.qq.com/s/xsg7Vfs9oBRLxDBFzLFEIg
+
+在美国国防部2023年度财政预算中，赫然出现了一个以前鲜为人知的机构“影响力与认知管理办公室”（Influence and Perception Management Office），简称IPMO。这是一个很多人从未听说过的机构，实际上美国官方也几乎从未披露过与该机构相关的信息。
+
+据美国国防部2023年度财政预文件显示，IPMO的主要任务是：运用广泛的运营能力来应对当前大国竞争，针对关键对手制定影响力战略，指导下属机构开展与影响力有关的行动。
+
+美国国防部军事及相关术语词典中给出的定义是：通过向外国受众、情报系统和各级领导人传达特定信息，影响其情绪、动机、客观推理，使事态朝着有利于发起者预期的方向发展，认知管理可以通过多种方式将真相与掩护和欺骗及心理干预结合起来。
+
+所谓“心理干预”，美国国防部也给出了明确的定义：通过向外国受众传达特定信息，并最终达到影响外国政府、组织、团体行为的效果。心理操作的目的是诱导或推动外国人的的态度和行为朝着有利于发起者的方向发展。
+:::
+
+
+## 可能的应用场景
+
+
+1. **数据辅助决策**：分析大数据集以发现模式和趋势，根据历史数据优化部署或供应链。
+2. **社交网络分析**：社交网络分析通信、动员、组织网络，帮助识别关键节点和脆弱性。
+3. **自然语言处理**：诊断认知动向，推动管理现代化、高效化。
+4. **数字追踪技术**：追踪内部信息，判断潜在外部威胁和渗透。
+5. **情景反应预判**：人感信息纳入，情境反应预估、预备、预防
+
+
+# 感谢关注，欢迎交流 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+[<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg">  <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>&nbsp; sammo3182](https://github.com/sammo3182)
+
+[<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg">  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>  <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg">  <circle cx="12" cy="12" r="10"></circle>  <line x1="2" y1="12" x2="22" y2="12"></line>  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+:::
+
+## 参考文献
