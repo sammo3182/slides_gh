@@ -1,0 +1,720 @@
+---
+title: | 
+  | Perceiving 
+  | Economic Inequality
+subtitle: "文化心理学研究中心国际暑期学校"
+date: "2025-07-27"
+
+author: 
+    - Yue Hu
+institute:
+    - School of Social Sciences, Tsinghua University
+
+bibliography: p_inequality_compare.bib
+
+format: 
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../css/goldenBlack.scss
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        title-slide-attributes:
+            data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+            data-background-size: 250px   
+            data-background-position: top 10% right 5%
+        default-image-extension: png
+revealjs-plugins:
+    - spotlight
+lightbox: 
+    match: auto
+    effect: fade
+spotlight:
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+editor:
+    render-on-save: true
+    chunk_output_type: console
+---
+
+```{r}
+#| include: false
+#| label: setup
+
+library(pacman)
+
+p_load(
+    "icons",
+    "ineq",
+    "tidyverse",
+    "drhutools"
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18), 
+  axis.title = element_text(size = 22), 
+  axis.text = element_text(size = 18)
+)
+```
+
+
+## Overview
+
+- What's economic inequality?
+- Why should you care about economic inequality?
+- Who builds your minds of inequality?
+
+# What's economic inequality
+
+Objective economic inequality vs. Perceptive inequality
+
+## Are we living in an (economically) unequal world?
+
+How do you know? 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*Common measures*
+
+- S80/S20 Ratio: The richest 20% / the poorest 20%. 
+- Palma Ratio: The richest 10% / the poorest 40%.
+- [Gini Coefficient:]{.fragment .highlight-red} The cumulative percentage of total income / the cumulative percentage of the population, starting from the poorest
+
+:::
+
+::: {.column .fragment width="50%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/gini.gif){fig-align="center" height=400}
+
+:::
+
+::::
+
+## Illustration
+
+```{r}
+#| label: fakeData
+
+create_society_from_quintiles <- function(quintile_shares, n_population = 1000, total_income = 50000000) {
+  
+  # Check that quintile shares sum to 1 (or 100 if in percentage)
+  if (sum(quintile_shares) > 1.1) quintile_shares <- quintile_shares / 100
+  if (abs(sum(quintile_shares) - 1) > 0.01) stop("Quintile shares must sum to 1 or 100.")
+  
+  # Calculate income for each quintile
+  quintile_incomes <- total_income * quintile_shares
+  
+  # Number of people per quintile
+  n_per_quintile <- n_population / 5
+  
+  # Calculate average income within each quintile
+  avg_incomes_per_quintile <- quintile_incomes / n_per_quintile
+  
+  # Generate individual incomes with some random noise around the quintile average
+  income_data <- c()
+  for (i in 1:5) {
+    # Generate incomes from a normal distribution centered on the quintile's average
+    quintile_group_incomes <- rnorm(
+      n = n_per_quintile,
+      mean = avg_incomes_per_quintile[i],
+      sd = avg_incomes_per_quintile[i] * 0.15 
+    )
+    # Ensure no income is negative
+    quintile_group_incomes[quintile_group_incomes < 0] <- avg_incomes_per_quintile[i] * 0.1
+    income_data <- c(income_data, quintile_group_incomes)
+  }
+  
+  return(round(income_data))
+}
+
+# Source: Approximate data from World Bank/OECD
+quintiles_slovenia <- c(0.093, 0.139, 0.175, 0.224, 0.369) # Low Inequality
+quintiles_usa <- c(0.036, 0.088, 0.141, 0.226, 0.509)      # Medium Inequality
+quintiles_safrica <- c(0.025, 0.051, 0.092, 0.179, 0.653)   # High Inequality
+
+# Data for the low inequality society (modeled on Slovenia)
+income_low <- create_society_from_quintiles(quintiles_slovenia)
+
+# Data for the medium inequality society (modeled on the USA)
+income_medium <- create_society_from_quintiles(quintiles_usa)
+
+# Data for the high inequality society (modeled on South Africa)
+income_high <- create_society_from_quintiles(quintiles_safrica)
+
+# --- Step 2: Create a function to calculate all measures ---
+
+calculate_metrics <- function(income, society_name) {
+  # Gini Coefficient
+  gini <- ineq(income, type = "Gini")
+  theil <- ineq(income, type = "Theil")
+
+  # Sort income to find quantiles
+  income_sorted <- sort(income)
+  n <- length(income_sorted)
+
+  # Palma Ratio (Top 10% share / Bottom 40% share)
+  income_top10_share <- sum(income_sorted[floor(n * 0.9):n]) /
+    sum(income_sorted)
+  income_bottom40_share <- sum(income_sorted[1:floor(n * 0.4)]) /
+    sum(income_sorted)
+  palma <- income_top10_share / income_bottom40_share
+
+  # S80/S20 Ratio (Top 20% total income / Bottom 20% total income)
+  income_top20 <- sum(income_sorted[floor(n * 0.8):n])
+  income_bottom20 <- sum(income_sorted[1:floor(n * 0.2)])
+  s80_s20 <- income_top20 / income_bottom20
+
+  # Return a data frame
+  data.frame(
+    Society = society_name,
+    Gini = gini,
+    Palma = palma,
+    S80_S20 = s80_s20,
+    Theil = theil
+  )
+}
+
+# Calculate metrics for each society
+metrics_low <- calculate_metrics(income_low, "Low Inequality")
+metrics_medium <- calculate_metrics(income_medium, "Medium Inequality")
+metrics_high <- calculate_metrics(income_high, "High Inequality")
+
+# Combine into a single data frame
+all_metrics <- bind_rows(metrics_low, metrics_medium, metrics_high)
+
+# --- Step 3: Visualize the results with ggplot2 ---
+
+# First, visualize the income distributions
+income_df <- data.frame(
+  Income = c(income_low, income_medium, income_high),
+  Society = factor(
+    rep(
+      c("Low Inequality", "Medium Inequality", "High Inequality"),
+      each = 1000
+    ),
+    levels = c("Low Inequality", "Medium Inequality", "High Inequality")
+  )
+)
+
+# Now, prepare data for comparing the inequality metrics
+metrics_long <- all_metrics %>%
+  pivot_longer(
+    cols = c(Gini, Palma, S80_S20, Theil),
+    names_to = "Measure",
+    values_to = "Value"
+  )
+
+```
+
+::: {.r-stack}
+
+```{r}
+#| label: fakeDist
+
+ggplot(income_df, aes(x = Income)) +
+  geom_density() +
+  scale_x_log10(labels = scales::comma) + # Use log scale for better visualization
+  labs(
+    x = "Income (Log Scale)",
+    y = "Density",
+    title = "Simulated Income Distributions"
+  ) +
+  facet_grid(cols = vars(Society))
+```
+
+::: {.fragment}
+
+```{r}
+#| label: fakeStats
+
+ggplot(metrics_long, aes(x = Measure, y = Value, color = Society)) +
+  geom_point(position = position_dodge(width = 0.4), size = 4, alpha = 0.8) +
+  facet_wrap(~ Measure, ncol = 4, scales = "free") +
+  labs(
+    x = "Inequality Measure",
+    y = "Calculated Value",
+    title = "Simulated Indicators of Economic inequality"
+  ) +
+    scale_color_gb() +
+    theme(legend.position = "bottom")
+```
+
+:::
+
+:::
+
+## Ready for the real world?
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_swiid.png){fig-align="center" height=600}
+
+## Puzzling real world
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_china.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_china_perceptiveObjective.jpg){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_china_trust.png){.fragment fig-align="center" height=600}
+
+:::
+
+# Why should you care
+It affects your mind
+
+## It changes your belief in dream
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_pursuitOfHappiness.jpg){fig-align="center" height=600}
+
+:::{.r-hstack .fragment}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_meritocracy.jpg){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/mod_zootopia.gif){.fragment fig-align="center" height=600}
+
+:::
+
+:::
+
+
+:::{.notes}
+
+Meritocracy is the key for the American Dream and the hope of the poor
+
+Self-reinforce: relative power theory
+Self-negating: conflict theory
+
+:::
+
+
+
+## Inequality &rarr; meritocracy
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+![Conflict theory](https://drhuyue.site:10002/sammo3182/figure/mod_hulk.gif){width=500}
+
+H<sub>0</sub>: Poor people living with high inequality believe in meritocracy [less]{.red}.
+
+:::
+
+::: {.column .fragment width="50%"}
+
+![Relative power theory](https://drhuyue.site:10002/sammo3182/figure/mod_hypnosis.gif){width=500}
+
+H<sub>1</sub>: Poor people living with high inequality believe in meritocracy [more]{.red}.
+
+:::
+
+::::
+
+:::{.fragment .r-fit-text style="text-align:center"}
+
+*Self-negating* vs. *Self-reinforcing*
+
+:::
+
+:::{.notes}
+
+The issue matters since it relates to the issue of how a society reproduce itself
+
+:::
+
+
+## Let the data talk
+
+*Data*: [Pew survey](https://www.pewresearch.org/), national data of the U.S. (1999--2012)
+
+:::{.fragment .nonincremental}
+*Target*
+
+> Which statement do you agree:
+
+- Most people who want to get ahead can make it if they’re willing to work hard
+- Hard work and determination are no guarantee of success for most people.
+
+:::
+
+:::{.fragment}
+*Model*
+
+$$
+\begin{align}
+\color{red}{Reject}\thinspace Meritocracy_{ij} =\boldsymbol{X\gamma} &+ \gamma_{10}Income_{ij} + \gamma_{01}Inequality_{j}\\
+                      &+ \gamma_{11}Inequality_{j} \times Income_{ij} + u_{ij}
+\end{align}
+$$
+:::
+
+
+## Results
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/mod_SH_plot2.png){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/spec_interaction2.jpg){.fragment fig-align="center" height=600}
+:::
+
+
+
+## It changes your view of the power
+
+In four ways:
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+::: {.r-vstack}
+
+![Impartial governance](https://drhuyue.site:10002/sammo3182/figure/inequality_collusion.jpg){fig-align="center" height=250}
+
+![Government Non-responsiveness](https://drhuyue.site:10002/sammo3182/figure/inequality_nonresponse.jpg){.fragment fig-align="center" height=250}
+
+:::
+
+:::{.notes}
+
+Impartial governance: 
+
+- The damage of economic disparities on political equality in democracies has been well documented in the literature [@SchlozmanEtAl2013]. 
+- Formal and informal institutions exist in non-democracies to convert economic resources into political influence and favorable treatment. 
+- Wealthy Chinese private entrepreneurs form extensive connections with local government officials to gain privileges [@ChenDickson2010]. 
+
+Government Non-responsiveness: 
+
+- Substantial evidence indicates that economic inequality reduces social capital and generates distrust and social conflicts. 
+- Class conflict theory suggests that in highly unequal societies, people's perceptions of economic positions on the social ladder are accentuated [@KrausEtAl2013]. 
+- Low levels of social capital and accentuated social conflicts make governance difficult as @BaldwinHuber2010 showed that income differences make an agreement over which public goods to provide more difficult, therefore have a negative relationship with public goods provision [@EppJennings2020]. 
+
+:::
+
+:::
+
+::: {.column width="50%"}
+
+::: {.r-vstack}
+
+![Judicial Injustice](https://drhuyue.site:10002/sammo3182/figure/jiayucun.jpg){.fragment fig-align="center" height=250}
+
+![Anti-Corruption Inadequacy](https://drhuyue.site:10002/sammo3182/figure/inequality_anticorruption.jpg){.fragment fig-align="center" height=250}
+
+:::
+
+
+:::{.notes}
+
+Judicial Injustice:
+
+1. greater inequality implies that the well-off have more resources to control the legal apparatus while the poor are more disadvantaged.
+1. the advantaged are motivated to attempt such control because of intensified social conflicts. 
+
+一女二卖引发的人命官司
+
+　　一个拐子，打算将拐来的丫头出卖。被拐卖的丫头原名叫英莲，是葫芦庙附近望族甄士隐家唯一的千金。
+
+　　最先买这个丫头的人叫冯渊，是本地一个小乡宦的儿子。冯渊自幼父母双亡，又无兄弟，一个人守着点薄产过日子。他看上了这个丫头，誓要把她买来作妾。冯渊与拐子约定好三日后交人。然而，这个拐子又把丫头卖给了有权有势的薛家，薛蟠见丫头长得不错，也立意要买下。拐子打算卷了两家的银子，再逃往省外。谁知道没有走掉，被两家拿住殴打。
+
+　　两家都不肯收回银子，都想要这个丫头。薛蟠倚财仗势，喝令手下的人把冯渊打了个稀烂。抬回家三日后，冯渊就死了。薛蟠仍然是无拘无束，到处游荡，视人命官司为儿戏，以为花点钱就可以了事。
+
+　　冯家的人不服，四处告状。告了一年，却没有人出来主持公道。最后告到刚任职的贾雨村处，方才受理了该官司。贾雨村原是寄宿在葫芦庙中的一个穷酸书生，幸得甄士隐援助路费，赴京赶考中了进士任了县太爷。因"贪酷之弊""恃才侮上"被参革职。后到林家做了黛玉的老师，得黛玉之父林如海推荐给荣国公之后贾政，贾政又竭力协助，得以至金陵应天府任职。
+
+　　贾雨村听完冯家人的陈述后，大怒道："打死人命就白白的走了，再拿不来的！"于是，贾雨村马上命令官差将凶犯缉拿归案。
+
+　　正要签发令状之时，有个门子向贾雨村使眼色，随后贾雨村宣布退堂，与这个门子进密室商谈。原来这个门子与贾雨村系旧相识，曾经是葫芦庙的僧人，后来还俗做了官府的一个门子。
+
+　　门子对贾雨村说，凡是来本省做官的，都要抄一张本省的"护官符"。雨村忙问："何为‘护官符’？"门子说，就是记载本省最有权势、极富极贵的大乡绅的一个单子。如果来本地做官的人触犯了这样的人家，官爵性命都难保。这命仆人打死冯渊的薛家，是本地四大家族之一，这四大家族皆连络有亲，一损皆损，一荣皆荣，扶持遮饰，皆有照应。老爷如今拿谁去？
+
+　　贾雨村听完门子的话后，就笑问："如你这样说来，却怎么了结此案？"
+
+　　门子告诉贾雨村，明日升堂时，老爷只管虚张声势，签发文书拿人。原凶自然是拿不来的，可让薛家的人报个薛蟠已经暴病身亡了，然后判点钱给冯家，就把此事了结了。
+
+　　第二天开庭时，贾雨村见冯家人口稀疏，只是想多要些钱，便胡乱判断，将案子了结了。
+
+Anti-Corruption Inadequacy:
+
+When inequality leads to widespread corruption, citizens doubt governments' intentions and abilities to combat corruption and perceive governments as incompetent to address the problems of the system. 
+
+人言包相是铁面，却原来官官相护有牵连
+
+:::
+
+:::
+
+::::
+
+
+## The Chinese Case
+
+:::: {.columns}
+
+::: {.column width="50%"}
+Data:
+
+*Chinese Household Finance Survey* (CHFS) 2013
+
++ 28,141 households from 29 provinces 
++ Representative income data for Gini coefficient
+
+*China Urban Governance Survey* (CUGS) 2015
+
++ 3,513 from 50 prefectures 
++ Later than CHFS
++ Political perceptions
+:::
+
+::: {.fragment .column width="50%"}
+
+Measurement:
+
+- Governance &rarr; Perceptions of government equality in treating citizens
+- Responsiveness &larr; External political efficacy
+- Justice &larr; Trust in the courts’ and procuratorates’ fairness
+- Anti-corruption &larr; Satisfaction of anti-corruption
+
+
+Method: *Causal mediation analysis*
+
++ Multi-mediator estimation
++ central and local governments
+
+:::
+
+::::
+
+:::{.notes}
+
+Imai 2014, mediation analysis for causal mechanism and non binary treatment
+
+:::
+
+
+## Results
+
+![](https://drhuyue.site:10002/sammo3182/figure/mediation.png){fig-align="center" height=550}
+
+## A quick wrapup
+
+- Economic inequality is a big deal
+  - A world trend
+  - Many puzzles
+
+::: {.fragment}
+
+- Economic inequality affects your mind
+  - @SoltEtAl2016;@SoltEtAl2017
+    - Economic inequality makes poor people believe in meritocracy more
+    - Economic inequality does not bring more class consciousness
+  - @JinEtAl2024
+    - *Economic* inequality leads to feelings of *political* inequality, which corrode the trust of the power
+
+:::
+
+
+# Who builds your inequality perceptions
+
+## Social comparison
+
+:::{.r-hstack}
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_fourWorlds.webp){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_wallCollapse.webp){.fragment fig-align="center" height=600}
+:::
+
+
+:::{.notes}
+
+China's gini has been above 0.4 since 2000, and largely remain stable after layoffs in state-owned enterprises, natural diseases, global finaicial crisis, and COVID-19.
+
+The social volcano has not erupted yet. Why? 
+
+*Social volcano*: Escalating economic inequality &rarr; social unrest &rarr; shaking regime stability [@He2003b] 
+
+Made by DALL·E 3, OpenAI
+
+The four worlds theory: people don't compare
+
+The urbanization and social media make people compare, what may happen?
+
+:::
+
+## Comparison &rarr; Perception
+
+> There exists, in the human organism, a drive to evaluate his opinions and abilities. The person will do this by [comparing himself with others]{.red}. [@Festinger1954, p. 117]
+
+:::{.fragment}
+
+- &uarr; comparison &rarr; discontent [@Crosby1976; @Gurr2015]
+- &darr; comparison &rarr; self-esteem [@Wills1981; @HopkinsBilimoria2008; @GibbonsGerrard1989]
+
+:::{.callout-important}
+
+## Comparison
+
+$H_{1.1}$: &uarr; comparison &rarr; perceived inequality [&uarr;]{.red} &rarr; redistribution support [&uarr;]{.red}
+
+$H_{1.2}$: &darr; comparison &rarr; perceived inequality [&darr;]{.green} &rarr; redistribution support [&darr;]{.green}
+
+:::
+
+:::
+
+## Institutional conditions
+
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_riceBowl.webp){fig-align="center" height=500}
+
+
+$H_{3}$: Public sector employees &rarr; perceived inequality
+
+
+
+## Experimental Design
+
+:::: {.columns}
+
+::: {.column width="70%"}
+> [In Chinese] Please imagine the individuals in Chinese society who are the [(worst/best) off]{.red}---those who have the (least/most) wealth, (lowest/highest) education level, and (least respected/most respected) jobs. Specifically, [consider how you differ from these individuals]{.red} in terms of your own income, educational background, and job status. 
+:::
+
+::: {.column width="30%"}
+![](https://drhuyue.site:10002/sammo3182/figure/macArthorLadder.jpg){fig-align="center" height=600}
+:::
+
+::::
+
+
+:::{.notes}
+
+Participants in the control group will be asked to imagine conversing with individuals who have similar income, education levels, and social status as themselves, and to reflect on what topics might arise in such a conversation.
+
+:::
+
+
+## Social comparisons does "not" make a difference
+
+:::{.r-stack}
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_atePerception.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/inequality_atePolicy.png){.fragment fig-align="center" height=600}
+:::
+
+
+
+## Until seperating being and being not co-opted
+
+:::{layout="[[1, 1], [1,1,1]]"}
+
+![Low-Dibao](https://drhuyue.site:10002/sammo3182/figure/Lowincome_Dibao_Policy.png){fig-align="center" height=220}
+
+![Low-Unemployment](https://drhuyue.site:10002/sammo3182/figure/Lowincome_Unemployment_Insurance.png){fig-align="center" height=220}
+
+![Middle-Dibao](https://drhuyue.site:10002/sammo3182/figure/Middleincome_Dibao_Policy.png){fig-align="center" height=220}
+
+![High-Dibao](https://drhuyue.site:10002/sammo3182/figure/Highincome_Dibao_Policy.png){fig-align="center" height=220}
+
+![High-Pension](https://drhuyue.site:10002/sammo3182/figure/Highincome_Retirement_Pension.png){fig-align="center" height=220}
+
+:::
+
+:::{.notes}
+
+Being in danwei reduce low-income people's support of dibao and pension (?) in upward comparison, increase their support of unemployment insurance when downard comparison
+
+Being in the danwei, upward and downward comparison increase the support of dibao of middle class;
+
+Being in the danwei, reducing high-income earners' support of dibao; increase their support of pension
+
+:::
+
+## Take-home points
+
+- What's economic inequality?
+  - It's an economic issue, but highly conditioned on the sociopolitical conditions
+
+::: {.fragment}
+
+- Why should you care about economic inequality?
+  - It changes your beliefs of dreams and trust of the power
+
+:::
+
+::: {.fragment}
+
+- Who builds your minds of inequality?
+  - People do not perceive inequality the same through comparisons
+    - Not only because of their economic but institutional differences
+
+:::
+
+
+
+# Thank you {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("mail")`&nbsp; yexy23@mail.tsinghua.edu.cn](mailto:yexy23@mail.tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+
+:::
+
+## Reference
+
+::: {#refs}
+:::
+
+# Appendix {.appendix visibility="uncounted"}
+
+## Measurement of Social Comparison (CVS 2021, N = 4,102)
+
+:::{.r-stack}
+
+- Outcome
+    - Inequality perception: income distribution fairness (1--4)
+    - Preference in redistribution policies
+        - Minimum subsistence allowance (*dibao*) &larr; benefit the [poor]{.green}
+        - Unemployment insurance &larr; benefit the [poor]{.green}
+        - Educaiton loans &larr; benefit the [middel]{.blue}/[poor]{.green}
+        - Pension &larr; benefit the [middel]{.blue}/[rich]{.red}
+- Income: Low-middle-high ([official categorization](https://www.stats.gov.cn/english/PressRelease/202102/t20210228_1814177.html))
+- Co-optation: governmental or SOE employed
+- Control: 
+    - Gender, age, education, urban/rural, party member
+    - GDP, GDP growth rate, population, city-level Gini
+:::
+
+
+:::{.notes}
+
+the per capita disposable income of low-income group reached 7,869 yuan, the lower-middle-income group 16,443 yuan, the middle-income group 26,249 yuan, the upper-middle-income group 41,172 yuan and the high-income group 80,294 yuan. 
+
+:::
