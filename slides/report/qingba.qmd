@@ -74,6 +74,8 @@ theme_update(
   strip.text = element_text(size = 20)
 )
 
+use("dplyr", c("filter", "select")) # require R 4.5.0
+
 ```
 
 ## 基本情况
@@ -152,7 +154,7 @@ theme_update(
 
 ::: {.column width="55%"}
 
-![](https://drhuyue.site:10002/sammo3182/figure/qingba_frontpage.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/qingba_frontpage.png){fig-align="center" height=500}
 
 :::
 
@@ -177,20 +179,17 @@ theme_update(
 ::: {.column width="60%"}
 
 - **机制**：解构经济不平等影响政治合法性机制，揭示[结构影响行为的认知机制]{.red}，为在高经济不平等状况下维持社会政治稳定有序提供借鉴。[（POQ 2025；《公共行政评论》 2022等）]{.small .navy}
-- **作用**：挖掘[治理工具的认知塑造效用]{.red}，揭示纪检监察、民情疏导、城市管理等重要领域治理过程中的潜藏问题，并提供破解思路 [（*Journal of Chinese Political Science* 2022；*Journal of Contemporary China* 2023等）]{.small .navy}
+- **作用**：挖掘[治理工具的认知塑造效用]{.red}，揭示纪检监察、民情疏导、城市管理等重要领域治理过程中潜藏问题，并提供破解思路 [（*Journal of Chinese Political Science* 2022；*Journal of Contemporary China* 2023等）]{.small .navy}
 - **比较**：基于144个国家30余年跨时空比较，从认知能动性角度理解政治发展多样性成因，从[鸟瞰人类社会]{.red}高度理解民意与制度关系。[（APSR 2024；*Research & Politics* 2025等）]{.small .navy}
 
 :::
 
 ::: {.column width="40%"}
 
-::: {.r-vstack}
-
-![](https://drhuyue.site:10002/sammo3182/figure/qingba_poq.png){fig-align="center" height=250}
-
-![](https://drhuyue.site:10002/sammo3182/figure/qingba_pub_cognition.jpg){fig-align="center" height=350}
-
-:::
+<div style="display: flex; gap: 0; margin: 0; padding: 0;">
+  <img src="https://drhuyue.site:10002/sammo3182/figure/qingba_pub_cognition.jpg" style="width:500px; height:300px; margin:0; padding:0; border:0;" />
+  <img src="https://drhuyue.site:10002/sammo3182/figure/qingba_poq.png" style="width:400px; height:200px; margin:0; padding:0; border:0;" />
+</div>
 
 :::
 
@@ -208,10 +207,10 @@ theme_update(
 
 ::: {.column width="50%"}
 
-- Devin Caughey (MIT)、 Chris Warshaw (GWU)、 Alexander Wuttke (Munich) 等民主问题专家社交媒体上[积极评价和传播]{.red}
+- Devin Caughey (MIT)、 Chris Warshaw (GWU)、 Alexander Wuttke (Munich) 等民主问题专家[积极评价和传播]{.red}
 - 在高水平学术平台上的[引发学术讨论]{.red}
 
-![](https://drhuyue.site:10002/sammo3182/figure/tenure_claassenCorrection.png){fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/tenure_claassenCorrection.png){fig-align="center" height=400}
 
 
 :::{.notes}
@@ -248,10 +247,8 @@ among others and books such as Research Handbook on Authoritarianism.
 
 ::: {.r-vstack}
 
+![](https://drhuyue.site:10002/sammo3182/figure/qingba_pub_language.png){fig-align="center" height=200}
 ![](https://drhuyue.site:10002/sammo3182/figure/theoryDiagram_3a.png){fig-align="center" height=300}
-
-![](https://drhuyue.site:10002/sammo3182/figure/qingba_pub_language.png){fig-align="center" height=300}
-
 
 :::
 
@@ -288,8 +285,7 @@ among others and books such as Research Handbook on Authoritarianism.
 
 ::: {.r-vstack}
 
-![](https://drhuyue.site:10002/sammo3182/figure/qingba_pub_method.jpg){fig-align="center" height=400}
-
+![](https://drhuyue.site:10002/sammo3182/figure/qingba_pub_method.jpg){fig-align="center" height=200}
 ![](https://drhuyue.site:10002/sammo3182/figure/qingba_macrointerest.png){fig-align="center" height=200}
 
 :::
@@ -310,7 +306,8 @@ packages <- c("dotwhisker", "interplot", "regioncode", "drhur", "drhutools", "pe
 
 # Fetch download counts for each package
 total_downloads <- packages |>
-  map_dfr(~ cran_downloads(packages = .x, from = "2012-01-01")) |>
+  map(~ cran_downloads(packages = .x, from = "2012-01-01")) |>
+  list_rbind() |> 
   summarize(total_downloads = round(sum(count)/10000, digits = 2)) 
 
 monthly_downloads <- cran_downloads(packages = "dotwhisker", 
