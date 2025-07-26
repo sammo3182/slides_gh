@@ -45,38 +45,7 @@ editor_options:
     chunk_output_type: console
 ---
 
-```{r}
-#| include: false
-#| label: setup
 
-library(pacman)
-
-p_load(
-  "icons",
-  "knitr",
-  "drhutools",
-  "tidyverse",
-  "cranlogs",
-  "purrr"
-)
-
-# Functions preload
-set.seed(313)
-
-theme_set(
-  theme_minimal(base_size = 18)
-)
-
-theme_update(
-  plot.title = element_text(size = 18),
-  axis.title = element_text(size = 30),
-  axis.text = element_text(size = 20),
-  strip.text = element_text(size = 20)
-)
-
-use("dplyr", c("filter", "select")) # require R 4.5.0
-
-```
 
 ## 基本情况
 
@@ -314,24 +283,7 @@ among others and books such as Research Handbook on Authoritarianism.
 
 ## 成果拓展
 
-```{r}
-#| label: badge
-#| include: false
 
-
-packages <- c("dotwhisker", "interplot", "regioncode", "drhur", "drhutools", "pewdata")
-
-# Fetch download counts for each package
-total_downloads <- packages |>
-  map(~ cran_downloads(packages = .x, from = "2012-01-01")) |>
-  list_rbind() |> 
-  summarize(total_downloads = round(sum(count)/10000, digits = 2)) 
-
-monthly_downloads <- cran_downloads(packages = "dotwhisker", 
-                                    when = "last-month") |>
-  summarize(lastMonth = sum(count))
-
-```
 
 :::{.callout-important appearance="simple" .large}
 
@@ -343,7 +295,7 @@ monthly_downloads <- cran_downloads(packages = "dotwhisker",
 
 ::: {.column width="60%"}
 
-全球累计下载量：[**`r total_downloads`万**]{.red}
+全球累计下载量：[**66.82万**]{.red}
 
 - **政治学顶刊**：*APSR*, *JOP*, *CPS*, *POQ*, *PSJ*......
 - **社科期刊**：经济学、心理学、法学、教育学、语言学......
@@ -552,60 +504,11 @@ PS Forum: Data harmonization
 
 ## 学术贡献点1: 认知能动性与制度运行
 
-```{r}
-#| label: thermostatic
-#| eval: false
 
-# Number of time points
-time_points <- 1:24
+::: {.cell}
 
-# Create data with added noise to make it more realistic
-Public_Demand_Base <- c(70, 68, 65, 63, 60, 58, 55, 53, 55, 57, 60, 63, 65, 67, 65, 63, 61, 58, 56, 53, 50, 48, 50, 53)
-Institutional_Performance_Base <- c(40, 42, 45, 47, 50, 52, 55, 58, 56, 54, 51, 48, 45, 43, 45, 47, 49, 52, 54, 57, 60, 62, 60, 57)
+:::
 
-# Adding random noise
-Public_Demand <- Public_Demand_Base + rnorm(24, mean = 0, sd = 3)
-Institutional_Performance <- Institutional_Performance_Base + rnorm(24, mean = 0, sd = 3)
-
-# Create data frame
-data <- data.frame(
-  Time_Point = time_points,
-  Public_Demand = Public_Demand,
-  Institutional_Performance = Institutional_Performance
-)
-
-# Create the line plot
-ggplot(data, aes(x = Time_Point)) +
-  geom_line(aes(y = Public_Demand),
-            color = gb_cols("gold"),
-            size = 1.2) +
-  geom_line(
-    aes(y = Institutional_Performance),
-    color = "black",
-    size = 1.2
-  ) +
-  annotate(
-    "text",
-    x = 12,
-    y = Public_Demand[12] + 4,
-    label = "民主支持",
-    color = gb_cols("gold"),
-    hjust = 0.5,
-    size = 12
-  ) +
-  annotate(
-    "text",
-    x = 12,
-    y = Institutional_Performance[12] - 4,
-    label = "民主制度",
-    color = "black",
-    hjust = 0.5,
-    size = 12
-  ) +
-  labs(title = "Thermostatic Model of Public Opinion in Democratic Institutions", x = "时间点", y = "Value")
-
-
-```
 
 
 :::{.r-stack}
@@ -882,4 +785,5 @@ a landmark study that will have a lasting impact on our understanding of the int
 ![以**空间视角**检验爱国主义教育基地的政治认知塑造作用：@Hu2019](https://drhuyue.site:10002/sammo3182/figure/tenure_ssq.png){fig-align="center" height=350}
 
 :::
+
 
