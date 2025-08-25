@@ -1,0 +1,2937 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="05_latentVariableIII_files/libs/clipboard/clipboard.min.js"></script>
+<script src="05_latentVariableIII_files/libs/quarto-html/tabby.min.js"></script>
+<script src="05_latentVariableIII_files/libs/quarto-html/popper.min.js"></script>
+<script src="05_latentVariableIII_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="05_latentVariableIII_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="05_latentVariableIII_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="05_latentVariableIII_files/libs/quarto-html/quarto-syntax-highlighting-a126389619fad6dbfb296a5315d49fef.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="05_latentVariableIII_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="05_latentVariableIII_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="05_latentVariableIII_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.8.13">
+
+  <meta name="author" content="胡悦">
+  <title>潜变量分析（前沿）</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="05_latentVariableIII_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="05_latentVariableIII_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="05_latentVariableIII_files/libs/revealjs/dist/theme/quarto-4772a0f11472f0e84779a38f80adf547.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
+  <link href="05_latentVariableIII_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="05_latentVariableIII_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="05_latentVariableIII_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="05_latentVariableIII_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <link href="05_latentVariableIII_files/libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+  <script src="05_latentVariableIII_files/libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+  <script src="05_latentVariableIII_files/libs/viz-1.8.2/viz.js"></script>
+
+  <link href="05_latentVariableIII_files/libs/DiagrammeR-styles-0.2/styles.css" rel="stylesheet">
+
+  <script src="05_latentVariableIII_files/libs/grViz-binding-1.0.11/grViz.js"></script>
+
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title">潜变量分析（前沿）</h1>
+  <p class="subtitle">计算政治学讲习班</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+胡悦 
+</div>
+        <p class="quarto-title-affiliation">
+            清华大学社会科学学院
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="概述" class="slide level2" data-number="0.1">
+<h2><span class="header-section-number">0.1</span> 概述</h2>
+<ol type="1">
+<li>潜变量分析基础（复习）</li>
+<li>群组加权平均（MRP）</li>
+<li>群组项目反应理论之道</li>
+<li>潜变量分析的维度选择</li>
+</ol>
+</section>
+<section>
+<section id="潜变量分析基础" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> 潜变量分析基础</h1>
+
+</section>
+<section id="解决的问题" class="slide level2" data-number="1.1">
+<h2><span class="header-section-number">1.1</span> 解决的问题</h2>
+<blockquote>
+<p>Vaild [latent variable] measurement is the <span class="red">cornerstone</span> of successful scientific inquiry <span class="citation" data-cites="CarpiniKeeter1993">(<a href="#/参考文献" role="doc-biblioref" onclick="">Carpini and Keeter 1993, 1203</a>)</span>.</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p>涵盖所有社科学科</p>
+<ul>
+<li>抽象</li>
+<li>复杂</li>
+<li>综合</li>
+</ul>
+</div><div class="column fragment" style="width:30%;">
+<p>操作性挑战</p>
+<ol type="1">
+<li>不可见(Unobservable)</li>
+<li>有效果(Consequential)</li>
+<li><strong>多维度(Multidimensional)</strong></li>
+</ol>
+</div><div class="column" style="width:40%;">
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_jamesStimson.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="[@Stimson1991]"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_jamesStimson.jpg" class="quarto-figure quarto-figure-center" height="400" alt="(Stimson 1991)"></a></p>
+</figure>
+</div>
+<figcaption><span class="citation" data-cites="Stimson1991">(<a href="#/参考文献" role="doc-biblioref" onclick="">Stimson 1991</a>)</span></figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>兜里有多少钱，不可见，但维度单一，不宜用潜变量分析，更好的办法是翻兜</p>
+<p>The latent variable per se can’t be directly measured. But its consequences in opinions and behaviors can be observed.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="平均值为什么不行" class="slide level2" data-number="1.2">
+<h2><span class="header-section-number">1.2</span> 平均值为什么不行</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>指标问题（1~10）：</p>
+<ol type="1">
+<li>您是否信任身边人？</li>
+<li>您在政府机关有没有亲戚？</li>
+<li>您的朋友是否和您的想法经常一致？</li>
+</ol>
+<p>累加综合法(additive scales)</p>
+<p><span class="math display">\[\tilde{X} = (X_1 + X_2 + X_3)/3.\]</span></p>
+</div><div class="column fragment" style="width:50%;">
+<p><em>潜在问题</em></p>
+<ol type="1">
+<li>相同权重(equal weight)</li>
+<li>结果不稳(extreme value sensitivity)</li>
+<li>忽略极化(polarity ignoring)</li>
+</ol>
+</div></div>
+<div class="fragment large" style="text-align:center; margin-top: 2em">
+<p><em>如何做得更好？</em></p>
+</div>
+</section>
+<section id="潜变量分析常见方法" class="slide level2" data-number="1.3">
+<h2><span class="header-section-number">1.3</span> 潜变量分析常见方法</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>连续因子模型</strong></p>
+<ol type="1">
+<li>探索性因子分析(EFA)</li>
+<li>结构方程模型(SEM)</li>
+</ol>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>离散回应模型</strong></p>
+<ul>
+<li>项目反应理论(IRT)
+<ul>
+<li>项目反应群组估计</li>
+</ul></li>
+</ul>
+</div></div>
+<div class="fragment" style="text-align:center; margin-top: 2em">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>待解之题</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>如何计算一个更<span class="red">靠谱</span>的平均值</li>
+<li>如何<span class="red">正确</span>使用群组潜变量分析</li>
+<li>如何判断潜变量的<span class="red">维度</span></li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="群组加权平均计算" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> 群组加权平均计算</h1>
+
+</section>
+<section id="平均值在群组层面的问题" class="slide level2" data-number="2.1">
+<h2><span class="header-section-number">2.1</span> 平均值在群组层面的问题</h2>
+<p><span class="math display">\[Y_{kq} = \frac{\sum Y_{ikq}}{n}.\]</span></p>
+<div style="text-align:center">
+<p>不妥之处？</p>
+<div class="fragment">
+<ol type="1">
+<li>如果群组过小，其平均值的代表意义不大</li>
+<li>不同的指标对于潜在变量贡献不一样</li>
+</ol>
+</div>
+<div class="fragment">
+<p><span class="large">↓</span></p>
+<p>经过群组信息（地理、人口）加权的平均值</p>
+<p>Multilevel Regression and Post-stratification <span class="citation" data-cites="GelmanLittle1997">(MRP, <a href="#/参考文献" role="doc-biblioref" onclick="">Gelman and Little 1997</a>)</span></p>
+</div>
+</div>
+</section>
+<section id="get-the-mean-right" class="slide level2" data-number="2.2">
+<h2><span class="header-section-number">2.2</span> Get the mean right</h2>
+<p><span class="math display">\[
+\theta_h = \frac{\sum_{j \in h} N_j \color{red}{\mu_j} }{\sum_{j \in h} n_j},
+\]</span></p>
+<div style="text-align:center">
+<p>N: 总体（来自普查）<br>
+n: 样本（来自sample）</p>
+</div>
+<ol type="1">
+<li>将总体（population）按群组（strata，如国家、地区）<span class="red">切分</span>；</li>
+<li>估测对象为核心变量在<span class="red">每个群组</span>中的平均值/比例， θ<sub>h</sub> (h ∈ {1, H});</li>
+<li>已知各群组以人口变量j（如老年男性、青年女性等）划分，确定<span class="red">群组人口</span>（N<sub>j</sub>）或占总人口比；</li>
+<li>通过<span class="red">multilevel model</span>进行估算各组总体平均值μ<sub>j</sub>。</li>
+</ol>
+</section>
+<section id="一个经济学" class="slide level2" data-number="2.3">
+<h2><span class="header-section-number">2.3</span> 一个经济学🌰</h2>
+<p>数据：某年某市五区域2396家产业公司的财政信息<br>
+目标：估测每个区域的产业平均收入</p>
+<div class="columns">
+<div class="column" style="width:70%;">
+<p>公司规模和区域分布</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">A</th>
+<th style="text-align: right;">B</th>
+<th style="text-align: right;">C</th>
+<th style="text-align: right;">D</th>
+<th style="text-align: right;">E</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Big</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medium</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">111</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: right;">138</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Small</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">593</td>
+<td style="text-align: right;">862</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div><div class="column fragment" style="width:30%;">
+<p>总体平均值（真值）</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Zone</th>
+<th style="text-align: right;">income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: right;">652.28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: right;">320.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: right;">331.02</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">D</td>
+<td style="text-align: right;">684.98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">E</td>
+<td style="text-align: right;">767.39</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<p>https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="样本" class="slide level2" data-number="2.4">
+<h2><span class="header-section-number">2.4</span> 样本</h2>
+<p>我们随机选取数据中1000个产业公司作为样本。 如果直接各组取平均值的话就会产生偏差：</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="05_latentVariableIII_files/figure-revealjs/rawsVsTrue-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="05_latentVariableIII_files/figure-revealjs/rawsVsTrue-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="计算" class="slide level2" data-number="2.5">
+<h2><span class="header-section-number">2.5</span> 计算</h2>
+<p><strong>Step I: Mr</strong> <span class="math display">\[
+\begin{align}
+收入 = \beta_{0z}&amp; + \beta_{1Z=z}公司规模_{iz} + \epsilon_{iz}, \\
+\beta_{0z}&amp; = \gamma_{00} + \gamma_{01}区域_z + u_{0z}.
+\end{align}
+\]</span></p>
+<p>Output: Post-strata means (<span class="math inline">\(\mu_z\)</span>)</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">A</th>
+<th style="text-align: right;">B</th>
+<th style="text-align: right;">C</th>
+<th style="text-align: right;">D</th>
+<th style="text-align: right;">E</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Big</td>
+<td style="text-align: right;">1274.74</td>
+<td style="text-align: right;">1148.58</td>
+<td style="text-align: right;">1189.59</td>
+<td style="text-align: right;">1238.51</td>
+<td style="text-align: right;">1251.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Medium</td>
+<td style="text-align: right;">706.19</td>
+<td style="text-align: right;">580.03</td>
+<td style="text-align: right;">621.03</td>
+<td style="text-align: right;">669.96</td>
+<td style="text-align: right;">683.40</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Small</td>
+<td style="text-align: right;">372.95</td>
+<td style="text-align: right;">246.79</td>
+<td style="text-align: right;">287.79</td>
+<td style="text-align: right;">336.72</td>
+<td style="text-align: right;">350.16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Step II: P</strong></p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>       A        B        C        D        E 
+656.4551 318.3753 326.6951 680.8675 754.5761 </code></pre>
+</div>
+</div>
+</section>
+<section id="矫正效果" class="slide level2" data-number="2.6">
+<h2><span class="header-section-number">2.6</span> 矫正效果</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure>
+<p><a href="05_latentVariableIII_files/figure-revealjs/mrpVsraw-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img data-src="05_latentVariableIII_files/figure-revealjs/mrpVsraw-1.png" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>MrP 没有解决的问题</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>答题难度的地区差异</li>
+<li>题目的scale</li>
+<li>Measurement error</li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="column fragment large" style="width:50%;">
+<div style="margin-top: 2em">
+<p>→ 群组IRT</p>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="群组irt之道" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> 群组IRT之“道”</h1>
+
+</section>
+<section id="群组irt" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> 群组IRT</h2>
+<p>Conquer the individual fallacy</p>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_maleFeminist.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_maleFeminist.jpg" class="fragment quarto-figure quarto-figure-center" height="550"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_incomeGap.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_incomeGap.jpg" class="fragment quarto-figure quarto-figure-center" height="550"></a></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>Ecological fallacy (Simpson’s paradox)</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img data-src="https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<p>再比如，民主、不平等、政治文化……</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="群组层级上的尝试-caugheywarshaw2015" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> 群组层级上的尝试 <span class="citation" data-cites="CaugheyWarshaw2015">(<a href="#/参考文献" role="doc-biblioref" onclick="">Caughey and Warshaw 2015</a>)</span></h2>
+<p><strong>Dynamic Group-level IRT（DGIRT）</strong></p>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p><em>群组（Group-level）</em>：<sup>1</sup></p>
+<p><span class="math inline">\(\eta_{ktq} = logit^{-1}(\frac{\color{red}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{red}{(1.7\sigma_{kt})^2}}}),\)</span></p>
+<p><span class="math inline">\(\bar{\theta}_k\)</span> 和 σ<sub>kt</sub> 是潜在变量在组k时间t的均值和SD。</p>
+<aside class="notes">
+<ol type="1">
+<li>在个体层面估测IRT；</li>
+<li>在估测IRT过程中加入群组级别变量；</li>
+<li>将时间变量融入IRT估测；</li>
+<li>用<a href="#/sec-mrp">MrP</a>给估测进行权重。</li>
+</ol>
+<p>1.7: sd of probit is (π/3)<sup>1/2</sup> for logit, while Long 1997 found it is more close to 1.7 in actual estimations.</p>
+<p>Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of Educational Statistics 8(4): 271–88.</p>
+<p>η: eta</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column fragment" style="width:50%;">
+<p><em>纳入时空 (Dynamic)</em></p>
+<p><span class="math display">\[
+\begin{align}
+\bar{\theta}_k\sim&amp; N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}}), \\
+\xi_t \sim&amp; N(\xi_{t-1}, \sigma^2_{\gamma}), \\
+\gamma_{pt} \sim&amp; N(\gamma_{p,t-1}, \delta_t + \boldsymbol{z'_p.\eta_t}, \sigma^2_{\gamma})
+\end{align}
+\]</span></p>
+<aside class="notes">
+<p>ξ<sub>t</sub>: xi</p>
+<p>x 为群组级变量</p>
+<p>t-1, dynamic linear model</p>
+<p><strong>z’<sub>p.</sub>η<sub>t</sub></strong>: geography-level attributes, η是coefficients</p>
+<p>n<sup>*</sup><sub>kqt</sub>基于MrP</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div></div>
+<div class="fragment" style="text-align:center">
+<p><em>效果</em>：</p>
+<ul>
+<li>囊括诸多因素</li>
+<li>可以部分平衡样本代表性问题</li>
+<li>强大，但<span class="red">复杂</span></li>
+</ul>
+</div>
+<aside class="notes">
+<p>Caughey &amp; Warshaw称会跑几个星期</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>个体：<span class="math inline">\(p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}].\)</span></p></li></ol></aside></section>
+<section id="简化版dgirt-claassen2019" class="slide level2" data-number="3.3">
+<h2><span class="header-section-number">3.3</span> 简化版DGIRT <span class="citation" data-cites="Claassen2019">(<a href="#/参考文献" role="doc-biblioref" onclick="">Claassen 2019</a>)</span></h2>
+<p><span class="math display">\[
+\begin{align}
+\eta_{ktq} = logit^{-1}&amp;(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).\\
+\downarrow&amp;\\
+\eta_{ktq} = logit^{-1}&amp;(\frac{\bar{\theta}'_{kt}- (\beta_q \color{red}{+ \delta_{kq}})}{\alpha_q}).
+\end{align}
+\]</span></p>
+<aside class="notes">
+<p>δ<sub>kq</sub>: 问题的difficulty随国家k变化。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<ol type="1">
+<li>只作用于代表性样本和<span class="red">国家</span>级别<br>
+</li>
+<li>只对二分变量进行分析</li>
+<li>将国家作用从估测θ变为估测difficulty<br>
+</li>
+<li>假定本地项目正态分布（忽略极化等现象😱）</li>
+</ol>
+</section>
+<section id="纠偏版dgirt-solt2020a" class="slide level2" data-number="3.4">
+<h2><span class="header-section-number">3.4</span> 纠偏版DGIRT <span class="citation" data-cites="Solt2020a">(<a href="#/参考文献" role="doc-biblioref" onclick="">Solt 2020</a>)</span></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/fsolt.jpeg" class="lightbox" data-gallery="quarto-lightbox-gallery-7"><img data-src="https://drhuyue.site:10002/sammo3182/figure/fsolt.jpeg" class="quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<p><a href="https://dcpo.org/team/"><span class="red">D</span>ynamic <span class="red">C</span>omparative <span class="red">P</span>ublic <span class="red">O</span>pinion</a></p>
+<div class="fragment">
+<p>复杂程度：</p>
+<p>Claasseen 2019 &lt; DCPO &lt; DGIRT</p>
+</div>
+<div class="fragment">
+<p>发表：</p>
+<ul>
+<li><em>APSR</em><span class="citation" data-cites="TaiEtAl2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">Tai, Hu, and Solt 2024</a>)</span></li>
+<li><em>BJPS</em><span class="citation" data-cites="WooEtAl2023">(<a href="#/参考文献" role="doc-biblioref" onclick="">Woo, Goldberg, and Solt 2023</a>)</span></li>
+<li><em>PSRM</em><span class="citation" data-cites="HuEtAl2024a">(<a href="#/参考文献" role="doc-biblioref" onclick="">Hu, Tai, and Solt 2024</a>)</span></li>
+<li><em>SSQ</em><span class="citation" data-cites="WooEtAl2024">(<a href="#/参考文献" role="doc-biblioref" onclick="">Woo et al. 2024</a>)</span></li>
+</ul>
+<p>……</p>
+</div>
+</div></div>
+</section>
+<section id="效率比较" class="slide level2" data-number="3.5">
+<h2><span class="header-section-number">3.5</span> 效率比较</h2>
+<div class="overlay-container">
+<div class="overlay-image fragment">
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/irtCompare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-8"><img data-src="https://drhuyue.site:10002/sammo3182/figure/irtCompare.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/irtFitCompare.png" class="lightbox" data-gallery="quarto-lightbox-gallery-9"><img data-src="https://drhuyue.site:10002/sammo3182/figure/irtFitCompare.png" class="fragment quarto-figure quarto-figure-center"></a></p>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>Bounded: 使用logit归为0-1</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</div>
+</section>
+<section id="新方法面临新挑战" class="slide level2" data-number="3.6">
+<h2><span class="header-section-number">3.6</span> 新方法面临新挑战</h2>
+<div class="overlay-container">
+<div class="overlay-image">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_risk.png" class="lightbox" data-gallery="quarto-lightbox-gallery-10" title="Source: urbanlogiq.com"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_risk.png" class="quarto-figure quarto-figure-center" height="600" alt="Source: urbanlogiq.com"></a></p>
+</figure>
+</div>
+<figcaption>Source: <a href="https://urbanlogiq.com/data-engineering-101-a-guide-for-government-officials/">urbanlogiq.com</a></figcaption>
+</figure>
+</div>
+</div>
+<div class="overlay-text-over fragment">
+<p>劣质源数据</p>
+<p>+</p>
+<p>数据收集过程的难复刻性</p>
+<p>+</p>
+<p>难以追踪的人为操作</p>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>The conventional approach usually involves a notorious bulk of manual work on indicator identification, data merging, data scaling, and so on</li>
+<li>Manual wrangling make a full reproducibility of research pipeline more difficulty and undermine the transparency</li>
+<li>Heterogeneous sources increases the risk
+<ul>
+<li>older survey files stored in SPSS’s ASCII or portable formats often require extensive restructuring before they can be merged with new format of data.</li>
+</ul></li>
+<li>Unfortunately, documentation does not cure everything, esp.&nbsp;the influence of human discretion embedded in manual processing</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="顶刊数据的例子" class="slide level2" data-number="3.7">
+<h2><span class="header-section-number">3.7</span> 顶刊数据的例子</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_replication.png" class="lightbox" data-gallery="quarto-lightbox-gallery-11"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_replication.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<p>Here we provide a vivid example from real-life research to show how different results the seemingly basic, well-described hand-entered steps can produce. We attempted to replicate the spreadsheets applied in prominent studies following the replication instructions of the publications but with a more automatic process (elaborated below). Points on the diagonal show agreement; points above indicate higher hand-entered values, while points below show lower hand-entered percentages compared to machine-collected data.</p>
+<p>For about 85% of country-year-item observations, differences between percentages are negligible-less than half a percent-resulting in points near the plot’s diagonal. However, for the remaining cases, differences are significant and cannot be ignored. These discrepancies stem from decisions on categorization, processing numerators and denominators in ratio calculation, and whether counting respondents excluded from original surveys. Though errors introduced during such processes seems minor and may appear as random noise, they can lead to opposite conclusions <span class="citation" data-cites="HuEtAl2024a">(<a href="#/参考文献" role="doc-biblioref" onclick="">Hu, Tai, and Solt 2024</a>)</span>. Such issues pose a major, yet underrecognized, challenge to data harmonization in political science.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="数据和谐之道a-tao-of-data-harmonization" class="slide level2" data-number="3.8">
+<h2><span class="header-section-number">3.8</span> 数据和谐之道（A TAO of Data Harmonization）</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<p><em>目标</em></p>
+<ol type="1">
+<li>使用尽可能多的数据</li>
+<li>最大限度消除人工错误</li>
+<li>数据结果<span class="red">稳健性</span>和<span class="red">可复制性</span></li>
+</ol>
+<aside class="notes">
+<ol type="1">
+<li>To incorporate as much available data as possible to provide a base for comparable data and increase generality of the inferences;</li>
+<li>To reduce the manual entry errors to improve the accuracy of the harmonized data and analytic data; and</li>
+<li>To improve the reproducibility of data wrangling process for the sake of transparency.</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p><em>方法</em></p>
+<ol type="1">
+<li><span class="red">T</span>eam-based concept construct and data selection;</li>
+<li>Data entry <span class="red">a</span>utomation and fully diagnoses;</li>
+<li>“Second-order” <span class="red">o</span>pening.</li>
+</ol>
+</div>
+</div><div class="column fragment" style="width:40%;">
+<p><em>演示案例</em></p>
+<div class="r-vstack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_swiid.png" class="lightbox" data-gallery="quarto-lightbox-gallery-12" title="硬数据: SWIID"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_swiid.png" class="quarto-figure quarto-figure-center" alt="硬数据: SWIID"></a></p>
+</figure>
+</div>
+<figcaption><em>硬数据</em>: SWIID</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_dcpo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-13" title="软数据: DCPO"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_dcpo.png" class="quarto-figure quarto-figure-center" alt="软数据: DCPO"></a></p>
+</figure>
+</div>
+<figcaption><em>软数据</em>: DCPO</figcaption>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<ul>
+<li>SWIID is a long-running project that seeks to provide harmonized income inequality statistics for the broadest possible coverage of countries and years</li>
+<li>DCPO is both a method and a database, to address the lack of cross-national and longitudinal data on many topics</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div></div>
+</section>
+<section id="step-1-team-based-construct-building-and-data-selection" class="slide level2" data-number="3.9">
+<h2><span class="header-section-number">3.9</span> Step 1: Team-Based Construct Building and Data Selection</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>目标问题</em></p>
+<ul>
+<li>“手残”之现实
+<ul>
+<li>即使经过二次查验，数据整合错误率仍超过1% <span class="citation" data-cites="BarchardPace2011">(<a href="#/参考文献" role="doc-biblioref" onclick="">Barchard and Pace 2011</a>)</span></li>
+<li>金融和民航界惨痛教训<span class="citation" data-cites="HaegemansEtAl2019">(<a href="#/参考文献" role="doc-biblioref" onclick="">Haegemans, Snoeck, and Lemahieu 2019</a>)</span></li>
+</ul></li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><em>解法</em>: Team work</p>
+<ul>
+<li>概念构建</li>
+<li>数据选择</li>
+<li>合理性校验</li>
+</ul>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_doubleEntry.png" class="lightbox" data-gallery="quarto-lightbox-gallery-14" title="Source: @BarchardPace2011 [fig. 2]"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_doubleEntry.png" class="quarto-figure quarto-figure-center" height="300" alt="Source: Barchard and Pace (2011, fig. 2)"></a></p>
+</figure>
+</div>
+<figcaption>Source: <span class="citation" data-cites="BarchardPace2011">Barchard and Pace (<a href="#/参考文献" role="doc-biblioref" onclick="">2011, fig. 2</a>)</span></figcaption>
+</figure>
+</div>
+</div>
+</div></div>
+<aside class="notes">
+<ul>
+<li>SWIID:
+<ul>
+<li>Told RAs that the goal of the research, a list of sources mainly from national statistic bureaus for them to start, but we also told them that update statistics for some countries may come from academic papers, published documents, and other sources, and they are free to add them in while <em>making sure a valid link</em> of the new sources are also recorded.</li>
+<li>how the data would use later is also important, as they could have a better sense of what data are analyticable and a forward perspective of how many situations would the later entry part need to take care. In the SWIID project, we told the RAs that the inequality statistics be recorded in four formats: Gini index in disposable (post-tax, post-transfer) income, Gini in market (pre-tax, pre-transfer) income, absolute redistribution (market-income inequality minus net-income inequality), or relative redistribution (market-income inequality minus net-income inequality, divided by market-income inequality).</li>
+<li>Cross-check: with new RAs</li>
+</ul></li>
+<li>DCPO: clearly defining and agreeing upon the latent construct among team members
+<ul>
+<li>Done by researchers not RAs</li>
+<li>Each team member is then assigned survey datasets from specific geographic regions and tasked with identifying potentially relevant items and potential dimensions based on both general theoretical guidance and region-specific knowledge.</li>
+<li>Before data selection begins, team members undergo hands-on training on how the method work and what type of data and detail they need to collect, such as data format and weighting types, which provide a valuable help of later build the automative data preparation software.</li>
+<li>the dural-entry section comes in: each team member reviews and re-codes the survey data originally handled by another member.</li>
+<li>Disputed cases are flagged for group discussion.</li>
+</ul></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="step-2-automation-diagnosis" class="slide level2" data-number="3.10">
+<h2><span class="header-section-number">3.10</span> Step 2: Automation &amp; Diagnosis</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>目标问题</em>: 手动输入错误和结果“靠谱性”</p>
+</div><div class="column" style="width:50%;">
+<p><em>解法</em>: 尽可能地自动化</p>
+<ul>
+<li>Programming + API</li>
+</ul>
+</div></div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_api.png" class="lightbox" data-gallery="quarto-lightbox-gallery-15"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_api.png" class="quarto-figure quarto-figure-center" height="500"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<ul>
+<li><code>DCPOTools</code>, <code>countrycode</code>, <code>tabulapdf</code></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="dcpo操作自动化" class="slide level2" data-number="3.11">
+<h2><span class="header-section-number">3.11</span> DCPO操作自动化</h2>
+<ol type="1">
+<li>收集survey数据，明确与感兴趣的变量相关的指标问题（手动）</li>
+<li>通过<code>DCPOtools</code>对数据进行预处理（半自动）</li>
+<li>通过<code>DCPO</code>进行数据分析（自动）</li>
+<li>通过<code>shinystan</code>诊断convergence（自动）</li>
+</ol>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>诊断什么和如何理解</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Bayesian inference方法：Markov Chain Monte Carlo (MCMC)</li>
+<li>数据拟合“底线”：Convergence</li>
+<li>当Chain的posterior停留在一个<span class="red">相对稳定</span>的区域内(<span class="red">ergodic</span> chain)
+<ul>
+<li><span class="math inline">\(\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.\)</span></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="step-3-second-order-opening" class="slide level2" data-number="3.12">
+<h2><span class="header-section-number">3.12</span> Step 3: “Second-Order” Opening</h2>
+<p><em>目标问题</em>: 社会科学研究仍不够透明</p>
+<p><span class="fragment"><em>解法</em>: Second-order opening, 不止步于分析，还有DGP</span></p>
+<div class="r-hstack fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_quarto.svg" class="lightbox" data-gallery="quarto-lightbox-gallery-16" title="Quarto"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_quarto.svg" class="quarto-figure quarto-figure-center" height="400" alt="Quarto"></a></p>
+</figure>
+</div>
+<figcaption>Quarto</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_github.png" class="lightbox" data-gallery="quarto-lightbox-gallery-17" title="Github"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_github.png" class="quarto-figure quarto-figure-center" height="400" alt="Github"></a></p>
+</figure>
+</div>
+<figcaption>Github</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_osf.png" class="lightbox" data-gallery="quarto-lightbox-gallery-18" title="OSF"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_osf.png" class="quarto-figure quarto-figure-center" height="400" alt="OSF"></a></p>
+</figure>
+</div>
+<figcaption>OSF</figcaption>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<p>If researchers applied our suggestions of team-based construct building, systematic data selection, and automated data entry, the second-order opening becomes both feasible and efficient. Along with a clearly conceptualized theoretical framework, researchers can simply share their programming scripts for data downloading, formatting, and wrangling, ensuring that the full pipeline is documented and reproducible.</p>
+<p>With developed scientific and technical publishing system, such as Quarto or R markdown, and version control platforms (e.g., Github) and open collaboration platforms (e.g., Open Science Framework, OSF), researchers can integrate the entire workflow—from raw data collection to final analysis—within a single, publicly trackable archive. We reached at this step for all the DCPO projects so far.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="未尽之事业" class="slide level2" data-number="3.13">
+<h2><span class="header-section-number">3.13</span> 未尽之事业</h2>
+<div class="r-hstack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_diagram.png" class="lightbox" data-gallery="quarto-lightbox-gallery-19" title="Source: Hu et al.&nbsp;2025a, Fig 1"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_diagram.png" class="quarto-figure quarto-figure-center" width="500" height="600" alt="Source: Hu et al.&nbsp;2025a, Fig 1"></a></p>
+</figure>
+</div>
+<figcaption>Source: Hu et al.&nbsp;2025a, Fig 1</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/wrangle_human.png" class="lightbox" data-gallery="quarto-lightbox-gallery-20" title="Source: Kuocheng Liao"><img data-src="https://drhuyue.site:10002/sammo3182/figure/wrangle_human.png" class="quarto-figure quarto-figure-center" height="600" alt="Source: Kuocheng Liao"></a></p>
+</figure>
+</div>
+<figcaption>Source: <a href="https://hbr.org/2018/07/collaborative-intelligence-humans-and-ai-are-joining-forces">Kuocheng Liao</a></figcaption>
+</figure>
+</div>
+</div>
+</section></section>
+<section>
+<section id="潜变量分析的维度选择" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> 潜变量分析的维度选择</h1>
+
+</section>
+<section id="如何确定看不见的维度" class="slide level2" data-number="4.1">
+<h2><span class="header-section-number">4.1</span> 如何确定看不见的维度</h2>
+<p>A.k.a., 你怎么知道只有<span class="red">一个</span>潜在变量？</p>
+<ul>
+<li>大部分IRT模型假定只有一个潜在变量</li>
+</ul>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_rp.png" class="lightbox" data-gallery="quarto-lightbox-gallery-21" title="但社会科学中往往不是如此"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_rp.png" class="quarto-figure quarto-figure-center" height="400" alt="但社会科学中往往不是如此"></a></p>
+</figure>
+</div>
+<figcaption>但社会科学中往往不是如此</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="迹象-huetal2025b" class="slide level2" data-number="4.2">
+<h2><span class="header-section-number">4.2</span> 迹象 <span class="citation" data-cites="HuEtAl2025b">(<a href="#/参考文献" role="doc-biblioref" onclick="">Hu et al. 2025</a>)</span></h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_democracyDimension.png" class="lightbox" data-gallery="quarto-lightbox-gallery-22"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_democracyDimension.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_democracyRofLaw.png" class="lightbox" data-gallery="quarto-lightbox-gallery-23"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_democracyRofLaw.png" class="fragment quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="理论标准" class="slide level2" data-number="4.3">
+<h2><span class="header-section-number">4.3</span> 理论标准</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Measurement Invariance <span class="citation" data-cites="PutnickBornstein2016">(<a href="#/参考文献" role="doc-biblioref" onclick="">Putnick and Bornstein 2016</a>)</span></strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>度量恒定性 (Metric invariance): 潜在变量的“一单位变化”在所有群体中都代表相同的含义
+<ul>
+<li>有度量恒定性，即可比较关系系数（如相关性、回归系数等），但<span class="red">不能直接比较平均值</span></li>
+</ul></li>
+<li>截距不变性 (Scalar invariance): 当两个比较对象的真实潜在水平相同，他们在不同群体中给出的观测值平均值也应相同。
+<ul>
+<li>须在度量恒定性基础上实现</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/process_interview.jpg" class="lightbox" data-gallery="quarto-lightbox-gallery-24" title="一个🌰"><img data-src="https://drhuyue.site:10002/sammo3182/figure/process_interview.jpg" class="quarto-figure quarto-figure-center" height="350" alt="一个🌰"></a></p>
+</figure>
+</div>
+<figcaption>一个🌰</figcaption>
+</figure>
+</div>
+</div>
+<aside class="notes">
+<ol type="1">
+<li><strong>度量不变性 (Metric invariance)</strong></li>
+</ol>
+<ul>
+<li>定义：不同群体中，潜在变量与测量指标之间的关系强度（即因子载荷）相同。</li>
+<li>含义：潜在变量的“一单位变化”在所有群体中都代表相同的含义。</li>
+<li>举例：如果“幸福感”增加 1 单位，在甲国和乙国，人们对“我经常微笑和大笑”这道题的平均回答都会增加同样的幅度。</li>
+</ul>
+<p>👉 有度量不变性时，可以比较不同群体间的<strong>相关性或回归系数</strong>，但不能直接比较幸福感的平均水平。</p>
+<ol start="2" type="1">
+<li><strong>截距不变性 (Scalar invariance)</strong></li>
+</ol>
+<ul>
+<li>定义：在度量不变性的基础上，不同群体的测量指标的截距（intercepts）也相同。</li>
+<li>含义：当两个人的真实潜在水平相同，他们在不同群体中给出的观测分数（如问卷回答）平均值也应相同。</li>
+<li>举例：甲国和乙国两个同样幸福的人，在问卷上都会给出相似的回答（不会因为文化差异，一个答“同意”而另一个答“中立”）。</li>
+</ul>
+<p>👉 有截距不变性时，研究者就可以比较群体间的<strong>潜在均值差异</strong>，也就是说，可以合理地说“甲国比乙国更幸福”。</p>
+<p>换句话说：</p>
+<ul>
+<li><strong>度量不变性</strong> → 不同群体用的是同样的“刻度单位”。</li>
+<li><strong>截距不变性</strong> → 不仅刻度相同，而且零点基准也一致。</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="一种间接验证方法cfm" class="slide level2" data-number="4.4">
+<h2><span class="header-section-number">4.4</span> 一种（间接）验证方法：CFM</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>EFA: 数据指向</strong></p>
+<ol type="1">
+<li>实证观察（归纳）
+<ul>
+<li><em>无法统计推断</em></li>
+</ul></li>
+<li>未知维度
+<ul>
+<li>每个维度都产生影响</li>
+</ul></li>
+<li>多重指标
+<ul>
+<li>Loading大小之分</li>
+</ul></li>
+<li>无视测量偏差关联</li>
+<li>Underidentified</li>
+</ol>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>CFA: 理论指向</strong></p>
+<ol type="1">
+<li>理论定义（演绎）
+<ul>
+<li><span class="red"><em>专为统计推断</em></span></li>
+</ul></li>
+<li>明确维度
+<ul>
+<li>维度-指标关系明确</li>
+</ul></li>
+<li>单一指标
+<ul>
+<li>Loading<span class="red">有无</span>之分</li>
+</ul></li>
+<li>允许测量误差相关</li>
+<li>必须identifiable</li>
+</ol>
+</div></div>
+</section>
+<section id="cfa指标选择" class="slide level2" data-number="4.5">
+<h2><span class="header-section-number">4.5</span> CFA指标选择</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ol type="1">
+<li>严格依据理论：<del>原因</del>效果指标</li>
+<li>每维度一指标，<span class="red">艺术&gt;技术</span></li>
+</ol>
+<div class="fragment">
+<p>🌰 人际信任: <span class="red">相信</span>他人不会<span class="red">伤害自己</span>或<span class="red">违背约定</span>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_interTrust.png" class="lightbox" data-gallery="quarto-lightbox-gallery-25"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_interTrust.png" class="quarto-figure quarto-figure-center" height="300"></a></p>
+</figure>
+</div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<p>指标：</p>
+<ol type="1">
+<li>总体而言，您是认同多数人是值得信任的，还是防人之心不可无？</li>
+<li>您认为多数时候人们是乐于助人的还是自私自利的？</li>
+<li>如果有机会，您认为别人是会占您便宜，还是说会恪守约定、公平行事？</li>
+</ol>
+</div></div>
+</section>
+<section id="另一个运动员评价" class="slide level2" data-number="4.6">
+<h2><span class="header-section-number">4.6</span> 另一个🌰：运动员评价</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_multitrait.png" class="lightbox" data-gallery="quarto-lightbox-gallery-26"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_multitrait.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+<aside class="notes">
+<p>裁判对滑雪运动员的评判</p>
+<p>单侧: factor complexity = 1 （一个变量只贡献一个latent）<br>
+双侧: factor complexity &gt; 1</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="定义公式" class="slide level2" data-auto-animate="true" data-number="4.7">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">4.7</span> 定义公式</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math display">\[
+\begin{align}
+X^* =&amp; \Phi\Lambda' + \epsilon; \\
+X =&amp; \Lambda X_\xi + \epsilon,
+\end{align}
+\]</span></p>
+<div style="text-align:center">
+<p><strong>X</strong>： 指标向量<br>
+<strong>ξ</strong>：潜在变量<br>
+<strong>Λ<sub>X</sub></strong>: X = f(ξ)系数(a.k.a., loading, path)<br>
+<strong>ε</strong>：偏误向量</p>
+<p><strong>Φ</strong>: 潜在变量的协方差矩阵<br>
+<strong>Θ<sub>ε</sub></strong>: 偏误的协方差矩阵</p>
+</div>
+</div>
+</div>
+</div>
+<aside class="notes">
+<p><strong>ξ</strong>: ksi<br>
+<strong>δ</strong>: delta<br>
+<strong>Φ</strong>: phi<br>
+<strong>Θ<sub>σ</sub></strong>: theta</p>
+<p>在EFA中潜在变量在等号左边，观测变量在右边</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column fragment" style="width:60%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png" class="lightbox" data-gallery="quarto-lightbox-gallery-27"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div></div>
+</section>
+<section id="估算" class="slide level2" data-auto-animate="true" data-number="4.8">
+<h2 data-id="quarto-animate-title"><span class="header-section-number">4.8</span> 估算</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png" class="lightbox" data-gallery="quarto-lightbox-gallery-28"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png" class="quarto-figure quarto-figure-center" height="300"></a></p>
+</figure>
+</div>
+<p><span class="navy">潜变量矩阵</span></p>
+<p><span class="math display">\[
+\Phi = \begin{bmatrix}
+\phi_{11} &amp; &amp; \\
+0 &amp; \phi_{22} &amp; \\
+0 &amp; \phi_{23} &amp; \phi_{33}
+\end{bmatrix}
+\]</span></p>
+<aside class="notes">
+<p>φ23$: classical 和showy 裁判的相关性</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column" style="width:60%;">
+<p><span class="red">测量矩阵</span></p>
+<p><span class="math display">\[
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+x_5
+\end{bmatrix} =
+\begin{bmatrix}
+1 &amp; 1 &amp; 0\\
+\lambda_{21} &amp; 1 &amp; 0\\
+\lambda_{31} &amp; 1 &amp; 0\\
+\lambda_{41} &amp; 0 &amp; 1\\
+\lambda_{51} &amp; 0 &amp; 1
+\end{bmatrix} \begin{bmatrix}\xi_1\\
+\xi_2\\
+\xi_3
+\end{bmatrix} + \begin{bmatrix}\epsilon_1\\
+\epsilon_2\\
+\epsilon_3\\
+\epsilon_4\\
+\epsilon_5
+\end{bmatrix}
+\]</span></p>
+<p><span class="green">偏误矩阵</span></p>
+<p>diag <strong>Θ<sub>σ</sub></strong> = diag[var(ε<sub>1</sub>) var(ε<sub>2</sub>)…var(ε<sub>5</sub>)]</p>
+</div></div>
+</section>
+<section id="identification" class="slide level2" data-number="4.9">
+<h2><span class="header-section-number">4.9</span> Identification</h2>
+<p>a.k.a., 最多能连多少线？</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Identified: 当<strong>Λ、Φ、Θ</strong>存在唯一解</p>
+<p><strong>Λ</strong>: <span class="math inline">\(X = f(\xi)\)</span>系数 (a.k.a., loading)；<br>
+<strong>Φ</strong>: 潜在变量的协方差矩阵；<br>
+<strong>Θ</strong>: 偏误的协方差矩阵。</p>
+<div class="fragment">
+<p><strong>t rule</strong>:</p>
+<p>t &lt; q(q + 1)/2</p>
+<p>t: 不可见<br>
+q：可见</p>
+</div>
+<aside class="notes">
+<p>Another way to calculate df.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column" style="width:50%;">
+<p>为保证identifable进行的限制</p>
+<ol type="1">
+<li>Scaling
+<ul>
+<li>λ<sub>11</sub> = 1;</li>
+<li>将潜在变量方差设为1(Standardized metric)</li>
+</ul></li>
+<li>参数调整
+<ul>
+<li>特定因子loading设为0；</li>
+<li>偏误的协方差设为0；</li>
+<li>偏误的方差设为0.</li>
+</ul></li>
+</ol>
+</div></div>
+</section>
+<section id="求解" class="slide level2" data-number="4.10">
+<h2><span class="header-section-number">4.10</span> 求解</h2>
+<p><span class="math display">\[\Sigma(\theta) = \Lambda_X\Phi\Lambda_X' + \Theta_\epsilon,\]</span> <strong>Σ</strong>: 所有可见指标得协方差矩阵</p>
+<aside class="notes">
+<p>寻找最优<strong>Σ</strong></p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="columns">
+<div class="column fragment" style="width:50%;">
+<p>全信息估计 (Maximum likelihood)</p>
+<ul>
+<li>Generalized Least Squares<br>
+</li>
+<li>Unweighted Least Squares</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p>有限信息估计</p>
+<ul>
+<li>Two Stage Least Squares</li>
+</ul>
+</div></div>
+</section>
+<section id="常见问题" class="slide level2" data-number="4.11">
+<h2><span class="header-section-number">4.11</span> 常见问题</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<p><code>错误：待分析的矩阵不是正定的</code></p>
+<ul>
+<li>数据或协方差矩阵中录入错误</li>
+<li>缺失数据</li>
+<li><strong>完全共线性</strong></li>
+<li>异常值</li>
+</ul>
+</div><div class="column" style="width:35%;">
+<p><code>错误：不恰当的解</code></p>
+<ul>
+<li>录入错误</li>
+<li>总体值接近变量边界，加之抽样波动</li>
+<li>模型错误</li>
+<li>因素指标观测量过小（&lt;150左右）且<strong>只有2个指标</strong></li>
+<li>“Unlucky”样本</li>
+<li>异常值</li>
+</ul>
+</div><div class="column" style="width:35%;">
+<p><code>错误：未收敛</code></p>
+<ul>
+<li>录入错误</li>
+<li>Unidentifiable</li>
+<li>模型不佳</li>
+<li>起始值不佳</li>
+<li>小样本（N&lt;100）</li>
+<li>每个因素只有2指标</li>
+<li>异常值</li>
+<li>观测变量<strong>量纲极大差异</strong></li>
+</ul>
+</div></div>
+<aside class="notes">
+<p><code>Error: Matrix to be analyzed not positive definite</code></p>
+<ul>
+<li>Typo in data file or covariance matrix</li>
+<li>Pairwise deletion of missing data</li>
+<li>Perfect collinearity</li>
+<li>Outliers/influential cases</li>
+</ul>
+<p><code>Error: Improper solutions</code></p>
+<ul>
+<li>Typo in program</li>
+<li>Population value near the borderline combined with sampling fluctuation</li>
+<li>Specification error</li>
+<li>Small samples (&lt;150 or so) combined with 2 indicators per factor</li>
+<li>“unlucky” sample</li>
+<li>Outliers/influential cases</li>
+</ul>
+<p><code>Error: Nonconvergence</code></p>
+<ul>
+<li>Typo in program, data file, or covariance matrix</li>
+<li>Underidentified model</li>
+<li>Poor model specification</li>
+<li>Bad starting values</li>
+<li>Small samples (N&lt;100)</li>
+<li>Only 2 indicators per factor</li>
+<li>Outliers/influential cases</li>
+<li>Observed variables in very different scale</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="诊断方法" class="slide level2" data-number="4.12">
+<h2><span class="header-section-number">4.12</span> 诊断方法</h2>
+<p><em>Overall: χ<sup>2</sup></em>，结果<span class="red">显著</span><sup>1</sup>则说明整体模型可能<span class="red">有问题</span>。</p>
+<aside class="notes">
+<ol type="1">
+<li>Because models are almost always incorrect, any otherwise reasonably fitting model can be rejected when sample size is sufficient</li>
+<li>Also a poor fitting model could be accepted if there is insufficient power to detect misspecification.</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p><em>Incremental Fit Indices</em>：将模型与基线模型比较</p>
+<ol type="1">
+<li>Tucker-Lewis Index (TLI, ρ<sub>2</sub>, Non-Normed Fit Index)</li>
+<li>Comparative Fit Index (CFI)</li>
+</ol>
+</div>
+<aside class="notes">
+<p>基线模型：只保留可见变量的方差和协方差</p>
+<p>1 理想情况<br>
+&lt;.95 不可接受</p>
+<p>CFI可以&gt;1, 这种情况视为1</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="fragment">
+<p><em>Absolute Fit Indices</em></p>
+<ol type="1">
+<li>Root Mean Square Error of Approximation (RMSEA)</li>
+<li>Standardized Root Mean Square Residual (SRMR)</li>
+</ol>
+</div>
+<aside class="notes">
+<ul>
+<li>0 理想情况</li>
+<li>≤ 0.05 不错</li>
+<li>0.05 ~ 0.08 差强人意</li>
+<li>≥ 0.1 不可接受</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><ol class="aside-footnotes"><li id="fn2"><p>然而，当N足够大时χ<sup>2</sup>通常显著。</p></li></ol></aside></section>
+<section id="holzinger-swineford-1939" class="slide level2" data-number="4.13">
+<h2><span class="header-section-number">4.13</span> 🌰 Holzinger &amp; Swineford 1939</h2>
+<p>对初中生精神状况的调查： 视觉因素（x<sub>1~3</sub>） + 阅读因素（x<sub>4~6</sub>）+ （表达因素：x<sub>7~9</sub>）</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="05_latentVariableIII_files/figure-revealjs/diagram-cfa-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-29"><img data-src="05_latentVariableIII_files/figure-revealjs/diagram-cfa-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="估测结果与诊断" class="slide level2" data-number="4.14">
+<h2><span class="header-section-number">4.14</span> 估测结果与诊断</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6-19 ended normally after 35 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        21
+
+  Number of observations                           301
+
+Model Test User Model:
+                                                      
+  Test statistic                                85.306
+  Degrees of freedom                                24
+  P-value (Chi-square)                           0.000
+
+Model Test Baseline Model:
+
+  Test statistic                               918.852
+  Degrees of freedom                                36
+  P-value                                        0.000
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.931
+  Tucker-Lewis Index (TLI)                       0.896
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)              -3737.745
+  Loglikelihood unrestricted model (H1)      -3695.092
+                                                      
+  Akaike (AIC)                                7517.490
+  Bayesian (BIC)                              7595.339
+  Sample-size adjusted Bayesian (SABIC)       7528.739
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.092
+  90 Percent confidence interval - lower         0.071
+  90 Percent confidence interval - upper         0.114
+  P-value H_0: RMSEA &lt;= 0.050                    0.001
+  P-value H_0: RMSEA &gt;= 0.080                    0.840
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.065
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  visual =~                                           
+    x1                1.000                           
+    x2                0.554    0.100    5.554    0.000
+    x3                0.729    0.109    6.685    0.000
+  textual =~                                          
+    x4                1.000                           
+    x5                1.113    0.065   17.014    0.000
+    x6                0.926    0.055   16.703    0.000
+  speed =~                                            
+    x7                1.000                           
+    x8                1.180    0.165    7.152    0.000
+    x9                1.082    0.151    7.155    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  visual ~~                                           
+    textual           0.408    0.074    5.552    0.000
+    speed             0.262    0.056    4.660    0.000
+  textual ~~                                          
+    speed             0.173    0.049    3.518    0.000
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .x1                0.549    0.114    4.833    0.000
+   .x2                1.134    0.102   11.146    0.000
+   .x3                0.844    0.091    9.317    0.000
+   .x4                0.371    0.048    7.779    0.000
+   .x5                0.446    0.058    7.642    0.000
+   .x6                0.356    0.043    8.277    0.000
+   .x7                0.799    0.081    9.823    0.000
+   .x8                0.488    0.074    6.573    0.000
+   .x9                0.566    0.071    8.003    0.000
+    visual            0.809    0.145    5.564    0.000
+    textual           0.979    0.112    8.737    0.000
+    speed             0.384    0.086    4.451    0.000</code></pre>
+</div>
+</div>
+</section>
+<section id="使用cfa确认验证维度-joreskog1971" class="slide level2" data-number="4.15">
+<h2><span class="header-section-number">4.15</span> 使用CFA确认/验证维度 <span class="citation" data-cites="Joreskog1971">(<a href="#/参考文献" role="doc-biblioref" onclick="">Jöreskog 1971</a>)</span></h2>
+<div class="cell">
+<div class="cell-output-display">
+<div class="grViz html-widget html-fill-item" id="htmlwidget-767a1dec7e16182f71d9" style="width:960px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-767a1dec7e16182f71d9">{"x":{"diagram":"\ndigraph cfa_vs_mgcfa {\n\n  graph [rankdir = TB, bgcolor = white, nodesep = 0.35, ranksep = 0.55]\n\n  # ----- default node/edge styles -----\n  node [shape = rounded, style = filled, fontname = Helvetica, color = black, width = 3.7, height = 0.6]\n  edge [color = black, arrowsize = 0.8]\n\n  # ===== LEFT COLUMN: Regular CFA =====\n  subgraph cluster_cfa {\n    label = \"Regular CFA\\n(Within-group validation)\";\n    labelloc = t; fontsize = 16; fontcolor = \"#1b5e20\";\n    color = \"#c8e6c9\"; penwidth = 1;\n\n    cfa1 [label=\"One group of data\", fillcolor = \"#a5d6a7\"];\n    cfa2 [label=\"Multiple latent variables\n(factors) allowed\", fillcolor = \"#a5d6a7\"];\n    cfa3 [label=\"Tests if model fits\nwithin this single group\", fillcolor = \"#a5d6a7\"];\n\n    {rank = same; }  # let Graphviz place rows vertically\n\n    # vertical flow (left)\n    cfa1 -> cfa2 -> cfa3;\n  }\n\n  # ===== RIGHT COLUMN: MGCFA =====\n  subgraph cluster_mgcfa {\n    label = \"Multiple-Group CFA (MGCFA)\\n(Cross-group comparability)\";\n    labelloc = t; fontsize = 16; fontcolor = \"#7f0000\";\n    color = \"#ffcdd2\"; penwidth = 1;\n\n    mg1 [label=\"Two or more groups of data\", fillcolor = \"#ef9a9a\"];\n    mg2 [label=\"Same factor model tested\nacross groups\", fillcolor = \"#ef9a9a\"];\n    mg3 [label=\"Sequential tests of invariance\n(configural → metric → scalar → strict)\", fillcolor = \"#ef9a9a\", width=4.6];\n    mg4 [label=\"Allows valid group comparisons\n(correlations, regressions, means)\", fillcolor = \"#ef9a9a\"];\n\n    # vertical flow (right)\n    mg1 -> mg2 -> mg3 -> mg4;\n  }\n\n  # ----- layout hints so the two columns align -----\n  { rank = same; cfa1 mg1 }\n  { rank = same; cfa2 mg2 }\n  { rank = same; cfa3 mg3 }\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="fragment large" style="text-align:center; margin-top: 0.5em">
+<p>Theory matters!</p>
+</div>
+<aside class="notes">
+<p>Using MGCFA to confirm dimensions</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="确认维度之后-berwickcaughey2025" class="slide level2" data-number="4.16">
+<h2><span class="header-section-number">4.16</span> 确认维度之后 <span class="citation" data-cites="BerwickCaughey2025">(<a href="#/参考文献" role="doc-biblioref" onclick="">Berwick and Caughey 2025</a>)</span></h2>
+<div class="overlay-container">
+<div class="overlay-image">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_modgirt.png" class="lightbox" data-gallery="quarto-lightbox-gallery-30"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_modgirt.png" class="quarto-figure quarto-figure-center" height="600"></a></p>
+</figure>
+</div>
+</div>
+<div class="overlay-text-over fragment">
+<p><span class="red">Multidimensional</span>, multilevel IRT</p>
+<ul>
+<li><strong>Strengths</strong>
+<ul>
+<li>Flexible: Single-country or cross-national datasets</li>
+<li>Extensible: Overdispersion, differential item functioning, and predictors.</li>
+</ul></li>
+<li><strong>Considerations</strong>
+<ul>
+<li>Computationally intensive (Bayesian estimation).</li>
+<li>Needs bridging items for comparability across groups/time.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="总结" class="slide level2" data-number="4.17">
+<h2><span class="header-section-number">4.17</span> 总结</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>平均值层次（MRP）
+<ul>
+<li>计算具有总体意义的组别平均值</li>
+<li>需要组别分布</li>
+<li>局限
+<ul>
+<li>问题差异</li>
+<li>答题差异</li>
+</ul></li>
+</ul></li>
+<li>群组IRT（DGIRT，<span class="red">DCPO</span>）
+<ul>
+<li>计算群组层级可比度量</li>
+<li>操作
+<ul>
+<li><span class="red">T</span>eam-work collection</li>
+<li><span class="red">A</span>utomation everything</li>
+<li><span class="red">O</span>pening</li>
+</ul></li>
+</ul></li>
+</ul>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>分析维度判定
+<ul>
+<li>验证性因子分析：检验潜在变量对于观察指标是否有影响
+<ul>
+<li>CFA诊断：χ<sup>2</sup>, TLI/CFI，RMSEA/SRMR</li>
+</ul></li>
+<li>CFA + IRT
+<ul>
+<li>MGCFA</li>
+<li>MODGIRT</li>
+</ul></li>
+</ul></li>
+</ul>
+</div></div>
+</section></section>
+<section>
+<section id="欢迎交流" class="title-slide slide level1 center" data-background="#43464B" data-number="5">
+<h1><span class="header-section-number">5</span> 欢迎交流</h1>
+<div style="text-align: right; margin-top: 1em">
+<p><a href="https://github.com/sammo3182"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>&nbsp; sammo3182</a></p>
+<p><a href="mailto:yuehu@tsinghua.edu.cn"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path> <polyline points="22,6 12,13 2,6"></polyline></svg>&nbsp; yuehu@tsinghua.edu.cn</a></p>
+<p><a href="https://sammo3182.github.io/"><svg viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"> <circle cx="12" cy="12" r="10"></circle> <line x1="2" y1="12" x2="22" y2="12"></line> <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>&nbsp; https://sammo3182.github.io/</a></p>
+<p><a href="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" class="lightbox" data-gallery="quarto-lightbox-gallery-31"><img data-src="https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png" height="250"></a></p>
+</div>
+</section>
+<section id="参考文献" class="slide level2 unnumbered smaller scrollable">
+<h2>参考文献</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-BarchardPace2011" class="csl-entry" role="listitem">
+Barchard, Kimberly A., and Larry A. Pace. 2011. <span>“Preventing Human Error: The Impact of Data Entry Methods on Data Accuracy and Statistical Results.”</span> <em>Computers in Human Behavior</em> 27 (5): 1834–39.
+</div>
+<div id="ref-BerwickCaughey2025" class="csl-entry" role="listitem">
+Berwick, Elissa, and Devin Caughey. 2025. <span>“MODGIRT: Multidimensional Dynamic Scaling of Aggregate Survey Data.”</span> <em>Political Analysis</em>, 1–16.
+</div>
+<div id="ref-CarpiniKeeter1993" class="csl-entry" role="listitem">
+Carpini, Michael X. Delli, and Scott Keeter. 1993. <span>“Measuring Political Knowledge: Putting First Things First.”</span> <em>American Journal of Political Science</em> 37 (4): 1179–1206. <a href="https://doi.org/10.2307/2111549">https://doi.org/10.2307/2111549</a>.
+</div>
+<div id="ref-CaugheyWarshaw2015" class="csl-entry" role="listitem">
+Caughey, Devin, and Christopher Warshaw. 2015. <span>“Dynamic Estimation of Latent Opinion Using a Hierarchical Group-Level IRT Model.”</span> <em>Political Analysis</em> 23 (2): 197–211. <a href="https://doi.org/10.1093/pan/mpu021">https://doi.org/10.1093/pan/mpu021</a>.
+</div>
+<div id="ref-Claassen2019" class="csl-entry" role="listitem">
+Claassen, Christopher. 2019. <span>“Estimating Smooth Country–Year Panels of Public Opinion.”</span> <em>Political Analysis</em> 27 (1): 1–20.
+</div>
+<div id="ref-GelmanLittle1997" class="csl-entry" role="listitem">
+Gelman, Andrew, and Thomas C. Little. 1997. <span>“Poststratification into Many Categories Using Hierarchical Logistic Regression.”</span> <em>Survey Methods</em> 23: 127–35.
+</div>
+<div id="ref-HaegemansEtAl2019" class="csl-entry" role="listitem">
+Haegemans, Tom, Monique Snoeck, and Wilfried Lemahieu. 2019. <span>“A Theoretical Framework to Improve the Quality of Manually Acquired Data.”</span> <em>Information &amp; Management</em> 56 (1): 1–14.
+</div>
+<div id="ref-HuEtAl2025b" class="csl-entry" role="listitem">
+Hu, Yue, Yuehong Cassandra Tai, Kyein Ko, Byung-Deuk Woo, and Frederick Solt. 2025. <span>“An Incomplete Recipe: One-Dimensional Latent Variables Do Not Capture the Full Flavor of Democratic Support.”</span> <em>Research &amp; Politics</em> 12 (2): 20531680251341857. <a href="https://doi.org/10.1177/20531680251341857">https://doi.org/10.1177/20531680251341857</a>.
+</div>
+<div id="ref-HuEtAl2024a" class="csl-entry" role="listitem">
+Hu, Yue, Yuehong Cassandra Tai, and Frederick Solt. 2024. <span>“Revisiting the Evidence on Thermostatic Response to Democratic Change: Degrees of Democratic Support or Researcher Degrees of Freedom?”</span> <em>Political Science Research and Methods</em>, May, 1–7. <a href="https://doi.org/10.1017/psrm.2024.16">https://doi.org/10.1017/psrm.2024.16</a>.
+</div>
+<div id="ref-Joreskog1971" class="csl-entry" role="listitem">
+Jöreskog, K. G. 1971. <span>“Simultaneous Factor Analysis in Several Populations.”</span> <em>Psychometrika</em> 36 (4): 409–26. <a href="https://doi.org/10.1007/BF02291366">https://doi.org/10.1007/BF02291366</a>.
+</div>
+<div id="ref-PutnickBornstein2016" class="csl-entry" role="listitem">
+Putnick, Diane L., and Marc H. Bornstein. 2016. <span>“Measurement Invariance Conventions and Reporting: The State of the Art and Future Directions for Psychological Research.”</span> <em>Developmental Review</em> 41 (September): 71–90. <a href="https://doi.org/10.1016/j.dr.2016.06.004">https://doi.org/10.1016/j.dr.2016.06.004</a>.
+</div>
+<div id="ref-Solt2020a" class="csl-entry" role="listitem">
+Solt, Frederick. 2020. <span>“Modeling Dynamic Comparative Public Opinion.”</span> SocArXiv.
+</div>
+<div id="ref-Stimson1991" class="csl-entry" role="listitem">
+Stimson, James A. 1991. <em>Public Opinion in America: Moods, Cycles, and Swings</em>. Transforming American Politics Series. Boulder: Westview Press.
+</div>
+<div id="ref-TaiEtAl2024" class="csl-entry" role="listitem">
+Tai, Yuehong ‘Cassandra’, Yue Hu, and Frederick Solt. 2024. <span>“Democracy, Public Support, and Measurement Uncertainty.”</span> <em>American Political Science Review</em> 118 (1): 512–18. <a href="https://doi.org/10.1017/S0003055422000429">https://doi.org/10.1017/S0003055422000429</a>.
+</div>
+<div id="ref-WooEtAl2023" class="csl-entry" role="listitem">
+Woo, Byung-Deuk, Lindsey A. Goldberg, and Frederick Solt. 2023. <span>“Public Gender Egalitarianism: A Dataset of Dynamic Comparative Public Opinion Toward Egalitarian Gender Roles in the Public Sphere.”</span> <em>British Journal of Political Science</em> 53 (2): 766–75. <a href="https://doi.org/10.1017/S0007123422000436">https://doi.org/10.1017/S0007123422000436</a>.
+</div>
+<div id="ref-WooEtAl2024" class="csl-entry" role="listitem">
+Woo, Byung-Deuk, Hyein Ko, Yuehong Cassandra Tai, Yue Hu, and Frederick Solt. 2024. <span>“Public Support for Gay Rights Across Countries and over Time.”</span> <em>Social Science Quarterly</em> 106 (1): e13478. <a href="https://doi.org/10.1111/ssqu.13478">https://doi.org/10.1111/ssqu.13478</a>.
+</div>
+</div>
+</section></section>
+<section>
+<section id="附录贝叶斯统计诊断" class="title-slide slide level1 appendix center" data-visibility="uncounted" data-number="6">
+<h1><span class="header-section-number">6</span> 附录：贝叶斯统计诊断</h1>
+
+</section>
+<section id="convergence-特征" class="slide level2" data-visibility="uncounted" data-number="6.1">
+<h2><span class="header-section-number">6.1</span> Convergence 特征</h2>
+<ul>
+<li><strong>常返</strong>
+<ul>
+<li><strong>齐次/封闭</strong>：在第 <span class="math inline">\(m\)</span> 步，如果此步的转移概率与 <span class="math inline">\(m\)</span> 无关；对于状态 A、B，<span class="math inline">\(p(A, B) = 0\)</span></li>
+<li><strong>不可约</strong>：如果从任意已达点/点集都可以到达其他任意已达点/点集；<span class="math inline">\(p(\theta_i, \theta_j) \neq 0, \ \forall \theta_i, \theta_j\)</span></li>
+</ul></li>
+<li><strong>平稳性</strong>：无自相关</li>
+<li><strong>非周期性</strong>：即使经过长时间，链的取值也不会出现相同的循环重复</li>
+</ul>
+<aside class="notes">
+<ul>
+<li><p>Reccurent</p>
+<ul>
+<li>Homogeneous/Closed: At step m if the trasition probabilities at this step do not depend on m; for State A, B, p(A, B) = 0</li>
+<li>Irreducible: If every reached point/point collection can be reached from every other reached point/point collection; p(θ<sub>i</sub>, θ<sub>j</sub>)≠ 0, ∀ θ<sub>i</sub>, θ<sub>j</sub></li>
+</ul></li>
+<li><p>Stationary: no autocorrelation</p></li>
+<li><p>Aperodic: even with a long time there’s no identical cycle of chain values repeating</p></li>
+<li><p>Homogeneity: at step m the transition probability at this step do not depend on</p></li>
+<li><p>Ergodicity：遍历性</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="converged时什么样一个" class="slide level2" data-visibility="uncounted" data-number="6.2">
+<h2><span class="header-section-number">6.2</span> Converged时什么样：一个🌰</h2>
+<div class="columns">
+<div class="column" style="width:35%;">
+<blockquote>
+<p>下雪啦天晴啦<br>
+下雪别忘穿棉袄<br>
+下雪啦天晴啦<br>
+天晴别忘戴草帽<br>
+带草帽~~~<br>
+—《心中的太阳》</p>
+</blockquote>
+<p>今晴，明80%也晴；<br>
+今雪，明60%也雪。</p>
+<table class="caption-top">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 30%">
+<col style="width: 30%">
+<col style="width: 30%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th></th>
+<th>明天</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>θ<sub>1</sub></td>
+<td>θ<sub>2</sub></td>
+</tr>
+<tr class="even">
+<td>今天</td>
+<td>θ<sub>1</sub></td>
+<td>0.8</td>
+<td>0.2</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>θ<sub>2</sub></td>
+<td>0.6</td>
+<td>0.4</td>
+</tr>
+</tbody>
+</table>
+<aside class="notes">
+<p>刘欢：《心中的太阳》, 《雪城》主题曲，1988年，倪萍主演</p>
+<p>该曲采用再现三段体结构形式写成，外加一个高亢、悠扬的尾声。A段采用悠扬自由的散板节奏，具有思忖沉寂的意境。“大实话”式的歌词，饱含着对自然、社会、人生的不解、疑惑与诘问。B段开始转为充满活力的快板速度，歌词开始由诘问转变为对人间常态的肯定。A’段的旋律不变，只是节律变得富于急迫感、动力感，在这种动力的驱动下，继续开始诘问。高亢、悠扬的尾声，以反复咏唱的“啊太阳”结束，寓意作者对人间真理的无限向往与坚定追求</p>
+<p>example of converged</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div><div class="column fragment" style="width:65%;">
+<p>起始点: [0.5 0.5]</p>
+<p><span class="math inline">\(S_1 = [0.5\; 0.5]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.7\; 0.3];\)</span> <span class="math inline">\(S_2 = [0.7\; 0.3]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.74\; 0.26];\)</span> <span class="math inline">\(S_3 = [0.74\; 0.26]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.748\; 0.252];\)</span> <span class="math inline">\(S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 &amp; 0.2\\ 0.6 &amp; 0.4 \end{bmatrix}=[0.749\; 0.250].\)</span></p>
+<div class="fragment">
+<p>再往下算，会发现概率变化越来越小，趋于稳定（congverged）</p>
+</div>
+</div></div>
+</section>
+<section id="检验convergence" class="slide level2" data-visibility="uncounted" data-number="6.3">
+<h2><span class="header-section-number">6.3</span> 检验Convergence</h2>
+<p>目前没有统计办法能够证明一个Markov Chain已经converged</p>
+<ol type="1">
+<li>在给定时间内，无法保证Markov chain能够<span class="red">达到</span>目标分布;</li>
+<li>无法预先确定一条Chain能够<span class="red">遍历</span>目标分布的所有区域;</li>
+<li>只能诊断一条Chain是否<span class="red">未</span>converged (诊断工具：Geweke’s G, Gelman-Rubin)</li>
+</ol>
+<div class="fragment">
+<p>增加Convergence可能的方法</p>
+<ol type="1">
+<li>足够的Burn-in rounds (诊断工具：Raftery-Lewis)</li>
+<li>尽可能排除autocorrelation（诊断工具：Heidelberger-Welch）</li>
+</ol>
+</div>
+</section>
+<section id="gewekes-g" class="slide level2" data-visibility="uncounted" data-number="6.4">
+<h2><span class="header-section-number">6.4</span> Geweke’s G</h2>
+<ul>
+<li>比较parameters在chain早期和晚期两个<span class="red">不重叠</span>的窗口内的均值；</li>
+<li>主要针对recurrence特征</li>
+</ul>
+<p><span class="math display">\[G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.\]</span></p>
+<aside class="notes">
+<p>A fancy difference of means</p>
+<p>converge 则显示不显著差异，增加burn-in</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="gelman-rubin-1992" class="slide level2" data-visibility="uncounted" data-number="6.5">
+<h2><span class="header-section-number">6.5</span> Gelman &amp; Rubin 1992</h2>
+<p><span class="math display">\[\hat{R}= \sqrt{\frac{\hat{var(\theta)}}{W}}\]</span></p>
+<ol type="1">
+<li>跑多条chains（5~10），每条长2n</li>
+<li>对每一个感兴趣的parameter计算
+<ol type="1">
+<li>Within chain variance(W)</li>
+<li>Between chain variance(B)</li>
+</ol></li>
+<li>计算总体variance： var(θ) = (1 - 1/n)W + (1/n)B</li>
+<li>计算Scale reduction (亦称shrink factor)</li>
+</ol>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>R趋近于1表示chains operating on same distribution
+<ul>
+<li>&lt; 1.1或1.2是可以接受的</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="burn-in" class="slide level2" data-visibility="uncounted" data-number="6.6">
+<h2><span class="header-section-number">6.6</span> Burn-In</h2>
+<ul>
+<li>给与足够的burning in以到达目标分布</li>
+<li>“炸毛的毛毛虫”（Fuzzy Caterpillar）</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/fuzzyCaterpillar.png" class="lightbox" data-gallery="quarto-lightbox-gallery-32"><img data-src="https://drhuyue.site:10002/sammo3182/figure/fuzzyCaterpillar.png" class="quarto-figure quarto-figure-center" height="450"></a></p>
+</figure>
+</div>
+</section>
+<section id="检验burn-in是否足够raftery-lewis-1991-1996" class="slide level2" data-visibility="uncounted" data-number="6.7">
+<h2><span class="header-section-number">6.7</span> 检验Burn-in是否足够：Raftery &amp; Lewis (1991, 1996)</h2>
+<ul>
+<li>分别评价每一个Chain的每一个变量
+<ol type="1">
+<li>根据Chain间的相关性，并据此提供一个迭代数（iteration number）</li>
+<li>检验autocorrelation inflation</li>
+</ol></li>
+<li>输出
+<ul>
+<li>Burn-in：一位数或两位数为佳</li>
+<li>Total：建议的burn-in数，未考虑cross-chain，因此真正burnin要乘上chain数</li>
+<li>Dependence Factor</li>
+</ul></li>
+</ul>
+</section>
+<section id="autocorrelation" class="slide level2" data-visibility="uncounted" data-number="6.8">
+<h2><span class="header-section-number">6.8</span> Autocorrelation</h2>
+<p>特征：</p>
+<ol type="1">
+<li>Chain间高相关性</li>
+<li>单一parameter高相关性</li>
+</ol>
+<aside class="notes">
+<ol type="1">
+<li>Chain间高相关性：Slow convergence</li>
+<li>单一parameter的高相关：Individual nonconvergence</li>
+</ol>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<div class="r-hstack">
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/isAutocorrelation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-33" title="Autocorrelated"><img data-src="https://drhuyue.site:10002/sammo3182/figure/isAutocorrelation.png" class="quarto-figure quarto-figure-center" height="400" alt="Autocorrelated"></a></p>
+</figure>
+</div>
+<figcaption>Autocorrelated</figcaption>
+</figure>
+</div>
+</div>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/noAutocorrelation.png" class="lightbox" data-gallery="quarto-lightbox-gallery-34" title="Not autocorrelated"><img data-src="https://drhuyue.site:10002/sammo3182/figure/noAutocorrelation.png" class="quarto-figure quarto-figure-center" height="400" alt="Not autocorrelated"></a></p>
+</figure>
+</div>
+<figcaption>Not autocorrelated</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="heidelberger-and-welch" class="slide level2" data-visibility="uncounted" data-number="6.9">
+<h2><span class="header-section-number">6.9</span> Heidelberger and Welch</h2>
+<p>用于检验Stationarity</p>
+<ol type="1">
+<li>确定一个迭代数N, 以及准确性（ε）和显著性数准(α)</li>
+<li>运行整个chain</li>
+<li>施用Cramér-von Mises Test，Null: Chain是stationary</li>
+<li>如检验未通过则依次略去10%、20%,乃至50%的迭代，再次检测；</li>
+<li>如结果表示部分数据不是stationary，则对该部分数据进行halfwidth检验</li>
+<li>如果halfwidth ratio &lt; ε, 则通过检验</li>
+</ol>
+</section>
+<section id="thinning" class="slide level2" data-visibility="uncounted" data-number="6.10">
+<h2><span class="header-section-number">6.10</span> Thinning</h2>
+<p>Thinning 并<span class="red">不会</span>提高Chain的运算速度、帮助convergence或增强估测质量</p>
+<ul>
+<li>每个Chain记录多少samples
+<ul>
+<li>Chain将仅记录第k个值，越高丢失的信息越多</li>
+<li>k通常取值：4，5，10</li>
+</ul></li>
+<li>仅用于降低autocorrelation</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>何时调Thin</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li>迭代中autocorrelation太高</li>
+<li>Chain的convergence太低</li>
+<li>并行运算</li>
+<li>模型维度过高</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="附录结构方程模型" class="title-slide slide level1 appendix center" data-visibility="uncounted" data-number="7">
+<h1><span class="header-section-number">7</span> 附录：结构方程模型</h1>
+
+</section>
+<section id="什么是结构方程模型" class="slide level2" data-visibility="uncounted" data-number="7.1">
+<h2><span class="header-section-number">7.1</span> 什么是结构方程模型</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<ul>
+<li>Structural equation model (SEM)<br>
+</li>
+<li>LISREL (Linear Structural ReLationships) models<br>
+</li>
+<li>Covariance structure models<br>
+</li>
+<li>Latent variable models<br>
+</li>
+<li>Structural equations with latent variables</li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="https://drhuyue.site:10002/sammo3182/figure/lv_sem.png" class="lightbox" data-gallery="quarto-lightbox-gallery-35"><img data-src="https://drhuyue.site:10002/sammo3182/figure/lv_sem.png" class="fragment quarto-figure quarto-figure-center" height="200"></a></p>
+</figure>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<ul>
+<li>Confirmative factor analysis<br>
+</li>
+<li>Multiple regression<br>
+</li>
+<li>Multivariate regression<br>
+</li>
+<li>ANOVA<br>
+</li>
+<li>General linear model<br>
+</li>
+<li>Path analysis<br>
+</li>
+<li>Recursive models<br>
+</li>
+<li>Dichotomous and ordered probit<br>
+</li>
+<li>Seemingly unrelated regressions<br>
+</li>
+<li>Simultaneous models<br>
+</li>
+<li>Latent growth curve models<br>
+……</li>
+</ul>
+</div></div>
+</section>
+<section id="sem-in-terms-of-cfa" class="slide level2" data-visibility="uncounted" data-number="7.2">
+<h2><span class="header-section-number">7.2</span> SEM (in terms of CFA)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>结构</strong></p>
+<ul>
+<li>观察变量： X + Y</li>
+<li>模型建构：
+<ol type="1">
+<li>Latent variable model</li>
+<li>Measurement model (CFA)</li>
+<li>Relations among the errors</li>
+</ol></li>
+<li>依然要求identification</li>
+</ul>
+<p><strong>估计</strong>：MLE</p>
+</div><div class="column" style="width:50%;">
+<p><strong>诊断</strong></p>
+<ul>
+<li>Overall：χ<sup>2</sup></li>
+<li>Incremental：
+<ul>
+<li>TLI &amp; CLI</li>
+<li>Incremental Fit Index(IFI, Δ<sup>2</sup>)</li>
+</ul></li>
+<li>Absolute:
+<ul>
+<li>RMSEA</li>
+<li>BIC</li>
+</ul></li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>除了CFA，SEM还能做什么</strong></p>
+</div>
+<div class="callout-content">
+<p><em>敬请注意</em>：<span class="red">SEM结果仍表现相关关系。</span></p>
+<p>处理Measurement errors；处理非线性变量(hint: GSEM)；纳入多层效应；处理缺失值</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="bollen-1989" class="slide level2" data-visibility="uncounted" data-number="7.3">
+<h2><span class="header-section-number">7.3</span> 🌰 Bollen 1989</h2>
+<p>政治民主（1960，1965）与工业化</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="05_latentVariableIII_files/figure-revealjs/diagram-sem-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-36"><img data-src="05_latentVariableIII_files/figure-revealjs/diagram-sem-1.png" class="quarto-figure quarto-figure-center" width="960"></a></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="结果与诊断" class="slide level2" data-visibility="uncounted" data-number="7.4">
+<h2><span class="header-section-number">7.4</span> 结果与诊断</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>lavaan 0.6-19 ended normally after 68 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        31
+
+  Number of observations                            75
+
+Model Test User Model:
+                                                      
+  Test statistic                                38.125
+  Degrees of freedom                                35
+  P-value (Chi-square)                           0.329
+
+Model Test Baseline Model:
+
+  Test statistic                               730.654
+  Degrees of freedom                                55
+  P-value                                        0.000
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.995
+  Tucker-Lewis Index (TLI)                       0.993
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)              -1547.791
+  Loglikelihood unrestricted model (H1)      -1528.728
+                                                      
+  Akaike (AIC)                                3157.582
+  Bayesian (BIC)                              3229.424
+  Sample-size adjusted Bayesian (SABIC)       3131.720
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.035
+  90 Percent confidence interval - lower         0.000
+  90 Percent confidence interval - upper         0.092
+  P-value H_0: RMSEA &lt;= 0.050                    0.611
+  P-value H_0: RMSEA &gt;= 0.080                    0.114
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.044
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Latent Variables:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  ind60 =~                                            
+    x1                1.000                           
+    x2                2.180    0.139   15.742    0.000
+    x3                1.819    0.152   11.967    0.000
+  dem60 =~                                            
+    y1                1.000                           
+    y2                1.257    0.182    6.889    0.000
+    y3                1.058    0.151    6.987    0.000
+    y4                1.265    0.145    8.722    0.000
+  dem65 =~                                            
+    y5                1.000                           
+    y6                1.186    0.169    7.024    0.000
+    y7                1.280    0.160    8.002    0.000
+    y8                1.266    0.158    8.007    0.000
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  dem60 ~                                             
+    ind60             1.483    0.399    3.715    0.000
+  dem65 ~                                             
+    ind60             0.572    0.221    2.586    0.010
+    dem60             0.837    0.098    8.514    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+ .y1 ~~                                               
+   .y5                0.624    0.358    1.741    0.082
+ .y2 ~~                                               
+   .y4                1.313    0.702    1.871    0.061
+   .y6                2.153    0.734    2.934    0.003
+ .y3 ~~                                               
+   .y7                0.795    0.608    1.308    0.191
+ .y4 ~~                                               
+   .y8                0.348    0.442    0.787    0.431
+ .y6 ~~                                               
+   .y8                1.356    0.568    2.386    0.017
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .x1                0.082    0.019    4.184    0.000
+   .x2                0.120    0.070    1.718    0.086
+   .x3                0.467    0.090    5.177    0.000
+   .y1                1.891    0.444    4.256    0.000
+   .y2                7.373    1.374    5.366    0.000
+   .y3                5.067    0.952    5.324    0.000
+   .y4                3.148    0.739    4.261    0.000
+   .y5                2.351    0.480    4.895    0.000
+   .y6                4.954    0.914    5.419    0.000
+   .y7                3.431    0.713    4.814    0.000
+   .y8                3.254    0.695    4.685    0.000
+    ind60             0.448    0.087    5.173    0.000
+   .dem60             3.956    0.921    4.295    0.000
+   .dem65             0.172    0.215    0.803    0.422</code></pre>
+</div>
+</div>
+
+</section></section>
+
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="05_latentVariableIII_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/reveal-spotlight/spotlight.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="05_latentVariableIII_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealSpotlight, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
+            }
+            return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+                // target, if specified
+                link.setAttribute("target", "_blank");
+                if (link.getAttribute("rel") === null) {
+                  link.setAttribute("rel", "noopener");
+                }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","loop":false,"openEffect":"fade","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>

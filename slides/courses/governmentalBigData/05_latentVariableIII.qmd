@@ -1,0 +1,1957 @@
+---
+title: "潜变量分析（前沿）"
+subtitle: "计算政治学讲习班"
+author: "胡悦"
+institute: "清华大学社会科学学院" 
+bibliography: [t_politicalData.bib, ../../conference/main_wrangling.bib]
+
+format: 
+    revealjs:
+        css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+        theme: ../../../css/goldenBlack.scss
+        number-sections: true
+        slide-number: true
+        filters: [appExclusion.lua] # not count appendices into page number
+        incremental: false
+        preview-links: true # open an iframe for a link
+        link-external-newwindow: true
+        self-contained: false
+        chalkboard: false # allwoing chalk board B, notes canvas C
+        # callout-icon: false
+        show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
+        show-notes: false
+        title-slide-attributes:
+            data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+            data-background-size: 250px   
+            data-background-position: top 10% right 5%
+        default-image-extension: png
+revealjs-plugins:
+    - spotlight
+lightbox: 
+    match: auto
+    effect: fade
+spotlight:
+    size: 50
+    presentingCursor: default
+    toggleSpotlightOnMouseDown: false
+    spotlightOnKeyPressAndHold: 73 # keycode for "i"
+
+execute: 
+    echo: false
+editor_options: 
+    chunk_output_type: console
+editor: 
+    render-on-save: true
+---
+
+## 概述
+
+1. 潜变量分析基础（复习）
+2. 群组加权平均（MRP）
+3. 群组项目反应理论之道
+4. 潜变量分析的维度选择
+
+# 潜变量分析基础
+
+```{r}
+#| label: setup
+#| include: false
+
+library(pacman)
+
+p_load(
+  psych,
+  lavaan,
+  drhutools,
+  semPlot,
+  qgraph,
+  haven,
+  here,
+  corrplot,
+  FactoMineR,
+  vcd,
+  factoextra,
+  ltm,
+  mirt,
+  TeachingSampling,
+  lme4,
+  ggalt,
+  DCPO,
+  latex2exp,
+  knitr,
+  kableExtra,
+  here,
+  icons,
+  tidyverse
+)
+
+# Functions preload
+set.seed(313)
+
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 18)
+)
+```
+
+
+## 解决的问题
+
+> Vaild [latent variable] measurement is the [cornerstone]{.red} of successful scientific inquiry [@CarpiniKeeter1993, p. 1203].
+
+
+:::: {.columns}
+
+::: {.column width="30%"}
+
+涵盖所有社科学科
+
+* 抽象
+* 复杂
+* 综合
+
+
+:::
+
+::: {.column .fragment width="30%"}
+
+操作性挑战
+
+1. 不可见(Unobservable)
+1. 有效果(Consequential)
+1. **多维度(Multidimensional)**
+
+:::
+
+::: {.column width="40%"}
+
+![[@Stimson1991]](https://drhuyue.site:10002/sammo3182/figure/lv_jamesStimson.jpg){.fragment fig-align="center" height=400}
+
+:::
+
+::::
+
+:::{.notes}
+
+兜里有多少钱，不可见，但维度单一，不宜用潜变量分析，更好的办法是翻兜
+
+The latent variable per se can't be directly measured. But its consequences in opinions and behaviors can be observed.
+
+:::
+
+## 平均值为什么不行
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+指标问题（1~10）：
+
+1. 您是否信任身边人？
+1. 您在政府机关有没有亲戚？
+1. 您的朋友是否和您的想法经常一致？
+
+
+累加综合法(additive scales)
+
+$$\tilde{X} = (X_1 + X_2 + X_3)/3.$$
+
+:::
+
+::: {.column .fragment width="50%"}
+
+*潜在问题*
+
+1. 相同权重(equal weight)
+1. 结果不稳(extreme value sensitivity)
+1. 忽略极化(polarity ignoring)
+
+:::
+
+::::
+
+:::{.fragment .large style="text-align:center; margin-top: 2em"}
+
+*如何做得更好？*
+
+:::
+
+## 潜变量分析常见方法
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**连续因子模型**
+
+1. 探索性因子分析(EFA)
+1. 结构方程模型(SEM)
+
+:::
+
+::: {.column .fragment width="50%"}
+
+**离散回应模型**
+
+- 项目反应理论(IRT)
+    - 项目反应群组估计
+
+:::
+
+::::
+
+::: {.callout-warning .fragment style="text-align:center; margin-top: 2em"}
+
+## 待解之题
+
+1. 如何计算一个更[靠谱]{.red}的平均值
+2. 如何[正确]{.red}使用群组潜变量分析
+3. 如何判断潜变量的[维度]{.red}
+
+:::
+
+# 群组加权平均计算
+
+## 平均值在群组层面的问题
+$$Y_{kq} = \frac{\sum Y_{ikq}}{n}.$$
+
+:::{style="text-align:center"}
+
+不妥之处？
+
+::: {.fragment}
+
+1. 如果群组过小，其平均值的代表意义不大
+2. 不同的指标对于潜在变量贡献不一样
+
+:::
+
+:::{.fragment}
+
+[&darr;]{.large}
+
+经过群组信息（地理、人口）加权的平均值    
+
+Multilevel Regression and Post-stratification [MRP, @GelmanLittle1997]
+
+:::
+
+:::
+
+## Get the mean right
+
+$$
+\theta_h = \frac{\sum_{j \in h} N_j \color{red}{\mu_j} }{\sum_{j \in h} n_j},
+$$
+
+:::{style="text-align:center"}
+
+N: 总体（来自普查）  
+n: 样本（来自sample）
+
+:::
+
+1. 将总体（population）按群组（strata，如国家、地区）[切分]{.red}；
+1. 估测对象为核心变量在[每个群组]{.red}中的平均值/比例， &theta;<sub>h</sub> (h &isin; {1, H});
+1. 已知各群组以人口变量j（如老年男性、青年女性等）划分，确定[群组人口]{.red}（N<sub>j</sub>）或占总人口比；
+1. 通过[multilevel model]{.red}进行估算各组总体平均值&mu;<sub>j</sub>。
+
+
+
+## 一个经济学🌰
+
+数据：某年某市五区域2396家产业公司的财政信息  
+目标：估测每个区域的产业平均收入
+
+:::: {.columns}
+
+::: {.column width="70%"}
+
+公司规模和区域分布
+
+```{r}
+#| label: descriptive-level
+
+data(Lucy)
+table(Lucy$Level, Lucy$Zone) %>%
+  kable()
+```
+
+:::
+
+::: {.column .fragment width="30%"}
+
+总体平均值（真值）
+
+```{r}
+#| label: trueMean
+
+tb_true <- group_by(Lucy, Zone) %>%
+  summarise(income = mean(Income))
+tb_true %>%
+  kable(digits = 2)
+```
+
+:::
+
+::::
+
+
+:::{.notes}
+
+https://www.r-bloggers.com/gelmans-mrp-in-r-what-is-this-all-about/
+
+:::
+
+## 样本
+
+我们随机选取数据中1000个产业公司作为样本。
+如果直接各组取平均值的话就会产生偏差：
+
+```{r}
+#| label: rawsVsTrue
+
+SLucy <- sample_n(Lucy, size = 1000)
+Np <- table(Lucy$Level, Lucy$Zone)
+
+tb_compare <- group_by(SLucy, Zone) %>%
+  summarise(income = mean(Income)) %>%
+  left_join(tb_true, by = c("Zone")) %>%
+  mutate(incomeTrue = 0, rawDiff = income.x - income.y, )
+
+ggplot(tb_compare, aes(x = incomeTrue, xend = rawDiff, y = Zone)) +
+  geom_dumbbell(
+    size = 4,
+    color = gb_cols("light grey"),
+    colour_x = gb_cols("gold"),
+    colour_xend = gb_cols("black"),
+  ) +
+  xlab("Difference from the true value") +
+  ylab("Zone")
+```
+
+
+## 计算
+
+**Step I: Mr**
+$$
+\begin{align}
+收入 = \beta_{0z}& + \beta_{1Z=z}公司规模_{iz} + \epsilon_{iz}, \\
+\beta_{0z}& = \gamma_{00} + \gamma_{01}区域_z + u_{0z}.
+\end{align}
+$$
+
+Output: Post-strata means ($\mu_z$)
+
+```{r}
+#| label: mr
+
+# Step 1: <<MR>> - Multilevel regression
+M1 <- lmer(Income ~ Level + (1 | Zone), data = SLucy)
+SLucy$Pred <- predict(M1)
+
+# Summary
+sum <- group_by(SLucy, Zone, Level) %>%
+  summarise(mean2 = mean(Pred))
+Mupred <- matrix(sum$mean2, ncol = 5, nrow = 3)
+
+rownames(Mupred) <- levels(SLucy$Level)
+colnames(Mupred) <- levels(SLucy$Zone)
+
+Mupred %>% kable(digits = 2)
+```
+
+**Step II: P**
+
+```{r}
+#| label: p
+
+colSums(Np * Mupred) / count(Lucy, Zone)$n
+```
+
+
+## 矫正效果
+
+```{r}
+#| label: mrpVsraw
+#| fig-height: 4
+
+tb_compare$mrpDiff <- colSums(Np * Mupred) /
+  count(Lucy, Zone)$n -
+  tb_compare$income.y
+
+tb_compare %>%
+  pivot_longer(rawDiff:mrpDiff, names_to = "methods", values_to = "diff") %>%
+  ggplot(aes(x = incomeTrue, xend = diff, y = Zone, color = methods)) +
+  geom_dumbbell(
+    size = 4,
+    colour_x = gb_cols("gold")
+  ) +
+  scale_color_viridis_d(alpha = 0.5, end = 0.7) +
+  xlab("Difference from the true value") +
+  ylab("Zone")
+```
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+::: {.callout-warning}
+
+## MrP 没有解决的问题
+
++ 答题难度的地区差异
++ 题目的scale
++ Measurement error
+
+:::
+
+:::
+
+::: {.column .fragment .large width="50%"}
+
+::: {style="margin-top: 2em"}
+
+&rarr; 群组IRT
+
+:::
+
+:::
+
+::::
+
+
+
+# 群组IRT之“道”
+
+## 群组IRT
+
+Conquer the individual fallacy
+
+:::{.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_maleFeminist.jpg){fig-align="center" .fragment height=550}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_incomeGap.jpg){.fragment fig-align="center" height=550}
+
+:::
+
+
+:::{.notes}
+
+Ecological fallacy (Simpson's paradox)
+
+![](https://drhuyue.site:10002/sammo3182/figure/ea_yuleSimpson.gif){fig-align="center" height=600}
+
+再比如，民主、不平等、政治文化……
+
+:::
+
+
+
+## 群组层级上的尝试 [@CaugheyWarshaw2015]
+
+**Dynamic Group-level IRT（DGIRT）**
+
+
+:::: {.columns}
+
+::: {.column .fragment width="50%"}
+
+*群组（Group-level）*：^[个体：$p_{iq} = logist^{-1}[\frac{\theta_i - {\beta_q}}{\alpha_q}].$]
+
+$\eta_{ktq} = logit^{-1}(\frac{\color{red}{\bar{\theta}_{kt}}- \beta_q}{\sqrt{\alpha^2_q + \color{red}{(1.7\sigma_{kt})^2}}}),$ 
+
+$\bar{\theta}_k$ 和 &sigma;<sub>kt</sub> 是潜在变量在组k时间t的均值和SD。
+
+:::{.notes}
+
+1. 在个体层面估测IRT；
+1. 在估测IRT过程中加入群组级别变量；
+1. 将时间变量融入IRT估测；
+1. 用[MrP](#sec-mrp)给估测进行权重。
+
+
+1.7: sd of probit is (&pi;/3)<sup>1/2</sup> for logit, while Long 1997 found it is more close to 1.7 in actual estimations.
+
+Mislevy, Robert J. 1983. “Item Response Models for Grouped Data.” Journal of Educational Statistics 8(4): 271–88.
+
+&eta;: eta 
+
+:::
+
+:::
+
+::: {.column .fragment width="50%"}
+
+*纳入时空 (Dynamic)*
+
+$$
+\begin{align}
+\bar{\theta}_k\sim& N(\xi_t + \boldsymbol{x'_k\gamma}, \sigma^2_{\bar{\theta}}), \\
+\xi_t \sim& N(\xi_{t-1}, \sigma^2_{\gamma}), \\
+\gamma_{pt} \sim& N(\gamma_{p,t-1}, \delta_t + \boldsymbol{z'_p.\eta_t}, \sigma^2_{\gamma})
+\end{align}
+$$ 
+
+:::{.notes}
+
+&xi;<sub>t</sub>: xi
+
+x 为群组级变量  
+
+t-1, dynamic linear model  
+
+**z'<sub>p.</sub>&eta;<sub>t</sub>**: geography-level attributes, &eta;是coefficients  
+
+n<sup>*</sup><sub>kqt</sub>基于MrP
+
+:::
+
+:::
+
+::::
+
+
+:::{.fragment style="text-align:center"}
+
+*效果*：
+
++ 囊括诸多因素
++ 可以部分平衡样本代表性问题
++ 强大，但[复杂]{.red}
+
+:::
+
+:::{.notes}
+
+Caughey & Warshaw称会跑几个星期
+
+:::
+
+
+## 简化版DGIRT [@Claassen2019]
+
+$$
+\begin{align}
+\eta_{ktq} = logit^{-1}&(\frac{\bar{\theta}'_{kt}- \beta_q}{\sqrt{\alpha^2_q + (1.7\sigma_{kt})^2}}).\\
+\downarrow&\\
+\eta_{ktq} = logit^{-1}&(\frac{\bar{\theta}'_{kt}- (\beta_q \color{red}{+ \delta_{kq}})}{\alpha_q}).
+\end{align}
+$$
+
+:::{.notes}
+
+&delta;<sub>kq</sub>: 问题的difficulty随国家k变化。
+
+:::
+
+1. 只作用于代表性样本和[国家]{.red}级别  
+1. 只对二分变量进行分析
+1. 将国家作用从估测&theta;变为估测difficulty  
+1. 假定本地项目正态分布（忽略极化等现象😱）
+
+
+
+## 纠偏版DGIRT [@Solt2020a]
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/fsolt.jpeg){fig-align="center" height=400}
+
+:::
+
+::: {.column width="50%"}
+
+[[D]{.red}ynamic [C]{.red}omparative [P]{.red}ublic [O]{.red}pinion](https://dcpo.org/team/)
+
+:::{.fragment}
+
+复杂程度：
+
+Claasseen 2019 < DCPO < DGIRT
+
+:::
+
+:::{.fragment}
+
+发表：
+
+- *APSR*[@TaiEtAl2024]
+- *BJPS*[@WooEtAl2023]
+- *PSRM*[@HuEtAl2024a]
+- *SSQ*[@WooEtAl2024]
+
+......
+
+:::
+
+
+:::
+
+::::
+
+## 效率比较
+
+::::{.overlay-container}
+
+::: {.overlay-image .fragment}
+
+:::{.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/irtCompare.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/irtFitCompare.png){.fragment fig-align="center"}
+
+:::
+
+:::{.notes}
+
+Bounded: 使用logit归为0-1
+
+:::
+
+:::
+
+::::
+
+
+## 新方法面临新挑战
+
+::::{.overlay-container}
+
+::: {.overlay-image}
+
+![Source: [urbanlogiq.com](https://urbanlogiq.com/data-engineering-101-a-guide-for-government-officials/)](https://drhuyue.site:10002/sammo3182/figure/wrangle_risk.png){fig-align="center" height=600}
+
+:::
+
+::: {.overlay-text-over .fragment}
+
+劣质源数据 
+
+\+ 
+
+数据收集过程的难复刻性
+
+\+ 
+
+难以追踪的人为操作
+
+:::
+
+::::
+
+
+
+::: {.notes}
+
+- The conventional approach usually involves a notorious bulk of manual work on indicator identification, data merging, data scaling, and so on
+- Manual wrangling make a full reproducibility of research pipeline more difficulty and undermine the transparency
+- Heterogeneous sources increases the risk
+    - older survey files stored in SPSS's ASCII or portable formats often require extensive restructuring before they can be merged with new format of data.
+- Unfortunately, documentation does not cure everything, esp. the influence of human discretion embedded in manual processing
+
+:::
+
+
+## 顶刊数据的例子
+
+![](https://drhuyue.site:10002/sammo3182/figure/wrangle_replication.png){fig-align="center" height=600}
+
+::: {.notes}
+
+Here we provide a vivid example from real-life research to show how different results the seemingly basic, well-described hand-entered steps can produce.
+We attempted to replicate the spreadsheets applied in prominent studies following the replication instructions of the publications but with a more automatic process (elaborated below).
+Points on the diagonal show agreement; points above indicate higher hand-entered values, while points below show lower hand-entered percentages compared to machine-collected data.
+
+For about 85% of country-year-item observations, differences between percentages are negligible-less than half a percent-resulting in points near the plot’s diagonal. 
+However, for the remaining cases, differences are significant and cannot be ignored.
+These discrepancies stem from decisions on categorization, processing numerators and denominators in ratio calculation, and whether counting respondents excluded from original surveys. 
+Though errors introduced during such processes seems minor and may appear as random noise, they can lead to opposite conclusions [@HuEtAl2024a]. 
+Such issues pose a major, yet underrecognized, challenge to data harmonization in political science.
+
+:::
+
+## 数据和谐之道（A TAO of Data Harmonization）
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+*目标*
+
+1. 使用尽可能多的数据
+1. 最大限度消除人工错误
+1. 数据结果[稳健性]{.red}和[可复制性]{.red}
+
+::: {.notes}
+
+1. To incorporate as much available data as possible to provide a base for comparable data and increase generality of the inferences;
+1. To reduce the manual entry errors to improve the accuracy of the harmonized data and analytic data; and 
+1. To improve the reproducibility of data wrangling process for the sake of transparency.
+
+:::
+
+
+::: {.fragment}
+
+*方法*
+
+1. [T]{.red}eam-based concept construct and data selection;
+1. Data entry [a]{.red}utomation and fully diagnoses; 
+1. "Second-order" [o]{.red}pening.
+
+:::
+
+:::
+
+::: {.column .fragment width="40%"}
+
+*演示案例*
+
+::: {.r-vstack}
+
+![*硬数据*: SWIID](https://drhuyue.site:10002/sammo3182/figure/wrangle_swiid.png){fig-align="center"}
+
+![*软数据*: DCPO](https://drhuyue.site:10002/sammo3182/figure/wrangle_dcpo.png){fig-align="center"}
+
+:::
+
+::: {.notes}
+
+- SWIID is a long-running project that seeks to provide harmonized income inequality statistics for the broadest possible coverage of countries and years
+- DCPO is both a method and a database, to address the lack of cross-national and longitudinal data on many topics
+
+:::
+
+:::
+
+::::
+
+
+## Step 1: Team-Based Construct Building and Data Selection
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*目标问题*
+
+- “手残”之现实
+    - 即使经过二次查验，数据整合错误率仍超过1% [@BarchardPace2011]
+    - 金融和民航界惨痛教训[@HaegemansEtAl2019]
+
+:::
+
+::: {.column .fragment width="50%"}
+
+*解法*: Team work
+
+- 概念构建
+- 数据选择
+- 合理性校验
+
+![Source: @BarchardPace2011 [fig. 2]](https://drhuyue.site:10002/sammo3182/figure/wrangle_doubleEntry.png){.fragment fig-align="center" height=300}
+
+:::
+
+::::
+
+::: {.notes}
+
+- SWIID: 
+    - Told RAs that the goal of the research, a list of sources mainly from national statistic bureaus for them to start, but we also told them that update statistics for some countries may come from academic papers, published documents, and other sources, and they are free to add them in while *making sure a valid link* of the new sources are also recorded.
+    - how the data would use later is also important, as they could have a better sense of what data are analyticable and a forward perspective of how many situations would the later entry part need to take care. In the SWIID project, we told the RAs that the inequality statistics be recorded in four formats: Gini index in disposable (post-tax, post-transfer) income, Gini in market (pre-tax, pre-transfer) income, absolute redistribution (market-income inequality minus net-income inequality), or relative redistribution (market-income inequality minus net-income inequality, divided by market-income inequality).
+    - Cross-check: with new RAs
+- DCPO: clearly defining and agreeing upon the latent construct among team members 
+    - Done by researchers not RAs
+    - Each team member is then assigned survey datasets from specific geographic regions and tasked with identifying potentially relevant items and potential dimensions based on both general theoretical guidance and region-specific knowledge. 
+    - Before data selection begins, team members undergo hands-on training on how the method work and what type of data and detail they need to collect, such as data format and weighting types, which provide a valuable help of later build the automative data preparation software. 
+    - the dural-entry section comes in: each team member reviews and re-codes the survey data originally handled by another member.
+    - Disputed cases are flagged for group discussion.
+
+:::
+
+## Step 2: Automation & Diagnosis
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*目标问题*: 手动输入错误和结果“靠谱性”
+
+:::
+
+::: {.column width="50%"}
+
+*解法*: 尽可能地自动化
+
+- Programming + API 
+
+:::
+
+::::
+
+![](https://drhuyue.site:10002/sammo3182/figure/wrangle_api.png){fig-align="center" height=500}
+
+::: {.notes}
+
+- `DCPOTools`, `countrycode`, `tabulapdf`
+
+:::
+
+## DCPO操作自动化
+
+1. 收集survey数据，明确与感兴趣的变量相关的指标问题（手动）
+1. 通过`DCPOtools`对数据进行预处理（半自动）
+1. 通过`DCPO`进行数据分析（自动）
+1. 通过`shinystan`诊断convergence（自动）
+
+::: {.callout-tip}
+
+## 诊断什么和如何理解
+
+- Bayesian inference方法：Markov Chain Monte Carlo (MCMC)
+- 数据拟合“底线”：Convergence
+- 当Chain的posterior停留在一个[相对稳定]{.red}的区域内([ergodic]{.red} chain)
+    - $\lim_{n\to \infty}p^n(\theta_i, \theta_j) = \pi(\theta_j), \forall \theta_i, \theta_j.$
+
+:::
+
+
+## Step 3: "Second-Order" Opening
+
+*目标问题*: 社会科学研究仍不够透明
+
+[*解法*: Second-order opening, 不止步于分析，还有DGP]{.fragment}
+
+::: {.r-hstack .fragment}
+
+![Quarto](https://drhuyue.site:10002/sammo3182/figure/wrangle_quarto.svg){fig-align="center" height=400}
+
+![Github](https://drhuyue.site:10002/sammo3182/figure/wrangle_github.png){fig-align="center" height=400}
+
+![OSF](https://drhuyue.site:10002/sammo3182/figure/wrangle_osf.png){fig-align="center" height=400}
+
+:::
+
+::: {.notes}
+
+If researchers applied our suggestions of team-based construct building, systematic data selection, and automated data entry, the second-order opening becomes both feasible and efficient.
+Along with a clearly conceptualized theoretical framework, researchers can simply share their programming scripts for data downloading, formatting, and wrangling, ensuring that the full pipeline is documented and reproducible.
+
+With developed scientific and technical publishing system, such as Quarto or R markdown, and version control platforms (e.g., Github) and open collaboration platforms (e.g., Open Science Framework, OSF), researchers can integrate the entire workflow—from raw data collection to final analysis—within a single, publicly trackable archive.
+We reached at this step for all the DCPO projects so far. 
+
+:::
+
+## 未尽之事业
+
+::: {.r-hstack}
+
+![Source: Hu et al. 2025a, Fig 1](https://drhuyue.site:10002/sammo3182/figure/wrangle_diagram.png){fig-align="center" height=600 width=500}
+
+![Source: [Kuocheng Liao](https://hbr.org/2018/07/collaborative-intelligence-humans-and-ai-are-joining-forces) ](https://drhuyue.site:10002/sammo3182/figure/wrangle_human.png){fig-align="center" height=600}
+
+:::
+
+# 潜变量分析的维度选择
+
+## 如何确定看不见的维度
+
+A.k.a., 你怎么知道只有[一个]{.red}潜在变量？
+
+- 大部分IRT模型假定只有一个潜在变量
+
+![但社会科学中往往不是如此](https://drhuyue.site:10002/sammo3182/figure/lv_rp.png){.fragment fig-align="center" height=400}
+
+## 迹象 [@HuEtAl2025b]
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_democracyDimension.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_democracyRofLaw.png){.fragment fig-align="center" height=600}
+
+:::
+
+## 理论标准
+
+::: {.callout-important}
+
+## Measurement Invariance [@PutnickBornstein2016]
+
+- 度量恒定性 (Metric invariance): 潜在变量的“一单位变化”在所有群体中都代表相同的含义
+    - 有度量恒定性，即可比较关系系数（如相关性、回归系数等），但[不能直接比较平均值]{.red}
+- 截距不变性 (Scalar invariance): 当两个比较对象的真实潜在水平相同，他们在不同群体中给出的观测值平均值也应相同。
+    - 须在度量恒定性基础上实现
+
+:::
+
+![一个🌰](https://drhuyue.site:10002/sammo3182/figure/process_interview.jpg){.fragment fig-align="center" height=350}
+
+::: {.notes}
+
+1. **度量不变性 (Metric invariance)**
+
+* 定义：不同群体中，潜在变量与测量指标之间的关系强度（即因子载荷）相同。
+* 含义：潜在变量的“一单位变化”在所有群体中都代表相同的含义。
+* 举例：如果“幸福感”增加 1 单位，在甲国和乙国，人们对“我经常微笑和大笑”这道题的平均回答都会增加同样的幅度。
+
+👉 有度量不变性时，可以比较不同群体间的**相关性或回归系数**，但不能直接比较幸福感的平均水平。
+
+2. **截距不变性 (Scalar invariance)**
+
+* 定义：在度量不变性的基础上，不同群体的测量指标的截距（intercepts）也相同。
+* 含义：当两个人的真实潜在水平相同，他们在不同群体中给出的观测分数（如问卷回答）平均值也应相同。
+* 举例：甲国和乙国两个同样幸福的人，在问卷上都会给出相似的回答（不会因为文化差异，一个答“同意”而另一个答“中立”）。
+
+👉 有截距不变性时，研究者就可以比较群体间的**潜在均值差异**，也就是说，可以合理地说“甲国比乙国更幸福”。
+
+换句话说：
+
+* **度量不变性** → 不同群体用的是同样的“刻度单位”。
+* **截距不变性** → 不仅刻度相同，而且零点基准也一致。
+
+:::
+
+## 一种（间接）验证方法：CFM
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**EFA: 数据指向**
+
+1. 实证观察（归纳）
+    - *无法统计推断*
+1. 未知维度
+    + 每个维度都产生影响
+1. 多重指标
+    + Loading大小之分
+1. 无视测量偏差关联
+1. Underidentified
+
+:::
+
+::: {.column .fragment width="50%"}
+
+**CFA: 理论指向**
+
+1. 理论定义（演绎）
+    - [*专为统计推断*]{.red}
+1. 明确维度
+    + 维度-指标关系明确
+1. 单一指标
+    + Loading[有无]{.red}之分
+1. 允许测量误差相关
+1. 必须identifiable
+
+:::
+
+::::
+
+## CFA指标选择
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+1. 严格依据理论：~~原因~~效果指标
+1. 每维度一指标，[艺术>技术]{.red}
+
+:::{.fragment}
+
+🌰 人际信任: [相信]{.red}他人不会[伤害自己]{.red}或[违背约定]{.red}.
+
+```{r}
+#| label: cfa
+#| eval: false
+
+DiagrammeR::grViz(
+  "digraph {
+
+graph[layout = dot]
+
+node[shape = rectangle, style = filled, fillcolor = Linen]
+
+s [label = 'Interpersonal Trust', shape = 'ellipse']
+d [label = 'General Trust']
+j [label = 'Altruism']
+i [label = 'Credibility']
+
+# edge definitions with the node IDs
+s -> {d, j, i}
+}"
+)
+```
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_interTrust.png){fig-align="center" height=300}
+
+:::
+
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+
+指标：
+
+1. 总体而言，您是认同多数人是值得信任的，还是防人之心不可无？
+1. 您认为多数时候人们是乐于助人的还是自私自利的？
+1. 如果有机会，您认为别人是会占您便宜，还是说会恪守约定、公平行事？
+
+:::
+
+::::
+
+
+
+## 另一个🌰：运动员评价
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_multitrait.png){fig-align="center" height=600}
+
+:::{.notes}
+
+裁判对滑雪运动员的评判
+
+单侧: factor complexity = 1 （一个变量只贡献一个latent）  
+双侧: factor complexity > 1
+
+:::
+
+## 定义公式 {auto-animate=true}
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+:::{.callout-important}
+
+$$
+\begin{align}
+X^* =& \Phi\Lambda' + \epsilon; \\
+X =& \Lambda X_\xi + \epsilon,
+\end{align}
+$$
+
+:::{style="text-align:center"}
+
+**X**： 指标向量  
+**&xi;**：潜在变量  
+**&Lambda;<sub>X</sub>**: X = f(&xi;)系数(a.k.a., loading, path)  
+**&epsilon;**：偏误向量  
+
+**&Phi;**: 潜在变量的协方差矩阵  
+**&Theta;<sub>&epsilon;</sub>**: 偏误的协方差矩阵
+
+:::
+
+:::
+
+
+:::{.notes}
+
+**&xi;**: ksi  
+**&delta;**: delta  
+**&Phi;**: phi  
+**&Theta;<sub>&sigma;</sub>**: theta  
+
+在EFA中潜在变量在等号左边，观测变量在右边
+
+:::
+
+:::
+
+::: {.column .fragment width="60%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png){ fig-align="center" height=600}
+
+:::
+
+::::
+
+
+## 估算 {auto-animate=true}
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_partMultitrait.png){ fig-align="center" height=300}
+
+[潜变量矩阵]{.navy}
+
+$$
+\Phi = \begin{bmatrix}
+\phi_{11} & & \\
+0 & \phi_{22} & \\
+0 & \phi_{23} & \phi_{33}
+\end{bmatrix}
+$$
+
+:::{.notes}
+
+&phi;23$: classical 和showy 裁判的相关性
+
+:::
+
+:::
+
+::: {.column width="60%"}
+
+[测量矩阵]{.red}
+
+$$
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3\\
+x_4\\
+x_5
+\end{bmatrix} = 
+\begin{bmatrix}
+1 & 1 & 0\\
+\lambda_{21} & 1 & 0\\
+\lambda_{31} & 1 & 0\\
+\lambda_{41} & 0 & 1\\
+\lambda_{51} & 0 & 1
+\end{bmatrix} \begin{bmatrix}\xi_1\\
+\xi_2\\
+\xi_3
+\end{bmatrix} + \begin{bmatrix}\epsilon_1\\
+\epsilon_2\\
+\epsilon_3\\
+\epsilon_4\\
+\epsilon_5
+\end{bmatrix}
+$$
+
+[偏误矩阵]{.green}
+
+diag **&Theta;<sub>&sigma;</sub>** = diag[var(&epsilon;<sub>1</sub>) var(&epsilon;<sub>2</sub>)...var(&epsilon;<sub>5</sub>)]
+
+:::
+
+::::
+
+
+
+
+## Identification
+
+a.k.a., 最多能连多少线？
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Identified: 当**&Lambda;、&Phi;、&Theta;**存在唯一解
+
+**&Lambda;**: $X = f(\xi)$系数 (a.k.a., loading)；    
+**&Phi;**: 潜在变量的协方差矩阵；   
+**&Theta;**: 偏误的协方差矩阵。
+
+
+:::{.fragment}
+
+**t rule**:
+
+t < q(q + 1)/2
+
+t: 不可见   
+q：可见
+
+:::
+
+
+:::{.notes}
+
+Another way to calculate df.
+
+:::
+
+:::
+
+::: {.column width="50%"}
+
+为保证identifable进行的限制
+
+1. Scaling
+    + &lambda;<sub>11</sub> = 1;
+    + 将潜在变量方差设为1(Standardized metric)
+2. 参数调整
+    + 特定因子loading设为0；
+    + 偏误的协方差设为0；
+    + 偏误的方差设为0.
+
+:::
+
+::::
+
+
+## 求解
+
+$$\Sigma(\theta) = \Lambda_X\Phi\Lambda_X' + \Theta_\epsilon,$$
+**&Sigma;**: 所有可见指标得协方差矩阵
+
+:::{.notes}
+
+寻找最优**&Sigma;**
+
+:::
+
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="50%"}
+
+全信息估计 (Maximum likelihood)
+
+- Generalized Least Squares  
+- Unweighted Least Squares
+
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+
+有限信息估计
+
+- Two Stage Least Squares
+
+:::
+
+::::
+
+
+## 常见问题
+
+:::: {.columns}
+
+::: {.column width="30%"}
+
+`错误：待分析的矩阵不是正定的`
+
++ 数据或协方差矩阵中录入错误
++ 缺失数据
++ **完全共线性**
++ 异常值
+
+:::
+
+::: {.column width="35%"}
+
+`错误：不恰当的解`
+
++ 录入错误
++ 总体值接近变量边界，加之抽样波动
++ 模型错误
++ 因素指标观测量过小（<150左右）且**只有2个指标**
++ “Unlucky”样本
++ 异常值
+
+:::
+
+::: {.column width="35%"}
+
+`错误：未收敛`
+
++ 录入错误
++ Unidentifiable
++ 模型不佳
++ 起始值不佳
++ 小样本（N<100）
++ 每个因素只有2指标
++ 异常值
++ 观测变量**量纲极大差异**
+
+:::
+
+::::
+
+:::{.notes}
+
+`Error: Matrix to be analyzed not positive definite`
+
++ Typo in data file or covariance matrix
++ Pairwise deletion of missing data
++ Perfect collinearity
++ Outliers/influential cases
+
+
+`Error: Improper solutions`
+
++ Typo in program
++ Population value near the borderline combined with sampling fluctuation
++ Specification error
++ Small samples (<150 or so) combined with 2 indicators per factor
++ “unlucky” sample
++ Outliers/influential cases
+
+
+`Error: Nonconvergence`
+
++ Typo in program, data file, or covariance matrix
++ Underidentified model
++ Poor model specification
++ Bad starting values
++ Small samples (N<100)
++ Only 2 indicators per factor
++ Outliers/influential cases
++ Observed variables in very different scale
+
+:::
+
+## 诊断方法
+
+*Overall: &chi;<sup>2</sup>*，结果[显著]{.red}^[然而，当N足够大时&chi;<sup>2</sup>通常显著。]则说明整体模型可能[有问题]{.red}。
+
+:::{.notes}
+
+1. Because models are almost always incorrect, any otherwise reasonably fitting model can be rejected when sample size is sufficient
+1. Also a poor fitting model could be accepted if there is insufficient power to detect misspecification.
+
+:::
+
+
+:::{.fragment .nonincremental}
+
+*Incremental Fit Indices*：将模型与基线模型比较
+
+1. Tucker-Lewis Index (TLI, &rho;<sub>2</sub>, Non-Normed Fit Index)
+1. Comparative Fit Index (CFI)
+
+:::
+
+:::{.notes}
+
+基线模型：只保留可见变量的方差和协方差
+
+1 理想情况    
+<.95 不可接受
+
+CFI可以>1, 这种情况视为1
+
+:::
+
+
+:::{.fragment .nonincremental}
+
+*Absolute Fit Indices*
+
+1. Root Mean Square Error of Approximation (RMSEA)
+1. Standardized Root Mean Square Residual (SRMR)
+
+:::
+
+:::{.notes}
+
++ 0 理想情况
++ &le; 0.05 不错
++ 0.05 ~ 0.08 差强人意
++ &ge; 0.1 不可接受
+
+:::
+
+
+
+## 🌰 Holzinger & Swineford 1939
+
+
+对初中生精神状况的调查： 视觉因素（x<sub>1~3</sub>） + 阅读因素（x<sub>4~6</sub>）+ （表达因素：x<sub>7~9</sub>）
+
+```{r}
+#| label: diagram-cfa
+#| fig-align: center
+
+HS.model <- ' visual  =~ x1 + x2 + x3
+            textual =~ x4 + x5 + x6
+            speed   =~ x7 + x8 + x9 '
+fit <- cfa(HS.model, data = HolzingerSwineford1939)
+
+semPaths(
+  fit,
+  layout = "tree",
+  curve = 1,
+  rotation = 4,
+  nCharNodes = 0,
+  mar = c(3, 20, 3, 20),
+  border.width = 1.0,
+  esize = 1.0,
+  edge.color = "black",
+  label.scale = FALSE,
+  label.cex = 1.0,
+  residuals = FALSE,
+  fixedStyle = 1,
+  freeStyle = 1,
+  curvePivot = FALSE,
+  sizeMan = 7,
+  sizeLat = 10
+)
+```
+
+## 估测结果与诊断
+
+```{r}
+#| label: results-hsModel
+
+fit <- cfa(HS.model, data = HolzingerSwineford1939)
+
+summary(fit, fit.measures = TRUE)
+```
+
+## 使用CFA确认/验证维度 [@Joreskog1971]
+
+```{r}
+#| label: mgcfa
+
+library(DiagrammeR)
+
+grViz(
+  "
+digraph cfa_vs_mgcfa {
+
+  graph [rankdir = TB, bgcolor = white, nodesep = 0.35, ranksep = 0.55]
+
+  # ----- default node/edge styles -----
+  node [shape = rounded, style = filled, fontname = Helvetica, color = black, width = 3.7, height = 0.6]
+  edge [color = black, arrowsize = 0.8]
+
+  # ===== LEFT COLUMN: Regular CFA =====
+  subgraph cluster_cfa {
+    label = 'Regular CFA\\n(Within-group validation)';
+    labelloc = t; fontsize = 16; fontcolor = '#1b5e20';
+    color = '#c8e6c9'; penwidth = 1;
+
+    cfa1 [label='One group of data', fillcolor = '#a5d6a7'];
+    cfa2 [label='Multiple latent variables\n(factors) allowed', fillcolor = '#a5d6a7'];
+    cfa3 [label='Tests if model fits\nwithin this single group', fillcolor = '#a5d6a7'];
+
+    {rank = same; }  # let Graphviz place rows vertically
+
+    # vertical flow (left)
+    cfa1 -> cfa2 -> cfa3;
+  }
+
+  # ===== RIGHT COLUMN: MGCFA =====
+  subgraph cluster_mgcfa {
+    label = 'Multiple-Group CFA (MGCFA)\\n(Cross-group comparability)';
+    labelloc = t; fontsize = 16; fontcolor = '#7f0000';
+    color = '#ffcdd2'; penwidth = 1;
+
+    mg1 [label='Two or more groups of data', fillcolor = '#ef9a9a'];
+    mg2 [label='Same factor model tested\nacross groups', fillcolor = '#ef9a9a'];
+    mg3 [label='Sequential tests of invariance\n(configural → metric → scalar → strict)', fillcolor = '#ef9a9a', width=4.6];
+    mg4 [label='Allows valid group comparisons\n(correlations, regressions, means)', fillcolor = '#ef9a9a'];
+
+    # vertical flow (right)
+    mg1 -> mg2 -> mg3 -> mg4;
+  }
+
+  # ----- layout hints so the two columns align -----
+  { rank = same; cfa1 mg1 }
+  { rank = same; cfa2 mg2 }
+  { rank = same; cfa3 mg3 }
+}
+"
+)
+
+```
+
+::: {.fragment .large style="text-align:center; margin-top: 0.5em"}
+
+Theory matters!
+
+:::
+
+::: {.notes}
+
+Using MGCFA to confirm dimensions
+
+:::
+
+
+## 确认维度之后 [@BerwickCaughey2025]
+
+::::{.overlay-container}
+
+:::{.overlay-image}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_modgirt.png){fig-align="center" height=600}
+
+:::
+
+:::{.overlay-text-over .fragment}
+
+[Multidimensional]{.red}, multilevel IRT
+
+- **Strengths**
+    - Flexible: Single-country or cross-national datasets
+    - Extensible: Overdispersion, differential item functioning, and predictors.
+
+- **Considerations**
+    - Computationally intensive (Bayesian estimation).
+    - Needs bridging items for comparability across groups/time.
+
+:::
+
+::::
+
+
+## 总结
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+- 平均值层次（MRP）
+    - 计算具有总体意义的组别平均值
+    - 需要组别分布
+    - 局限
+        - 问题差异
+        - 答题差异
+- 群组IRT（DGIRT，[DCPO]{.red}）
+    - 计算群组层级可比度量
+    - 操作
+        - [T]{.red}eam-work collection
+        - [A]{.red}utomation everything
+        - [O]{.red}pening
+
+:::
+
+::: {.column width="50%"}
+
+- 分析维度判定
+    + 验证性因子分析：检验潜在变量对于观察指标是否有影响
+        + CFA诊断：&chi;<sup>2</sup>, TLI/CFI，RMSEA/SRMR
+    - CFA + IRT
+        - MGCFA
+        - MODGIRT
+
+:::
+
+::::
+
+# 欢迎交流 {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}  
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+
+:::
+
+## 参考文献 {.unnumbered}
+
+::: {#refs}
+:::
+
+# 附录：贝叶斯统计诊断 {.appendix}
+
+
+## Convergence 特征
+
+
+* **常返**
+  * **齐次/封闭**：在第 $m$ 步，如果此步的转移概率与 $m$ 无关；对于状态 A、B，$p(A, B) = 0$
+  * **不可约**：如果从任意已达点/点集都可以到达其他任意已达点/点集；$p(\theta_i, \theta_j) \neq 0, \ \forall \theta_i, \theta_j$
+* **平稳性**：无自相关
+* **非周期性**：即使经过长时间，链的取值也不会出现相同的循环重复
+
+
+:::{.notes}
+
++ Reccurent
+    + Homogeneous/Closed: At step m if the trasition probabilities at this step do not depend on m; for State A, B, p(A, B) = 0
+    + Irreducible: If every reached point/point collection can be reached from every other reached point/point collection; p(&theta;<sub>i</sub>, &theta;<sub>j</sub>)&ne; 0, &forall; &theta;<sub>i</sub>, &theta;<sub>j</sub>
++ Stationary: no autocorrelation
++ Aperodic: even with a long time there's no identical cycle of chain values repeating
+
+
++ Homogeneity: at step m the transition probability at this step do not depend on
++ Ergodicity：遍历性
+
+:::
+
+
+## Converged时什么样：一个🌰
+
+:::: {.columns}
+
+::: {.column width="35%"}
+>下雪啦天晴啦   
+    下雪别忘穿棉袄    
+    下雪啦天晴啦    
+    天晴别忘戴草帽    
+    带草帽~~~  
+    ---《心中的太阳》
+
+今晴，明80%也晴；  
+今雪，明60%也雪。
+
+|      |                     | 明天                |                     |
+|------|---------------------|---------------------|---------------------|
+|      |                     | &theta;<sub>1</sub> | &theta;<sub>2</sub> |
+| 今天 | &theta;<sub>1</sub> | 0.8                 | 0.2                 |
+|      | &theta;<sub>2</sub> | 0.6                 | 0.4                 |
+
+:::{.notes}
+刘欢：《心中的太阳》, 《雪城》主题曲，1988年，倪萍主演
+
+该曲采用再现三段体结构形式写成，外加一个高亢、悠扬的尾声。A段采用悠扬自由的散板节奏，具有思忖沉寂的意境。“大实话”式的歌词，饱含着对自然、社会、人生的不解、疑惑与诘问。B段开始转为充满活力的快板速度，歌词开始由诘问转变为对人间常态的肯定。A'段的旋律不变，只是节律变得富于急迫感、动力感，在这种动力的驱动下，继续开始诘问。高亢、悠扬的尾声，以反复咏唱的“啊太阳”结束，寓意作者对人间真理的无限向往与坚定追求
+
+
+example of converged
+:::
+
+:::
+
+::: {.column .fragment width="65%"}
+起始点: [0.5 0.5]
+
+$S_1 = [0.5\; 0.5]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.7\; 0.3];$
+$S_2 = [0.7\; 0.3]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.74\; 0.26];$
+$S_3 = [0.74\; 0.26]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.748\; 0.252];$
+$S_4 = [0.748\; 0.252]\begin{bmatrix}0.8 & 0.2\\ 0.6 & 0.4 \end{bmatrix}=[0.749\; 0.250].$
+
+:::{.fragment}
+再往下算，会发现概率变化越来越小，趋于稳定（congverged）
+:::
+
+
+:::
+
+::::
+
+## 检验Convergence
+
+目前没有统计办法能够证明一个Markov Chain已经converged
+
+1. 在给定时间内，无法保证Markov chain能够[达到]{.red}目标分布;
+1. 无法预先确定一条Chain能够[遍历]{.red}目标分布的所有区域;
+1. 只能诊断一条Chain是否[未]{.red}converged (诊断工具：Geweke's G, Gelman-Rubin)
+
+:::{.fragment}
+
+增加Convergence可能的方法
+
+1. 足够的Burn-in rounds (诊断工具：Raftery-Lewis)
+1. 尽可能排除autocorrelation（诊断工具：Heidelberger-Welch）
+
+:::
+
+
+## Geweke's G
+
+- 比较parameters在chain早期和晚期两个[不重叠]{.red}的窗口内的均值；
+- 主要针对recurrence特征
+
+$$G = \frac{\bar{\theta_1}- \bar{\theta_2}}{\sqrt{\frac{s_1}{n_1} + \frac{s_2}{n_2}}}.$$
+
+
+:::{.notes}
+
+A fancy difference of means
+
+converge 则显示不显著差异，增加burn-in
+
+:::
+
+
+## Gelman & Rubin 1992
+
+$$\hat{R}= \sqrt{\frac{\hat{var(\theta)}}{W}}$$
+
+1. 跑多条chains（5~10），每条长2n
+1. 对每一个感兴趣的parameter计算
+    1. Within chain variance(W)
+    1. Between chain variance(B)
+1. 计算总体variance： var(&theta;) = (1 - 1/n)W + (1/n)B
+1. 计算Scale reduction (亦称shrink factor)
+
+
+:::{.fragment}
+
+:::{.callout-tip}
+
+- R趋近于1表示chains operating on same distribution
+    - < 1.1或1.2是可以接受的
+
+::: 
+
+:::
+
+
+## Burn-In
+
+- 给与足够的burning in以到达目标分布
+- “炸毛的毛毛虫”（Fuzzy Caterpillar）
+
+![](https://drhuyue.site:10002/sammo3182/figure/fuzzyCaterpillar.png){fig-align="center" height=450}
+
+
+## 检验Burn-in是否足够：Raftery & Lewis (1991, 1996)
+
++ 分别评价每一个Chain的每一个变量
+    1. 根据Chain间的相关性，并据此提供一个迭代数（iteration number）
+    1. 检验autocorrelation inflation
++ 输出
+    + Burn-in：一位数或两位数为佳
+    + Total：建议的burn-in数，未考虑cross-chain，因此真正burnin要乘上chain数
+    + Dependence Factor
+
+
+## Autocorrelation
+
+特征：
+
+1. Chain间高相关性
+1. 单一parameter高相关性
+
+
+:::{.notes}
+
+1. Chain间高相关性：Slow convergence
+1. 单一parameter的高相关：Individual nonconvergence
+
+:::
+
+:::{.r-hstack}
+
+![Autocorrelated](https://drhuyue.site:10002/sammo3182/figure/isAutocorrelation.png){.fragment fig-align="center" height=400}
+
+![Not autocorrelated](https://drhuyue.site:10002/sammo3182/figure/noAutocorrelation.png){.fragment fig-align="center" height=400}
+
+:::
+
+
+
+## Heidelberger and Welch
+
+用于检验Stationarity
+
+1. 确定一个迭代数N, 以及准确性（&epsilon;）和显著性数准(&alpha;)
+1. 运行整个chain
+1. 施用Cram&eacute;r-von Mises Test，Null: Chain是stationary
+1. 如检验未通过则依次略去10%、20%,乃至50%的迭代，再次检测；
+1. 如结果表示部分数据不是stationary，则对该部分数据进行halfwidth检验
+1. 如果halfwidth ratio < &epsilon;, 则通过检验
+
+
+## Thinning
+
+Thinning 并[不会]{.red}提高Chain的运算速度、帮助convergence或增强估测质量
+
++ 每个Chain记录多少samples
+    + Chain将仅记录第k个值，越高丢失的信息越多
+    + k通常取值：4，5，10
++ 仅用于降低autocorrelation
+
+::: {.callout-tip .fragment}
+
+## 何时调Thin
+
+1. 迭代中autocorrelation太高
+1. Chain的convergence太低
+1. 并行运算
+1. 模型维度过高
+
+:::
+
+# 附录：结构方程模型 {.appendix}
+
+## 什么是结构方程模型
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+
+- Structural equation model (SEM)   
+- LISREL (Linear Structural ReLationships) models   
+- Covariance structure models   
+- Latent variable models    
+- Structural equations with latent variables    
+
+![](https://drhuyue.site:10002/sammo3182/figure/lv_sem.png){.fragment fig-align="center" height=200}
+
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+
+- Confirmative factor analysis  
+- Multiple regression  
+- Multivariate regression  
+- ANOVA  
+- General linear model  
+- Path analysis  
+- Recursive models  
+- Dichotomous and ordered probit  
+- Seemingly unrelated regressions  
+- Simultaneous models  
+- Latent growth curve models  
+......
+
+:::
+
+::::
+
+
+## SEM (in terms of CFA)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**结构**
+
++ 观察变量： X + Y
++ 模型建构：
+    1. Latent variable model
+    1. Measurement model (CFA)
+    1. Relations among the errors 
++ 依然要求identification
+
+**估计**：MLE
+
+:::
+
+::: {.column width="50%"}
+
+**诊断**
+
++ Overall：&chi;<sup>2</sup>
++ Incremental：
+    + TLI & CLI
+    + Incremental Fit Index(IFI, &Delta;<sup>2</sup>)
++ Absolute:
+    + RMSEA
+    + BIC
+
+:::
+
+::::
+
+:::{.fragment}
+
+:::{.callout-tip}
+
+## 除了CFA，SEM还能做什么
+
+*敬请注意*：[SEM结果仍表现相关关系。]{.red}
+
+处理Measurement errors；处理非线性变量(hint: GSEM)；纳入多层效应；处理缺失值
+
+:::
+
+:::
+
+
+
+## 🌰 Bollen 1989
+
+政治民主（1960，1965）与工业化
+
+```{r}
+#| label: diagram-sem
+#| fig-align: center
+#| fig-height: 4
+#| fig-keep: last
+
+model <- '
+    # measurement model
+        ind60 =~ x1 + x2 + x3
+        dem60 =~ y1 + y2 + y3 + y4
+        dem65 =~ y5 + y6 + y7 + y8
+    # regressions
+        dem60 ~ ind60
+        dem65 ~ ind60 + dem60
+    # residual correlations
+        y1 ~~ y5
+        y2 ~~ y4 + y6
+        y3 ~~ y7
+        y4 ~~ y8
+        y6 ~~ y8
+'
+fit <- sem(model, data = PoliticalDemocracy)
+Graph <- semPaths(
+  fit,
+  #layout=L,
+  layout = "tree2",
+  nCharNodes = 0,
+  curve = 1,
+  rotation = 4,
+  #mar=c(3,3,3,3),
+  edge.color = "black",
+  border.width = 1.0,
+  esize = 1.0,
+  label.scale = FALSE,
+  label.cex = 1.0,
+  residuals = FALSE,
+  fixedStyle = 1,
+  freeStyle = 1,
+  curvePivot = FALSE,
+  #style="LISREL",
+  exoVar = FALSE,
+  sizeMan = 7,
+  sizeLat = 10,
+  DoNotPlot = FALSE
+)
+L <- matrix(
+  c(
+    0.4,
+    1,
+    0.7,
+    1,
+    1.0,
+    1,
+    -1.0,
+    1,
+    -1.0,
+    0.71,
+    -1.0,
+    0.43,
+    -1.0,
+    0.14,
+    -1.0,
+    -0.14,
+    -1.0,
+    -0.43,
+    -1.0,
+    -0.71,
+    -1.0,
+    -1,
+    0.7,
+    0.4,
+    0.0,
+    0.4,
+    0.0,
+    -0.4
+  ),
+  14,
+  2,
+  byrow = TRUE
+)
+qgraph(Graph, layout = L, arrowAngle = 0.5)
+```
+
+## 结果与诊断
+
+```{r}
+#| label: results-semModel
+
+fit <- sem(model, data = PoliticalDemocracy)
+
+summary(fit, fit.measures = TRUE)
+```
+
