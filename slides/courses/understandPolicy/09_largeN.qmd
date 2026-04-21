@@ -49,12 +49,13 @@ spotlight:
 ```{r}
 #| label: setup
 #| include: false
-
-if (!require(pacman)) install.packages("pacman")
+if (!require(pacman)) {
+  install.packages("pacman")
+}
 library(pacman)
 
 p_load(
-  icons, 
+  icons,
   tidyverse,
   tinytable,
   modelsummary,
@@ -71,39 +72,11 @@ theme_set(
 )
 
 theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
   axis.text = element_text(size = 18)
 )
 ```
-
-## Review how to evaluate an experiment {.center .unnumbered background="#43464B"}
-
-:::: {.columns}
-
-::: {.column .nonincremental width="70%"}
-
-- **Question**: Do people view others differently because of the language they use?  
-- **Subjects**: 500 students from Japan and Korea 
-- **Design**: 
-    1. Watch the video on the right
-    1. Answer the survey about the characteristics of Nezha (masculinity, intimacy, powerfulness, literacy, etc.)
-
-:::
-
-::: {.column width="30%"}
-
-{{< video https://drhuyue.site:10002/sammo3182/video/lab_nezhaDialect.mp4 title="黎叔在加班：《哪吒2》多国多地区多语言多方言配音来啦！体验不一样的哪吒！" height=600 preload="auto" controls allowfullscreen>}}
-
-::: {.notes}
-
-https://www.bilibili.com/video/BV1euPkerEnp/?vd_source=f38aeefd0d38cecba9017eeee43e71c8
-
-:::
-
-:::
-
-::::
 
 ## Overview {.unnumbered}
 
@@ -111,14 +84,11 @@ https://www.bilibili.com/video/BV1euPkerEnp/?vd_source=f38aeefd0d38cecba9017eeee
 
 ::: {.column width="60%"}
 
-+ WHAT is a large-N analysis (LNA)
-- WHY LNA
-  - Why *not* experiment
++ WHAT & WHY
+  - An analysis on *how many* data points?
+  - Why *not* experiments?
   - What do we look for with LNA?
 + HOW
-    + One
-    + Two
-    + More than two
 
 :::
 
@@ -131,14 +101,14 @@ https://www.bilibili.com/video/BV1euPkerEnp/?vd_source=f38aeefd0d38cecba9017eeee
 ::::
 
 
-# What
+# What & Why
 
 ## What's LNA
 
 In lieu of "quantitative"...
 
 :::{.fragment}
-Large-[N]{.red}: Number of **observations**---not participants, but trails/units
+Large-[N]{.red}: Number of **observations**---not participants, but trials/units
 :::
 
 
@@ -166,9 +136,6 @@ Did you really 定量？
 [To know how large, you have to know why using this method...]{.fragment}
 
 :::
-
-
-# Why
 
 ## Why Not Experiments?
 
@@ -201,12 +168,12 @@ Did you really 定量？
 
 Alternative: [Quasi]{.grayLight}-experiment^[[*Collins Thesaurus*: Quasi- =  pseudo-, apparent, seeming, semi-, so-called, would-be.]{.fragment}]
 
-[A.k.a., Pseudo random assignment]{.fragment}
+[A.k.a., pseudo-random assignment]{.fragment}
 
 :::
 
 
-## Why Have to Be large
+## Why Must N Be Large?
 
 :::{.large style="text-align:center; margin-top: 1em"}
 
@@ -297,7 +264,7 @@ And we are going outside! 😈
 
 {{< video https://drhuyue.site:10002/sammo3182/video/lar_normalDistribution_bbc.mp4 title="Normal by people" height=600 loading="eager" allowfullscreen>}}
 
-## Why does CLT ask for over 1000
+## Why Does CLT Require Over 1,000?
 
 ![](https://drhuyue.site:10002/sammo3182/figure/lar_largeNumber.gif){fig-align="center" height=200}
 
@@ -328,7 +295,7 @@ To cut the margin of error in half, like from 3.2% down to 1.6%, you need four t
 
 :::
 
-## LNA for public policy
+## LNA for Public Policy
 
 :::{.large}
 
@@ -344,7 +311,7 @@ To cut the margin of error in half, like from 3.2% down to 1.6%, you need four t
 
 # How
 
-## Univariate analysis
+## Univariate Analysis
 
 :::: {.columns}
 
@@ -364,8 +331,10 @@ Let's say we'll test a school policy of course management
 
 ```{r}
 #| label: data
-
-showWatching <- tibble(Student_ID = paste0("202509", sample(1000:9000, size = 7)), Courses = c(9, 9, 12, 10, 8, 10, 15))
+showWatching <- tibble(
+  Student_ID = paste0("202509", sample(1000:9000, size = 7)),
+  Courses = c(9, 9, 12, 10, 8, 10, 15)
+)
 
 tt(showWatching)
 ```
@@ -378,27 +347,28 @@ tt(showWatching)
 
 ## How to Describe a Variable
 
+::::{.overlay-container}
+
+::: {.overlay-text}
+
 Given the courses students took: (9, 9, 12, 10, 8, 10, 15)
 
 ::: {.fragment .nonincremental}
 
-+ Mean: $\frac{9 + 9 + 12 + 10 + 8 + 10 + 15}{7} \approx 11.$
++ Mean: $\frac{9 + 9 + 12 + 10 + 8 + 10 + 15}{7} \approx 10.$
 + Median: 8, 9, 9, [10]{.red}, 10, 12, 15
 + Mode: 8, [9]{.red}, [9]{.red}, [10]{.red}, [10]{.red}, 12, 15
 
 :::
 
-:::: {.columns}
+[*Which one is **the best**?*]{.fragment}
 
-::: {.column .fragment width="40%"}
-
-*Which one is **the best**?*
 
 :::
 
-::: {.column .fragment width="60%"}
+::: {.overlay-image .fragment}
 
-![How about this](https://drhuyue.site:10002/sammo3182/figure/desc_sheHulk.png){fig-align="center" height=400}
+![How about this](https://drhuyue.site:10002/sammo3182/figure/desc_sheHulk.png){fig-align="center" height=600}
 
 :::
 
@@ -420,10 +390,11 @@ Given the courses students took: (9, 9, 12, 10, 8, 10, 15)
 
 ```{r}
 #| label: descriptive
-
 df_descrptive <- select(mtcars, -am, -carb) |>
-  mutate(across(where(~length(unique(.x)) == 2), as.logical),
-  across(where(~length(unique(.x)) < 7 & !is.logical(.x)), as.factor))
+  mutate(
+    across(where(~ length(unique(.x)) == 2), as.logical),
+    across(where(~ length(unique(.x)) < 7 & !is.logical(.x)), as.factor)
+  )
 
 datasummary_skim(df_descrptive)
 ```
@@ -433,7 +404,7 @@ datasummary_skim(df_descrptive)
 ::::
 
 
-## Binary Analysis
+## Bivariate Analysis
 
 
 ```{r}
@@ -441,30 +412,28 @@ datasummary_skim(df_descrptive)
 #| fig-height: 6
 #| fig-cap: Weight of a car and how long it can run
 #| label: scatter
-
 ggplot(mtcars, aes(wt, mpg)) +
   geom_point() +
   ylab("Mileage per Gallon") +
   xlab("Weight")
 ```
 
-## Not always work
+## Not Always Reliable
 
 ```{r}
 #| fig-align: center
 #| fig-height: 6
 #| fig-cap: How about this data then?
 #| label: scatterMess
-
 data(tobacco, package = "summarytools")
 
 ggplot(tobacco, aes(age, cigs.per.day)) +
   geom_point() +
-  ylab("Cigrate per day") +
+  ylab("Cigarettes per Day") +
   xlab("Age")
 ```
 
-## Multivariate Analysis
+## Multivariable Analysis
 
 :::{.r-stack}
 
@@ -477,18 +446,17 @@ ggplot(tobacco, aes(age, cigs.per.day)) +
 :::
 
 
-## Multivariate analysis not a panacea
+## Multivariable Analysis: Not a Panacea
 
 {{< video https://drhuyue.site:10002/sammo3182/video/lar_pork.mp4 title="Predicting Pork Price" height=600 loading="eager" allowfullscreen>}}
 
 
-## Present your model efficiently
+## Present Your Model Efficiently
 
 ```{r}
 #| fig-align: center
 #| fig-height: 7
 #| label: dotwhisker
-
 m1 <- lm(mpg ~ wt + cyl + disp + gear, data = mtcars)
 m2 <- update(m1, . ~ . + hp) # add another predictor
 m3 <- update(m2, . ~ . + am) # and another
@@ -503,8 +471,6 @@ list(m1, m2, m3) |>
     )
   )
 ```
-
-
 
 ## Take-Home Points
 
@@ -540,4 +506,304 @@ list(m1, m2, m3) |>
 ## Reference
 
 ::: {#refs}
+:::
+
+
+# Bonus: Policy Analysis with LNA {.appendix}
+
+## Example 1: Hukou Policy and Migration Decisions? [@PizziHu2022]
+
+:::: {.columns}
+
+::: {.column width="40%"}
+
+**Research Question**
+
+Does governmental [hukou]{.red} (户口) policy shape migrants' destination choices in China?
+
+- Cities set their own rules: how hard to *acquire* local hukou, and what *benefits* it confers
+- Millions migrate despite strict policies --- so what actually matters?
+
+
+:::
+
+::: {.column width="60%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_hukou.jpg){fig-align="center" height=400}
+
+:::{.fragment .callout-note}
+
+## Why this is a large-N problem
+
+- Hukou policy varies across [hundreds]{.red} of cities
+- Individual migration choices are noisy --- only patterns across thousands of cases reveal policy effects
+- Need enough variation to separate hukou effects from economic ones
+
+:::
+
+:::
+
+::::
+
+## Theories & hypotheses
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**H₁: Barriers**
+
+Strict hukou acquisition rules [deter]{.red} migrants from choosing that city
+
+- Harder to get hukou → city less appealing
+- Migrants actively avoid locked cities
+
+:::
+
+::: {.column width="50%"}
+
+**H₂: Benefits**
+
+People prefer destinations where they can [access]{.red} public services and welfare
+
+- H₂.₁: Cities where one *can get* local hukou are more attractive
+- H₂.₂: Cities where services are accessible *regardless* of hukou status are even more attractive
+
+:::
+
+::::
+
+::: {.callout-note .fragment}
+
+These two hypotheses make [opposite]{.red} predictions about what drives migration ---
+only data can tell us which is right
+
+:::
+
+
+## Data: Two Sources, One Theory
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**LESS 2018** *(survey experiment)*
+
+- N = 1,100; 50% migrants, 50% non-migrants
+- Online, quota-sampled (gender × education)
+- Covers 31 provinces
+- Key feature: [embedded experiment]{.red} --- randomly shows respondents different hukou scenarios
+
+:::
+
+::: {.column width="50%"}
+
+**CLDS 2016** *(national representative survey)*
+
+- N = 21,086 respondents
+- Multi-stage stratified probability sample
+- 145 cities across 29 provinces
+- Checks generalizability of experimental results
+
+:::
+
+::::
+
+::: {.notes}
+
+**Plus: objective hukou strictness scores** for 297 cities
+&rarr; Estimated via [random forest]{.red} using seed data from 45 cities (Zhang & Tao, 2012)
+&rarr; Scores range 0–4; Shanghai, Shenzhen, Beijing, Guangzhou rank strictest
+
+:::
+
+## Variables and Analytical Strategy
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Key Variables**
+
+|Variable | Measurement |
+|---|---|
+| OV (experiment) | Destination preference (1–5 Likert) |
+| OV (survey) | Intent to stay long-term (1–5) |
+| OV (survey) | Desire to acquire local hukou (1–5) |
+| Treatment | easier hukou *vs.* education w/o hukou |
+| EV (observed) | City hukou strictness (0–4) |
+
+:::
+
+::: {.column width="50%"}
+
+Controls: Age, gender, education, job type, income satisfaction
+
+:::{.fragment .nonincremental}
+
+**Methods --- from bivariate to multivariate**
+
+- **Ordered logit** --- appropriate for ordinal DV
+  *(e.g., "how likely to stay: 1–5")*
+- **Kolmogorov-Smirnov test** --- compare full distributions between experiment groups
+- **Average marginal effects** --- interpret conditional effects across city tiers
+
+:::
+
+:::
+
+::::
+
+## Findings: Hukou as a Barrier?
+
+::: {.r-stack}
+
+![Known](https://drhuyue.site:10002/sammo3182/figure/hukou-aware-1.png){fig-align="center" height=600}
+
+![Careness](https://drhuyue.site:10002/sammo3182/figure/hukou-care-1.png){.fragment fig-align="center" height=600}
+
+:::
+
+::: {.notes}
+
+H₁ Rejected: Strictness Is NOT a Deterrent
+
+- Respondents correctly perceive hukou strictness differences across cities
+- Yet they rank hukou strictness [last]{.red} among six factors in destination choice (income and job security ranked first)
+- No demographic group --- including current migrants --- weights strictness heavily
+
+:::
+
+## Findings: Hukou as a Benefit?
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/hukou-stay-1.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/hukou-experiment-1.png){.fragment fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/hukou-value-1.png){.fragment fig-align="center" height=600}
+
+:::
+
+::: {.notes}
+
+Experiment results (all groups faced the same economic trade-off):
+
+| Group | Prefer City B (lower wage, but...) |
+|---|---|
+| Control (no hukou info) | 13.4% |
+| Hukou treatment (easier to get hukou in B) | 28.1% |
+| [Education treatment (no hukou needed for schools in B)]{.red} | [41.7%]{.red} |
+
+&rarr; In the national survey: stricter cities reduce migrants' intention to stay long-term (ordered logit, p < 0.05), robust across all city tiers
+
+**Policy takeaway**: Extending services to non-hukou-holders is [more]{.red} effective than relaxing hukou acquisition rules
+
+
+:::
+
+
+## Example 2: English-Learning Policy and Political Minds? [@HuYueZhuMeng2022]
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_english.jpg){fig-align="center" height=400}
+
+:::{.fragment .callout-note}
+
+## Why this is a large-N problem
+
+- Language effects on political cognition are [subtle and cumulative]{.red} --- only detectable across thousands of respondents
+- Need enough variation in English proficiency to separate language effects from education, income, and other confounders
+
+:::
+
+:::
+
+::: {.column .nonincremental width="40%"}
+
+**Research Question**
+
+Does [English proficiency]{.red} shape Chinese citizens' political cognitive capabilities?
+
+- China has 400+ million English learners --- a product of 40 years of mandatory education
+- But does this language learning change *how people think about politics*?
+
+:::
+
+
+::::
+
+## The Language Policy Field Model
+
+**Core idea**
+
+Language effects are [policy-conditioned]{.red}: the same language produces different political effects in different policy environments
+
+
+::: {.fragment}
+
+**Four hypothesized mechanisms**
+
+| Mechanism | Path | Prediction |
+|---|---|---|
+| H₁ Information | English → internet use | ↑ internal & external efficacy |
+| H₂ Values | English → Western values | ↑ internal, ↓ external efficacy |
+| H₃ Self-evaluation | English → self-confidence | ↑ internal efficacy |
+| H₄ Competition | Relative English advantage | ↑ internal & external efficacy |
+
+:::
+
+
+## Data 
+
+**CGSS 2010**
+
+- Chinese General Social Survey (中国综合社会调查)
+- Multi-stage stratified probability sample
+- 31 provinces, 140 cities, 2,762 communities
+- N ≈ 11,700 usable respondents
+- Contains rare items on both English proficiency *and* political efficacy
+
+## Operation
+
+| Variable | Measurement |
+|---|---|
+| OV | Internal political efficacy (1–5) |
+| OV | External political efficacy (1–5) |
+| EV | English proficiency (self-rated listening + speaking, 1–5) |
+| Mediator 1 | Internet use frequency (1–5) |
+| Mediator 2 | Attitude toward free speech (1–5) |
+| Mediator 3 | Self-rated social class (1–10) |
+| Mediator 4 | Relative English advantage (Δ from city mean) |
+| Controls | Education, Mandarin, income (log), age, gender, party membership, rural status, migrant status, ethnicity; provincial fixed effects |
+
+
+## Findings: What Drives Political Capability?
+
+::: {.r-stack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_engEfficacy.png){fig-align="center" height=600}
+
+![](https://drhuyue.site:10002/sammo3182/figure/lar_engMediator.png){.fragment fig-align="center" height=600}
+
+:::
+
+::: {.notes}
+
+1. Effect Confirmed: English Proficiency Boosts Both Types of Efficacy
+  - OLS results (controlling for education, Mandarin, income, and demographics): English proficiency has a [significant positive]{.red} effect on both internal and external political efficacy --- robust across all specifications
+1.**Internal efficacy** --- *"Can I understand and participate in politics?"*
+  - Information acquisition: [70%+]{.red} of mediated effect (dominant)
+  - Self-evaluation (self-confidence): ~24% of mediated effect
+  - Value westernization: [NOT significant]{.red}
+1. **External efficacy** --- *"Does the government respond to people like me?"*
+  - Relative English advantage: [90%+]{.red} of mediated effect (dominant)
+  - Self-evaluation also contributes positively (consistent with internal efficacy linkage)
+
+**Policy takeaway**: English learning shapes political capability through [literacy, not values]{.red} --- no evidence of westernization; instead, it raises citizens' confidence in understanding government and their sense of competitive standing in society
+
 :::
