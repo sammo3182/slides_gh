@@ -1,6 +1,6 @@
 ---
 title: |
-  Case Illustration: 
+  Case Illustration:
   Computational Analysis
 subtitle: "Understanding Policies (10700193-90)"
 author: "Yue Hu"
@@ -45,40 +45,17 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-```{r}
-#| label: setup
-#| include: false
-
-if (!require(pacman)) install.packages("pacman")
-library(pacman)
-
-p_load(
-  icons, tidyverse, drhutools
-) # data wrangling # data wrangling
-
-# Functions preload
-set.seed(313)
-
-# Visualization
-theme_set(
-  theme_minimal(base_size = 18)
-)
-
-theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
-  axis.text = element_text(size = 18)
-)
-
-```
-
 ## Overview
 
-* What's "big" data
-* What can big-data do
-* Ethnic issues of Big Data
+* Big Models, Big Data
+  - From the 6 Vs to LLMs
+  - Computational analysis: *description, relationship, pattern*
+* Policy on data — amplified by AI/LLMs
+  - Who *owns* the data (and the model)
+  - Who *accesses* it (and the inference pipeline)
+  - Who *uses* it to do &mdash; and to *generate* &mdash; what
 
-# What's big data
+# Big Models, Big Data
 
 ## The political meaning of the "Big-Data" (Computational) approach
 
@@ -106,16 +83,61 @@ theme_update(
 ::::
 
 
-## Quiz: Big-data based works?  {.center background="#43464B"}
+## From the 6 Vs to LLMs
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Big data's 6 Vs**
+
+1. **V**olume — petabytes of records
+1. **V**ariety — text, image, audio, video
+1. **V**elocity — streaming, real-time
+1. **V**eracity — noise, bias
+1. **V**alue — signal for decisions
+1. **V**ariability — drift over time
+
+:::
+
+::: {.column .fragment width="50%"}
+
+**What LLMs do with them**
+
+1. Volume &rarr; trillions of *tokens* for pre-training
+1. Variety &rarr; *multimodal* models (text + audio + vision)
+1. Velocity &rarr; inference at conversational speed
+1. Veracity &rarr; alignment / *RLHF* to curb bias
+1. Value &rarr; *emergent* capabilities at scale
+1. Variability &rarr; continual fine-tuning, retrieval augmentation
+
+:::
+
+::::
+
+:::{.fragment style="text-align:center"}
+
+[Big data is the **fuel**; the architecture (e.g., transformer) is the **engine**.]{.red}
+
+:::
+
+
+## Quiz: Data-based advantages?  {.center background="#43464B"}
 
 "I established a CPC elite database containing extensive biographical and career information for over 20,000 positions with a unique number of 4,700 cadres, including all the members of the Central Committee and Provincial Standing Committee of the CPC from 1982 to 2020......"
 
 ["To provide a further test of the classic arguments on democracy and public support, we generated estimates of democratic support......assembling as much survey data on democratic support as possible. We employed 4,905 national opinions on democracy from 1,889 national surveys, representing a 32.0% and 37.3% increase respectively over the 3,716 opinions and 1,376 national surveys used in Claassen (2020a; 2020b)."]{.fragment}
 
+["We prompted an open-source LLM to read every provincial *Government Work Report* from 2000 to 2024 and return structured labels on policy priorities — producing a 300,000-paragraph, human-validated corpus that would have taken a research team of ten over a year to code by hand."]{.fragment}
+
+::: {.notes}
+
+- 数据让研究者做成了什么没有数据做不成的事情
+
+:::
 
 
-
-## Policy Analysis with Big Data
+## Policy Analysis w. big data and big models
 
 :::: {.columns}
 
@@ -128,7 +150,9 @@ theme_update(
 1. Speeches, statements
 1. Traditional and new media
 1. Official document archives
-1. Judicial documents ......
+1. Judicial documents
+1. Multimodal policy data — audio & video transcribed at scale
+1. LLM-processed and LLM-generated corpora ......
 
 :::
 
@@ -148,8 +172,8 @@ theme_update(
 
 **Methods**
 
-1. Description✨
-1. Relationship analysis
+1. Description (夯)
+1. Relationship analysis (拉)
 1. Pattern learning
 
 :::
@@ -210,19 +234,27 @@ Dietrich, Bryce J., Matthew Hayes, and Diana Z. O’Brien. 2019. “Pitch Perfec
 
 female MCs speak with greater emotional intensity when talking about women as compared to both their male colleagues and their speech on other topics.
 
-:::
-
-## Ethnic Issues of Big Data
-
-:::{.large .nonincremental style="text-align:center; margin-top: 2em"}
-
-1. Who own the data
-1. Who can access the data
-1. Who can [use]{.red} the data to [do]{.red} what
+What Dietrich et al. did by hand with a handful of speeches, multimodal LLMs — Whisper for transcription, GPT-4o / Gemini for audio understanding — now do at scale across every legislature, podcast, and press briefing. The bottleneck has shifted from *extraction* to *interpretation and ethics*.
 
 :::
 
-## Who own the data: Data Responsibility
+# Policy on data
+
+AI/LLMs do not replace the three classical questions
+
+---they [amplify]{.red} each of them.
+
+## Issues in the AI/LLM Era
+
+:::{.large style="text-align:center; margin-top: 1em"}
+
+1. Who own the data (and the *model weights*)
+1. Who can access the data (and the *inference pipeline*)
+1. Who can [use]{.red} the data to [do]{.red} and [generate]{.red} what
+
+:::
+
+## Who owns the data: Data Responsibility
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_dataPrivacy.mp4 title="Surveillance capitalism" height=600 loading="eager" allowfullscreen>}}
 
@@ -234,58 +266,126 @@ Cambridge Analytica助选
 
 :::
 
-## Relative public policies
+## Who owns the *training* data?
 
-```{r}
-#| label: privacyLaws
-#| fig-height: 6
 
-library(DiagrammeR)
+The LLM era extends "whose data" from **stored records** to **model memory**:
 
-grViz("
-digraph G {
-  graph [rankdir=TB, fontsize=18]
+* *NYT v. OpenAI* (2023–): did OpenAI lawfully ingest copyrighted news to train GPT? [@Pope2024]
+* China's "奥特曼案": the 2024 *Guangzhou Internet Court* ruling held that an AI image service infringed when its outputs reproduced a licensed character [@ChuMeng2021]
+* 生成式AI训练语料合规:《生成式人工智能服务管理暂行办法》requires providers to use "data with lawful source" and to respect personal-information and IP rights [@GuoJiaHuLianWangXinXiBanGongShi2023]
 
-  # 定义节点样式
-  node [shape=box, style=filled, fontname=\"Microsoft YaHei\", fontsize=18]
+::: {.notes}
 
-  # 根节点
-  A0 [label=\"《宪法》《民法典》《刑法》\", fillcolor=\"#e1eaf5\", color=\"#333\", penwidth=2]
+- Less than three decades ago, in New York Times Co. v. Jonathan Tasini, the publisher fought against a group of its own freelance authors.  The Supreme Court ruled in a 7-2 decision that publishers infringed on freelancers' copyrights by placing their print articles into electronic databases without permission or compensation. Industry Impact: The decision forced publishers to change how they contracted digital rights, often requiring writers to sign over all rights to their work.
+- 标志性案例：奥特曼AI文生图侵权案
+  - 原告上海某文化发展有限公司(以下简称“原告”)通过许可的形式获得了奥特曼系列作品的权利人圆谷制作株式会社在中国国内的著作权授权并享有维权权利。被告AI公司(化名，以下简称“AI公司”或“被告”)是一家提供人工智能服务的平台
+  - 案情概要：原告系“奥特曼”系列美术作品独占权利人，发现被告的AI服务网站在输入特定提示词后，生成了与原告作品实质性相似的奥特曼图片，遂起诉被告侵犯其复制权、改编权及信息网络传播权。
+  - 法院判决：广州互联网法院认定被告作为人工智能服务提供商，应知晓其模型可能生成侵权内容，却未尽到合理的注意义务，侵犯了原告的著作权，判令被告赔偿经济损失并停止侵权。
+  - 裁判核心观点
+    - 否定“避风港原则”：法院认为，AIGC平台并非仅仅是被动的技术服务者，其通过对模型训练和优化提供服务并获利（如收费、卖算力），因此不适用传统“通知-删除”的“避风港规则”，应承担更高的合理注意义务。
+    - 实质性相似认定：若AI生成的图片与高知名度受保护作品构成实质性相似，且平台具备防范能力而未防范，则构成侵权。
+    - 多主体责任划分：在产业链条（训练、生成、应用）中，法院关注平台对生成内容的控制力，强调平台在输入端、输出端设置合理侵权防范机制的责任。 
+  - 法理价值与影响
+    - 全球前沿判例：该案作为“全球首例”生成式AI平台侵权生效判决，为处理AI与版权保护的关系提供了明确的法律预期。
+    - 促进合规发展：判决引导AIGC服务提供者完善合规体系，在训练数据清洗、提示词过滤、生成内容标识等方面履行注意义务，推动大模型产业的良性发展。 
 
-  # 主干法律
-  A1 [label=\"网络安全法（CSL）\\n2017.6.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
-  A2 [label=\"数据安全法（DSL）\\n2021.9.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
-  A3 [label=\"个人信息保护法（PIPL）\\n2021.11.1实施\", fillcolor=\"#b3d7f0\", color=\"#333\", penwidth=2]
 
-  # 配套法规
-  B1 [label=\"网络数据安全管理条例\\n2025.1.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
-  B2 [label=\"个人信息出境保护认证办法\\n2025征求意见稿\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
-  B3 [label=\"个人信息保护合规审计办法\\n2025.5.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
-  B4 [label=\"电信和互联网用户个人信息保护规定\\n2013.9.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
-  B5 [label=\"关键信息基础设施安全保护条例\\n2021.9.1实施\", fillcolor=\"#f6f6e6\", color=\"#999\", penwidth=1.5]
 
-  # 连接关系
-  A0 -> A1
-  A0 -> A2
-  A0 -> A3
+:::
 
-  A1 -> B1
-  A2 -> B1
-  A3 -> B1
-  A3 -> B2
-  A3 -> B3
-  A1 -> B4
-  A1 -> B5
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+
+[Once data are *absorbed* into model weights, ownership becomes *provenance*.]{.red}
+
+:::
+
+<style>
+.lawtree {
+  font-family: "Microsoft YaHei", "PingFang SC", "Source Han Sans CN", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5em;
+  margin: 0.2em auto;
+  max-width: 1200px;
 }
-")
+.lawtree .row {
+  display: flex;
+  justify-content: center;
+  gap: 0.6em;
+}
+.lawtree .col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+.lawtree .box {
+  border: 2px solid #333;
+  border-radius: 8px;
+  padding: 0.4em 0.6em;
+  font-size: 17px;
+  line-height: 1.3;
+  text-align: center;
+  background: #fff;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lawtree .root    { background: #e1eaf5; font-size: 20px; font-weight: 600; }
+.lawtree .main    { background: #b3d7f0; font-size: 18px; font-weight: 600; }
+.lawtree .ai-main { background: #f2c994; font-size: 18px; font-weight: 600; }
+.lawtree .sub     { background: #f6f6e6; border-color: #888; border-width: 1px; }
+.lawtree .ai-sub  { background: #fdecd6; border-color: #888; border-width: 1px; }
+.lawtree .shared  { background: #d9ead3; border-color: #888; font-style: italic; }
+.lawtree .arrow   { text-align: center; color: #666; font-size: 14px; line-height: 1; }
+</style>
 
-```
 
 ## Who can access the data: information management
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_targeting.mp4 title="Software Kills" height=600 loading="eager" allowfullscreen>}}
 
-## Who can use the data to do what
+## LLM-era access: new gates, new leaks
+
+:::: {.columns}
+
+::: {.column .nonincremental width="50%"}
+
+**New "data" to access**
+
+* Model *weights* (open vs. closed)
+* Training corpora
+* Inference APIs & rate limits
+* Embedding / vector stores
+
+:::
+
+::: {.column .nonincremental width="50%"}
+
+**New ways access can fail**
+
+* *Prompt injection* &rarr; exfiltration of system prompts or tools
+* *Membership inference* &rarr; recovering training records
+* *Jailbreak* &rarr; bypassing safety and policy controls
+* *Shadow use* &rarr; staff pasting confidential docs into public chatbots
+
+:::
+
+::::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+
+[Access control used to end at the database. Now it extends to *every prompt and every response*.]{.red}
+
+:::
+
+## Who can use the data to generate what
 
 [![](https://drhuyue.site:10002/sammo3182/figure/big_audio.png){fig-align="center" height=600}](https://openai.com/blog/navigating-the-challenges-and-opportunities-of-synthetic-voices)
 
@@ -295,70 +395,109 @@ https://openai.com/blog/navigating-the-challenges-and-opportunities-of-synthetic
 
 :::
 
-## Who can use the data to do what
+## Who can use the data to generate — and impersonate — whom
 
 {{< video https://drhuyue.site:10002/sammo3182/video/big_AImimic.mp4 title="Reid Hoffman and his AI mimic" height=600 loading="eager" allowfullscreen>}}
 
-## Policies and laws relating with information management
+## Laws and policies of information management
 
-```{r}
-#| label: infoManagement
+```{=html}
+<div class="lawtree">
+  <div class="row">
+    <div class="box root">《宪法》《民法典》《刑法》</div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="row">
+    <div class="box main">网络安全法（CSL）<br>2017.6.1实施</div>
+    <div class="box main">数据安全法（DSL）<br>2021.9.1实施</div>
+    <div class="box main">个人信息保护法（PIPL）<br>2021.11.1实施</div>
+    <div class="box ai-main">AI专项法规</div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="row">
+    <div class="col">
+      <div class="box sub">电信和互联网用户个人信息保护规定<br>2013.9.1实施</div>
+      <div class="box sub">关键信息基础设施安全保护条例<br>2021.9.1实施</div>
+    </div>
+    <div class="col"></div>
+    <div class="col">
+      <div class="box sub">个人信息出境保护认证办法<br>2025征求意见稿</div>
+      <div class="box sub">个人信息保护合规审计办法<br>2025.5.1实施</div>
+    </div>
+    <div class="col">
+      <div class="box ai-sub">生成式人工智能服务管理暂行办法<br>2023.8.15实施</div>
+      <div class="box ai-sub">互联网信息服务深度合成管理规定<br>2023.1.10实施</div>
+      <div class="box ai-sub">人工智能生成合成内容标识办法<br>2025.9.1实施</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="box shared" style="flex:3;">三法共通（CSL · DSL · PIPL）：网络数据安全管理条例（2025.1.1实施）</div>
+    <div class="col" style="flex:1;"></div>
+  </div>
+</div>
+```
 
-grViz("
-digraph law_framework {
-  graph [layout = dot, rankdir = TB, fontsize=18]
-  
-  # 节点定义
-  node [shape = rectangle, style = filled, fillcolor = '#b3d7f0', fontname = 'Microsoft YaHei']
-  PIPL [label = '个人信息保护法\n(PIPL)']
-  CSL [label = '网络安全法']
-  DSL [label = '数据安全法']
-  CISA [label = '关键信息基础设施安全保护条例']
-  
-  node [shape = rectangle, style = filled, fillcolor = '#f6f6e6', fontname = 'Microsoft YaHei']
-  PIPL1 [label = '网络数据安全管理条例']
-  PIPL2 [label = '个人信息出境保护认证办法']
-  PIPL3 [label = '个人信息保护合规审计办法']
-  PIPL4 [label = '配套细则']
-  
-  CSL1 [label = '等级保护制度']
-  CSL2 [label = '运营者义务']
-  CSL3 [label = '关键信息基础设施']
-  CSL4 [label = '配套细则']
-  
-  DSL1 [label = '数据分类分级']
-  DSL2 [label = '数据处理安全']
-  DSL3 [label = '跨境数据管理']
-  DSL4 [label = '配套细则']
-  
-  CISA1 [label = '设施范围']
-  CISA2 [label = '运营者责任']
-  CISA3 [label = '安全措施']
-  CISA4 [label = '配套细则']
-  
-  # 连线
-  PIPL -> PIPL1 -> PIPL2 -> PIPL3 -> PIPL4
-  CSL -> CSL1 -> CSL2 -> CSL3 -> CSL4
-  DSL -> DSL1 -> DSL2 -> DSL3 -> DSL4
-  CISA -> CISA1 -> CISA2 -> CISA3 -> CISA4
-}
-")
+
+## Policies of information protection
+
+```{=html}
+<div class="lawtree">
+  <div class="row">
+    <div class="box main">个人信息保护法 (PIPL)</div>
+    <div class="box main">网络安全法</div>
+    <div class="box main">数据安全法</div>
+    <div class="box main">关键信息基础设施安全保护条例</div>
+    <div class="box ai-main">AIGC / 生成式AI治理</div>
+  </div>
+  <div class="arrow">▼</div>
+  <div class="row">
+    <div class="box sub">网络数据安全管理条例</div>
+    <div class="box sub">等级保护制度</div>
+    <div class="box sub">数据分类分级</div>
+    <div class="box sub">设施范围</div>
+    <div class="box ai-sub">算法备案</div>
+  </div>
+  <div class="row">
+    <div class="box sub">个人信息出境保护认证办法</div>
+    <div class="box sub">运营者义务</div>
+    <div class="box sub">数据处理安全</div>
+    <div class="box sub">运营者责任</div>
+    <div class="box ai-sub">深度合成标识</div>
+  </div>
+  <div class="row">
+    <div class="box sub">个人信息保护合规审计办法</div>
+    <div class="box sub">关键信息基础设施</div>
+    <div class="box sub">跨境数据管理</div>
+    <div class="box sub">安全措施</div>
+    <div class="box ai-sub">训练数据合规</div>
+  </div>
+  <div class="row">
+    <div class="box sub">配套细则</div>
+    <div class="box sub">配套细则</div>
+    <div class="box sub">配套细则</div>
+    <div class="box sub">配套细则</div>
+    <div class="box ai-sub">生成内容审核</div>
+  </div>
+</div>
 ```
 
 ## Take-Home Points
 
 ::: {.nonincremental}
 
-* What's "big" data
-  - 6 Vs
-* What can big-data do
-  1. Description
-  1. Relationship
-  1. Pattern
-* Ethnic issues of big data
-  - Whose data
-  - Who access data
-  - Who use data and how
+* Big Models, Big Data
+  - 6 Vs &rarr; the *fuel* of LLMs
+  - Computational analysis: description (夯), relationship (拉), pattern
+* Policy on data — amplified in the AI/LLM era
+  - Whose data (and whose *model weights* / *training corpora*)
+  - Who accesses data (and the *inference pipeline*)
+  - Who uses data to *do* and *generate* what
+
+:::
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+
+[Big data feeds big models; the three classical questions now cover *training*, *deployment*, and *generation*.]{.red}
 
 :::
 
