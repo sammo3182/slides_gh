@@ -1,9 +1,9 @@
 ---
 title: |
-  | 关于大语言模型时代
-  | 自然语言分析使用一些想法
-subtitle: "新闻传播学定量研究方法体系建设研讨会"
-date: "2025-06-23"
+  | 关于AI时代
+  | 方法研究与教学的一些想法
+subtitle: "兰州大学·区域国别研究创新方法学术研讨会"
+date: "2026-04-25"
 author: "胡悦"
 institute: "清华大学社会科学学院"
 
@@ -49,12 +49,11 @@ editor:
 ```{r}
 #| include: false
 #| label: setup
-
 library(pacman)
 
 p_load(
-    "icons",
-    "tidyverse"
+  "icons",
+  "tidyverse"
 )
 
 # Functions preload
@@ -65,7 +64,7 @@ set.seed(313)
 
 ::: {style="text-align:center; margin-top: 1em"}
 
-大语言模型时代，还需要（系统）学习（自然语言）研究方法吗？
+AI时代，还需要（系统）学习研究方法和编程吗？
 
 - 主体：[研究者]{.red}还需要学吗？学生还需要学吗？
 - 内容：要学NLP吗？要学[统计]{.red}吗？要学编程吗？
@@ -184,8 +183,8 @@ set.seed(313)
 ::: {.column .incremental width="50%"}
 
 - 学者还要不要关注方法：
-  - 还是得关注
-  - 还是得关注
+  - 还是得关注（方法）
+  - 还是得关注（应用）
 
 ::: {.notes}
 
@@ -233,7 +232,6 @@ set.seed(313)
 ```{r}
 #| label: llmCoding
 #| eval: false
-
 ##说明
 #8-170行属于爬取数据的环节
 #180-321 搜索data scraping包及相关信息
@@ -983,7 +981,6 @@ if (
 
 # 保存结果
 write.xlsx(transformation_packages, "data_transformation_packages_final.xlsx")
-
 ```
 
 ::: {.fragment}
@@ -991,21 +988,39 @@ write.xlsx(transformation_packages, "data_transformation_packages_final.xlsx")
 ```{r}
 #| label: myCoding
 #| eval: false
-
 library(purrr)
 library(pkgsearch)
 
 kw_download <- c("api download", "collect", "gather")
-kw_clean <- c("preprocess data", "data clean", "parse", "sanitize", "scrub",  "correct", "rectify", "standardize")
-kw_transform <- c("convert data", "reformat", "transform", "aggregate", "rescale", "reshape", "recode", "modify", "restructure")
+kw_clean <- c(
+  "preprocess data",
+  "data clean",
+  "parse",
+  "sanitize",
+  "scrub",
+  "correct",
+  "rectify",
+  "standardize"
+)
+kw_transform <- c(
+  "convert data",
+  "reformat",
+  "transform",
+  "aggregate",
+  "rescale",
+  "reshape",
+  "recode",
+  "modify",
+  "restructure"
+)
 
 kw_short <- c(kw_download[1], kw_clean[1], kw_transform[1])
 
-ls_packages <- map(kw_short, \(keyword){
-  pkg_search(keyword, format = "long", size = 50) |> 
-    select(package, title, maintainer = maintainer_name) 
-}) |> 
-  set_names(c("download", "clean", "transform")) 
+ls_packages <- map(kw_short, \(keyword) {
+  pkg_search(keyword, format = "long", size = 50) |>
+    select(package, title, maintainer = maintainer_name)
+}) |>
+  set_names(c("download", "clean", "transform"))
 ```
 
 :::
