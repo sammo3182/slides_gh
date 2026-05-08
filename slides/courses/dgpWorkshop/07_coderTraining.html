@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="07_coderTraining_files/libs/clipboard/clipboard.min.js"></script>
+<script src="07_coderTraining_files/libs/quarto-html/tabby.min.js"></script>
+<script src="07_coderTraining_files/libs/quarto-html/popper.min.js"></script>
+<script src="07_coderTraining_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="07_coderTraining_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="07_coderTraining_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="07_coderTraining_files/libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="07_coderTraining_files/libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="07_coderTraining_files/libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="07_coderTraining_files/libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.37">
+
+  <meta name="author" content="Yue Hu">
+  <meta name="author" content="Tianhui Wu">
+  <meta name="author" content="Haofeng Ma">
+  <title>Coder Training: A Weibo Case</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="07_coderTraining_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="07_coderTraining_files/libs/revealjs/dist/reveal.css">
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
+  <link rel="stylesheet" href="07_coderTraining_files/libs/revealjs/dist/theme/quarto-9c9288a4a86694ccac8bd10173497232.css">
+  <link rel="stylesheet" href="https://www.drhuyue.site/slides_gh/css/style_basic.css">
+  <link href="07_coderTraining_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="07_coderTraining_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="07_coderTraining_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="07_coderTraining_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
+  <h1 class="title">Coder Training: A Weibo Case</h1>
+  <p class="subtitle">Data Generation Process Workshop</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Yue Hu 
+</div>
+        <p class="quarto-title-affiliation">
+            Tsinghua University
+          </p>
+    </div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Tianhui Wu 
+</div>
+        <p class="quarto-title-affiliation">
+            The Chinese University of Hong Kong, Shenzhen
+          </p>
+    </div>
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Haofeng Ma 
+</div>
+        <p class="quarto-title-affiliation">
+            University of Iowa
+          </p>
+    </div>
+</div>
+
+</section>
+<section id="培训安排" class="slide level2">
+<h2>培训安排</h2>
+<div style="text-align:center; margin-top: 1em">
+<ol type="1">
+<li class="fragment">研究内容和目的</li>
+<li class="fragment">数据与标注界面</li>
+<li class="fragment">编码维度详解</li>
+<li class="fragment">网络词汇速查</li>
+<li class="fragment">标注工具操作</li>
+<li class="fragment">实战练习</li>
+<li class="fragment">工作规范</li>
+</ol>
+</div>
+<aside class="notes">
+<p>约 90 分钟。重点在第 4 部分（编码维度详解），占一半以上时间。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section>
+<section id="研究内容和目的" class="title-slide slide level1 center">
+<h1>研究内容和目的</h1>
+
+</section>
+<section id="一部引发争议的电影" class="slide level2">
+<h2>一部引发争议的电影</h2>
+<div class="r-stack">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_weibo.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1" title="Source: @LianHeZaoBao2025"><img data-src="images/penghu_weibo.png" class="quarto-figure quarto-figure-center" height="400" alt="Source: 联合早报 (2025)"></a></p>
+</figure>
+</div>
+<figcaption>Source: <span class="citation" data-cites="LianHeZaoBao2025">联合早报 (<a href="#/常见表情包含义" role="doc-biblioref" onclick="">2025</a>)</span></figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_zaobao.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img data-src="images/penghu_zaobao.png" class="fragment quarto-figure quarto-figure-center" height="400"></a></p>
+</figure>
+</div>
+</div>
+<ul>
+<li class="fragment">改编自1683年（清康熙二十二年）真实历史事件</li>
+<li class="fragment">施琅率军渡海击败郑克塽，将台湾纳入清朝版图</li>
+<li class="fragment">网上争论焦点不是电影本身，而是深层历史与政治问题</li>
+</ul>
+<aside class="notes">
+<p>电影公映预告发出后，微博迅速掀起激烈讨论。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="争论源头" class="slide level2">
+<h2>争论源头</h2>
+<p>清朝在中国人记忆中有<strong>两面性</strong>：</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>鼎盛一面</strong></p>
+<ul>
+<li class="fragment">康乾时期版图扩张</li>
+<li class="fragment">帝国鼎盛</li>
+</ul>
+</div><div class="column" style="width:50%;">
+<p><strong>屈辱一面</strong></p>
+<ul>
+<li class="fragment">后期对外战争屡屡失败</li>
+<li class="fragment">签订大量不平等条约</li>
+</ul>
+</div></div>
+<p><span class="fragment">→ 以<strong>施琅</strong>为正面形象，直接触怒了相当一部分人</span></p>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>史观</th>
+<th>核心主张</th>
+<th>代表立场</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>“1644 史观”</strong></td>
+<td>清军入关 = 近代开端，清朝 = 外来征服</td>
+<td>皇汉群体</td>
+</tr>
+<tr class="even">
+<td><strong>“1840 史观”</strong></td>
+<td>鸦片战争 = 近代开端</td>
+<td>主流教育</td>
+</tr>
+<tr class="odd">
+<td><strong>团结史观</strong></td>
+<td>各民族共同创造历史共同体</td>
+<td>官方立场</td>
+</tr>
+<tr class="even">
+<td><strong>人民/阶级史观</strong></td>
+<td>人民是历史创造者，阶级矛盾 &gt; 民族矛盾</td>
+<td>官方立场</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="事件发展与阵营分化" class="slide level2">
+<h2>事件发展与阵营分化</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>时间</th>
+<th>事件</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2025.10.25</td>
+<td>电影宣发，话题词上线</td>
+</tr>
+<tr class="even">
+<td>10月下旬至11月</td>
+<td>争论爆发，微博大量讨论与骂战</td>
+</tr>
+<tr class="odd">
+<td>11月至12月</td>
+<td>1644 vs 团结史观之争升温，官媒介入</td>
+</tr>
+<tr class="even">
+<td>2025.12.27</td>
+<td>数据采集截止</td>
+</tr>
+</tbody>
+</table>
+<div class="columns fragment">
+<div class="column" style="width:33%;">
+<p><strong>皇汉</strong></p>
+<ul>
+<li class="fragment">反满，强调汉族文化正统</li>
+<li class="fragment">常用蔑称：
+<ul>
+<li class="fragment">鞑清、满清</li>
+<li class="fragment">野猪皮</li>
+</ul></li>
+</ul>
+</div><div class="column fragment" style="width:33%;">
+<p><strong>满遗 / 官方主流</strong></p>
+<ul>
+<li class="fragment">多民族共同体</li>
+<li class="fragment">反对将清定性为外来统治</li>
+</ul>
+</div><div class="column fragment" style="width:34%;">
+<p><strong>人民史观</strong></p>
+<ul>
+<li class="fragment">跳出民族框架</li>
+<li class="fragment">用阶级分析</li>
+<li class="fragment">只认同新中国合法性</li>
+</ul>
+</div></div>
+</section>
+<section id="主要争论议题" class="slide level2">
+<h2>主要争论议题</h2>
+<div style="text-align:center; margin-top: 2em">
+<ol type="1">
+<li class="fragment">当代人如何评价清朝的历史功过？</li>
+<li class="fragment">清朝”统一台湾”能否类比当代两岸关系？</li>
+<li class="fragment">民族政策与少数民族的当代待遇是否公正？</li>
+<li class="fragment">谁在网络上”带节奏”？背后是否有推手？</li>
+</ol>
+</div>
+<aside class="notes">
+<p>这场讨论远超电影本身，涉及历史认知、民族政策、台海关系等多个层面。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="研究方向" class="slide level2">
+<h2>研究方向</h2>
+<div style="text-align:center; margin-top: 2em">
+<ol type="1">
+<li class="fragment"><strong>主题漂移</strong>：讨论是否从电影转向更广泛议题？</li>
+<li class="fragment"><span class="red"><strong>情绪演变</strong>：愤怒、嘲讽等情绪如何传播与变化？</span></li>
+<li class="fragment"><strong>立场极化</strong>：不同群体的政治价值表达有何差异？</li>
+<li class="fragment"><strong>网络攻击</strong>：互动如何演变为骂战与攻击？</li>
+</ol>
+</div>
+</section>
+<section id="为什么需要您来编码" class="slide level2">
+<h2>为什么需要您来编码？</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_goldStandard.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3" title="Source: @Petkova2024"><img data-src="images/penghu_goldStandard.png" class="quarto-figure quarto-figure-center" height="300" alt="Source: Petkova (2024)"></a></p>
+</figure>
+</div>
+<figcaption>Source: <span class="citation" data-cites="Petkova2024">Petkova (<a href="#/常见表情包含义" role="doc-biblioref" onclick="">2024</a>)</span></figcaption>
+</figure>
+</div>
+<div class="columns fragment">
+<div class="column" style="width:50%;">
+<p><strong>数据规模</strong></p>
+<ul>
+<li class="fragment">约 <strong>8万条</strong> 微博帖子</li>
+<li class="fragment">时间跨度：2025.10.25—12.27</li>
+</ul>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>您的角色</strong></p>
+<ul>
+<li class="fragment">每人标注 <strong>&gt; 1000条</strong></li>
+<li class="fragment">编码质量<strong>直接决定</strong>整个研究的科学性</li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>最重要的原则</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>宁可不确定，也不乱猜。</strong> 准确 &gt; 覆盖率。</p>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="三数据与标注界面" class="title-slide slide level1 center">
+<h1>三、数据与标注界面</h1>
+
+</section>
+<section id="标注界面三行文本" class="slide level2">
+<h2>标注界面：三行文本</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>帖子类型</em></p>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>original</strong></td>
+<td>原创帖</td>
+</tr>
+<tr class="even">
+<td><strong>comment</strong></td>
+<td>评论</td>
+</tr>
+<tr class="odd">
+<td><strong>repost</strong></td>
+<td>转发（转发者写的）</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column fragment" style="width:50%;">
+<p>标注界面按时间从晚到早显示三行文本：</p>
+<ul>
+<li class="fragment"><strong>第 1 行（本条评论）</strong>：<span style="color: red; font-weight: bold">要标注的对象</span></li>
+<li class="fragment"><strong>第 2 行（回应内容）</strong>：本条回应对象</li>
+<li class="fragment"><strong>第 3 行（微博原帖）</strong>：讨论起源</li>
+</ul>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>两种情况</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li class="fragment"><strong>情况 A</strong>：只有第 1、3 行（本条直接回应原帖）</li>
+<li class="fragment"><strong>情况 B</strong>：三行都有（第 3 行原帖 → 第 2 行别人的反应 → 第 1 行本条）</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="判断原则" class="slide level2">
+<h2>判断原则</h2>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>标注永远只针对”本条评论”（第 1 行）</strong></p>
+</div>
+<div class="callout-content">
+<p>第 2、3 行只是上下文，帮助理解，<strong>不要标它们</strong>。</p>
+</div>
+</div>
+</div>
+<ul>
+<li class="fragment">仅当本条指代不明时（如”+1”“同意”），可参考上下文</li>
+<li class="fragment">即使参考了上下文，编码仍基于”本条”本身</li>
+<li class="fragment">不确定时选”无法判断”或留空，不要猜</li>
+<li class="fragment">只根据文本内容判断，不对作者”真实动机”做推测</li>
+</ul>
+</section></section>
+<section>
+<section id="四编码维度详解" class="title-slide slide level1 center">
+<h1>四、编码维度详解</h1>
+
+</section>
+<section id="维度总览" class="slide level2">
+<h2>维度总览</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>#</th>
+<th>维度</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>议题焦点</td>
+<td>最多选2</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>立场/历史观</td>
+<td>单选 1-4</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>主导情绪</td>
+<td>最多选2</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>情感强度</td>
+<td>0/1/2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>是否嘲讽/阴阳</td>
+<td>0/1</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>其他政治价值取向</td>
+<td>最多选2</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>境外阴谋论</td>
+<td>0/1</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>是否脏话/粗口</td>
+<td>0/1</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>攻击对象</td>
+<td>最多选2</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="维度-1议题焦点" class="slide level2">
+<h2>维度 1：议题焦点</h2>
+<blockquote>
+<p>这条帖子主要在谈什么？</p>
+</blockquote>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>电影制作（选角、档期、票房、审查）</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>施琅 / 郑成功 / 郑经</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>元清正统性 / 1644 史观</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>现代台海 / 统一</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>近代屈辱 / 日本</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>当代民族关系</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>当代政治与社会</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>无法判断</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="维度-1判断原则" class="slide level2">
+<h2>维度 1：判断原则</h2>
+<ul>
+<li class="fragment">涉及多议题时，取<strong>篇幅最多、情绪最集中</strong>的为主题</li>
+<li class="fragment">次要议题可填副主题（绝大多数帖子只有一个主题）</li>
+<li class="fragment">三个议题各占三分之一时，优先选与历史立场相关的（2、3）</li>
+<li class="fragment">只有完全无法理解或纯乱码时才选 8</li>
+</ul>
+</section>
+<section id="维度-1举例" class="slide level2">
+<h2>维度 1：举例</h2>
+<ol type="1">
+<li class="fragment">电影制作：“这导演是HK的，投资也复杂”</li>
+<li class="fragment">施琅/郑成功：“施琅唯一可取之处是武力实现了统一”</li>
+<li class="fragment">元清正统性：“剃发易服 文字狱……近代落后不是清问题吗？”</li>
+<li class="fragment">现代台海：“支不支持解放台湾，统一中国”</li>
+<li class="fragment">近代屈辱/日本：“中国大学怎么请日本人当历史老师”</li>
+<li class="fragment">当代民族关系：“发达地区某些人也加分是真的崩不住”</li>
+<li class="fragment">当代政治与社会：“<code>@</code>紫光阁 给我下架这部电影”</li>
+<li class="fragment">无法判断：“下一句咋不发”</li>
+</ol>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>类别2 vs 类别3</strong></p>
+</div>
+<div class="callout-content">
+<p><strong>类别 2</strong>：就事论事讨论施琅/郑成功等具体历史人物和事件</p>
+<p><strong>类别 3</strong>：讨论元清<strong>整体</strong>是否是中国、1644 vs 1840 史观之争</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="维度-2立场-历史观" class="slide level2">
+<h2>维度 2：立场 / 历史观</h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>类别</th>
+<th>核心特征</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>官方主流</td>
+<td>元清是中国，强调民族融合</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>皇汉/1644</td>
+<td>反满，视清为外来</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>超越民族叙事</td>
+<td>阶级/人民史观，跳出民族框架</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>无法判断/模糊</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div><div class="column" style="width:40%;">
+<div style="text-align:center; margin-top: 1em">
+<pre><code>帖子是否使用阶级、人民史观、封建主义等框架？
+          │
+     ┌────┴────┐
+     是         否
+     │          │
+  类别 3    帖子是否反满，称清为外来政权？
+                │
+           ┌────┴────┐
+           是         否
+           │          │
+        类别 2    帖子是否承认元/清是中国？
+                      │
+                 ┌────┴────┐
+                 是         否
+                 │          │
+              类别 1      类别 4</code></pre>
+</div>
+</div></div>
+</section>
+<section id="类别-3-超越民族叙事" class="slide level2">
+<h2>类别 3： 超越民族叙事（<span class="red">★</span>）</h2>
+<p><strong>核心特征</strong></p>
+<ul>
+<li class="fragment">用阶级、人民、封建主义等分析框架，<strong>不用</strong>民族框架</li>
+<li class="fragment">认为满汉矛盾是虚假问题，真正矛盾在阶级层面</li>
+<li class="fragment">既不站官方主流，也不站皇汉，只认同新中国</li>
+</ul>
+<p><strong>典型语言</strong></p>
+<ul>
+<li class="fragment">“人民史观”“阶级斗争”“封建主义”“三座大山”“统治阶级都是剥削者”</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>这是一个不易识别的类别，但对后续研究尤其重要。请仔细阅读。</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="类别-3-例句" class="slide level2">
+<h2>类别 3 例句</h2>
+<blockquote>
+<p>“满清统治阶级不就是这样吗？联合洋人压榨中华大地上<strong>各族人民</strong>。对普通百姓无论是汉满蒙等等都是屠杀和压榨”</p>
+</blockquote>
+<blockquote>
+<p>“作为中华人民共和国公民，只承认<strong>人民史观</strong>”</p>
+</blockquote>
+<blockquote>
+<p>“真正需要反思的不是群众怎么看历史，而是当局者到底要用什么立场与方法去向人民讲历史……当<strong>封建统治阶级</strong>的阶级本质被淡化，<strong>民族情绪</strong>被推到前台，几乎是不可避免的结果”</p>
+</blockquote>
+<aside class="notes">
+<p>类别 3 区别于类别 1（民族共同体框架）和类别 2（汉族框架），它拒绝民族框架本身。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="维度-3主导情绪" class="slide level2">
+<h2>维度 3：主导情绪（<span class="red">★</span>）</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>情绪</th>
+<th>政治语境中的表现</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>快乐</td>
+<td>胜利感、正义感得到伸张、自豪</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>悲伤</td>
+<td>屈辱、哀伤、无奈、失望</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>愤怒</td>
+<td>生气、激愤（<strong>最常见</strong>的政治情绪）</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>恐惧</td>
+<td>担忧、害怕、警惕</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>惊讶</td>
+<td>意外、震惊、不敢相信</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>无情绪</td>
+<td>冷静陈述、学理讨论</td>
+</tr>
+</tbody>
+</table>
+<p>可选 1-2 个（情绪 1 必填，情绪 2 可留空）</p>
+</section>
+<section id="维度-3例句" class="slide level2">
+<h2>维度 3：例句</h2>
+<ol type="1">
+<li class="fragment">快乐：“彰显祖国统一大势，振奋人心”</li>
+<li class="fragment">悲伤：“中国近代史太过屈辱的不甘”</li>
+<li class="fragment">愤怒：“艹，真抽象”</li>
+<li class="fragment">恐惧：“历史政治这一块比较微妙，舆情风险是一大挑战”</li>
+<li class="fragment">惊讶：“居然最早在2009年就出现了！令人震惊！”</li>
+<li class="fragment">无情绪：“请看看《剑桥中国清代前中期史》的导论”</li>
+</ol>
+</section>
+<section id="维度-4情感强度" class="slide level2">
+<h2>维度 4：情感强度</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>级别</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>无情绪/中性陈述</td>
+<td>“剧本由方家旭执笔。导演是港人。”</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>弱情绪（有但克制）</td>
+<td>“这电影选角有点迷”</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>强情绪（明显激烈）</td>
+<td>“艹，真抽象”</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>自我注意力测试</strong></p>
+</div>
+<div class="callout-content">
+<p>如果维度 3 = 6（无情绪），强度<strong>必须</strong>填 0。 两者要保持一致。</p>
+</div>
+</div>
+</div>
+</section>
+<section id="维度-5是否嘲讽阴阳" class="slide level2">
+<h2>维度 5：是否嘲讽/阴阳</h2>
+<blockquote>
+<p>帖子是否使用反讽修辞？</p>
+</blockquote>
+<p><strong>标 0 (没有阴阳)的情况：</strong></p>
+<ul>
+<li class="fragment">直接表达情绪（愤怒、悲伤），无反讽修辞</li>
+<li class="fragment">陈述事实、平铺直叙</li>
+</ul>
+<p><strong>标 1（嘲讽阴阳）的情况：</strong></p>
+<ul>
+<li class="fragment">表面说一件事，实际意思相反</li>
+<li class="fragment">使用 [doge]、[允悲]、[二哈]、[挖鼻]、笑死、呵呵</li>
+<li class="fragment">反问句嘲讽（“您是不是太天真了？”）</li>
+<li class="fragment">假装赞同</li>
+</ul>
+</section>
+<section id="案例对比" class="slide level2">
+<h2>案例对比</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>非嘲讽 = 0</strong></p>
+<p>“艹，真抽象”</p>
+<p>“剃发易服 文字狱……近代的落后和清没关系？”</p>
+<p>（虽是反问句，但是直接质问而非阴阳怪气）</p>
+</div><div class="column" style="width:50%;">
+<p><strong>嘲讽 = 1</strong></p>
+<p>“1643的缠足是好的，1644的缠足是坏的。[doge]”</p>
+<p>“幸亏日本失败了，不然现在要从”日本人立场”看抗日战争了[二哈]”</p>
+</div></div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>阴阳和愤怒可以共存</strong></p>
+</div>
+<div class="callout-content">
+<p>“[doge] 笑死了，居然真有人信”： 既是愤怒也是阴阳。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="维度-6其他政治价值取向" class="slide level2">
+<h2>维度 6：其他政治价值取向</h2>
+<blockquote>
+<p>除史观/民族以外的政治诉求,与维度 1、2 的区分</p>
+</blockquote>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>三个维度各管各的</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li class="fragment"><strong>维度 1</strong>（议题）= 帖子在<strong>谈什么</strong></li>
+<li class="fragment"><strong>维度 2</strong>（立场）= 关于元清/历史的<strong>看法</strong></li>
+<li class="fragment"><strong>维度 6</strong>（价值）= 还表达了哪些<strong>其他</strong>政治诉求</li>
+</ul>
+</div>
+</div>
+</div>
+<p><strong>示例</strong>：“满清就是垃圾，但更可恨的是国家不让我们自由说话”</p>
+<ul>
+<li class="fragment">维度 1 = 3 元清正统性</li>
+<li class="fragment">维度 2 = 2 皇汉</li>
+<li class="fragment">维度 6 = 6 亲西方、呼吁开放</li>
+</ul>
+</section>
+<section id="维度-67个类别" class="slide level2">
+<h2>维度 6：7个类别</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>类别</th>
+<th>关键词</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>稳定与发展主义</td>
+<td>别折腾、搞经济</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>反日美、西方、排外</td>
+<td>境外势力、小日本</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>呼吁网络/社会管控</td>
+<td>封禁、举报、严管</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>反管控/反精英/反特权</td>
+<td>批评宣传部门、官僚</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>历史正义/复仇</td>
+<td>不忘、要报仇、清算</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>亲西方、呼吁开放</td>
+<td>自由、开放（少见）</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>以上都不是/纯情绪</td>
+<td>无明确政治诉求</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="维度-7境外阴谋论" class="slide level2">
+<h2>维度 7：境外阴谋论</h2>
+<blockquote>
+<p>是否指控境外势力或汉奸推动？</p>
+</blockquote>
+<p><strong>标 0：</strong></p>
+<ul>
+<li class="fragment">仅表达对某个观点不满，但没有归因为境外/汉奸</li>
+</ul>
+<p><strong>标 1：</strong></p>
+<ul>
+<li class="fragment">明确指控境外势力（美国、日本、台独、CIA、1450）介入</li>
+<li class="fragment">指控”公知”“汉奸”“第五纵队”推动</li>
+<li class="fragment">使用”带节奏”“有预案”“背后有人”等暗示</li>
+</ul>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>阴谋论包含“双向”</strong></p>
+</div>
+<div class="callout-content">
+<p>可以指控皇汉是境外推动，也可以指控官方主流是境外推动。两个方向都标 1。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="维度-8是否脏话粗口" class="slide level2">
+<h2>维度 8：是否脏话/粗口</h2>
+<blockquote>
+<p>区分日常粗口与政治贬称</p>
+</blockquote>
+<p>政治贬称属于歧视性政治表达，在维度 2（立场）或维度 9（攻击对象）中体现，<strong>不算</strong>脏话。</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>脏话 / 粗口 = <span style="color: red; font-weight: bold">1</span></strong></p>
+<p>婊子、杂种、狗、傻逼</p>
+<p>操、艹、滚</p>
+<p>垃圾、畜生、脑残</p>
+</div><div class="column" style="width:50%;">
+<p><strong>政治贬称 ≠ 脏话 = <span style="color: green; font-weight: bold">0</span></strong></p>
+<p>满遗、皇汉、鞑虏</p>
+<p>野猪皮、通古斯</p>
+<p>1450、蛙岛、汉奸</p>
+</div></div>
+</section>
+<section id="维度-9攻击对象" class="slide level2">
+<h2>维度 9：攻击对象</h2>
+<blockquote>
+<p>帖子明确针对的目标是谁？</p>
+</blockquote>
+<div class="columns">
+<div class="column" style="width:50%;">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>代码</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>无明确目标</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>满族/满遗/清</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>汉族/皇汉</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>台独/台湾民众</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>日本/日本人</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>西方/美国/境外势力</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>公知/学者</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>官方机构/媒体</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>某具体用户（<code>@</code>骂战）</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>电影主创/演员</td>
+</tr>
+</tbody>
+</table>
+</div><div class="column fragment" style="width:50%;">
+<p><strong>判断原则</strong></p>
+<ul>
+<li class="fragment">目标必须是<strong>当代</strong>具体人/群体</li>
+<li class="fragment">批评一个<strong>历史现象</strong>（如批评清朝制度）→ 选 1（无目标）</li>
+<li class="fragment">批评清朝遗民的<strong>当代后裔</strong> → 选 2（满族/满遗）</li>
+<li class="fragment">最多选 <strong>2个</strong></li>
+</ul>
+<div class="fragment">
+<p><em>示例</em></p>
+<ul>
+<li class="fragment">“公知、1450、碍国大V这次是合流了”→ 7 公知 + 4 台独</li>
+<li class="fragment">“<code>@</code>紫光阁 给我下架这部电影”→ 10 电影主创</li>
+<li class="fragment">“剃发易服 文字狱……近代落后和清没关系？”→ 1 无目标（批评历史现象）</li>
+</ul>
+</div>
+</div></div>
+</section></section>
+<section>
+<section id="实战练习" class="title-slide slide level1 center">
+<h1>实战练习</h1>
+
+</section>
+<section id="练习-1" class="slide level2">
+<h2>练习 1</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>本条评论</strong></p>
+</div>
+<div class="callout-content">
+<p>“这导演是HK的，投资也复杂，您能指望HK导演有什么高眼界吗？”</p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 议题</td>
+<td>1 电影制作</td>
+<td>讨论导演和投资</td>
+</tr>
+<tr class="even">
+<td>2 立场</td>
+<td>4 无法判断</td>
+<td>无明确史观表达</td>
+</tr>
+<tr class="odd">
+<td>3 情绪</td>
+<td>3 愤怒</td>
+<td>不满、质问语气</td>
+</tr>
+<tr class="even">
+<td>4 强度</td>
+<td>1 弱情绪</td>
+<td>有不满但相对克制</td>
+</tr>
+<tr class="odd">
+<td>5 嘲讽</td>
+<td>1</td>
+<td>反问句带嘲讽</td>
+</tr>
+<tr class="even">
+<td>6 政治价值</td>
+<td>7 无明确</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7 阴谋论</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8 脏话</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9 攻击对象</td>
+<td>10 电影主创</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="练习-2" class="slide level2">
+<h2>练习 2</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>本条评论</strong></p>
+</div>
+<div class="callout-content">
+<p>“满清统治阶级不就是这样吗？联合洋人压榨中华大地上各族人民。对普通百姓无论是汉满蒙等等都是屠杀和压榨”</p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 议题</td>
+<td>3 元清正统性</td>
+<td>讨论清朝统治</td>
+</tr>
+<tr class="even">
+<td>2 立场</td>
+<td>3 超越民族叙事</td>
+<td>阶级框架，“各族人民”</td>
+</tr>
+<tr class="odd">
+<td>3 情绪</td>
+<td>3 愤怒</td>
+<td>对统治阶级激愤</td>
+</tr>
+<tr class="even">
+<td>4 强度</td>
+<td>2 强</td>
+<td>“屠杀和压榨”</td>
+</tr>
+<tr class="odd">
+<td>5 嘲讽</td>
+<td>0</td>
+<td>直接表达</td>
+</tr>
+<tr class="even">
+<td>6 政治价值</td>
+<td>7 无明确</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7 阴谋论</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8 脏话</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9 攻击对象</td>
+<td>1 无目标</td>
+<td>批评历史现象</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="练习-3" class="slide level2">
+<h2>练习 3</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>本条评论</strong></p>
+</div>
+<div class="callout-content">
+<p>“公知、1450、碍国大V、申姨叫兽这次是合流了”</p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 议题</td>
+<td>7 当代政治</td>
+<td>讨论舆论推手</td>
+</tr>
+<tr class="even">
+<td>2 立场</td>
+<td>1 官方主流</td>
+<td>批评皇汉、台独</td>
+</tr>
+<tr class="odd">
+<td>3 情绪</td>
+<td>3 愤怒</td>
+<td>指控语气</td>
+</tr>
+<tr class="even">
+<td>4 强度</td>
+<td>2 强</td>
+<td>多个贬称叠加</td>
+</tr>
+<tr class="odd">
+<td>5 嘲讽</td>
+<td>1</td>
+<td>“碍国”“申姨叫兽”</td>
+</tr>
+<tr class="even">
+<td>6 政治价值</td>
+<td>2 反日美西方</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7 阴谋论</td>
+<td>1</td>
+<td>指控合流、有组织</td>
+</tr>
+<tr class="even">
+<td>8 脏话</td>
+<td>0</td>
+<td>政治贬称，非日常粗口</td>
+</tr>
+<tr class="odd">
+<td>9 攻击对象</td>
+<td>7 公知 + 4 台独</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="练习-4" class="slide level2">
+<h2>练习 4</h2>
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>本条评论</strong></p>
+</div>
+<div class="callout-content">
+<p>“1643的缠足是好的，1644的缠足是坏的。[doge]”</p>
+</div>
+</div>
+</div>
+<div class="fragment">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1 议题</td>
+<td>3 元清正统性</td>
+<td>嘲讽 1644 史观的逻辑</td>
+</tr>
+<tr class="even">
+<td>2 立场</td>
+<td>1 官方主流</td>
+<td>反对皇汉立场</td>
+</tr>
+<tr class="odd">
+<td>3 情绪</td>
+<td>3 愤怒</td>
+<td>嘲讽背后的不满</td>
+</tr>
+<tr class="even">
+<td>4 强度</td>
+<td>1 弱</td>
+<td>克制的嘲讽</td>
+</tr>
+<tr class="odd">
+<td>5 嘲讽</td>
+<td>1</td>
+<td>[doge] + 反讽对比</td>
+</tr>
+<tr class="even">
+<td>6 政治价值</td>
+<td>7 无明确</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>7 阴谋论</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>8 脏话</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>9 攻击对象</td>
+<td>3 皇汉</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section></section>
+<section>
+<section id="标注工具操作" class="title-slide slide level1 center">
+<h1>标注工具操作</h1>
+
+</section>
+<section id="准备工作" class="slide level2">
+<h2>准备工作</h2>
+<ol type="1">
+<li class="fragment">获得压缩包：“标注工具-mac.zip”或”标注工具-windows.zip”</li>
+<li class="fragment"><strong>解压</strong>压缩包，内含：
+<ul>
+<li class="fragment">标注工具 app（annonator_mac 或 annonator_windows）</li>
+<li class="fragment">csv 文档（微博帖子）</li>
+</ul></li>
+<li class="fragment"><strong>两个文件放在同一路径</strong>，确保每次都能找到</li>
+</ol>
+</section>
+<section id="软件设置" class="slide level2">
+<h2>软件设置</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_software_step1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4" title="1. 打开标注工具 app（首次使用请信任）"><img data-src="images/penghu_software_step1.png" class="quarto-figure quarto-figure-center" height="200" alt="1. 打开标注工具 app（首次使用请信任）"></a></p>
+</figure>
+</div>
+<figcaption>1. 打开标注工具 app（首次使用请信任）</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_software_step2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5" title="2. 输入您的id（姓名拼音，如 huyue）"><img data-src="images/penghu_software_step2.png" class="quarto-figure quarto-figure-center" height="200" alt="2. 输入您的id（姓名拼音，如 huyue）"></a></p>
+</figure>
+</div>
+<figcaption>2. 输入您的<code>id</code>（姓名拼音，如 <code>huyue</code>）</figcaption>
+</figure>
+</div>
+</section>
+<section id="标注准备" class="slide level2">
+<h2>标注准备</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_software_step3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6" title="3. 选择 csv 文档"><img data-src="images/penghu_software_step3.png" class="quarto-figure quarto-figure-center" height="200" alt="3. 选择 csv 文档"></a></p>
+</figure>
+</div>
+<figcaption>3. 选择 csv 文档</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><a href="images/penghu_software_step4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-7" title="4. 选择全屏显示，减少滚动"><img data-src="images/penghu_software_step4.png" class="quarto-figure quarto-figure-center" height="300" alt="4. 选择全屏显示，减少滚动"></a></p>
+</figure>
+</div>
+<figcaption>4. 选择<strong>全屏显示</strong>，减少滚动</figcaption>
+</figure>
+</div>
+</section>
+<section id="操作要点" class="slide level2">
+<h2>操作要点</h2>
+<ul>
+<li class="fragment"><strong>首次单击</strong>标签 → 选择（字体变色）</li>
+<li class="fragment"><strong>二次点击</strong> → 取消选择（回到黑色）</li>
+<li class="fragment">必须<strong>完成当前帖子</strong>所有维度才能跳到下一条</li>
+<li class="fragment">可通过”上一条”“下一条”“跳转”导航</li>
+<li class="fragment">遇到疑问：<strong>先完成标注</strong>，同时自行备注第几条有疑问</li>
+</ul>
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>保存机制</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li class="fragment">随时可关闭 app，下次打开输入<strong>同样的 id</strong> 即可恢复进度</li>
+<li class="fragment">编码结果保存在 <code>ann_[id].json</code> 和 <code>ann_[id].csv</code></li>
+<li class="fragment">这两个文件<span class="red"><strong>请勿删除或手动编辑</strong></span>！</li>
+</ul>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="工作规范" class="title-slide slide level1 center">
+<h1>工作规范</h1>
+
+</section>
+<section id="时间安排" class="slide level2">
+<h2>时间安排</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>阶段</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>编码校准</td>
+<td>50条试验</td>
+</tr>
+<tr class="even">
+<td>正式启动</td>
+<td>每人完成 &gt;1000 条标注</td>
+</tr>
+<tr class="odd">
+<td>双周例会</td>
+<td>线上/线下：汇总疑问、统一难点</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="每日工作建议" class="slide level2">
+<h2>每日工作建议</h2>
+<ul>
+<li class="fragment">每日编码量：<strong>不超过 300 条</strong></li>
+<li class="fragment">每日最长工作时间：<strong>不超过 4 小时</strong></li>
+<li class="fragment">感到难以集中注意力时(如发现注意力问题打错)，<strong>停下休息</strong></li>
+</ul>
+<div class="fragment">
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>质量 &gt; 数量</strong></p>
+</div>
+<div class="callout-content">
+<p>长时间高强度阅读会造成判断疲劳，导致标注质量下降。</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>遇到不确定怎么办？</strong></p>
+</div>
+<div class="callout-content">
+<ol type="1">
+<li class="fragment"><strong>先查词汇表</strong></li>
+<li class="fragment"><strong>百谷歌度</strong>，仍不懂则标”无法判断/模糊”</li>
+<li class="fragment"><strong>自行记录</strong>：第几条、什么问题</li>
+<li class="fragment"><strong>带到例会讨论</strong>，期待发现问题、期待群策群力</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="checking-list" class="slide level2">
+<h2>Checking list</h2>
+<div style="font-size: 0.95em">
+<ul class="task-list">
+<li class="fragment"><label><input type="checkbox">温习了培训手册（含所有维度说明）</label></li>
+<li class="fragment"><label><input type="checkbox">熟悉了网络词汇表</label></li>
+<li class="fragment"><label><input type="checkbox">了解了9个编码维度的标注逻辑和顺序</label></li>
+<li class="fragment"><label><input type="checkbox">清楚了不确定时的处理方式</label></li>
+<li class="fragment"><label><input type="checkbox">标注工具已解压并测试</label></li>
+</ul>
+</div>
+<div class="fragment" style="text-align:center; margin-top: 1em; font-size: 1.3em; font-weight: bold">
+<p>我们与你们同在！<span class="fragment">Aka, 随时准备好本手册在旁边！😏</span></p>
+</div>
+</section></section>
+<section id="祝编码顺利" class="title-slide slide level1 center" data-background="#43464B">
+<h1>祝编码顺利！</h1>
+<div style="text-align:center; margin-top: 2em; color: white; font-size: 1.2em">
+<p>您的工作对这项研究至关重要！</p>
+<p>如有任何问题，请随时发到群里。</p>
+</div>
+</section>
+
+<section>
+<section id="附录相关网络词汇" class="title-slide slide level1 appendix center" data-visibility="uncounted">
+<h1>附录：相关网络词汇</h1>
+
+</section>
+<section id="对清朝满族的贬称" class="slide level2" data-visibility="uncounted">
+<h2>对清朝/满族的贬称</h2>
+<div style="font-size: 0.9em">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>词汇</th>
+<th>含义</th>
+<th>维度 8</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>鞑清/鞑虏</td>
+<td>对清朝政权的蔑称</td>
+<td>0（政治贬称）</td>
+</tr>
+<tr class="even">
+<td>满遗</td>
+<td>“满清遗老遗少”</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>野猪皮</td>
+<td>指努尔哈赤</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>金钱鼠尾</td>
+<td>清代强制发型</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>通古斯</td>
+<td>满族族源地</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>螨虫/满狗</td>
+<td>极度贬称</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<aside class="notes">
+<p>这些虽然带有强烈贬义，但在维度 8 中归为政治贬称，不算脏话。</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="对台湾日本其他群体的称呼" class="slide level2" data-visibility="uncounted">
+<h2>对台湾/日本/其他群体的称呼</h2>
+<div style="font-size: 0.9em">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>词汇</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1450</td>
+<td>台独水军代号</td>
+</tr>
+<tr class="even">
+<td>蛙岛/蛙</td>
+<td>对台湾的贬称</td>
+</tr>
+<tr class="odd">
+<td>梧桐</td>
+<td>“武统”的谐音</td>
+</tr>
+<tr class="even">
+<td>小日子/倭寇/脚盆</td>
+<td>对日本的蔑称</td>
+</tr>
+<tr class="odd">
+<td>皇汉</td>
+<td>汉族民族主义者（可自称/他称）</td>
+</tr>
+<tr class="even">
+<td>50万/行走的50万</td>
+<td>指控某人是间谍</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="关键术语" class="slide level2" data-visibility="uncounted">
+<h2>关键术语</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>术语</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>吃瓜蒙主/蒙主</td>
+<td>1644 史观主要推动者之一</td>
+</tr>
+<tr class="even">
+<td>沈逸</td>
+<td>复旦学者，官方立场代表</td>
+</tr>
+<tr class="odd">
+<td>浙江宣传</td>
+<td>浙江省委宣传部公众号</td>
+</tr>
+<tr class="even">
+<td>南明</td>
+<td>1644年后明朝南方政权</td>
+</tr>
+<tr class="odd">
+<td>历史虚无主义</td>
+<td>官方批评史观偏离用语</td>
+</tr>
+<tr class="even">
+<td>带节奏</td>
+<td>故意引导舆论方向</td>
+</tr>
+<tr class="odd">
+<td>第五纵队</td>
+<td>阴谋论标签</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="常见表情包含义" class="slide level2 smaller scrollable" data-visibility="uncounted">
+<h2>常见表情包含义</h2>
+<div style="font-size: 1.1em; text-align: center">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>表情</th>
+<th>含义</th>
+<th>维度 5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>[doge]</td>
+<td>嘲讽/反讽（<strong>最常见的阴阳标志</strong>）</td>
+<td>→ 1</td>
+</tr>
+<tr class="even">
+<td>[笑cry]</td>
+<td>苦笑/自嘲</td>
+<td>→ 看语境</td>
+</tr>
+<tr class="odd">
+<td>[允悲]</td>
+<td>无奈/哭笑不得</td>
+<td>→ 1</td>
+</tr>
+<tr class="even">
+<td>[二哈]</td>
+<td>戏谑/玩梗</td>
+<td>→ 1</td>
+</tr>
+<tr class="odd">
+<td>[挖鼻]</td>
+<td>阴阳/不屑</td>
+<td>→ 1</td>
+</tr>
+<tr class="even">
+<td>[摊手]</td>
+<td>无奈</td>
+<td>→ 看语境</td>
+</tr>
+<tr class="odd">
+<td>[怒]</td>
+<td>愤怒</td>
+<td>→ 0</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-Petkova2024" class="csl-entry" role="listitem">
+Petkova, Gergana. 2024. <span>“The Gold Standard - the Key to Information Extraction and Data Quality Control.”</span> Graphwise, December 3.
+</div>
+<div id="ref-LianHeZaoBao2025" class="csl-entry" role="listitem">
+联合早报. 2025. <span>“攻台电影《澎湖海战》遭中国网民抵制 负面舆论被屏蔽.”</span> <em>联合早报</em>, October 31.
+</div>
+</div>
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="07_coderTraining_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="07_coderTraining_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/reveal-spotlight/spotlight.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="07_coderTraining_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="07_coderTraining_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'spotlight': {"size":50,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":73,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealSpotlight, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+      window.document.addEventListener("DOMContentLoaded", function (event) {
+        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+        tabsets.forEach(function(tabset) {
+          const tabby = new Tabby('#' + tabset.id);
+        });
+        const isCodeAnnotation = (el) => {
+          for (const clz of el.classList) {
+            if (clz.startsWith('code-annotation-')) {                     
+              return true;
+            }
+          }
+          return false;
+        }
+        const onCopySuccess = function(e) {
+          // button target
+          const button = e.trigger;
+          // don't keep focus
+          button.blur();
+          // flash "checked"
+          button.classList.add('code-copy-button-checked');
+          var currentTitle = button.getAttribute("title");
+          button.setAttribute("title", "Copied!");
+          let tooltip;
+          if (window.bootstrap) {
+            button.setAttribute("data-bs-toggle", "tooltip");
+            button.setAttribute("data-bs-placement", "left");
+            button.setAttribute("data-bs-title", "Copied!");
+            tooltip = new bootstrap.Tooltip(button, 
+              { trigger: "manual", 
+                customClass: "code-copy-button-tooltip",
+                offset: [0, -8]});
+            tooltip.show();    
+          }
+          setTimeout(function() {
+            if (tooltip) {
+              tooltip.hide();
+              button.removeAttribute("data-bs-title");
+              button.removeAttribute("data-bs-toggle");
+              button.removeAttribute("data-bs-placement");
+            }
+            button.setAttribute("title", currentTitle);
+            button.classList.remove('code-copy-button-checked');
+          }, 1000);
+          // clear code selection
+          e.clearSelection();
+        }
+        const getTextToCopy = function(trigger) {
+          const outerScaffold = trigger.parentElement.cloneNode(true);
+          const codeEl = outerScaffold.querySelector('code');
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+          text: getTextToCopy
+        });
+        clipboard.on('success', onCopySuccess);
+        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+            text: getTextToCopy,
+            container: window.document.getElementById('quarto-embedded-source-code-modal')
+          });
+          clipboardModal.on('success', onCopySuccess);
+        }
+          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+          var mailtoRegex = new RegExp(/^mailto:/);
+            var filterRegex = new RegExp('/' + window.location.host + '/');
+          var isInternal = (href) => {
+              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+          }
+          // Inspect non-navigation links and adorn them if external
+         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+          for (var i=0; i<links.length; i++) {
+            const link = links[i];
+            if (!isInternal(link.href)) {
+              // undo the damage that might have been done by quarto-nav.js in the case of
+              // links that we want to consider external
+              if (link.dataset.originalHref !== undefined) {
+                link.href = link.dataset.originalHref;
+              }
+                // target, if specified
+                link.setAttribute("target", "_blank");
+                if (link.getAttribute("rel") === null) {
+                  link.setAttribute("rel", "noopener");
+                }
+            }
+          }
+        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+          const config = {
+            allowHTML: true,
+            maxWidth: 500,
+            delay: 100,
+            arrow: false,
+            appendTo: function(el) {
+                return el.closest('section.slide') || el.parentElement;
+            },
+            interactive: true,
+            interactiveBorder: 10,
+            theme: 'light-border',
+            placement: 'bottom-start',
+          };
+          if (contentFn) {
+            config.content = contentFn;
+          }
+          if (onTriggerFn) {
+            config.onTrigger = onTriggerFn;
+          }
+          if (onUntriggerFn) {
+            config.onUntrigger = onUntriggerFn;
+          }
+            config['offset'] = [0,0];
+            config['maxWidth'] = 700;
+          window.tippy(el, config); 
+        }
+        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+        for (var i=0; i<noterefs.length; i++) {
+          const ref = noterefs[i];
+          tippyHover(ref, function() {
+            // use id or data attribute instead here
+            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+            try { href = new URL(href).hash; } catch {}
+            const id = href.replace(/^#\/?/, "");
+            const note = window.document.getElementById(id);
+            if (note) {
+              return note.innerHTML;
+            } else {
+              return "";
+            }
+          });
+        }
+        const findCites = (el) => {
+          const parentEl = el.parentElement;
+          if (parentEl) {
+            const cites = parentEl.dataset.cites;
+            if (cites) {
+              return {
+                el,
+                cites: cites.split(' ')
+              };
+            } else {
+              return findCites(el.parentElement)
+            }
+          } else {
+            return undefined;
+          }
+        };
+        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+        for (var i=0; i<bibliorefs.length; i++) {
+          const ref = bibliorefs[i];
+          const citeInfo = findCites(ref);
+          if (citeInfo) {
+            tippyHover(citeInfo.el, function() {
+              var popup = window.document.createElement('div');
+              citeInfo.cites.forEach(function(cite) {
+                var citeDiv = window.document.createElement('div');
+                citeDiv.classList.add('hanging-indent');
+                citeDiv.classList.add('csl-entry');
+                var biblioDiv = window.document.getElementById('ref-' + cite);
+                if (biblioDiv) {
+                  citeDiv.innerHTML = biblioDiv.innerHTML;
+                }
+                popup.appendChild(citeDiv);
+              });
+              return popup.innerHTML;
+            });
+          }
+        }
+      });
+      </script>
+    <script>var lightboxQuarto = GLightbox({"closeEffect":"fade","descPosition":"bottom","loop":false,"openEffect":"fade","selector":".lightbox"});
+    (function() {
+      let previousOnload = window.onload;
+      window.onload = () => {
+        if (previousOnload) {
+          previousOnload();
+        }
+        lightboxQuarto.on('slide_before_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          const href = trigger.getAttribute('href');
+          if (href !== null) {
+            const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+            if (imgEl !== null) {
+              const srcAttr = imgEl.getAttribute("src");
+              if (srcAttr && srcAttr.startsWith("data:")) {
+                slideConfig.href = srcAttr;
+              }
+            }
+          } 
+        });
+      
+        lightboxQuarto.on('slide_after_load', (data) => {
+          const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(slideNode);
+          }
+        });
+      
+      };
+      
+    })();
+              </script>
+    
+
+</body></html>
