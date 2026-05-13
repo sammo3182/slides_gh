@@ -1,0 +1,692 @@
+---
+title: "Data Wrangling"
+subtitle: "Learn R with Dr. Hu and His Friends"
+author: "Yue Hu (Department of Political Science, Tsinghua University)"
+
+webr:
+  packages:
+    - drhur
+    - dplyr
+    - tidyr
+---
+
+{{< include _extensions/r-wasm/live/_knitr.qmd >}}
+
+# Data Wrangling {#sec-munging-en}
+
+::: {.callout-note title="Chapter Highlights"}
+
+1. Single-dataset operations
+    - Explore
+    - Wrangle
+    - Filter
+    - Modify
+2. Cross-dataset operations
+    - Direct merging
+    - Index merging
+
+*Research question*: Drawing on the WVS7 sample (`wvs7`), what useful information does it contain regarding the factors that shape people's views of equality?
+
+:::
+
+## Data Exploration
+
+- Data exploration: initial inspection of an unfamiliar dataset — its composition, structure, format, and content
+- A follow-up to data input, and the first step of any data analysis
+- Simplest method: "just look at the data" — call the object name directly
+
+```{webr}
+#| label: glimpse
+
+# Load the data
+data("wvs7", package = "drhur")
+
+# Inspect the data frame
+wvs7
+```
+
+---
+
+::: {.callout-tip title="The `tibble` data frame"}
+
+- `wvs7` is stored as a `tibble` — an upgraded data frame
+- It still has rows, columns, and cells
+- Almost all functions for `data.frame` also work on `tibble`
+- It is the standard format across the tidyverse toolchain
+
+:::
+
+---
+
+- Direct inspection is convenient but breaks down when data are large
+- We need more systematic ways to look at structure and variable characteristics
+
+---
+
+- Data structure = the size and composition of the dataset: number of observations, variables, variable names
+- Probe functions usually have abbreviated English names
+- Example: `str` = "structure", listing variable types, row count, column count
+
+```{webr}
+#| label: systemView
+
+library(dplyr)
+
+# Number of rows
+nrow(wvs7)
+
+# Number of columns
+ncol(wvs7)
+
+# Variable names (first 6 only)
+head(names(wvs7))
+
+# The tidyverse-preferred structure inspector
+glimpse(wvs7)
+```
+
+---
+
+- The data has 1264 rows and 24 columns
+- `glimpse()` displays the data more compactly:
+    - Column names listed vertically
+    - Each variable type annotated (`<fct>` factor, `<dbl>` double, etc.)
+    - Preview of the first few values
+
+---
+
+- Two ways to extract a variable:
+    - Bracket form: `<df>[, "name"]`
+    - Dollar-sign form: `<df>$<name>` (the more common)
+
+```{webr}
+#| label: variable_extract
+
+# Bracket form (showing first 6 rows only)
+head(wvs7[, "country"])
+
+# Dollar-sign form (showing first 10 unique values only)
+unique(wvs7$country) |> head(10)
+```
+
+---
+
+- For numeric variables: `mean()`, `median()`, `max()`, `var()`, `summary()`, etc.
+
+```{webr}
+#| label: varCal_numeric
+
+# Mean age of respondents
+mean(wvs7$age, na.rm = TRUE)
+
+# Income-level distribution summary
+summary(wvs7$incomeLevel)
+```
+
+---
+
+- For categorical and ordinal variables: `unique()` for the value set, `table()` for the frequency distribution
+
+```{webr}
+#| label: varCal_categorical
+
+# Frequency distribution of age
+table(wvs7$age)
+
+# Frequency distribution of gender
+table(wvs7$female)
+
+# Frequency distribution of marital status
+table(wvs7$marital)
+```
+
+---
+
+- `table()` returns different output for different variable types — another instance of OOP polymorphism
+
+## Data Wrangling with `dplyr`
+
+- Data wrangling = purposefully picking variables, filtering observations, and reshaping data
+- Base R has wrangling functions; `tidyverse` makes them more intuitive
+- The two workhorses: `dplyr` (cleaning) plus parts of `tidyr`
+
+---
+
+- `tidyverse` is a meta-package (a collection of R packages)
+- Members include `tidyr`, `dplyr`, `stringr`, `tibble`
+- They share a common data structure and design philosophy (the "tidy universe")
+- `library(tidyverse)` loads the core members at once
+
+---
+
+- `dplyr` specializes in data cleaning
+- Goal: reshape raw data into an analysis-ready form
+- Includes adjustments to variable names, types, value representations
+
+---
+
+- The pipe (`|>`): hands the result of one command to the next
+- R's native pipe is `|>`; `dplyr` adds `%>%`
+- Visualizes commands in execution order; reads naturally
+
+---
+
+- Traditional nested style (read inside-out, hard to follow):
+
+```r
+# Eating dumplings, nested
+eatDumpling <- eat(
+  dip(
+    cook(
+      fill(
+        mix(meat, with = c(salt, soy_sauce, green_onion, ginger)),
+        with = wrapper
+      ),
+      in_water = boiled_water
+    ),
+    in_sauce = vinegar
+  )
+)
+```
+
+---
+
+- Pipe style (read top-down, logic is clear):
+
+```r
+# Eating dumplings, piped
+eatDumpling_pipe <- mix(meat, with = c(salt, soy_sauce, green_onion, ginger)) |>
+  fill(with = wrapper) |>
+  cook(in_water = boiled_water) |>
+  dip(in_sauce = vinegar) |>
+  eat()
+```
+
+- Read `|>` as "then" or "and then" — function chains become close to natural language
+
+---
+
+::: {.callout-note title="Pipe shortcut"}
+
+- Windows / Linux: `Ctrl + Shift + M`
+- macOS: `Cmd + Shift + M`
+
+:::
+
+---
+
+- Four common wrangling operations: select, filter, arrange, mutate
+
+---
+
+- Selecting variables = picking columns
+- Use `select()`
+- Syntax: `select(<df>, <var1>, <var2>, ...)`
+
+```{webr}
+#| label: select
+
+library(dplyr)
+
+# Pick five variables of interest
+select(wvs7, equalIncentive, incomeLevel, confidence_gov, education, country)
+```
+
+---
+
+- Pattern-based selection helpers:
+    - `starts_with()`: starts with a given string
+    - `ends_with()`: ends with a given string
+    - `matches()`: regular-expression match anywhere
+
+```{webr}
+#| label: select_startwith
+
+# All variables beginning with "corruption"
+select(wvs7, starts_with("corruption"))
+```
+
+---
+
+::: {.callout-tip title="Pattern-based helpers"}
+
+- `starts_with`: opening characters
+- `ends_with`: closing characters
+- `matches`: regular-expression match (most powerful)
+- Note: third-person singular `s` — easy to forget
+
+:::
+
+---
+
+- Drop variables by prepending `-`
+- `select(wvs7, -corruption_state)` drops one variable
+- `select(wvs7, -(varA:varB))` drops a contiguous range
+- Can combine with helpers like `starts_with()`
+
+```{webr}
+#| label: deselect
+
+# Keep corruption_local and corruption_civil, drop corruption_state
+select(wvs7, starts_with("corruption"), -corruption_state)
+```
+
+---
+
+- `rename()` changes a variable name
+- Syntax: `rename(<df>, <new_name> = <old_name>)`
+- Multiple names can be changed at once
+
+```{webr}
+#| label: rename
+
+# Rename 'country' to 'nationality'
+rename(wvs7, nationality = country)
+```
+
+---
+
+- Note: `rename()` only prints a preview — it does not overwrite the original data frame
+- To make the change permanent, assign back with `<-`
+- Example: `wvs7 <- rename(wvs7, nationality = country)`
+
+---
+
+- `filter()` keeps rows that satisfy a logical condition
+- Syntax: `filter(<df>, <condition1>, <condition2>, ...)`
+- Multiple conditions separated by commas — equivalent to logical AND
+
+```{webr}
+#| label: filter
+
+# Single condition: only South Korea
+select(wvs7, equalIncentive, country) |>
+  filter(country == "South Korea")
+
+# Set condition: South Korea OR Japan
+select(wvs7, equalIncentive, country) |>
+  filter(country %in% c("South Korea", "Japan"))
+```
+
+---
+
+- `filter()` supports any logical or comparison expression
+- Compound example: Japanese respondents over age 50
+
+```{webr}
+#| label: filter_compound
+
+# Two conditions at once
+select(wvs7, equalIncentive, country, age) |>
+  filter(country == "Japan", age > 50)
+```
+
+---
+
+::: {.callout-note title="Why didn't the rename stick?"}
+
+- `rename()` does not automatically modify the data frame stored in your environment
+- To make the change permanent, you must explicitly assign with `<-`
+- Otherwise the original variable name remains in the next step
+
+:::
+
+---
+
+- `arrange()` sorts rows by variable values
+- Syntax: `arrange(<df>, <var1>, <var2>, ...)`
+- Default order is ascending (smallest to largest)
+
+```{webr}
+#| label: arrange
+
+# Sort by income level (low to high)
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(incomeLevel)
+```
+
+---
+
+- Two ways to do descending:
+    - Wrap the variable in `desc()`
+    - Prepend a minus sign `-` (numeric variables only)
+
+```{webr}
+#| label: arrange_desc
+
+# Method 1: desc() helper
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(desc(incomeLevel))
+
+# Method 2: minus sign (numeric only)
+select(wvs7, equalIncentive, incomeLevel, country) |>
+  filter(country == "Japan") |>
+  arrange(-incomeLevel)
+```
+
+---
+
+- `arrange()` also supports multiple sort keys
+- Order matters: ties on the first key are resolved by the second
+
+```{webr}
+#| label: arrange_compound
+
+# Sort by income first; ties go to age
+select(wvs7, equalIncentive, incomeLevel, age) |>
+  arrange(incomeLevel, age)
+```
+
+---
+
+::: {.callout-warning title="Order of sort keys matters"}
+
+- Argument order in `select` and `filter` mostly does not matter
+- In `arrange`, **argument order determines sort priority**
+- Swapping the keys completely changes the result
+
+:::
+
+```{webr}
+#| label: arrange_order
+
+# Sort by age first; ties go to income
+select(wvs7, equalIncentive, incomeLevel, age) |>
+  arrange(age, incomeLevel)
+```
+
+---
+
+- Data modification: reshape how a variable is encoded
+- Example: collapse a 10-level income variable into a "poor / rich" binary
+- Use `mutate()` — syntax: `mutate(<df>, <new_var> = <expression>)`
+
+```{webr}
+#| label: mutate
+
+# New variable poor: TRUE if income <= 3
+select(wvs7, equalIncentive, incomeLevel) |>
+  mutate(poor = incomeLevel <= 3)
+```
+
+---
+
+::: {.callout-important title="Modify, not invent"}
+
+- The English word "mutate" means "transform"
+- The function's spirit: not create from nothing, but reshape existing variables into new ones
+
+:::
+
+---
+
+- `mutate()` can create several new variables at once, separated by `,`
+- It can generate multiple new variables from the same source
+
+```{webr}
+#| label: mutate_multiple
+
+# Create poor and rich in one call
+select(wvs7, equalIncentive, incomeLevel) |>
+  mutate(
+    poor = incomeLevel <= 3,
+    rich = incomeLevel >= 6
+  )
+```
+
+---
+
+::: {.callout-warning title="Avoid accidental overwrites"}
+
+- `mutate` allows you to use the same name twice — the later assignment overwrites the earlier
+- In a single pipeline, assigning the same name to two different expressions discards the first
+
+:::
+
+```{webr}
+#| label: mutate_overwrite
+
+# poor is defined twice; the second wins
+select(wvs7, country, incomeLevel) |>
+  mutate(
+    poor = incomeLevel <= 3,
+    poor = incomeLevel <= 5
+  )
+```
+
+## Merging Datasets
+
+- Data merging: combine multiple data frames into a single new one
+- Single-source data carry limited information; multi-source merging amplifies analytical value
+- Two paths: direct merging, and index merging
+
+---
+
+- Direct merging: stack same-structured data vertically or horizontally
+- Two flavors:
+    - Row-binding: equal column count required; `bind_rows()`
+    - Column-binding: equal row count required; `bind_cols()`
+
+```{webr}
+#| label: bindRow
+
+# Mock data 1: first 3 South-Korean rows
+wvs7_sk3 <- filter(wvs7, country == "South Korea") |>
+  head(n = 3)
+
+# Mock data 2: first 3 Japanese rows
+wvs7_ja3 <- filter(wvs7, country == "Japan") |>
+  head(n = 3)
+
+# Row-bind
+bind_rows(wvs7_sk3, wvs7_ja3)
+```
+
+---
+
+::: {.callout-warning title="Unequal-column row-binding"}
+
+- `bind_rows` still works when columns do not match
+- Mismatched cells are filled with `NA`
+- Useful when source structures differ slightly
+
+:::
+
+```{webr}
+#| label: bindRow_unequal
+
+# Mock data 1: income and country only
+wvs7_sk3_income <- select(wvs7, incomeLevel, country) |>
+  filter(country == "South Korea") |>
+  head(n = 3)
+
+# Mock data 2: country and government confidence only
+wvs7_ja3_confidence <- select(wvs7, country, confidence_gov) |>
+  filter(country == "Japan") |>
+  head(n = 3)
+
+# Unequal-column row-bind: mismatched cells become NA
+bind_rows(wvs7_sk3_income, wvs7_ja3_confidence)
+```
+
+---
+
+- Column-binding: use `bind_cols`
+- The function name is plural — do not forget the "s"
+
+```{webr}
+#| label: bindCols
+
+# Prep 1: all confidence variables
+wvs7_confidence <- select(wvs7, starts_with("confidence"))
+
+# Prep 2: country variable
+wvs7_country <- select(wvs7, country)
+
+# Column-bind
+bind_cols(wvs7_confidence, wvs7_country)
+```
+
+---
+
+- Index merging: combine two datasets on shared index values
+- Safer than direct merging: as long as index variables agree in structure, the merge is correct
+- Supports one-to-one and one-to-many
+
+---
+
+::: {.callout-important title="Structural consistency"}
+
+- Structural consistency = the index variables follow the same coding scheme
+- The variables need not cover every possible value
+- Example: with "gender" as index (0=male, 1=female), a dataset containing only women can still be merged correctly if the scheme is preserved
+
+:::
+
+---
+
+- Demonstration datasets:
+    - `wvs7_eq`: individual-level data, Japan + South Korea
+    - `country_info`: country-level data, Japan + Thailand
+- Both have country-name variables that serve as the index, though under different names
+
+```{webr}
+#| label: join_data
+
+# Data 1: individual-level data for Japan and South Korea
+wvs7_eq <- select(wvs7, country, equalIncentive, female, education) |>
+  filter(country %in% c("Japan", "South Korea"))
+
+# Data 2: country-level data for Japan and Thailand
+country_info <- filter(wvs7, country %in% c("Japan", "Thailand")) |>
+  group_by(country) |>
+  summarise(across(female:education, \(x) mean(x, na.rm = TRUE))) |>
+  ungroup() |>
+  rename(nation = country)
+
+# Inspect
+wvs7_eq
+country_info
+```
+
+---
+
+- `dplyr` provides four join types:
+    - **Left join `left_join`**: keep all rows of the left table; merge in the right where keys match; right-only keys are dropped
+    - **Right join `right_join`**: mirror of the left join
+    - **Inner join `inner_join`**: keep only rows whose key appears in both (intersection)
+    - **Full join `full_join`**: keep all keys from either side (union); unmatched cells become `NA`
+- Generic syntax: `<type>_join(<data1>, <data2>, by = join_by(<index>))`
+
+```{webr}
+#| label: join
+
+# Run all four join types
+wvs7_lj <- left_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_rj <- right_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_ij <- inner_join(wvs7_eq, country_info, by = join_by(country == nation))
+wvs7_fj <- full_join(wvs7_eq, country_info, by = join_by(country == nation))
+
+# Compare which countries each retained
+wvs7_lj$country |> unique()
+wvs7_rj$country |> unique()
+wvs7_ij$country |> unique()
+wvs7_fj$country |> unique()
+```
+
+## Section Exercise {.unnumbered}
+
+**Exercise 1**: A comprehensive `dplyr` pipeline
+
+Build a single `dplyr` pipeline on `wvs7` that:
+
+1. Creates a new variable `avg_confidence` — the arithmetic mean of `confidence_gov` and `confidence_court`
+2. Keeps respondents who satisfy:
+    - `country` equals `"Japan"`
+    - `age` strictly between 40 and 60
+    - `avg_confidence` greater than 3
+3. Sorts the result by `avg_confidence` in descending order
+4. Returns only `age`, `incomeLevel`, `equalIncentive`, `avg_confidence`
+
+::: { .hint exercise="dplyr_pipeline" }
+
+- Use `mutate()` to add the new variable
+- Use `filter()` for the conditions
+- Use `arrange(desc(...))` for descending order
+- Use `select()` to keep only the target columns
+- Order: mutate → filter → arrange → select
+
+:::
+
+```{webr}
+#| label: dplyr_pipeline
+#| exercise: dplyr_pipeline
+
+library(dplyr)
+data("wvs7", package = "drhur")
+
+# Build the pipeline here
+
+```
+
+::: { .solution exercise="dplyr_pipeline" }
+
+```r
+library(dplyr)
+data("wvs7", package = "drhur")
+
+wvs7 |>
+  mutate(avg_confidence = (confidence_gov + confidence_court) / 2) |>
+  filter(
+    country == "Japan",
+    age > 40,
+    age < 60,
+    avg_confidence > 3
+  ) |>
+  arrange(desc(avg_confidence)) |>
+  select(age, incomeLevel, equalIncentive, avg_confidence)
+
+# Walk-through:
+# 1. mutate: new avg_confidence as mean of government and court confidence
+# 2. filter: Japanese respondents, age strictly within (40, 60), avg_confidence > 3
+# 3. arrange(desc(...)): descending order by avg_confidence
+# 4. select: keep only the four target columns
+```
+
+:::
+
+## Chapter Recap
+
+::: {.callout-note title="A friendly reminder"}
+
+This chapter and the chapters that follow will cover quite a few concepts.
+Some of them you do not need to master at first sight — a general impression is enough, and many will deepen as you encounter them again in later chapters.
+Others, however, form the core foundation of this stage. Missing them now will hinder your understanding later.
+Each chapter therefore ends with a key-point recap that flags what you must hold onto at this moment.
+
+:::
+
+---
+
+- Data exploration
+    - Row / column count: `nrow()` / `ncol()`
+    - Structure: `glimpse()`
+    - Variable names: `names()`
+    - Unique values: `unique()`
+    - Frequency distribution: `table()`
+- Data wrangling
+    - Pipe: `|>`
+    - Select columns: `select()`
+    - Rename: `rename()`
+    - Filter rows: `filter()`
+    - Arrange: `arrange()`
+    - Modify / add: `mutate()`
+- Data merging
+    - Row-bind: `bind_rows()`
+    - Column-bind: `bind_cols()`
+    - Left join: `left_join()`
+    - Right join: `right_join()`
+    - Inner join: `inner_join()`
+    - Full join: `full_join()`
