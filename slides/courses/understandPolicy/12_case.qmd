@@ -48,15 +48,21 @@ spotlight:
 ```{r}
 #| label: setup
 #| include: false
-
-if (!require(pacman)) install.packages("pacman")
+if (!require(pacman)) {
+  install.packages("pacman")
+}
 library(pacman)
 
 p_load(
-  icons, knitr, kableExtra, # dependency
-  stringr, arm, car, 
+  icons,
+  knitr,
+  kableExtra, # dependency
+  stringr,
+  arm,
+  car,
   modelsummary,
-  broom, tidyverse
+  broom,
+  tidyverse
 ) # data wrangling # data wrangling
 
 # Functions preload
@@ -68,26 +74,23 @@ theme_set(
 )
 
 theme_update(
-  plot.title = element_text(size = 18), 
-  axis.title = element_text(size = 22), 
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
   axis.text = element_text(size = 18)
 )
-
 ```
 
 ## Overview
 
-> [综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、**深入分析论证、科学把握尺度** [@ZhongGongZhongYangDangShiHeWenXianYanJiuYuanZhongYangXueXiGuanCheXiJinPingXinShiDaiZhongGuoTeSeSheHuiZhuYiSiXiangZhuTiJiaoYuLingDaoXiaoZuBanGongShi2023, p. 103]。]{.red}
-
 :::: {.columns}
 
-::: {.column .nonincremental .fragment width="50%"}
+::: {.column .nonincremental width="50%"}
 
-**Where are you**
+**Where we are in the toolbox**
 
-- large N
-- Small N
-  + **Case study**
+- Large N (statistics, surveys)
+- Small N — *today's focus*
+  + **Case study** ← today
   + Process tracing
   + Interview
   + Focus group
@@ -97,16 +100,21 @@ theme_update(
 
 ::: {.column .nonincremental .fragment width="50%"}
 
-**What to learn**
+**What you'll be able to do**
 
-1. What's a case study
-1. Scientific case study
-1. Effective case comparison*
+1. *Define* what counts as a case
+1. *Judge* whether a case study is scientific
+1. *Design* a comparison across cases
+
 :::
 
 ::::
 
+::: {.fragment}
 
+> [综合性决策部署要考虑方方面面的差异性，专项性决策部署要找准在全局中的合理定位，这些都需要充分熟悉情况、**深入分析论证、科学把握尺度** [@ZhongGongZhongYangDangShiHeWenXianYanJiuYuanZhongYangXueXiGuanCheXiJinPingXinShiDaiZhongGuoTeSeSheHuiZhuYiSiXiangZhuTiJiaoYuLingDaoXiaoZuBanGongShi2023, p. 103]。]{.red}
+
+:::
 
 # What's a case study
 
@@ -122,9 +130,9 @@ theme_update(
 
 A unit within a [*boundary*](https://www.drhuyue.site/slides_gh/slides/courses/policyGE/04_systemTheory.html#/boundaries)
 
-* **Biological** boundaries
-* **Physical** boundaries (time and space)
-* **Social** boundaries
+* **Biological** boundaries (a person, a species)
+* **Physical** boundaries (a city, a year)
+* **Social** boundaries (a party, a policy)
 
 :::
 
@@ -132,9 +140,9 @@ A unit within a [*boundary*](https://www.drhuyue.site/slides_gh/slides/courses/p
 
 **Types of cases**
 
-1. 1 unit over time
-1. N subunit at one time
-1. N subunit over time
+1. 1 unit over time *(e.g., China, 1978–today)*
+1. N subunits at one time *(e.g., 31 provinces in 2020)*
+1. N subunits over time *(e.g., 31 provinces, 2000–2020)*
 
 :::
 
@@ -142,31 +150,45 @@ A unit within a [*boundary*](https://www.drhuyue.site/slides_gh/slides/courses/p
 
 ::: {.r-fit-text .fragment style="margin-top: 0.2em"}
 
-[Variance]{.red} is the key!
+[Variance]{.red} is the key — no variation, no comparison.
 
 :::
 
 
 
-## Observation, Variable, or Case {.center background="#43464B"}
+## Observation, Variable, or Case? {.center background="#43464B"}
+
+::: {style="font-size: 0.8em; margin-bottom: 0.3em"}
+
+For each goal below, **what is the case, the variable, and the observation?**
+
+1. To study **regional** differences
+1. To study **party** differences
+
+:::
 
 ```{r}
 #| label: unitCase
+text_tb <- data.frame(
+  Observed = 1:8,
+  Party = rep(c("Party Member", "Non-PM"), times = 4),
+  Region = rep(c("Educational", "Dependents"), each = 4)
+)
 
-text_tb <- data.frame(Observed = 1:8,
-                      Party = rep(c("Party Member", "Non-PM"), times = 4), 
-                      Region = rep(c("Educational", "Dependents"), each = 4))
-
-kable(text_tb, "html", align = "crr") |> 
-  kable_styling(full_width = TRUE, font_size = 25, bootstrap_options = c("responsive"))
+kable(text_tb, "html", align = "crr") |>
+  kable_styling(
+    full_width = TRUE,
+    font_size = 25,
+    bootstrap_options = c("responsive")
+  )
 ```
 
 :::{.notes}
 
-Where's the case: your goal
+The point: "case" is defined by your research question, not by the row of data. Same dataset, different cases.
 
-1. Study regional differences
-1. Study party difference
+1. Goal = regional differences → cases are regions; party membership is a variable within each case.
+1. Goal = party differences → cases are party / non-party groups; region is the variable.
 
 :::
 
@@ -176,35 +198,36 @@ Where's the case: your goal
 
 :::: {.columns}
 
-::: {.column .nonincremental width="30%"}
+::: {.column .nonincremental width="35%"}
 
-Small-N
+**Small-N quality criteria**
 
-+ Credibility
-+ Transferability
-+ Dependability
-+ Confirmability
++ **Credibility** — believable account
++ **Transferability** — useful elsewhere?
++ **Dependability** — traceable process
++ **Confirmability** — findings tied to evidence
+
 
 ::: {.notes}
 
-+ Credibility: If the data and implications are presented credibly, Based on enough description and background
-+ Transferability: A result of detailed, illustrative description, and the responsibility shifts from the researcher (the sender) to individuals in other settings (the receivers)
-+ Dependability: What kinds of data, what period of time
-+ Confirmability: Findings clearly linked to analysis, data, and the research site.
++ Credibility: data and implications presented credibly, based on enough description and background
++ Transferability: a result of detailed, illustrative description — responsibility shifts from the researcher (sender) to individuals in other settings (receivers)
++ Dependability: what kinds of data, what period of time
++ Confirmability: findings clearly linked to analysis, data, and the research site
 
 :::
 
 :::
 
-::: {.column width="70%"}
+::: {.column .fragment width="65%"}
 
-Case study
+**A case study aims for…**
 
-* [Deep]{.red} rather than broad, bounded scope of proposition
-* [Comparing]{.red} with rather than represent other cases
-* [Mechanism]{.red} rather than effect
+* [Deep]{.red} rather than broad — bounded scope
+* [Compare with]{.red} rather than represent other cases
+* [Mechanism]{.red} (the *how*) rather than effect (the *how much*)
 * [Deterministic]{.red} rather than probabilistic relations
-* [Exploring]{.red} rather than confirmatory test
+* [Exploring]{.red} rather than confirmatory testing
 
 :::
 
@@ -214,13 +237,32 @@ Case study
 
 > Is random selection a good method? Why/why not?
 
-:::{.notes}
+:::{.fragment}
 
-Representativeness roots from large-N analysis
+With **small N**, randomness gives no guarantee of representativeness — and we usually don't *want* an average case anyway. We want a case that **earns its keep**.
 
 :::
 
-Relevance
+:::{.fragment style="margin-top: 0.5em"}
+
+Six strategies for picking *this* case (next slides):
+
+1. Relevance
+1. Policy Relevance
+1. Comparison
+1. Deviance
+1. Illustration
+1. Historical Significance
+
+:::
+
+:::{.notes}
+
+Representativeness is a large-N idea; for small N we choose cases by their analytical leverage, not by sampling probability.
+
+:::
+
+## Relevance
 
 The case represents a significant or typical [empirical instance]{.red} of a phenomenon, providing rich data.
 
@@ -263,10 +305,37 @@ The case has [historical]{.red} importance, helping to understand key events and
 - > The study of the fall of the Berlin Wall provides critical insights into the end of the Cold War and the dynamics of political change in Eastern Europe.
 - > Analyzing the Cuban Missile Crisis provides historical insights into Cold War diplomacy and crisis management.
 
-## Procedure of case studies
+## Two styles for a Case Study
 
-- Descriptive approach
-- Analytic approach
+:::: {.columns}
+
+::: {.column .fragment .nonincremental width="50%"}
+
+**Descriptive**
+
+- Goal: *show* the mechanism in rich detail
+- Question: *How does X work in this case?*
+- Output: a careful narrative
+
+:::
+
+::: {.column .fragment .nonincremental width="50%"}
+
+**Analytic**
+
+- Goal: *test* an inference by comparing
+- Question: *Does X cause Y here, but not there?*
+- Output: a structured comparison
+
+:::
+
+::::
+
+::: {.fragment style="text-align:center; margin-top: 1em"}
+
+Let's see how they work...
+
+:::
 
 
 ## Descriptive approach: An Illustration {background="#43464B"}
@@ -294,7 +363,6 @@ The case has [historical]{.red} importance, helping to understand key events and
 ```{r}
 #| label: stopwatch1
 #| echo: false
-
 library(countdown)
 
 countdown(
@@ -306,7 +374,6 @@ countdown(
   font_size = "3em",
   play_sound = TRUE
 )
-
 ```
 
 :::
@@ -316,13 +383,17 @@ countdown(
 
 ## Descriptive Case Study
 
-- Objective: Details and Mechanisms
-- Approach:
-  1. Clear question
-  1. Detailed narrative
-  1. Calling back to the questions
-  1. Extension (more than the initial question)
-- Quality: [Credibility]{.red} > Confirmability > Transferability > Dependability
+- **Objective**: surface the *details and mechanism* of one case
+- **Approach**:
+  1. Pose a clear question
+  1. Build a detailed narrative
+  1. Call back to the question — does the evidence answer it?
+  1. Extend — what does this teach us *beyond* the question?
+- **Quality priority**: [Credibility]{.red} > Confirmability > Transferability > Dependability
+
+::: {.fragment style="margin-top: 0.5em; font-size: 0.85em"}
+*Rule of thumb*: a reader who knows nothing about your case should leave understanding both **what happened** and **why it matters**.
+:::
 
 
 ## Analytic approach: An Illustration {background="#43464B"}
@@ -336,7 +407,6 @@ countdown(
 ```{r}
 #| label: stopwatch2
 #| echo: false
-
 countdown(
   minutes = 2,
   seconds = 0,
@@ -367,22 +437,21 @@ countdown(
 ::::
 
 
-## Analytic case study
+## Analytic Case Study
 
-Ojbective: Testing inferences
+**Objective**: testing inferences through *comparison*
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-Approach: 
-
 *Analytic*
 
 - Clear question
-- Case selection
-- Delicate design of comparison
+- **Deliberate case selection**
+- **Designed comparison**
 - General conclusion
+
 :::
 
 ::: {.column .nonincremental width="50%"}
@@ -391,41 +460,40 @@ Approach:
 
 - Clear question
 - Detailed narrative
-- Calling back to the questions
-- Extension (more than the initial question)
+- Calling back to the question
+- Extension beyond the initial question
 
 :::
 
 ::::
 
-:::{style="text-align:center; margin-top: 1em"}
+:::{style="text-align:center; margin-top: 0.8em"}
 
-> What're the key differences?
+> What's the key difference?  → **A phase of comparison.**
 
 :::
 
-- Quality: Credibility = Confirmability = Dependability > Transferability
+- **Quality priority**: Credibility = Confirmability = Dependability > Transferability
 
 :::{.notes}
 
-What's the core difference? 
+Core difference: analytic adds a comparison phase, which brings:
 
-a phase of comparison
-
-- Hypotheses test
-- Completion
-- Quality
+- Hypothesis test
+- Completion of the inference
+- Different quality balance
 
 :::
 
 ## Take-Home Points
 
-1. What's a case study
-    - Define a case
-    - Defend the case selection
-1. Logic of a scientific case study
-    - Descriptive
-    - Analytic
+1. **What's a case study**
+    - A case = a unit within a *boundary*; it's defined by your **question**
+    - You must **defend** why *this* case (Relevance, Policy, Comparison, Deviance, Illustration, Historical)
+1. **Logic of a scientific case study**
+    - *Descriptive* — depth and mechanism (credibility first)
+    - *Analytic* — designed comparison to test an inference
+1. **Variance is the key** — no variation, no leverage
 
 ## Reference
 
@@ -434,25 +502,29 @@ a phase of comparison
 
 # Bonus: Effective Case Comparison {.appendix}
 
-## Show your logic
+## Show Your Logic
 
-The most classic case study logic: 
+The most classic case-comparison logic:
 
 :::: {.columns}
 
 ::: {.column .nonincremental width="70%"}
 
-*@Mill2002's Five Canons*(DARC)
+*@Mill2002's Five Canons* (mnemonic: **DARC** + Joint)
 
-1. Method of **D**ifference (Most [similar]{.red} systems, MSS)
-1. Method of **A**greement (Most [different]{.red} systems, MDS)
-1. Joint Method of Agreement and Difference
+1. Method of **D**ifference — Most [similar]{.red} systems (MSS)
+1. Method of **A**greement — Most [different]{.red} systems (MDS)
+1. **Joint** Method of Agreement and Difference
 1. Method of **R**esidues
-1. Method of **C**oncomitant Variations 
+1. Method of **C**oncomitant Variations
+
+::: {style="font-size: 0.75em; margin-top: 0.5em"}
+Two questions every canon answers: *What stays the same?* and *What changes?*
+:::
 
 ::: {.notes}
 
-originallly published in 1843
+Originally published in 1843.
 
 :::
 
@@ -468,26 +540,43 @@ originallly published in 1843
 
 
 
-## MDS
+## MDS — Most Different Systems
 
-> If two or more instances of a phenomenon [share only one condition in common]{.red}, then the condition in which all instances agree is the cause (or effect) of the given phenomenon.
+> If two or more instances of a phenomenon [share only one condition in common]{.red}, then that shared condition is the cause (or effect) of the phenomenon.
 
-![](https://drhuyue.site:10002/sammo3182/figure/case_newYork.jpg){.fragment fig-align="center" height=400}
+::: {style="font-size: 0.8em"}
+**Plain English**: cases look *different* in almost every way, yet the *outcome* is the same. The one thing they *also* share must be the cause.
+:::
+
+::: {.fragment style="font-size: 0.8em; margin-top: 0.3em"}
+*Example*: Three cities with very different cultures, economies, and politics all see a drop in crime. The one factor they share? They all expanded street lighting. → Lighting is the candidate cause.
+:::
+
+![](https://drhuyue.site:10002/sammo3182/figure/case_newYork.jpg){.fragment fig-align="center" height=300}
 
 
-## MSS
+## MSS — Most Similar Systems
 
-> If an instance in which a phenomenon occurs and an instance in which it does not occur have every circumstance in common [except one]{.red}, then that one differing circumstance is likely the cause (or effect) of the phenomenon.
+> If an instance in which the phenomenon occurs and one in which it does not have every circumstance in common [except one]{.red}, that one differing circumstance is the cause (or effect).
 
-![](https://drhuyue.site:10002/sammo3182/figure/case_mss.webp){.fragment fig-align="center" height=400}
+::: {style="font-size: 0.8em"}
+**Plain English**: cases look *similar* in almost every way, but the *outcome* differs. The one factor that also differs must be the cause.
+:::
 
-## In research
+::: {.fragment style="font-size: 0.8em; margin-top: 0.3em"}
+*Example*: Two neighboring provinces — same culture, economy, demographics. One adopts a new policy, the other doesn't. The first sees a drop in pollution; the second doesn't. → Policy is the candidate cause.
+:::
 
-|                                   | MDS                                                                                           | MSS                                                                           |
-|-----------------------------------|-----------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| Explanatory Variable              | intrasystemic **similarities**                                                                | intersystemic **differences**                                                 |
-| Control Variables                 | **Differences** in the systemic characteristics                                        | **Similarities** between the systems                                          |
-| Assumption                        | Systemic factors **do not play any role** in explaining the observed behavior.                 | Characteristics shared by one group of systems, such as can be **removed**.   |
+![](https://drhuyue.site:10002/sammo3182/figure/case_mss.webp){.fragment fig-align="center" height=300}
+
+## MDS vs. MSS in Practice
+
+|                          | **MDS** (Most Different)                          | **MSS** (Most Similar)                      |
+|--------------------------|---------------------------------------------------|---------------------------------------------|
+| **Explanatory variable** | *Similarity* across very different cases          | *Difference* across very similar cases      |
+| **Control variables**    | The many *differences* (assumed irrelevant)       | The many *similarities* (assumed to cancel out) |
+| **Key assumption**       | Systemic factors don't drive the outcome          | Shared traits can be safely "controlled away" |
+| **Best for**             | Finding a *universal* cause                       | Pinpointing a *specific* cause              |
 
 
 ## Residue
@@ -496,13 +585,21 @@ originallly published in 1843
 
 ::: {.column width="40%"}
 
-> [Subtract]{.red} from any phenomenon the part which is [known]{.red} by previous inductions to be the effect of certain antecedents, and the residue of the phenomenon is the effect of the remaining antecedents.
+> [Subtract]{.red} from any phenomenon the part [known]{.red} by previous inductions to be the effect of certain antecedents; the residue is the effect of the remaining antecedents.
+
+::: {.fragment style="font-size: 0.85em; margin-top: 0.5em"}
+**Plain English**: rule out what you can explain. Whatever is left points to the unknown cause.
+:::
+
+::: {.fragment style="font-size: 0.8em; margin-top: 0.4em"}
+*Example* — diagnosing a rare disease: doctors rule out common conditions one by one; what remains is the candidate diagnosis. *(Sherlock's logic.)*
+:::
 
 :::
 
 ::: {.column .fragment width="60%"}
 
-![](https://drhuyue.site:10002/sammo3182/figure/case_holmes.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/case_holmes.jpg){fig-align="center" height=550}
 
 :::
 
@@ -562,25 +659,45 @@ Example: The Innocence Project
 
 
 
-## Concomitant
+## Concomitant Variation
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 
-> If two phenomena [vary together]{.red}, they are likely causally related. This method identifies correlations where an increase or decrease in one variable corresponds to an increase or decrease in another variable.
+> If two phenomena [vary together]{.red} — one rises as the other rises, or falls as it falls — they are likely causally related.
+
+::: {.fragment style="font-size: 0.85em; margin-top: 0.5em"}
+
+**Plain English**: when X moves, Y moves with it. The pattern of co-movement is the clue.
+
+:::
+
+::: {.fragment style="font-size: 0.8em; margin-top: 0.4em"}
+
+*Example*: more screen time at night → less sleep; less screen time → more sleep. 
+The systematic co-movement suggests a causal link.
+
+:::
+
+::: {.fragment style="font-size: 0.75em; margin-top: 0.4em; color: #c44"}
+
+*Caution*: correlation ≠ causation. Always ask whether a *third factor* drives both.
+
+:::
 
 :::
 
 ::: {.column .fragment width="50%"}
 
-![](https://drhuyue.site:10002/sammo3182/figure/case_screenTime.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/case_screenTime.jpg){fig-align="center" height=550}
 
 :::
 
 ::::
 
 :::{.notes}
+
 1. **Studying and Grades**
 
 Example: Study Time and Test Scores
