@@ -25,26 +25,19 @@ webr:
 
 :::
 
-## 面向对象编程 {#sec-sub_oop}
+## 面向对象编程 {#sec-sub_oop .smaller}
 
 - 面向对象编程（Object-Oriented Programming, OOP）：通过类与对象组织、封装数据
 - C++、Java、Python、R 都采用 OOP 架构
 - 与面向过程编程（POP）相比，OOP 更擅长处理复杂系统和多变需求
-
----
-
 - 两个基本概念：类（`class`）与对象（`object`）
-- 类：对一组对象的总体规定（如"马"、"主食"）
-- 对象：类的具体实例（如"白马"、"土豆"）
-- 属性（property）：对象的特征
-- 方法（method）：可作用于该类对象的动作
+    - 类：对一组对象的总体规定（如"马"、"主食"）
+    - 对象：类的具体实例（如"白马"、"土豆"）
+    - 属性（property）：对象的特征
+    - 方法（method）：可作用于该类对象的动作
+- OOP 的好处：先归类、再批量操作，避免重复编程；例：脏上衣、脏外裤 → "脏衣物"类 → 统一"放进洗衣机"
 
----
-
-- OOP 的好处：先归类、再批量操作，避免对每个对象重复编程
-- 例：脏上衣、脏外裤 → "脏衣物"类 → 统一"放进洗衣机"
-
----
+## 函数：状语后置的祈使句
 
 - 函数（function）：状语后置的祈使句
 - 数学含义：`y = f(x)` 里的 `f`
@@ -90,8 +83,6 @@ calculateBMI <- function(weight, height) {
 calculateBMI(80, 1.69)
 ```
 
----
-
 ::: {.callout-tip title="自动\"打印\""}
 
 - 直接敲函数名会触发 auto-print：结果显示在控制台
@@ -107,8 +98,6 @@ calculateBMI(80, 1.69)
     - 仅限字母、数字、`.` 和 `_`
     - 区分大小写
 
----
-
 ::: {.callout-tip title="命名规则的由来"}
 
 - 字母开头：让计算机区分"名字"与"数字"
@@ -123,8 +112,10 @@ calculateBMI(80, 1.69)
     - 动词或动词短语：`read_rds`、`saveRDS`
     - 名词：`lm`（linear model）、`dotwhisker`
     - 常见缩写：`sqrt`（square root）、`exp`（exponential）
+- 名称要表意：让看代码的人能猜出函数功能
+- 避免覆写 R 内置函数（如 `mean`、`list`、`sum`）
 
----
+## 软件包：函数的集合 {#sec-sub_package}
 
 - 软件包（package）：函数的集合
 - 类比：装着各种工具的"工具箱"
@@ -160,8 +151,6 @@ drhur("play")
     - `help.search("关键词")`：搜索
     - `help.start()`：打开总文档（不常用）
 
----
-
 ::: {.callout-tip title="安装 R 包的预期时间"}
 
 - 一般几秒到十几秒
@@ -170,7 +159,43 @@ drhur("play")
 
 :::
 
----
+## 现学现练 {.unnumbered}
+
+**练习1**：一次安装多个 R 包
+
+`install.packages` 函数中 "package" 用的是复数，说明可一次安装多个包。请调用帮助文档，探索如何一次性安装 `regioncode`、`dotwhisker`、`drhur` 三个包。
+
+::: { .hint exercise="install_multi" }
+
+- 用 `?install.packages` 查阅 `pkgs` 参数说明
+- 该参数接受一个字符向量
+- 用 `c()` 把多个包名打包成向量
+
+:::
+
+```{webr}
+#| label: install_multi
+#| exercise: install_multi
+
+# 在此尝试一次性安装三个包
+?install.packages
+
+```
+
+
+::: { .solution exercise="install_multi" }
+
+```r
+?install.packages
+
+# 利用 c() 将三个包名打包成字符向量，一次传给 install.packages
+# 这种"批量处理"写法比写三行单独的安装命令高效得多
+install.packages(c("regioncode", "dotwhisker", "drhur"))
+```
+
+:::
+
+## OOP 编程基本性质
 
 - 架构在 OOP 上，R 具有四大特性：
     - 继承（inheritance）
@@ -203,8 +228,6 @@ inherits(y, "factor")
 - 封装性：把一系列命令打包成一个命令组合
 - 调用打包后的命令，R 会按流程跑完所有既定步骤
 - `function()` 就是常用的封装命令
-
----
 
 ::: {.callout-warning title="封装的可覆写性"}
 
@@ -260,48 +283,11 @@ summary(y)
 
 :::
 
----
-
 - OOP 基本原则：*不直接触碰原始数据*
 - 数据处理采用"对象+命令"方式
 - 优点：每步可回溯、安全性高、便于协作
 
 ## 现学现练 {.unnumbered}
-
-**练习1**：一次安装多个 R 包
-
-`install.packages` 函数中 "package" 用的是复数，说明可一次安装多个包。请调用帮助文档，探索如何一次性安装 `regioncode`、`dotwhisker`、`drhur` 三个包。
-
-::: { .hint exercise="install_multi" }
-
-- 用 `?install.packages` 查阅 `pkgs` 参数说明
-- 该参数接受一个字符向量
-- 用 `c()` 把多个包名打包成向量
-
-:::
-
-```{webr}
-#| label: install_multi
-#| exercise: install_multi
-
-# 在此尝试一次性安装三个包
-?install.packages
-
-```
-
-::: { .solution exercise="install_multi" }
-
-```r
-?install.packages
-
-# 利用 c() 将三个包名打包成字符向量，一次传给 install.packages
-# 这种"批量处理"写法比写三行单独的安装命令高效得多
-install.packages(c("regioncode", "dotwhisker", "drhur"))
-```
-
-:::
-
----
 
 **练习2**：解读 plot 的多态性
 
@@ -325,6 +311,7 @@ plot(mtcars$mpg, mtcars$wt)
 
 ```
 
+
 ::: { .solution exercise="plot_polymorphism" }
 
 ```r
@@ -341,14 +328,11 @@ plot(mtcars$mpg, mtcars$wt)
 
 :::
 
-## 记录
+## 赋值（创建） {.smaller}
 
 - R 中创建数据 = 将现实观察转换为可分析的数据形式
 - R 按类（class）分类记录，每类有各自属性与方法
 - 常见类：向量（vector）、数据框（data frame）、列表（list）
-
----
-
 - 赋值（assign）：给值或对象起个名字、缓存以备调用
 - 最常用赋值符：`<-`
 - 同效命令：`assign()`、`->`、`<<-`、`=`
@@ -440,7 +424,46 @@ message("公告：", campus_bulletin)
     - 区分大小写：`X != x`
     - 谨防覆写内置命令（如 `list`、`mean`）
 
----
+## 现学现练 {.unnumbered}
+
+**练习3**：命名规则
+
+下面两行代码，第一行报错、第二行不报错。请运行并解释为什么。
+
+::: { .hint exercise="naming" }
+
+- R 的命名规则之一：不能以数字开头
+- 第一个名称违反了哪条规则？
+- 第二个名称合规吗？
+
+:::
+
+```{webr}
+#| label: naming
+#| exercise: naming
+
+5var_name <- 1:5
+
+var_name5 <- 1:5
+
+```
+
+
+::: { .solution exercise="naming" }
+
+```r
+# 第一行：5var_name <- 1:5
+# 报错原因：R 规定变量名不能以数字开头
+# "5var_name" 以数字 5 开头，违反命名规则
+
+# 第二行：var_name5 <- 1:5
+# 合规：以字母 v 开头，只包含字母、数字、下划线
+var_name5
+```
+
+:::
+
+## 向量 {.smaller}
 
 - 向量（vector）：R 中所有"一串"数据的统称
 - 用 `c()` 或 `vector()` 创建
@@ -451,6 +474,7 @@ message("公告：", campus_bulletin)
 
 - 数值向量（numeric vector）：可代数运算的数值
 - 子类型：双精度（double，含小数）、整数型（integer）
+- `NA`（not available）：缺失值，是 R 同质向量的"例外"
 
 ```{webr}
 #| label: numeric
@@ -467,16 +491,6 @@ vec_1_100 <- c(1:100)
 # 包含缺失值 (NA) 的向量
 vec_miss <- c(1, NA, 3, NA, 24)
 ```
-
----
-
-::: {.callout-important title="缺失数据 NA"}
-
-- `NA` 是 "not available" 的缩写，用以记录缺失值
-- 缺失可能来自人为遗漏，也可能源于前序计算无法得出结果
-- 是 R 同质向量的"例外"
-
-:::
 
 ---
 
@@ -502,6 +516,7 @@ vec_logic
 - 类别向量（factor vector）：记录分类信息
 - `factor()` 创建，水平（level）记录类别，标签（label）给水平起名
 - 子类：定序向量（ordinal vector），`ordered()` 创建，水平含顺序
+- 进阶工具：`forcats` 包专门处理分类/定序变量（改水平顺序、添加类别、调整参照组）
 
 ```{webr}
 #| label: factor
@@ -526,19 +541,10 @@ vec_ord
 
 ---
 
-::: {.callout-tip title="`forcats` 包"}
-
-- 专门处理分类与定序变量
-- 函数简明：改变水平顺序、添加类别、调整参照组
-- 后续数据清理与分析章节遇到具体场景再展开
-
-:::
-
----
-
 - 字符向量（character vector）：记录字符形式的值
 - R 不"读懂"字符含义，对中、英、俄等都一视同仁
 - 创建时每个字符值外需加引号
+- 预存字符常量：`letters`、`LETTERS`、`month.abb`、`month.name`
 
 ```{webr}
 #| label: character
@@ -548,10 +554,6 @@ vec_chr <- c("牛", "♥️", "R is hard，but I can nail it.")
 
 vec_chr
 ```
-
----
-
-- 预存字符常量：`letters`、`LETTERS`、`month.abb`、`month.name`
 
 ---
 
@@ -602,7 +604,88 @@ dmy("16/10/2022")
 ymd_hms("2022-10-16 09:00:00", tz = "Etc/GMT+8")
 ```
 
+## 现学现练 {.unnumbered}
+
+**练习4**：两种方式生成字母序列
+
+比较下面两个命令生成的向量，并验证是否完全相等。
+
+::: { .hint exercise="letters_compare" }
+
+- `c()` 是手动逐个录入字符
+- `letters` 是 R 预存的小写字母常量
+- 用 `identical()` 验证两个向量是否完全相等
+
+:::
+
+```{webr}
+#| label: letters_compare
+#| exercise: letters_compare
+
+vec_letters_raw <- c("a", "b", "c", "d", "e")
+
+vec_letters_quick <- letters[1:5]
+
+```
+
+
+::: { .solution exercise="letters_compare" }
+
+```r
+vec_letters_raw <- c("a", "b", "c", "d", "e")
+vec_letters_quick <- letters[1:5]
+
+# 验证两者是否完全相等
+identical(vec_letters_raw, vec_letters_quick)
+
+# 结果完全一样，都是 "a"-"e" 五个字符向量
+# vec_letters_raw：手动录入，适合无规律字符
+# vec_letters_quick：利用预存常量，效率更高、适合字母表场景
+```
+
+:::
+
 ---
+
+**练习5**：解析混乱时间字符串
+
+`lubridate::parse_date_time()` 可根据多种格式识别并转换混乱的时间字符串。请用这个函数将下列字符向量转化为标准时间格式：
+
+`c("20190101", "01012019", "021901")`
+
+::: { .hint exercise="date_parse" }
+
+- 加载 `lubridate` 包
+- `parse_date_time()` 的 `orders` 参数接受一个猜测列表
+- 用 `c("ymd", "dmy", "mdy")` 提供三种格式猜测
+
+:::
+
+```{webr}
+#| label: date_parse
+#| exercise: date_parse
+
+library(lubridate)
+raw_dates <- c("20190101", "01012019", "021901")
+
+```
+
+
+::: { .solution exercise="date_parse" }
+
+```r
+library(lubridate)
+raw_dates <- c("20190101", "01012019", "021901")
+
+# orders 参数提供格式猜测列表
+# 函数会自动尝试匹配，把乱字符统一转为标准 POSIXct
+parsed_dates <- parse_date_time(raw_dates, orders = c("ymd", "dmy", "mdy"))
+parsed_dates
+```
+
+:::
+
+## 数据框与列表
 
 - 数据框（data frame）：列等长的二维结构，列可异质
 - 新文科实践中"数据"通常指数据框
@@ -671,7 +754,7 @@ an_array <- array(c(5, 9, 3, 10, 11, 12, 13, 14, 15), dim = c(3, 3, 2))
 an_array
 ```
 
----
+## 数据属性
 
 - 探针型工具：查询对象属性
     - `class()` / `typeof()`：变量属性 / 内存存储方式
@@ -709,131 +792,9 @@ dim(df_toy)
 - `typeof()`：对象在内存里的底层存储方式
 - 数据框的 `length()` 返回列数（因为本质是列表）
 - 查行数用 `nrow()`、列数用 `ncol()`、全维度用 `dim()`
+- 判断型工具：通常以 `is` 开头（`is.numeric()`、`is.character()`、`is.factor()`、`is.data.frame()`、`is.list()`），返回逻辑值表示对象是否属于该类型
 
----
-
-- 判断型工具：通常以 `is` 开头
-- 例：`is.numeric()`、`is.character()`、`is.factor()`、`is.data.frame()`、`is.list()`
-- 返回逻辑值，表示对象是否属于该类型
-
-## 现学现练 {.unnumbered}
-
-**练习3**：命名规则
-
-下面两行代码，第一行报错、第二行不报错。请运行并解释为什么。
-
-::: { .hint exercise="naming" }
-
-- R 的命名规则之一：不能以数字开头
-- 第一个名称违反了哪条规则？
-- 第二个名称合规吗？
-
-:::
-
-```{webr}
-#| label: naming
-#| exercise: naming
-
-5var_name <- 1:5
-
-var_name5 <- 1:5
-
-```
-
-::: { .solution exercise="naming" }
-
-```r
-# 第一行：5var_name <- 1:5
-# 报错原因：R 规定变量名不能以数字开头
-# "5var_name" 以数字 5 开头，违反命名规则
-
-# 第二行：var_name5 <- 1:5
-# 合规：以字母 v 开头，只包含字母、数字、下划线
-var_name5
-```
-
-:::
-
----
-
-**练习4**：两种方式生成字母序列
-
-比较下面两个命令生成的向量，并验证是否完全相等。
-
-::: { .hint exercise="letters_compare" }
-
-- `c()` 是手动逐个录入字符
-- `letters` 是 R 预存的小写字母常量
-- 用 `identical()` 验证两个向量是否完全相等
-
-:::
-
-```{webr}
-#| label: letters_compare
-#| exercise: letters_compare
-
-vec_letters_raw <- c("a", "b", "c", "d", "e")
-
-vec_letters_quick <- letters[1:5]
-
-```
-
-::: { .solution exercise="letters_compare" }
-
-```r
-vec_letters_raw <- c("a", "b", "c", "d", "e")
-vec_letters_quick <- letters[1:5]
-
-# 验证两者是否完全相等
-identical(vec_letters_raw, vec_letters_quick)
-
-# 结果完全一样，都是 "a"-"e" 五个字符向量
-# vec_letters_raw：手动录入，适合无规律字符
-# vec_letters_quick：利用预存常量，效率更高、适合字母表场景
-```
-
-:::
-
----
-
-**练习5**：解析混乱时间字符串
-
-`lubridate::parse_date_time()` 可根据多种格式识别并转换混乱的时间字符串。请用这个函数将下列字符向量转化为标准时间格式：
-
-`c("20190101", "01012019", "021901")`
-
-::: { .hint exercise="date_parse" }
-
-- 加载 `lubridate` 包
-- `parse_date_time()` 的 `orders` 参数接受一个猜测列表
-- 用 `c("ymd", "dmy", "mdy")` 提供三种格式猜测
-
-:::
-
-```{webr}
-#| label: date_parse
-#| exercise: date_parse
-
-library(lubridate)
-raw_dates <- c("20190101", "01012019", "021901")
-
-```
-
-::: { .solution exercise="date_parse" }
-
-```r
-library(lubridate)
-raw_dates <- c("20190101", "01012019", "021901")
-
-# orders 参数提供格式猜测列表
-# 函数会自动尝试匹配，把乱字符统一转为标准 POSIXct
-parsed_dates <- parse_date_time(raw_dates, orders = c("ymd", "dmy", "mdy"))
-parsed_dates
-```
-
-:::
-
----
+## 现学现练 {.unnumbered .smaller}
 
 **练习6**：探索 wvs7 数据集
 
@@ -843,10 +804,10 @@ parsed_dates
 
 请用所学知识检查它的基本结构：
 
-a. wvs7 对象本身是什么类（class）？
-b. wvs7 包含多少行和多少列？
-c. 提取 `marital` 列，查看其包含哪些分类水平。
-d. 用 `is.*` 系列函数验证：wvs7 是数据框？是列表？是矩阵？
+- **(a)** wvs7 对象本身是什么类（class）？
+- **(b)** wvs7 包含多少行和多少列？
+- **(c)** 提取 `marital` 列，查看其包含哪些分类水平。
+- **(d)** 用 `is.*` 系列函数验证：wvs7 是数据框？是列表？是矩阵？
 
 ::: { .hint exercise="wvs7_explore" }
 
@@ -866,6 +827,7 @@ d. 用 `is.*` 系列函数验证：wvs7 是数据框？是列表？是矩阵？
 data("wvs7", package = "drhur")
 
 ```
+
 
 ::: { .solution exercise="wvs7_explore" }
 
@@ -893,13 +855,10 @@ is.matrix(wvs7)      # FALSE（除非被强制转换）
 
 :::
 
-## 输入 {#sec-sub_input}
+## 内置数据 {#sec-sub_input .smaller}
 
 - 实际工作中手动创建数据机会不多，多数情况是从外部导入
 - 三种数据输入方式：内置数据、直接读取、调用包读取
-
----
-
 - 内置数据（built-in data）：R 自带或软件包附带
 - 调取清单：`data()`
 - 调用单个数据集：`data(<数据名>)`
@@ -944,7 +903,7 @@ data(iris)
 head(iris)
 ```
 
----
+## 直接读取数据
 
 - 直接读取支持的数据类型：
     - `.RDS`：R 专有，单一对象
@@ -953,6 +912,8 @@ head(iris)
     - `.csv`：逗号分隔值
 - 输入语法：`<名称> <- <读取函数>(<数据路径>)`
 - 读取函数常以 `read` 开头
+
+---
 
 ```r
 # 读取 RDS 格式
@@ -968,8 +929,6 @@ df_csv <- read.csv("./aDataset.csv")
 load("aDataset.RData")
 ```
 
----
-
 ::: {.callout-warning title="文件名大小写"}
 
 - Windows / Mac：`.RData` 与 `.rdata` 大小写不敏感
@@ -978,7 +937,7 @@ load("aDataset.RData")
 
 :::
 
----
+## 调用读取数据
 
 - 调用专门软件包读取其他格式
 - 常见包：
@@ -987,6 +946,8 @@ load("aDataset.RData")
     - `readxl`：Excel
     - `rjson`：JSON
     - `XML`：XML / HTML
+
+---
 
 ```r
 # --- 统计软件 ---
@@ -1044,6 +1005,7 @@ df_anything <- import("<AnyTypeOfData>")
 
 ```
 
+
 ::: { .solution exercise="uspop" }
 
 ```r
@@ -1060,16 +1022,17 @@ summary(uspop)
 
 :::
 
-## 输出
+## 储存为 R 数据
 
 - 数据输出基础语法：`<函数名>(<储存对象>, <储存路径>, <其他条件>)`
 - 函数名常以 `save`、`write` 开头
-
----
-
 - R 专有格式：
     - `.rds`：单一对象，用 `saveRDS()`
     - `.RData`：多个对象，用 `save()`
+- 推荐 `.rds`：调取和整理更清晰
+- `.RData` 的内容只能 `load()` 之后才能看到
+
+---
 
 ```r
 # 保存为 RDS 单一对象
@@ -1079,10 +1042,7 @@ saveRDS(df_toy, file = "df_toy.rds")
 save(df_toy, ls_monks, file = "./data/test.rdata")
 ```
 
-- 推荐 `.rds`：调取和整理更清晰
-- `.RData` 的内容只能 `load()` 之后才能看到
-
----
+## 储存为 csv 文件
 
 - CSV：跨平台通用格式
 - 压缩效率不高，但几乎所有平台、所有程序都能读取
@@ -1093,8 +1053,6 @@ save(df_toy, ls_monks, file = "./data/test.rdata")
 write.csv(df_toy, file = "toy.csv")
 ```
 
----
-
 ::: {.callout-warning title="CSV 与中文数据"}
 
 - 中文数据存储时要选择 UTF-8 编码
@@ -1102,13 +1060,11 @@ write.csv(df_toy, file = "toy.csv")
 
 :::
 
----
+## 储存为其他格式
 
-- 其他格式：用 `rio` 包的 `export()`
+- 用 `rio` 包的 `export()`
 - 自动识别后缀，将 R 对象存为几乎任何格式
 - 支持 STATA、SPSS、SAS、Excel、JSON、Matlab、HTML 等
-
----
 
 ::: {.callout-tip title="数据存储效率"}
 
@@ -1120,16 +1076,6 @@ write.csv(df_toy, file = "toy.csv")
 
 ## 本章重点回顾
 
-::: {.callout-note title="小提示"}
-
-本章以及后续章节将涵盖较多知识点。
-其中，部分内容无需一次性掌握，建立初步印象即可，很多知识点的内涵以及操作将会在后续章节的场景应用中逐步深化理解。而另外一些内容则构成当前阶段的关键基础，若未能及时掌握，将直接影响后续理解。
-因此，每章结尾将设置要点小结，明确标识读者当前必须掌握的核心内容。
-
-:::
-
----
-
 - 基础概念
     - OOP（类与对象）
     - 函数与赋值
@@ -1138,6 +1084,9 @@ write.csv(df_toy, file = "toy.csv")
     - 向量（数值、逻辑、类别、字符、时间）
     - 矩阵
     - 数据框与列表（重点内容）
+
+---
+
 - 数据属性：查看数据类型、维度、概况
 - 数据输入
     - 内置数据调用
