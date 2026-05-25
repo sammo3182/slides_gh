@@ -45,59 +45,62 @@ spotlight:
   spotlightOnKeyPressAndHold: 73 # keycode for "i"
 ---
 
-## Administration: Guide for Proposal presentation
+```{r}
+#| label: setup
+#| include: false
+if (!require(pacman)) {
+  install.packages("pacman")
+}
+library(pacman)
 
-- Upload the slides to Web Learning [before]{.red} 13:30, 2026-06-02
+p_load(
+  icons,
+  knitr,
+  kableExtra, # dependency
+  stringr,
+  arm,
+  car,
+  modelsummary,
+  broom,
+  tidyverse
+) # data wrangling # data wrangling
+
+# Functions preload
+set.seed(313)
+
+# Visualization
+theme_set(
+  theme_minimal(base_size = 18)
+)
+
+theme_update(
+  plot.title = element_text(size = 18),
+  axis.title = element_text(size = 22),
+  axis.text = element_text(size = 18)
+)
+```
+
+## Guide for Proposal presentation
+
+- Upload the slides to Web Learning [before]{.red} 13:30, 2025-05-19
 - 8-10 min presentation (randomly ordered)
 - 1 question (I asked)
-
-:::: {.columns .fragment}
-
-::: {.column width="50%"}
-
-*Content*
-
-::: {.nonincremental}
-
-- Objective to study
-- [Justifications]{.red}
-  - Valuable puzzle to be solved
-  - Proper design 
-  - Valid data and method
-
-:::
-
-
-:::
-
-::: {.column width="50%"}
-
-*Not required*
-
-::: {.nonincremental}
-
-- Data
-- Analysis
-- Results
-
-:::
-
-:::
-
-::::
-
-::: {.fragment .large style="text-align:center; margin-top: 1em"}
-
-The [doability]{.red} and [value]{.red} of your project!
-
-:::
+- Content:
+    - Objective to study
+    - Puzzle to test
+    - Design for examination
+    - Data and method justification
+- Unnecessary:
+    - Data
+    - Analysis
+    - Results
 
 ## 答辩
 
 {{< video https://drhuyue.site:10002/sammo3182/video/process_how2defense.mp4 title="How to conduct an oral defense" height=600 preload="auto" controls allowfullscreen>}}
 
 
-## Overview
+## Overview of the class
 
 :::: {.columns}
 
@@ -106,9 +109,9 @@ The [doability]{.red} and [value]{.red} of your project!
 - large N
 - Small N
   + [Case study]{.grayLight}
-  + Interview 🌟
-    + Focus group
   + Process tracing
+  + Interview
+  + Focus group
   + Content analysis
 
 :::
@@ -145,7 +148,7 @@ Opening question (30 s): "Which of these have you already planned to use in your
 
 :::{style="text-align:center; margin-top: 1em"}
 
-> [要克服自弹自唱、自娱自乐、隔空喊话、封闭运行的倾向，进万家门、访万家情、结万家亲，经常同群众进行**面对面、手拉手、心贴心**的零距离接触，增进对群众的真挚感情。要克服以主观想象代替群众真实需求的倾向，把握群众所需所急所盼，少搞一些强加于群众的活动，多提供一些对路的服务。[习近平，《在中央党的群团工作会议上的讲话》（2015年7月6日）， @ZhongGongZhongYangWenXianYanJiuShi2017, p. 197]]{.large .red}
+> [要克服自弹自唱、自娱自乐、隔空喊话、封闭运行的倾向，进万家门、访万家情、结万家亲，经常同群众进行**面对面、手拉手、心贴心**的零距离接触，增进对群众的真挚感情。要克服以主观想象代替群众真实需求的倾向，把握群众所需所急所盼，少搞一些强加于群众的活动，多提供一些对路的服务。[《在中央党的群团工作会议上的讲话》（2015年7月6日）， @ZhongGongZhongYangWenXianYanJiuShi2017, p. 197]]{.large .red}
 
 :::
 
@@ -283,23 +286,15 @@ Rory Kinnear as Craig Oliver, the former Director of Politics and Communications
 
 **Pros:**
 
-::: {.fragment .nonincremental}
-
 1. Real-life (conversational) environment
 1. Flexibility
 1. Low cost (< case studies)
 
-:::
-
 **Cons:**
-
-::: {.fragment .nonincremental}
 
 1. Non-privacy-protection
 1. Who leads the talk?
 1. Selecting interviewees
-
-:::
 
 :::
 
@@ -319,58 +314,11 @@ Discussion: "Interview or focus group for studying how families decide on a chil
 
 :::
 
-## Take-Home Points
 
-:::: {.columns}
 
-::: {.column .nonincremental width="45%"}
+# Process Tracing: Causal Interpretation
 
-**The toolkit**
-
-+ Interview
-    + Structured → semi → unstructured
-+ Focus group
-    + Lifelike, cheap, flexible
-    + ...but watch *who leads* & privacy
-
-:::
-
-::: {.column .nonincremental width="55%"}
-
-**The principles**
-
-1. Meaning lives in the respondent's [own words]{.red} — don't impose your categories
-1. Match technique to question: depth vs. comparability
-1. Messy, contradictory answers [*are* the data]{.red}
-1. Good data = safe setting + piloted design + listen > talk
-
-:::
-
-::::
-
-::: {.fragment .large style="text-align:center; margin-top: 0.5em"}
-
-Interpretivism: understand the [*why*]{.red} and [*how*]{.red}, in their words.
-
-:::
-
-:::{.notes}
-
-Land the four principles, not the bullet list — these are what should survive into their proposals. If time allowed the bonus, add the fifth: process tracing tests rival explanations against a within-case causal sequence.
-
-Bridge to the proposal slide we opened with: "If you're using interviews or a focus group, which of these four will be hardest to satisfy with the access you actually have?"
-
-:::
-
-## Reference
-
-::: {#refs}
-:::
-
-# Bonus: Discourse Methods {.appendix}
-
-## Process Tracing: Causal Interpretation
-
+## What's Process Tracing
 
 ![Tenet](https://drhuyue.site:10002/sammo3182/figure/process_tenet.gif){fig-align="center" height=400}
 
@@ -380,8 +328,6 @@ Bridge to the proposal slide we opened with: "If you're using interviews or a fo
 ::: {.notes}
 
 信条，2020年上映英国与美国合拍的科幻动作惊悚片，克里斯托弗·诺兰编剧和执导
-
-Core idea to land: process tracing opens the *black box* between X and Y in a single case. Unlike large-N (which estimates average effects across cases), here we test rival explanations against the within-case causal sequence. The Tenet gif = following the chain of events forward and backward in time.
 
 :::
 
@@ -411,21 +357,9 @@ Why was English recognized as an official language in Singapore?
 
 ::::
 
-:::{.notes}
-
-Run this as a hook. Pose the question, show the language map, and ask students to guess *why English* before you advance. Let them commit (most will say "colonial legacy" or "it was the majority language"). THEN reveal the 21% callout — the puzzle is that English was a minority tongue, so the obvious answers fail. That tension is what process tracing exists to resolve, and it sets up the six steps that follow.
-
-:::
-
 ## Process tracing procedure
 
 ![](https://drhuyue.site:10002/sammo3182/figure/process_routine.gif){fig-align="center" height=600}
-
-:::{.notes}
-
-Signpost slide: the next six slides walk these steps in order, using the Singapore-English puzzle as the running case. Tell students to hold the 21% puzzle in mind — we resolve it at Step 6.
-
-:::
 
 
 
@@ -515,21 +449,46 @@ If there's no comparative cases, then conterfactual outcomes.
 
 The primary hypothesis failed the hoop test: when recognition happened, the state was not a strong state
 
-Close the loop: recall the Singapore puzzle — the strong-state hypothesis failed the hoop test at Step 6, so prioritization of education (Goh) survives as the better explanation. That is process tracing doing its job: not "more data," but rival explanations tested against the causal sequence.
+:::
 
-Bridge to their proposals: which of these six steps is hardest to do with the evidence they can actually get?
+## Take-Home Points
+
+**Interpretivist Toolkit**
+
+:::: {.columns}
+
+::: {.column .nonincremental width="40%"}
+
++ Interview methods
+  + Interview 
+  - Focus group
 
 :::
+
+::: {.column .nonincremental width="60%"}
+
++ Causal inference: Process-tracing
+    1. Hypotheses
+    1. Time line
+    1. Causal graph
+    1. Alternative choice
+    1. Counterfacutal outcomes
+    1. Evidence
+
+:::
+
+::::
+
+## Reference
+
+::: {#refs}
+:::
+
+# Bonus: Discourse Methods {.appendix}
 
 ## Content analysis
 
 ![](https://drhuyue.site:10002/sammo3182/figure/process_closeReading.jpg){fig-align="center" height=600}
-
-:::{.notes}
-
-Cover only if time remains — this section is self-contained and safe to assign as reading. If teaching it live, the through-line is the same three steps every time: sample → code → analyze. Anchor it as "systematic close reading."
-
-:::
 
 
 ## Step 1: Content Sampling
@@ -625,7 +584,7 @@ Lab Notes: Keep everything in record!!
 
 :::{.fragment}
 
-**Pros**:
+**Pros**;
 
 * Economic
 * Allowing correction
@@ -655,12 +614,6 @@ Lab Notes: Keep everything in record!!
 - When A is a [sufficient]{.red} condition of B, then once A happens, B must happen.
 - When A is a [necessary]{.red} condition of B, then there must be A for B to happen.
 
-:::{.notes}
-
-This is the engine behind the evidence tests two slides later. Quick mnemonic: sufficient = "A guarantees B"; necessary = "no A, no B." Draw the two arrows on the chalkboard (B) if students look unsure before sending them into the practice.
-
-:::
-
 ## Practice
 
 + Being 2, 4, 6, or 8 is __ for being an even natural integer.
@@ -671,21 +624,6 @@ This is the engine behind the evidence tests two slides later. Quick mnemonic: s
 + Showing up to class is __ for getting an A.
 + Being mortal is __ for being human.
 + Being a rational animal is __ for being human.
-
-:::{.notes}
-
-Answer key (have students call them out, then confirm):
-
-1. **Sufficient, not necessary** — these are even, but 10, 12, … are even too.
-2. **Necessary and sufficient** — the even naturals below 10 are exactly {2,4,6,8}. (Edge case to needle them with: does 0 count as a natural number?)
-3. **Necessary, not sufficient** — admission needs it, but many intelligent people aren't here.
-4. **Neither** — you can get an A without perfect attendance, and attending doesn't guarantee it.
-5. **Necessary, not sufficient** — all humans are mortal, but so are dogs.
-6. **Necessary and sufficient** — the Aristotelian definition; this is what defines "human."
-
-Tie-back: the same logic underlies the four evidence tests on the next slide (hoop = necessary, smoking-gun = sufficient).
-
-:::
 
 ## Type of evidence [@VanEvera1997]
 
