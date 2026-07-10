@@ -10,9 +10,10 @@ institute:
 bibliography: pre_cams.bib
 format: 
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
+    number-sections: false
     slide-number: true
     incremental: false
     preview-links: true # open an iframe for a link
@@ -57,11 +58,19 @@ editor_options:
 
 library(pacman)
 
+# jiebaR was archived from CRAN; install from the archive if missing (needs Rtools on Windows)
+if (!requireNamespace("jiebaR", quietly = TRUE)) {
+  install.packages(
+    c("https://cran.r-project.org/src/contrib/Archive/jiebaRD/jiebaRD_0.1.tar.gz",
+      "https://cran.r-project.org/src/contrib/Archive/jiebaR/jiebaR_0.11.1.tar.gz"),
+    repos = NULL, type = "source"
+  )
+}
+
 p_load(
   icons,
-  tidyverse, 
-  flextable, gridExtra,
-  rvest, stringr, broom, jiebaR, tidytext, tidyverse
+  tidyverse,
+  rvest, stringr, broom, jiebaR, tidytext
 )
 
 # Functions preload
@@ -78,14 +87,29 @@ theme_set(theme_minimal())
 
 # Text-As-Data Approach
 
+## Text: the oldest data
+
+Long before spreadsheets, humanity stored its record in [words]{.red}.
+
+- Cuneiform in Mesopotamia (~3200 BCE)
+- Egyptian hieroglyphs
+- Oracle-bone script of Shang-dynasty China
+
+:::{.fragment style="text-align:center; margin-top: 1em"}
+Text is the oldest form of "data storage"---and still the richest record of human life.
+:::
+
 ## When text becomes (big) data
 
-- Yearly: Social media users increase 56,530,000 in 2017--18.
-- Daily: 
-    + Baidu ("Chinese google") [day]{.red} user search request, it takes [1.7 days]{.red} to scan once;
-    + Wechat ("Chinese whatsup") [day]{.red} added data [500TB]{.red}---more than all human books.
-- Timely: 2.9 million emails around the world [every second]{.red}
-    - A person's [5.5 years]{.red} of day and night to read them all.
+More text is produced each day than any of us could read in a lifetime:
+
+- [Email]{.red}: 36+ billion messages sent and received [every day]{.red} worldwide.
+- [WeChat]{.red}: 45+ billion messages a day---1.5+ TB of new data daily.
+- [Social media]{.red}: tens of thousands of new posts [every second]{.red}.
+
+:::{.fragment}
+> These oceans of text carry attitudes, emotions, values, political stances---even consumer preferences.
+:::
 
 
 :::{.fragment}
@@ -105,28 +129,101 @@ Giga Byte < Tera Byte < Peta Byte <
 Exa Byte < Zetta Byte < Yotta Byte
 :::
 
-## History of text as data
+## A long tradition of reading text
 
-- "Ancient" studies
-    - How the law resolves externality problems [@Coase1960]
-    - Construction of policy surprises via historical documents [@FriedmanSchwartz2008]
+:::: {.columns}
+
+::: {.column width="50%"}
+*East*
+
+- Exegesis (訓詁學): *Erya*, *Shuowen Jiezi*
+- Evidential scholarship (考據學) of the Qing
+:::
+
+::: {.column .fragment width="50%"}
+*West*
+
+- Greek rhetoric
+- Biblical hermeneutics
+- 19th-century philology
+:::
+
+::::
+
+:::{.fragment style="margin-top:1em"}
+*Toward science*: Lasswell's content analysis of wartime propaganda [-@Lasswell1927]; Stone's `General Inquirer`, the first computer text analysis [-@Stone1962].
+:::
+
+## Before computers: four hard limits
+
+- Early empirical uses of text
+    - Law and the externality problem [@Coase1960]
+    - Policy surprises from historical documents [@FriedmanSchwartz2008]
 
 :::{.fragment}
-- Difficulties
-    - Maintaining and update
-    - Analytic methods
-    - Time consumption
-    - Generalization
+- Why systematic analysis stayed out of reach:
+    1. [Preservation & updating]{.red} --- documents decay; ephemera are lost
+    1. [Subjectivity]{.red} --- no shared, replicable coding standard
+    1. [Time cost]{.red} --- even a handful of texts takes enormous effort
+    1. [Limited inference]{.red} --- case studies rarely generalize
+:::
+
+:::{.fragment style="text-align:center; margin-top:0.5em"}
+&rarr; Early work was confined to *close reading* of a few classics.
 :::
 
 
-## Boom of Text Analysis in the age of big data
+## The computational turn
 
-+ Text data grows [exponentially]{.red}
-+ Large-scale text data [collection]{.red}
-+ Enhanced [storage and management]{.red} capabilities
-+ Extensive [social meaning]{.red} expressed through text
-+ Scalable, well-developed and economic [methods]{.red}
+Three shifts opened the floodgates from the 1990s on:
+
+1. [Democratized data]{.red} --- blogs, forums, social media: ordinary voices, not just elite texts.
+1. [Computational methods]{.red} --- NLP and machine learning automate topic, sentiment, and extraction.
+1. [Mature theory]{.red} --- Grimmer & Stewart [-@GrimmerStewart2013], and later @GrimmerEtAl2022, laid the "text as data" foundation.
+
+## Why compute? (Not just "big data")
+
+> The usual answer---"because we can handle more data"---misses the point.
+
+:::{.fragment}
+Three reasons size alone is not the justification:
+:::
+
+:::{.incremental}
+1. Bigger [≠]{.red} better
+1. Language breaks the [independence]{.red} assumption
+1. Machines read [backwards]{.red} from humans
+:::
+
+## Three uncomfortable truths
+
+::: {.panel-tabset}
+
+### Bigger ≠ better
+
+Large samples help in classical statistics via the law of large numbers---but what is the *population* of a language? One person's words? A nation's? All of humanity's? Language is open and ever-generating, with no clear boundary [@Biber1993]. Size alone guarantees no representativeness.
+
+### Independence
+
+Most statistics assume independent units. Language is the opposite: "*he*" needs an antecedent; "*however*" presupposes a claim to overturn. Meaning is nested from character to word to sentence to document. Counting words as if they were independent throws away the essence.
+
+### Backwards
+
+No one writes by sampling words from a corpus by probability; no one reads by tallying every word before forming a view. Human language is real-time, situated, goal-directed. The computer must do the reverse: gather *everything* first, then hunt for patterns.
+
+:::
+
+## Then what are we hunting?
+
+> Statistical regularities the naked eye cannot see.
+
+:::{.fragment}
+**Zipf's law** --- in any large text, frequency is inversely proportional to rank: the 2nd word appears about half as often as the 1st, the 3rd about a third as often... strikingly stable across languages [@Zipf2016].
+:::
+
+:::{.fragment}
+**Function words** --- pronouns, prepositions, conjunctions are used almost *unconsciously*, yet betray attention, emotion, and social relations [@Pennebaker2017]. Heavy use of "I" tracks depression; the emotional tone of Justices' words in oral argument even predicts their votes [@BlackEtAl2011a; @Liu2022].
+:::
 
 ## Text-as-data perspective
 
@@ -161,6 +258,16 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 ::::
 
 
+## Three ways to analyze text {.smaller}
+
+|  | Content analysis | Discourse analysis | Computational |
+|--|--|--|--|
+| Core question | What is said? | How & why said? | What statistical regularities? |
+| Scale | Small–mid | Small | Large |
+| Main tool | Human coding | Qualitative reading | Algorithms |
+| Strength | Replicable, objective | Deep, context-sensitive | Efficient; finds hidden patterns |
+| Limit | Codebook-bound, hard to scale | Subjective, hard to generalize | May lose context |
+
 ## Illustration I
 
 @Grimmer2010
@@ -178,7 +285,7 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 ### Focus
 
 
-![Committee leaders focus on their committee's issues](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer1.png){.lightbox fig-align="center" height=500}
+![Committee leaders focus on their committee's issues](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer1.png){.lightbox fig-align="center" height=500}
 
 :::{.notes}
 Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees' jurisdiction than other senators. **This figure compares the attention that Senate committee leaders---chairs or ranking members---dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
@@ -187,7 +294,7 @@ Fig. 4 Chairman and ranking members of committees allocate more attention to iss
 
 ### Cluster
 
-![Expressed agendas cluster geographically](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer2.png){fig-align="center" height=500}
+![Expressed agendas cluster geographically](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer2.png){fig-align="center" height=500}
 
 
 
@@ -197,7 +304,7 @@ Fig. 5 Attention to issues follows expected geographic patterns. **This figure d
 
 ### Predict
 
-![Attention to appropriations predicts opposition to earmark reform](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_grimmer3.png){fig-align="center" height=500}
+![Attention to appropriations predicts opposition to earmark reform](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer3.png){fig-align="center" height=500}
 
 
 
@@ -230,7 +337,7 @@ The left-hand figure shows that senators who discuss fire department grants more
 ::: {.panel-tabset}
 ### Coding
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
 
 :::{.notes}
 Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.
@@ -238,7 +345,7 @@ Figure 1: Hierarchical coding scheme for two policy domains with ordinal positio
 
 ### Results
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
 
 :::{.notes}
 Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
@@ -262,10 +369,10 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 ## Operation
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
 
 :::{.fragment}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_vocalPitch.png){.lightbox fig-align="center" height="600"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch.png){.lightbox fig-align="center" height="600"}
 :::
 
 :::
@@ -291,11 +398,11 @@ RNN: Recurrent Neural Network
 ## Operation
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_casm.png){fig-align="center" width="1000"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_casm.png){fig-align="center" width="1000"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center"}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center"}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
 :::
 
 
@@ -373,19 +480,19 @@ RNN: Recurrent Neural Network
 
 ## Open Platforms
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_index.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_index.png){fig-align="center" height=600}
 
 ## Media database
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_renminribao.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_renminribao.png){fig-align="center" height=600}
 
 ## E-Government
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_henan-Egovernment.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_henan-Egovernment.png){fig-align="center" height=600}
 
 ## Social Media
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_social-media.gif){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_social-media.gif){fig-align="center" height=600}
 
 :::{.notes}
 新浪微博1.4亿，微信用户5.5亿;
@@ -394,7 +501,7 @@ RNN: Recurrent Neural Network
 
 ## Reddit
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhihu.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhihu.png){fig-align="center" height=600}
 
 :::{.notes}
 Quora, Stack Overflow
@@ -402,7 +509,7 @@ Quora, Stack Overflow
 
 ## Open question
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_survey_openQuestion.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_survey_openQuestion.png){fig-align="center" height=600}
 
 
 ## Second-hand sources
@@ -419,14 +526,14 @@ Quora, Stack Overflow
 
 ## Indicators
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_baidu_zhishu.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_baidu_zhishu.png){fig-align="center" height=600}
 
 ## Digitalized documents
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=600}
 :::
 
 ## Text data collection
@@ -436,28 +543,28 @@ Quora, Stack Overflow
 
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bazhuayu.png){.fragment fig-align="center" height=450}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_bazhuayu.png){.fragment fig-align="center" height=450}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
 :::
 
 ## Scraper operation
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
 :::
 
 ## Customized Scrapping
 
 `SelectorGadget` (Chrome add-in)
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
 
 ## Scrapping with `rvest`
 
@@ -493,11 +600,11 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 
 ## Regular Expression
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_regular_expression.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_regular_expression.png){fig-align="center" height=600}
 
 ## Structuralization
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_zhongsheng_output.png){fig-align="center" width=1000}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_output.png){fig-align="center" width=1000}
 
 ## Wrap it up
 
@@ -516,7 +623,7 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 
 ## An (Classic) Overview [@GrimmerStewart2013]
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_analysis-method.png){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_analysis-method.png){fig-align="center" height=600}
 
 ## Level of Analysis
 
@@ -549,6 +656,18 @@ Sentiment analysis, word embedding, word sequence, relationship
 1. There is [no globally best]{.red} method for automated text analysis. 
 1. [Validate, Validate, Validate.]{.fragment .highlight-blue}
 :::
+
+## The human stays in the loop
+
+> The computer [computes]{.red}; the researcher [reasons]{.red}.
+
+Only you can:
+
+- Ask a question worth asking
+- Choose fit-for-purpose data & methods
+- Interpret what a pattern *means*
+- Put findings in dialogue with theory
+- Name the limits of the conclusion
 
 ## Unit of Analysis
 
@@ -589,11 +708,11 @@ Sequence of linguistic features
 A text is represented as the bag (multiset) of its words.
 :::
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords.png){.fragment fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords.png){.fragment fig-align="center" height=300}
 
 ## From natural language to computational language
 
-![Document-Term Matrix (DTM)](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_bagOfWords2.jpg){fig-align="center" height=600}
+![Document-Term Matrix (DTM)](https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords2.jpg){fig-align="center" height=600}
 
 
 :::{.notes}
@@ -703,14 +822,14 @@ read_lines(STOPPATH)[157:177]
 
 ## A comprehensive application
 
-![2019-05-14 ~ 05-22: China-US trade war](http://103.238.162.29:10002/webdav/sammo3182/figure/text_zhongsheng.png){fig-align="center" height=600}
+![2019-05-14 ~ 05-22: China-US trade war](https://drhuyue.site:10002/sammo3182/figure/text_zhongsheng.png){fig-align="center" height=600}
 
 ## Data collection
 
 *Raw Data*
 
 ```{r zhongsheng-clean}
-df_zhongsheng <- readRDS(url("http://103.238.162.29:10002/webdav/sammo3182/data/zhongsheng.RDS"))
+df_zhongsheng <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"))
 
 df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
   segment(content, cutter) |> paste(collapse = " ")
@@ -844,8 +963,8 @@ Measuring the distance between texts
 > Hamming distance: the distance between two strings of equal length is the number of [positions]{.blue} at which the [corresponding symbols are different]{.red}. 
 
 :::{.r-stack}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=num}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_hammingDis_comp.png){fig-align="center" height=num}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=300}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_comp.png){.fragment fig-align="center" height=300}
 :::
 
 e.g., H(100→011) = 3; H(010→111) = 2.
@@ -921,7 +1040,7 @@ Cons of DTM
 
 > Words' meanings depend not just on immediate neighbors
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
+![](https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
 
 :::{.notes}
 The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
@@ -933,7 +1052,7 @@ The term "embedding" comes from the neural network literature, in which an "embe
 ## Topic modeling
 
 <video width="1000" height="600" controls preload>
-<source src="http://103.238.162.29:10002/webdav/sammo3182/video/theory_topicModeling.webm" type="video/webm">
+<source src="https://drhuyue.site:10002/sammo3182/video/theory_topicModeling.webm" type="video/webm">
 </video>
 
 :::{.notes}
@@ -977,6 +1096,76 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
         - RoBERTa, PALM
     - The [GPT]{.red .large} family
 
+## Do LLMs make this obsolete?
+
+Not at all---and *not* by belittling them.
+
+:::{.fragment}
+> Zero-shot ChatGPT beat crowd workers by ~25 points on stance and relevance labeling, at under 3¢ per label [@GilardiEtAl2023]; on some tasks it even tops trained experts [@Tornberg2025].
+:::
+
+:::{.fragment style="text-align:center; margin-top:1em"}
+So *can* an LLM label text? Often yes. The real question is: [can you trust it?]{.red}
+:::
+
+## Four cautions
+
+::: {.panel-tabset}
+
+### Uneven
+
+Across 27 replicated studies, GPT-4's accuracy swung wildly---on some tasks precision or recall fell below 0.5, no better than a coin flip [@PangakisEtAl2023].
+
+### Biased stats
+
+Even at 90% labeling accuracy, feeding labels straight into a regression yields *biased* coefficients and invalid intervals. Correcting it needs a small human "gold standard" plus classic inference [@EgamiEtAl2024].
+
+### LLM hacking
+
+Swapping the model or rewording a prompt flipped about one-third of conclusions in real replications; closed models also update silently [@BaumannEtAl2025; @OllionEtAl2024].
+
+### Non-English
+
+Training data is English-dominated, and its biases are inherited [@BenderEtAl2021]. On fine-grained tasks a small fine-tuned model can beat zero-shot GPT-4 by 10–25 points [@BucherMartini2024].
+
+:::
+
+## Why classic methods still matter
+
+:::: {.columns}
+
+::: {.column width="50%"}
+1. [Validation]{.red} bedrock
+2. [Interpretability]{.red}
+3. [Replicability]{.red}
+:::
+
+::: {.column width="50%"}
+4. [Resource]{.red} efficiency
+5. [Theoretical]{.red} grounding
+6. [Methodological]{.red} bridge
+:::
+
+::::
+
+:::{.fragment style="text-align:center; margin-top:1em"}
+The tools that "replace" the classics are exactly the classics you need to *trust* them.
+:::
+
+## The emerging workflow
+
+1. LLM labels a *subset*
+1. Train a lightweight local classifier
+1. Validate against a human [gold standard]{.red}
+1. Deploy to the full corpus
+
+:::{.fragment .huge style="text-align:center; margin-top:1em"}
+"Start small, start open, validate first."
+:::
+
+:::{.fragment style="text-align:center"}
+[@StoltzEtAl2026]
+:::
 
 ## Wrap it up
 
@@ -1020,7 +1209,7 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
 
 [`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
-[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+[`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
 :::
 
 ## References

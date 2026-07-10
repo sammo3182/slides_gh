@@ -1,6 +1,6 @@
 ---
-title: "Unveiling<br>the Power of Words"
-subtitle: "Quantitative Text Analysis, CAMS"
+title: "From Mouth to Mind"
+subtitle: "Data Science and Text Analysis, CAMS"
     
 # date: "2023-06-12"
 # date-format: "iso"
@@ -19,14 +19,16 @@ execute:
 editor_options: 
   chunk_output_type: console
 
-format: 
+format:
   revealjs:
-    css: https://sammo3182.github.io/slides_gh/css/style_basic.css
+    number-sections: false
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
     theme: ../../../css/goldenBlack.scss
     # logo: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_zzxx.png?inline=true
     slide-number: true
-    incremental: false
+    incremental: true
     preview-links: true # open an iframe for a link
+    link-external-newwindow: true
     embed-resources: false
     chalkboard: true # allwoing chalk board B, notes canvas C
     # callout-icon: false
@@ -61,9 +63,7 @@ library(pacman)
 
 p_load(
   icons,
-  tidyverse, 
-  flextable, gridExtra,
-  rvest, stringr, broom, jiebaR, tidytext, tidyverse
+  tidyverse
 )
 
 # Functions preload
@@ -75,25 +75,26 @@ set.seed(313)
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 *Experience*
 
 - PhD. of Poli. Sci., U of Iowa
   - Grad. Certificate in Informatics
-- Deputy director
-    - Computational Social Science Platform, THU
-    - Data and Governance Center, THU
+- Deputy director of Computational Social Science Lab, THU
 - Founder of *Learning R with Dr. Hu and His Friends*
+- Creator of 100k-download packages
+
 :::
 
-::: {.column .fragment width="50%"}
-*Interest*: 
+::: {.column width="50%"}
 
-> Interdisciplinary
+*Method specialty*: 
 
 - W. data science
   - Lab and survey experiments
   - Latent variable, network, spatial
   - *Text analysis, data visualization*
+
 :::
 
 ::::
@@ -101,67 +102,160 @@ set.seed(313)
 ## Research Areas
 
 - W. psychology
-  - Political [**communication**]{.red} (state media, youth)
-  - **Memory** politics(participation, public health)
-  - **Identity** cognition (urban/rural, Hong Kong, Judiciary)
+  - Political [cognition]{.red}(attitudes, behaviors, memory)
+  - Political communication (state media, youth)
+  - Identity politics (urban/rural, Hong Kong, Judiciary)
 - W. economics
   - Macro economy &rarr; micro cognition &rarr; meso-policy
-  - Socioeconomic [**inequality**]{.red}
+  - Economic [inequality]{.red}
 - W. linguistics
-  - Political **influence** of language
-  - Language planning and [**policies**]{.red}
+  - Language planning and policies
+  - How language you speak [shape]{.red} the mind of politics
+
+## Warm-up questions {background="#43464B"}
+
+1. Why do you get up early today? 😝
+1. Without understanding what a person says, how can you tell s/he is a leader and how much power does s/he have?
+1. "King" &minus; "man" + "woman" &approx; "Queen"？ Can word meaning really do arithmetic?
+1. (Sharper) Do you still need to learn natural language process in the age of large language model (LLM)?
+1. (Even sharper) Do you still need to learn programming in the age of LLM?
+
+
+::: {.fragment .r-fit-text}
+
+*Let's learn how to figure them out!*
+
+:::
 
 
 ## Plan of the course
 
+A three-part journey: **talk to the computer** &rarr; **teach the computer to read** &rarr; **teach the computer to "understand"**
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 *[Programming]{.red} Basic*
 
 1. R Basics
-1. Loop
 1. Data visualization
 
-*Text-As-Data [Theory]{.red}*
+*Text-As-Data [Preparation]{.red}*
 
-1. Assumptions
-1. Levels of analysis
-1. Procedure
+1. Theory
+1. Data scrapping
+    - Regular expression*
+    - Text Preprocessing
 
 :::
 
 ::: {.column width="50%"}
 *Text Analysis in [Practice]{.red}*
 
-1. Data scrapping
-1. Regular expression
-1. Text Preprocessing
 1. Word frequency analysis
 1. Classification
 1. Clusterring
-1. [Beyond "BOW"]{.gray} 
+1. [Beyond "BOW"]{.gray}*
 
 :::
 
 ::::
 
-## Prerequesite
+## Prerequisite
 
 - You'll learn the course a little more easily, if you've known
-  - A little bit econometrics
-  - A little bit programming
+    - A little bit econometrics
+    - A little bit programming
+    - But you don't have to
 
 :::{.fragment style="text-align:right; margin-top: 1em"}
+
 - Operation environment
-  - [R](https://cran.r-project.org/mirrors.html)
+  - [R](https://cran.r-project.org/mirrors.html) (why not Python?😋)
   - [`drhur`](https://sammo3182.github.io/software/drhur/)
   - [`rvest`](https://rvest.tidyverse.org/)
-  - [`jiebaR`](https://qinwenfeng.com/jiebaR/)/[`TopWORDS`](http://www.stat.tsinghua.edu.cn/kdeng/r-package/)
   - [`quanteda`](http://quanteda.io/)
+
 :::
 
+
+# Why Taking the Course [Now]{.red}
+
+## "Can't I just ask ChatGPT?"
+
+> LLMs already write code and read texts for me. Why should I, a liberal arts student, still learn programming and natural language processing?
+
+:::{.fragment style="text-align:center; margin-top: 2em"}
+
+The answer depends on your answers to [two questions]{.red}.
+
+:::
+
+:::{.notes}
+This is the core message of the whole lecture: remember warm-up questions 4 & 5.
+:::
+
+## Q1: To *get by*, or to *get strong*?
+
+- Asking AI for code can complete a basic task — enough to [get by]{.red}.
+- But LLM-generated code (from ChatGPT & DeepSeek to Copilot) is still often
+  - Incomplete or buggy;
+  - Written in outdated syntax rather than today's best solution.
+- Judging, fixing, and improving that code requires exactly what it was supposed to replace: [your own programming ability]{.red}.
+
+## Q2: To *use* AI, or to *be used* by AI?
+
+- Over half of college students already use generative AI regularly [@YanYiQiao2025] — but in two very different ways:
+  - [Active]{.red} users own the knowledge and can evaluate what the model returns; for them AI is an *assistant*.
+  - [Passive]{.red} users merely relay answers from the chat box to the code box; for them AI is the *teacher* — no different from believing whatever the early internet said.
+- Knowing how programs run and how machines "read" text is what puts you on the active side: [shaping]{.red} the digital world instead of merely accepting it.
+
+:::{.fragment .r-fit-text}
+
+*The one who uses AI, or the one used by AI — which will you be?*
+
+:::
+
+## "But I'm a liberal arts student..."
+
+Three misconceptions (based on the interviews with students of universities around the country):
+
+- ["Programming = math."]{.red}
+  - Most data work needs only basic math — the computer does the calculating;
+  - The core is *logic*: decomposing a complex problem into clear, ordered steps — a liberal arts [strength]{.red}.
+- ["What can I even do with it?"]{.red}
+  - Without a goal, most learners quit after a few commands;
+  - This course anchors every technique to [real research questions]{.red}.
+- ["Recite V-E-C-T-O-R, vector..."]{.red}
+  - A language is never mastered by memorization but by [use]{.red} — so we practice from day one.
+
+## Three advantages you already have
+
+- A pure liberal arts student can go far
+    - I majored in political science *because* it seemed math-free; now computational political science is my main field.
+
+:::{.fragment}
+
+1. [Language sense]{.red}: a programming language is an *artificial* language — far simpler than any natural language you have mastered; modern R reads almost like plain English.
+2. [Imagination]{.red}: reframe coding from mechanical operation to *conversation* (next slide).
+3. [Problem-driven learning]{.red}: you don't need to become an engineer — keep asking "*what can this do for my research?*" and you'll learn faster with less.
+
+:::
+
+## Programming as a conversation
+
+- Not typing commands at a machine, but talking with ["little R"]{.red}: a three-year-old genius
+  - Computes anything, draws beautifully — but speaks only English, in short sentences;
+  - Understands you only when [every logical step]{.red} is spelled out.
+- A "3-yr-old genius" theory
+  - ![Errors are not failures --- just a child saying "I don't understand yet."](https://drhuyue.site:10002/sammo3182/figure/drhur_textbook/drhur_littleR.png){fig-align="center" height=300}
+
+:::{.notes}
+
+Psychological barriers, not information, are the biggest obstacle for liberal arts students. STEM students face the same frustrations but cannot quit because programming is a hard requirement for them. The conversation metaphor builds the persistence that liberal arts students otherwise lack.
+
+:::
 
 # Why R
 
@@ -170,7 +264,7 @@ set.seed(313)
 - A high-level programming language (object-oriented programming)
 
 :::{.fragment}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/languageLevel.jpg){fig-align="center" height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/languageLevel.jpg){fig-align="center" height=500}
 :::
 
 
@@ -249,11 +343,11 @@ Sending emails
 ### Visualization
 :::{.r-stack}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/ggmap.png){.fragment height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/ggmap.png){.fragment height=500}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/hillShade.png){.fragment height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/hillShade.png){.fragment height=500}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/distributionHill.png){.fragment height=500}
+![](https://drhuyue.site:10002/sammo3182/figure/distributionHill.png){.fragment height=500}
 
 :::
 :::
@@ -261,9 +355,9 @@ Sending emails
 ::::
 
 
-## {background-image="http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
+## {background-image="https://drhuyue.site:10002/sammo3182/figure/programCompare.jpg" background-size="auto auto" background-opacity=0.1}
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/programCompare.jpg){fig-align="center" height=600}
+![](https://drhuyue.site:10002/sammo3182/figure/programCompare.jpg){fig-align="center" height=600}
 
 
 # Set Up
@@ -275,13 +369,13 @@ Sending emails
 ::: {.column width="50%"}
 *Core*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/Rlogo.png){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/Rlogo.png){fig-align="center" height=400}
 :::
 
 ::: {.column width="50%"}
 *Integrated development environment（IDE）*
 
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/rstudio.jpg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/rstudio.jpg){fig-align="center" height=400}
 :::
 
 ::::
@@ -292,7 +386,7 @@ Sending emails
 :::: {.columns}
 
 ::: {.column width="40%"}
-![](http://103.238.162.29:10002/webdav/sammo3182/figure/apps.jpeg){fig-align="center" height=400}
+![](https://drhuyue.site:10002/sammo3182/figure/apps.jpeg){fig-align="center" height=400}
 :::
 
 ::: {.column width="60%"}
@@ -300,7 +394,7 @@ Sending emails
 :::{.fragment}
 *Installation*
 
-```{r installPg, eval=FALSE}
+```{r installPg}
 #| eval: false
 #| echo: true
 
@@ -330,34 +424,37 @@ drhur::drhur("play")
 
 - Software Installation
 
+::: {.fragment}
+
 ```{r install}
 #| eval: false
 
 drhur(module, language = "en")
 ```
 
+:::
 
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 - Programming module
-    - Released version (1.1.0)
-        - `calculate`
+    - Released version (2.0.0)
+        - `algebra`
         - `play`
-        - `wrangle`
-        - `visualization`
-    - `loop` (CAMS module)
+        - `visual_basic`
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 - Text analysis (CAMS module)
     1. `scrap`
-    1. `regex`
+    1. `regex`*
     1. `preprocess`
     1. `frequency`
     1. `classify`
-    1. `cluster`
-    1. `beyond`
+
 :::
 
 ::::
@@ -375,8 +472,4 @@ install.packages(<the_package_file>, type="source")
 
 :::
 
-
-
-# Ready? 
-
-Let's go to [`drhur`](http://103.238.162.29:8787/)
+## Reference
