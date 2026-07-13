@@ -220,7 +220,7 @@
 
 <section id="title-slide" data-background-image="https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true" data-background-position="top 10% right 5%" data-background-size="250px" class="quarto-title-block center">
   <h1 class="title">Principles of<br>Text Analysis</h1>
-  <p class="subtitle">Class Advanced Methods School, CityU</p>
+  <p class="subtitle">Data Science and Text Analysis, CAMS, CityU</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -237,15 +237,14 @@ Yue Hu
 </div>
 
 </section>
-<section id="outline" class="title-slide slide level1 center">
-<h1>Outline</h1>
+<section id="outline" class="slide level2">
+<h2>Outline</h2>
 <ul>
 <li>Text-As-Data Approach</li>
 <li>DGP for Text-As-Data</li>
 <li>Analyzing text data</li>
 </ul>
 </section>
-
 <section>
 <section id="text-as-data-approach" class="title-slide slide level1 center">
 <h1>Text-As-Data Approach</h1>
@@ -261,6 +260,7 @@ Yue Hu
 </ul>
 <div class="fragment" style="text-align:center; margin-top: 1em">
 <p>Text is the oldest form of “data storage”—and still the richest record of human life.</p>
+<p>Every language is an application programming interface (API).</p>
 </div>
 </section>
 <section id="when-text-becomes-big-data" class="slide level2">
@@ -347,6 +347,23 @@ Yue Hu
 <div class="fragment" style="text-align:center; margin-top:0.5em">
 <p>→ Early work was confined to <em>close reading</em> of a few classics.</p>
 </div>
+<aside class="notes">
+<p>The two examples both treat text as evidence, long before “text as data” was a method.</p>
+<ul>
+<li><p><strong>Coase (1960), “The Problem of Social Cost”:</strong> Coase builds his argument by reading actual court cases—rulings on straying cattle, a factory’s smoke, a confectioner’s noise disturbing a doctor. The legal records <em>are</em> his data. From these documents he derives what became the Coase theorem: when transaction costs are low, parties bargain to an efficient allocation of rights regardless of who is initially liable. Externalities are read out of legal text, not modeled from assumptions.</p></li>
+<li><p><strong>Friedman &amp; Schwartz (2008 [1963]), <em>A Monetary History of the United States, 1867–1960</em>:</strong> They assemble nearly a century of historical records—Federal Reserve minutes, bank reports, policy documents—to reconstruct the money supply. Reading these documents overturned the received story of the Great Depression: the collapse was deepened by the Fed’s contraction of the money supply, a policy “surprise” that only surfaces once you work through the archival paper trail.</p></li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
 </section>
 <section id="the-computational-turn" class="slide level2">
 <h2>The computational turn</h2>
@@ -360,7 +377,7 @@ Yue Hu
 <section id="why-compute-not-just-big-data" class="slide level2">
 <h2>Why compute? (Not just “big data”)</h2>
 <blockquote>
-<p>The usual answer—“because we can handle more data”—misses the point.</p>
+<p>Not <span class="red">only</span> because we can handle more data</p>
 </blockquote>
 <div class="fragment">
 <p>Three reasons size alone is not the justification:</p>
@@ -1009,23 +1026,21 @@ Yue Hu
 <span id="cb1-6"><a href=""></a></span>
 <span id="cb1-7"><a href=""></a>df_zhongsheng <span class="ot">&lt;-</span> <span class="fu">map_df</span>(ls_zhongsheng, <span class="cf">function</span>(link) {</span>
 <span id="cb1-8"><a href=""></a>  zs_article <span class="ot">&lt;-</span> <span class="fu">read_html</span>(link, <span class="at">encoding =</span> <span class="st">"GB18030"</span>) <span class="co"># read the html</span></span>
-<span id="cb1-9"><a href=""></a>  </span>
+<span id="cb1-9"><a href=""></a></span>
 <span id="cb1-10"><a href=""></a>  zs_title <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"h1"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-11"><a href=""></a>    html_text</span>
-<span id="cb1-12"><a href=""></a>  </span>
+<span id="cb1-12"><a href=""></a></span>
 <span id="cb1-13"><a href=""></a>  zs_time <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">".box01 .fl"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-14"><a href=""></a>    html_text <span class="sc">|&gt;</span></span>
 <span id="cb1-15"><a href=""></a>    <span class="fu">str_extract</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">d{4}年</span><span class="sc">\\</span><span class="st">d{2}月</span><span class="sc">\\</span><span class="st">d{2}日"</span>)</span>
-<span id="cb1-16"><a href=""></a>  </span>
+<span id="cb1-16"><a href=""></a></span>
 <span id="cb1-17"><a href=""></a>  zs_content <span class="ot">&lt;-</span> <span class="fu">html_nodes</span>(zs_article, <span class="st">"#rwb_zw p"</span>) <span class="sc">|&gt;</span></span>
 <span id="cb1-18"><a href=""></a>    html_text <span class="sc">|&gt;</span></span>
 <span id="cb1-19"><a href=""></a>    <span class="fu">str_c</span>(<span class="at">collapse =</span> <span class="st">""</span>) <span class="sc">|&gt;</span> <span class="co"># combined the paragraphs</span></span>
 <span id="cb1-20"><a href=""></a>    <span class="fu">str_remove_all</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">s|</span><span class="sc">\\</span><span class="st">n|</span><span class="sc">\\</span><span class="st">t"</span>) <span class="co"># remove the horizontal spaces</span></span>
-<span id="cb1-21"><a href=""></a>  </span>
-<span id="cb1-22"><a href=""></a>  zs_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">title =</span> zs_title,</span>
-<span id="cb1-23"><a href=""></a>                        <span class="at">time =</span> zs_time,</span>
-<span id="cb1-24"><a href=""></a>                        <span class="at">content =</span> zs_content)</span>
-<span id="cb1-25"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-21"><a href=""></a></span>
+<span id="cb1-22"><a href=""></a>  zs_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">title =</span> zs_title, <span class="at">time =</span> zs_time, <span class="at">content =</span> zs_content)</span>
+<span id="cb1-23"><a href=""></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 </section>
@@ -1380,24 +1395,26 @@ Yue Hu
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>df_zhongsheng <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">url</span>(<span class="st">"https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"</span>))</span>
-<span id="cb6-2"><a href=""></a></span>
-<span id="cb6-3"><a href=""></a>df_zhongsheng<span class="sc">$</span>segmented <span class="ot">&lt;-</span> <span class="fu">map_chr</span>(df_zhongsheng<span class="sc">$</span>content, <span class="cf">function</span>(content){</span>
-<span id="cb6-4"><a href=""></a>  <span class="fu">segment</span>(content, cutter) <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">" "</span>)</span>
-<span id="cb6-5"><a href=""></a>})</span>
-<span id="cb6-6"><a href=""></a></span>
-<span id="cb6-7"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase <span class="ot">&lt;-</span> <span class="st">"US_fail"</span></span>
-<span id="cb6-8"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-22"</span>] <span class="ot">&lt;-</span> <span class="st">"theory_test"</span></span>
-<span id="cb6-9"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-11"</span>] <span class="ot">&lt;-</span> <span class="st">"reassessment"</span></span>
-<span id="cb6-10"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-08"</span>] <span class="ot">&lt;-</span> <span class="st">"optimism"</span></span>
-<span id="cb6-11"><a href=""></a></span>
-<span id="cb6-12"><a href=""></a></span>
-<span id="cb6-13"><a href=""></a>df_token <span class="ot">&lt;-</span> df_zhongsheng <span class="sc">|&gt;</span> </span>
-<span id="cb6-14"><a href=""></a>  <span class="fu">select</span>(<span class="sc">-</span>content) <span class="sc">|&gt;</span> </span>
-<span id="cb6-15"><a href=""></a>  <span class="fu">unnest_tokens</span>(word, segmented) <span class="co"># tokenization</span></span>
-<span id="cb6-16"><a href=""></a></span>
-<span id="cb6-17"><a href=""></a><span class="co"># Show the word counts</span></span>
-<span id="cb6-18"><a href=""></a><span class="fu">select</span>(df_token, <span class="sc">-</span>phase) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>df_zhongsheng <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">url</span>(</span>
+<span id="cb6-2"><a href=""></a>  <span class="st">"https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"</span></span>
+<span id="cb6-3"><a href=""></a>))</span>
+<span id="cb6-4"><a href=""></a></span>
+<span id="cb6-5"><a href=""></a>df_zhongsheng<span class="sc">$</span>segmented <span class="ot">&lt;-</span> <span class="fu">map_chr</span>(df_zhongsheng<span class="sc">$</span>content, <span class="cf">function</span>(content) {</span>
+<span id="cb6-6"><a href=""></a>  <span class="fu">segment</span>(content, cutter) <span class="sc">|&gt;</span> <span class="fu">paste</span>(<span class="at">collapse =</span> <span class="st">" "</span>)</span>
+<span id="cb6-7"><a href=""></a>})</span>
+<span id="cb6-8"><a href=""></a></span>
+<span id="cb6-9"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase <span class="ot">&lt;-</span> <span class="st">"US_fail"</span></span>
+<span id="cb6-10"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-22"</span>] <span class="ot">&lt;-</span> <span class="st">"theory_test"</span></span>
+<span id="cb6-11"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-11"</span>] <span class="ot">&lt;-</span> <span class="st">"reassessment"</span></span>
+<span id="cb6-12"><a href=""></a>df_zhongsheng<span class="sc">$</span>phase[df_zhongsheng<span class="sc">$</span>time <span class="sc">&lt;=</span> <span class="st">"2019-05-08"</span>] <span class="ot">&lt;-</span> <span class="st">"optimism"</span></span>
+<span id="cb6-13"><a href=""></a></span>
+<span id="cb6-14"><a href=""></a></span>
+<span id="cb6-15"><a href=""></a>df_token <span class="ot">&lt;-</span> df_zhongsheng <span class="sc">|&gt;</span></span>
+<span id="cb6-16"><a href=""></a>  <span class="fu">select</span>(<span class="sc">-</span>content) <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href=""></a>  <span class="fu">unnest_tokens</span>(word, segmented) <span class="co"># tokenization</span></span>
+<span id="cb6-18"><a href=""></a></span>
+<span id="cb6-19"><a href=""></a><span class="co"># Show the word counts</span></span>
+<span id="cb6-20"><a href=""></a><span class="fu">select</span>(df_token, <span class="sc">-</span>phase) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                           title       time word
@@ -1417,8 +1434,8 @@ Yue Hu
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="co"># removing the stop words</span></span>
 <span id="cb8-2"><a href=""></a>df_stopWords <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">word =</span> <span class="fu">read_lines</span>(STOPPATH))</span>
 <span id="cb8-3"><a href=""></a></span>
-<span id="cb8-4"><a href=""></a>df_token <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span> </span>
-<span id="cb8-5"><a href=""></a>  <span class="fu">anti_join</span>(df_stopWords) </span>
+<span id="cb8-4"><a href=""></a>df_token <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span></span>
+<span id="cb8-5"><a href=""></a>  <span class="fu">anti_join</span>(df_stopWords)</span>
 <span id="cb8-6"><a href=""></a></span>
 <span id="cb8-7"><a href=""></a><span class="fu">select</span>(df_token, <span class="sc">-</span>phase) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
@@ -1439,15 +1456,16 @@ Yue Hu
 <div class="cell" data-layout-align="center">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>df_plot <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span> <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb10-2"><a href=""></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">151</span>) <span class="sc">|&gt;</span></span>
-<span id="cb10-3"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">reorder</span>(word, n))</span>
-<span id="cb10-4"><a href=""></a></span>
-<span id="cb10-5"><a href=""></a><span class="fu">ggplot</span>(df_plot) <span class="sc">+</span></span>
-<span id="cb10-6"><a href=""></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(word, n)) <span class="sc">+</span></span>
-<span id="cb10-7"><a href=""></a>  <span class="fu">ylab</span>(<span class="st">"Word Frequency"</span>) <span class="sc">+</span> </span>
-<span id="cb10-8"><a href=""></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
-<span id="cb10-9"><a href=""></a>  <span class="fu">coord_flip</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>df_plot <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href=""></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href=""></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">151</span>) <span class="sc">|&gt;</span></span>
+<span id="cb10-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">reorder</span>(word, n))</span>
+<span id="cb10-5"><a href=""></a></span>
+<span id="cb10-6"><a href=""></a><span class="fu">ggplot</span>(df_plot) <span class="sc">+</span></span>
+<span id="cb10-7"><a href=""></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(word, n)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href=""></a>  <span class="fu">ylab</span>(<span class="st">"Word Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb10-9"><a href=""></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">20</span>)) <span class="sc">+</span></span>
+<span id="cb10-10"><a href=""></a>  <span class="fu">coord_flip</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -1463,21 +1481,23 @@ Yue Hu
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>df_plot <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span> </span>
-<span id="cb11-2"><a href=""></a>  <span class="fu">group_by</span>(phase) <span class="sc">|&gt;</span> </span>
-<span id="cb11-3"><a href=""></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>df_plot <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span></span>
+<span id="cb11-2"><a href=""></a>  <span class="fu">group_by</span>(phase) <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href=""></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
 <span id="cb11-4"><a href=""></a>  <span class="fu">top_n</span>(<span class="dv">10</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-5"><a href=""></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb11-6"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">word =</span> <span class="fu">reorder</span>(word, n),</span>
-<span id="cb11-7"><a href=""></a>         <span class="at">word =</span> <span class="fu">factor</span>(word, <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">unique</span>(word))))</span>
-<span id="cb11-8"><a href=""></a></span>
-<span id="cb11-9"><a href=""></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(word, n)) <span class="sc">+</span></span>
-<span id="cb11-10"><a href=""></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
-<span id="cb11-11"><a href=""></a>  <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb11-12"><a href=""></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
-<span id="cb11-13"><a href=""></a>  <span class="fu">ylab</span>(<span class="st">"Word FRequency"</span>) <span class="sc">+</span> </span>
-<span id="cb11-14"><a href=""></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)) <span class="sc">+</span></span>
-<span id="cb11-15"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> phase, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-5"><a href=""></a>  <span class="fu">ungroup</span>() <span class="sc">|&gt;</span></span>
+<span id="cb11-6"><a href=""></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-7"><a href=""></a>    <span class="at">word =</span> <span class="fu">reorder</span>(word, n),</span>
+<span id="cb11-8"><a href=""></a>    <span class="at">word =</span> <span class="fu">factor</span>(word, <span class="at">levels =</span> <span class="fu">rev</span>(<span class="fu">unique</span>(word)))</span>
+<span id="cb11-9"><a href=""></a>  )</span>
+<span id="cb11-10"><a href=""></a></span>
+<span id="cb11-11"><a href=""></a><span class="fu">ggplot</span>(df_plot, <span class="fu">aes</span>(word, n)) <span class="sc">+</span></span>
+<span id="cb11-12"><a href=""></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb11-13"><a href=""></a>  <span class="fu">xlab</span>(<span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb11-14"><a href=""></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb11-15"><a href=""></a>  <span class="fu">ylab</span>(<span class="st">"Word FRequency"</span>) <span class="sc">+</span></span>
+<span id="cb11-16"><a href=""></a>  <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)) <span class="sc">+</span></span>
+<span id="cb11-17"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>phase, <span class="at">scales =</span> <span class="st">"free"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1506,28 +1526,40 @@ Yue Hu
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>frequency <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>frequency <span class="ot">&lt;-</span> df_token <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href=""></a>  <span class="fu">count</span>(phase, word) <span class="sc">|&gt;</span></span>
 <span id="cb12-3"><a href=""></a>  <span class="fu">group_by</span>(phase) <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">proportion =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span> </span>
-<span id="cb12-5"><a href=""></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">|&gt;</span> </span>
-<span id="cb12-6"><a href=""></a>  <span class="fu">spread</span>(phase, proportion) <span class="sc">|&gt;</span> </span>
+<span id="cb12-4"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">proportion =</span> n <span class="sc">/</span> <span class="fu">sum</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb12-5"><a href=""></a>  <span class="fu">select</span>(<span class="sc">-</span>n) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href=""></a>  <span class="fu">spread</span>(phase, proportion) <span class="sc">|&gt;</span></span>
 <span id="cb12-7"><a href=""></a>  <span class="fu">gather</span>(phase, proportion, optimism<span class="sc">:</span>theory_test)</span>
 <span id="cb12-8"><a href=""></a></span>
 <span id="cb12-9"><a href=""></a><span class="fu">library</span>(scales)</span>
 <span id="cb12-10"><a href=""></a></span>
 <span id="cb12-11"><a href=""></a><span class="co"># expect a warning about rows with missing values being removed</span></span>
-<span id="cb12-12"><a href=""></a><span class="fu">ggplot</span>(frequency, <span class="fu">aes</span>(<span class="at">x =</span> proportion, <span class="at">y =</span> <span class="st">`</span><span class="at">US_fail</span><span class="st">`</span>, <span class="at">color =</span> <span class="fu">abs</span>(<span class="st">`</span><span class="at">US_fail</span><span class="st">`</span> <span class="sc">-</span> proportion))) <span class="sc">+</span></span>
-<span id="cb12-13"><a href=""></a>  <span class="fu">geom_abline</span>(<span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-14"><a href=""></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">height =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb12-15"><a href=""></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> word), <span class="at">check_overlap =</span> <span class="cn">TRUE</span>, <span class="at">vjust =</span> <span class="fl">1.5</span>, <span class="at">family =</span> <span class="st">"WenQuanYi Micro Hei"</span>) <span class="sc">+</span></span>
-<span id="cb12-16"><a href=""></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
-<span id="cb12-17"><a href=""></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
-<span id="cb12-18"><a href=""></a>  <span class="fu">scale_color_gradient</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>), <span class="at">low =</span> <span class="st">"darkslategray4"</span>, <span class="at">high =</span> <span class="st">"gray75"</span>) <span class="sc">+</span></span>
-<span id="cb12-19"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>phase, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb12-20"><a href=""></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb12-21"><a href=""></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"US Inevitable Failure"</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb12-22"><a href=""></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"WenQuanYi Micro Hei"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-12"><a href=""></a><span class="fu">ggplot</span>(</span>
+<span id="cb12-13"><a href=""></a>  frequency,</span>
+<span id="cb12-14"><a href=""></a>  <span class="fu">aes</span>(<span class="at">x =</span> proportion, <span class="at">y =</span> <span class="st">`</span><span class="at">US_fail</span><span class="st">`</span>, <span class="at">color =</span> <span class="fu">abs</span>(<span class="st">`</span><span class="at">US_fail</span><span class="st">`</span> <span class="sc">-</span> proportion))</span>
+<span id="cb12-15"><a href=""></a>) <span class="sc">+</span></span>
+<span id="cb12-16"><a href=""></a>  <span class="fu">geom_abline</span>(<span class="at">color =</span> <span class="st">"gray40"</span>, <span class="at">lty =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-17"><a href=""></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">height =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb12-18"><a href=""></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb12-19"><a href=""></a>    <span class="fu">aes</span>(<span class="at">label =</span> word),</span>
+<span id="cb12-20"><a href=""></a>    <span class="at">check_overlap =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-21"><a href=""></a>    <span class="at">vjust =</span> <span class="fl">1.5</span>,</span>
+<span id="cb12-22"><a href=""></a>    <span class="at">family =</span> <span class="st">"WenQuanYi Micro Hei"</span></span>
+<span id="cb12-23"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb12-24"><a href=""></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb12-25"><a href=""></a>  <span class="fu">scale_y_log10</span>(<span class="at">labels =</span> <span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb12-26"><a href=""></a>  <span class="fu">scale_color_gradient</span>(</span>
+<span id="cb12-27"><a href=""></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>),</span>
+<span id="cb12-28"><a href=""></a>    <span class="at">low =</span> <span class="st">"darkslategray4"</span>,</span>
+<span id="cb12-29"><a href=""></a>    <span class="at">high =</span> <span class="st">"gray75"</span></span>
+<span id="cb12-30"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb12-31"><a href=""></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>phase, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb12-32"><a href=""></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb12-33"><a href=""></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">"US Inevitable Failure"</span>, <span class="at">x =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb12-34"><a href=""></a>  <span class="fu">theme</span>(<span class="at">text =</span> <span class="fu">element_text</span>(<span class="at">family =</span> <span class="st">"WenQuanYi Micro Hei"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div>
@@ -1560,7 +1592,10 @@ Yue Hu
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>extractor_keyword <span class="ot">&lt;-</span> <span class="fu">worker</span>(<span class="st">"simhash"</span>, <span class="at">topn =</span> <span class="dv">5</span>)</span>
 <span id="cb13-2"><a href=""></a></span>
-<span id="cb13-3"><a href=""></a><span class="fu">simhash</span>(df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-07"</span>], extractor_keyword)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-3"><a href=""></a><span class="fu">simhash</span>(</span>
+<span id="cb13-4"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-07"</span>],</span>
+<span id="cb13-5"><a href=""></a>  extractor_keyword</span>
+<span id="cb13-6"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$simhash
@@ -1576,7 +1611,10 @@ $keyword
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">simhash</span>(df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>], extractor_keyword)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a><span class="fu">simhash</span>(</span>
+<span id="cb15-2"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>],</span>
+<span id="cb15-3"><a href=""></a>  extractor_keyword</span>
+<span id="cb15-4"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$simhash
@@ -1621,9 +1659,11 @@ $keyword
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">distance</span>(df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>],</span>
-<span id="cb17-2"><a href=""></a>         df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-22"</span>],</span>
-<span id="cb17-3"><a href=""></a>         extractor_keyword)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a><span class="fu">distance</span>(</span>
+<span id="cb17-2"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>],</span>
+<span id="cb17-3"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-22"</span>],</span>
+<span id="cb17-4"><a href=""></a>  extractor_keyword</span>
+<span id="cb17-5"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$distance
@@ -1643,9 +1683,11 @@ $rhs
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">distance</span>(df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>],</span>
-<span id="cb19-2"><a href=""></a>         df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-23"</span>][<span class="dv">1</span>],</span>
-<span id="cb19-3"><a href=""></a>         extractor_keyword)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">distance</span>(</span>
+<span id="cb19-2"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-30"</span>],</span>
+<span id="cb19-3"><a href=""></a>  df_zhongsheng<span class="sc">$</span>content[df_zhongsheng<span class="sc">$</span>time <span class="sc">==</span> <span class="st">"2019-05-23"</span>][<span class="dv">1</span>],</span>
+<span id="cb19-4"><a href=""></a>  extractor_keyword</span>
+<span id="cb19-5"><a href=""></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>$distance

@@ -1,6 +1,6 @@
 ---
 title: "Principles of<br>Text Analysis"
-subtitle: "Class Advanced Methods School, CityU"
+subtitle: "Data Science and Text Analysis, CAMS, CityU"
 # date: "2023-06-13"
 # date-format: "iso"
 author: "Yue Hu"
@@ -61,25 +61,30 @@ library(pacman)
 # jiebaR was archived from CRAN; install from the archive if missing (needs Rtools on Windows)
 if (!requireNamespace("jiebaR", quietly = TRUE)) {
   install.packages(
-    c("https://cran.r-project.org/src/contrib/Archive/jiebaRD/jiebaRD_0.1.tar.gz",
-      "https://cran.r-project.org/src/contrib/Archive/jiebaR/jiebaR_0.11.1.tar.gz"),
-    repos = NULL, type = "source"
+    c(
+      "https://cran.r-project.org/src/contrib/Archive/jiebaRD/jiebaRD_0.1.tar.gz",
+      "https://cran.r-project.org/src/contrib/Archive/jiebaR/jiebaR_0.11.1.tar.gz"
+    ),
+    repos = NULL,
+    type = "source"
   )
 }
 
 p_load(
   icons,
   tidyverse,
-  rvest, stringr, broom, jiebaR, tidytext
+  rvest,
+  stringr,
+  broom,
+  jiebaR,
+  tidytext
 )
 
 # Functions preload
 set.seed(313)
-
-theme_set(theme_minimal())
 ```
 
-# Outline
+## Outline
 
 - Text-As-Data Approach
 - DGP for Text-As-Data
@@ -89,14 +94,18 @@ theme_set(theme_minimal())
 
 ## Text: the oldest data
 
-Long before spreadsheets, humanity stored its record in [words]{.red}.
+Long before spreadsheets, humanity stored its records in [words]{.red}.
 
 - Cuneiform in Mesopotamia (~3200 BCE)
 - Egyptian hieroglyphs
 - Oracle-bone script of Shang-dynasty China
 
 :::{.fragment style="text-align:center; margin-top: 1em"}
+
 Text is the oldest form of "data storage"---and still the richest record of human life.
+
+Every language is an application programming interface (API).
+
 :::
 
 ## When text becomes (big) data
@@ -108,25 +117,31 @@ More text is produced each day than any of us could read in a lifetime:
 - [Social media]{.red}: tens of thousands of new posts [every second]{.red}.
 
 :::{.fragment}
+
 > These oceans of text carry attitudes, emotions, values, political stances---even consumer preferences.
+
 :::
 
 
 :::{.fragment}
 
 :::{.callout-tip collapse="true"}
+
 By 2020, the size of global data has reached 40ZB (5.2TB/person).^[
 [<sup>1</sup> 1ZB = 1,024EB = 1,024<sup>2</sup>PB = 1,024<sup>3</sup>TB  = 1024<sup>4</sup>GB---reference: 1080p HD 2hrs：6GB]{.fragment}
 ]
+
 :::
 
 :::
 
 :::{.notes}
+
 http://pdf.dfcfw.com/pdf/H3_AP201903111304577789_1.pdf
 
 Giga Byte < Tera Byte < Peta Byte < 
 Exa Byte < Zetta Byte < Yotta Byte
+
 :::
 
 ## A long tradition of reading text
@@ -134,24 +149,30 @@ Exa Byte < Zetta Byte < Yotta Byte
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 *East*
 
 - Exegesis (訓詁學): *Erya*, *Shuowen Jiezi*
 - Evidential scholarship (考據學) of the Qing
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 *West*
 
 - Greek rhetoric
 - Biblical hermeneutics
 - 19th-century philology
+
 :::
 
 ::::
 
 :::{.fragment style="margin-top:1em"}
+
 *Toward science*: Lasswell's content analysis of wartime propaganda [-@Lasswell1927]; Stone's `General Inquirer`, the first computer text analysis [-@Stone1962].
+
 :::
 
 ## Before computers: four hard limits
@@ -161,15 +182,30 @@ Exa Byte < Zetta Byte < Yotta Byte
     - Policy surprises from historical documents [@FriedmanSchwartz2008]
 
 :::{.fragment}
+
 - Why systematic analysis stayed out of reach:
     1. [Preservation & updating]{.red} --- documents decay; ephemera are lost
     1. [Subjectivity]{.red} --- no shared, replicable coding standard
     1. [Time cost]{.red} --- even a handful of texts takes enormous effort
     1. [Limited inference]{.red} --- case studies rarely generalize
+
 :::
 
 :::{.fragment style="text-align:center; margin-top:0.5em"}
+
 &rarr; Early work was confined to *close reading* of a few classics.
+
+:::
+
+:::{.notes}
+
+The two examples both treat text as evidence, long before "text as data" was a method.
+
+- **Coase (1960), "The Problem of Social Cost":** Coase builds his argument by reading actual court cases---rulings on straying cattle, a factory's smoke, a confectioner's noise disturbing a doctor. The legal records *are* his data. From these documents he derives what became the Coase theorem: when transaction costs are low, parties bargain to an efficient allocation of rights regardless of who is initially liable. Externalities are read out of legal text, not modeled from assumptions.
+
+- **Friedman & Schwartz (2008 [1963]), *A Monetary History of the United States, 1867--1960*:** They assemble nearly a century of historical records---Federal Reserve minutes, bank reports, policy documents---to reconstruct the money supply. Reading these documents overturned the received story of the Great Depression: the collapse was deepened by the Fed's contraction of the money supply, a policy "surprise" that only surfaces once you work through the archival paper trail.
+
+
 :::
 
 
@@ -183,16 +219,20 @@ Three shifts opened the floodgates from the 1990s on:
 
 ## Why compute? (Not just "big data")
 
-> The usual answer---"because we can handle more data"---misses the point.
+> Not [only]{.red} because we can handle more data
 
 :::{.fragment}
+
 Three reasons size alone is not the justification:
+
 :::
 
 :::{.incremental}
+
 1. Bigger [≠]{.red} better
 1. Language breaks the [independence]{.red} assumption
 1. Machines read [backwards]{.red} from humans
+
 :::
 
 ## Three uncomfortable truths
@@ -218,11 +258,15 @@ No one writes by sampling words from a corpus by probability; no one reads by ta
 > Statistical regularities the naked eye cannot see.
 
 :::{.fragment}
+
 **Zipf's law** --- in any large text, frequency is inversely proportional to rank: the 2nd word appears about half as often as the 1st, the 3rd about a third as often... strikingly stable across languages [@Zipf2016].
+
 :::
 
 :::{.fragment}
+
 **Function words** --- pronouns, prepositions, conjunctions are used almost *unconsciously*, yet betray attention, emotion, and social relations [@Pennebaker2017]. Heavy use of "I" tracks depression; the emotional tone of Justices' words in oral argument even predicts their votes [@BlackEtAl2011a; @Liu2022].
+
 :::
 
 ## Text-as-data perspective
@@ -230,12 +274,15 @@ No one writes by sampling words from a corpus by probability; no one reads by ta
 :::: {.columns}
 
 ::: {.column width="20%"}
+
 *Objective*
 
 ~~Text~~ Language
+
 :::
 
 ::: {.column width="80%"}
+
 *Type*
 
 * Text analysis vs. content analysis
@@ -243,6 +290,7 @@ No one writes by sampling words from a corpus by probability; no one reads by ta
 * Thematic analysis vs. semantic analysis
 
 :::{.notes}
+
 Representational 精确解码，关注外显（manifest）；
 Instrumental 探索意图，关注隐含（latent）
 Thematic 概念是否出现及何种关系，基于词频和向量；
@@ -251,7 +299,9 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 语法学(syntax, how to say it)
 语义学(semantic, what is said)
 语用学(pragmatic, what is implicated)
+
 :::
+
 :::
 
 
@@ -282,13 +332,16 @@ Semantic 识别主题间的具体关系；考虑语法、逻辑等
 ## Findings
 
 ::: {.panel-tabset}
+
 ### Focus
 
 
 ![Committee leaders focus on their committee's issues](https://drhuyue.site:10002/sammo3182/figure/theory_grimmer1.png){.lightbox fig-align="center" height=500}
 
 :::{.notes}
+
 Fig. 4 Chairman and ranking members of committees allocate more attention to issues under their committees' jurisdiction than other senators. **This figure compares the attention that Senate committee leaders---chairs or ranking members---dedicate to topics under their committee jurisdictions to the attention allocated by the rest of the Senate.** The solid dots represent the expected difference, the thick lines are 80% credible intervals, and the thin lines are 95% intervals. Along the left-hand vertical axis, the topics are listed, and on the right-hand side, the corresponding committee names are listed. In all but seven cases, the dot is to the right of the zero line, indicating that leaders of committees discuss issues that highlight their power in the institution more often than other senators.
+
 :::
 
 
@@ -299,7 +352,9 @@ Fig. 4 Chairman and ranking members of committees allocate more attention to iss
 
 
 :::{.notes}
-Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators' expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state's delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture's importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicates the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
+
+Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators' expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state's delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture's importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicating the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
+
 :::
 
 ### Predict
@@ -309,6 +364,7 @@ Fig. 5 Attention to issues follows expected geographic patterns. **This figure d
 
 
 :::{.notes}
+
 An earmark is a provision inserted into a discretionary spending appropriations bill that directs funds to a specific recipient while bypassing the merit-based or competitive funds allocation process. These provisions are often associated with legislation specifying certain congressional spending priorities or in revenue bills that apply to a limited number of individuals or entities. 
 
 The DeMint-McCain amendment was a significant proposal related to earmark reform. Senator Jim DeMint introduced a one-year earmark moratorium amendment, which was co-sponsored by both Republicans and Democrats. The amendment aimed to end the era of earmarks and was seen as a step towards increased transparency, accountability, and fiscal responsibility in Congress. Despite its support from some senators and advocacy groups, the amendment was defeated in a late-night Senate vote, with a result of 29-71.
@@ -316,7 +372,9 @@ The DeMint-McCain amendment was a significant proposal related to earmark reform
 Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose Demint-McCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator's posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. 
 
 The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
+
 :::
+
 :::
 
 
@@ -335,12 +393,15 @@ The left-hand figure shows that senators who discuss fire department grants more
 ## Operation
 
 ::: {.panel-tabset}
+
 ### Coding
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_crowd-sourced.jpg){fig-align="center" height=500}
 
 :::{.notes}
+
 Figure 1: Hierarchical coding scheme for two policy domains with ordinal positioning.
+
 :::
 
 ### Results
@@ -348,7 +409,9 @@ Figure 1: Hierarchical coding scheme for two policy domains with ordinal positio
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_expert-crowd.png){fig-align="center" height=500}
 
 :::{.notes}
+
 Figure 2. British party positions on economic and social policy 1987 – 2010; sequential expert text processing (vertical axis) and independent expert surveys (horizontal).
+
 :::
 
 :::
@@ -369,10 +432,13 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
 ## Operation
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch_hcy.png){fig-align="center" height="500"}
 
 :::{.fragment}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_vocalPitch.png){.lightbox fig-align="center" height="600"}
+
 :::
 
 :::
@@ -390,19 +456,23 @@ Figure 2. British party positions on economic and social policy 1987 – 2010; s
     - A random sample of 20,000 geocoded posts from Weibo, 2010--2017
 
 :::{.notes}
+
 CNN: Convolutional Neural Network
 
 RNN: Recurrent Neural Network
+
 :::
 
 ## Operation
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_casm.png){fig-align="center" width="1000"}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_runningMan.png){.fragment fig-align="center"}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_banner.png){.fragment fig-align="center" height=500}
+
 :::
 
 
@@ -411,6 +481,7 @@ RNN: Recurrent Neural Network
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 *Theory*
 
 - Single causal mechanism?
@@ -419,22 +490,27 @@ RNN: Recurrent Neural Network
 *Assumption*
 
 - A bag of words (elaborated later)
+
 :::
 
 ::: {.column width="50%"}
+
 *Data*
 
-- Unstructuralized data
+- Unstructured data
 - Manifest and latent dimension reduction
 - Concept relations and context ignorance
 - DGP
     - Only posted
     - One-time censor?
     - Random sampling?
+
 :::
 
 :::{.notes}
+
 审查已经使用 machine learning @SuEtAl2020
+
 :::
 
 ::::
@@ -465,6 +541,7 @@ RNN: Recurrent Neural Network
 ## First-hand sources
 
 :::{style="text-align:center; margin-top: 2em"}
+
 *Text from authors*
 
 * Email/SMS
@@ -476,6 +553,7 @@ RNN: Recurrent Neural Network
 * Media database
 * Internet transaction behavior       
 ......
+
 :::
 
 ## Open Platforms
@@ -495,8 +573,10 @@ RNN: Recurrent Neural Network
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_social-media.gif){fig-align="center" height=600}
 
 :::{.notes}
+
 新浪微博1.4亿，微信用户5.5亿;
 微信日增数据500TB，QQ日增数据200TB。
+
 :::
 
 ## Reddit
@@ -504,7 +584,9 @@ RNN: Recurrent Neural Network
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_zhihu.png){fig-align="center" height=600}
 
 :::{.notes}
+
 Quora, Stack Overflow
+
 :::
 
 ## Open question
@@ -515,6 +597,7 @@ Quora, Stack Overflow
 ## Second-hand sources
 
 :::{style="text-align:center; margin-top: 2em"}
+
 *Text from archives*
 
 * CNKI and other databases (journals, newspapers, yearbooks, etc.)
@@ -522,6 +605,7 @@ Quora, Stack Overflow
 * Google Trend, Baidu Index
 * JSTOR Data for Research   
 ......
+
 :::
 
 ## Indicators
@@ -531,9 +615,11 @@ Quora, Stack Overflow
 ## Digitalized documents
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_hongkong_lib.png){fig-align="center" height=600}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_cbdb.png){.fragment fig-align="center" height=600}
+
 :::
 
 ## Text data collection
@@ -543,30 +629,34 @@ Quora, Stack Overflow
 
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_bazhuayu.png){.fragment fig-align="center" height=450}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_huochetou.png){.fragment fig-align="center" height=450}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseeker.png){.fragment fig-align="center" height=450}
+
 :::
 
 ## Scraper operation
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerI.png){.fragment fig-align="center" height=600}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerII.png){.fragment fig-align="center" height=600}
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_gooseekerIII.png){.fragment fig-align="center" height=600}
+
 :::
 
-## Customized Scrapping
+## Customized Scraping
 
 `SelectorGadget` (Chrome add-in)
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
 
-## Scrapping with `rvest`
+## Scraping with `rvest`
 
 ```{r zhongsheng-eg}
 #| eval: false
@@ -579,22 +669,20 @@ ls_zhongsheng <-
 
 df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
   zs_article <- read_html(link, encoding = "GB18030") # read the html
-  
+
   zs_title <- html_nodes(zs_article, "h1") |>
     html_text
-  
+
   zs_time <- html_nodes(zs_article, ".box01 .fl") |>
     html_text |>
     str_extract("\\d{4}年\\d{2}月\\d{2}日")
-  
+
   zs_content <- html_nodes(zs_article, "#rwb_zw p") |>
     html_text |>
     str_c(collapse = "") |> # combined the paragraphs
     str_remove_all("\\s|\\n|\\t") # remove the horizontal spaces
-  
-  zs_data <- data.frame(title = zs_title,
-                        time = zs_time,
-                        content = zs_content)
+
+  zs_data <- data.frame(title = zs_title, time = zs_time, content = zs_content)
 })
 ```
 
@@ -612,7 +700,7 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
     - First-hand
     - Second-hand
 - Data collection
-    - First-hand: Scrapping
+    - First-hand: Scraping
         - Foolproof software
         - Programming
             - Regular expression
@@ -628,33 +716,43 @@ df_zhongsheng <- map_df(ls_zhongsheng, function(link) {
 ## Level of Analysis
 
 :::{style="text-align:center; margin-top: 2em"}
+
 :::{.fragment .fade-in-then-semi-out}
+
 *Description*
 
 Frequency, word cloud (👎), network
+
 :::
 
 
 :::{.fragment .fade-in-then-semi-out}
+
 *Classification*
 
 Supervised, unsupervised, self-supervised
+
 :::
 
 :::{.fragment}
+
 *Semantics*
 
 Sentiment analysis, word embedding, word sequence, relationship
+
 :::
+
 :::
 
 ## Tenet of Text-as-data analysis [@GrimmerStewart2013]
 
 :::{style="text-align:center; margin-top: 2em"}
+
 1. All quantitative models of language are [wrong]{.red}---but some are useful. 
 1. Quantitative methods for text amplify resources and [augment humans]{.red}. 
 1. There is [no globally best]{.red} method for automated text analysis. 
 1. [Validate, Validate, Validate.]{.fragment .highlight-blue}
+
 :::
 
 ## The human stays in the loop
@@ -674,20 +772,25 @@ Only you can:
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 - Corpus
-    - Document (volumn, chapter, section)
+    - Document (volume, chapter, section)
         - Paragraph
             - Sentence [&check;]{.green}
                 - Clause [&check;]{.green}
                     - **Word (Unigram)** [&check;]{.green}
                         - **Token** [&check;]{.green}
+
 :::
 
 ::: {.column .fragment width="50%"}
+
 :::{.callout-tip}
+
 ## Token
 
 Sequence of linguistic features
+
 :::
 
 - Token in a document: term
@@ -703,9 +806,11 @@ Sequence of linguistic features
 > Where the "all models are wrong" starts
 
 :::{.callout-important}
+
 **Bag of words** (BoW)
 
 A text is represented as the bag (multiset) of its words.
+
 :::
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_bagOfWords.png){.fragment fig-align="center" height=300}
@@ -716,16 +821,20 @@ A text is represented as the bag (multiset) of its words.
 
 
 :::{.notes}
+
 In linguistics, the opposite of natural language is artificial/constructed language (conlangs),  like Klingon in "Star Trek," Dothraki in "Game of Thrones"
+
 :::
 
 ## Preprocessing
 
 :::{style="text-align:center; margin-top: 2em"}
+
 - Segmentation
 - Tokenization
 - Stopwords/function words removing   
 - Other project-oriented wrangling
+
 :::
 
 
@@ -734,18 +843,22 @@ In linguistics, the opposite of natural language is artificial/constructed langu
 :::: {.columns}
 
 ::: {.column width="30%"}
+
 *Scriptio discreta* (e.g., English)
 
 Document &rarr; paragraphs/sentences
 
 :::{.notes}
+
 discrete script
+
 :::
 
 :::
 
 ::: {.column .fragment width="70%"}
-*Scriptio continua* (e.g, CJK) 
+
+*Scriptio continua* (e.g., CJK)
 
 ```{r segment}
 #| code-fold: false
@@ -757,12 +870,15 @@ cutter <- worker() # segment engine
 
 segment(zhongsheng, cutter)
 ```
+
 :::
 
 :::{.notes}
+
 continuous script
 
 《人民日报》（2019年05月30日02版）
+
 :::
 
 
@@ -784,17 +900,22 @@ Examples of Stopwords*
 read_lines(STOPPATH)[883:903]
 read_lines(STOPPATH)[157:177]
 ```
+
 :::
 
 
 :::{.fragment}
+
 :::{.callout-tip}
+
 ## Stopwords sources for Chinese
 
 * 百度停词表
 * 哈工大停词表
 * 网络搜集停词表，如["最全中文停用词表整理（1893个）"](https://blog.csdn.net/shijiebei2009/article/details/39696571)
+
 :::
+
 :::
 
 
@@ -806,18 +927,24 @@ read_lines(STOPPATH)[157:177]
 - Stemming: (happy, happier, happiness) &rarr; happi
 
 :::{.fragment}
+
 :::{.callout-tip}
+
 ## More Examples
 
-- Lemmization: (went, leaves, geese, unhappy) &rarr; (go, leaf, goose, unhappy)
+- Lemmatization: (went, leaves, geese, unhappy) &rarr; (go, leaf, goose, unhappy)
 - Stemming: (went, leaves, geese, unhappy) &rarr; (went, leav, geese , unhappi)
+
 :::
+
 :::
 
 :::{.fragment}
+
 - Labeling
     - Content vs. function
     - Linguistic features: n., v., adj., adv., prep., conj.......
+
 :::
 
 ## A comprehensive application
@@ -829,9 +956,11 @@ read_lines(STOPPATH)[157:177]
 *Raw Data*
 
 ```{r zhongsheng-clean}
-df_zhongsheng <- readRDS(url("https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"))
+df_zhongsheng <- readRDS(url(
+  "https://drhuyue.site:10002/sammo3182/data/zhongsheng.RDS"
+))
 
-df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content){
+df_zhongsheng$segmented <- map_chr(df_zhongsheng$content, function(content) {
   segment(content, cutter) |> paste(collapse = " ")
 })
 
@@ -841,8 +970,8 @@ df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-11"] <- "reassessment"
 df_zhongsheng$phase[df_zhongsheng$time <= "2019-05-08"] <- "optimism"
 
 
-df_token <- df_zhongsheng |> 
-  select(-content) |> 
+df_token <- df_zhongsheng |>
+  select(-content) |>
   unnest_tokens(word, segmented) # tokenization
 
 # Show the word counts
@@ -850,6 +979,7 @@ select(df_token, -phase) |> head()
 ```
 
 :::{.fragment}
+
 *Removing the stopwords*
 
 ```{r zhongsheng-stop}
@@ -858,8 +988,8 @@ select(df_token, -phase) |> head()
 # removing the stop words
 df_stopWords <- tibble(word = read_lines(STOPPATH))
 
-df_token <- df_token |> 
-  anti_join(df_stopWords) 
+df_token <- df_token |>
+  anti_join(df_stopWords)
 
 select(df_token, -phase) |> head()
 ```
@@ -869,13 +999,14 @@ select(df_token, -phase) |> head()
 ## Frequency Analysis
 
 ```{r zhongsheng-frequency, fig.align='center'}
-df_plot <- df_token |> count(word, sort = TRUE) |> 
+df_plot <- df_token |>
+  count(word, sort = TRUE) |>
   filter(n > 151) |>
   mutate(word = reorder(word, n))
 
 ggplot(df_plot) +
   geom_col(aes(word, n)) +
-  ylab("Word Frequency") + 
+  ylab("Word Frequency") +
   theme(axis.text = element_text(size = 20)) +
   coord_flip()
 ```
@@ -883,58 +1014,76 @@ ggplot(df_plot) +
 ## Frequency Dynamics
 
 ```{r zhongsheng-phase-freq, out.width="100%"}
-df_plot <- df_token |> 
-  group_by(phase) |> 
-  count(word, sort = TRUE) |> 
+df_plot <- df_token |>
+  group_by(phase) |>
+  count(word, sort = TRUE) |>
   top_n(10) |>
-  ungroup() |> 
-  mutate(word = reorder(word, n),
-         word = factor(word, levels = rev(unique(word))))
+  ungroup() |>
+  mutate(
+    word = reorder(word, n),
+    word = factor(word, levels = rev(unique(word)))
+  )
 
 ggplot(df_plot, aes(word, n)) +
   geom_col() +
   xlab(NULL) +
   coord_flip() +
-  ylab("Word FRequency") + 
+  ylab("Word Frequency") +
   theme(axis.text = element_text(size = 12)) +
-  facet_wrap(~ phase, scales = "free")
+  facet_wrap(~phase, scales = "free")
 ```
 
 :::{.notes}
+
 The Economist journalist Simon Rabinovitch
+
 :::
 
 ## Frequency Correlations
 
 ```{r zhongsheng-fre-compare, out.width="100%"}
-frequency <- df_token |> 
+frequency <- df_token |>
   count(phase, word) |>
   group_by(phase) |>
-  mutate(proportion = n / sum(n)) |> 
-  select(-n) |> 
-  spread(phase, proportion) |> 
+  mutate(proportion = n / sum(n)) |>
+  select(-n) |>
+  spread(phase, proportion) |>
   gather(phase, proportion, optimism:theory_test)
 
 library(scales)
 
 # expect a warning about rows with missing values being removed
-ggplot(frequency, aes(x = proportion, y = `US_fail`, color = abs(`US_fail` - proportion))) +
+ggplot(
+  frequency,
+  aes(x = proportion, y = `US_fail`, color = abs(`US_fail` - proportion))
+) +
   geom_abline(color = "gray40", lty = 2) +
   geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
-  geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5, family = "WenQuanYi Micro Hei") +
+  geom_text(
+    aes(label = word),
+    check_overlap = TRUE,
+    vjust = 1.5,
+    family = "WenQuanYi Micro Hei"
+  ) +
   scale_x_log10(labels = percent_format()) +
   scale_y_log10(labels = percent_format()) +
-  scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+  scale_color_gradient(
+    limits = c(0, 0.001),
+    low = "darkslategray4",
+    high = "gray75"
+  ) +
   facet_wrap(~phase, ncol = 2) +
-  theme(legend.position="none") +
+  theme(legend.position = "none") +
   labs(y = "US Inevitable Failure", x = NULL) +
   theme(text = element_text(family = "WenQuanYi Micro Hei"))
 ```
 
 :::{.notes}
+
 x = proportion, y = `US_fail`
 
 proportion = n / sum(n)
+
 :::
 
 ## Keyword analysis
@@ -944,7 +1093,10 @@ Keywords for articles published on 2019-05-07
 ```{r keyword}
 extractor_keyword <- worker("simhash", topn = 5)
 
-simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-07"], extractor_keyword)
+simhash(
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-07"],
+  extractor_keyword
+)
 ```
 
 . . .
@@ -952,7 +1104,10 @@ simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-07"], extractor_key
 Keywords for articles published on 2019-05-30
 
 ```{r keword2}
-simhash(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"], extractor_keyword)
+simhash(
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+  extractor_keyword
+)
 ```
 
 
@@ -963,14 +1118,18 @@ Measuring the distance between texts
 > Hamming distance: the distance between two strings of equal length is the number of [positions]{.blue} at which the [corresponding symbols are different]{.red}. 
 
 :::{.r-stack}
+
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_org.png){fig-align="center" height=300}
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_hammingDis_comp.png){.fragment fig-align="center" height=300}
+
 :::
 
 e.g., H(100→011) = 3; H(010→111) = 2.
 
 :::{.notes}
+
 It measures the minimum number of substitutions required to change one string into the other, or the minimum number of errors that could have transformed one string into the other.
+
 :::
 
 ## Application
@@ -978,23 +1137,31 @@ It measures the minimum number of substitutions required to change one string in
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 *05-30 vs. 05-[22]{.red}*
 
 ```{r keyword-distnace}
-distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
-         df_zhongsheng$content[df_zhongsheng$time == "2019-05-22"],
-         extractor_keyword)
+distance(
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-22"],
+  extractor_keyword
+)
 ```
+
 :::
 
 ::: {.column width="50%"}
+
 *05-30 vs. 05-[23]{.red}*
 
 ```{r keyword-distance2}
-distance(df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
-         df_zhongsheng$content[df_zhongsheng$time == "2019-05-23"][1],
-         extractor_keyword)
+distance(
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-30"],
+  df_zhongsheng$content[df_zhongsheng$time == "2019-05-23"][1],
+  extractor_keyword
+)
 ```
+
 :::
 
 ::::
@@ -1028,10 +1195,12 @@ Cons of DTM
   3. Improve the performance of machine learning models
 
 :::{.fragment}
+
 - Cons:
   1. Assume independence of terms (same as DTM)
-  2. Give high weight to rare words that is very rare in the corpus but appears a few times in a particular document
+  2. Give high weight to words that are very rare in the corpus but appear a few times in a particular document
   3. Sensitive to the size and diversity of the corpus
+
 :::
 
 
@@ -1043,10 +1212,12 @@ Cons of DTM
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_wordEmbedding.png){.lightbox fig-align="center" height=550}
 
 :::{.notes}
+
 The term "embedding" comes from the neural network literature, in which an "embedding layer" is an input function that efficiently compresses high-dimensional data down to a low-dimensional dense representation for input to subsequent neural network layers.
 
 - The embedding model GloVe ("Global Vectors") by @PenningtonEtAl2014 is explicitly designed to construct word vectors encoding local co-occurrence.
 - An equally influential word embedding model is Word2Vec [@BengioEtAl2000], which treats each instance of a word and its context as a separate prediction problem that word vectors are chosen to solve.
+
 :::
 
 ## Topic modeling
@@ -1056,7 +1227,9 @@ The term "embedding" comes from the neural network literature, in which an "embe
 </video>
 
 :::{.notes}
+
 LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular, the (V × K) matrix B from (2) contains a series of row vectors corresponding to each term in the vocabulary (see also Levy and Goldberg 2014). Those vectors contain information about word co-occurrence at the document level, rather than within a local context.
+
 :::
 
 ## Attention Function
@@ -1064,16 +1237,19 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 > Word embedding weights all the words equally in the context[🤦‍♂️]{.large}
 
 :::{.fragment .fade-in-then-semi-out}
+
 "Attention is all you need" [@VaswaniEtAl2017]
 
 > As a leading firm in the [MASK] sector, we hire highly skilled software engineers.    
 > As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.
 
 What should be filled into the "[MASK]"? How do you figure out?
+
 :::
 
 
 :::{.fragment}
+
 As a leading firm in the [*information technology*] sector, we hire highly skilled [software]{.red} engineers.
 
 As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.red} engineers.
@@ -1084,12 +1260,14 @@ As a leading firm in the [*energy*] sector, we hire highly skilled [petroleum]{.
 ## Word Sequence
 
 :::{.callout-note}
+
 ## Self-attention function
 
 Take as input a sequence of initial token embeddings and outputs a sequence of new token embeddings that [allow the initial embeddings to interact]{.red}.
+
 :::
 
-- Massive neural networks composed of stacked attention and feed forward neural network layerscan be efficiently parallelized for training using specialized processors.
+- Massive neural networks composed of stacked attention and feed-forward neural network layers can be efficiently parallelized for training using specialized processors.
     - A.k.a., the [Transformer]{.red}
 - Common transformer models
     - BERT
@@ -1101,11 +1279,15 @@ Take as input a sequence of initial token embeddings and outputs a sequence of n
 Not at all---and *not* by belittling them.
 
 :::{.fragment}
+
 > Zero-shot ChatGPT beat crowd workers by ~25 points on stance and relevance labeling, at under 3¢ per label [@GilardiEtAl2023]; on some tasks it even tops trained experts [@Tornberg2025].
+
 :::
 
 :::{.fragment style="text-align:center; margin-top:1em"}
+
 So *can* an LLM label text? Often yes. The real question is: [can you trust it?]{.red}
+
 :::
 
 ## Four cautions
@@ -1135,21 +1317,27 @@ Training data is English-dominated, and its biases are inherited [@BenderEtAl202
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 1. [Validation]{.red} bedrock
 2. [Interpretability]{.red}
 3. [Replicability]{.red}
+
 :::
 
 ::: {.column width="50%"}
+
 4. [Resource]{.red} efficiency
 5. [Theoretical]{.red} grounding
 6. [Methodological]{.red} bridge
+
 :::
 
 ::::
 
 :::{.fragment style="text-align:center; margin-top:1em"}
+
 The tools that "replace" the classics are exactly the classics you need to *trust* them.
+
 :::
 
 ## The emerging workflow
@@ -1160,11 +1348,15 @@ The tools that "replace" the classics are exactly the classics you need to *trus
 1. Deploy to the full corpus
 
 :::{.fragment .huge style="text-align:center; margin-top:1em"}
+
 "Start small, start open, validate first."
+
 :::
 
 :::{.fragment style="text-align:center"}
+
 [@StoltzEtAl2026]
+
 :::
 
 ## Wrap it up
@@ -1172,18 +1364,21 @@ The tools that "replace" the classics are exactly the classics you need to *trus
 :::: {.columns}
 
 ::: {.column width="50%"}
+
 - Principles
     1. All models are wrong
-    1. Aim for assist human
+    1. Aim to assist humans
     1. No best method
     1. Validation, validation, validation
 - Levels of analysis
     - Description
     - Classification
     - Semantics
+
 :::
 
 ::: {.column width="50%"}
+
 - Procedure
     - Preprocessing
         - Segmentation
@@ -1195,6 +1390,7 @@ The tools that "replace" the classics are exactly the classics you need to *trus
     - Semantic analysis
         - Word embedding, sequence
             - Topic modeling
+
 :::
 
 ::::
@@ -1203,6 +1399,7 @@ The tools that "replace" the classics are exactly the classics you need to *trus
 # Thank you {background="#43464B"}
 
 :::{style="text-align: right; margin-top: 1em"}  
+
 ![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
 
 [`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
@@ -1210,6 +1407,7 @@ The tools that "replace" the classics are exactly the classics you need to *trus
 [`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn) 
 
 [`r feather_icons("globe")`&nbsp; https://www.drhuyue.site](https://www.drhuyue.site)
+
 :::
 
 ## References
