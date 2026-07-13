@@ -19,7 +19,7 @@ format:
     preview-links: true # open an iframe for a link
     link-external-newwindow: true
     embed-resources: false
-    chalkboard: true # allwoing chalk board B, notes canvas C
+    chalkboard: true # allowing chalk board B, notes canvas C
     # callout-icon: false
     callout-appearance: simple
     show-slide-number: all # `speaker` only print in pdf, `all` shows all the time
@@ -82,6 +82,18 @@ p_load(
 
 # Functions preload
 set.seed(313)
+
+# CJK-capable font for plotting Chinese labels: pick one available on the render OS.
+# "WenQuanYi Micro Hei" ships with Linux; Windows has "Microsoft YaHei" instead.
+if (.Platform$OS.type == "windows") {
+  cjk_font <- "Microsoft YaHei"
+  windowsFonts(`Microsoft YaHei` = windowsFont("Microsoft YaHei"))
+} else {
+  cjk_font <- "WenQuanYi Micro Hei"
+}
+
+# Make the CJK font the default for every ggplot so Chinese labels render everywhere
+theme_set(theme_gray(base_family = cjk_font))
 ```
 
 ## Outline
@@ -391,7 +403,7 @@ Fig. 4 Chairman and ranking members of committees allocate more attention to iss
 
 :::{.notes}
 
-Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators' expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state's delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention to senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture's importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicating the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
+Fig. 5 Attention to issues follows expected geographic patterns. **This figure demonstrates that senators' expressed agendas are grouped geographically.** The left-hand plot shows that senators from western states allocate substantial attention to public-land issues. Darker shades indicate that the average expected attention from the state's delegation to public-land issues is larger. The center plot carries out a comparison of three different regional issues: public-land and western states (top estimate), hurricanes and gulf coast states (middle estimate), and border-security and states that share an international border (bottom estimate). The point in each plot represents the expected difference between the attention senators in a geographic area allocate to an issue and the attention senators from other areas of the country dedicate to the same issue. The thick and thin lines are 80% and 95% HPD intervals for this difference. Each point is to the right of the zero, indicating that the issues receive more attention in the geographic areas we would expect. The right-hand plot shows that senators from states with a large number of farms per person also tend to allocate more attention to agriculture issues. The horizontal axis represents the number of farms per resident of the state (one measure of agriculture's importance to a state), and the vertical axis indicates the proportion of press releases allocated to agricultural issues. The gray lines are lowess curves indicating the relationship between the number of farms per capita and the attention to agriculture, whereas the black line is the average relationship.
 
 :::
 
@@ -407,9 +419,9 @@ An earmark is a provision inserted into a discretionary spending appropriations 
 
 The DeMint-McCain amendment was a significant proposal related to earmark reform. Senator Jim DeMint introduced a one-year earmark moratorium amendment, which was co-sponsored by both Republicans and Democrats. The amendment aimed to end the era of earmarks and was seen as a step towards increased transparency, accountability, and fiscal responsibility in Congress. Despite its support from some senators and advocacy groups, the amendment was defeated in a late-night Senate vote, with a result of 29-71.
 
-Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose Demint-McCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the Demint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicate to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator's posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DemintMcCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. 
+Fig. 6 Senators who dedicate more attention to appropriations were more likely to oppose DeMint-McCain. This figure shows that **senators who dedicate more attention to appropriations in their press releases are more likely to oppose the DeMint-McCain amendment.** The vertical axis plots the vote on the amendment, and along the horizontal axis is the average proportion of press releases dedicated to discussing appropriations secured for fire departments. To generate the light gray lines, I took 100 draws from each senator's posterior expressed agenda and then regressed the earmark vote on the draw from the posterior. The gray lines represent the expected probability of supporting the DeMint-McCain amendment, and the solid black line is the expected value of the relationship, averaged over the draws from the posterior distribution on the expressed agenda. 
 
-The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DemintMcCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
+The left-hand figure shows that senators who discuss fire department grants more often were more likely to oppose the DeMint-McCain amendment, and the center plot shows that this relationship was even stronger for an aggregate appropriations category. The right-hand plot shows that the relationship remains even after conditioning upon estimated ideal points of senators, suggesting that consistency explains components of voting behavior beyond ideal point estimates.
 
 :::
 
@@ -690,7 +702,7 @@ Quora, Stack Overflow
 
 ## Customized Scraping
 
-`SelectorGadget` (Chrome add-in)
+`SelectorGadget` (Chrome extension)
 
 ![](https://drhuyue.site:10002/sammo3182/figure/theory_zhongsheng_page.png){fig-align="center" height=500}
 
@@ -870,7 +882,7 @@ In linguistics, the opposite of natural language is artificial/constructed langu
 
 - Segmentation
 - Tokenization
-- Stopwords/function words removing   
+- Stopwords/function words removal
 - Other project-oriented wrangling
 
 :::
@@ -930,7 +942,7 @@ continuous script
 
 :::{.fragment}
 
-Examples of Stopwords*
+Examples of Stopwords
 
 ```{r stop-words}
 #| echo: false
@@ -971,7 +983,7 @@ read_lines(STOPPATH)[157:177]
 ## More Examples
 
 - Lemmatization: (went, leaves, geese, unhappy) &rarr; (go, leaf, goose, unhappy)
-- Stemming: (went, leaves, geese, unhappy) &rarr; (went, leav, geese , unhappi)
+- Stemming: (went, leaves, geese, unhappy) &rarr; (went, leav, geese, unhappi)
 
 :::
 
@@ -1101,7 +1113,7 @@ ggplot(
     aes(label = word),
     check_overlap = TRUE,
     vjust = 1.5,
-    family = "WenQuanYi Micro Hei"
+    family = cjk_font
   ) +
   scale_x_log10(labels = percent_format()) +
   scale_y_log10(labels = percent_format()) +
@@ -1112,8 +1124,7 @@ ggplot(
   ) +
   facet_wrap(~phase, ncol = 2) +
   theme(legend.position = "none") +
-  labs(y = "US Inevitable Failure", x = NULL) +
-  theme(text = element_text(family = "WenQuanYi Micro Hei"))
+  labs(y = "US Inevitable Failure", x = NULL)
 ```
 
 :::{.notes}
@@ -1212,7 +1223,7 @@ distance(
 - Neighbor words:  Markov Model of Order N
     + Unigram: 清华 大学 政治 系
     + Bigram: 清华大学 政治系/清华 大学政治 系
-    + Trigram：清华大学政治 系/清华 大学政治系
+    + Trigram: 清华大学政治 系/清华 大学政治系
 
 
 ## Frequency to Weighted Frequency
@@ -1229,7 +1240,7 @@ Cons of DTM
 
 - Pros: 
   1. Identify important words
-  2. Reduces the weight of common words
+  2. Reduce the weight of common words
   3. Improve the performance of machine learning models
 
 :::{.fragment}
@@ -1281,7 +1292,7 @@ LSA, NMF, and LDA can also be viewed as producing word embeddings. In particular
 > As a leading firm in the [MASK] sector, we hire highly skilled software engineers.    
 > As a leading firm in the [MASK] sector, we hire highly skilled petroleum engineers.
 
-What should be filled into the "[MASK]"? How do you figure out?
+What should be filled into the "[MASK]"? How do you figure it out?
 
 :::
 
