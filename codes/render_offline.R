@@ -149,6 +149,20 @@ p_load(stringr, readr, purrr, base64enc)
   html
 }
 
+# recursively copy a directory's contents into `to` (created if needed),
+# overwriting anything already there -- base R has no direct equivalent
+.copyDirContents <- function(from, to) {
+  rel <- list.files(from, recursive = TRUE)
+  if (length(rel) == 0) {
+    return(invisible())
+  }
+  dest <- file.path(to, rel)
+  for (d in unique(dirname(dest))) {
+    dir.create(d, recursive = TRUE, showWarnings = FALSE)
+  }
+  file.copy(file.path(from, rel), dest, overwrite = TRUE)
+}
+
 .ensureGitignored <- function(repo_root, pattern) {
   gi <- file.path(repo_root, ".gitignore")
   lines <- if (file.exists(gi)) readLines(gi, warn = FALSE) else character()
@@ -183,13 +197,20 @@ p_load(stringr, readr, purrr, base64enc)
 #'   if a file with the same name already exists there); the file no longer
 #'   exists in the repo afterward
 #' @param repo_root repo root, used to locate/update .gitignore
-#' @param keep_offline_files keep the "<name>_offline_files/" support folder
-#'   (if quarto produced one) instead of deleting it once inlined
+#' @param keep_offline_files keep the "<name>_files/" support folder (the
+#'   one quarto produces for the document, reused by both the online and
+#'   offline renders) instead of deleting it once inlined. Defaults to TRUE
+#'   because the *online* HTML (which stays in the repo) references this
+#'   folder by relative path rather than embedding it -- deleting it breaks
+#'   the online render (e.g. reveal.js plugin scripts like the speaker-notes
+#'   timer 404 and silently fail to load). Only pass FALSE if you don't care
+#'   about the online HTML working, or will regenerate the folder before
+#'   using it.
 renderDual <- function(
   qmd_path,
   seafile_dir = "D:/Seafile/WW_share",
   repo_root = .findRepoRoot(qmd_path),
-  keep_offline_files = FALSE
+  keep_offline_files = TRUE
 ) {
   qmd_path <- normalizePath(qmd_path, mustWork = TRUE)
   dir <- dirname(qmd_path)
@@ -197,7 +218,20 @@ renderDual <- function(
 
   online_html <- file.path(dir, paste0(base, ".html"))
   offline_html <- file.path(dir, paste0(base, "_offline.html"))
-  offline_files_dir <- file.path(dir, paste0(base, "_offline_files"))
+  # Quarto names a document's supporting-resources folder after the *source*
+  # .qmd's stem, not after -o's output basename -- so both the online and
+  # offline renders below write into this same folder. The offline
+  # (embed-resources: true) pass inlines what it can from it and then
+  # deletes it, which can leave dangling references (e.g. via the lightbox
+  # extension) to images that no longer exist on disk by the time we get to
+  # the fallback-inlining step. We back it up after the online render (whose
+  # figures are deterministic thanks to set.seed()) and restore it before
+  # inlining so those files are still there to embed.
+  resource_files_dir <- file.path(dir, paste0(base, "_files"))
+  resource_files_backup <- file.path(
+    tempdir(),
+    paste0(base, "_files_backup_", as.integer(Sys.time()))
+  )
 
   old_wd <- setwd(dir)
   on.exit(setwd(old_wd), add = TRUE)
@@ -217,6 +251,11 @@ renderDual <- function(
     )
   )
 
+  if (dir.exists(resource_files_dir)) {
+    dir.create(resource_files_backup, recursive = TRUE, showWarnings = FALSE)
+    .copyDirContents(resource_files_dir, resource_files_backup)
+  }
+
   message("Rendering offline base (embed-resources: true)...")
   system2(
     "quarto",
@@ -231,6 +270,11 @@ renderDual <- function(
       shQuote(basename(offline_html))
     )
   )
+
+  if (dir.exists(resource_files_backup)) {
+    .copyDirContents(resource_files_backup, resource_files_dir)
+    unlink(resource_files_backup, recursive = TRUE)
+  }
 
   message("Inlining every remaining local/remote resource...")
   html <- offline_html |>
@@ -252,8 +296,8 @@ renderDual <- function(
     )
   }
 
-  if (!keep_offline_files && dir.exists(offline_files_dir)) {
-    unlink(offline_files_dir, recursive = TRUE)
+  if (!keep_offline_files && dir.exists(resource_files_dir)) {
+    unlink(resource_files_dir, recursive = TRUE)
   }
 
   if (!dir.exists(seafile_dir)) {
