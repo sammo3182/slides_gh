@@ -1,17 +1,18 @@
 # Render a Quarto revealjs .qmd into a normal ("online") HTML and a fully
 # self-contained ("offline") HTML that needs neither internet nor any
-# companion file (fonts/css/js/images all inlined as data URIs / <style> /
-# <script>).
+# companion file (fonts/css/js/images/videos all inlined as data URIs /
+# <style> / <script>).
 #
 # Works on any revealjs .qmd unmodified -- it does not rely on any
 # project-specific params or helper functions inside the .qmd. Quarto's own
 # `embed-resources: true` inlines most local assets, but empirically still
-# leaves the revealjs core/plugin JS+CSS (and any remote-hosted image/css,
-# e.g. a title-slide background image hosted elsewhere) as separate
-# <script src>/<link href> references into the "<name>_files/" folder or a
-# remote URL. This script does a second pass over the rendered HTML and
-# inlines *everything* still referenced that way, local or remote, so the
-# offline file has zero external dependencies.
+# leaves the revealjs core/plugin JS+CSS, `{{< video >}}` shortcode sources
+# (e.g. `{{< video https://.../clip.mp4 >}}`), and any remote-hosted
+# image/css (e.g. a title-slide background image hosted elsewhere) as
+# separate <script src>/<link href>/<source src> references into the
+# "<name>_files/" folder or a remote URL. This script does a second pass
+# over the rendered HTML and inlines *everything* still referenced that
+# way, local or remote, so the offline file has zero external dependencies.
 #
 # Usage (from repo root, in R/Positron):
 #   source("codes/render_offline.R")
@@ -29,17 +30,30 @@ p_load(stringr, readr, purrr, base64enc)
     gif = "image/gif",
     svg = "image/svg+xml",
     webp = "image/webp",
+    mp4 = "video/mp4",
+    webm = "video/webm",
+    ogg = ,
+    ogv = "video/ogg",
+    mov = "video/quicktime",
     "application/octet-stream"
   )
 }
 
 .isRemote <- function(url) grepl("^https?://", url)
 
+.withLongTimeout <- function(expr) {
+  old <- options(timeout = max(600, getOption("timeout")))
+  on.exit(options(old), add = TRUE)
+  expr
+}
+
 .readBinResource <- function(url, base_dir) {
   if (.isRemote(url)) {
     tmp <- tempfile()
     on.exit(unlink(tmp))
-    utils::download.file(url, tmp, mode = "wb", quiet = TRUE)
+    .withLongTimeout(
+      utils::download.file(url, tmp, mode = "wb", quiet = TRUE)
+    )
     readBin(tmp, "raw", file.info(tmp)$size)
   } else {
     path <- file.path(base_dir, utils::URLdecode(url))
@@ -93,7 +107,7 @@ p_load(stringr, readr, purrr, base64enc)
   paste0("<script>\n", js, "\n</script>")
 }
 
-.inlineOneImg <- function(m, attr, base_dir) {
+.inlineOneBinary <- function(m, attr, base_dir) {
   url <- stringr::str_match(m, paste0(attr, '="([^"]+)"'))[, 2]
   if (!.isInlinable(url)) {
     return(m)
@@ -101,7 +115,7 @@ p_load(stringr, readr, purrr, base64enc)
   ext <- tools::file_ext(sub("[?#].*$", "", url))
   bin <- tryCatch(.readBinResource(url, base_dir), error = \(e) NULL)
   if (is.null(bin)) {
-    warning("Could not inline image, left as-is: ", url)
+    warning("Could not inline resource, left as-is: ", url)
     return(m)
   }
   uri <- paste0(
@@ -113,8 +127,9 @@ p_load(stringr, readr, purrr, base64enc)
   paste0(attr, '="', uri, '"')
 }
 
-# inline every stylesheet link, script tag, and image reference (src /
-# data-src / data-background-image / href) that isn't already a data: URI --
+# inline every stylesheet link, script tag, image reference (src /
+# data-src / data-background-image / href), and <video><source src="..."></>
+# (e.g. from a `{{< video >}}` shortcode) that isn't already a data: URI --
 # whether it points at a remote URL or a local relative path/folder.
 .inlineAllResources <- function(html, base_dir) {
   css_pattern <- '<link(?=[^>]*\\brel="stylesheet")(?=[^>]*\\bhref="[^"]+")[^>]*>'
@@ -127,19 +142,20 @@ p_load(stringr, readr, purrr, base64enc)
     purrr::map_chr(m, .inlineOneScript, base_dir = base_dir)
   })
 
-  img_attrs <- c("src", "data-src", "data-background-image", "href")
+  media_attrs <- c("src", "data-src", "data-background-image", "href")
+  media_ext <- "png|jpe?g|gif|svg|webp|mp4|webm|og[gv]|mov"
   html <- purrr::reduce(
-    img_attrs,
+    media_attrs,
     \(acc, attr) {
-      img_pattern <- paste0(
+      media_pattern <- paste0(
         attr,
-        '="[^"]+\\.(?:png|jpe?g|gif|svg|webp)(?:[?#][^"]*)?"'
+        '="[^"]+\\.(?:', media_ext, ')(?:[?#][^"]*)?"'
       )
       stringr::str_replace_all(
         acc,
-        stringr::regex(img_pattern, ignore_case = TRUE),
+        stringr::regex(media_pattern, ignore_case = TRUE),
         \(m) {
-          purrr::map_chr(m, .inlineOneImg, attr = attr, base_dir = base_dir)
+          purrr::map_chr(m, .inlineOneBinary, attr = attr, base_dir = base_dir)
         }
       )
     },
