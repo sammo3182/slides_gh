@@ -8,25 +8,66 @@ library(purrr)
 library(cli)
 library(readr)
 
-# Rewrite local image links (e.g. "images/foo.png") in the .qmd file(s) that
-# sit alongside `source_dir` so they point at the published URL instead.
-update_qmd_links <- function(qmd_dir, folder_name, filename_url) {
-  qmd_files <- dir_ls(qmd_dir, type = "file", regexp = "\\.qmd$")
+# Walk up from `source_dir` to the nearest folder that holds .qmd files
+# (e.g. slides/guestLecture/images/publicServant -> slides/guestLecture).
+find_qmd_dir <- function(source_dir) {
+  dir <- path_abs(source_dir)
+  repeat {
+    if (length(dir_ls(dir, type = "file", regexp = "\\.qmd$")) > 0) {
+      return(dir)
+    }
+    parent <- path_dir(dir)
+    if (parent == dir) {
+      return(NULL)
+    }
+    dir <- parent
+  }
+}
+
+escape_regex <- function(x) {
+  str_replace_all(x, "[[:punct:]]", "\\\\\\0")
+}
+
+# Rewrite every image tag that points at a published local file to
+# ![<caption>](<url>){<attrs>}. Existing captions and {...} attributes are kept
+# (their heights are tuned per slide); `default_attr` is added only when a tag
+# has none.
+update_qmd_links <- function(
+  source_dir,
+  plot_files,
+  urls,
+  default_attr = '{fig-align="center" height=600}'
+) {
+  qmd_dir <- find_qmd_dir(source_dir)
+  qmd_files <- if (is_null(qmd_dir)) {
+    character()
+  } else {
+    dir_ls(qmd_dir, type = "file", regexp = "\\.qmd$")
+  }
   if (length(qmd_files) == 0) {
-    cli_alert_info("No .qmd files found in {qmd_dir}; link update skipped")
+    cli_alert_info("No .qmd files found above {source_dir}; link update skipped")
     return(invisible(NULL))
   }
 
-  old_links <- path(folder_name, names(filename_url)) |> as.character()
+  # Links as written in the qmd, relative to its folder (e.g. images/x/a.svg)
+  old_links <- path_rel(plot_files, start = qmd_dir) |> as.character()
 
   walk(qmd_files, \(qmd_file) {
     text <- read_lines(qmd_file)
-
     n_replaced <- 0
-    walk2(old_links, filename_url, \(old_link, url) {
-      hits <- str_count(text, fixed(old_link))
-      n_replaced <<- n_replaced + sum(hits)
-      text <<- str_replace_all(text, fixed(old_link), url)
+
+    walk2(old_links, urls, \(old_link, url) {
+      pattern <- str_c(
+        "!\\[([^\\]]*)\\]\\(\\s*(?:\\./)?",
+        escape_regex(old_link),
+        "\\s*\\)(\\{[^}]*\\})?"
+      )
+      n_replaced <<- n_replaced + sum(str_count(text, pattern))
+      text <<- str_replace_all(text, pattern, \(m) {
+        parts <- str_match(m, pattern)
+        attr <- ifelse(is.na(parts[, 3]), default_attr, parts[, 3])
+        str_c("![", parts[, 2], "](", url, ")", attr)
+      })
     })
 
     if (n_replaced > 0) {
@@ -119,9 +160,9 @@ publish_figures <- function(
   urls <- paste0("https://drhuyue.site:10002/sammo3182/figure/", new_names)
 
   update_qmd_links(
-    qmd_dir = path_dir(source_dir),
-    folder_name = path_file(source_dir),
-    filename_url = set_names(urls, path_file(plot_files))
+    source_dir = source_dir,
+    plot_files = plot_files,
+    urls = urls
   )
 
   tibble::tibble(
