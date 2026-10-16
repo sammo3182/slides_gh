@@ -1,181 +1,179 @@
-# Rename slide-deck plots with a project prefix and publish them to S:/figure,
-# the folder served at https://drhuyue.site:10002/sammo3182/figure/<file>.
+# Publish the local figures a slide-deck .qmd references to S:/figure (served at
+# https://drhuyue.site:10002/sammo3182/figure/<file>) under a project prefix,
+# then relink them in the qmd. Figures already on a URL are left alone.
 # Run interactively; prompts fill in anything not supplied as an argument.
+#
+# Usage:
+#   source("codes/publish_figures.R")
+#   publishFigures("slides/guestLecture/language_book_cn.qmd", prefix = "languageBook")
 
-library(fs)
-library(stringr)
-library(purrr)
-library(cli)
-library(readr)
+pacman::p_load(fs, stringr, purrr, cli, readr, dplyr, tibble)
 
-# Walk up from `source_dir` to the nearest folder that holds .qmd files
-# (e.g. slides/guestLecture/images/publicServant -> slides/guestLecture).
-find_qmd_dir <- function(source_dir) {
-  dir <- path_abs(source_dir)
-  repeat {
-    if (length(dir_ls(dir, type = "file", regexp = "\\.qmd$")) > 0) {
-      return(dir)
-    }
-    parent <- path_dir(dir)
-    if (parent == dir) {
-      return(NULL)
-    }
-    dir <- parent
+regex_image <- "\\.(png|jpe?g|gif|svg|pdf)$"
+url_base <- "https://drhuyue.site:10002/sammo3182/figure/"
+
+# Prompt wrapper: lower-cased answer, "" when non-interactive
+askLower <- \(msg) str_to_lower(readline(msg))
+
+escapeRegex <- \(x) str_replace_all(x, "[[:punct:]]", "\\\\\\0")
+
+# Local image files referenced by `![](...)` tags in a qmd (remote URLs and
+# data URIs are ignored; links whose file is missing are reported and dropped).
+findLocalFigures <- function(qmd_file) {
+  dir_qmd <- path_dir(path_abs(qmd_file))
+
+  link_all <- read_lines(qmd_file) |>
+    str_match_all("!\\[[^\\]]*\\]\\(\\s*([^)\\s]+)") |>
+    map(\(m) m[, 2]) |>
+    list_c() |>
+    unique() |>
+    str_remove("^\\./")
+
+  # Keep relative paths to image files only (drop http(s)://, data:, //host)
+  link_local <- link_all[
+    !str_detect(link_all, "^([a-zA-Z][a-zA-Z0-9+.-]*:|//)") &
+      str_detect(str_to_lower(link_all), regex_image)
+  ]
+
+  file_local <- path_norm(path(dir_qmd, link_local))
+  is_missing <- !file_exists(file_local)
+  if (any(is_missing)) {
+    cli_alert_warning("Referenced but not found, skipped:")
+    walk(link_local[is_missing], cli_li)
   }
+  unique(file_local[!is_missing])
 }
 
-escape_regex <- function(x) {
-  str_replace_all(x, "[[:punct:]]", "\\\\\\0")
-}
-
-# Rewrite every image tag that points at a published local file to
+# Rewrite each image tag that points at a published local file to
 # ![<caption>](<url>){<attrs>}. Existing captions and {...} attributes are kept
-# (their heights are tuned per slide); `default_attr` is added only when a tag
-# has none.
-update_qmd_links <- function(
-  source_dir,
-  plot_files,
-  urls,
-  default_attr = '{fig-align="center" height=600}'
+# (heights are tuned per slide); `attr_default` is added only when a tag has none.
+relinkQmd <- function(
+  qmd_file,
+  file_plot,
+  url_new,
+  attr_default = '{fig-align="center" height=600}'
 ) {
-  qmd_dir <- find_qmd_dir(source_dir)
-  qmd_files <- if (is_null(qmd_dir)) {
-    character()
-  } else {
-    dir_ls(qmd_dir, type = "file", regexp = "\\.qmd$")
-  }
-  if (length(qmd_files) == 0) {
-    cli_alert_info("No .qmd files found above {source_dir}; link update skipped")
-    return(invisible(NULL))
-  }
+  text_old <- read_lines(qmd_file)
 
   # Links as written in the qmd, relative to its folder (e.g. images/x/a.svg)
-  old_links <- path_rel(plot_files, start = qmd_dir) |> as.character()
+  link_old <- path_rel(file_plot, start = path_dir(path_abs(qmd_file))) |>
+    as.character()
 
-  walk(qmd_files, \(qmd_file) {
-    text <- read_lines(qmd_file)
-    n_replaced <- 0
-
-    walk2(old_links, urls, \(old_link, url) {
-      pattern <- str_c(
-        "!\\[([^\\]]*)\\]\\(\\s*(?:\\./)?",
-        escape_regex(old_link),
-        "\\s*\\)(\\{[^}]*\\})?"
-      )
-      n_replaced <<- n_replaced + sum(str_count(text, pattern))
-      text <<- str_replace_all(text, pattern, \(m) {
-        parts <- str_match(m, pattern)
-        attr <- ifelse(is.na(parts[, 3]), default_attr, parts[, 3])
-        str_c("![", parts[, 2], "](", url, ")", attr)
-      })
+  # Fold over the links so each substitution builds on the previous text
+  text_new <- reduce2(link_old, url_new, .init = text_old, \(text, old, url) {
+    pattern <- str_c(
+      "!\\[([^\\]]*)\\]\\(\\s*(?:\\./)?",
+      escapeRegex(old),
+      "\\s*\\)(\\{[^}]*\\})?"
+    )
+    str_replace_all(text, pattern, \(m) {
+      parts <- str_match(m, pattern)
+      attr_use <- if_else(is.na(parts[, 3]), attr_default, parts[, 3])
+      str_c("![", parts[, 2], "](", url, ")", attr_use)
     })
-
-    if (n_replaced > 0) {
-      write_lines(text, qmd_file)
-      cli_alert_success(
-        "Updated {n_replaced} link(s) in {path_file(qmd_file)}"
-      )
-    }
   })
+
+  n_changed <- sum(text_new != text_old)
+  if (n_changed > 0) {
+    write_lines(text_new, qmd_file)
+    cli_alert_success("Updated {n_changed} line(s) in {path_file(qmd_file)}")
+  }
+  invisible(n_changed)
 }
 
-publish_figures <- function(
-  source_dir = NULL,
-  prefix = NULL,
-  target_dir = "S:/figure"
-) {
-  if (is_null(source_dir) || !dir_exists(source_dir)) {
-    source_dir <- readline("Folder containing the plots to publish: ")
+# Copy `file_plot` to `dir_target` under `prefix`, optionally delete the local
+# copies, then relink the qmd. Returns a tibble of what happened.
+publishFiles <- function(file_plot, prefix, dir_target, qmd_file) {
+  prefix <- str_c(str_remove(prefix, "_$"), "_")
+
+  name_new <- path_file(file_plot) |>
+    (\(x) if_else(str_starts(x, fixed(prefix)), x, str_c(prefix, x)))()
+  if (anyDuplicated(name_new) > 0) {
+    cli_abort(
+      "Different sources would be published under the same name: {unique(name_new[duplicated(name_new)])}"
+    )
   }
-  if (!dir_exists(source_dir)) {
-    cli_abort("Folder not found: {source_dir}")
-  }
+  path_dest <- path(dir_target, name_new)
 
-  plot_files <- dir_ls(
-    source_dir,
-    type = "file",
-    regexp = "\\.(png|jpe?g|svg|pdf)$"
-  )
-  if (length(plot_files) == 0) {
-    cli_abort("No image files (png/jpg/jpeg/svg/pdf) found in {source_dir}")
-  }
+  # Per-file decision; existing files are overwritten unless the user skips
+  action <- rep("copy", length(path_dest)) |> set_names(path_dest)
+  path_exist <- path_dest[file_exists(path_dest)]
 
-  if (is_null(prefix) || prefix == "") {
-    prefix <- readline("Prefix to prepend to each filename (e.g. dangtuan_): ")
-  }
-  prefix <- str_remove(prefix, "_$") |> (\(x) paste0(x, "_"))()
+  if (length(path_exist) > 0) {
+    cli_alert_warning("These files already exist in {dir_target}:")
+    walk(path_exist, \(f) cli_li(path_file(f)))
 
-  new_names <- path_file(plot_files) |>
-    (\(x) ifelse(str_starts(x, fixed(prefix)), x, paste0(prefix, x)))()
-  dest_paths <- path(target_dir, new_names)
-
-  already_present <- dest_paths[file_exists(dest_paths)]
-  decision <- rep("copy", length(dest_paths)) |> set_names(dest_paths)
-
-  if (length(already_present) > 0) {
-    cli_alert_warning("These files already exist in {target_dir}:")
-    walk(already_present, \(f) cli_li(path_file(f)))
-
-    choice <- readline(
+    choice <- askLower(
       "Overwrite (o), skip (s), or decide file-by-file (d)? [o/s/d]: "
-    ) |>
-      str_to_lower()
-
+    )
     if (choice == "s") {
-      decision[already_present] <- "skip"
+      action[path_exist] <- "skip"
     } else if (choice == "d") {
-      per_file <- map_chr(already_present, \(f) {
-        readline(str_glue(
-          "  {path_file(f)} - overwrite (o) or skip (s)? [o/s]: "
-        )) |>
-          str_to_lower()
+      answer_each <- map_chr(path_exist, \(f) {
+        askLower(str_glue("  {path_file(f)} - overwrite (o) or skip (s)? [o/s]: "))
       })
-      decision[already_present] <- if_else(per_file == "s", "skip", "copy")
+      action[path_exist] <- if_else(answer_each == "s", "skip", "copy")
     }
-    # choice == "o" (or anything else): default stays "copy", i.e. overwrite
   }
 
-  to_copy <- decision == "copy"
-  dir_create(target_dir)
-  walk2(plot_files[to_copy], dest_paths[to_copy], \(from, to) {
-    file_copy(from, to, overwrite = TRUE)
-  })
+  is_copy <- action == "copy"
+  dir_create(dir_target)
+  file_copy(file_plot[is_copy], path_dest[is_copy], overwrite = TRUE)
 
-  cli_alert_success("Copied {sum(to_copy)} file(s) to {target_dir}")
-  if (any(!to_copy)) {
-    cli_alert_info("Skipped {sum(!to_copy)} file(s) already present")
+  cli_alert_success("Copied {sum(is_copy)} file(s) to {dir_target}")
+  if (any(!is_copy)) {
+    cli_alert_info("Skipped {sum(!is_copy)} file(s) already present")
   }
 
-  delete_choice <- readline(
-    "Delete the local copies that were published? [y/N]: "
-  ) |>
-    str_to_lower()
-  if (delete_choice == "y") {
-    file_delete(plot_files[to_copy])
-    cli_alert_success("Deleted {sum(to_copy)} local file(s) from {source_dir}")
+  if (askLower("Delete the local copies that were published? [y/N]: ") == "y") {
+    file_delete(file_plot[is_copy])
+    cli_alert_success("Deleted {sum(is_copy)} local file(s)")
   } else {
-    cli_alert_info("Local copies kept in {source_dir}")
+    cli_alert_info("Local copies kept")
   }
 
-  urls <- paste0("https://drhuyue.site:10002/sammo3182/figure/", new_names)
+  url_new <- str_c(url_base, name_new)
+  relinkQmd(qmd_file, file_plot, url_new)
 
-  update_qmd_links(
-    source_dir = source_dir,
-    plot_files = plot_files,
-    urls = urls
-  )
-
-  tibble::tibble(
-    source = plot_files,
-    published = dest_paths,
-    url = urls,
-    action = decision
+  tibble(
+    source = file_plot,
+    published = path_dest,
+    url = url_new,
+    action = action
   )
 }
 
-# Example:
-# source("codes/publish_figures.R")
-# publish_figures(
-#   source_dir = "slides/guestLecture/inequality_comparison_plots",
-#   prefix     = "inequalityCompare"
-# )
+# Publish the local images that `qmd_file` references. Prefix defaults to the
+# qmd's file name.
+publishFigures <- function(
+  qmd_file = NULL,
+  prefix = NULL,
+  dir_target = "S:/figure"
+) {
+  if (is.null(qmd_file) || !file_exists(qmd_file)) {
+    qmd_file <- readline("Path to the .qmd file: ")
+  }
+  if (!file_exists(qmd_file)) {
+    cli_abort("File not found: {qmd_file}")
+  }
+
+  file_plot <- findLocalFigures(qmd_file)
+  if (length(file_plot) == 0) {
+    cli_alert_info("No unpublished local figures in {path_file(qmd_file)}")
+    return(invisible(NULL))
+  }
+  cli_alert_info(
+    "{length(file_plot)} local figure(s) in {path_file(qmd_file)} not yet published:"
+  )
+  walk(path_rel(file_plot, start = path_dir(path_abs(qmd_file))), cli_li)
+
+  if (is.null(prefix) || prefix == "") {
+    prefix_default <- path_ext_remove(path_file(qmd_file))
+    prefix <- readline(
+      str_glue("Prefix to prepend to each filename [{prefix_default}]: ")
+    )
+    if (prefix == "") prefix <- prefix_default
+  }
+
+  publishFiles(file_plot, prefix, dir_target, qmd_file)
+}
