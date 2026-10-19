@@ -1,0 +1,568 @@
+---
+title: "Macrodiscontent Across Countries"
+subtitle: 'Pre-Event Workshop, ISC Midterm Meeting and Beijing Science Dialogue'
+date: "2026-10-19"
+date-format: "iso"
+
+author:
+  - Haofeng Ma
+  - Jeongho Choi
+  - Yuehong Cassandra Tai
+  - Yue Hu
+  - Frederick Solt
+institute:
+  - The Chinese University of Hong Kong, Shenzhen
+  - Kyung Hee University
+  - The Pennsylvania State University
+  - Tsinghua University
+  - University of Iowa
+
+bibliography: dcpo-macrodiscontent.bib
+
+knitr:
+    opts_chunk:
+      echo: false
+
+format:
+  revealjs:
+    css: https://www.drhuyue.site/slides_gh/css/style_basic.css
+    theme: goldenBlack.scss
+    slide-number: true
+    incremental: false
+    preview-links: true
+    link-external-newwindow: true
+    chalkboard: false
+    show-slide-number: all
+    title-slide-attributes:
+      data-background-image: https://gitlab.com/sammo3182/backup/raw/85b3c1ad4b459d7a9f901f124b936428eda5fcaf/logo_THPS.png?inline=true
+      data-background-size: 250px
+      data-background-position: top 10% right 5%
+    default-image-extension: png
+lightbox:
+  match: auto
+  effect: fade
+
+filters:
+  - appExclusion.lua
+
+editor:
+    chunk_output_type: console
+---
+
+```{r}
+#| include: false
+#| label: setup
+library(pacman)
+
+p_load(
+  "icons",
+  "tidyverse"
+)
+
+set.seed(313)
+```
+
+## Rising or Trendless?
+
+::::{.overlay-container style="min-height: 400px"}
+
+::: {.overlay-image}
+
+::: {.r-hstack}
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_hook_greece_2011.jpg){fig-align="center" height=330}
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_hook_chile_2019.jpg){fig-align="center" height=330}
+
+:::
+
+::: {style="text-align:center; font-size: 0.4em; color: gray"}
+
+Athens, Syntagma Square, 2011 (Kotsolis, CC BY-SA 3.0) &nbsp;|&nbsp; Santiago, Plaza Baquedano, 2019 (Carlos Figueroa, CC BY-SA 4.0); via Wikimedia Commons
+
+:::
+
+:::
+
+::: {.overlay-text-over .fragment style="top: 0; transform: translateX(-50%); text-align: left"}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**A rising tide?**
+
+- Democratic [deconsolidation]{.red} [@foa2016danger; @foa2017signs]
+- Erosion of political support [@Dalton2004; @Jennings2017]
+
+:::
+
+::: {.column width="50%"}
+
+**Or just noise?**
+
+- "Trendless fluctuations" [@norris2011democratic]
+- Discontent fluctuates without a clear trend
+
+:::
+
+::::
+
+::: {.callout-important .fragment}
+
+## Research Question
+
+Is public discontent with the political system [rising]{.red}? And what [drives]{.red} it?
+
+::: {.fragment style="text-align:center"}
+
+*What I'll offer*
+
+1. A [bird's-eye view]{.red} of political discontent
+2. A method for [cross-national, over-time]{.red} comparison
+3. A [systematic analysis]{.red} of what drives discontent
+
+:::
+
+:::
+
+:::
+
+::::
+
+::: {.notes}
+
+Athens 2011, protests against austerity; Santiago 2019, the estallido social. Both are OECD democracies, both were sparked by economic grievances, and both appear in our data.
+[click] Scholars disagree on a basic fact: Foa and Mounk see democratic deconsolidation; Norris sees only trendless fluctuations.
+[click] So our question: is discontent with the political system rising, and what drives it?
+[click] In seven minutes I offer three things: a bird's-eye view of discontent, a method for comparing it across countries and time, and a systematic test of its drivers.
+
+Photo sources:
+https://commons.wikimedia.org/wiki/File:2011_Greece_Uprising.jpg
+https://commons.wikimedia.org/wiki/File:Protestas_en_Chile_20191022_06.jpg
+
+:::
+
+## Why the Debate Persists
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+::: {.callout-important}
+
+## Conceptual fragmentation
+
+- Lack of diffuse support [@easton1975re]
+- Low responsiveness [@jennings2016dimensions]
+- Democratic deficit [@norris2011democratic]
+- Incumbent dissatisfaction [@muller1983discontent]
+
+:::
+
+:::
+
+::: {.column width="50%"}
+
+::: {.callout-warning}
+
+## Data constraints
+
+- [Incomparable]{.red}: different questions, projects, rounds
+- [Sparse]{.red}: many country-years never asked
+- Different datasets [&rarr;]{.large} conflicting conclusions [@Jennings2017]
+
+:::
+
+:::
+
+::::
+
+::: {.fragment}
+
+**Our solution**
+
+- [Diffuse support]{.red}: system legitimacy [&rarr;]{.large} threat when eroded
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*Included*
+
+- External efficacy/responsiveness
+- Trust in political institutions
+- Perceived political [corruption]{.red}
+
+:::
+
+::: {.column width="50%"}
+
+*Excluded*
+
+- Trust in incumbent (specific~)
+- Support for democracy
+- Satisfaction with democracy
+
+:::
+
+::::
+
+:::
+
+::: {.notes}
+
+Discontent matters because legitimacy underpins democratic survival, and discontent feeds populism. But the debate persists for two reasons.
+First, scholars define discontent differently: lack of diffuse support, low responsiveness, democratic deficits, dissatisfaction with the government.
+Second, survey data are incomparable and sparse, so different datasets give different conclusions.
+[click] We follow Easton: discontent is a lack of diffuse support for the system as a whole, not dissatisfaction with the current government.
+It includes low external efficacy, low trust in political institutions, and perceived corruption.
+It excludes trust in incumbents and satisfaction with democracy, which behave like specific support, and abstract support for democracy, which is near universal.
+
+:::
+
+## Solving the Data Constraints
+
+::::{.overlay-container style="min-height: 480px"}
+
+::: {.overlay-image}
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_1.png){fig-align="center" height=430}
+
+:::{style="text-align:center"}
+
+[388]{.red} survey datasets &nbsp;|&nbsp; [111]{.red} items &nbsp;|&nbsp; [136]{.red} countries &nbsp;|&nbsp; [56]{.red} years
+
+:::
+
+:::
+
+::: {.overlay-text-over .fragment style="top: 0; transform: translateX(-50%); text-align: left"}
+
+- Solution: Dynamic Comparative Public Opinion [@Solt2020c]
+- Output: [PPD scores]{.red}, 3,362 country-years &rarr; publicly available
+- Validated: source items, democracy evaluations, government performance
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Incomparability**
+
+- Difficulty: discontent needed to endorse a response
+- Dispersion: noise of each item
+- Country-specific bias: translation, culture
+
+:::
+
+::: {.column width="50%"}
+
+**Sparsity**
+
+- Random-walk prior: PPD~t~ = PPD~t-1~ + shock
+- Borrows strength across years
+- Cost: wider uncertainty in thin years
+
+:::
+
+::::
+
+:::
+
+::::
+
+::: {.notes}
+
+We collected 388 surveys with 111 relevant items, covering 136 countries from 1968 to 2023. But no single question is asked everywhere, every year.
+[click] Our solution is the DCPO latent-variable model. Think of educational testing: students take different test forms, yet their abilities land on one common scale.
+DCPO treats each survey item as its own imperfect instrument, estimating how hard it is to endorse, how noisy it is, and how it is biased in each country.
+A random-walk prior fills in thinly surveyed years.
+The result: public political discontent, or PPD, scores for 3,362 country-years, publicly available.
+And they pass three validity checks: they track the original survey items, they correlate with democracy evaluations we never used, and with views of government performance. Details are in the appendix.
+
+:::
+
+## Digging In: OECD Countries
+
+:::: {.columns}
+
+::: {.column width="45%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_5.png){fig-align="center" height=580}
+
+:::
+
+::: {.column width="55%"}
+
+- 38 OECD democracies, ordered by latest PPD
+- Highest: Slovakia, Greece, Spain
+- Lowest: Norway, Denmark, Switzerland
+- Large gaps [across countries]{.red} and [over time]{.red}
+
+::: {.callout-warning .fragment}
+
+## Back to the research question
+
+So, rising or trendless? What explains the variation?
+
+:::
+
+:::
+
+::::
+
+::: {.notes}
+
+Now we zoom in on the 38 OECD democracies, where the debate is most heated.
+Countries are ordered by their latest score. Greece surges after the debt crisis; the Nordic countries and Switzerland decline.
+[click] The gaps across countries and over time are large. So, is discontent rising overall, and what explains these differences?
+
+:::
+
+## What Drives Discontent: Economy over Institutions
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_6.png){fig-align="center" height=480}
+
+:::
+
+::: {.column width="45%"}
+
+::: {style="font-size: 0.75em"}
+
+| Driver | Expected | Found |
+|---|:---:|:---:|
+| Time trend | ? | [&uarr;]{.blue} [rising]{.red} |
+| Election year | [&darr;]{.red} | [&darr;]{.red} modest |
+| Power-sharing | [&darr;]{.red} | [n.s.]{.grayLight} |
+| Poor economy | [&uarr;]{.blue} | [&uarr;]{.blue} [strongest]{.red} |
+| Inequality | [&uarr;]{.blue} / [&darr;]{.red} | [&darr;]{.red} |
+
+[38]{.red} OECD countries, [1,217]{.red} country-years<br>
+Bayesian multilevel, within-between [@Bell2015]
+
+:::
+
+:::
+
+::::
+
+::: {.notes}
+
+We test four explanations together on 38 OECD democracies, 1,217 country-years, with a Bayesian multilevel model that separates long-run differences between countries from short-run changes within them.
+First, the trend: net of everything else, discontent is rising, by about 0.1 points a year. Not trendless fluctuation.
+Elections were expected to give discontent an outlet; they do lower it, but only modestly.
+Power-sharing institutions, parliamentarism and federalism, were expected to make citizens feel included; they make no detectable difference.
+The economy is the strongest driver: richer countries are much less discontented, and rising unemployment or falling growth pushes discontent up immediately.
+Inequality was ambiguous in theory; rising inequality actually lowers discontent, consistent with system justification and relative power theories.
+The full long-run versus short-run breakdown is in the appendix.
+
+:::
+
+## Conclusion
+
+1. Concept: discontent as lack of [diffuse support]{.red}
+2. Measure: PPD for [136 countries over 56 years]{.red}, validated three ways
+3. Trend: OECD discontent is [rising]{.red}, not trendless fluctuation
+4. Drivers: [economic conditions]{.red} matter more than elections and institutions
+
+::: {.callout-important .fragment}
+
+## Contributions
+
+**Theory**: one framework for fragmented measures of discontent<br>
+**Data**: open panel for backsliding, populism, and regime stability
+
+:::
+
+::: {.fragment}
+
+> [Anything that can increase social and institutional trust produces especially large benefits for those subject to various forms of hardship.]{.red}
+
+:::{style="text-align:right"}
+
+[—— Helliwell et al., *World Happiness Report 2020*, Ch. 2]{.red}
+
+:::
+
+:::
+
+::: {.notes}
+
+To sum up: a clearer concept, a global validated measure, a rising trend, and an economic story.
+[click] The data are open for research on backsliding, populism, and regime stability, in democracies and non-democracies alike.
+[click] Why should this matter for wellbeing? The World Happiness Report finds that institutional trust cushions people against hardship, offsetting on average about 40 percent of the wellbeing loss from risks such as unemployment and low income.
+Our finding is the mirror image: economic hardship erodes that very trust.
+So hardship hurts twice, and the people who need the cushion most are the first to lose it.
+Tracking political discontent is part of tracking human wellbeing.
+
+Data: Harvard Dataverse, https://doi.org/10.7910/DVN/0II26W
+Source of quote: Helliwell, Huang, Wang & Norton, "Social Environments for World Happiness," World Happiness Report 2020, Chapter 2.
+
+:::
+
+# Thank you {background="#43464B"}
+
+:::{style="text-align: right; margin-top: 1em"}
+
+[`r feather_icons("github")`&nbsp; sammo3182](https://github.com/sammo3182)
+
+[`r feather_icons("mail")`&nbsp; yuehu@tsinghua.edu.cn](mailto:yuehu@tsinghua.edu.cn)
+
+[`r feather_icons("globe")`&nbsp; https://sammo3182.github.io/](https://sammo3182.github.io/)
+
+![](https://user-images.githubusercontent.com/6463211/232207708-b0e64eee-7fb3-45a4-9779-ec52397f786c.png){height=250}
+
+:::
+
+# Appendix {.appendix visibility="uncounted"}
+
+## Validation: Internal Convergent
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_2.png){fig-align="center" height=440}
+
+- PPD vs. source items: cross-section, panel, and over time [&rarr;]{.large} R = 0.71 to 0.81
+
+::: {.notes}
+
+Left: Eurobarometer "tend not to trust" political parties, the single most-asked item (R = 0.74).
+Middle: Gallup Voice of the People 2005, "is your country governed by the will of the people?" (R = 0.71).
+Right: Sweden's SOM confidence in parliament, the longest single-country series (R = 0.81).
+
+:::
+
+## Hypotheses
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+*Political*
+
+- H<sub>1</sub>: Elections
+  - Outlet [&rarr;]{.large} PPD [&darr;]{.red}
+  - Negative campaigns [&rarr;]{.large} PPD [&uarr;]{.blue}
+- H<sub>2</sub>: Power-sharing institutions [&rarr;]{.large} inclusion [&rarr;]{.large} PPD [&darr;]{.red}
+
+[@lau2007effects; @Kittilson2010; @lijphart1999patterns]
+
+:::
+
+::: {.column width="50%"}
+
+*Economic*
+
+- H<sub>3</sub>: Low income, slow growth, unemployment [&rarr;]{.large} PPD [&uarr;]{.blue}
+- H<sub>4</sub>: Income inequality
+  - Grievance [&rarr;]{.large} PPD [&uarr;]{.blue}
+  - System justification, relative power [&rarr;]{.large} PPD [&darr;]{.red}
+
+[@quaranta2016does; @Jost2019; @Solt2008]
+
+:::
+
+::::
+
+## Validation: External Convergent
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_3.png){fig-align="center" height=440}
+
+- Items [not]{.red} used in estimation: evaluations of democracy [&rarr;]{.large} R = &minus;0.76 to &minus;0.84
+
+::: {.notes}
+
+ISSP National Identity: proud of how democracy works (R = -0.77).
+WVS/EVS: satisfied with how democracy is developing (R = -0.84).
+CSES: satisfied with the way democracy works (R = -0.76).
+These items tap specific rather than diffuse support, so they were excluded from estimation.
+
+:::
+
+## Validation: Construct
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_4.png){fig-align="center" height=440}
+
+- Government success in health, elderly care, environment [&rarr;]{.large} R = &minus;0.58 to &minus;0.68
+
+::: {.notes}
+
+ISSP Role of Government 2006 and 2016: health care (R = -0.58), the elderly (R = -0.64), the environment (R = -0.68).
+
+:::
+
+## Research Design
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+**Data**
+
+- [38]{.red} OECD countries, [1,217]{.red} country-years
+- Elections: DES [@Bormann2022]
+- Institutions: parliamentarism, federalism, Gallagher index
+- Economy: OECD.Stat; Gini: SWIID [@Solt2020]
+
+:::
+
+::: {.column width="50%"}
+
+**Model**
+
+- Bayesian multilevel: country and year intercepts [@Shor2007]
+- Within-between: [long run]{.red} vs. [short run]{.red} [@Bell2015]
+- Measurement uncertainty in PPD and Gini [@Tai2024]
+
+:::
+
+::::
+
+- Best single item (Eurobarometer) [&rarr;]{.large} 582 obs., Europe only
+
+::: {.notes}
+
+1,217 country-years; 16 (Turkey) to 43 (US) consecutive years per country, mean 32.
+Within-between random effects: each time-varying predictor is split into its country mean (long-run effect) and the yearly deviation from that mean (short-run effect).
+PPD and Gini enter as distributions with known standard deviations. Estimated with brms.
+
+:::
+
+## Long Run vs. Short Run
+
+| Predictor | Long run: between countries | Short run: within country |
+|---|:---:|:---:|
+| GDP per capita | [&darr;]{.red} | [&darr;]{.grayLight} |
+| GDP growth | [n.s.]{.grayLight} | [&darr;]{.red} |
+| Unemployment | [&uarr;]{.blue} | [&uarr;]{.blue} |
+| Income inequality | [n.s.]{.grayLight} | [&darr;]{.red} |
+| Disproportionality | [&uarr;]{.blue} | [n.s.]{.grayLight} |
+
+- Bad economy [&rarr;]{.large} discontent [&uarr;]{.blue} at both horizons
+- Rising inequality [&rarr;]{.large} discontent [&darr;]{.red}: system justification, relative power
+
+::: {.notes}
+
+GDP per capita: a country 1 SD above the mean has PPD 9.4 points lower than one 1 SD below (95% CI: 14.8 to 4.1). Short run: 0.7 points less per 2 SD increase (85.6% of posterior negative).
+GDP growth: no long-run effect; short run, 1.2 points less per 2 SD increase (95% CI: 1.8 to 0.6).
+Unemployment: long run 3.9 points (95% CI: -0.8 to 8.5); short run 3.8 points per 2 SD increase (95% CI: 3.2 to 4.4).
+Income inequality: short run, 1.1 points lower per 2 SD rise (95% CI: 1.8 to 0.5).
+Disproportionality: two SD higher mean Gallagher index means 3.6 points more PPD (94.9% of posterior positive).
+Time trend: 0.1 points per year (95% CI: 0.04 to 0.16). Election years: 0.5 points lower (95.6% of posterior below zero).
+
+:::
+
+## Source Data Coverage: Europe and Asia-Oceania
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_A1.png){fig-align="center" height=600}
+
+## Source Data Coverage: Americas and Africa
+
+![](https://drhuyue.site:10002/sammo3182/figure/discontent_Figure_A2.png){fig-align="center" height=600}
+
+## References
+
+::: {#refs}
+
+:::
