@@ -47,14 +47,61 @@ p_load(stringr, readr, purrr, base64enc)
   expr
 }
 
+# Persistent cache for remote resources, so a URL fetched once successfully is
+# never re-requested (avoids GitLab's per-IP 429 rate limit, which hits hard
+# because nearly every deck pulls the same logo).
+.remoteCacheDir <- function() {
+  d <- tools::R_user_dir("render_offline", which = "cache")
+  dir.create(d, recursive = TRUE, showWarnings = FALSE)
+  d
+}
+
+# Download a remote URL into the cache (with a browser-like User-Agent, which
+# Wikimedia requires, and retries with backoff for 429/5xx) and return the
+# cached file path.
+.fetchRemote <- function(url, tries = 3) {
+  url_file <- tempfile()
+  writeLines(url, url_file)
+  url_hash <- unname(tools::md5sum(url_file))
+  unlink(url_file)
+  key <- paste0(
+    substr(url_hash, 1, 12),
+    "_",
+    substr(gsub("[^A-Za-z0-9._-]", "_", basename(sub("[?#].*$", "", url))), 1, 80)
+  )
+  cached <- file.path(.remoteCacheDir(), key)
+  if (file.exists(cached) && file.info(cached)$size > 0) {
+    return(cached)
+  }
+  ua <- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) render_offline.R"
+  tmp <- tempfile()
+  on.exit(unlink(tmp))
+  for (i in seq_len(tries)) {
+    ok <- tryCatch(
+      {
+        .withLongTimeout(utils::download.file(
+          url, tmp,
+          mode = "wb", quiet = TRUE, method = "libcurl",
+          headers = c("User-Agent" = ua)
+        ))
+        TRUE
+      },
+      error = \(e) FALSE,
+      warning = \(w) FALSE
+    )
+    if (ok && file.exists(tmp) && file.info(tmp)$size > 0) {
+      file.copy(tmp, cached, overwrite = TRUE)
+      return(cached)
+    }
+    if (i < tries) Sys.sleep(5 * i)
+  }
+  stop("Failed to download after ", tries, " tries: ", url)
+}
+
 .readBinResource <- function(url, base_dir) {
   if (.isRemote(url)) {
-    tmp <- tempfile()
-    on.exit(unlink(tmp))
-    .withLongTimeout(
-      utils::download.file(url, tmp, mode = "wb", quiet = TRUE)
-    )
-    readBin(tmp, "raw", file.info(tmp)$size)
+    path <- .fetchRemote(url)
+    readBin(path, "raw", file.info(path)$size)
   } else {
     path <- file.path(base_dir, utils::URLdecode(url))
     readBin(path, "raw", file.info(path)$size)
@@ -63,10 +110,7 @@ p_load(stringr, readr, purrr, base64enc)
 
 .readTextResource <- function(url, base_dir) {
   if (.isRemote(url)) {
-    tmp <- tempfile()
-    on.exit(unlink(tmp))
-    utils::download.file(url, tmp, mode = "wb", quiet = TRUE)
-    readr::read_file(tmp)
+    readr::read_file(.fetchRemote(url))
   } else {
     readr::read_file(file.path(base_dir, utils::URLdecode(url)))
   }
