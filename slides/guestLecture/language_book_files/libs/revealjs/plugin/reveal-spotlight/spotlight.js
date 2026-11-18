@@ -292,5 +292,12 @@ var RevealSpotlight = window.RevealSpotlight || (function () {
 
   this.toggleSpotlight = toggleSpotlight;
   this.togglePresentationMode = togglePresentationMode;
-  return this;
+  // Return a proper plugin object; `this` is `window` here, which breaks
+  // JSON serialization of Reveal's config (speaker-view clock never starts).
+  return {
+    id: 'spotlight',
+    init: function () {},
+    toggleSpotlight: toggleSpotlight,
+    togglePresentationMode: togglePresentationMode
+  };
 })();
